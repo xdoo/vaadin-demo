@@ -24,15 +24,20 @@ public class LoginServiceImpl implements LoginService {
     AuthenticationManager am;
 
     @Override
-    public boolean login(String username, String password) {
+    public void login(String username, String password) {
         try {
             UsernamePasswordAuthenticationToken request = new UsernamePasswordAuthenticationToken(username, password);
             Authentication result = am.authenticate(request);
             SecurityContextHolder.getContext().setAuthentication(result);
         } catch (AuthenticationException e) {
-            return Boolean.FALSE;
+            e.printStackTrace();
         }
-        return Boolean.TRUE;
+    }
+
+    @Override
+    public boolean isAutheticated() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return auth.isAuthenticated();
     }
 
 }

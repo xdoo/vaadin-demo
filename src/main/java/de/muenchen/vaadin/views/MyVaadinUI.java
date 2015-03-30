@@ -12,10 +12,12 @@ import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CssLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import de.muenchen.vaadin.security.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -25,33 +27,41 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Theme("valo")
 @SpringUI
 public class MyVaadinUI extends UI {
-    
+
     @Autowired
     private SpringViewProvider viewProvider;
 
+    @Autowired
+    private LoginService login;
+
     @Override
     protected void init(VaadinRequest request) {
-        final VerticalLayout root = new VerticalLayout();
-        root.setSizeFull();
-        root.setMargin(true);
-        root.setSpacing(true);
-        setContent(root);
-        
-        final CssLayout navigationBar = new CssLayout();
-        navigationBar.addStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
-        navigationBar.addComponent(createNavigationButton("View 1", View1.VIEW_NAME));
-        navigationBar.addComponent(createNavigationButton("View 2", View2.VIEW_NAME));
-        root.addComponent(navigationBar);
 
-        final Panel viewContainer = new Panel();
-        viewContainer.setSizeFull();
-        root.addComponent(viewContainer);
-        root.setExpandRatio(viewContainer, 1.0f);
+        if (login.isAutheticated()) {
+            final VerticalLayout root = new VerticalLayout();
+            root.setSizeFull();
+            root.setMargin(true);
+            root.setSpacing(true);
+            setContent(root);
 
-        Navigator navigator = new Navigator(this, viewContainer);
-        navigator.addProvider(viewProvider);
+            final CssLayout navigationBar = new CssLayout();
+            navigationBar.addStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
+            navigationBar.addComponent(createNavigationButton("View 1", View1.VIEW_NAME));
+            navigationBar.addComponent(createNavigationButton("View 2", View2.VIEW_NAME));
+            root.addComponent(navigationBar);
+
+            final Panel viewContainer = new Panel();
+            viewContainer.setSizeFull();
+            root.addComponent(viewContainer);
+            root.setExpandRatio(viewContainer, 1.0f);
+
+            Navigator navigator = new Navigator(this, viewContainer);
+            navigator.addProvider(viewProvider);
+        } else {
+            setContent(new Label("Login first!!!!"));
+        }
     }
-    
+
     private Button createNavigationButton(String caption, final String viewName) {
         Button button = new Button(caption);
         button.addStyleName(ValoTheme.BUTTON_SMALL);
@@ -59,5 +69,5 @@ public class MyVaadinUI extends UI {
         button.addClickListener(event -> getUI().getNavigator().navigateTo(viewName));
         return button;
     }
-    
+
 }

@@ -11,6 +11,8 @@ package de.muenchen.vaadin.security;
  */
 public interface LoginService {
  
-    public boolean login(String username, String password);
+    public void login(String username, String password);
+    
+    public boolean isAutheticated();
     
 }
