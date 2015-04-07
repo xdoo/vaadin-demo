@@ -6,14 +6,11 @@
 package de.muenchen.vaadin.ui.app.views;
 
 import javax.annotation.PostConstruct;
-import org.springframework.security.access.annotation.Secured;
 import org.vaadin.spring.navigator.annotation.VaadinView;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.shared.ui.label.ContentMode;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import de.muenchen.vaadin.ui.util.VaadinUtil;
 import org.vaadin.spring.annotation.VaadinUIScope;

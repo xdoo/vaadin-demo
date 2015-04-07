@@ -12,7 +12,11 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import de.muenchen.vaadin.ui.components.PersonForm;
+import de.muenchen.vaadin.ui.controller.PersonController;
+import de.muenchen.vaadin.ui.util.VaadinUtil;
 import javax.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.annotation.VaadinUIScope;
 import org.vaadin.spring.navigator.annotation.VaadinView;
 
@@ -26,22 +30,17 @@ public class PersonView extends VerticalLayout implements View {
 
     public static final String NAME = "person";
     
+    @Autowired
+    PersonController controller;
+    
     @PostConstruct
     private void postConstruct() {
         setSizeFull();
         setSpacing(true);
         setMargin(true);
         addComponent(new Label("<h3>Person View</h3>", ContentMode.HTML));
-        Button goToSecuredView = new Button("Go To Main View");
-        goToSecuredView.addClickListener(new Button.ClickListener() {
-            private static final long serialVersionUID = -2896151918118631378L;
-
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                UI.getCurrent().getNavigator().navigateTo(MainView.NAME);
-            }
-        });
-        addComponent(goToSecuredView);
+        addComponent(new PersonForm(controller.createPerson()));
+        addComponent(VaadinUtil.createNavigationButton("Go To Main View", MainView.NAME));
     }
     
     @Override

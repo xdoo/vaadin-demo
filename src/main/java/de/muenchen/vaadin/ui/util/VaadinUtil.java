@@ -5,7 +5,9 @@
  */
 package de.muenchen.vaadin.ui.util;
 
+import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import de.muenchen.vaadin.ui.app.views.MainView;
 
@@ -26,6 +28,13 @@ public class VaadinUtil {
             }
         });
         return button;
+    }
+    
+    public static TextField createFormTextField(BeanFieldGroup binder, String labelText, String property) {
+        TextField firstname = (TextField) binder.buildAndBind(labelText, property);
+        firstname.setNullRepresentation("");
+        firstname.setInputPrompt(labelText);
+        return firstname;
     }
     
 }
