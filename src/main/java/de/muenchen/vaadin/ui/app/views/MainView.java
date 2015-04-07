@@ -15,6 +15,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Button.ClickEvent;
+import de.muenchen.vaadin.ui.util.VaadinUtil;
 import org.vaadin.spring.annotation.VaadinUIScope;
 
 @VaadinView(name = MainView.NAME)
@@ -30,16 +31,8 @@ public class MainView extends VerticalLayout implements View {
         setSpacing(true);
         setMargin(true);
         addComponent(new Label("<h2>Main View</h2>", ContentMode.HTML));
-        Button goToSecuredView = new Button("Go To Secured View");
-        goToSecuredView.addClickListener(new Button.ClickListener() {
-            private static final long serialVersionUID = -2896151918118631378L;
-
-            @Override
-            public void buttonClick(ClickEvent event) {
-                UI.getCurrent().getNavigator().navigateTo(SecuredView.NAME);
-            }
-        });
-        addComponent(goToSecuredView);
+        addComponent(VaadinUtil.createNavigationButton("Go To Secured View", SecuredView.NAME));
+        addComponent(VaadinUtil.createNavigationButton("Create Person", PersonView.NAME));
     }
 
     @Override

@@ -5,16 +5,32 @@
  */
 package de.muenchen.vaadin.domain;
 
+import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
  * @author claus.straube
  */
-public class Person {
+@Entity
+public class Person implements Serializable {
     
+    @Id @GeneratedValue
+    private Long id;
+    
+    @Column
     String firstname;
+    
+    @Column
     String lastname;
+    
+    @Temporal(TemporalType.DATE)
     Date birthdate;
 
     public String getFirstname() {
@@ -40,7 +56,13 @@ public class Person {
     public void setBirthdate(Date birthdate) {
         this.birthdate = birthdate;
     }
-    
-    
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
     
 }
