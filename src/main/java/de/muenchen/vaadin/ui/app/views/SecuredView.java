@@ -13,6 +13,7 @@ import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import de.muenchen.vaadin.ui.util.VaadinUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.annotation.VaadinUIScope;
 
 @VaadinView(name = SecuredView.NAME)
@@ -22,6 +23,9 @@ public class SecuredView extends VerticalLayout implements View {
 
     private static final long serialVersionUID = 6937605817612926676L;
     public static final String NAME = "secured";
+    
+    @Autowired
+    VaadinUtil util;
 
     @PostConstruct
     private void postConstruct() {
@@ -29,7 +33,7 @@ public class SecuredView extends VerticalLayout implements View {
         setSpacing(true);
         setMargin(true);
         addComponent(new Label("<h3>Secured View</h3>", ContentMode.HTML));
-        addComponent(VaadinUtil.createNavigationButton("Go To Main View", MainView.NAME));
+        addComponent(util.createNavigationButton("m1.person", MainView.NAME));
     }
 
     @Override

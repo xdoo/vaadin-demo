@@ -33,6 +33,10 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
@@ -45,6 +49,11 @@
         <dependency>
             <groupId>org.vaadin.spring</groupId>
             <artifactId>spring-vaadin-security</artifactId>
+            <version>${vaadin4spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.vaadin.spring</groupId>
+            <artifactId>spring-vaadin-i18n</artifactId>
             <version>${vaadin4spring.version}</version>
         </dependency>
         <dependency>

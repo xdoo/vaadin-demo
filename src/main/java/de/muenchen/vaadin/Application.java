@@ -16,18 +16,14 @@
 package de.muenchen.vaadin;
 
 
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 
-@EnableAutoConfiguration
-@ComponentScan
-@Controller
-public class Application {
+@SpringBootApplication
+public class Application  {
 
     public static void main(String[] args) throws Exception {
         new SpringApplicationBuilder(Application.class).run(args);

@@ -33,14 +33,17 @@ public class PersonView extends VerticalLayout implements View {
     @Autowired
     PersonController controller;
     
+    @Autowired
+    VaadinUtil util;
+    
     @PostConstruct
     private void postConstruct() {
         setSizeFull();
         setSpacing(true);
         setMargin(true);
         addComponent(new Label("<h3>Person View</h3>", ContentMode.HTML));
-        addComponent(new PersonForm(controller.createPerson()));
-        addComponent(VaadinUtil.createNavigationButton("Go To Main View", MainView.NAME));
+        addComponent(new PersonForm(controller.createPerson(), util));
+        addComponent(util.createNavigationButton("m2.main", MainView.NAME));
     }
     
     @Override

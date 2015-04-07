@@ -9,15 +9,22 @@ import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
-import de.muenchen.vaadin.ui.app.views.MainView;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.vaadin.spring.i18n.I18N;
 
 /**
  *
  * @author claus.straube
  */
+@Component
 public class VaadinUtil {
     
-    public static Button createNavigationButton(String text, final String path) {
+    @Autowired
+    I18N i18n;
+    
+    public Button createNavigationButton(String baseKey, final String path) {
+        String text = i18n.get(baseKey + ".navigation.button.label", null);
         Button button = new Button(text);
         button.addClickListener(new Button.ClickListener() {
             private static final long serialVersionUID = -2896151918118631378L;
@@ -30,10 +37,12 @@ public class VaadinUtil {
         return button;
     }
     
-    public static TextField createFormTextField(BeanFieldGroup binder, String labelText, String property) {
+    public TextField createFormTextField(BeanFieldGroup binder, String baseKey, String property) {
+        String labelText = i18n.get(baseKey + "." + property + ".label", null);
+        String inputPrompt = i18n.get(baseKey + "." + property + ".input_prompt", null);
         TextField firstname = (TextField) binder.buildAndBind(labelText, property);
         firstname.setNullRepresentation("");
-        firstname.setInputPrompt(labelText);
+        firstname.setInputPrompt(inputPrompt);
         return firstname;
     }
     

@@ -24,15 +24,15 @@ import de.muenchen.vaadin.ui.util.VaadinUtil;
  */
 public class PersonForm extends CustomComponent {
 
-    public PersonForm(Person item) {
+    public PersonForm(Person item, VaadinUtil util) {
         FormLayout layout = new FormLayout();
 
         // Now use a binder to bind the members
         final BeanFieldGroup<Person> binder = new BeanFieldGroup<Person>(Person.class);
         binder.setItemDataSource(item);
 
-        layout.addComponent(VaadinUtil.createFormTextField(binder, "Vorname: ", "firstname"));
-        layout.addComponent(VaadinUtil.createFormTextField(binder, "Nachname: ", "lastname"));
+        layout.addComponent(util.createFormTextField(binder, "m1.person", "firstname"));
+        layout.addComponent(util.createFormTextField(binder, "m1.person", "lastname"));
         layout.addComponent(binder.buildAndBind("Geburtsdatum: ", "birthdate"));
 
         // A button to commit the buffer
