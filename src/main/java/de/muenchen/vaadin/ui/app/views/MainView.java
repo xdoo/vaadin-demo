@@ -10,14 +10,10 @@ import org.vaadin.spring.navigator.annotation.VaadinView;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.shared.ui.label.ContentMode;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Button.ClickEvent;
 import de.muenchen.vaadin.ui.util.VaadinUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.vaadin.spring.annotation.VaadinUIScope;
 
 @VaadinView(name = MainView.NAME)
@@ -29,13 +25,9 @@ public class MainView extends VerticalLayout implements View {
     
     @Autowired
     VaadinUtil util;
-    
-//    @Value("${m1.person.navigation.button.label}")
-//    String foo;
 
     @PostConstruct
     private void postConstruct() {
-//        System.out.println("foo -----------------------------------------------> " + foo);
         setSizeFull();
         setSpacing(true);
         setMargin(true);

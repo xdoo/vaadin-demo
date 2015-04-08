@@ -13,6 +13,7 @@ import com.vaadin.annotations.Widgetset;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.UI;
+import org.springframework.context.MessageSource;
 import org.vaadin.spring.annotation.VaadinUI;
 
 @VaadinUI
@@ -25,7 +26,7 @@ public class MainUI extends UI {
     
     @Autowired
     private SpringViewProvider ViewProvider;
-
+    
     @Override
     protected void init(VaadinRequest request) {
         Navigator navigator = new Navigator(this, this);
