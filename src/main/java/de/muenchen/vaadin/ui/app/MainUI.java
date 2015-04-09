@@ -12,6 +12,7 @@ import com.vaadin.annotations.Title;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.UI;
+import java.util.Locale;
 import org.vaadin.spring.annotation.VaadinUI;
 
 @VaadinUI
@@ -27,6 +28,8 @@ public class MainUI extends UI {
     
     @Override
     protected void init(VaadinRequest request) {
+        setLocale(Locale.GERMANY);
+        
         Navigator navigator = new Navigator(this, this);
         navigator.addProvider(ViewProvider);
         setNavigator(navigator);
