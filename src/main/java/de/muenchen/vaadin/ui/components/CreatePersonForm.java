@@ -30,9 +30,9 @@ public class CreatePersonForm extends CustomComponent {
         final BeanFieldGroup<Person> binder = new BeanFieldGroup<Person>(Person.class);
         binder.setItemDataSource(new Person());
 
-        layout.addComponent(util.createFormTextField(binder, "m1.person", "firstname"));
-        layout.addComponent(util.createFormTextField(binder, "m1.person", "lastname"));
-        layout.addComponent(binder.buildAndBind("Geburtsdatum: ", "birthdate"));
+        layout.addComponent(util.createFormTextField(binder, PersonConstants.BASE_PATH, "firstname"));
+        layout.addComponent(util.createFormTextField(binder, PersonConstants.BASE_PATH, "lastname"));
+        layout.addComponent(util.createFormDateField(binder, PersonConstants.BASE_PATH, "birthdate"));
 
         // A button to commit the buffer
         layout.addComponent(new Button("OK", new ClickListener() {

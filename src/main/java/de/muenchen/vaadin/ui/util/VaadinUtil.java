@@ -7,6 +7,8 @@ package de.muenchen.vaadin.ui.util;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.DateField;
+import com.vaadin.ui.Field;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,12 +40,23 @@ public class VaadinUtil {
     }
     
     public TextField createFormTextField(BeanFieldGroup binder, String baseKey, String property) {
-        String labelText = i18n.get(baseKey + "." + property + ".label", null);
-        String inputPrompt = i18n.get(baseKey + "." + property + ".input_prompt", null);
-        TextField firstname = (TextField) binder.buildAndBind(labelText, property);
-        firstname.setNullRepresentation("");
-        firstname.setInputPrompt(inputPrompt);
-        return firstname;
+        TextField tf = (TextField) binder.buildAndBind(this.readLabel(baseKey, property), property);
+        tf.setNullRepresentation("");
+        tf.setInputPrompt(this.readInputPrompt(baseKey, property));
+        return tf;
+    }
+    
+    public DateField createFormDateField(BeanFieldGroup binder, String baseKey, String property) {
+        DateField df = (DateField) binder.buildAndBind(this.readLabel(baseKey, property), property);
+        return df;
+    }
+ 
+    private String readLabel(String baseKey, String property) {
+        return i18n.get(baseKey + "." + property + ".label", null);
+    }
+    
+    private String readInputPrompt(String baseKey, String property) {
+        return i18n.get(baseKey + "." + property + ".input_prompt", null);
     }
     
 }
