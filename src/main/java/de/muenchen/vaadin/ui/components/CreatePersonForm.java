@@ -21,14 +21,14 @@ import de.muenchen.vaadin.ui.util.VaadinUtil;
  *
  * @author claus.straube
  */
-public class PersonForm extends CustomComponent {
+public class CreatePersonForm extends CustomComponent {
 
-    public PersonForm(Person item, VaadinUtil util, final PersonService service) {
+    public CreatePersonForm(VaadinUtil util, final PersonService service) {
         FormLayout layout = new FormLayout();
 
         // Now use a binder to bind the members
         final BeanFieldGroup<Person> binder = new BeanFieldGroup<Person>(Person.class);
-        binder.setItemDataSource(item);
+        binder.setItemDataSource(new Person());
 
         layout.addComponent(util.createFormTextField(binder, "m1.person", "firstname"));
         layout.addComponent(util.createFormTextField(binder, "m1.person", "lastname"));
@@ -48,14 +48,14 @@ public class PersonForm extends CustomComponent {
             }
         }));
 
-        // A button to discard the buffer
-        layout.addComponent(new Button("Discard", new ClickListener() {
-            @Override
-            public void buttonClick(ClickEvent event) {
-                binder.discard();
-                Notification.show("Discarded!");
-            }
-        }));
+//        // A button to discard the buffer
+//        layout.addComponent(new Button("Discard", new ClickListener() {
+//            @Override
+//            public void buttonClick(ClickEvent event) {
+//                binder.discard();
+//                Notification.show("Discarded!");
+//            }
+//        }));
 
         setCompositionRoot(layout);
     }
