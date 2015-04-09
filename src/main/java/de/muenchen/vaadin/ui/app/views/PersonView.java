@@ -12,6 +12,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import de.muenchen.vaadin.services.PersonService;
 import de.muenchen.vaadin.ui.components.PersonForm;
 import de.muenchen.vaadin.ui.controller.PersonController;
 import de.muenchen.vaadin.ui.util.VaadinUtil;
@@ -36,13 +37,16 @@ public class PersonView extends VerticalLayout implements View {
     @Autowired
     VaadinUtil util;
     
+    @Autowired
+    PersonService service;
+    
     @PostConstruct
     private void postConstruct() {
         setSizeFull();
         setSpacing(true);
         setMargin(true);
         addComponent(new Label("<h3>Person View</h3>", ContentMode.HTML));
-        addComponent(new PersonForm(controller.createPerson(), util));
+        addComponent(new PersonForm(controller.createPerson(), util, service));
         addComponent(util.createNavigationButton("m2.main", MainView.NAME));
     }
     

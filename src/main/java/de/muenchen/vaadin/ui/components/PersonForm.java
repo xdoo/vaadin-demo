@@ -11,11 +11,10 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.Field;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.Notification;
-import com.vaadin.ui.TextField;
 import de.muenchen.vaadin.domain.Person;
+import de.muenchen.vaadin.services.PersonService;
 import de.muenchen.vaadin.ui.util.VaadinUtil;
 
 /**
@@ -24,7 +23,7 @@ import de.muenchen.vaadin.ui.util.VaadinUtil;
  */
 public class PersonForm extends CustomComponent {
 
-    public PersonForm(Person item, VaadinUtil util) {
+    public PersonForm(Person item, VaadinUtil util, final PersonService service) {
         FormLayout layout = new FormLayout();
 
         // Now use a binder to bind the members
@@ -42,6 +41,7 @@ public class PersonForm extends CustomComponent {
                 try {
                     binder.commit();
                     Notification.show("Thanks!");
+                    service.createPerson(binder.getItemDataSource().getBean());
                 } catch (CommitException e) {
                     Notification.show("You fail!");
                 }

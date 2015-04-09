@@ -9,11 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
-import com.vaadin.annotations.Widgetset;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.UI;
-import org.springframework.context.MessageSource;
 import org.vaadin.spring.annotation.VaadinUI;
 
 @VaadinUI

@@ -14,11 +14,12 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import de.muenchen.vaadin.ui.util.VaadinUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.vaadin.spring.annotation.VaadinUIScope;
 
 @VaadinView(name = SecuredView.NAME)
 @VaadinUIScope
-//@Secured("ROLE_USER")
+@Secured("USER")
 public class SecuredView extends VerticalLayout implements View {
 
     private static final long serialVersionUID = 6937605817612926676L;
@@ -28,6 +29,7 @@ public class SecuredView extends VerticalLayout implements View {
     VaadinUtil util;
 
     @PostConstruct
+//    @Secured("USER")
     private void postConstruct() {
         setSizeFull();
         setSpacing(true);
