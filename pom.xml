@@ -19,7 +19,7 @@
     </organization>
     <properties>
         <main.basedir>${basedir}/../..</main.basedir>
-        <vaadin.version>7.4.1</vaadin.version>
+        <vaadin.version>7.4.3</vaadin.version>
         <vaadin4spring.version>0.0.4.RELEASE</vaadin4spring.version>
     </properties>
     <dependencies>
@@ -57,8 +57,18 @@
             <version>${vaadin4spring.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.vaadin.spring</groupId>
+            <artifactId>spring-vaadin-eventbus</artifactId>
+            <version>${vaadin4spring.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-themes</artifactId>
+            <version>${vaadin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-server</artifactId>
             <version>${vaadin.version}</version>
         </dependency>
         <dependency>

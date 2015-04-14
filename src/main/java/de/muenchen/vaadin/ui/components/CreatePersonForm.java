@@ -16,6 +16,7 @@ import com.vaadin.ui.Notification;
 import de.muenchen.vaadin.domain.Person;
 import de.muenchen.vaadin.services.PersonService;
 import de.muenchen.vaadin.ui.util.VaadinUtil;
+import org.vaadin.spring.events.EventBus;
 
 /**
  *
@@ -23,7 +24,7 @@ import de.muenchen.vaadin.ui.util.VaadinUtil;
  */
 public class CreatePersonForm extends CustomComponent {
 
-    public CreatePersonForm(VaadinUtil util, final PersonService service) {
+    public CreatePersonForm(VaadinUtil util, final PersonService service, EventBus eventbus) {
         FormLayout layout = new FormLayout();
 
         // Now use a binder to bind the members
@@ -35,7 +36,7 @@ public class CreatePersonForm extends CustomComponent {
         layout.addComponent(util.createFormDateField(binder, PersonConstants.BASE_PATH, "birthdate"));
 
         // A button to commit the buffer
-        layout.addComponent(new Button("OK", new ClickListener() {
+        layout.addComponent(new Button("Erstellen", new ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
                 try {
@@ -47,15 +48,6 @@ public class CreatePersonForm extends CustomComponent {
                 }
             }
         }));
-
-//        // A button to discard the buffer
-//        layout.addComponent(new Button("Discard", new ClickListener() {
-//            @Override
-//            public void buttonClick(ClickEvent event) {
-//                binder.discard();
-//                Notification.show("Discarded!");
-//            }
-//        }));
 
         setCompositionRoot(layout);
     }

@@ -8,17 +8,18 @@ package de.muenchen.vaadin.ui.app.views;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.shared.ui.label.ContentMode;
-import com.vaadin.ui.Button;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import de.muenchen.vaadin.services.PersonService;
 import de.muenchen.vaadin.ui.components.CreatePersonForm;
+import de.muenchen.vaadin.ui.components.PersonTable;
 import de.muenchen.vaadin.ui.controller.PersonController;
 import de.muenchen.vaadin.ui.util.VaadinUtil;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.annotation.VaadinUIScope;
+import org.vaadin.spring.events.EventBus;
 import org.vaadin.spring.navigator.annotation.VaadinView;
 
 /**
@@ -40,13 +41,19 @@ public class PersonView extends VerticalLayout implements View {
     @Autowired
     PersonService service;
     
+    @Autowired
+    EventBus eventbus;
+    
     @PostConstruct
     private void postConstruct() {
         setSizeFull();
         setSpacing(true);
         setMargin(true);
         addComponent(new Label("<h3>Person View</h3>", ContentMode.HTML));
-        addComponent(new CreatePersonForm(util, service));
+        HorizontalLayout horizontalLayout = new HorizontalLayout();
+        horizontalLayout.addComponent(new CreatePersonForm(util, service, eventbus));
+        horizontalLayout.addComponent(new PersonTable(util, service));
+        addComponent(horizontalLayout);
         addComponent(util.createNavigationButton("m2.main", MainView.NAME));
     }
     
