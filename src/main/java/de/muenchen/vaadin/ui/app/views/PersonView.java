@@ -51,7 +51,7 @@ public class PersonView extends VerticalLayout implements View {
         setMargin(true);
         addComponent(new Label("<h3>Person View</h3>", ContentMode.HTML));
         HorizontalLayout horizontalLayout = new HorizontalLayout();
-        horizontalLayout.addComponent(new CreatePersonForm(util, service, eventbus));
+        horizontalLayout.addComponent(new CreatePersonForm(util, service));
         horizontalLayout.addComponent(new PersonTable(util, service));
         addComponent(horizontalLayout);
         addComponent(util.createNavigationButton("m2.main", MainView.NAME));

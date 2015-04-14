@@ -16,7 +16,6 @@ import com.vaadin.ui.Notification;
 import de.muenchen.vaadin.domain.Person;
 import de.muenchen.vaadin.services.PersonService;
 import de.muenchen.vaadin.ui.util.VaadinUtil;
-import org.vaadin.spring.events.EventBus;
 
 /**
  *
@@ -24,7 +23,7 @@ import org.vaadin.spring.events.EventBus;
  */
 public class CreatePersonForm extends CustomComponent {
 
-    public CreatePersonForm(VaadinUtil util, final PersonService service, EventBus eventbus) {
+    public CreatePersonForm(VaadinUtil util, final PersonService service) {
         FormLayout layout = new FormLayout();
 
         // Now use a binder to bind the members
