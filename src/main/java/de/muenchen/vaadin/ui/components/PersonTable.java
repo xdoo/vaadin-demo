@@ -19,20 +19,34 @@ import java.util.List;
  */
 public class PersonTable extends CustomComponent {
 
-    public PersonTable(VaadinUtil util, final PersonService service) {
+    private List<Person> all;
+    private PersonService service;
+    private BeanItemContainer<Person> container;
+    
+    public PersonTable(VaadinUtil util, PersonService service) {
 
+        this.service = service;
+        
         // Have some data
-        List<Person> all = service.findAll();
-
+        this.all = this.service.findAll();
+        
         // Have a container of some type to contain the data
-        BeanItemContainer<Person> container
-                = new BeanItemContainer<Person>(Person.class, all);
+        this.container = new BeanItemContainer<Person>(Person.class, all);
 
         // Create a grid bound to the container
         Grid grid = new Grid(container);
         grid.setColumnOrder("id", "firstname", "lastname", "birthdate");
 
         setCompositionRoot(grid);
+    }
+    
+    public void add(Person person) {
+        System.out.println(person.toString());
+        this.container.addBean(person);
+    }
+    
+    public void update(Person person) {
+
     }
 
 }

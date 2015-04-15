@@ -1,8 +1,6 @@
 package de.muenchen.vaadin.ui.app;
 
-import com.google.gwt.codegen.server.StringGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.navigator.Navigator;
@@ -19,7 +17,6 @@ import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.ui.app.views.MainView;
@@ -31,6 +28,7 @@ import java.util.Locale;
 import java.util.Map.Entry;
 import org.vaadin.spring.annotation.VaadinUI;
 import org.vaadin.spring.i18n.I18N;
+import org.vaadin.spring.navigator.SpringViewProvider;
 
 @VaadinUI
 @Title("Vaadin Spring-Security Sample")

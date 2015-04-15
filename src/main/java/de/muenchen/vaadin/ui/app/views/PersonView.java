@@ -12,6 +12,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import de.muenchen.vaadin.services.PersonService;
+import de.muenchen.vaadin.ui.app.views.events.CreatePersonEvent;
 import de.muenchen.vaadin.ui.components.CreatePersonForm;
 import de.muenchen.vaadin.ui.components.PersonTable;
 import de.muenchen.vaadin.ui.controller.PersonController;
@@ -20,6 +21,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.annotation.VaadinUIScope;
 import org.vaadin.spring.events.EventBus;
+import org.vaadin.spring.events.annotation.EventBusListenerMethod;
 import org.vaadin.spring.navigator.annotation.VaadinView;
 
 /**
@@ -44,17 +46,37 @@ public class PersonView extends VerticalLayout implements View {
     @Autowired
     EventBus eventbus;
     
+    // components
+    CreatePersonForm createPersonForm;
+    PersonTable personTable;
+    
+    
     @PostConstruct
     private void postConstruct() {
+        this.configure();
+        this.createPersonForm = new CreatePersonForm(util, service, eventbus);
+        this.personTable = new PersonTable(util, service);
+        
+        // header
+        addComponent(new Label("<h3>Person View</h3>", ContentMode.HTML));
+        
+        HorizontalLayout horizontalLayout = new HorizontalLayout();
+        horizontalLayout.addComponent(this.createPersonForm);
+        horizontalLayout.addComponent(this.personTable);
+        addComponent(horizontalLayout);
+        
+        addComponent(util.createNavigationButton("m2.main", MainView.NAME));
+    }
+    
+    @EventBusListenerMethod
+    public void createPerson(CreatePersonEvent event) {
+        this.personTable.add(event.getPerson());
+    }
+    
+    private void configure() {
         setSizeFull();
         setSpacing(true);
         setMargin(true);
-        addComponent(new Label("<h3>Person View</h3>", ContentMode.HTML));
-        HorizontalLayout horizontalLayout = new HorizontalLayout();
-        horizontalLayout.addComponent(new CreatePersonForm(util, service));
-        horizontalLayout.addComponent(new PersonTable(util, service));
-        addComponent(horizontalLayout);
-        addComponent(util.createNavigationButton("m2.main", MainView.NAME));
     }
     
     @Override

@@ -64,5 +64,12 @@ public class Person implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return String.format("id: %s | firstname: %s | lastname: %s | birthdate: %s", this.id, this.firstname, this.lastname, this.birthdate);
+    }
+    
+    
     
 }
