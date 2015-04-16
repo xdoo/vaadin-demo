@@ -15,7 +15,7 @@ import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.Notification;
 import de.muenchen.vaadin.domain.Person;
 import de.muenchen.vaadin.services.PersonService;
-import de.muenchen.vaadin.ui.app.views.events.CreatePersonEventImpl;
+import de.muenchen.vaadin.ui.app.views.events.PersonEvent;
 import de.muenchen.vaadin.ui.util.VaadinUtil;
 import org.vaadin.spring.events.EventBus;
 
@@ -44,7 +44,7 @@ public class CreatePersonForm extends CustomComponent {
                     binder.commit();
                     Notification.show("Thanks!");
                     Person person = service.createPerson(binder.getItemDataSource().getBean());
-                    eventbus.publish(this, new CreatePersonEventImpl(person));
+                    eventbus.publish(this, new PersonEvent(person));
                     binder.setItemDataSource(new Person());
                 } catch (CommitException e) {
                     Notification.show("You fail!");

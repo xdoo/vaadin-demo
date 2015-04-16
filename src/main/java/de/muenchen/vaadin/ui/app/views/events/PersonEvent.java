@@ -11,8 +11,23 @@ import de.muenchen.vaadin.domain.Person;
  *
  * @author claus.straube
  */
-public interface CreatePersonEvent {
+public class PersonEvent {
     
-    public void setPerson(Person person);
-    public Person getPerson();
+    private Person person;
+
+    public PersonEvent() {
+    }
+
+    public PersonEvent(Person person) {
+        this.person = person;
+    }
+    
+    public void setPerson(Person person) {
+        this.person = person;
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+    
 }

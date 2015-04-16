@@ -12,7 +12,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import de.muenchen.vaadin.services.PersonService;
-import de.muenchen.vaadin.ui.app.views.events.CreatePersonEvent;
+import de.muenchen.vaadin.ui.app.views.events.PersonEvent;
 import de.muenchen.vaadin.ui.components.CreatePersonForm;
 import de.muenchen.vaadin.ui.components.PersonTable;
 import de.muenchen.vaadin.ui.controller.PersonController;
@@ -21,7 +21,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.annotation.VaadinUIScope;
 import org.vaadin.spring.events.EventBus;
-import org.vaadin.spring.events.annotation.EventBusListenerMethod;
+import org.vaadin.spring.events.EventBusListener;
 import org.vaadin.spring.navigator.annotation.VaadinView;
 
 /**
@@ -30,7 +30,7 @@ import org.vaadin.spring.navigator.annotation.VaadinView;
  */
 @VaadinView(name = PersonView.NAME)
 @VaadinUIScope
-public class PersonView extends VerticalLayout implements View {
+public class PersonView extends VerticalLayout implements View, EventBusListener<PersonEvent> {
 
     public static final String NAME = "person";
     
@@ -66,11 +66,7 @@ public class PersonView extends VerticalLayout implements View {
         addComponent(horizontalLayout);
         
         addComponent(util.createNavigationButton("m2.main", MainView.NAME));
-    }
-    
-    @EventBusListenerMethod
-    public void createPerson(CreatePersonEvent event) {
-        this.personTable.add(event.getPerson());
+        this.eventbus.subscribe(this, true);
     }
     
     private void configure() {
@@ -81,6 +77,12 @@ public class PersonView extends VerticalLayout implements View {
     
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
+        // not implemented
+    }
+
+    @Override
+    public void onEvent(org.vaadin.spring.events.Event<PersonEvent> event) {
+        this.personTable.add(event.getPayload().getPerson());
     }
     
 }
