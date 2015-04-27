@@ -5,13 +5,19 @@
  */
 package de.muenchen.vaadin.ui.components;
 
+import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.data.util.GeneratedPropertyContainer;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.renderers.DateRenderer;
 import de.muenchen.vaadin.domain.Person;
 import de.muenchen.vaadin.services.PersonService;
+import de.muenchen.vaadin.ui.app.views.events.SelectPersonEvent;
 import de.muenchen.vaadin.ui.util.VaadinUtil;
+import java.text.DateFormat;
 import java.util.List;
+import org.vaadin.spring.events.EventBus;
 
 /**
  *
@@ -19,11 +25,11 @@ import java.util.List;
  */
 public class PersonTable extends CustomComponent {
 
-    private List<Person> all;
-    private PersonService service;
-    private BeanItemContainer<Person> container;
+    private final List<Person> all;
+    private final PersonService service;
+    private final BeanItemContainer<Person> container;
     
-    public PersonTable(VaadinUtil util, PersonService service) {
+    public PersonTable(VaadinUtil util, PersonService service, final EventBus eventbus) {
 
         this.service = service;
         
@@ -32,21 +38,35 @@ public class PersonTable extends CustomComponent {
         
         // Have a container of some type to contain the data
         this.container = new BeanItemContainer<Person>(Person.class, all);
+        
+        // remove id column
+        GeneratedPropertyContainer wrapperContainer = new GeneratedPropertyContainer(this.container);
+        wrapperContainer.removeContainerProperty("id");
 
         // Create a grid bound to the container
-        Grid grid = new Grid(container);
-        grid.setColumnOrder("id", "firstname", "lastname", "birthdate");
+        Grid grid = new Grid(wrapperContainer);
+        grid.setSelectionMode(Grid.SelectionMode.SINGLE);
+        grid.setColumnOrder("firstname", "lastname", "birthdate");
+        
+        // set format for date
+        grid.getColumn("birthdate").setRenderer(new DateRenderer(DateFormat.getDateInstance()));
+        
+        // selection listener
+        grid.addSelectionListener(e -> {
+            BeanItem<Person> item = container.getItem(grid.getSelectedRow());
+            eventbus.publish(this, new SelectPersonEvent(item));
+        });
 
         setCompositionRoot(grid);
     }
     
     public void add(Person person) {
-        System.out.println(person.toString());
+        System.out.println("add person --> " + person.toString());
         this.container.addBean(person);
     }
     
     public void update(Person person) {
-
+        System.out.println("update person --> " + person.toString());
     }
 
 }

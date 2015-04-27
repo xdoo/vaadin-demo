@@ -51,12 +51,16 @@ public class VaadinUtil {
         return df;
     }
  
-    private String readLabel(String baseKey, String property) {
+    public String readLabel(String baseKey, String property) {
         return i18n.get(baseKey + "." + property + ".label", null);
     }
     
-    private String readInputPrompt(String baseKey, String property) {
+    public String readInputPrompt(String baseKey, String property) {
         return i18n.get(baseKey + "." + property + ".input_prompt", null);
+    }
+    
+    public String readColumnHeader(String baseKey, String property) {
+        return i18n.get(baseKey + "." + property + ".column-header", null);
     }
     
 }

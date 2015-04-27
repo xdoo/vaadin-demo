@@ -11,10 +11,15 @@ import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.services.PersonService;
+import de.muenchen.vaadin.ui.app.views.events.CreatePersonEvent;
 import de.muenchen.vaadin.ui.app.views.events.PersonEvent;
+import de.muenchen.vaadin.ui.app.views.events.SelectPersonEvent;
+import de.muenchen.vaadin.ui.app.views.events.UpdatePersonEvent;
 import de.muenchen.vaadin.ui.components.CreatePersonForm;
 import de.muenchen.vaadin.ui.components.PersonTable;
+import de.muenchen.vaadin.ui.components.UpdatePersonForm;
 import de.muenchen.vaadin.ui.controller.PersonController;
 import de.muenchen.vaadin.ui.util.VaadinUtil;
 import javax.annotation.PostConstruct;
@@ -30,7 +35,7 @@ import org.vaadin.spring.navigator.annotation.VaadinView;
  */
 @VaadinView(name = PersonView.NAME)
 @VaadinUIScope
-public class PersonView extends VerticalLayout implements View, EventBusListener<PersonEvent> {
+public class PersonView extends VerticalLayout implements View, EventBusListener<PersonEvent>{
 
     public static final String NAME = "person";
     
@@ -48,6 +53,7 @@ public class PersonView extends VerticalLayout implements View, EventBusListener
     
     // components
     CreatePersonForm createPersonForm;
+    UpdatePersonForm updatePersonForm;
     PersonTable personTable;
     
     
@@ -55,23 +61,31 @@ public class PersonView extends VerticalLayout implements View, EventBusListener
     private void postConstruct() {
         this.configure();
         this.createPersonForm = new CreatePersonForm(util, service, eventbus);
-        this.personTable = new PersonTable(util, service);
+        this.updatePersonForm = new UpdatePersonForm(util, service, eventbus);
+        this.personTable = new PersonTable(util, service, eventbus);
         
-        // header
-        addComponent(new Label("<h3>Person View</h3>", ContentMode.HTML));
+        // headline
+        Label headline = new Label("Person View");
+        headline.addStyleName(ValoTheme.LABEL_H3);
+        headline.addStyleName(ValoTheme.LABEL_COLORED);
+        addComponent(headline);
         
+        // body
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         horizontalLayout.addComponent(this.createPersonForm);
-        horizontalLayout.addComponent(this.personTable);
+        horizontalLayout.addComponent(this.updatePersonForm);
+        horizontalLayout.setMargin(true);
         addComponent(horizontalLayout);
         
-        addComponent(util.createNavigationButton("m2.main", MainView.NAME));
+        addComponent(this.personTable);
+        
         this.eventbus.subscribe(this, true);
     }
     
     private void configure() {
         setSizeFull();
-        setSpacing(true);
+        this.setHeightUndefined();
+//        setSpacing(true);
         setMargin(true);
     }
     
@@ -81,8 +95,23 @@ public class PersonView extends VerticalLayout implements View, EventBusListener
     }
 
     @Override
-    public void onEvent(org.vaadin.spring.events.Event<PersonEvent> event) {
-        this.personTable.add(event.getPayload().getPerson());
+    public void onEvent(org.vaadin.spring.events.Event<PersonEvent> e) {
+        PersonEvent event = e.getPayload();
+        
+        // create
+        if(event instanceof CreatePersonEvent) {
+            this.personTable.add(event.getPerson());
+        } 
+        
+        // update
+        if(event instanceof UpdatePersonEvent) {
+            this.personTable.update(event.getPerson());
+        }
+        
+        // select
+        if(event instanceof SelectPersonEvent) {
+            this.updatePersonForm.select(event.getItem());
+        }
     }
     
 }

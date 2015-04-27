@@ -7,27 +7,51 @@ package de.muenchen.vaadin.ui.components;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
+import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.Notification;
 import de.muenchen.vaadin.domain.Person;
 import de.muenchen.vaadin.services.PersonService;
+import de.muenchen.vaadin.ui.app.views.events.CreatePersonEvent;
+import de.muenchen.vaadin.ui.app.views.events.UpdatePersonEvent;
 import de.muenchen.vaadin.ui.util.VaadinUtil;
+import org.vaadin.spring.events.EventBus;
 
 /**
  *
  * @author claus
  */
 public class UpdatePersonForm extends CustomComponent {
+    
+    PersonService service;
+    final EventBus eventBus;
+    final BeanFieldGroup<Person> binder = new BeanFieldGroup<Person>(Person.class);
+    VaadinUtil util;
+    FormLayout layout = new FormLayout();
+    
+    
+    private Person person;
 
-    public UpdatePersonForm(VaadinUtil util, final PersonService service, Long id) {
-        FormLayout layout = new FormLayout();
+    public UpdatePersonForm(VaadinUtil util, final PersonService service, final EventBus eventbus) {
+        
+        this.service = service;
+        this.eventBus = eventbus;
+        this.util = util;
 
+        // create form
+        this.createForm();
+
+    }
+    
+    private void createForm() {
         // Now use a binder to bind the members
-        Person person = service.readPerson(id);
-        final BeanFieldGroup<Person> binder = new BeanFieldGroup<Person>(Person.class);
+        this.person = null;
+        
         binder.setItemDataSource(person);
+        
+        layout.setMargin(true);
 
         layout.addComponent(util.createFormTextField(binder, PersonConstants.BASE_PATH, "firstname"));
         layout.addComponent(util.createFormTextField(binder, PersonConstants.BASE_PATH, "lastname"));
@@ -40,7 +64,9 @@ public class UpdatePersonForm extends CustomComponent {
                 try {
                     binder.commit();
                     Notification.show("Thanks!");
-                    service.createPerson(binder.getItemDataSource().getBean());
+                    Person person = binder.getItemDataSource().getBean();
+                    eventBus.publish(this, new UpdatePersonEvent(person));
+                    service.updatePerson(person);
                 } catch (FieldGroup.CommitException e) {
                     Notification.show("You fail!");
                 }
@@ -48,6 +74,10 @@ public class UpdatePersonForm extends CustomComponent {
         }));
 
         setCompositionRoot(layout);
+    }
+    
+    public void select(BeanItem<Person> person) {
+        this.binder.setItemDataSource(person);
     }
 
 }
