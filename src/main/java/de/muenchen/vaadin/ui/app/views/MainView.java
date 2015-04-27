@@ -33,7 +33,7 @@ public class MainView extends VerticalLayout implements View {
         setMargin(true);
         addComponent(new Label("<h2>Main View</h2>", ContentMode.HTML));
         addComponent(util.createNavigationButton("m2.secured", SecuredView.NAME));
-        addComponent(util.createNavigationButton("m1.person", PersonView.NAME));
+        addComponent(util.createNavigationButton("m1.person", SamplePersonView.NAME));
     }
 
     @Override
