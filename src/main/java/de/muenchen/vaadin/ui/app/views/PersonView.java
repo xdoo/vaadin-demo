@@ -21,6 +21,7 @@ import de.muenchen.vaadin.ui.components.CreatePersonForm;
 import de.muenchen.vaadin.ui.components.PersonTable;
 import de.muenchen.vaadin.ui.components.UpdatePersonForm;
 import de.muenchen.vaadin.ui.controller.PersonController;
+import de.muenchen.vaadin.ui.util.I18nPaths;
 import de.muenchen.vaadin.ui.util.VaadinUtil;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,7 @@ import org.vaadin.spring.navigator.annotation.VaadinView;
 public class PersonView extends VerticalLayout implements View, EventBusListener<PersonEvent>{
 
     public static final String NAME = "person";
+    public static final String I18N_BASE_PATH = "m1.person";
     
     @Autowired
     PersonController controller;
@@ -65,18 +67,20 @@ public class PersonView extends VerticalLayout implements View, EventBusListener
         this.personTable = new PersonTable(util, service, eventbus);
         
         // headline
-        Label headline = new Label("Person View");
-        headline.addStyleName(ValoTheme.LABEL_H3);
+        Label headline = new Label(util.readText(I18N_BASE_PATH, I18nPaths.I18N_PAGE_TITLE));
+        headline.addStyleName(ValoTheme.LABEL_H1);
         headline.addStyleName(ValoTheme.LABEL_COLORED);
         addComponent(headline);
         
         // body
-        HorizontalLayout horizontalLayout = new HorizontalLayout();
-        horizontalLayout.addComponent(this.createPersonForm);
-        horizontalLayout.addComponent(this.updatePersonForm);
-        horizontalLayout.setMargin(true);
-        addComponent(horizontalLayout);
+//        HorizontalLayout horizontalLayout = new HorizontalLayout();
+//        horizontalLayout.addComponent(this.createPersonForm);
+//        horizontalLayout.addComponent(this.updatePersonForm);
+//        horizontalLayout.setMargin(true);
+//        addComponent(horizontalLayout);
         
+        addComponent(this.createPersonForm);
+        addComponent(this.updatePersonForm);
         addComponent(this.personTable);
         
         this.eventbus.subscribe(this, true);

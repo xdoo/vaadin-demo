@@ -63,4 +63,8 @@ public class VaadinUtil {
         return i18n.get(baseKey + "." + property + ".column-header", null);
     }
     
+    public String readText(String baseKey, String property) {
+        return i18n.get(baseKey + "." + property, null);
+    }
+    
 }

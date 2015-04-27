@@ -11,11 +11,14 @@ import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.domain.Person;
 import de.muenchen.vaadin.services.PersonService;
-import de.muenchen.vaadin.ui.app.views.events.CreatePersonEvent;
+import de.muenchen.vaadin.ui.app.views.PersonView;
 import de.muenchen.vaadin.ui.app.views.events.UpdatePersonEvent;
+import de.muenchen.vaadin.ui.util.I18nPaths;
 import de.muenchen.vaadin.ui.util.VaadinUtil;
 import org.vaadin.spring.events.EventBus;
 
@@ -52,13 +55,19 @@ public class UpdatePersonForm extends CustomComponent {
         binder.setItemDataSource(person);
         
         layout.setMargin(true);
+        
+        // headline
+        Label headline = new Label(util.readText(PersonView.I18N_BASE_PATH, I18nPaths.I18N_FORM_UPDATE_HEADLINE_LABEL));
+        headline.addStyleName(ValoTheme.LABEL_H3);
+        layout.addComponent(headline);
 
-        layout.addComponent(util.createFormTextField(binder, PersonConstants.BASE_PATH, "firstname"));
-        layout.addComponent(util.createFormTextField(binder, PersonConstants.BASE_PATH, "lastname"));
-        layout.addComponent(util.createFormDateField(binder, PersonConstants.BASE_PATH, "birthdate"));
+        layout.addComponent(util.createFormTextField(binder, PersonView.I18N_BASE_PATH, "firstname"));
+        layout.addComponent(util.createFormTextField(binder, PersonView.I18N_BASE_PATH, "lastname"));
+        layout.addComponent(util.createFormDateField(binder, PersonView.I18N_BASE_PATH, "birthdate"));
 
         // A button to commit the buffer
-        layout.addComponent(new Button("speichern", new Button.ClickListener() {
+        String label = util.readText(PersonView.I18N_BASE_PATH, I18nPaths.I18N_FORM_UPDATE_BUTTON_LABEL);
+        layout.addComponent(new Button(label, new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 try {
