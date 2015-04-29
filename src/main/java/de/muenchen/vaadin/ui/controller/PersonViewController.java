@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
  * @author claus.straube
  */
 @Component
-public class PersonController {
+public class PersonViewController {
     
     @Autowired
     PersonService service;
