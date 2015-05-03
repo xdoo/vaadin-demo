@@ -7,20 +7,12 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.services.PersonService;
-import de.muenchen.vaadin.ui.app.views.events.CreatePersonEvent;
-import de.muenchen.vaadin.ui.app.views.events.PersonEvent;
-import de.muenchen.vaadin.ui.app.views.events.SelectPersonEvent;
-import de.muenchen.vaadin.ui.app.views.events.UpdatePersonEvent;
-import de.muenchen.vaadin.ui.components.CreatePersonForm;
-import de.muenchen.vaadin.ui.components.PersonTable;
-import de.muenchen.vaadin.ui.components.UpdatePersonForm;
 import de.muenchen.vaadin.ui.controller.PersonViewController;
 import de.muenchen.vaadin.ui.util.I18nPaths;
 import de.muenchen.vaadin.ui.util.VaadinUtil;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.events.EventBus;
-import org.vaadin.spring.events.EventBusListener;
 
 /**
  * Für jede Entity existiert eine (voll generierte) Basis Klasse. Aus dieser
@@ -43,26 +35,19 @@ import org.vaadin.spring.events.EventBusListener;
  * 
  * @author claus.straube
  */
-public abstract class DefaultPersonView extends VerticalLayout implements View, EventBusListener<PersonEvent>{
+public abstract class DefaultPersonView extends VerticalLayout implements View{
 
     public static final String I18N_BASE_PATH = "m1.person";
     
-    @Autowired
     PersonViewController controller;
+
+    public DefaultPersonView(PersonService service, VaadinUtil util, EventBus eventbus) {
+        
+        // create for every view instance a controller
+        this.controller = new PersonViewController(service, util, eventbus);
+    }
     
-    @Autowired
-    VaadinUtil util;
     
-    @Autowired
-    PersonService service;
-    
-    @Autowired
-    EventBus eventbus;
-    
-    // components
-    CreatePersonForm createPersonForm;
-    UpdatePersonForm updatePersonForm;
-    PersonTable personTable;
     
     /**
      * 
@@ -70,16 +55,13 @@ public abstract class DefaultPersonView extends VerticalLayout implements View, 
     @PostConstruct
     private void postConstruct() {
         this.configure();
-        this.createPersonForm = new CreatePersonForm(util, service, eventbus);
-        this.updatePersonForm = new UpdatePersonForm(util, service, eventbus);
-        this.personTable = new PersonTable(util, service, eventbus);
         
         // add some components
         this.addHeadline();
         this.site();
-        
-        this.eventbus.subscribe(this, true);
     }
+    
+    
     
     /**
      * The 'rigth'side of the site. You can put in here, everthing you need.
@@ -89,7 +71,7 @@ public abstract class DefaultPersonView extends VerticalLayout implements View, 
     protected void addHeadline() {
         
         // headline
-        Label pageTitle = new Label(util.readText(I18N_BASE_PATH, I18nPaths.I18N_PAGE_TITLE));
+        Label pageTitle = new Label(this.controller.getUtil().readText(I18N_BASE_PATH, I18nPaths.I18N_PAGE_TITLE));
         pageTitle.addStyleName(ValoTheme.LABEL_H1);
         pageTitle.addStyleName(ValoTheme.LABEL_COLORED);
         
@@ -109,26 +91,6 @@ public abstract class DefaultPersonView extends VerticalLayout implements View, 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
         // not implemented
-    }
-
-    @Override
-    public void onEvent(org.vaadin.spring.events.Event<PersonEvent> e) {
-        PersonEvent event = e.getPayload();
-        
-        // create
-        if(event instanceof CreatePersonEvent) {
-            this.personTable.add(event.getPerson());
-        } 
-        
-        // update
-        if(event instanceof UpdatePersonEvent) {
-            this.personTable.update(event.getPerson());
-        }
-        
-        // select
-        if(event instanceof SelectPersonEvent) {
-            this.updatePersonForm.select(event.getItem());
-        }
     }
     
 }
