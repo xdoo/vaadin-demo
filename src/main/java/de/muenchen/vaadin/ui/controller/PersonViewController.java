@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package de.muenchen.vaadin.ui.controller;
 
 import de.muenchen.vaadin.domain.Person;
@@ -15,7 +10,7 @@ import de.muenchen.vaadin.ui.components.CreatePersonForm;
 import de.muenchen.vaadin.ui.components.PersonTable;
 import de.muenchen.vaadin.ui.components.UpdatePersonForm;
 import de.muenchen.vaadin.ui.util.VaadinUtil;
-import javax.annotation.PostConstruct;
+import java.util.List;
 import org.vaadin.spring.events.EventBus;
 import org.vaadin.spring.events.EventBusListener;
 
@@ -58,24 +53,28 @@ public class PersonViewController implements EventBusListener<PersonEvent> {
     public void savePerson(Person person) {
         service.updatePerson(person);
     }
+    
+    public List<Person> findPersons() {
+        return service.findAll();
+    }
 
     public CreatePersonForm getCreatePersonForm() {
         if(this.createPersonForm == null) {
-            this.createPersonForm = new CreatePersonForm(util, service, eventbus);
+            this.createPersonForm = new CreatePersonForm(this);
         }
         return createPersonForm;
     }
 
     public UpdatePersonForm getUpdatePersonForm() {
         if(this.updatePersonForm == null) {
-            this.updatePersonForm = new UpdatePersonForm(util, service, eventbus);
+            this.updatePersonForm = new UpdatePersonForm(this);
         }
         return updatePersonForm;
     }
 
     public PersonTable getPersonTable() {
         if(this.personTable == null) {
-            this.personTable = new PersonTable(util, service, eventbus);
+            this.personTable = new PersonTable(this);
         }
         return personTable;
     }

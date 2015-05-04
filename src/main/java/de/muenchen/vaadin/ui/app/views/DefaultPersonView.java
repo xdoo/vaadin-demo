@@ -11,7 +11,6 @@ import de.muenchen.vaadin.ui.controller.PersonViewController;
 import de.muenchen.vaadin.ui.util.I18nPaths;
 import de.muenchen.vaadin.ui.util.VaadinUtil;
 import javax.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.events.EventBus;
 
 /**
@@ -47,8 +46,6 @@ public abstract class DefaultPersonView extends VerticalLayout implements View{
         this.controller = new PersonViewController(service, util, eventbus);
     }
     
-    
-    
     /**
      * 
      */
@@ -60,8 +57,6 @@ public abstract class DefaultPersonView extends VerticalLayout implements View{
         this.addHeadline();
         this.site();
     }
-    
-    
     
     /**
      * The 'rigth'side of the site. You can put in here, everthing you need.

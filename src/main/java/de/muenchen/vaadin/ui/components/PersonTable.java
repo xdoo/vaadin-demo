@@ -12,12 +12,10 @@ import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.renderers.DateRenderer;
 import de.muenchen.vaadin.domain.Person;
-import de.muenchen.vaadin.services.PersonService;
 import de.muenchen.vaadin.ui.app.views.events.SelectPersonEvent;
-import de.muenchen.vaadin.ui.util.VaadinUtil;
+import de.muenchen.vaadin.ui.controller.PersonViewController;
 import java.text.DateFormat;
 import java.util.List;
-import org.vaadin.spring.events.EventBus;
 
 /**
  *
@@ -25,16 +23,12 @@ import org.vaadin.spring.events.EventBus;
  */
 public class PersonTable extends CustomComponent {
 
-    private final List<Person> all;
-    private final PersonService service;
     private final BeanItemContainer<Person> container;
     
-    public PersonTable(VaadinUtil util, PersonService service, final EventBus eventbus) {
-
-        this.service = service;
+    public PersonTable(final PersonViewController controller) {
         
         // Have some data
-        this.all = this.service.findAll();
+        List<Person> all = controller.findPersons();
         
         // Have a container of some type to contain the data
         this.container = new BeanItemContainer<Person>(Person.class, all);
@@ -54,7 +48,7 @@ public class PersonTable extends CustomComponent {
         // selection listener
         grid.addSelectionListener(e -> {
             BeanItem<Person> item = container.getItem(grid.getSelectedRow());
-            eventbus.publish(this, new SelectPersonEvent(item));
+            controller.getEventbus().publish(this, new SelectPersonEvent(item));
         });
 
         setCompositionRoot(grid);
