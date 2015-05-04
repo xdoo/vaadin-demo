@@ -15,13 +15,10 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.domain.Person;
-import de.muenchen.vaadin.services.PersonService;
 import de.muenchen.vaadin.ui.app.views.DefaultPersonView;
 import de.muenchen.vaadin.ui.app.views.events.UpdatePersonEvent;
 import de.muenchen.vaadin.ui.controller.PersonViewController;
 import de.muenchen.vaadin.ui.util.I18nPaths;
-import de.muenchen.vaadin.ui.util.VaadinUtil;
-import org.vaadin.spring.events.EventBus;
 
 /**
  *
