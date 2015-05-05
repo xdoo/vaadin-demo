@@ -16,8 +16,9 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.domain.Person;
 import de.muenchen.vaadin.ui.app.views.DefaultPersonView;
-import de.muenchen.vaadin.ui.app.views.events.UpdatePersonEvent;
+import de.muenchen.vaadin.ui.app.views.events.PersonEvent;
 import de.muenchen.vaadin.ui.controller.PersonViewController;
+import de.muenchen.vaadin.ui.util.EventType;
 import de.muenchen.vaadin.ui.util.I18nPaths;
 
 /**
@@ -68,8 +69,7 @@ public class UpdatePersonForm extends CustomComponent {
                     binder.commit();
                     Notification.show("Thanks!");
                     Person person = binder.getItemDataSource().getBean();
-                    controller.getEventbus().publish(this, new UpdatePersonEvent(person));
-                    controller.savePerson(person);
+                    controller.getEventbus().publish(this, new PersonEvent(person, EventType.UPDATE));
                 } catch (FieldGroup.CommitException e) {
                     Notification.show("You fail!");
                 }

@@ -1,5 +1,6 @@
 package de.muenchen.vaadin.ui.components;
 
+import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.server.FontAwesome;
@@ -10,9 +11,12 @@ import com.vaadin.ui.Table;
 import com.vaadin.ui.Table.ColumnGenerator;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.domain.Person;
-import de.muenchen.vaadin.ui.app.views.events.SelectPersonEvent;
+import de.muenchen.vaadin.ui.app.views.events.PersonEvent;
 import de.muenchen.vaadin.ui.controller.PersonViewController;
+import de.muenchen.vaadin.ui.util.EventType;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -22,6 +26,9 @@ public class PersonTable extends CustomComponent {
 
     private final BeanItemContainer<Person> container;
     private PersonViewController controller;
+    private Table table;
+    
+    protected static final Logger LOG = LoggerFactory.getLogger(PersonTable.class);
     
     public PersonTable(final PersonViewController controller) {
         
@@ -34,7 +41,7 @@ public class PersonTable extends CustomComponent {
         this.container = new BeanItemContainer<Person>(Person.class, all);
         
         // create table
-        Table table = new Table();
+        this.table = new Table();
         table.setContainerDataSource(this.container);
         
         //remove id column
@@ -50,59 +57,52 @@ public class PersonTable extends CustomComponent {
             }
         });
         
-//        // remove id column
-//        GeneratedPropertyContainer wrapperContainer = new GeneratedPropertyContainer(this.container);
-//        wrapperContainer.removeContainerProperty("id");
-//
-//        // Create a grid bound to the container
-//        Grid grid = new Grid(wrapperContainer);
-//        grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-//        grid.setColumnOrder("firstname", "lastname", "birthdate");
-//        
-//        // set format for date
-//        grid.getColumn("birthdate").setRenderer(new DateRenderer(DateFormat.getDateInstance()));
-//        
-//        // selection listener
-//        grid.addSelectionListener(e -> {
-//            BeanItem<Person> item = container.getItem(grid.getSelectedRow());
-//            controller.getEventbus().publish(this, new SelectPersonEvent(item));
-//        });
-//
-//        setCompositionRoot(grid);
-        
         setCompositionRoot(table);
     }
     
     public void add(Person person) {
-        System.out.println("add person --> " + person.toString());
+        LOG.debug("added person to table.");
         this.container.addBean(person);
     }
     
     public void update(Person person) {
-        System.out.println("update person --> " + person.toString());
+        LOG.debug("updated person in table.");
+    }
+    
+    public void delete(Object id) {
+        LOG.debug("deleted person from table.");
+        this.container.removeItem(id);
     }
     
     public HorizontalLayout addButtons(final Object id) {
         
         //edit
         Button edit = new Button();
-        edit.setIcon(FontAwesome.EDIT);
+        edit.setIcon(FontAwesome.PENCIL);
         edit.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
         edit.addClickListener(e -> {
             BeanItem<Person> item = container.getItem(id);
-            controller.getEventbus().publish(this, new SelectPersonEvent(item));
+            controller.getEventbus().publish(this, new PersonEvent(item, id, EventType.SELECT));
         });
         
         //copy
         Button copy = new Button();
         copy.setIcon(FontAwesome.COPY);
         copy.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
+        copy.addClickListener(e -> {
+            BeanItem<Person> item = container.getItem(id);
+            controller.getEventbus().publish(this, new PersonEvent(item, id, EventType.COPY));
+        });
         
         //delete
         Button delete = new Button();
         delete.setIcon(FontAwesome.TRASH_O);
         delete.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
         delete.addStyleName(ValoTheme.BUTTON_DANGER);
+        delete.addClickListener(e -> {
+            BeanItem<Person> item = container.getItem(id);
+            controller.getEventbus().publish(this, new PersonEvent(item, id, EventType.DELETE));
+        });
 
         HorizontalLayout layout = new HorizontalLayout(edit, copy, delete);
         layout.setSpacing(true);
