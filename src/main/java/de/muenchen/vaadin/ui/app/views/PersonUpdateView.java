@@ -6,6 +6,7 @@
 package de.muenchen.vaadin.ui.app.views;
 
 import de.muenchen.vaadin.services.PersonService;
+import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.util.VaadinUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.annotation.VaadinUIScope;
@@ -16,22 +17,20 @@ import org.vaadin.spring.navigator.annotation.VaadinView;
  *
  * @author claus
  */
-@VaadinView(name = SamplePersonView.NAME)
+@VaadinView(name = PersonUpdateView.NAME)
 @VaadinUIScope
-public class SamplePersonView extends DefaultPersonView {
+public class PersonUpdateView extends DefaultPersonView {
     
-    public static final String NAME = "sample_person_view";
+    public static final String NAME = "person_update_view";
 
     @Autowired
-    public SamplePersonView(PersonService service, VaadinUtil util, EventBus eventbus) {
-        super(service, util, eventbus);
+    public PersonUpdateView(PersonService service, VaadinUtil util, EventBus eventbus, MainUI ui) {
+        super(service, util, eventbus, ui);
     }
 
     @Override
     protected void site() {
-        addComponent(this.controller.getCreatePersonForm());
-        addComponent(this.controller.getUpdatePersonForm());
-        addComponent(this.controller.getPersonTable());
+        addComponent(this.controller.generateUpdatePersonForm(PersonTableView.NAME));
     }
     
 }

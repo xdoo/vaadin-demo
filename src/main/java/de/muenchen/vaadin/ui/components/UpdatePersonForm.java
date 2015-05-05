@@ -33,10 +33,12 @@ public class UpdatePersonForm extends CustomComponent {
     
     
     private Person person;
+    private String navigateTo;
 
-    public UpdatePersonForm(PersonViewController controller) {
+    public UpdatePersonForm(PersonViewController controller, String navigateTo) {
         
         this.controller = controller;
+        this.navigateTo = navigateTo;
         
         // create form
         this.createForm();
@@ -64,12 +66,14 @@ public class UpdatePersonForm extends CustomComponent {
         String label = controller.getUtil().readText(DefaultPersonView.I18N_BASE_PATH, I18nPaths.I18N_FORM_UPDATE_BUTTON_LABEL);
         layout.addComponent(new Button(label, new Button.ClickListener() {
             @Override
-            public void buttonClick(Button.ClickEvent event) {
+            public void buttonClick(Button.ClickEvent click) {
                 try {
                     binder.commit();
                     Notification.show("Thanks!");
                     Person person = binder.getItemDataSource().getBean();
-                    controller.getEventbus().publish(this, new PersonEvent(person, EventType.UPDATE));
+                    PersonEvent event = new PersonEvent(person, EventType.UPDATE);
+                    event.setNavigateTo(navigateTo);
+                    controller.getEventbus().publish(this, event);
                 } catch (FieldGroup.CommitException e) {
                     Notification.show("You fail!");
                 }

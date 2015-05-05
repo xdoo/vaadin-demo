@@ -23,7 +23,7 @@ import de.muenchen.vaadin.ui.util.I18nPaths;
  */
 public class CreatePersonForm extends CustomComponent {
 
-    public CreatePersonForm(final PersonViewController controller) {
+    public CreatePersonForm(final PersonViewController controller, final String navigateTo) {
         FormLayout layout = new FormLayout();
         layout.setMargin(true);
         
@@ -44,11 +44,14 @@ public class CreatePersonForm extends CustomComponent {
         String label = controller.getUtil().readText(DefaultPersonView.I18N_BASE_PATH, I18nPaths.I18N_FORM_CREATE_BUTTON_LABEL);
         layout.addComponent(new Button(label, new ClickListener() {
             @Override
-            public void buttonClick(ClickEvent event) {
+            public void buttonClick(ClickEvent click) {
                 try {
                     binder.commit();
                     Notification.show("Thanks!");
-                    controller.getEventbus().publish(this, new PersonEvent(binder.getItemDataSource().getBean(), EventType.CREATE));
+                    PersonEvent event = new PersonEvent(binder.getItemDataSource().getBean(), EventType.CREATE);
+                    event.setNavigateTo(navigateTo);
+                    controller.getEventbus().publish(this, event);
+                    //reset
                     binder.setItemDataSource(new Person());
                 } catch (CommitException e) {
                     Notification.show("You fail!");

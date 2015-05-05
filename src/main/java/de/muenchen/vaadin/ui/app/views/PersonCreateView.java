@@ -17,20 +17,20 @@ import org.vaadin.spring.navigator.annotation.VaadinView;
  *
  * @author claus
  */
-@VaadinView(name = SamplePersonView1.NAME)
+@VaadinView(name = PersonCreateView.NAME)
 @VaadinUIScope
-public class SamplePersonView1 extends DefaultPersonView {
+public class PersonCreateView extends DefaultPersonView {
     
-    public static final String NAME = "sample_person_view1";
+    public static final String NAME = "person_create_view";
 
     @Autowired
-    public SamplePersonView1(PersonService service, VaadinUtil util, EventBus eventbus, MainUI ui) {
+    public PersonCreateView(PersonService service, VaadinUtil util, EventBus eventbus, MainUI ui) {
         super(service, util, eventbus, ui);
     }
 
     @Override
     protected void site() {
-        addComponent(this.controller.generatePersonTable(PersonUpdateView.NAME));
+        addComponent(this.controller.generateCreatePersonForm(PersonTableView.NAME));
     }
     
 }

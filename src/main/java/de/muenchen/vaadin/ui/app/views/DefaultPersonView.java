@@ -1,5 +1,6 @@
 package de.muenchen.vaadin.ui.app.views;
 
+import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.HorizontalLayout;
@@ -7,6 +8,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.services.PersonService;
+import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.controller.PersonViewController;
 import de.muenchen.vaadin.ui.util.I18nPaths;
 import de.muenchen.vaadin.ui.util.VaadinUtil;
@@ -40,10 +42,10 @@ public abstract class DefaultPersonView extends VerticalLayout implements View{
     
     PersonViewController controller;
 
-    public DefaultPersonView(PersonService service, VaadinUtil util, EventBus eventbus) {
+    public DefaultPersonView(PersonService service, VaadinUtil util, EventBus eventbus, MainUI ui) {
         
         // create for every view instance a controller
-        this.controller = new PersonViewController(service, util, eventbus, I18N_BASE_PATH);
+        this.controller = new PersonViewController(service, util, eventbus, I18N_BASE_PATH, ui);
     }
     
     /**

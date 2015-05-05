@@ -20,8 +20,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.ui.app.views.MainView;
-import de.muenchen.vaadin.ui.app.views.DefaultPersonView;
-import de.muenchen.vaadin.ui.app.views.SamplePersonView;
+import de.muenchen.vaadin.ui.app.views.PersonTableView;
 import de.muenchen.vaadin.ui.app.views.SamplePersonView1;
 import de.muenchen.vaadin.ui.app.views.SecuredView;
 import java.util.Iterator;
@@ -146,7 +145,7 @@ public class MainUI extends UI {
 
     private Component createNavigationMenu() {
         this.menuItems.put(MainView.NAME, "Haupseite");
-        this.menuItems.put(SamplePersonView.NAME, "Personen Pflege 1");
+        this.menuItems.put(PersonTableView.NAME, "Personen Pflege 1");
         this.menuItems.put(SamplePersonView1.NAME, "Person Pflege 2");
         this.menuItems.put(SecuredView.NAME, "Sichere Seite");
 

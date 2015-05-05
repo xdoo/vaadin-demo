@@ -1,13 +1,17 @@
 package de.muenchen.vaadin.ui.controller;
 
+import com.vaadin.navigator.Navigator;
+import com.vaadin.ui.UI;
 import de.muenchen.vaadin.domain.Person;
 import de.muenchen.vaadin.services.PersonService;
+import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.app.views.events.PersonEvent;
 import de.muenchen.vaadin.ui.components.CreatePersonForm;
 import de.muenchen.vaadin.ui.components.PersonTable;
 import de.muenchen.vaadin.ui.components.UpdatePersonForm;
 import de.muenchen.vaadin.ui.util.EventType;
 import de.muenchen.vaadin.ui.util.VaadinUtil;
+import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,17 +44,28 @@ public class PersonViewController implements EventBusListener<PersonEvent> {
      */
     EventBus eventbus;
     
+    /**
+     * {@link UI} {@link Navigator}
+     */
+    Navigator navigator;
+    
     String i18nBasePath;
 
-    public PersonViewController(PersonService service, VaadinUtil util, EventBus eventbus, String i18nBasePath) {
+    public PersonViewController(PersonService service, VaadinUtil util, EventBus eventbus, String i18nBasePath, MainUI ui) {
         this.service = service;
         this.util = util;
         this.eventbus = eventbus;
         this.i18nBasePath = i18nBasePath;
+        this.navigator = ui.getNavigator();
         
+        // an Event Bus registrieren
         this.eventbus.subscribe(this, true);
     }
-     
+    
+    List<CreatePersonForm> createPersonForms;
+    List<UpdatePersonForm> updatePersonForms;
+    List<PersonTable> personTables;
+    
     // components
     CreatePersonForm createPersonForm;
     UpdatePersonForm updatePersonForm;
@@ -68,6 +83,11 @@ public class PersonViewController implements EventBusListener<PersonEvent> {
     public String getI18nBasePath() {
         return i18nBasePath;
     }
+
+    public Navigator getNavigator() {
+        return navigator;
+    }
+    
     
     ////////////////////////
     // Service Operations //
@@ -127,25 +147,39 @@ public class PersonViewController implements EventBusListener<PersonEvent> {
     // Setter und Getter für die UI Komponenten //
     //////////////////////////////////////////////
 
-    public CreatePersonForm getCreatePersonForm() {
-        if(this.createPersonForm == null) {
-            this.createPersonForm = new CreatePersonForm(this);
+    public CreatePersonForm generateCreatePersonForm(String navigateTo) {
+        if(this.createPersonForms == null) {
+            this.createPersonForms = new ArrayList<>();
         }
-        return createPersonForm;
+        
+        CreatePersonForm form = new CreatePersonForm(this, navigateTo);
+        this.createPersonForms.add(form);
+        
+        return form;
     }
 
-    public UpdatePersonForm getUpdatePersonForm() {
-        if(this.updatePersonForm == null) {
-            this.updatePersonForm = new UpdatePersonForm(this);
+    public UpdatePersonForm generateUpdatePersonForm(String navigateTo) {
+        if(this.updatePersonForms == null) {
+            this.updatePersonForms = new ArrayList<>();
         }
-        return updatePersonForm;
+        
+        UpdatePersonForm form = new UpdatePersonForm(this, navigateTo);
+        this.updatePersonForms.add(form);
+        
+        return form;
     }
 
-    public PersonTable getPersonTable() {
-        if(this.personTable == null) {
-            this.personTable = new PersonTable(this);
+    public PersonTable generatePersonTable(String navigateToAfterEdit) {
+        if(this.personTables == null) {
+            this.personTables = new ArrayList<>();
         }
-        return personTable;
+        
+        PersonTable table = new PersonTable(this);
+        this.personTables.add(table);
+        
+        table.setNavigateToAfterEdit(navigateToAfterEdit);
+        
+        return table;
     }
     
     /////////////////////
@@ -173,9 +207,12 @@ public class PersonViewController implements EventBusListener<PersonEvent> {
             this.savePerson(event.getPerson());
             
             // UI Komponenten aktualisieren
-            if(this.personTable != null) {
-                this.personTable.add(event.getPerson());
-            }
+            this.personTables.stream().forEach((table) -> {
+                table.add(event.getPerson());
+            });
+            
+            // Zur Seite wechseln
+            this.navigator.navigateTo(event.getNavigateTo());
         } 
         
         // update
@@ -185,9 +222,12 @@ public class PersonViewController implements EventBusListener<PersonEvent> {
             this.savePerson(event.getPerson());
             
             // UI Komponenten aktualisieren
-            if(this.personTable != null) {
-                this.personTable.update(event.getPerson());
-            }
+            this.personTables.stream().forEach((table) -> {
+                table.add(event.getPerson());
+            });
+            
+            // Zur Seite wechseln
+            this.navigator.navigateTo(event.getNavigateTo());
         }
         
         // delete
@@ -209,9 +249,9 @@ public class PersonViewController implements EventBusListener<PersonEvent> {
             Person copy = this.copyPerson(event.getPerson());
             
             // UI Komponenten aktualisieren
-            if(this.personTable != null) {
-                this.personTable.add(copy);
-            }
+            this.personTables.stream().forEach((table) -> {
+                table.add(copy);
+            });
         }
         
         // select
@@ -219,9 +259,9 @@ public class PersonViewController implements EventBusListener<PersonEvent> {
             LOG.debug("select event");
             
             // UI Komponenten aktualisieren
-            if(this.updatePersonForm != null) {
+            updatePersonForms.stream().forEach((_item) -> {
                 this.updatePersonForm.select(event.getItem());
-            }
+            });
         }
     }
     

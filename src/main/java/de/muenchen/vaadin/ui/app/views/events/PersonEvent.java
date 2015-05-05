@@ -14,9 +14,16 @@ public class PersonEvent {
     private BeanItem<Person> item;
     private EventType type;
     private Object itemId;
+    private String navigateTo;
 
     public PersonEvent() {
     }
+
+    public PersonEvent(EventType type) {
+        this.type = type;
+    }
+    
+    
 
     public PersonEvent(Person person, EventType type) {
         this.person = person;
@@ -62,6 +69,14 @@ public class PersonEvent {
 
     public Object getItemId() {
         return itemId;
+    }
+
+    public void setNavigateTo(String navigateTo) {
+        this.navigateTo = navigateTo;
+    }
+
+    public String getNavigateTo() {
+        return navigateTo;
     }
     
 }

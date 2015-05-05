@@ -27,6 +27,9 @@ public class PersonTable extends CustomComponent {
     private PersonViewController controller;
     private Table table;
     
+    // Navigation
+    private String navigateToAfterEdit;
+    
     protected static final Logger LOG = LoggerFactory.getLogger(PersonTable.class);
     
     public PersonTable(final PersonViewController controller) {
@@ -130,6 +133,16 @@ public class PersonTable extends CustomComponent {
         layout.setSpacing(true);
         
         return layout;
+    }
+    
+    // Members
+
+    public void setNavigateToAfterEdit(String navigateToAfterEdit) {
+        this.navigateToAfterEdit = navigateToAfterEdit;
+    }
+
+    public String getNavigateToAfterEdit() {
+        return navigateToAfterEdit;
     }
 
 }
