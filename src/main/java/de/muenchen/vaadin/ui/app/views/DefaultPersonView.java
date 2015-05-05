@@ -43,7 +43,7 @@ public abstract class DefaultPersonView extends VerticalLayout implements View{
     public DefaultPersonView(PersonService service, VaadinUtil util, EventBus eventbus) {
         
         // create for every view instance a controller
-        this.controller = new PersonViewController(service, util, eventbus);
+        this.controller = new PersonViewController(service, util, eventbus, I18N_BASE_PATH);
     }
     
     /**

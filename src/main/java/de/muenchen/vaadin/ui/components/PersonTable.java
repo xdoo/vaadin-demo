@@ -1,6 +1,5 @@
 package de.muenchen.vaadin.ui.components;
 
-import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.server.FontAwesome;
@@ -44,9 +43,11 @@ public class PersonTable extends CustomComponent {
         this.table = new Table();
         table.setContainerDataSource(this.container);
         
-        //remove id column
+        //configure
         table.removeContainerProperty("id");
-        
+        table.setWidth("100%");
+        table.setPageLength(10);
+       
         //set action column
         table.addGeneratedColumn("button", new ColumnGenerator() {
             @Override
@@ -56,6 +57,15 @@ public class PersonTable extends CustomComponent {
                 return addButtons(itemId);
             }
         });
+        
+        // set headers
+        table.setColumnHeader("firstname", controller.getUtil().readColumnHeader(controller.getI18nBasePath(), "firstname"));
+        table.setColumnIcon("firstname", controller.getUtil().readColumnHeaderIcon(controller.getI18nBasePath(), "firstname"));
+        table.setColumnHeader("birthdate", controller.getUtil().readColumnHeader(controller.getI18nBasePath(), "birthdate"));
+        table.setColumnIcon("birthdate", controller.getUtil().readColumnHeaderIcon(controller.getI18nBasePath(), "birthdate"));
+        table.setColumnHeader("lastname", controller.getUtil().readColumnHeader(controller.getI18nBasePath(), "lastname"));
+        table.setColumnIcon("lastname", controller.getUtil().readColumnHeaderIcon(controller.getI18nBasePath(), "lastname"));
+        table.setColumnHeader("button", "");
         
         setCompositionRoot(table);
     }
@@ -74,6 +84,18 @@ public class PersonTable extends CustomComponent {
         this.container.removeItem(id);
     }
     
+    /**
+     * "Action" Buttons für jede Tabellenzeile. In jeder Tabellenzeile
+     * gibt "Action" Buttons für folgende Ereignisse:
+     * <ul>
+     *  <li>bearbeiten</li>
+     *  <li>kopieren</li>
+     *  <li>löschen</li>
+     * <ul>
+     * 
+     * @param id
+     * @return 
+     */
     public HorizontalLayout addButtons(final Object id) {
         
         //edit

@@ -39,11 +39,14 @@ public class PersonViewController implements EventBusListener<PersonEvent> {
      * Event Bus zur Kommunikation
      */
     EventBus eventbus;
+    
+    String i18nBasePath;
 
-    public PersonViewController(PersonService service, VaadinUtil util, EventBus eventbus) {
+    public PersonViewController(PersonService service, VaadinUtil util, EventBus eventbus, String i18nBasePath) {
         this.service = service;
         this.util = util;
         this.eventbus = eventbus;
+        this.i18nBasePath = i18nBasePath;
         
         this.eventbus.subscribe(this, true);
     }
@@ -60,6 +63,10 @@ public class PersonViewController implements EventBusListener<PersonEvent> {
 
     public VaadinUtil getUtil() {
         return util;
+    }
+
+    public String getI18nBasePath() {
+        return i18nBasePath;
     }
     
     ////////////////////////
