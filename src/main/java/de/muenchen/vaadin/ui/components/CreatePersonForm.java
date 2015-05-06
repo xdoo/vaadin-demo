@@ -28,7 +28,7 @@ public class CreatePersonForm extends CustomComponent {
         layout.setMargin(true);
         
         // headline
-        Label headline = new Label(controller.getUtil().readText(DefaultPersonView.I18N_BASE_PATH, I18nPaths.I18N_FORM_CREATE_HEADLINE_LABEL));
+        Label headline = new Label(controller.getUtil().readText(controller.getI18nBasePath(), I18nPaths.I18N_FORM_CREATE_HEADLINE_LABEL));
         headline.addStyleName(ValoTheme.LABEL_H3);
         layout.addComponent(headline);
 
@@ -36,19 +36,19 @@ public class CreatePersonForm extends CustomComponent {
         final BeanFieldGroup<Person> binder = new BeanFieldGroup<Person>(Person.class);
         binder.setItemDataSource(new Person());
 
-        layout.addComponent(controller.getUtil().createFormTextField(binder, DefaultPersonView.I18N_BASE_PATH, "firstname"));
-        layout.addComponent(controller.getUtil().createFormTextField(binder, DefaultPersonView.I18N_BASE_PATH, "lastname"));
-        layout.addComponent(controller.getUtil().createFormDateField(binder, DefaultPersonView.I18N_BASE_PATH, "birthdate"));
+        layout.addComponent(controller.getUtil().createFormTextField(binder, controller.getI18nBasePath(), "firstname"));
+        layout.addComponent(controller.getUtil().createFormTextField(binder, controller.getI18nBasePath(), "lastname"));
+        layout.addComponent(controller.getUtil().createFormDateField(binder, controller.getI18nBasePath(), "birthdate"));
 
         // A button to commit the buffer
-        String label = controller.getUtil().readText(DefaultPersonView.I18N_BASE_PATH, I18nPaths.I18N_FORM_CREATE_BUTTON_LABEL);
+        String label = controller.getUtil().readText(controller.getI18nBasePath(), I18nPaths.I18N_FORM_CREATE_BUTTON_LABEL);
         layout.addComponent(new Button(label, new ClickListener() {
             @Override
             public void buttonClick(ClickEvent click) {
                 try {
                     binder.commit();
                     Notification.show("Thanks!");
-                    PersonEvent event = new PersonEvent(binder.getItemDataSource().getBean(), EventType.CREATE);
+                    PersonEvent event = new PersonEvent(binder.getItemDataSource().getBean(), EventType.UPDATE);
                     event.setNavigateTo(navigateTo);
                     controller.getEventbus().publish(this, event);
                     //reset

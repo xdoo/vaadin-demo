@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.vaadin.spring.events.EventBus;
 import org.vaadin.spring.events.EventBusListener;
 
@@ -22,7 +24,10 @@ import org.vaadin.spring.events.EventBusListener;
  *
  * @author claus.straube
  */
+@Component
 public class PersonViewController implements EventBusListener<PersonEvent> {
+    
+    public static final String I18N_BASE_PATH = "m1.person";
     
     /**
      * Logger
@@ -48,29 +53,32 @@ public class PersonViewController implements EventBusListener<PersonEvent> {
      * {@link UI} {@link Navigator}
      */
     Navigator navigator;
-    
-    String i18nBasePath;
 
-    public PersonViewController(PersonService service, VaadinUtil util, EventBus eventbus, String i18nBasePath, MainUI ui) {
+    @Autowired
+    public PersonViewController(PersonService service, VaadinUtil util) {
         this.service = service;
         this.util = util;
-        this.eventbus = eventbus;
-        this.i18nBasePath = i18nBasePath;
-        this.navigator = ui.getNavigator();
-        
-        // an Event Bus registrieren
-        this.eventbus.subscribe(this, true);
     }
     
-    List<CreatePersonForm> createPersonForms;
-    List<UpdatePersonForm> updatePersonForms;
-    List<PersonTable> personTables;
+    List<CreatePersonForm> createPersonForms = new ArrayList<>();
+    List<UpdatePersonForm> updatePersonForms = new ArrayList<>();
+    List<PersonTable> personTables = new ArrayList<>();
     
     // components
     CreatePersonForm createPersonForm;
     UpdatePersonForm updatePersonForm;
     PersonTable personTable;
-   
+    
+    public void registerEventBus(EventBus eventbus) {
+        if(this.eventbus == null) {
+            this.eventbus = eventbus;
+            this.eventbus.subscribe(this, true);
+        }
+    }
+    
+    public void registerUI(MainUI ui) {
+        this.navigator = ui.getNavigator();
+    }
 
     public EventBus getEventbus() {
         return eventbus;
@@ -81,7 +89,7 @@ public class PersonViewController implements EventBusListener<PersonEvent> {
     }
 
     public String getI18nBasePath() {
-        return i18nBasePath;
+        return I18N_BASE_PATH;
     }
 
     public Navigator getNavigator() {
@@ -148,32 +156,20 @@ public class PersonViewController implements EventBusListener<PersonEvent> {
     //////////////////////////////////////////////
 
     public CreatePersonForm generateCreatePersonForm(String navigateTo) {
-        if(this.createPersonForms == null) {
-            this.createPersonForms = new ArrayList<>();
-        }
-        
         CreatePersonForm form = new CreatePersonForm(this, navigateTo);
         this.createPersonForms.add(form);
         
         return form;
     }
 
-    public UpdatePersonForm generateUpdatePersonForm(String navigateTo) {
-        if(this.updatePersonForms == null) {
-            this.updatePersonForms = new ArrayList<>();
-        }
-        
+    public UpdatePersonForm generateUpdatePersonForm(String navigateTo) {      
         UpdatePersonForm form = new UpdatePersonForm(this, navigateTo);
         this.updatePersonForms.add(form);
         
         return form;
     }
 
-    public PersonTable generatePersonTable(String navigateToAfterEdit) {
-        if(this.personTables == null) {
-            this.personTables = new ArrayList<>();
-        }
-        
+    public PersonTable generatePersonTable(String navigateToAfterEdit) {      
         PersonTable table = new PersonTable(this);
         this.personTables.add(table);
         
@@ -190,11 +186,7 @@ public class PersonViewController implements EventBusListener<PersonEvent> {
      * In dieser Methode wird zentral gesteuert, was bei bestimmten Ereignissen passiert.
      * Ausgehend von den Ereignissen werden innerhalb der UI Komponenten Operationen
      * ausgeführt. So ist es möglich eine Kommunnikation zwischen den Komponenten zu
-     * schaffen, ohne dass diese sich untereinander kennen müssen.
-     * </br>
-     * Bevor auf einer Komponente eine Operation ausgeführt wird, muss gepfüt werden, ob 
-     * die Komponente überhaupt aktiv verwendet wird (also nicht null ist).
-     * 
+     * schaffen, ohne dass diese sich untereinander kennen müssen. 
      */
     @Override
     public void onEvent(org.vaadin.spring.events.Event<PersonEvent> e) {
@@ -203,14 +195,6 @@ public class PersonViewController implements EventBusListener<PersonEvent> {
         // create
         if(event.getType().equals(EventType.CREATE)) {
             LOG.debug("create event");
-            // Service Operationen ausführen
-            this.savePerson(event.getPerson());
-            
-            // UI Komponenten aktualisieren
-            this.personTables.stream().forEach((table) -> {
-                table.add(event.getPerson());
-            });
-            
             // Zur Seite wechseln
             this.navigator.navigateTo(event.getNavigateTo());
         } 
@@ -237,9 +221,9 @@ public class PersonViewController implements EventBusListener<PersonEvent> {
             this.deletePerson(event.getPerson());
             
             // UI Komponenten aktualisieren
-            if(this.personTable != null) {
-                this.personTable.delete(event.getItemId());
-            }
+            this.personTables.stream().forEach((table) -> {
+                table.delete(event.getItemId());
+            });
         }
         
         // copy
@@ -259,9 +243,12 @@ public class PersonViewController implements EventBusListener<PersonEvent> {
             LOG.debug("select event");
             
             // UI Komponenten aktualisieren
-            updatePersonForms.stream().forEach((_item) -> {
-                this.updatePersonForm.select(event.getItem());
+            updatePersonForms.stream().forEach((form) -> {
+                form.select(event.getItem());
             });
+            
+            // Zur Seite wechseln
+            this.navigator.navigateTo(event.getNavigateTo());
         }
     }
     

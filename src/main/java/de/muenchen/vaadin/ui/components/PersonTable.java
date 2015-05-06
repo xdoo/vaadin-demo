@@ -107,7 +107,9 @@ public class PersonTable extends CustomComponent {
         edit.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
         edit.addClickListener(e -> {
             BeanItem<Person> item = container.getItem(id);
-            controller.getEventbus().publish(this, new PersonEvent(item, id, EventType.SELECT));
+            PersonEvent event = new PersonEvent(item, id, EventType.SELECT);
+            event.setNavigateTo(navigateToAfterEdit);
+            controller.getEventbus().publish(this, event);
         });
         
         //copy

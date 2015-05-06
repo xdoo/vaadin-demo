@@ -5,9 +5,8 @@
  */
 package de.muenchen.vaadin.ui.app.views;
 
-import de.muenchen.vaadin.services.PersonService;
 import de.muenchen.vaadin.ui.app.MainUI;
-import de.muenchen.vaadin.ui.util.VaadinUtil;
+import de.muenchen.vaadin.ui.controller.PersonViewController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.annotation.VaadinUIScope;
 import org.vaadin.spring.events.EventBus;
@@ -24,8 +23,8 @@ public class PersonCreateView extends DefaultPersonView {
     public static final String NAME = "person_create_view";
 
     @Autowired
-    public PersonCreateView(PersonService service, VaadinUtil util, EventBus eventbus, MainUI ui) {
-        super(service, util, eventbus, ui);
+    public PersonCreateView(PersonViewController controller, EventBus eventbus, MainUI ui) {
+        super(controller, eventbus, ui);
     }
 
     @Override

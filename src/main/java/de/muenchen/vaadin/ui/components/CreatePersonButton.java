@@ -18,7 +18,7 @@ public class CreatePersonButton extends CustomComponent {
 
     public CreatePersonButton(final PersonViewController controller, String navigateTo) {
         
-        String label = controller.getUtil().readText(DefaultPersonView.I18N_BASE_PATH, I18nPaths.I18N_FORM_CREATE_BUTTON_LABEL);
+        String label = controller.getUtil().readText(controller.getI18nBasePath(), I18nPaths.I18N_FORM_CREATE_BUTTON_LABEL);
         Button create = new Button(label, FontAwesome.MAGIC);
         create.addStyleName(ValoTheme.BUTTON_FRIENDLY);
         create.addClickListener(e -> {

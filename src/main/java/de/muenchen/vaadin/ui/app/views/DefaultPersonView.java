@@ -13,6 +13,7 @@ import de.muenchen.vaadin.ui.controller.PersonViewController;
 import de.muenchen.vaadin.ui.util.I18nPaths;
 import de.muenchen.vaadin.ui.util.VaadinUtil;
 import javax.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.events.EventBus;
 
 /**
@@ -37,16 +38,16 @@ import org.vaadin.spring.events.EventBus;
  * @author claus.straube
  */
 public abstract class DefaultPersonView extends VerticalLayout implements View{
-
-    public static final String I18N_BASE_PATH = "m1.person";
+    
     
     PersonViewController controller;
-
-    public DefaultPersonView(PersonService service, VaadinUtil util, EventBus eventbus, MainUI ui) {
-        
-        // create for every view instance a controller
-        this.controller = new PersonViewController(service, util, eventbus, I18N_BASE_PATH, ui);
+    
+    public DefaultPersonView(PersonViewController controller, EventBus eventbus, MainUI ui) {
+        this.controller = controller;
+        this.controller.registerEventBus(eventbus);
+        this.controller.registerUI(ui);
     }
+    
     
     /**
      * 
@@ -61,14 +62,14 @@ public abstract class DefaultPersonView extends VerticalLayout implements View{
     }
     
     /**
-     * The 'rigth'side of the site. You can put in here, everthing you need.
+     * 
      */
     protected abstract void site();
     
     protected void addHeadline() {
         
         // headline
-        Label pageTitle = new Label(this.controller.getUtil().readText(I18N_BASE_PATH, I18nPaths.I18N_PAGE_TITLE));
+        Label pageTitle = new Label(this.controller.getUtil().readText(controller.getI18nBasePath(), I18nPaths.I18N_PAGE_TITLE));
         pageTitle.addStyleName(ValoTheme.LABEL_H1);
         pageTitle.addStyleName(ValoTheme.LABEL_COLORED);
         
