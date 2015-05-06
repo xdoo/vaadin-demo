@@ -1,6 +1,5 @@
 package de.muenchen.vaadin.ui.controller;
 
-import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.ui.UI;
@@ -23,7 +22,8 @@ import org.vaadin.spring.events.EventBus;
 import org.vaadin.spring.events.EventBusListener;
 
 /**
- *
+ * Der Controller ist die zentrale Klasse um die Logik im Kontext Person abzubilden.
+ * 
  * @author claus.straube
  */
 @Component
@@ -65,11 +65,6 @@ public class PersonViewController implements EventBusListener<PersonEvent> {
     List<CreatePersonForm> createPersonForms = new ArrayList<>();
     List<UpdatePersonForm> updatePersonForms = new ArrayList<>();
     List<PersonTable> personTables = new ArrayList<>();
-    
-    // components
-    CreatePersonForm createPersonForm;
-    UpdatePersonForm updatePersonForm;
-    PersonTable personTable;
     
     // item cache
     BeanItem<Person> current;

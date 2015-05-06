@@ -2,6 +2,7 @@ package de.muenchen.vaadin.ui.components;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
+import com.vaadin.server.Page;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -47,14 +48,18 @@ public class CreatePersonForm extends CustomComponent {
             public void buttonClick(ClickEvent click) {
                 try {
                     binder.commit();
-                    Notification.show("Thanks!");
+                    // TODO --> i18n
+                    Success succes = new Success("Person erstellt", "Die Person wurde erfolgreich erstellt und gespeichert.");
+                    succes.show(Page.getCurrent());
                     PersonEvent event = new PersonEvent(binder.getItemDataSource().getBean(), EventType.UPDATE);
                     event.setNavigateTo(navigateTo);
                     controller.getEventbus().publish(this, event);
                     //reset
                     binder.setItemDataSource(new Person());
                 } catch (CommitException e) {
-                    Notification.show("You fail!");
+                    // TODO --> i18n
+                    Error error = new Error("Fehler", "Beim erstellen der Person ist ein Fehler aufgetreten. Der Service Desk wurde per E-Mail informiert");
+                    error.show(Page.getCurrent());
                 }
             }
         }));
