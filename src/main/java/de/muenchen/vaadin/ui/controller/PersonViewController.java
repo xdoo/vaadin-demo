@@ -1,5 +1,7 @@
 package de.muenchen.vaadin.ui.controller;
 
+import com.vaadin.data.Item;
+import com.vaadin.data.util.BeanItem;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.ui.UI;
 import de.muenchen.vaadin.domain.Person;
@@ -69,6 +71,16 @@ public class PersonViewController implements EventBusListener<PersonEvent> {
     UpdatePersonForm updatePersonForm;
     PersonTable personTable;
     
+    // item cache
+    BeanItem<Person> current;
+    
+    /**
+     * Der Eventbus wird über die {@link DefaulPersonView} registriert. Dies
+     * ist notwendig, da die Vaadin abhängigen Beans zum Zeitpunkt der Instanzierung
+     * noch nicht vorhanden sind.
+     * 
+     * @param eventbus 
+     */
     public void registerEventBus(EventBus eventbus) {
         if(this.eventbus == null) {
             this.eventbus = eventbus;
@@ -76,6 +88,14 @@ public class PersonViewController implements EventBusListener<PersonEvent> {
         }
     }
     
+    /**
+     * Die Main wird über die {@link DefaulPersonView} registriert. Dies
+     * ist notwendig, da die Vaadin abhängigen Beans zum Zeitpunkt der Instanzierung
+     * noch nicht vorhanden sind. Aus der Main UI wird der {@link Navigator} geholt,
+     * um über ihn eine Navigation zwischen einzelnen Views zu ermöglichen.
+     * 
+     * @param ui 
+     */
     public void registerUI(MainUI ui) {
         this.navigator = ui.getNavigator();
     }
@@ -95,7 +115,10 @@ public class PersonViewController implements EventBusListener<PersonEvent> {
     public Navigator getNavigator() {
         return navigator;
     }
-    
+
+    public BeanItem<Person> getCurrent() {
+        return current;
+    }
     
     ////////////////////////
     // Service Operations //
@@ -246,6 +269,14 @@ public class PersonViewController implements EventBusListener<PersonEvent> {
             updatePersonForms.stream().forEach((form) -> {
                 form.select(event.getItem());
             });
+            
+            // Wenn eine Seite das erste mal aufgerufen wird, dann
+            // ist die UI Komponente noch nicht in der 'updatePersons'
+            // Liste. In diesem Fall kann die ausgewählte Person
+            // nicht aktiv an die UI Komponente übergeben werden. Deshalb
+            // wird die Person unter 'current' gespeichert, damit sich
+            // die Komponente selbst versorgen kann.
+            this.current = event.getItem();
             
             // Zur Seite wechseln
             this.navigator.navigateTo(event.getNavigateTo());

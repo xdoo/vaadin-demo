@@ -53,10 +53,14 @@ public class UpdatePersonForm extends CustomComponent {
     }
     
     private void createForm() {
-        // Now use a binder to bind the members
-        this.person = null;
         
-        binder.setItemDataSource(person);
+        // Beim ersten Aufruf der view kann die Komponente nicht
+        // aktiv mit einem Objekt versorgt werden. Hier muss sich
+        // die Komponente die Daten selbst holen.
+        if(this.person == null) {
+           this.binder.setItemDataSource(this.controller.getCurrent());
+           this.person = this.controller.getCurrent().getBean();
+        }
         
         layout.setMargin(true);
         
@@ -93,6 +97,7 @@ public class UpdatePersonForm extends CustomComponent {
     public void select(BeanItem<Person> person) {
         LOG.debug("seleted person to modify.");
         this.binder.setItemDataSource(person);
+        this.person = person.getBean();
     }
 
 }

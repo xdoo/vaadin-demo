@@ -19,21 +19,6 @@ import org.vaadin.spring.events.EventBus;
 /**
  * Für jede Entity existiert eine (voll generierte) Basis Klasse. Aus dieser
  * leiten sich alle anderen Views ab.
- * <br/><br/>
- * Diskussion: 
- * <ul>
- * <li>
- * 1) Aus meiner Sicht wäre es sinnvoller bereits im Modell eine view
- * zu definieren und dieser Entities zu zu ordnen. In der Basis Klasse würden
- * dann Vorbereitungen zur Verarbeitung aller Enties getroffen.
- * </li>
- * <li>
- * 2) Sollen in der Basis View schon alle vorhandenen custom UI Komponenten
- * initialisiert werden? Dafür spricht, dass es dann nicht mehr gemacht werden muss,
- * dagegen spricht, dass damit jeweils eine große Wolke an Objekten initialisiert 
- * wird, die potenziell gar nicht benötigt wird.
- * </li>
- * </ul>
  * 
  * @author claus.straube
  */
@@ -54,7 +39,7 @@ public abstract class DefaultPersonView extends VerticalLayout implements View{
      */
     @PostConstruct
     private void postConstruct() {
-        this.configure();
+        this.configureLayout();
         
         // add some components
         this.addHeadline();
@@ -80,7 +65,7 @@ public abstract class DefaultPersonView extends VerticalLayout implements View{
         addComponent(pageTitle);
     }
     
-    private void configure() {
+    private void configureLayout() {
         setSizeFull();
         this.setHeightUndefined();
         setMargin(true);

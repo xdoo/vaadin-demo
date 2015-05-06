@@ -35,7 +35,10 @@ public class PersonTableView extends DefaultPersonView {
         CreatePersonButton button = new CreatePersonButton(controller, PersonCreateView.NAME);
         PersonTable table = this.controller.generatePersonTable(PersonUpdateView.NAME);
         
-        addComponent(new VerticalLayout(button, table));
+        VerticalLayout layout = new VerticalLayout(button, table);
+        layout.setSpacing(true);
+        
+        addComponent(layout);
     }
     
 }
