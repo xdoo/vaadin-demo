@@ -8,7 +8,7 @@ import de.muenchen.vaadin.ui.util.EventType;
  *
  * @author claus.straube
  */
-public class PersonEvent extends Event {
+public class PersonEvent extends AppEvent {
     
     private Person person;
     private BeanItem<Person> item;

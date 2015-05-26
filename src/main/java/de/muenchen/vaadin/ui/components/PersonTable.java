@@ -128,7 +128,10 @@ public class PersonTable extends CustomComponent {
         delete.addStyleName(ValoTheme.BUTTON_DANGER);
         delete.addClickListener(e -> {
             BeanItem<Person> item = container.getItem(id);
-            controller.getEventbus().publish(this, new PersonEvent(item, id, EventType.DELETE));
+//            controller.getEventbus().publish(this, new PersonEvent(item, id, EventType.DELETE));
+            
+            GenericConfirmationWindow win = new GenericConfirmationWindow( new PersonEvent(item, id, EventType.DELETE), controller.getEventbus());
+            getUI().addWindow(win);
         });
 
         HorizontalLayout layout = new HorizontalLayout(edit, copy, delete);

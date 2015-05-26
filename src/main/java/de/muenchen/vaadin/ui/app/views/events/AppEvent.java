@@ -11,7 +11,7 @@ import de.muenchen.vaadin.ui.util.EventType;
  *
  * @author claus.straube
  */
-public class Event {
+public class AppEvent {
    
     protected EventType type;
     protected Object itemId;
