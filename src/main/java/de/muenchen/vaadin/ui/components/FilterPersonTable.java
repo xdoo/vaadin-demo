@@ -7,6 +7,8 @@ package de.muenchen.vaadin.ui.components;
 
 import com.vaadin.ui.CustomComponent;
 import de.muenchen.vaadin.ui.controller.PersonViewController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -14,6 +16,8 @@ import de.muenchen.vaadin.ui.controller.PersonViewController;
  */
 public class FilterPersonTable extends CustomComponent {
 
+    protected static final Logger LOG = LoggerFactory.getLogger(FilterPersonTable.class);
+    
     public FilterPersonTable(final PersonViewController controller) {
         
     }

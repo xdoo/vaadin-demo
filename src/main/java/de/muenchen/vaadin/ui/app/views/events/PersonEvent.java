@@ -8,13 +8,10 @@ import de.muenchen.vaadin.ui.util.EventType;
  *
  * @author claus.straube
  */
-public class PersonEvent {
+public class PersonEvent extends Event {
     
     private Person person;
     private BeanItem<Person> item;
-    private EventType type;
-    private Object itemId;
-    private String navigateTo;
 
     public PersonEvent() {
     }
@@ -53,30 +50,6 @@ public class PersonEvent {
 
     public BeanItem<Person> getItem() {
         return item;
-    }
-
-    public EventType getType() {
-        return type;
-    }
-
-    public void setType(EventType type) {
-        this.type = type;
-    }
-
-    public void setItemId(Object itemId) {
-        this.itemId = itemId;
-    }
-
-    public Object getItemId() {
-        return itemId;
-    }
-
-    public void setNavigateTo(String navigateTo) {
-        this.navigateTo = navigateTo;
-    }
-
-    public String getNavigateTo() {
-        return navigateTo;
     }
     
 }
