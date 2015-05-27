@@ -6,34 +6,32 @@
 package de.muenchen.vaadin.domain;
 
 import java.io.Serializable;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 /**
  *
  * @author claus.straube
  */
 @Entity
-public class Sachbearbeiter implements Serializable {
+@Table(name = "SACHBEARBEITER")
+public class Sachbearbeiter extends AuditingBaseEntity {
     
-    @Id @GeneratedValue
-    private Long id;
-    
-    @Column
+    @Column(length = 50, nullable = true, name = "SACH_FIRSTNAME")
     String firstname;
     
-    @Column
+    @Column(length = 50, nullable = false, name = "SACH_LASTNAME")
     String lastname;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    
+    @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    private List<Person> personen;
 
     public void setFirstname(String firstname) {
         this.firstname = firstname;
@@ -49,6 +47,14 @@ public class Sachbearbeiter implements Serializable {
 
     public String getLastname() {
         return lastname;
+    }
+
+    public List<Person> getPersonen() {
+        return personen;
+    }
+
+    public void setPersonen(List<Person> personen) {
+        this.personen = personen;
     }
     
 }

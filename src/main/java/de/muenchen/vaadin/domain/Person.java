@@ -7,8 +7,10 @@ package de.muenchen.vaadin.domain;
 
 import java.util.Date;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -17,9 +19,6 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "PERSONEN")
 public class Person extends AuditingBaseEntity {
-    
-    @Column(length = 30, nullable = false, name = "ACCOUNT_OID")
-    private String accountOid;
     
     @Column(length = 50, nullable = true, name = "PERS_FIRSTNAME")
     private String firstname;
@@ -31,13 +30,13 @@ public class Person extends AuditingBaseEntity {
     @Temporal(TemporalType.DATE)
     private Date birthdate;
     
-    @OneToMany(mappedBy = "buerger")
+    @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
     private List<Wohnung> wohnungen;
     
-//    @OneToMany(mappedBy = "buerger")
+    // Muss über eine Referenz in das verwaltende System gelöst werden.
 //    private List<Staatsangehoerigkeit> staatsangehoerigkeiten;
     
-    @OneToMany(mappedBy = "buerger")
+    @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
     private List<Sachbearbeiter> sachbearbeiter;
     
     public String getFirstname() {
@@ -62,6 +61,22 @@ public class Person extends AuditingBaseEntity {
 
     public void setBirthdate(Date birthdate) {
         this.birthdate = birthdate;
+    }
+
+    public List<Wohnung> getWohnungen() {
+        return wohnungen;
+    }
+
+    public void setWohnungen(List<Wohnung> wohnungen) {
+        this.wohnungen = wohnungen;
+    }
+
+    public List<Sachbearbeiter> getSachbearbeiter() {
+        return sachbearbeiter;
+    }
+
+    public void setSachbearbeiter(List<Sachbearbeiter> sachbearbeiter) {
+        this.sachbearbeiter = sachbearbeiter;
     }
 
     @Override
