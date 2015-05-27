@@ -32,9 +32,11 @@ public class GenericConfirmationWindow extends Window {
         this.addDefaultLabels();
     
         Panel content = new Panel();
+        VerticalLayout l = new VerticalLayout(new Label(this.message));
+        l.setMargin(true);
         content.setSizeFull();
         content.addStyleName(ValoTheme.PANEL_BORDERLESS);
-        content.setContent(new Label(this.message));
+        content.setContent(l);
         
         HorizontalLayout footer = new HorizontalLayout(this.addOkButton(event, eventbus), this.addCancelButton());
         footer.setWidth("100%");
@@ -45,7 +47,8 @@ public class GenericConfirmationWindow extends Window {
         VerticalLayout root = new VerticalLayout(content, footer);
         
         this.setWidth("380px");
-        this.setHeight("300px");
+        String prevHeight = this.getHeight() + this.getHeightUnits().toString();
+        this.setHeight(prevHeight);
         this.setClosable(false);
         this.setResizable(false);
         this.setContent(root);

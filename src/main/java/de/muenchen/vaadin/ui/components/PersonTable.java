@@ -127,11 +127,11 @@ public class PersonTable extends CustomComponent {
         delete.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
         delete.addStyleName(ValoTheme.BUTTON_DANGER);
         delete.addClickListener(e -> {
-            BeanItem<Person> item = container.getItem(id);
-//            controller.getEventbus().publish(this, new PersonEvent(item, id, EventType.DELETE));
-            
+            BeanItem<Person> item = container.getItem(id);            
             GenericConfirmationWindow win = new GenericConfirmationWindow( new PersonEvent(item, id, EventType.DELETE), controller.getEventbus());
             getUI().addWindow(win);
+            win.center();
+            win.focus();
         });
 
         HorizontalLayout layout = new HorizontalLayout(edit, copy, delete);
