@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package de.muenchen.vaadin.ui.components;
 
 import com.vaadin.event.ShortcutAction.KeyCode;
@@ -18,16 +13,37 @@ import de.muenchen.vaadin.ui.app.views.events.AppEvent;
 import org.vaadin.spring.events.EventBus;
 
 /**
- *
+ * Generisches Bestätigungsfenster mit einer "ok" und 
+ * einer "abbrechen" Schaltfläche. 
+ * 
+ * TODO -> sollte in einen generischen Artefakt übernommen werden.
+ * 
  * @author claus.straube
  */
 public class GenericConfirmationWindow extends Window {
     
-    
+    /**
+     * Beschriftung "ok" Schaltfläche
+     */
     private String okButton;
+    
+    /**
+     * Beschriftung "abbrechen" Schaltfläche
+     */
     private String cancelButton;
+    
+    /**
+     * Fenster Nachricht
+     */
     private String message;
     
+    /**
+     * Konfiguriert ein Bestätigungsfenster mit einer "ok" und 
+     * einer "abbrechen" Schaltfläche.
+     * 
+     * @param event Ereignis für Klick auf "ok" Schaltfläche
+     * @param eventbus der aktuelle Event Bus
+     */
     public GenericConfirmationWindow(AppEvent event, EventBus eventbus) {
         this.addDefaultLabels();
     
@@ -61,6 +77,14 @@ public class GenericConfirmationWindow extends Window {
         this.okButton = "löschen";
     }
     
+    /**
+     * Erstellt eine Schaltfläche, die das übergebene Event an 
+     * den Eventbus schickt. Danach wird das Fenster geschlossen.
+     * 
+     * @param event
+     * @param eventbus
+     * @return "ok" Schaltfläche
+     */
     private Button addOkButton(AppEvent event, EventBus eventbus) {
         Button ok = new Button();
         ok.setIcon(FontAwesome.TRASH_O);
@@ -74,6 +98,11 @@ public class GenericConfirmationWindow extends Window {
         return ok;
     }
     
+    /**
+     * Erstellt eine Schaltfläche, die ohne Aktion das Fenster schließt.
+     * 
+     * @return "cancel" Schaltfläche
+     */
     private Button addCancelButton() {
         Button cancel = new Button();
         cancel.setIcon(FontAwesome.REORDER);
