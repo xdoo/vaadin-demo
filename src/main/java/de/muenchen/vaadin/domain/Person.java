@@ -5,34 +5,41 @@
  */
 package de.muenchen.vaadin.domain;
 
-import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-/**
- *
- * @author claus.straube
- */
 @Entity
-public class Person implements Serializable {
+@Table(name = "PERSONEN")
+public class Person extends AuditingBaseEntity {
     
-    @Id @GeneratedValue
-    private Long id;
+    @Column(length = 30, nullable = false, name = "ACCOUNT_OID")
+    private String accountOid;
     
-    @Column
-    String firstname;
+    @Column(length = 50, nullable = true, name = "PERS_FIRSTNAME")
+    private String firstname;
     
-    @Column
-    String lastname;
+    @Column(length = 50, nullable = false, name = "PERS_LASTNAME")
+    private String lastname;
     
+    @Column(name = "PERS_BIRTHDATE")
     @Temporal(TemporalType.DATE)
-    Date birthdate;
-
+    private Date birthdate;
+    
+    @OneToMany(mappedBy = "buerger")
+    private List<Wohnung> wohnungen;
+    
+//    @OneToMany(mappedBy = "buerger")
+//    private List<Staatsangehoerigkeit> staatsangehoerigkeiten;
+    
+    @OneToMany(mappedBy = "buerger")
+    private List<Sachbearbeiter> sachbearbeiter;
+    
     public String getFirstname() {
         return firstname;
     }
@@ -57,17 +64,9 @@ public class Person implements Serializable {
         this.birthdate = birthdate;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     @Override
     public String toString() {
-        return String.format("id: %s | firstname: %s | lastname: %s | birthdate: %s", this.id, this.firstname, this.lastname, this.birthdate);
+        return String.format("id: %s | firstname: %s | lastname: %s | birthdate: %s", this.getId(), this.firstname, this.lastname, this.birthdate);
     }
     
     
