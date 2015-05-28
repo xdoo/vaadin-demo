@@ -14,7 +14,7 @@ import java.util.List;
  */
 public interface PersonService {
     
-    public Person createPerson(Person person);
+    public Person createPerson();
     
     public Person readPerson(Long id);
     
