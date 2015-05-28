@@ -10,22 +10,27 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  *
  * @author claus.straube
  */
 @Entity
+@Table(name = "WOHNUNGEN")
 public class Wohnung implements Serializable {
     
     @Id @GeneratedValue
     private Long id;
     
-    @Column
+    @Column(name = "WOHN_STOCK")
     private int stock;
     
-    @Column
+    @Column(length = 20, name = "WOHN_AUSRICHTUNG")
     private String ausrichtung;
+    
+    @Column(length = 30, nullable = false, name = "WOHN_ADRESSE_OID")
+    private String adresseOid;
 
     public int getStock() {
         return stock;
@@ -49,5 +54,13 @@ public class Wohnung implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getAdresseOid() {
+        return adresseOid;
+    }
+
+    public void setAdresseOid(String adresseOid) {
+        this.adresseOid = adresseOid;
     }
 }

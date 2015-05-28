@@ -33,11 +33,20 @@ public class Person extends AuditingBaseEntity {
     @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
     private List<Wohnung> wohnungen;
     
-    // Muss über eine Referenz in das verwaltende System gelöst werden.
-//    private List<Staatsangehoerigkeit> staatsangehoerigkeiten;
-    
     @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
     private List<Sachbearbeiter> sachbearbeiter;
+    
+    @Column(length = 30, nullable = true, name = "PERS_STAATSANGEHOERIGKEIT1")
+    private String staatsangehoerigkeit1;
+    
+    @Column(length = 30, nullable = true, name = "PERS_STAATSANGEHOERIGKEIT2")
+    private String staatsangehoerigkeit2;
+    
+    @Column(length = 30, nullable = true, name = "PERS_STAATSANGEHOERIGKEIT3")
+    private String staatsangehoerigkeit3;
+    
+    @Column(length = 30, nullable = true, name = "PERS_STAATSANGEHOERIGKEIT4")
+    private String staatsangehoerigkeit4;
     
     public String getFirstname() {
         return firstname;
@@ -77,6 +86,38 @@ public class Person extends AuditingBaseEntity {
 
     public void setSachbearbeiter(List<Sachbearbeiter> sachbearbeiter) {
         this.sachbearbeiter = sachbearbeiter;
+    }
+
+    public String getStaatsangehoerigkeit1() {
+        return staatsangehoerigkeit1;
+    }
+
+    public void setStaatsangehoerigkeit1(String staatsangehoerigkeit1) {
+        this.staatsangehoerigkeit1 = staatsangehoerigkeit1;
+    }
+
+    public String getStaatsangehoerigkeit2() {
+        return staatsangehoerigkeit2;
+    }
+
+    public void setStaatsangehoerigkeit2(String staatsangehoerigkeit2) {
+        this.staatsangehoerigkeit2 = staatsangehoerigkeit2;
+    }
+
+    public String getStaatsangehoerigkeit3() {
+        return staatsangehoerigkeit3;
+    }
+
+    public void setStaatsangehoerigkeit3(String staatsangehoerigkeit3) {
+        this.staatsangehoerigkeit3 = staatsangehoerigkeit3;
+    }
+
+    public String getStaatsangehoerigkeit4() {
+        return staatsangehoerigkeit4;
+    }
+
+    public void setStaatsangehoerigkeit4(String staatsangehoerigkeit4) {
+        this.staatsangehoerigkeit4 = staatsangehoerigkeit4;
     }
 
     @Override
