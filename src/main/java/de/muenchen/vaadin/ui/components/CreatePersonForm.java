@@ -53,7 +53,7 @@ public class CreatePersonForm extends CustomComponent {
                     event.setNavigateTo(navigateTo);
                     controller.getEventbus().publish(this, event);
                     //reset
-                    binder.setItemDataSource(new Person());
+                    binder.setItemDataSource(controller.createPerson());
                 } catch (CommitException e) {
                     // TODO --> i18n
                     Error error = new Error("Fehler", "Beim erstellen der Person ist ein Fehler aufgetreten. Der Service Desk wurde per E-Mail informiert");
