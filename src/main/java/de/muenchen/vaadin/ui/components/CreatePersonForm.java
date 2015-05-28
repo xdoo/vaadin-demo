@@ -9,10 +9,8 @@ import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.domain.Person;
-import de.muenchen.vaadin.ui.app.views.DefaultPersonView;
 import de.muenchen.vaadin.ui.app.views.events.PersonEvent;
 import de.muenchen.vaadin.ui.controller.PersonViewController;
 import de.muenchen.vaadin.ui.util.EventType;
@@ -35,7 +33,7 @@ public class CreatePersonForm extends CustomComponent {
 
         // Now use a binder to bind the members
         final BeanFieldGroup<Person> binder = new BeanFieldGroup<Person>(Person.class);
-        binder.setItemDataSource(new Person());
+        binder.setItemDataSource(controller.createPerson());
 
         layout.addComponent(controller.getUtil().createFormTextField(binder, controller.getI18nBasePath(), "firstname"));
         layout.addComponent(controller.getUtil().createFormTextField(binder, controller.getI18nBasePath(), "lastname"));
@@ -55,7 +53,7 @@ public class CreatePersonForm extends CustomComponent {
                     event.setNavigateTo(navigateTo);
                     controller.getEventbus().publish(this, event);
                     //reset
-                    binder.setItemDataSource(new Person());
+                    binder.setItemDataSource(controller.createPerson());
                 } catch (CommitException e) {
                     // TODO --> i18n
                     Error error = new Error("Fehler", "Beim erstellen der Person ist ein Fehler aufgetreten. Der Service Desk wurde per E-Mail informiert");

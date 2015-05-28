@@ -126,7 +126,8 @@ public class PersonViewController implements EventBusListener<PersonEvent> {
      * @return neue Instanz einer Person
      */
     public Person createPerson() {
-        return new Person();
+        Person person = this.service.createPerson();
+        return person;
     }
     
     /**
@@ -137,7 +138,7 @@ public class PersonViewController implements EventBusListener<PersonEvent> {
      * @return kopierte Instanz einer Person
      */
     public Person copyPerson(Person person) {
-        Person clone = new Person();
+        Person clone = this.service.createPerson();
         
         // Properties kopieren.
         // TODO --> hier kann eventuell ein Framework eingesetzt werden,

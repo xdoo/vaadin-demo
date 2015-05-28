@@ -45,11 +45,6 @@ public class PersonTable extends CustomComponent {
         // create table
         this.table = new Table();
         table.setContainerDataSource(this.container);
-        
-        //configure
-        table.removeContainerProperty("id");
-        table.setWidth("100%");
-        table.setPageLength(10);
        
         //set action column
         table.addGeneratedColumn("button", new ColumnGenerator() {
@@ -60,6 +55,12 @@ public class PersonTable extends CustomComponent {
                 return addButtons(itemId);
             }
         });
+        
+        //configure
+        table.setWidth("100%");
+        table.setPageLength(10);
+        table.setColumnCollapsingAllowed(true);
+        table.setVisibleColumns("firstname", "lastname", "birthdate", "button");
         
         // set headers
         table.setColumnHeader("firstname", controller.getUtil().readColumnHeader(controller.getI18nBasePath(), "firstname"));
