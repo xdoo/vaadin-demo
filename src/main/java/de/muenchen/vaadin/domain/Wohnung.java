@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import org.hibernate.envers.Audited;
 
 /**
  *
@@ -18,10 +19,8 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "WOHNUNGEN")
-public class Wohnung implements Serializable {
-    
-    @Id @GeneratedValue
-    private Long id;
+@Audited
+public class Wohnung extends BaseEntity {
     
     @Column(name = "WOHN_STOCK")
     private int stock;
@@ -46,14 +45,6 @@ public class Wohnung implements Serializable {
 
     public void setAusrichtung(String ausrichtung) {
         this.ausrichtung = ausrichtung;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getAdresseOid() {

@@ -15,10 +15,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import org.hibernate.envers.Audited;
 
 @Entity
 @Table(name = "PERSONEN")
-public class Person extends AuditingBaseEntity {
+@Audited
+public class Person extends BaseEntity {
     
     @Column(length = 50, nullable = true, name = "PERS_FIRSTNAME")
     private String firstname;

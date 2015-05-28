@@ -15,6 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import org.hibernate.envers.Audited;
 
 /**
  *
@@ -22,7 +23,8 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "SACHBEARBEITER")
-public class Sachbearbeiter extends AuditingBaseEntity {
+@Audited
+public class Sachbearbeiter extends BaseEntity {
     
     @Column(length = 50, nullable = true, name = "SACH_FIRSTNAME")
     String firstname;

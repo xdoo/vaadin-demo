@@ -21,4 +21,20 @@ public abstract class BaseEntity implements Serializable {
     @Column(length = 30, unique = true, nullable = false, name = "OID")
     private String oid;
     
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setOid(String oid) {
+        this.oid = oid;
+    }
+
+    public String getOid() {
+        return oid;
+    }
+    
 }
