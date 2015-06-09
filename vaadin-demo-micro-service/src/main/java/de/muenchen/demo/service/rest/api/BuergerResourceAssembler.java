@@ -8,9 +8,9 @@ import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
  *
  * @author claus.straube
  */
-public class BurgerResourceAssembler extends ResourceAssemblerSupport<Buerger, BuergerResource>{
-
-    public BurgerResourceAssembler(Class<BuergerController> controllerClass, Class<BuergerResource> resourceType) {
+public class BuergerResourceAssembler extends ResourceAssemblerSupport<Buerger, BuergerResource>{
+    
+    public BuergerResourceAssembler(Class<BuergerController> controllerClass, Class<BuergerResource> resourceType) {
         super(controllerClass, resourceType);
     }
 

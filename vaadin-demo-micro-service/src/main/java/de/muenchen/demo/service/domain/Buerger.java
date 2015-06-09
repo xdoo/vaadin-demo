@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
@@ -14,6 +15,7 @@ import javax.persistence.Transient;
  *
  * @author claus.straube
  */
+@Entity
 public class Buerger extends BaseEntity {
     
     @Column(length = 70, nullable = true, name = "BUER_VORNAME")

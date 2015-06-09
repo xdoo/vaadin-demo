@@ -24,8 +24,8 @@ public class Sachbearbeiter extends BaseEntity {
     @Column(length = 50, nullable = false, name = "SACH_LASTNAME")
     String lastname;
     
-    @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
-    private List<Buerger> buerger;
+//    @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
+//    private List<Buerger> buerger;
 
     public void setFirstname(String firstname) {
         this.firstname = firstname;
@@ -43,12 +43,12 @@ public class Sachbearbeiter extends BaseEntity {
         return lastname;
     }
 
-    public List<Buerger> getBuerger() {
-        return buerger;
-    }
-
-    public void setBuerger(List<Buerger> buerger) {
-        this.buerger = buerger;
-    }
+//    public List<Buerger> getBuerger() {
+//        return buerger;
+//    }
+//
+//    public void setBuerger(List<Buerger> buerger) {
+//        this.buerger = buerger;
+//    }
     
 }
