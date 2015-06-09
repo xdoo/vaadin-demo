@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.muenchen.vaadin.domain;
+package de.muenchen.demo.service.config;
 
 /**
  *
  * @author claus.straube
  */
-public class Staatsangehoerigkeit {
+public class SecurityConfiguration {
     
 }

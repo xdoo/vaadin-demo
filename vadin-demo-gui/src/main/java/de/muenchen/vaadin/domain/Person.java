@@ -5,6 +5,8 @@
  */
 package de.muenchen.vaadin.domain;
 
+import de.muenchen.demo.service.domain.Wohnung;
+import de.muenchen.demo.service.domain.Sachbearbeiter;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;

@@ -1,18 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package de.muenchen.vaadin.domain;
+package de.muenchen.demo.service.domain;
 
-import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import org.hibernate.envers.Audited;
@@ -33,7 +25,7 @@ public class Sachbearbeiter extends BaseEntity {
     String lastname;
     
     @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
-    private List<Person> personen;
+    private List<Buerger> buerger;
 
     public void setFirstname(String firstname) {
         this.firstname = firstname;
@@ -51,12 +43,12 @@ public class Sachbearbeiter extends BaseEntity {
         return lastname;
     }
 
-    public List<Person> getPersonen() {
-        return personen;
+    public List<Buerger> getBuerger() {
+        return buerger;
     }
 
-    public void setPersonen(List<Person> personen) {
-        this.personen = personen;
+    public void setBuerger(List<Buerger> buerger) {
+        this.buerger = buerger;
     }
     
 }

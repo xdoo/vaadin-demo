@@ -1,4 +1,4 @@
-package de.muenchen.vaadin.domain;
+package de.muenchen.demo.service.domain;
 
 import org.springframework.data.repository.CrudRepository;
 
