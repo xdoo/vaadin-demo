@@ -8,7 +8,7 @@
         <version>1.2.4.RELEASE</version>
     </parent>
     <artifactId>vaadin-demo-micro-service</artifactId>
-    <groupId>com.catify</groupId>
+    <groupId>de.muenchen</groupId>
     <name>vaadin demo :: micro service</name>
     <description>Micro Service
     </description>
