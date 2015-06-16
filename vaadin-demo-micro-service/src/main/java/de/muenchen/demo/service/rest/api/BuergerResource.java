@@ -1,13 +1,12 @@
 package de.muenchen.demo.service.rest.api;
 
 import java.util.Date;
-import org.springframework.hateoas.ResourceSupport;
 
 /**
  *
  * @author claus.straube
  */
-public class BuergerResource extends ResourceSupport {
+public class BuergerResource extends BaseResource {
     
     private String firstname;
     private String lastname;

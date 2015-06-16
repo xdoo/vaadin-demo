@@ -1,12 +1,15 @@
 package de.muenchen.demo.service.services;
 
 import de.muenchen.demo.service.domain.Buerger;
+import java.util.List;
 
 /**
  *
  * @author claus
  */
 public interface BuergerService {
+    
+    public List<Buerger> query();
     
     public Buerger create(Buerger buerger);
     

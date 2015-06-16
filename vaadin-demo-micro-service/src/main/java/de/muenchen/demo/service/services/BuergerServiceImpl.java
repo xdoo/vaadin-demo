@@ -1,5 +1,6 @@
 package de.muenchen.demo.service.services;
 
+import com.google.common.collect.Lists;
 import de.muenchen.demo.service.domain.Buerger;
 import de.muenchen.demo.service.domain.BuergerRepository;
 import de.muenchen.demo.service.util.IdService;
@@ -47,6 +48,12 @@ public class BuergerServiceImpl implements BuergerService {
     public void delete(String oid) {
         Buerger item = this.read(oid);
         this.repo.delete(item);
+    }
+
+    @Override
+    public List<Buerger> query() {
+        Iterable<Buerger> all = this.repo.findAll();
+        return Lists.newArrayList(all);
     }
     
 }

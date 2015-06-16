@@ -1,9 +1,11 @@
 package de.muenchen.demo.service.rest;
 
+import de.muenchen.demo.service.domain.Buerger;
 import de.muenchen.demo.service.rest.api.BuergerResource;
 import de.muenchen.demo.service.rest.api.BuergerResourceAssembler;
 import de.muenchen.demo.service.services.BuergerService;
 import java.util.Date;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +33,14 @@ public class BuergerController {
     
     @Autowired EntityLinks entityLinks;
     @Autowired BuergerService service;
+    @Autowired BuergerResourceAssembler assembler;
     
-    @RequestMapping(method = {RequestMethod.GET})
+    @RequestMapping(value = "/search", method = {RequestMethod.GET})
     ResponseEntity queryBuerger() {
         if(LOG.isDebugEnabled())
             LOG.debug("query buerger");
+        ResponseEntity<List<Buerger>> response = ResponseEntity.created(null).body(this.service.query());
+        
         return null;
     }
     
@@ -57,11 +62,13 @@ public class BuergerController {
         return null;
     }
     
-    @RequestMapping(value = "/{id}", method = {RequestMethod.GET})
-    ResponseEntity readBuerger(@PathVariable("id") String id) {
+    @RequestMapping(value = "/{oid}", method = {RequestMethod.GET})
+    ResponseEntity readBuerger(@PathVariable("oid") String oid) {
         if(LOG.isDebugEnabled())
             LOG.debug("read buerger");
-        return null;
+        Buerger buerger = this.service.read(oid);
+        BuergerResource resource = this.assembler.toResource(buerger);
+        return ResponseEntity.ok(resource);
     }
     
     @RequestMapping(value = "/{id}", method = {RequestMethod.POST})
