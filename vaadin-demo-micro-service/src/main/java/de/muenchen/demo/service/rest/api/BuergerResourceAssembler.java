@@ -3,11 +3,14 @@ package de.muenchen.demo.service.rest.api;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import de.muenchen.demo.service.domain.Buerger;
+import de.muenchen.demo.service.rest.BuergerController;
 import de.muenchen.demo.service.services.BuergerService;
 import java.util.List;
 import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityLinks;
 import org.springframework.stereotype.Service;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 
 /**
  *
@@ -18,6 +21,7 @@ public class BuergerResourceAssembler {
 
     @Autowired DozerBeanMapper dozer;
     @Autowired BuergerService service;
+    @Autowired EntityLinks entityLinks;
     
     /**
      * 
@@ -28,7 +32,7 @@ public class BuergerResourceAssembler {
         List<BuergerResource> result = Lists.newArrayList();
         buerger.stream().forEach((b) -> {
             result.add(this.toResource(b));
-        });
+        });        
         return result;
     }
     
@@ -38,7 +42,14 @@ public class BuergerResourceAssembler {
      * @return 
      */
     public BuergerResource toResource(Buerger buerger) {
+        // map
         BuergerResource resource = this.dozer.map(buerger, BuergerResource.class);
+        // add crud
+        resource.add(linkTo(methodOn(BuergerController.class).createBuerger()).withRel("new"));
+        resource.add(linkTo(methodOn(BuergerController.class).readBuerger(buerger.getOid())).withSelfRel());
+        resource.add(linkTo(methodOn(BuergerController.class).updateBuerger(null)).withRel("next"));
+        resource.add(linkTo(methodOn(BuergerController.class).deleteBuerger(buerger.getOid())).withRel("delete"));
+        
         return resource;
     }
     

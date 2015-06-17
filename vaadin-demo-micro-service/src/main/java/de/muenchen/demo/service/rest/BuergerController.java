@@ -36,7 +36,7 @@ public class BuergerController {
     @Autowired BuergerResourceAssembler assembler;
     
     @RequestMapping(value = "/search", method = {RequestMethod.GET})
-    ResponseEntity queryBuerger() {
+    public ResponseEntity queryBuerger() {
         if(LOG.isDebugEnabled())
             LOG.debug("query buerger");
         ResponseEntity<List<Buerger>> response = ResponseEntity.created(null).body(this.service.query());
@@ -45,7 +45,7 @@ public class BuergerController {
     }
     
     @RequestMapping(value = "/{vorname}/{nachname}/{geburtsdatum}")
-    ResponseEntity queryBuerger(@PathVariable("vorname") String vorname
+    public ResponseEntity queryBuerger(@PathVariable("vorname") String vorname
                                 , @PathVariable("nachname") String nachname
                                 , @PathVariable("geburtsdatum") Date geburtsdatum) {
         if(LOG.isDebugEnabled())
@@ -55,15 +55,14 @@ public class BuergerController {
     }
     
     @RequestMapping(method = {RequestMethod.POST})
-    ResponseEntity createBuerger(RequestEntity<BuergerResource> request) {
+    public ResponseEntity createBuerger() {
         if(LOG.isDebugEnabled())
             LOG.debug("create buerger");
-        ResponseEntity<BuergerResource> response = new ResponseEntity<BuergerResource>(HttpStatus.CONFLICT);
         return null;
     }
     
     @RequestMapping(value = "/{oid}", method = {RequestMethod.GET})
-    ResponseEntity readBuerger(@PathVariable("oid") String oid) {
+    public ResponseEntity readBuerger(@PathVariable("oid") String oid) {
         if(LOG.isDebugEnabled())
             LOG.debug("read buerger");
         Buerger buerger = this.service.read(oid);
@@ -72,14 +71,14 @@ public class BuergerController {
     }
     
     @RequestMapping(value = "/{id}", method = {RequestMethod.POST})
-    ResponseEntity updateBuerger() {
+    public ResponseEntity updateBuerger(RequestEntity request) {
         if(LOG.isDebugEnabled())
             LOG.debug("update buerger");
         return null;
     }
     
     @RequestMapping(value = "/{id}", method = {RequestMethod.DELETE})
-    ResponseEntity deleteBuerger(@PathVariable("id") String id) {
+    public ResponseEntity deleteBuerger(@PathVariable("id") String id) {
         if(LOG.isDebugEnabled())
             LOG.debug("delete buerger");
         return null;
