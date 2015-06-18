@@ -47,7 +47,7 @@ public class BuergerResourceAssembler {
         // add crud
         resource.add(linkTo(methodOn(BuergerController.class).createBuerger()).withRel("new"));
         resource.add(linkTo(methodOn(BuergerController.class).readBuerger(buerger.getOid())).withSelfRel());
-        resource.add(linkTo(methodOn(BuergerController.class).updateBuerger(null)).withRel("next"));
+        resource.add(linkTo(methodOn(BuergerController.class).updateBuerger(buerger.getOid(), null)).withRel("next"));
         resource.add(linkTo(methodOn(BuergerController.class).deleteBuerger(buerger.getOid())).withRel("delete"));
         
         return resource;

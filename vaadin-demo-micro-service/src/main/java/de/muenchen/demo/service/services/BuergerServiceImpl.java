@@ -22,9 +22,19 @@ public class BuergerServiceImpl implements BuergerService {
     @Autowired BuergerRepository repo;
     
     @Override
-    public Buerger create(Buerger buerger) {
+    public Buerger create() {
+        Buerger buerger = new Buerger();
         buerger.setOid(IdService.next());
-        return this.repo.save(buerger);
+        return buerger;
+    }
+
+    @Override
+    public Buerger save(Buerger buerger) {
+        if(buerger.getId() == 0) {
+            return this.repo.save(buerger);
+        } else {
+            throw new IllegalArgumentException("On save, the ID must be empty");
+        }
     }
     
     @Override

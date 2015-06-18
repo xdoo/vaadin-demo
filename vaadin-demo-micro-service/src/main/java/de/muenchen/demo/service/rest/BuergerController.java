@@ -54,24 +54,26 @@ public class BuergerController {
         return null;
     }
     
-    @RequestMapping(method = {RequestMethod.POST})
+    @RequestMapping(value = "/new", method = {RequestMethod.GET})
     public ResponseEntity createBuerger() {
         if(LOG.isDebugEnabled())
             LOG.debug("create buerger");
-        return null;
+        Buerger entity = this.service.create();
+        BuergerResource resource = this.assembler.toResource(entity);
+        return ResponseEntity.ok(resource);
     }
     
     @RequestMapping(value = "/{oid}", method = {RequestMethod.GET})
     public ResponseEntity readBuerger(@PathVariable("oid") String oid) {
         if(LOG.isDebugEnabled())
             LOG.debug("read buerger");
-        Buerger buerger = this.service.read(oid);
-        BuergerResource resource = this.assembler.toResource(buerger);
+        Buerger entity = this.service.read(oid);
+        BuergerResource resource = this.assembler.toResource(entity);
         return ResponseEntity.ok(resource);
     }
     
-    @RequestMapping(value = "/{id}", method = {RequestMethod.POST})
-    public ResponseEntity updateBuerger(RequestEntity request) {
+    @RequestMapping(value = "/{oid}", method = {RequestMethod.POST})
+    public ResponseEntity updateBuerger(@PathVariable("oid") String oid, RequestEntity request) {
         if(LOG.isDebugEnabled())
             LOG.debug("update buerger");
         return null;

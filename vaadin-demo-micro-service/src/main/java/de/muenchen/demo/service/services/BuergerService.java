@@ -11,7 +11,9 @@ public interface BuergerService {
     
     public List<Buerger> query();
     
-    public Buerger create(Buerger buerger);
+    public Buerger create();
+    
+    public Buerger save(Buerger buerger);
     
     public Buerger read(String oid);
     
