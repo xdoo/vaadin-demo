@@ -1,5 +1,6 @@
 package de.muenchen.demo.service.services;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import de.muenchen.demo.service.domain.Buerger;
 import de.muenchen.demo.service.domain.BuergerRepository;
@@ -30,11 +31,9 @@ public class BuergerServiceImpl implements BuergerService {
 
     @Override
     public Buerger save(Buerger buerger) {
-        if(buerger.getId() == 0) {
-            return this.repo.save(buerger);
-        } else {
-            throw new IllegalArgumentException("On save, the ID must be empty");
-        }
+        LOG.info(buerger.toString());
+        Preconditions.checkArgument(buerger.getId() == null, "On save, the ID must be empty");
+        return this.repo.save(buerger);
     }
     
     @Override

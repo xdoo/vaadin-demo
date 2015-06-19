@@ -95,5 +95,10 @@ public class Buerger extends BaseEntity {
     public void setStaatsangehoerigkeitReferences(List<StaatsangehoerigkeitReference> staatsangehoerigkeitReferences) {
         this.staatsangehoerigkeitReferences = staatsangehoerigkeitReferences;
     }
+    
+    @Override
+    public String toString() {
+        return String.format("id > %s | oid > %s | vorname > %s | nachname > %s | geburtsdatum > %s", this.getId(), this.getOid(),  this.vorname, this.nachname, this.geburtsdatum);
+    } 
 
 }

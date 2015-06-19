@@ -8,32 +8,36 @@ import java.util.Date;
  */
 public class BuergerResource extends BaseResource {
     
-    private String firstname;
-    private String lastname;
-    private Date birthdate;
+    private String vorname;
+    private String nachname;
+    private Date geburtsdatum;
 
-    public String getFirstname() {
-        return firstname;
+    public String getVorname() {
+        return vorname;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public void setVorname(String vorname) {
+        this.vorname = vorname;
     }
 
-    public String getLastname() {
-        return lastname;
+    public String getNachname() {
+        return nachname;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setNachname(String nachname) {
+        this.nachname = nachname;
     }
 
-    public Date getBirthdate() {
-        return birthdate;
+    public Date getGeburtsdatum() {
+        return geburtsdatum;
     }
 
-    public void setBirthdate(Date birthdate) {
-        this.birthdate = birthdate;
+    public void setGeburtsdatum(Date geburtsdatum) {
+        this.geburtsdatum = geburtsdatum;
     }
-    
+
+    @Override
+    public String toString() {
+        return String.format("oid > %s | vorname > %s | nachname > %s | geburtsdatum > %s", this.getOid(), this.vorname, this.nachname, this.geburtsdatum);
+    } 
 }
