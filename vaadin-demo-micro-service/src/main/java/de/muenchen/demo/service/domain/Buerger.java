@@ -24,7 +24,7 @@ public class Buerger extends BaseEntity {
     @Column(length = 70, nullable = false, name = "BUER_NACHNAME")
     private String nachname;
     
-    @Column(name = "PERS_GEBURTSDATUM")
+    @Column(name = "BUER_GEBURTSDATUM")
     @Temporal(TemporalType.DATE)
     private Date geburtsdatum;
     

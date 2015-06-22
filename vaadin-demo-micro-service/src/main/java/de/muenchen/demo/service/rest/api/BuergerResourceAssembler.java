@@ -80,6 +80,10 @@ public class BuergerResourceAssembler {
             resource.add(linkTo(methodOn(BuergerController.class).saveBuerger(null)).withRel(HateoasUtil.SAVE));
         }
         
+        if(relations.contains(HateoasRelations.COPY)) {
+            resource.add(linkTo(methodOn(BuergerController.class).copyBuerger(buerger.getOid())).withRel(HateoasUtil.COPY));
+        }
+        
         return resource;
     }
 

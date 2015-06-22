@@ -77,9 +77,25 @@ public class BuergerController {
     @RequestMapping(value = "/new", method = {RequestMethod.GET})
     public ResponseEntity newBuerger() {
         if(LOG.isDebugEnabled())
-            LOG.debug("create buerger");
+            LOG.debug("new buerger");
         Buerger entity = this.service.create();
         BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.NEW, HateoasRelations.SAVE);
+        return ResponseEntity.ok(resource);
+    }
+    
+    /**
+     * Macht eine Kopie eines Büergers. Diese Kopie wird bei
+     * Erstellung in der DB gespeichert.
+     * 
+     * @param oid
+     * @return 
+     */
+    @RequestMapping(value = "/copy/{oid}", method = {RequestMethod.GET})
+    public ResponseEntity copyBuerger(@PathVariable String oid) {
+        if(LOG.isDebugEnabled())
+            LOG.debug("copy buerger");
+        Buerger entity = this.service.copy(oid);
+        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY);
         return ResponseEntity.ok(resource);
     }
     
@@ -94,7 +110,7 @@ public class BuergerController {
         if(LOG.isDebugEnabled())
             LOG.debug("read buerger");
         Buerger entity = this.service.read(oid);
-        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE);
+        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY);
         return ResponseEntity.ok(resource);
     }
     
@@ -114,7 +130,7 @@ public class BuergerController {
         this.assembler.fromResource(request, entity);
         LOG.info("danach > " + entity.toString());
         this.service.update(entity);
-        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE);
+        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY);
         return ResponseEntity.ok(resource);
     }
     
@@ -131,7 +147,7 @@ public class BuergerController {
         Buerger entity = new Buerger();
         this.assembler.fromResource(request, entity);
         this.service.save(entity);
-        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE);
+        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY);
         return ResponseEntity.ok(resource);
     }
     

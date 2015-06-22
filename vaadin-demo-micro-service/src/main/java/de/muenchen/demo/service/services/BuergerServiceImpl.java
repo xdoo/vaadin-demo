@@ -5,7 +5,11 @@ import com.google.common.collect.Lists;
 import de.muenchen.demo.service.domain.Buerger;
 import de.muenchen.demo.service.domain.BuergerRepository;
 import de.muenchen.demo.service.util.IdService;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +67,27 @@ public class BuergerServiceImpl implements BuergerService {
     public List<Buerger> query() {
         Iterable<Buerger> all = this.repo.findAll();
         return Lists.newArrayList(all);
+    }
+
+    @Override
+    public List<Buerger> query(String vorname, String nachname, Date geburtsdatum) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Buerger copy(String oid) {
+        Buerger source = this.read(oid);
+        Buerger result = null;
+        Buerger clone = new Buerger();
+        clone.setOid(IdService.next());
+        // start mapping
+        clone.setVorname(source.getVorname());
+        clone.setNachname(source.getNachname());
+        clone.setGeburtsdatum(source.getGeburtsdatum());
+        // end mapping
+        LOG.info("clone --> " + clone.toString());
+        result = this.repo.save(clone);
+        return result;
     }
     
 }
