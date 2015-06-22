@@ -7,8 +7,8 @@ package de.muenchen.vaadin.ui.app.views;
 
 import com.vaadin.ui.VerticalLayout;
 import de.muenchen.vaadin.ui.app.MainUI;
-import de.muenchen.vaadin.ui.components.CreatePersonButton;
-import de.muenchen.vaadin.ui.components.PersonTable;
+import de.muenchen.vaadin.ui.components.CreateBuergerButton;
+import de.muenchen.vaadin.ui.components.BuergerTable;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.annotation.VaadinUIScope;
@@ -32,8 +32,8 @@ public class PersonTableView extends DefaultPersonView {
 
     @Override
     protected void site() {
-        CreatePersonButton button = new CreatePersonButton(controller, PersonCreateView.NAME);
-        PersonTable table = this.controller.generatePersonTable(PersonUpdateView.NAME);
+        CreateBuergerButton button = new CreateBuergerButton(controller, PersonCreateView.NAME);
+        BuergerTable table = this.controller.generatePersonTable(PersonUpdateView.NAME);
         
         VerticalLayout layout = new VerticalLayout(button, table);
         layout.setSpacing(true);

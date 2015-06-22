@@ -14,8 +14,7 @@ import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.vaadin.domain.Person;
-import de.muenchen.vaadin.ui.app.views.DefaultPersonView;
+import de.muenchen.vaadin.domain.Buerger;
 import de.muenchen.vaadin.ui.app.views.events.BuergerEvent;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.EventType;
@@ -27,22 +26,22 @@ import org.slf4j.LoggerFactory;
  *
  * @author claus
  */
-public class UpdatePersonForm extends CustomComponent {
+public class UpdateBuergerForm extends CustomComponent {
     
     /**
      * Logger
      */
-    protected static final Logger LOG = LoggerFactory.getLogger(UpdatePersonForm.class);
+    protected static final Logger LOG = LoggerFactory.getLogger(UpdateBuergerForm.class);
     
-    final BeanFieldGroup<Person> binder = new BeanFieldGroup<Person>(Person.class);
+    final BeanFieldGroup<Buerger> binder = new BeanFieldGroup<Buerger>(Buerger.class);
     FormLayout layout = new FormLayout();
     final BuergerViewController controller;
     
     
-    private Person person;
+    private Buerger entity;
     private String navigateTo;
 
-    public UpdatePersonForm(BuergerViewController controller, String navigateTo) {
+    public UpdateBuergerForm(BuergerViewController controller, String navigateTo) {
         
         this.controller = controller;
         this.navigateTo = navigateTo;
@@ -57,9 +56,9 @@ public class UpdatePersonForm extends CustomComponent {
         // Beim ersten Aufruf der view kann die Komponente nicht
         // aktiv mit einem Objekt versorgt werden. Hier muss sich
         // die Komponente die Daten selbst holen.
-        if(this.person == null) {
+        if(this.entity == null) {
            this.binder.setItemDataSource(this.controller.getCurrent());
-           this.person = this.controller.getCurrent().getBean();
+           this.entity = this.controller.getCurrent().getBean();
         }
         
         layout.setMargin(true);
@@ -81,8 +80,8 @@ public class UpdatePersonForm extends CustomComponent {
                 try {
                     binder.commit();
                     Notification.show("Thanks!");
-                    Person person = binder.getItemDataSource().getBean();
-                    BuergerEvent event = new BuergerEvent(person, EventType.UPDATE);
+                    Buerger entity = binder.getItemDataSource().getBean();
+                    BuergerEvent event = new BuergerEvent(entity, EventType.UPDATE);
                     event.setNavigateTo(navigateTo);
                     controller.getEventbus().publish(this, event);
                 } catch (FieldGroup.CommitException e) {
@@ -94,10 +93,10 @@ public class UpdatePersonForm extends CustomComponent {
         setCompositionRoot(layout);
     }
     
-    public void select(BeanItem<Person> person) {
+    public void select(BeanItem<Buerger> item) {
         LOG.debug("seleted person to modify.");
-        this.binder.setItemDataSource(person);
-        this.person = person.getBean();
+        this.binder.setItemDataSource(item);
+        this.entity = item.getBean();
     }
 
 }

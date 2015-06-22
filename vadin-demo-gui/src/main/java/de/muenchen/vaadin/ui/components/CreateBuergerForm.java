@@ -10,7 +10,7 @@ import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.vaadin.domain.Person;
+import de.muenchen.vaadin.domain.Buerger;
 import de.muenchen.vaadin.ui.app.views.events.BuergerEvent;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.EventType;
@@ -20,9 +20,9 @@ import de.muenchen.vaadin.ui.util.I18nPaths;
  *
  * @author claus.straube
  */
-public class CreatePersonForm extends CustomComponent {
+public class CreateBuergerForm extends CustomComponent {
 
-    public CreatePersonForm(final BuergerViewController controller, final String navigateTo) {
+    public CreateBuergerForm(final BuergerViewController controller, final String navigateTo) {
         FormLayout layout = new FormLayout();
         layout.setMargin(true);
         
@@ -32,7 +32,7 @@ public class CreatePersonForm extends CustomComponent {
         layout.addComponent(headline);
 
         // Now use a binder to bind the members
-        final BeanFieldGroup<Person> binder = new BeanFieldGroup<Person>(Person.class);
+        final BeanFieldGroup<Buerger> binder = new BeanFieldGroup<Buerger>(Buerger.class);
         binder.setItemDataSource(controller.createPerson());
 
         layout.addComponent(controller.getUtil().createFormTextField(binder, controller.getI18nBasePath(), "firstname"));

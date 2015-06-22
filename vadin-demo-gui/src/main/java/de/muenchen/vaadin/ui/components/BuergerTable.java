@@ -9,7 +9,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.Table.ColumnGenerator;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.vaadin.domain.Person;
+import de.muenchen.vaadin.domain.Buerger;
 import de.muenchen.vaadin.ui.app.views.events.BuergerEvent;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.EventType;
@@ -21,26 +21,26 @@ import org.slf4j.LoggerFactory;
  *
  * @author claus.straube
  */
-public class PersonTable extends CustomComponent {
+public class BuergerTable extends CustomComponent {
 
-    private final BeanItemContainer<Person> container;
+    private final BeanItemContainer<Buerger> container;
     private BuergerViewController controller;
     private Table table;
     
     // Navigation
     private String navigateToAfterEdit;
     
-    protected static final Logger LOG = LoggerFactory.getLogger(PersonTable.class);
+    protected static final Logger LOG = LoggerFactory.getLogger(BuergerTable.class);
     
-    public PersonTable(final BuergerViewController controller) {
+    public BuergerTable(final BuergerViewController controller) {
         
         this.controller = controller;
         
         // Have some data
-        List<Person> all = controller.findPersons();
+        List<Buerger> all = controller.findBuerger();
         
         // Have a container of some type to contain the data
-        this.container = new BeanItemContainer<Person>(Person.class, all);
+        this.container = new BeanItemContainer<Buerger>(Buerger.class, all);
         
         // create table
         this.table = new Table();
@@ -74,12 +74,12 @@ public class PersonTable extends CustomComponent {
         setCompositionRoot(table);
     }
     
-    public void add(Person person) {
+    public void add(Buerger person) {
         LOG.debug("added person to table.");
         this.container.addBean(person);
     }
     
-    public void update(Person person) {
+    public void update(Buerger person) {
         LOG.debug("updated person in table.");
     }
     
@@ -107,7 +107,7 @@ public class PersonTable extends CustomComponent {
         edit.setIcon(FontAwesome.PENCIL);
         edit.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
         edit.addClickListener(e -> {
-            BeanItem<Person> item = container.getItem(id);
+            BeanItem<Buerger> item = container.getItem(id);
             BuergerEvent event = new BuergerEvent(item, id, EventType.SELECT);
             event.setNavigateTo(navigateToAfterEdit);
             controller.getEventbus().publish(this, event);
@@ -118,7 +118,7 @@ public class PersonTable extends CustomComponent {
         copy.setIcon(FontAwesome.COPY);
         copy.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
         copy.addClickListener(e -> {
-            BeanItem<Person> item = container.getItem(id);
+            BeanItem<Buerger> item = container.getItem(id);
             controller.getEventbus().publish(this, new BuergerEvent(item, id, EventType.COPY));
         });
         
@@ -128,7 +128,7 @@ public class PersonTable extends CustomComponent {
         delete.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
         delete.addStyleName(ValoTheme.BUTTON_DANGER);
         delete.addClickListener(e -> {
-            BeanItem<Person> item = container.getItem(id);            
+            BeanItem<Buerger> item = container.getItem(id);            
             GenericConfirmationWindow win = new GenericConfirmationWindow( new BuergerEvent(item, id, EventType.DELETE), controller.getEventbus());
             getUI().addWindow(win);
             win.center();
