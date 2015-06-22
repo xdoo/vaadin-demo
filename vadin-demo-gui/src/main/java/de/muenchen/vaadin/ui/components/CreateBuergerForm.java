@@ -33,7 +33,7 @@ public class CreateBuergerForm extends CustomComponent {
 
         // Now use a binder to bind the members
         final BeanFieldGroup<Buerger> binder = new BeanFieldGroup<Buerger>(Buerger.class);
-        binder.setItemDataSource(controller.createPerson());
+        binder.setItemDataSource(controller.createBuerger());
 
         layout.addComponent(controller.getUtil().createFormTextField(binder, controller.getI18nBasePath(), "firstname"));
         layout.addComponent(controller.getUtil().createFormTextField(binder, controller.getI18nBasePath(), "lastname"));
@@ -53,7 +53,7 @@ public class CreateBuergerForm extends CustomComponent {
                     event.setNavigateTo(navigateTo);
                     controller.getEventbus().publish(this, event);
                     //reset
-                    binder.setItemDataSource(controller.createPerson());
+                    binder.setItemDataSource(controller.createBuerger());
                 } catch (CommitException e) {
                     // TODO --> i18n
                     Error error = new Error("Fehler", "Beim erstellen der Person ist ein Fehler aufgetreten. Der Service Desk wurde per E-Mail informiert");

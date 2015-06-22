@@ -1,19 +1,15 @@
 package de.muenchen.vaadin.ui.app.views;
 
-import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.vaadin.services.BuergerService;
 import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.I18nPaths;
-import de.muenchen.vaadin.ui.util.VaadinUtil;
 import javax.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.events.EventBus;
 
 /**
@@ -22,12 +18,12 @@ import org.vaadin.spring.events.EventBus;
  * 
  * @author claus.straube
  */
-public abstract class DefaultPersonView extends VerticalLayout implements View{
+public abstract class DefaultBuergerView extends VerticalLayout implements View{
     
     
     BuergerViewController controller;
     
-    public DefaultPersonView(BuergerViewController controller, EventBus eventbus, MainUI ui) {
+    public DefaultBuergerView(BuergerViewController controller, EventBus eventbus, MainUI ui) {
         this.controller = controller;
         this.controller.registerEventBus(eventbus);
         this.controller.registerUI(ui);

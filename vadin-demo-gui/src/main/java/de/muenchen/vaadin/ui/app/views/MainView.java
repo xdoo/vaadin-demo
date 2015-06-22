@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package de.muenchen.vaadin.ui.app.views;
 
 import javax.annotation.PostConstruct;
@@ -33,7 +28,7 @@ public class MainView extends VerticalLayout implements View {
         setMargin(true);
         addComponent(new Label("<h2>Main View</h2>", ContentMode.HTML));
         addComponent(util.createNavigationButton("m2.secured", SecuredView.NAME));
-        addComponent(util.createNavigationButton("m1.person", PersonTableView.NAME));
+        addComponent(util.createNavigationButton("m1.person", BuergerTableView.NAME));
     }
 
     @Override

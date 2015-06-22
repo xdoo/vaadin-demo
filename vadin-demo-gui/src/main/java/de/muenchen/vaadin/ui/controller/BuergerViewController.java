@@ -125,7 +125,7 @@ public class BuergerViewController implements EventBusListener<BuergerEvent> {
      * 
      * @return neue Instanz einer Person
      */
-    public Buerger createPerson() {
+    public Buerger createBuerger() {
         Buerger entity = this.service.createBuerger();
         return entity;
     }
@@ -137,7 +137,7 @@ public class BuergerViewController implements EventBusListener<BuergerEvent> {
      * @param person
      * @return kopierte Instanz einer Person
      */
-    public Buerger copyPerson(Buerger buerger) {
+    public Buerger copyBuerger(Buerger buerger) {
         return this.service.copyBuerger(buerger.getOid());
     }
     
@@ -238,7 +238,7 @@ public class BuergerViewController implements EventBusListener<BuergerEvent> {
         if(event.getType().equals(EventType.COPY)) {
             LOG.debug("copy event");
             // Service Operationen ausführen
-            Buerger copy = this.copyPerson(event.getBuerger());
+            Buerger copy = this.copyBuerger(event.getBuerger());
             
             // UI Komponenten aktualisieren
             this.personTables.stream().forEach((table) -> {

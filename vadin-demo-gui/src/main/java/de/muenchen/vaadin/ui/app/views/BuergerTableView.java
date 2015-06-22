@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package de.muenchen.vaadin.ui.app.views;
 
 import com.vaadin.ui.VerticalLayout;
@@ -19,21 +14,21 @@ import org.vaadin.spring.navigator.annotation.VaadinView;
  *
  * @author claus
  */
-@VaadinView(name = PersonTableView.NAME)
+@VaadinView(name = BuergerTableView.NAME)
 @VaadinUIScope
-public class PersonTableView extends DefaultPersonView {
+public class BuergerTableView extends DefaultBuergerView {
     
-    public static final String NAME = "person_table_view";
+    public static final String NAME = "buerger_table_view";
     
     @Autowired
-    public PersonTableView(BuergerViewController controller, EventBus eventbus, MainUI ui) {
+    public BuergerTableView(BuergerViewController controller, EventBus eventbus, MainUI ui) {
         super(controller, eventbus, ui);
     }
 
     @Override
     protected void site() {
-        CreateBuergerButton button = new CreateBuergerButton(controller, PersonCreateView.NAME);
-        BuergerTable table = this.controller.generatePersonTable(PersonUpdateView.NAME);
+        CreateBuergerButton button = new CreateBuergerButton(controller, BuergerCreateView.NAME);
+        BuergerTable table = this.controller.generatePersonTable(BuergerUpdateView.NAME);
         
         VerticalLayout layout = new VerticalLayout(button, table);
         layout.setSpacing(true);

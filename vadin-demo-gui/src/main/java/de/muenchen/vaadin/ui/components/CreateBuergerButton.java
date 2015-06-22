@@ -4,7 +4,7 @@ import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.vaadin.ui.app.views.DefaultPersonView;
+import de.muenchen.vaadin.ui.app.views.DefaultBuergerView;
 import de.muenchen.vaadin.ui.app.views.events.BuergerEvent;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.EventType;
