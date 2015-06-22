@@ -7,9 +7,9 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.vaadin.services.PersonService;
+import de.muenchen.vaadin.services.BuergerService;
 import de.muenchen.vaadin.ui.app.MainUI;
-import de.muenchen.vaadin.ui.controller.PersonViewController;
+import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.I18nPaths;
 import de.muenchen.vaadin.ui.util.VaadinUtil;
 import javax.annotation.PostConstruct;
@@ -25,9 +25,9 @@ import org.vaadin.spring.events.EventBus;
 public abstract class DefaultPersonView extends VerticalLayout implements View{
     
     
-    PersonViewController controller;
+    BuergerViewController controller;
     
-    public DefaultPersonView(PersonViewController controller, EventBus eventbus, MainUI ui) {
+    public DefaultPersonView(BuergerViewController controller, EventBus eventbus, MainUI ui) {
         this.controller = controller;
         this.controller.registerEventBus(eventbus);
         this.controller.registerUI(ui);

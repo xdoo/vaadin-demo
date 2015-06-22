@@ -3,10 +3,10 @@ package de.muenchen.vaadin.ui.controller;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.ui.UI;
-import de.muenchen.vaadin.domain.Person;
-import de.muenchen.vaadin.services.PersonService;
+import de.muenchen.vaadin.domain.Buerger;
+import de.muenchen.vaadin.services.BuergerService;
 import de.muenchen.vaadin.ui.app.MainUI;
-import de.muenchen.vaadin.ui.app.views.events.PersonEvent;
+import de.muenchen.vaadin.ui.app.views.events.BuergerEvent;
 import de.muenchen.vaadin.ui.components.CreatePersonForm;
 import de.muenchen.vaadin.ui.components.PersonTable;
 import de.muenchen.vaadin.ui.components.UpdatePersonForm;
@@ -27,19 +27,19 @@ import org.vaadin.spring.events.EventBusListener;
  * @author claus.straube
  */
 @Component
-public class PersonViewController implements EventBusListener<PersonEvent> {
+public class BuergerViewController implements EventBusListener<BuergerEvent> {
     
-    public static final String I18N_BASE_PATH = "m1.person";
+    public static final String I18N_BASE_PATH = "m1.buerger";
     
     /**
      * Logger
      */
-    protected static final Logger LOG = LoggerFactory.getLogger(PersonViewController.class);
+    protected static final Logger LOG = LoggerFactory.getLogger(BuergerViewController.class);
     
     /**
      * Die Service Klasse
      */
-    PersonService service;
+    BuergerService service;
     
     /**
      * Werkzeuge für Vaadin
@@ -57,7 +57,7 @@ public class PersonViewController implements EventBusListener<PersonEvent> {
     Navigator navigator;
 
     @Autowired
-    public PersonViewController(PersonService service, VaadinUtil util) {
+    public BuergerViewController(BuergerService service, VaadinUtil util) {
         this.service = service;
         this.util = util;
     }
@@ -67,7 +67,7 @@ public class PersonViewController implements EventBusListener<PersonEvent> {
     List<PersonTable> personTables = new ArrayList<>();
     
     // item cache
-    BeanItem<Person> current;
+    BeanItem<Buerger> current;
     
     /**
      * Der Eventbus wird über die {@link DefaulPersonView} registriert. Dies
@@ -111,7 +111,7 @@ public class PersonViewController implements EventBusListener<PersonEvent> {
         return navigator;
     }
 
-    public BeanItem<Person> getCurrent() {
+    public BeanItem<Buerger> getCurrent() {
         return current;
     }
     
@@ -125,9 +125,9 @@ public class PersonViewController implements EventBusListener<PersonEvent> {
      * 
      * @return neue Instanz einer Person
      */
-    public Person createPerson() {
-        Person person = this.service.createPerson();
-        return person;
+    public Buerger createPerson() {
+        Buerger entity = this.service.createBuerger();
+        return entity;
     }
     
     /**
@@ -137,36 +137,25 @@ public class PersonViewController implements EventBusListener<PersonEvent> {
      * @param person
      * @return kopierte Instanz einer Person
      */
-    public Person copyPerson(Person person) {
-        Person clone = this.service.createPerson();
-        
-        // Properties kopieren.
-        // TODO --> hier kann eventuell ein Framework eingesetzt werden,
-        //          oder man generiert einfach die Kopier-Operationen.
-        clone.setFirstname(person.getFirstname());
-        clone.setLastname(person.getLastname());
-        clone.setBirthdate(person.getBirthdate());
-        
-        // in der DB speichern
-        clone = this.savePerson(clone);
-        return clone;
+    public Buerger copyPerson(Buerger buerger) {
+        return this.service.copyBuerger(buerger.getOid());
     }
     
     /**
-     * Speichert ein {@link Person} Objekt in der Datenbank.
+     * Speichert ein {@link Buerger} Objekt in der Datenbank.
      * 
-     * @param person
+     * @param entity
      * @return 
      */
-    public Person savePerson(Person person) {
-        return service.updatePerson(person);
+    public Buerger saveBuerger(Buerger entity) {
+        return service.updateBuerger(entity);
     }
     
-    public void deletePerson(Person person) {
-        service.deletePerson(person.getId());
+    public void deleteBuerger(Buerger entity) {
+        service.deleteBuerger(entity.getOid());
     }
     
-    public List<Person> findPersons() {
+    public List<Buerger> findBuerger() {
         return service.findAll();
     }
     
@@ -208,8 +197,8 @@ public class PersonViewController implements EventBusListener<PersonEvent> {
      * schaffen, ohne dass diese sich untereinander kennen müssen. 
      */
     @Override
-    public void onEvent(org.vaadin.spring.events.Event<PersonEvent> e) {
-        PersonEvent event = e.getPayload();
+    public void onEvent(org.vaadin.spring.events.Event<BuergerEvent> e) {
+        BuergerEvent event = e.getPayload();
         
         // create
         if(event.getType().equals(EventType.CREATE)) {
@@ -222,11 +211,11 @@ public class PersonViewController implements EventBusListener<PersonEvent> {
         if(event.getType().equals(EventType.UPDATE)) {
             LOG.debug("update event");
             // Service Operationen ausführen
-            this.savePerson(event.getPerson());
+            this.saveBuerger(event.getBuerger());
             
             // UI Komponenten aktualisieren
             this.personTables.stream().forEach((table) -> {
-                table.add(event.getPerson());
+                table.add(event.getBuerger());
             });
             
             // Zur Seite wechseln
@@ -237,7 +226,7 @@ public class PersonViewController implements EventBusListener<PersonEvent> {
         if(event.getType().equals(EventType.DELETE)) {
             LOG.debug("delete event");
             // Service Operationen ausführen
-            this.deletePerson(event.getPerson());
+            this.deleteBuerger(event.getPerson());
             
             // UI Komponenten aktualisieren
             this.personTables.stream().forEach((table) -> {

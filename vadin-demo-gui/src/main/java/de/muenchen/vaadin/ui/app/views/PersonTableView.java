@@ -9,7 +9,7 @@ import com.vaadin.ui.VerticalLayout;
 import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.components.CreatePersonButton;
 import de.muenchen.vaadin.ui.components.PersonTable;
-import de.muenchen.vaadin.ui.controller.PersonViewController;
+import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.annotation.VaadinUIScope;
 import org.vaadin.spring.events.EventBus;
@@ -26,7 +26,7 @@ public class PersonTableView extends DefaultPersonView {
     public static final String NAME = "person_table_view";
     
     @Autowired
-    public PersonTableView(PersonViewController controller, EventBus eventbus, MainUI ui) {
+    public PersonTableView(BuergerViewController controller, EventBus eventbus, MainUI ui) {
         super(controller, eventbus, ui);
     }
 

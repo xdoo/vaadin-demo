@@ -10,8 +10,8 @@ import com.vaadin.ui.Table;
 import com.vaadin.ui.Table.ColumnGenerator;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.domain.Person;
-import de.muenchen.vaadin.ui.app.views.events.PersonEvent;
-import de.muenchen.vaadin.ui.controller.PersonViewController;
+import de.muenchen.vaadin.ui.app.views.events.BuergerEvent;
+import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.EventType;
 import java.util.List;
 import org.slf4j.Logger;
@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 public class PersonTable extends CustomComponent {
 
     private final BeanItemContainer<Person> container;
-    private PersonViewController controller;
+    private BuergerViewController controller;
     private Table table;
     
     // Navigation
@@ -32,7 +32,7 @@ public class PersonTable extends CustomComponent {
     
     protected static final Logger LOG = LoggerFactory.getLogger(PersonTable.class);
     
-    public PersonTable(final PersonViewController controller) {
+    public PersonTable(final BuergerViewController controller) {
         
         this.controller = controller;
         
@@ -108,7 +108,7 @@ public class PersonTable extends CustomComponent {
         edit.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
         edit.addClickListener(e -> {
             BeanItem<Person> item = container.getItem(id);
-            PersonEvent event = new PersonEvent(item, id, EventType.SELECT);
+            BuergerEvent event = new BuergerEvent(item, id, EventType.SELECT);
             event.setNavigateTo(navigateToAfterEdit);
             controller.getEventbus().publish(this, event);
         });
@@ -119,7 +119,7 @@ public class PersonTable extends CustomComponent {
         copy.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
         copy.addClickListener(e -> {
             BeanItem<Person> item = container.getItem(id);
-            controller.getEventbus().publish(this, new PersonEvent(item, id, EventType.COPY));
+            controller.getEventbus().publish(this, new BuergerEvent(item, id, EventType.COPY));
         });
         
         //delete
@@ -129,7 +129,7 @@ public class PersonTable extends CustomComponent {
         delete.addStyleName(ValoTheme.BUTTON_DANGER);
         delete.addClickListener(e -> {
             BeanItem<Person> item = container.getItem(id);            
-            GenericConfirmationWindow win = new GenericConfirmationWindow( new PersonEvent(item, id, EventType.DELETE), controller.getEventbus());
+            GenericConfirmationWindow win = new GenericConfirmationWindow( new BuergerEvent(item, id, EventType.DELETE), controller.getEventbus());
             getUI().addWindow(win);
             win.center();
             win.focus();

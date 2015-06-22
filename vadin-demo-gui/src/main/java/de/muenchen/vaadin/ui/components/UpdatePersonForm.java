@@ -16,8 +16,8 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.domain.Person;
 import de.muenchen.vaadin.ui.app.views.DefaultPersonView;
-import de.muenchen.vaadin.ui.app.views.events.PersonEvent;
-import de.muenchen.vaadin.ui.controller.PersonViewController;
+import de.muenchen.vaadin.ui.app.views.events.BuergerEvent;
+import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.EventType;
 import de.muenchen.vaadin.ui.util.I18nPaths;
 import org.slf4j.Logger;
@@ -36,13 +36,13 @@ public class UpdatePersonForm extends CustomComponent {
     
     final BeanFieldGroup<Person> binder = new BeanFieldGroup<Person>(Person.class);
     FormLayout layout = new FormLayout();
-    final PersonViewController controller;
+    final BuergerViewController controller;
     
     
     private Person person;
     private String navigateTo;
 
-    public UpdatePersonForm(PersonViewController controller, String navigateTo) {
+    public UpdatePersonForm(BuergerViewController controller, String navigateTo) {
         
         this.controller = controller;
         this.navigateTo = navigateTo;
@@ -82,7 +82,7 @@ public class UpdatePersonForm extends CustomComponent {
                     binder.commit();
                     Notification.show("Thanks!");
                     Person person = binder.getItemDataSource().getBean();
-                    PersonEvent event = new PersonEvent(person, EventType.UPDATE);
+                    BuergerEvent event = new BuergerEvent(person, EventType.UPDATE);
                     event.setNavigateTo(navigateTo);
                     controller.getEventbus().publish(this, event);
                 } catch (FieldGroup.CommitException e) {

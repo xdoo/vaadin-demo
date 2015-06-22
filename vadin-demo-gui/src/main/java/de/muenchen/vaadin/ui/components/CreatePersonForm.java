@@ -11,8 +11,8 @@ import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.domain.Person;
-import de.muenchen.vaadin.ui.app.views.events.PersonEvent;
-import de.muenchen.vaadin.ui.controller.PersonViewController;
+import de.muenchen.vaadin.ui.app.views.events.BuergerEvent;
+import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.EventType;
 import de.muenchen.vaadin.ui.util.I18nPaths;
 
@@ -22,7 +22,7 @@ import de.muenchen.vaadin.ui.util.I18nPaths;
  */
 public class CreatePersonForm extends CustomComponent {
 
-    public CreatePersonForm(final PersonViewController controller, final String navigateTo) {
+    public CreatePersonForm(final BuergerViewController controller, final String navigateTo) {
         FormLayout layout = new FormLayout();
         layout.setMargin(true);
         
@@ -49,7 +49,7 @@ public class CreatePersonForm extends CustomComponent {
                     // TODO --> i18n
                     Success succes = new Success("Person erstellt", "Die Person wurde erfolgreich erstellt und gespeichert.");
                     succes.show(Page.getCurrent());
-                    PersonEvent event = new PersonEvent(binder.getItemDataSource().getBean(), EventType.UPDATE);
+                    BuergerEvent event = new BuergerEvent(binder.getItemDataSource().getBean(), EventType.UPDATE);
                     event.setNavigateTo(navigateTo);
                     controller.getEventbus().publish(this, event);
                     //reset
