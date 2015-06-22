@@ -5,11 +5,9 @@ import com.google.common.collect.Lists;
 import de.muenchen.demo.service.domain.Buerger;
 import de.muenchen.demo.service.domain.BuergerRepository;
 import de.muenchen.demo.service.util.IdService;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Date;
+import de.muenchen.demo.service.util.QueryService;
 import java.util.List;
-import java.util.logging.Level;
-import org.apache.commons.beanutils.BeanUtils;
+import javax.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +22,17 @@ public class BuergerServiceImpl implements BuergerService {
     
     private static final Logger LOG = LoggerFactory.getLogger(BuergerService.class);
     
-    @Autowired BuergerRepository repo;
+    BuergerRepository repo;
+    QueryService<Buerger> search;
+
+    public BuergerServiceImpl() {
+    }
+
+    @Autowired
+    public BuergerServiceImpl(BuergerRepository repo, EntityManager em) {
+        this.repo = repo;
+        this.search = new QueryService<>(em, Buerger.class, "vorname", "nachname");
+    }
     
     @Override
     public Buerger create() {
@@ -70,8 +78,8 @@ public class BuergerServiceImpl implements BuergerService {
     }
 
     @Override
-    public List<Buerger> query(String vorname, String nachname, Date geburtsdatum) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<Buerger> query(String query) { 
+        return this.search.query(query);
     }
 
     @Override

@@ -6,7 +6,6 @@ import de.muenchen.demo.service.rest.api.BuergerResourceAssembler;
 import de.muenchen.demo.service.rest.api.SearchResultResource;
 import de.muenchen.demo.service.services.BuergerService;
 import de.muenchen.demo.service.util.HateoasRelations;
-import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  *
@@ -40,7 +40,7 @@ public class BuergerController {
      * 
      * @return 
      */
-    @RequestMapping(value = "/search", method = {RequestMethod.GET})
+    @RequestMapping(value = "/query", method = {RequestMethod.GET})
     public ResponseEntity queryBuerger() {
         if(LOG.isDebugEnabled())
             LOG.debug("query buerger");
@@ -52,19 +52,15 @@ public class BuergerController {
     /**
      * Bürger mit Parametern suchen.
      * 
-     * @param vorname
-     * @param nachname
-     * @param geburtsdatum
+     * @param filter
      * @return 
      */
-    @RequestMapping(value = "/{vorname}/{nachname}/{geburtsdatum}")
-    public ResponseEntity queryBuerger(@PathVariable("vorname") String vorname
-                                , @PathVariable("nachname") String nachname
-                                , @PathVariable("geburtsdatum") Date geburtsdatum) {
+    @RequestMapping(value = "/query", params = {"filter"})
+    public ResponseEntity queryBuerger(@RequestParam (value = "filter") String filter) {
         if(LOG.isDebugEnabled())
-            LOG.debug("query buerger with params: vorname, nachname, geburtsdatum");
-        SearchResultResource<BuergerResource> resource = this.assembler.toResource(this.service.query());
-        resource.add(linkTo(methodOn(BuergerController.class).queryBuerger(vorname, nachname, geburtsdatum)).withSelfRel()); // add self link with params
+            LOG.debug("query buerger with filter > " + filter);
+        SearchResultResource<BuergerResource> resource = this.assembler.toResource(this.service.query(filter));
+        resource.add(linkTo(methodOn(BuergerController.class).queryBuerger(filter)).withSelfRel()); // add self link with params
         return ResponseEntity.ok(resource);
     }
     

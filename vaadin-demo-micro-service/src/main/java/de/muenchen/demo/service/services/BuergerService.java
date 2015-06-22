@@ -12,7 +12,7 @@ public interface BuergerService {
     
     public List<Buerger> query();
     
-    public List<Buerger> query(String vorname, String nachname, Date geburtsdatum);
+    public List<Buerger> query(String query);
     
     public Buerger create();
     

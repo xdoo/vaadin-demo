@@ -1,27 +1,34 @@
 package de.muenchen.demo.service.domain;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import org.hibernate.search.annotations.DateBridge;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.Resolution;
 
 /**
  *
  * @author claus.straube
  */
 @Entity
+@Indexed
+@Table(name = "BUERGER")
 public class Buerger extends BaseEntity {
     
-    @Column(length = 70, nullable = true, name = "BUER_VORNAME")
+    @Field @Column(length = 70, nullable = true, name = "BUER_VORNAME")
     private String vorname;
     
-    @Column(length = 70, nullable = false, name = "BUER_NACHNAME")
+    @Field @Column(length = 70, nullable = false, name = "BUER_NACHNAME")
     private String nachname;
     
     @Column(name = "BUER_GEBURTSDATUM")
@@ -29,16 +36,16 @@ public class Buerger extends BaseEntity {
     private Date geburtsdatum;
     
     @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
-    private List<Wohnung> wohnungen;
+    private Set<Wohnung> wohnungen;
     
     @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
-    private List<Sachbearbeiter> sachbearbeiter;
+    private Set<Sachbearbeiter> sachbearbeiter;
     
     @Transient
-    private List<Staatsangehoerigkeit> staatsangehoerigkeiten;
+    private Set<Staatsangehoerigkeit> staatsangehoerigkeiten;
     
     @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
-    private List<StaatsangehoerigkeitReference> staatsangehoerigkeitReferences;
+    private Set<StaatsangehoerigkeitReference> staatsangehoerigkeitReferences;
 
     public String getVorname() {
         return vorname;
@@ -64,38 +71,38 @@ public class Buerger extends BaseEntity {
         this.geburtsdatum = geburtsdatum;
     }
 
-    public List<Wohnung> getWohnungen() {
+    public Set<Wohnung> getWohnungen() {
         return wohnungen;
     }
 
-    public void setWohnungen(List<Wohnung> wohnungen) {
+    public void setWohnungen(Set<Wohnung> wohnungen) {
         this.wohnungen = wohnungen;
     }
 
-    public List<Sachbearbeiter> getSachbearbeiter() {
+    public Set<Sachbearbeiter> getSachbearbeiter() {
         return sachbearbeiter;
     }
 
-    public void setSachbearbeiter(List<Sachbearbeiter> sachbearbeiter) {
+    public void setSachbearbeiter(Set<Sachbearbeiter> sachbearbeiter) {
         this.sachbearbeiter = sachbearbeiter;
     }
 
-    public List<Staatsangehoerigkeit> getStaatsangehoerigkeiten() {
+    public Set<Staatsangehoerigkeit> getStaatsangehoerigkeiten() {
         return staatsangehoerigkeiten;
     }
 
-    public void setStaatsangehoerigkeiten(List<Staatsangehoerigkeit> staatsangehoerigkeiten) {
+    public void setStaatsangehoerigkeiten(Set<Staatsangehoerigkeit> staatsangehoerigkeiten) {
         this.staatsangehoerigkeiten = staatsangehoerigkeiten;
     }
 
-    public List<StaatsangehoerigkeitReference> getStaatsangehoerigkeitReferences() {
+    public Set<StaatsangehoerigkeitReference> getStaatsangehoerigkeitReferences() {
         return staatsangehoerigkeitReferences;
     }
 
-    public void setStaatsangehoerigkeitReferences(List<StaatsangehoerigkeitReference> staatsangehoerigkeitReferences) {
+    public void setStaatsangehoerigkeitReferences(Set<StaatsangehoerigkeitReference> staatsangehoerigkeitReferences) {
         this.staatsangehoerigkeitReferences = staatsangehoerigkeitReferences;
     }
-    
+
     @Override
     public String toString() {
         return String.format("id > %s | oid > %s | vorname > %s | nachname > %s | geburtsdatum > %s", this.getId(), this.getOid(),  this.vorname, this.nachname, this.geburtsdatum);
