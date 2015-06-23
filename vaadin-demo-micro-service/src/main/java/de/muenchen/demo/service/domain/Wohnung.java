@@ -9,7 +9,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import org.hibernate.annotations.NaturalId;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 
@@ -22,11 +24,16 @@ import org.hibernate.envers.NotAudited;
 @Audited
 public class Wohnung extends BaseEntity  {
 
+  
     @Column(name = "WOHN_STOCK")
     private String stock;
 
     @Column(length = 20, name = "WOHN_AUSRICHTUNG")
     private String ausrichtung;
+    
+    @Column(length = 30, nullable = false, name = "WOHN_ADRESSE_OID")
+    private String adresseOid;
+    
 
     @NotAudited
     @OneToOne
@@ -64,4 +71,7 @@ public class Wohnung extends BaseEntity  {
 
 
 
-}
+    } 
+    
+
+

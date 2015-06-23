@@ -74,6 +74,8 @@ public class BuergerResourceAssembler {
 
         if (relations.contains(HateoasRelations.SELF)) {
             resource.add(linkTo(methodOn(BuergerController.class).readBuerger(buerger.getOid())).withSelfRel());
+            resource.add(linkTo(methodOn(BuergerController.class).readBuergerWohnungen(buerger.getOid())).withRel("Wohnungen"));
+
         }
 
         if (relations.contains(HateoasRelations.DELETE)) {
