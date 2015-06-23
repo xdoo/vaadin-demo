@@ -1,4 +1,4 @@
-package com.catify.vaadin.demo.api.domain;
+package com.catify.vaadin.demo.api.rest;
 
 import java.util.Date;
 
