@@ -38,7 +38,23 @@ public class BuergerRestClient {
         return this.readMultiSource(HateoasUtil.REL_QUERY, links);
     }
     
+    public Buerger updateBuerger(Buerger buerger) {
+        return this.writeSingleSource(HateoasUtil.REL_UPDATE, buerger);
+    }
     
+    public void deleteBuerger(List<Link> links) {
+        this.readSingleSource(HateoasUtil.REL_DELETE, links);
+    }
+    
+    public Buerger writeSingleSource(String rel, Buerger buerger) {
+        Optional<Link> link = HateoasUtil.findLinkForRel(rel, buerger.getLinks());
+        if(link.isPresent()) {
+            ResponseEntity<BuergerResource> resource = restTemplate.postForEntity(link.get().getHref(), buerger, BuergerResource.class);
+            return BuergerAssembler.fromResource(resource.getBody());
+        }
+        LOG.warn("Found no link to self.");
+        return null;
+    }
     
     public Buerger readSingleSource(String rel, List<Link> links) {
         Optional<Link> link = HateoasUtil.findLinkForRel(rel, links);
