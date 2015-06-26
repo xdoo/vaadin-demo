@@ -1,6 +1,6 @@
 package de.muenchen.vaadin.services;
 
-import de.muenchen.vaadin.domain.Buerger;
+import com.catify.vaadin.demo.api.domain.Buerger;
 import java.util.List;
 
 /**

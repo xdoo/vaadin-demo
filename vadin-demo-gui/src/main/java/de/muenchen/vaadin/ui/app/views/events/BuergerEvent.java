@@ -1,7 +1,7 @@
 package de.muenchen.vaadin.ui.app.views.events;
 
 import com.vaadin.data.util.BeanItem;
-import de.muenchen.vaadin.domain.Buerger;
+import com.catify.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.ui.util.EventType;
 
 /**

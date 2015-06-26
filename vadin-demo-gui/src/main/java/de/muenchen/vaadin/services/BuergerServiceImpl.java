@@ -5,8 +5,10 @@
  */
 package de.muenchen.vaadin.services;
 
-import de.muenchen.vaadin.domain.Buerger;
+import com.catify.vaadin.demo.api.domain.Buerger;
+import com.catify.vaadin.demo.api.rest.BuergerRestClient;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,6 +17,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class BuergerServiceImpl implements BuergerService {
+    
+    @Autowired BuergerRestClient client;
 
     @Override
     public Buerger createBuerger() {

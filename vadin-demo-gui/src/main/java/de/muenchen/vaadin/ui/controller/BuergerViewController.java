@@ -3,7 +3,7 @@ package de.muenchen.vaadin.ui.controller;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.ui.UI;
-import de.muenchen.vaadin.domain.Buerger;
+import com.catify.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.services.BuergerService;
 import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.app.views.events.BuergerEvent;
@@ -62,9 +62,9 @@ public class BuergerViewController implements EventBusListener<BuergerEvent> {
         this.util = util;
     }
     
-    List<CreateBuergerForm> createPersonForms = new ArrayList<>();
-    List<UpdateBuergerForm> updatePersonForms = new ArrayList<>();
-    List<BuergerTable> personTables = new ArrayList<>();
+    List<CreateBuergerForm> createBuergerForms = new ArrayList<>();
+    List<UpdateBuergerForm> updateBuergerForms = new ArrayList<>();
+    List<BuergerTable> buergerTables = new ArrayList<>();
     
     // item cache
     BeanItem<Buerger> current;
@@ -165,21 +165,21 @@ public class BuergerViewController implements EventBusListener<BuergerEvent> {
 
     public CreateBuergerForm generateCreatePersonForm(String navigateTo) {
         CreateBuergerForm form = new CreateBuergerForm(this, navigateTo);
-        this.createPersonForms.add(form);
+        this.createBuergerForms.add(form);
         
         return form;
     }
 
     public UpdateBuergerForm generateUpdatePersonForm(String navigateTo) {      
         UpdateBuergerForm form = new UpdateBuergerForm(this, navigateTo);
-        this.updatePersonForms.add(form);
+        this.updateBuergerForms.add(form);
         
         return form;
     }
 
     public BuergerTable generatePersonTable(String navigateToAfterEdit) {      
         BuergerTable table = new BuergerTable(this);
-        this.personTables.add(table);
+        this.buergerTables.add(table);
         
         table.setNavigateToAfterEdit(navigateToAfterEdit);
         
@@ -214,7 +214,7 @@ public class BuergerViewController implements EventBusListener<BuergerEvent> {
             this.saveBuerger(event.getBuerger());
             
             // UI Komponenten aktualisieren
-            this.personTables.stream().forEach((table) -> {
+            this.buergerTables.stream().forEach((table) -> {
                 table.add(event.getBuerger());
             });
             
@@ -229,7 +229,7 @@ public class BuergerViewController implements EventBusListener<BuergerEvent> {
             this.deleteBuerger(event.getBuerger());
             
             // UI Komponenten aktualisieren
-            this.personTables.stream().forEach((table) -> {
+            this.buergerTables.stream().forEach((table) -> {
                 table.delete(event.getItemId());
             });
         }
@@ -241,7 +241,7 @@ public class BuergerViewController implements EventBusListener<BuergerEvent> {
             Buerger copy = this.copyBuerger(event.getBuerger());
             
             // UI Komponenten aktualisieren
-            this.personTables.stream().forEach((table) -> {
+            this.buergerTables.stream().forEach((table) -> {
                 table.add(copy);
             });
         }
@@ -251,7 +251,7 @@ public class BuergerViewController implements EventBusListener<BuergerEvent> {
             LOG.debug("select event");
             
             // UI Komponenten aktualisieren
-            updatePersonForms.stream().forEach((form) -> {
+            updateBuergerForms.stream().forEach((form) -> {
                 form.select(event.getItem());
             });
             
