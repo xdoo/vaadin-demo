@@ -15,18 +15,18 @@ public class BuergerAssembler {
     }
     
     public static Buerger fromResource(BuergerResource resource) {
-        Buerger buerger = new Buerger();
+        Buerger entity = new Buerger();
         // start mapping
-        buerger.setOid(resource.getOid());
-        buerger.setVorname(resource.getVorname());
-        buerger.setNachname(resource.getNachname());
-        buerger.setGeburtsdatum(resource.getGeburtsdatum());
+        entity.setOid(resource.getOid());
+        entity.setVorname(resource.getVorname());
+        entity.setNachname(resource.getNachname());
+        entity.setGeburtsdatum(resource.getGeburtsdatum());
         // end mapping
         
         // set links
-        buerger.setId(resource.getId().getHref());
-        buerger.setLinks(resource.getLinks());
-        return buerger;
+        entity.setId(resource.getId().getHref());
+        entity.setLinks(resource.getLinks());
+        return entity;
     }
     
 }

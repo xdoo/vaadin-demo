@@ -156,7 +156,7 @@ public class BuergerViewController implements EventBusListener<BuergerEvent> {
     }
     
     public List<Buerger> findBuerger() {
-        return service.findAll();
+        return service.queryBuerger();
     }
     
     //////////////////////////////////////////////

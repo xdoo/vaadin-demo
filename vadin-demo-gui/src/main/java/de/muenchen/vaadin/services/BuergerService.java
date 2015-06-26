@@ -17,7 +17,7 @@ public interface BuergerService {
     
     public void deleteBuerger(String oid);
     
-    public List<Buerger> findAll();
+    public List<Buerger> queryBuerger();
     
     public Buerger copyBuerger(String oid);
     

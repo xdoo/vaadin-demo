@@ -1,14 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package de.muenchen.vaadin.services;
 
 import com.catify.vaadin.demo.api.domain.Buerger;
+import com.catify.vaadin.demo.api.hateoas.HateoasUtil;
 import com.catify.vaadin.demo.api.rest.BuergerRestClient;
+import com.google.common.collect.Lists;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
 import org.springframework.stereotype.Service;
 
 /**
@@ -19,10 +18,13 @@ import org.springframework.stereotype.Service;
 public class BuergerServiceImpl implements BuergerService {
     
     @Autowired BuergerRestClient client;
+    @Autowired InfoService infoService;
 
     @Override
     public Buerger createBuerger() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Link link = this.infoService.getUrl("buerger_new");
+        ArrayList<Link> links = Lists.newArrayList(link.withRel(HateoasUtil.REL_NEW));
+        return client.newBuerger(links);
     }
 
     @Override
@@ -31,8 +33,8 @@ public class BuergerServiceImpl implements BuergerService {
     }
 
     @Override
-    public Buerger updateBuerger(Buerger person) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Buerger updateBuerger(Buerger buerger) {
+        return client.updateBuerger(buerger);
     }
 
     @Override
@@ -41,8 +43,10 @@ public class BuergerServiceImpl implements BuergerService {
     }
 
     @Override
-    public List<Buerger> findAll() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<Buerger> queryBuerger() {
+        Link link = this.infoService.getUrl("buerger_query");
+        ArrayList<Link> links = Lists.newArrayList(link.withRel(HateoasUtil.REL_QUERY));
+        return client.queryBuerger(links);
     }
 
     @Override
