@@ -28,8 +28,8 @@ public class BuergerServiceImpl implements BuergerService {
     }
 
     @Override
-    public Buerger readBuerger(Long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Buerger readBuerger(Buerger entity) {
+        return client.readBuerger(entity.getLinks());
     }
 
     @Override
@@ -38,8 +38,8 @@ public class BuergerServiceImpl implements BuergerService {
     }
 
     @Override
-    public void deleteBuerger(String oid) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void deleteBuerger(Buerger buerger) {
+        client.deleteBuerger(buerger.getLinks());
     }
 
     @Override
@@ -50,8 +50,8 @@ public class BuergerServiceImpl implements BuergerService {
     }
 
     @Override
-    public Buerger copyBuerger(String oid) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Buerger copyBuerger(Buerger buerger) {
+        return client.copyBuerger(buerger.getLinks());
     }
     
 }

@@ -134,11 +134,11 @@ public class BuergerViewController implements EventBusListener<BuergerEvent> {
      * Kopiert eine vorhandene Instanz eines {@link Person} Objektes in eine
      * neue Instanz. Die Kopie wird gleich in der DB gespeichert.
      * 
-     * @param person
+     * @param entity
      * @return kopierte Instanz einer Person
      */
-    public Buerger copyBuerger(Buerger buerger) {
-        return this.service.copyBuerger(buerger.getOid());
+    public Buerger copyBuerger(Buerger entity) {
+        return this.service.copyBuerger(entity);
     }
     
     /**
@@ -152,10 +152,10 @@ public class BuergerViewController implements EventBusListener<BuergerEvent> {
     }
     
     public void deleteBuerger(Buerger entity) {
-        service.deleteBuerger(entity.getOid());
+        service.deleteBuerger(entity);
     }
     
-    public List<Buerger> findBuerger() {
+    public List<Buerger> queryBuerger() {
         return service.queryBuerger();
     }
     

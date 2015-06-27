@@ -37,7 +37,7 @@ public class BuergerTable extends CustomComponent {
         this.controller = controller;
         
         // Have some data
-        List<Buerger> all = controller.findBuerger();
+        List<Buerger> all = controller.queryBuerger();
         
         // Have a container of some type to contain the data
         this.container = new BeanItemContainer<Buerger>(Buerger.class, all);
