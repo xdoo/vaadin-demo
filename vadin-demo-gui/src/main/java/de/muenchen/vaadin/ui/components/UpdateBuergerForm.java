@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package de.muenchen.vaadin.ui.components;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
@@ -83,7 +78,7 @@ public class UpdateBuergerForm extends CustomComponent {
                     Buerger entity = binder.getItemDataSource().getBean();
                     BuergerEvent event = new BuergerEvent(entity, EventType.UPDATE);
                     event.setNavigateTo(navigateTo);
-                    controller.getEventbus().publish(this, event);
+                    controller.getEventbus().post(event);
                 } catch (FieldGroup.CommitException e) {
                     Notification.show("You fail!");
                 }

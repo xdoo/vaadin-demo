@@ -3,55 +3,74 @@ package de.muenchen.vaadin.services;
 import com.catify.vaadin.demo.api.domain.Buerger;
 import com.catify.vaadin.demo.api.hateoas.HateoasUtil;
 import com.catify.vaadin.demo.api.rest.BuergerRestClient;
+import com.catify.vaadin.demo.api.services.SecurityService;
 import com.google.common.collect.Lists;
+import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.spring.annotation.UIScope;
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
-import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 /**
  *
  * @author claus.straube
  */
-@Service
+@SpringComponent @UIScope
 public class BuergerServiceImpl implements BuergerService {
     
-    @Autowired BuergerRestClient client;
-    @Autowired InfoService infoService;
+    private static final Logger LOG = LoggerFactory.getLogger(BuergerService.class);
+    
+    private BuergerRestClient client;
+    private InfoService infoService;
+    private RestTemplate template;
+
+    @Autowired
+    public BuergerServiceImpl(BuergerRestClient client, InfoService infoService, SecurityService securityService) {
+        this.client = client;
+        this.infoService = infoService;
+        if(securityService.getRestTemplate().isPresent()) {
+            this.template = securityService.getRestTemplate().get();
+        } else {
+            LOG.warn("Cannot acquire rest template from security service.");
+        }
+    }
 
     @Override
     public Buerger createBuerger() {
         Link link = this.infoService.getUrl("buerger_new");
         ArrayList<Link> links = Lists.newArrayList(link.withRel(HateoasUtil.REL_NEW));
-        return client.newBuerger(links);
+        return client.newBuerger(links, this.template);
     }
 
     @Override
     public Buerger readBuerger(Buerger entity) {
-        return client.readBuerger(entity.getLinks());
+        return client.readBuerger(entity.getLinks(), this.template);
     }
 
     @Override
     public Buerger updateBuerger(Buerger buerger) {
-        return client.updateBuerger(buerger);
+        return client.updateBuerger(buerger, this.template);
     }
 
     @Override
     public void deleteBuerger(Buerger buerger) {
-        client.deleteBuerger(buerger.getLinks());
+        client.deleteBuerger(buerger.getLinks(), this.template);
     }
 
     @Override
     public List<Buerger> queryBuerger() {
         Link link = this.infoService.getUrl("buerger_query");
         ArrayList<Link> links = Lists.newArrayList(link.withRel(HateoasUtil.REL_QUERY));
-        return client.queryBuerger(links);
+        return client.queryBuerger(links, this.template);
     }
 
     @Override
     public Buerger copyBuerger(Buerger buerger) {
-        return client.copyBuerger(buerger.getLinks());
+        return client.copyBuerger(buerger.getLinks(), this.template);
     }
     
 }

@@ -4,7 +4,6 @@ import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.vaadin.ui.app.views.DefaultBuergerView;
 import de.muenchen.vaadin.ui.app.views.events.BuergerEvent;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.EventType;
@@ -24,7 +23,7 @@ public class CreateBuergerButton extends CustomComponent {
         create.addClickListener(e -> {
             BuergerEvent event = new BuergerEvent(EventType.CREATE);
             event.setNavigateTo(navigateTo);
-            controller.getEventbus().publish(this, event);
+            controller.getEventbus().post(event);
         });
         
         setCompositionRoot(create);

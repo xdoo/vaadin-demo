@@ -3,6 +3,7 @@ package com.catify.vaadin.demo.api.rest;
 import com.catify.vaadin.demo.api.domain.Buerger;
 import java.util.List;
 import org.springframework.hateoas.Link;
+import org.springframework.web.client.RestTemplate;
 
 /**
  *
@@ -10,16 +11,16 @@ import org.springframework.hateoas.Link;
  */
 public interface BuergerRestClient {
     
-    public Buerger newBuerger(List<Link> links);
+    public Buerger newBuerger(List<Link> links, RestTemplate restTemplate);
     
-    public Buerger readBuerger(List<Link> links);
+    public Buerger readBuerger(List<Link> links, RestTemplate restTemplate);
     
-    public Buerger copyBuerger(List<Link> links);
+    public Buerger copyBuerger(List<Link> links, RestTemplate restTemplate);
     
-    public List<Buerger> queryBuerger(List<Link> links);
+    public List<Buerger> queryBuerger(List<Link> links, RestTemplate restTemplate);
     
-    public Buerger updateBuerger(Buerger buerger);
+    public Buerger updateBuerger(Buerger buerger, RestTemplate restTemplate);
     
-    public void deleteBuerger(List<Link> links);
+    public void deleteBuerger(List<Link> links, RestTemplate restTemplate);
     
 }

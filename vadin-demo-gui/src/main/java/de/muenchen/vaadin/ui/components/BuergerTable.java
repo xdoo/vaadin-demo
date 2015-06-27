@@ -110,7 +110,7 @@ public class BuergerTable extends CustomComponent {
             BeanItem<Buerger> item = container.getItem(id);
             BuergerEvent event = new BuergerEvent(item, id, EventType.SELECT);
             event.setNavigateTo(navigateToAfterEdit);
-            controller.getEventbus().publish(this, event);
+            controller.getEventbus().post(event);
         });
         
         //copy
@@ -119,7 +119,7 @@ public class BuergerTable extends CustomComponent {
         copy.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
         copy.addClickListener(e -> {
             BeanItem<Buerger> item = container.getItem(id);
-            controller.getEventbus().publish(this, new BuergerEvent(item, id, EventType.COPY));
+            controller.getEventbus().post(new BuergerEvent(item, id, EventType.COPY));
         });
         
         //delete

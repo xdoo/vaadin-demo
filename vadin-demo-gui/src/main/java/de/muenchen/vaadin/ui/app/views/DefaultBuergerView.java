@@ -10,7 +10,6 @@ import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.I18nPaths;
 import javax.annotation.PostConstruct;
-import org.vaadin.spring.events.EventBus;
 
 /**
  * Für jede Entity existiert eine (voll generierte) Basis Klasse. Aus dieser
@@ -23,9 +22,8 @@ public abstract class DefaultBuergerView extends VerticalLayout implements View{
     
     BuergerViewController controller;
     
-    public DefaultBuergerView(BuergerViewController controller, EventBus eventbus, MainUI ui) {
+    public DefaultBuergerView(BuergerViewController controller, MainUI ui) {
         this.controller = controller;
-        this.controller.registerEventBus(eventbus);
         this.controller.registerUI(ui);
     }
     

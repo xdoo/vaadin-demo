@@ -1,20 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package de.muenchen.vaadin.ui.login.views;
+package de.muenchen.vaadin.ui.app.views;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.AuthenticationException;
-import org.vaadin.spring.http.HttpService;
-import org.vaadin.spring.navigator.annotation.VaadinView;
-import org.vaadin.spring.security.VaadinSecurity;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Responsive;
+import com.vaadin.spring.annotation.SpringView;
+import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -28,22 +21,21 @@ import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.vaadin.ui.login.LoginUI;
-import org.vaadin.spring.annotation.VaadinUIScope;
+import com.catify.vaadin.demo.api.services.SecurityService;
 
-@VaadinView(name = LoginView.NAME, ui = LoginUI.class)
-@VaadinUIScope
+@SpringView(name = LoginView.NAME)
+@UIScope
 public class LoginView extends VerticalLayout implements View {
 
     private static final long serialVersionUID = -4430276235082912377L;
-    public static final String NAME = "";
-    @Autowired
-    private VaadinSecurity security;
-    @Autowired
-    private HttpService http;
+    public static final String NAME = SecurityService.LOGIN_VIEW_NAME;
+    
+    // Services
+    private SecurityService security;
+    
+    // Vaadin Komponenten
     private TextField username;
     private PasswordField password;
-    private CheckBox rememberMe = new CheckBox("Remember me", true);
 
     public LoginView() {
         setSizeFull();
@@ -65,7 +57,6 @@ public class LoginView extends VerticalLayout implements View {
         loginPanel.addStyleName("login-panel");
         loginPanel.addComponent(buildLabels());
         loginPanel.addComponent(buildFields());
-        loginPanel.addComponent(rememberMe);
         return loginPanel;
     }
 
@@ -90,13 +81,14 @@ public class LoginView extends VerticalLayout implements View {
 
             @Override
             public void buttonClick(final ClickEvent event) {
-                try {
-                    security.login(username.getValue(), password.getValue());
-                } catch (AuthenticationException e) {
-                    e.printStackTrace();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                security.login(username.getValue(), password.getValue());
+//                try {
+//                    security.login(username.getValue(), password.getValue());
+//                } catch (AuthenticationException e) {
+//                    e.printStackTrace();
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
 // TODO Register Remember me Token
 /*
                  * Redirect is handled by the VaadinRedirectStrategy

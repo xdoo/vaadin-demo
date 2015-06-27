@@ -4,12 +4,16 @@ import com.vaadin.data.util.BeanItem;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.ui.UI;
 import com.catify.vaadin.demo.api.domain.Buerger;
+import com.google.common.eventbus.Subscribe;
+import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.spring.annotation.UIScope;
 import de.muenchen.vaadin.services.BuergerService;
 import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.app.views.events.BuergerEvent;
 import de.muenchen.vaadin.ui.components.CreateBuergerForm;
 import de.muenchen.vaadin.ui.components.BuergerTable;
 import de.muenchen.vaadin.ui.components.UpdateBuergerForm;
+import de.muenchen.vaadin.ui.util.EventBus;
 import de.muenchen.vaadin.ui.util.EventType;
 import de.muenchen.vaadin.ui.util.VaadinUtil;
 import java.util.ArrayList;
@@ -17,17 +21,14 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.vaadin.spring.events.EventBus;
-import org.vaadin.spring.events.EventBusListener;
 
 /**
- * Der Controller ist die zentrale Klasse um die Logik im Kontext Person abzubilden.
+ * Der Controller ist die zentrale Klasse um die Logik im Kontext Buerger abzubilden.
  * 
  * @author claus.straube
  */
-@Component
-public class BuergerViewController implements EventBusListener<BuergerEvent> {
+@SpringComponent @UIScope
+public class BuergerViewController {
     
     public static final String I18N_BASE_PATH = "m1.buerger";
     
@@ -57,9 +58,12 @@ public class BuergerViewController implements EventBusListener<BuergerEvent> {
     Navigator navigator;
 
     @Autowired
-    public BuergerViewController(BuergerService service, VaadinUtil util) {
+    public BuergerViewController(BuergerService service, VaadinUtil util, EventBus eventBus) {
         this.service = service;
         this.util = util;
+        this.eventbus = eventBus;
+        // controller im Session Event Bus registrieren
+        this.eventbus.register(this);
     }
     
     List<CreateBuergerForm> createBuergerForms = new ArrayList<>();
@@ -68,20 +72,6 @@ public class BuergerViewController implements EventBusListener<BuergerEvent> {
     
     // item cache
     BeanItem<Buerger> current;
-    
-    /**
-     * Der Eventbus wird über die {@link DefaulPersonView} registriert. Dies
-     * ist notwendig, da die Vaadin abhängigen Beans zum Zeitpunkt der Instanzierung
-     * noch nicht vorhanden sind.
-     * 
-     * @param eventbus 
-     */
-    public void registerEventBus(EventBus eventbus) {
-        if(this.eventbus == null) {
-            this.eventbus = eventbus;
-            this.eventbus.subscribe(this, true);
-        }
-    }
     
     /**
      * Die Main wird über die {@link DefaulPersonView} registriert. Dies
@@ -196,9 +186,8 @@ public class BuergerViewController implements EventBusListener<BuergerEvent> {
      * ausgeführt. So ist es möglich eine Kommunnikation zwischen den Komponenten zu
      * schaffen, ohne dass diese sich untereinander kennen müssen. 
      */
-    @Override
-    public void onEvent(org.vaadin.spring.events.Event<BuergerEvent> e) {
-        BuergerEvent event = e.getPayload();
+    @Subscribe
+    public void onEvent(BuergerEvent event) {
         
         // create
         if(event.getType().equals(EventType.CREATE)) {

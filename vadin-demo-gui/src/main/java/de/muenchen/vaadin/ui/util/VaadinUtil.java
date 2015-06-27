@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package de.muenchen.vaadin.ui.util;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
@@ -11,10 +6,10 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
+import de.muenchen.vaadin.services.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import org.vaadin.spring.i18n.I18N;
 
 /**
  *
@@ -24,10 +19,10 @@ import org.vaadin.spring.i18n.I18N;
 public class VaadinUtil {
     
     @Autowired
-    I18N i18n;
+    MessageService i18n;
     
     public Button createNavigationButton(String baseKey, final String path) {
-        String text = i18n.get(baseKey + ".navigation.button.label", null);
+        String text = i18n.get(baseKey + ".navigation.button.label");
         Button button = new Button(text);
         button.addClickListener(new Button.ClickListener() {
             private static final long serialVersionUID = -2896151918118631378L;
@@ -53,23 +48,23 @@ public class VaadinUtil {
     }
  
     public String readLabel(String baseKey, String property) {
-        return i18n.get(baseKey + "." + property + ".label", null);
+        return i18n.get(baseKey + "." + property + ".label");
     }
     
     public String readInputPrompt(String baseKey, String property) {
-        return i18n.get(baseKey + "." + property + ".input_prompt", null);
+        return i18n.get(baseKey + "." + property + ".input_prompt");
     }
     
     public String readColumnHeader(String baseKey, String property) {
-        return " " + i18n.get(baseKey + "." + property + ".column_header", null);
+        return " " + i18n.get(baseKey + "." + property + ".column_header");
     }
     
     public String readText(String baseKey, String property) {
-        return i18n.get(baseKey + "." + property, null);
+        return i18n.get(baseKey + "." + property);
     }
     
     public FontAwesome readColumnHeaderIcon(String baseKey, String property) {
-        String icon = i18n.get(baseKey + "." + property + ".column_header.icon", null);
+        String icon = i18n.get(baseKey + "." + property + ".column_header.icon");
         if(!StringUtils.isEmpty(icon)) {
             return FontAwesome.valueOf(icon);
         }

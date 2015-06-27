@@ -1,5 +1,6 @@
 package de.muenchen.vaadin.ui.components;
 
+import com.google.common.eventbus.EventBus;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
@@ -10,7 +11,6 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.ui.app.views.events.AppEvent;
-import org.vaadin.spring.events.EventBus;
 
 /**
  * Generisches Bestätigungsfenster mit einer "ok" und 
@@ -91,7 +91,7 @@ public class GenericConfirmationWindow extends Window {
         ok.setCaption(this.okButton);
         ok.addStyleName(ValoTheme.BUTTON_DANGER);
         ok.addClickListener(e -> {
-            eventbus.publish(this, event);
+            eventbus.post(event);
             this.close();
         });
         

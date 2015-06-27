@@ -8,6 +8,8 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.Responsive;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.spring.annotation.SpringUI;
+import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -19,19 +21,17 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.themes.ValoTheme;
+import de.muenchen.vaadin.services.MessageService;
+import com.catify.vaadin.demo.api.services.SecurityService;
 import de.muenchen.vaadin.ui.app.views.MainView;
 import de.muenchen.vaadin.ui.app.views.BuergerTableView;
-import de.muenchen.vaadin.ui.app.views.SampleBuergerView1;
-import de.muenchen.vaadin.ui.app.views.SecuredView;
+import de.muenchen.vaadin.ui.app.views.LoginView;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map.Entry;
-import org.vaadin.spring.annotation.VaadinUI;
-import org.vaadin.spring.i18n.I18N;
-import org.vaadin.spring.navigator.SpringViewProvider;
 
-@VaadinUI
+@SpringUI
 @Title("Vaadin Spring-Security Sample")
 @Theme("valo")
 //@Widgetset("de.muenchen.vaadin.Widgetset")
@@ -39,11 +39,16 @@ public class MainUI extends UI {
 
     private static final long serialVersionUID = 5310014981075920878L;
 
-    @Autowired
     private SpringViewProvider ViewProvider;
+    private SecurityService security;
+    private MessageService i18n;
 
     @Autowired
-    I18N i18n;
+    public MainUI(SpringViewProvider ViewProvider, SecurityService security, MessageService i18n) {
+        this.ViewProvider = ViewProvider;
+        this.security = security;
+        this.i18n = i18n;
+    }
 
     private final boolean testMode = false;
 
@@ -71,7 +76,7 @@ public class MainUI extends UI {
         }
 
         // build page
-        getPage().setTitle(i18n.get("page.title", (Object) null));
+        getPage().setTitle(i18n.get("page.title"));
         setContent(root);
         root.setWidth("100%");
         root.addMenu(buildMenu());
@@ -81,10 +86,30 @@ public class MainUI extends UI {
         this.navigator = new Navigator(this, this.viewDisplay);
         this.navigator.addProvider(ViewProvider);
         setNavigator(this.navigator);
+        
+        // add navigator to security Service
+        this.security.setNavigator(this.navigator);
 
         navigator.addViewChangeListener(new ViewChangeListener() {
             @Override
             public boolean beforeViewChange(final ViewChangeEvent event) {
+                
+                // Check if a user has logged in
+                boolean isLoggedIn = security.isLoggedIn();
+                boolean isLoginView = event.getNewView() instanceof LoginView;
+
+                if (!isLoggedIn && !isLoginView) {
+                    // Redirect to login view always if a user has not yet
+                    // logged in
+                    getNavigator().navigateTo(LoginView.NAME);
+                    return false;
+
+                } else if (isLoggedIn && isLoginView) {
+                    // If someone tries to access to login view while logged in,
+                    // then cancel
+                    return false;
+                }
+
                 return true;
             }
 
@@ -144,10 +169,11 @@ public class MainUI extends UI {
     }
 
     private Component createNavigationMenu() {
+        
+        // Start Menüeinträge
         this.menuItems.put(MainView.NAME, "Haupseite");
-        this.menuItems.put(BuergerTableView.NAME, "Personen Pflege 1");
-        this.menuItems.put(SampleBuergerView1.NAME, "Person Pflege 2");
-        this.menuItems.put(SecuredView.NAME, "Sichere Seite");
+        this.menuItems.put(BuergerTableView.NAME, "Bürger Pflege");
+        // Ende Menüeinträge
 
         menuItemsLayout.setPrimaryStyleName("valo-menuitems");
 

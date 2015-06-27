@@ -51,7 +51,7 @@ public class CreateBuergerForm extends CustomComponent {
                     succes.show(Page.getCurrent());
                     BuergerEvent event = new BuergerEvent(binder.getItemDataSource().getBean(), EventType.UPDATE);
                     event.setNavigateTo(navigateTo);
-                    controller.getEventbus().publish(this, event);
+                    controller.getEventbus().post(event);
                     //reset
                     binder.setItemDataSource(controller.createBuerger());
                 } catch (CommitException e) {

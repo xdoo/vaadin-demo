@@ -27,52 +27,12 @@
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-        </dependency>
-        <!-- Vaadin -->
-        <dependency>
-            <groupId>org.vaadin.spring</groupId>
-            <artifactId>spring-boot-vaadin</artifactId>
-            <version>${vaadin4spring.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.vaadin.spring</groupId>
-            <artifactId>spring-vaadin-security</artifactId>
-            <version>${vaadin4spring.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.vaadin.spring</groupId>
-            <artifactId>spring-vaadin-i18n</artifactId>
-            <version>${vaadin4spring.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.vaadin.spring</groupId>
-            <artifactId>spring-vaadin-eventbus</artifactId>
-            <version>${vaadin4spring.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-themes</artifactId>
-            <version>${vaadin.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-server</artifactId>
-            <version>${vaadin.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-client-compiled</artifactId>
-            <version>${vaadin.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -91,6 +51,7 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
+    
     <build>
         <plugins>
             <plugin>
