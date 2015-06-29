@@ -19,7 +19,7 @@
     </organization>
     <properties>
         <main.basedir>${basedir}/../..</main.basedir>
-        <vaadin.version>7.4.3</vaadin.version>
+        <vaadin.version>7.4.4</vaadin.version>
         <vaadin4spring.version>0.0.4.RELEASE</vaadin4spring.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -43,6 +43,17 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>18.0</version>
+        </dependency>
+        <!-- vaadin -->
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-client-compiled</artifactId>
+            <version>${vaadin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-themes</artifactId>
+            <version>${vaadin.version}</version>
         </dependency>
         <!-- internal -->
         <dependency>

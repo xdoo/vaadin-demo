@@ -22,7 +22,8 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public String get(String path) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "foo";
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

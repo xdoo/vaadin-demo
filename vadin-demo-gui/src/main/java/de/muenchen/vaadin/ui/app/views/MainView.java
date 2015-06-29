@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class MainView extends VerticalLayout implements View {
 
     private static final long serialVersionUID = -3780256410686877889L;
-    public static final String NAME = "main";
+    public static final String NAME = "";
     
     @Autowired
     VaadinUtil util;

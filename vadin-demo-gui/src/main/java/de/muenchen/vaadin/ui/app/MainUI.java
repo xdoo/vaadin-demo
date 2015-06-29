@@ -3,6 +3,7 @@ package de.muenchen.vaadin.ui.app;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
+import com.vaadin.annotations.Widgetset;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.Responsive;
@@ -88,7 +89,7 @@ public class MainUI extends UI {
         setNavigator(this.navigator);
         
         // add navigator to security Service
-        this.security.setNavigator(this.navigator);
+//        this.security.setNavigator(this.navigator);
 
         navigator.addViewChangeListener(new ViewChangeListener() {
             @Override
