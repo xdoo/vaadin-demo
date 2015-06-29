@@ -10,8 +10,7 @@
     <artifactId>vaadin-demo-micro-service</artifactId>
     <groupId>de.muenchen</groupId>
     <name>vaadin demo :: micro service</name>
-    <description>Micro Service
-    </description>
+    <description>Micro Service</description>
     <version>1.0-SNAPSHOT</version>
     <url>http://projects.spring.io/spring-boot/</url>
     <organization>

@@ -6,10 +6,12 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import de.muenchen.vaadin.services.MessageService;
 import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.I18nPaths;
 import javax.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Für jede Entity existiert eine (voll generierte) Basis Klasse. Aus dieser
@@ -19,6 +21,7 @@ import javax.annotation.PostConstruct;
  */
 public abstract class DefaultBuergerView extends VerticalLayout implements View{
     
+    @Autowired private MessageService msg;
     
     BuergerViewController controller;
     
@@ -48,7 +51,7 @@ public abstract class DefaultBuergerView extends VerticalLayout implements View{
     protected void addHeadline() {
         
         // headline
-        Label pageTitle = new Label(this.controller.getUtil().readText(controller.getI18nBasePath(), I18nPaths.I18N_PAGE_TITLE));
+        Label pageTitle = new Label(this.msg.readText(controller.getI18nBasePath(), I18nPaths.I18N_PAGE_TITLE));
         pageTitle.addStyleName(ValoTheme.LABEL_H1);
         pageTitle.addStyleName(ValoTheme.LABEL_COLORED);
         

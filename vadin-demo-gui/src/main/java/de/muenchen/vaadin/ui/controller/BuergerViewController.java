@@ -8,6 +8,7 @@ import com.google.common.eventbus.Subscribe;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import de.muenchen.vaadin.services.BuergerService;
+import de.muenchen.vaadin.services.MessageService;
 import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.app.views.events.BuergerEvent;
 import de.muenchen.vaadin.ui.components.CreateBuergerForm;
@@ -40,17 +41,22 @@ public class BuergerViewController {
     /**
      * Die Service Klasse
      */
-    BuergerService service;
+    private BuergerService service;
     
     /**
      * Werkzeuge für Vaadin
      */
-    VaadinUtil util;
+    private VaadinUtil util;
     
     /**
      * Event Bus zur Kommunikation
      */
-    EventBus eventbus;
+    private EventBus eventbus;
+    
+    /**
+     * {@link MessageService} zur Auflösung der Platzhalter
+     */
+    @Autowired private MessageService msg;
     
     /**
      * {@link UI} {@link Navigator}
@@ -103,6 +109,10 @@ public class BuergerViewController {
 
     public BeanItem<Buerger> getCurrent() {
         return current;
+    }
+
+    public MessageService getMsg() {
+        return msg;
     }
     
     ////////////////////////

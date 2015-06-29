@@ -63,12 +63,12 @@ public class BuergerTable extends CustomComponent {
         table.setVisibleColumns("firstname", "lastname", "birthdate", "button");
         
         // set headers
-        table.setColumnHeader("firstname", controller.getUtil().readColumnHeader(controller.getI18nBasePath(), "firstname"));
-        table.setColumnIcon("firstname", controller.getUtil().readColumnHeaderIcon(controller.getI18nBasePath(), "firstname"));
-        table.setColumnHeader("birthdate", controller.getUtil().readColumnHeader(controller.getI18nBasePath(), "birthdate"));
-        table.setColumnIcon("birthdate", controller.getUtil().readColumnHeaderIcon(controller.getI18nBasePath(), "birthdate"));
-        table.setColumnHeader("lastname", controller.getUtil().readColumnHeader(controller.getI18nBasePath(), "lastname"));
-        table.setColumnIcon("lastname", controller.getUtil().readColumnHeaderIcon(controller.getI18nBasePath(), "lastname"));
+        table.setColumnHeader("firstname", controller.getMsg().readColumnHeader(controller.getI18nBasePath(), "firstname"));
+        table.setColumnIcon("firstname", controller.getMsg().readColumnHeaderIcon(controller.getI18nBasePath(), "firstname"));
+        table.setColumnHeader("birthdate", controller.getMsg().readColumnHeader(controller.getI18nBasePath(), "birthdate"));
+        table.setColumnIcon("birthdate", controller.getMsg().readColumnHeaderIcon(controller.getI18nBasePath(), "birthdate"));
+        table.setColumnHeader("lastname", controller.getMsg().readColumnHeader(controller.getI18nBasePath(), "lastname"));
+        table.setColumnIcon("lastname", controller.getMsg().readColumnHeaderIcon(controller.getI18nBasePath(), "lastname"));
         table.setColumnHeader("button", "");
         
         setCompositionRoot(table);

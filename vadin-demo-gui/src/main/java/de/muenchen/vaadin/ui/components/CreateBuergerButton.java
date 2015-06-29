@@ -17,7 +17,7 @@ public class CreateBuergerButton extends CustomComponent {
 
     public CreateBuergerButton(final BuergerViewController controller, String navigateTo) {
         
-        String label = controller.getUtil().readText(controller.getI18nBasePath(), I18nPaths.I18N_FORM_CREATE_BUTTON_LABEL);
+        String label = controller.getMsg().readText(controller.getI18nBasePath(), I18nPaths.I18N_FORM_CREATE_BUTTON_LABEL);
         Button create = new Button(label, FontAwesome.MAGIC);
         create.addStyleName(ValoTheme.BUTTON_FRIENDLY);
         create.addClickListener(e -> {
