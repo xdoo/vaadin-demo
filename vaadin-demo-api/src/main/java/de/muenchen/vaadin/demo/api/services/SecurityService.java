@@ -1,4 +1,4 @@
-package com.catify.vaadin.demo.api.services;
+package de.muenchen.vaadin.demo.api.services;
 
 import com.vaadin.navigator.Navigator;
 import java.util.Optional;

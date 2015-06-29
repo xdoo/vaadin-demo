@@ -1,4 +1,4 @@
-package com.catify.vaadin.demo.api.rest;
+package de.muenchen.vaadin.demo.api.rest;
 
 import java.util.Date;
 

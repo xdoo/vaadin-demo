@@ -1,7 +1,7 @@
-package com.catify.vaadin.demo.api.rest;
+package de.muenchen.vaadin.demo.api.rest;
 
-import com.catify.vaadin.demo.api.domain.Principal;
-import com.catify.vaadin.demo.api.domain.ServiceInfo;
+import de.muenchen.vaadin.demo.api.domain.Principal;
+import de.muenchen.vaadin.demo.api.domain.ServiceInfo;
 import com.google.gwt.thirdparty.guava.common.collect.Lists;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;

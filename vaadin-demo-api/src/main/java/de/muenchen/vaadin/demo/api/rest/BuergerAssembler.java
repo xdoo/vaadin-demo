@@ -1,6 +1,6 @@
-package com.catify.vaadin.demo.api.rest;
+package de.muenchen.vaadin.demo.api.rest;
 
-import com.catify.vaadin.demo.api.domain.Buerger;
+import de.muenchen.vaadin.demo.api.domain.Buerger;
 import java.util.List;
 import java.util.stream.Collectors;
 

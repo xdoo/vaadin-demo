@@ -1,7 +1,7 @@
-package com.catify.vaadin.demo.api.rest;
+package de.muenchen.vaadin.demo.api.rest;
 
-import com.catify.vaadin.demo.api.domain.Buerger;
-import com.catify.vaadin.demo.api.hateoas.HateoasUtil;
+import de.muenchen.vaadin.demo.api.domain.Buerger;
+import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;

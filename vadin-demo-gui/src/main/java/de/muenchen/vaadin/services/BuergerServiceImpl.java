@@ -1,9 +1,9 @@
 package de.muenchen.vaadin.services;
 
-import com.catify.vaadin.demo.api.domain.Buerger;
-import com.catify.vaadin.demo.api.hateoas.HateoasUtil;
-import com.catify.vaadin.demo.api.rest.BuergerRestClient;
-import com.catify.vaadin.demo.api.services.SecurityService;
+import de.muenchen.vaadin.demo.api.domain.Buerger;
+import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
+import de.muenchen.vaadin.demo.api.rest.BuergerRestClient;
+import de.muenchen.vaadin.demo.api.services.SecurityService;
 import com.google.common.collect.Lists;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;

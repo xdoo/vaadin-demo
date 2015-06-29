@@ -21,7 +21,7 @@ import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
-import com.catify.vaadin.demo.api.services.SecurityService;
+import de.muenchen.vaadin.demo.api.services.SecurityService;
 
 @SpringView(name = LoginView.NAME)
 @UIScope

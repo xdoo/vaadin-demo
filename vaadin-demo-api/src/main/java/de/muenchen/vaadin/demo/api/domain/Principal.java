@@ -1,4 +1,4 @@
-package com.catify.vaadin.demo.api.domain;
+package de.muenchen.vaadin.demo.api.domain;
 
 import java.util.List;
 

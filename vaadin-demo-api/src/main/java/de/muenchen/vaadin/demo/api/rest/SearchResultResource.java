@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.catify.vaadin.demo.api.rest;
+package de.muenchen.vaadin.demo.api.rest;
 
 import com.google.common.collect.Lists;
 import java.util.List;

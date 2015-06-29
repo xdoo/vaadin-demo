@@ -1,8 +1,6 @@
-package com.catify.vaadin.demo.api.rest;
+package de.muenchen.vaadin.demo.api.rest;
 
-import com.catify.vaadin.demo.api.domain.ServiceInfo;
-import com.catify.vaadin.demo.api.services.SecurityService;
-import org.springframework.beans.factory.annotation.Autowired;
+import de.muenchen.vaadin.demo.api.domain.ServiceInfo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

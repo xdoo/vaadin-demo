@@ -1,4 +1,4 @@
-package com.catify.vaadin.demo.api.domain;
+package de.muenchen.vaadin.demo.api.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;

@@ -1,7 +1,7 @@
-package com.catify.vaadin.demo.api.services;
+package de.muenchen.vaadin.demo.api.services;
 
-import com.catify.vaadin.demo.api.domain.Principal;
-import com.catify.vaadin.demo.api.rest.SecurityRestClient;
+import de.muenchen.vaadin.demo.api.domain.Principal;
+import de.muenchen.vaadin.demo.api.rest.SecurityRestClient;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;

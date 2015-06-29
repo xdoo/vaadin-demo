@@ -1,6 +1,6 @@
 package de.muenchen.vaadin.services;
 
-import com.catify.vaadin.demo.api.rest.ServiceInfoRestClient;
+import de.muenchen.vaadin.demo.api.rest.ServiceInfoRestClient;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
@@ -18,8 +18,14 @@ public class InfoServiceImpl implements InfoService {
 
     private static final Logger LOG = LoggerFactory.getLogger(InfoService.class);
     
+    private final ServiceInfoRestClient client;
+
     @Autowired
-    private ServiceInfoRestClient client;
+    public InfoServiceImpl(ServiceInfoRestClient client) {
+        this.client = client;
+    }
+    
+    
     
     private Map<String, Link> links;
     
@@ -49,7 +55,8 @@ public class InfoServiceImpl implements InfoService {
      * Lädt die Liste der Service Links.
      */
     public void loadLinks() {
-        this.links = client.getServiceInfo().getEntityLinks();
+//        TODO > fix in service
+//        this.links = client.getServiceInfo().getEntityLinks();
     }
     
 }

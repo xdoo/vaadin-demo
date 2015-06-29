@@ -22,7 +22,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.services.MessageService;
-import com.catify.vaadin.demo.api.services.SecurityService;
+import de.muenchen.vaadin.demo.api.services.SecurityService;
 import de.muenchen.vaadin.ui.app.views.MainView;
 import de.muenchen.vaadin.ui.app.views.BuergerTableView;
 import de.muenchen.vaadin.ui.app.views.LoginView;

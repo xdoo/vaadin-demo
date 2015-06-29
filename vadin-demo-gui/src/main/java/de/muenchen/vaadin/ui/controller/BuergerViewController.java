@@ -3,7 +3,7 @@ package de.muenchen.vaadin.ui.controller;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.ui.UI;
-import com.catify.vaadin.demo.api.domain.Buerger;
+import de.muenchen.vaadin.demo.api.domain.Buerger;
 import com.google.common.eventbus.Subscribe;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
