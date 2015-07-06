@@ -22,6 +22,8 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.services.SecurityService;
+import de.muenchen.vaadin.ui.app.views.events.LoginEvent;
+import de.muenchen.vaadin.ui.util.EventBus;
 
 @SpringView(name = LoginView.NAME)
 @UIScope
@@ -32,12 +34,17 @@ public class LoginView extends VerticalLayout implements View {
     
     // Services
     private SecurityService security;
+    private EventBus eventBus;
     
     // Vaadin Komponenten
     private TextField username;
     private PasswordField password;
 
-    public LoginView() {
+    @Autowired
+    public LoginView(SecurityService security, EventBus eventBus) {
+        this.security = security;
+        this.eventBus = eventBus;
+        
         setSizeFull();
         Component loginForm = buildLoginForm();
         addComponent(loginForm);
@@ -81,7 +88,9 @@ public class LoginView extends VerticalLayout implements View {
 
             @Override
             public void buttonClick(final ClickEvent event) {
-                security.login(username.getValue(), password.getValue());
+                if(security.login(username.getValue(), password.getValue())) {
+                    eventBus.post(new LoginEvent());
+                }
 //                try {
 //                    security.login(username.getValue(), password.getValue());
 //                } catch (AuthenticationException e) {
