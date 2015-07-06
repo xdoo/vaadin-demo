@@ -48,24 +48,35 @@ public class SecurityServiceImpl implements SecurityService {
 
     @Override
     public boolean login(String username, String password) {
-        BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-        credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(username, password));
-        
-        HttpClient httpClient = HttpClientBuilder
-                .create()
-                .setDefaultCredentialsProvider(credentialsProvider)
-                .build();
-        ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
-        RestTemplate template = new RestTemplate(requestFactory);
-        Optional<Principal> p = this.restClient.getPrincipal(template);
-        if(p.isPresent()) {
+        // HACK
+        if(username.equals("user") && password.equals("user")) {
+            LOG.info(String.format("User '%s' with password '*****' logged in.", username));
             this.login = Boolean.TRUE;
-            this.restTemplate = template;
-            this.principal = p.get();
-            return Boolean.TRUE;
+            return true;
         } else {
-            return Boolean.FALSE;
+            return false;
         }
+        
+        // diese Implementierung für die Rest Schnittstelle verwenden
+        
+//        BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+//        credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(username, password));
+//        
+//        HttpClient httpClient = HttpClientBuilder
+//                .create()
+//                .setDefaultCredentialsProvider(credentialsProvider)
+//                .build();
+//        ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
+//        RestTemplate template = new RestTemplate(requestFactory);
+//        Optional<Principal> p = this.restClient.getPrincipal(template);
+//        if(p.isPresent()) {
+//            this.login = Boolean.TRUE;
+//            this.restTemplate = template;
+//            this.principal = p.get();
+//            return Boolean.TRUE;
+//        } else {
+//            return Boolean.FALSE;
+//        }
     }
     
     @Override
@@ -86,7 +97,7 @@ public class SecurityServiceImpl implements SecurityService {
 
     @Override
     public Optional<RestTemplate> getRestTemplate() {
-        return Optional.of(this.restTemplate);
+        return Optional.ofNullable(this.restTemplate);
     }
 
 }

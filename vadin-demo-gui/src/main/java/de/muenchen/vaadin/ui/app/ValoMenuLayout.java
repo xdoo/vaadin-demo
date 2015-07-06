@@ -37,4 +37,12 @@ public class ValoMenuLayout extends HorizontalLayout {
         menu.addStyleName("valo-menu-part");
         menuArea.addComponent(menu);
     }
+    
+    public void switchOffMenu() {
+        this.menuArea.setVisible(Boolean.FALSE);
+    }
+    
+    public void switchOnMenu() {
+        this.menuArea.setVisible(Boolean.TRUE);
+    }
 }

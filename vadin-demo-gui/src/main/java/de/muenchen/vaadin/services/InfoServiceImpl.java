@@ -1,6 +1,8 @@
 package de.muenchen.vaadin.services;
 
+import com.google.common.collect.Maps;
 import de.muenchen.vaadin.demo.api.rest.ServiceInfoRestClient;
+import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
@@ -57,6 +59,7 @@ public class InfoServiceImpl implements InfoService {
     public void loadLinks() {
 //        TODO > fix in service
 //        this.links = client.getServiceInfo().getEntityLinks();
+        this.links = new HashMap<>();
     }
     
 }

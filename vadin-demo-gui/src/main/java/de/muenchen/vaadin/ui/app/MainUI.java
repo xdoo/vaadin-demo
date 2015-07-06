@@ -1,5 +1,6 @@
 package de.muenchen.vaadin.ui.app;
 
+import com.google.common.eventbus.Subscribe;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
@@ -27,28 +28,37 @@ import de.muenchen.vaadin.demo.api.services.SecurityService;
 import de.muenchen.vaadin.ui.app.views.MainView;
 import de.muenchen.vaadin.ui.app.views.BuergerTableView;
 import de.muenchen.vaadin.ui.app.views.LoginView;
+import de.muenchen.vaadin.ui.app.views.events.LoginEvent;
+import de.muenchen.vaadin.ui.util.EventBus;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map.Entry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SpringUI
 @Title("Vaadin Spring-Security Sample")
 @Theme("valo")
 //@Widgetset("de.muenchen.vaadin.Widgetset")
 public class MainUI extends UI {
+    
+     private static final Logger LOG = LoggerFactory.getLogger(MainUI.class);
 
     private static final long serialVersionUID = 5310014981075920878L;
 
-    private SpringViewProvider ViewProvider;
-    private SecurityService security;
-    private MessageService i18n;
+    private final SpringViewProvider viewProvider;
+    private final SecurityService security;
+    private final MessageService i18n;
+    private final EventBus eventBus;
 
     @Autowired
-    public MainUI(SpringViewProvider ViewProvider, SecurityService security, MessageService i18n) {
-        this.ViewProvider = ViewProvider;
+    public MainUI(SpringViewProvider ViewProvider, SecurityService security, MessageService i18n, EventBus eventBus) {
+        this.viewProvider = ViewProvider;
         this.security = security;
         this.i18n = i18n;
+        this.eventBus = eventBus;
+        this.eventBus.register(this);
     }
 
     private final boolean testMode = false;
@@ -82,10 +92,15 @@ public class MainUI extends UI {
         root.setWidth("100%");
         root.addMenu(buildMenu());
         addStyleName(ValoTheme.UI_WITH_MENU);
+        
+        // check security
+        if(!this.security.isLoggedIn()) {
+            this.root.switchOffMenu();
+        } 
 
         // configure navigator
         this.navigator = new Navigator(this, this.viewDisplay);
-        this.navigator.addProvider(ViewProvider);
+        this.navigator.addProvider(viewProvider);
         setNavigator(this.navigator);
         
         // add navigator to security Service
@@ -103,14 +118,16 @@ public class MainUI extends UI {
                     // Redirect to login view always if a user has not yet
                     // logged in
                     getNavigator().navigateTo(LoginView.NAME);
+                    LOG.info("not logged in");
                     return false;
 
                 } else if (isLoggedIn && isLoginView) {
                     // If someone tries to access to login view while logged in,
                     // then cancel
+                    LOG.warn("login view cannot be entered while logged in.");
                     return false;
                 }
-
+                LOG.info("logged in");
                 return true;
             }
 
@@ -138,6 +155,16 @@ public class MainUI extends UI {
                 menu.removeStyleName("valo-menu-visible");
             }
         });
+    }
+    
+    @Subscribe
+    public void login(LoginEvent event) {
+        this.root.switchOnMenu();
+        getNavigator().navigateTo(MainView.NAME);
+    }
+    
+    public void logout() {
+        
     }
 
     private CssLayout buildMenu() {
