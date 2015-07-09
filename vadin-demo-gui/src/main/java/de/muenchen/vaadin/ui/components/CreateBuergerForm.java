@@ -35,9 +35,9 @@ public class CreateBuergerForm extends CustomComponent {
         final BeanFieldGroup<Buerger> binder = new BeanFieldGroup<Buerger>(Buerger.class);
         binder.setItemDataSource(controller.createBuerger());
 
-        layout.addComponent(controller.getUtil().createFormTextField(binder, controller.getI18nBasePath(), "firstname"));
-        layout.addComponent(controller.getUtil().createFormTextField(binder, controller.getI18nBasePath(), "lastname"));
-        layout.addComponent(controller.getUtil().createFormDateField(binder, controller.getI18nBasePath(), "birthdate"));
+        layout.addComponent(controller.getUtil().createFormTextField(binder, controller.getI18nBasePath(), Buerger.VORNAME, controller.getMsg()));
+        layout.addComponent(controller.getUtil().createFormTextField(binder, controller.getI18nBasePath(), Buerger.NACHNAME, controller.getMsg()));
+        layout.addComponent(controller.getUtil().createFormDateField(binder, controller.getI18nBasePath(), Buerger.GEBURTSDATUM, controller.getMsg()));
 
         // A button to commit the buffer
         String label = controller.getMsg().readText(controller.getI18nBasePath(), I18nPaths.I18N_FORM_CREATE_BUTTON_LABEL);

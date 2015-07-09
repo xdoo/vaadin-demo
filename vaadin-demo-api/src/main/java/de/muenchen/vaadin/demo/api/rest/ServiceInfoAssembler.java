@@ -19,7 +19,7 @@ public class ServiceInfoAssembler {
         
         // set links
 //        entity.setId(resource.getOid());
-//        entity.setLinks(resource.getLinks());
+        entity.setLinks(resource.getLinks());
         return entity;
     }
     

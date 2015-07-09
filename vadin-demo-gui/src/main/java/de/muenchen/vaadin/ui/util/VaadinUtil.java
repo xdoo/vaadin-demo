@@ -5,6 +5,8 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
+import de.muenchen.vaadin.demo.api.domain.Buerger;
+import de.muenchen.vaadin.services.MessageService;
 import org.springframework.stereotype.Component;
 
 /**
@@ -27,14 +29,17 @@ public class VaadinUtil {
         return button;
     }
     
-    public TextField createFormTextField(BeanFieldGroup binder, String label, String property) {
+    public TextField createFormTextField(BeanFieldGroup binder, String basePath, String property, MessageService msg) {
+        String label = msg.readLabel(basePath, Buerger.VORNAME);
+        String prompt = msg.readInputPrompt(basePath, property);
         TextField tf = (TextField) binder.buildAndBind(label, property);
         tf.setNullRepresentation("");
-        tf.setInputPrompt(label);
+        tf.setInputPrompt(prompt);
         return tf;
     }
     
-    public DateField createFormDateField(BeanFieldGroup binder, String label, String property) {
+    public DateField createFormDateField(BeanFieldGroup binder, String basePath, String property, MessageService msg) {
+        String label = msg.readLabel(basePath, property);
         DateField df = (DateField) binder.buildAndBind(label, property);
         return df;
     }
