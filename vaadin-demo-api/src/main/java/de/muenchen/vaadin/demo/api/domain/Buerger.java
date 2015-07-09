@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package de.muenchen.vaadin.demo.api.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -13,6 +8,10 @@ import java.util.Date;
  * @author claus.straube
  */
 public class Buerger extends BaseEntity {
+    
+    public static final String VORNAME = "vorname";
+    public static final String NACHNAME = "nachname";
+    public static final String GEBURTSDATUM = "geburtsdatum";
     
     private String vorname;
     private String nachname;

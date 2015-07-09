@@ -60,15 +60,15 @@ public class BuergerTable extends CustomComponent {
         table.setWidth("100%");
         table.setPageLength(10);
         table.setColumnCollapsingAllowed(true);
-        table.setVisibleColumns("firstname", "lastname", "birthdate", "button");
+        table.setVisibleColumns(Buerger.VORNAME, Buerger.NACHNAME, Buerger.GEBURTSDATUM, "button");
         
         // set headers
-        table.setColumnHeader("firstname", controller.getMsg().readColumnHeader(controller.getI18nBasePath(), "firstname"));
-        table.setColumnIcon("firstname", controller.getMsg().readColumnHeaderIcon(controller.getI18nBasePath(), "firstname"));
-        table.setColumnHeader("birthdate", controller.getMsg().readColumnHeader(controller.getI18nBasePath(), "birthdate"));
-        table.setColumnIcon("birthdate", controller.getMsg().readColumnHeaderIcon(controller.getI18nBasePath(), "birthdate"));
-        table.setColumnHeader("lastname", controller.getMsg().readColumnHeader(controller.getI18nBasePath(), "lastname"));
-        table.setColumnIcon("lastname", controller.getMsg().readColumnHeaderIcon(controller.getI18nBasePath(), "lastname"));
+        table.setColumnHeader(Buerger.VORNAME, controller.getMsg().readColumnHeader(controller.getI18nBasePath(), Buerger.VORNAME));
+        table.setColumnIcon(Buerger.VORNAME, controller.getMsg().readColumnHeaderIcon(controller.getI18nBasePath(), Buerger.VORNAME));
+        table.setColumnHeader(Buerger.GEBURTSDATUM, controller.getMsg().readColumnHeader(controller.getI18nBasePath(), Buerger.GEBURTSDATUM));
+        table.setColumnIcon(Buerger.GEBURTSDATUM, controller.getMsg().readColumnHeaderIcon(controller.getI18nBasePath(), Buerger.GEBURTSDATUM));
+        table.setColumnHeader(Buerger.NACHNAME, controller.getMsg().readColumnHeader(controller.getI18nBasePath(), Buerger.NACHNAME));
+        table.setColumnIcon(Buerger.NACHNAME, controller.getMsg().readColumnHeaderIcon(controller.getI18nBasePath(),Buerger.NACHNAME));
         table.setColumnHeader("button", "");
         
         setCompositionRoot(table);
