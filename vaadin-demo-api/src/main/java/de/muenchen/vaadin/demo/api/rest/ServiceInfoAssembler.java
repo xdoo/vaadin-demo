@@ -18,8 +18,8 @@ public class ServiceInfoAssembler {
         // end mapping
         
         // set links
-        entity.setId(resource.getId().getHref());
-        entity.setLinks(resource.getLinks());
+//        entity.setId(resource.getOid());
+//        entity.setLinks(resource.getLinks());
         return entity;
     }
     

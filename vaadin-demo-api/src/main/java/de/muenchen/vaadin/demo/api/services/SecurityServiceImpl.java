@@ -52,6 +52,7 @@ public class SecurityServiceImpl implements SecurityService {
         if(username.equals("user") && password.equals("user")) {
             LOG.info(String.format("User '%s' with password '*****' logged in.", username));
             this.login = Boolean.TRUE;
+            this.restTemplate = new RestTemplate();
             return true;
         } else {
             return false;

@@ -24,6 +24,7 @@ public class ServiceInfoRestClientImpl implements ServiceInfoRestClient {
     }
     
     public ServiceInfo readSingleSource() {
+        
         ResponseEntity<ServiceInfoResource> resource = this.restTemplate.getForEntity(this.url, ServiceInfoResource.class);
         return ServiceInfoAssembler.fromResource(resource.getBody());
     }

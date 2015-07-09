@@ -1,6 +1,7 @@
 package de.muenchen.vaadin.demo.api.hateoas;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.hateoas.Link;
@@ -49,6 +50,19 @@ public class HateoasUtil {
      */
     public List<Link> findLinksForRel(String rel, List<Link> links) {
         return links.stream().filter(l -> l.getRel().startsWith(rel)).collect(Collectors.toList());
+    }
+    
+    /**
+     * Erzeugt eine String Repräsentation der Link Liste.
+     * 
+     * @param links
+     * @return 
+     */
+    public static String links(Map<String, Link> links) {
+        StringBuilder result = new StringBuilder();
+        result.append(String.format("\nThere're %s links referenced.", links.size()));
+        links.keySet().stream().forEach(k -> result.append(String.format("\n%s > %s", k, links.get(k))));
+        return result.toString();
     }
     
 }

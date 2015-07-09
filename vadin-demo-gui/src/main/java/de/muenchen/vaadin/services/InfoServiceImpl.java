@@ -1,6 +1,7 @@
 package de.muenchen.vaadin.services;
 
 import com.google.common.collect.Maps;
+import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
 import de.muenchen.vaadin.demo.api.rest.ServiceInfoRestClient;
 import java.util.HashMap;
 import java.util.Map;
@@ -49,7 +50,7 @@ public class InfoServiceImpl implements InfoService {
         if(this.links.containsKey(rel)) {
             return this.links.get(rel);
         }
-        LOG.warn(String.format("Cannot find relation '%s' in list of loaded links.", rel));
+        LOG.warn(String.format("Cannot find relation '%s' in list of loaded links.%s", rel, HateoasUtil.links(links)));
         return null;
     }
     
@@ -58,8 +59,8 @@ public class InfoServiceImpl implements InfoService {
      */
     public void loadLinks() {
 //        TODO > fix in service
-//        this.links = client.getServiceInfo().getEntityLinks();
-        this.links = new HashMap<>();
+        this.links = client.getServiceInfo().getEntityLinks();
+//        this.links = new HashMap<>();
     }
     
 }

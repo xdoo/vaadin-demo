@@ -1,6 +1,6 @@
 package de.muenchen.demo.service.rest;
 
-import de.muenchen.demo.service.rest.api.ServiceInfoResource;
+import de.muenchen.vaadin.demo.api.rest.ServiceInfoResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 
 /**
- *
+ * Schnittstelle um allgemeine Informationen über den Service abrufen zu können.
+ * 
  * @author claus.straube
  */
 @Controller
@@ -22,13 +23,28 @@ public class ServiceInfoController {
     
     private static final Logger LOG = LoggerFactory.getLogger(ServiceInfoController.class);
     
+    /**
+     * OID des services (z.B. EWO)
+     */
     @Value(value = "${service.info.oid}") String oid;
+    
+    /**
+     * Name des Services (z.B. Einwohnermeldewesen).
+     */
     @Value(value = "${service.info.name}") String name;
+    
+    /**
+     * Version des Services (z.B. 1.0.4). Hier müssen die
+     * vorgegebenen NAmenskonventionen verwendet werden.
+     */
     @Value(value = "${service.info.version}") String version;
     
     ServiceInfoResource resource;
     
     /**
+     * Diese Operation gibt alle Links zur Suche und Neuerstellung von Objekten zurück. 
+     * Ziel ist es, dass man bei Einstieg in eine (z.B. grafische) Anwendung mit einem 
+     * Link (nämlich zum Server) sämtliche Navigationsmöglichkeiten geliefert bekommt.
      * 
      * @return 
      */

@@ -14,6 +14,17 @@ public class ServiceInfoResource extends BaseResource {
     private String version;
     private Map<String, Link> entityLinks = new HashMap<>();
 
+    public ServiceInfoResource() {
+    }
+
+    public ServiceInfoResource(String name, String version, String oid) {
+        this.name = name;
+        this.version = version;
+        this.setOid(oid);
+    }
+    
+    
+
     public String getName() {
         return name;
     }
@@ -36,6 +47,10 @@ public class ServiceInfoResource extends BaseResource {
 
     public void setEntityLinks(Map<String, Link> entityLinks) {
         this.entityLinks = entityLinks;
+    }
+    
+    public void addEntityLink(Link link) {
+        this.entityLinks.put(link.getRel(), link);
     }
     
 }
