@@ -11,7 +11,7 @@ public class BuergerResource extends BaseResource {
     private String vorname;
     private String nachname;
     private Date geburtsdatum;
-
+    
     public String getVorname() {
         return vorname;
     }
