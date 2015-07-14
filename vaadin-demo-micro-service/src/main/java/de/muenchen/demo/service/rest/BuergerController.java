@@ -1,14 +1,24 @@
 package de.muenchen.demo.service.rest;
 
 import de.muenchen.demo.service.domain.Buerger;
+import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
+import de.muenchen.demo.service.domain.Wohnung;
 import de.muenchen.demo.service.rest.api.BuergerResource;
 import de.muenchen.demo.service.rest.api.BuergerResourceAssembler;
 import de.muenchen.demo.service.rest.api.SearchResultResource;
+import de.muenchen.demo.service.rest.api.WohnungResource;
+import de.muenchen.demo.service.rest.api.WohnungResourceAssembler;
 import de.muenchen.demo.service.services.BuergerService;
+import de.muenchen.demo.service.services.StaatsangehoerigkeitService;
+import de.muenchen.demo.service.services.WohnungService;
 import de.muenchen.demo.service.util.HateoasRelations;
+import java.util.List;
+import java.util.Set;
+import javax.annotation.security.RolesAllowed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.http.ResponseEntity;
@@ -29,137 +39,312 @@ import org.springframework.web.bind.annotation.RequestParam;
 @ExposesResourceFor(BuergerController.class)
 @RequestMapping("/buerger")
 public class BuergerController {
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(BuergerController.class);
-    
-    @Autowired EntityLinks entityLinks;
-    @Autowired BuergerService service;
-    @Autowired BuergerResourceAssembler assembler;
-    
+
+    @Autowired
+    EntityLinks entityLinks;
+    @Autowired
+    BuergerService service;
+    @Autowired
+    WohnungService wohnungService;
+    @Autowired
+    StaatsangehoerigkeitService staatsService;
+    @Autowired
+    BuergerResourceAssembler assembler;
+    @Autowired
+    WohnungResourceAssembler wohnungAssembler;
+    @Value("${URL}")
+    private String URL;
+
     /**
      * Alle Bürger suchen.
-     * 
-     * @return 
+     *
+     * @return
      */
-    @RequestMapping(value = "/query", method = {RequestMethod.GET})
+@RolesAllowed({"PERM_queryBuerger"})
+@RequestMapping(value = "/query", method = {RequestMethod.GET})
     public ResponseEntity queryBuerger() {
-        if(LOG.isDebugEnabled())
+        if (LOG.isDebugEnabled()) {
             LOG.debug("query buerger");
+        }
         SearchResultResource<BuergerResource> resource = this.assembler.toResource(this.service.query());
         resource.add(linkTo(methodOn(BuergerController.class).queryBuerger()).withSelfRel()); // add self link
         return ResponseEntity.ok(resource);
     }
-    
+
     /**
      * Bürger mit Parametern suchen.
-     * 
+     *
      * @param filter
-     * @return 
+     * @return
      */
-    @RequestMapping(value = "/query", params = {"filter"})
-    public ResponseEntity queryBuerger(@RequestParam (value = "filter") String filter) {
-        if(LOG.isDebugEnabled())
+@RolesAllowed({"PERM_queryBuerger"})
+@RequestMapping(value = "/query", params = {"filter"})
+    public ResponseEntity queryBuerger(@RequestParam(value = "filter") String filter) {
+        if (LOG.isDebugEnabled()) {
             LOG.debug("query buerger with filter > " + filter);
+        }
         SearchResultResource<BuergerResource> resource = this.assembler.toResource(this.service.query(filter));
         resource.add(linkTo(methodOn(BuergerController.class).queryBuerger(filter)).withSelfRel()); // add self link with params
         return ResponseEntity.ok(resource);
     }
-    
+
     /**
-     * Erzeugt ein neues Bürger Objekt mit gefüllter OID. Das 
-     * Objekt ist noch in der DB gespeichert.
-     * 
-     * @return 
+     * Erzeugt ein neues Bürger Objekt mit gefüllter OID. Das Objekt ist noch in
+     * der DB gespeichert.
+     *
+     * @return
      */
+    @RolesAllowed({"PERM_newBuerger"})
     @RequestMapping(value = "/new", method = {RequestMethod.GET})
     public ResponseEntity newBuerger() {
-        if(LOG.isDebugEnabled())
+        if (LOG.isDebugEnabled()) {
             LOG.debug("new buerger");
+        }
+        System.out.println(URL);
         Buerger entity = this.service.create();
         BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.NEW, HateoasRelations.SAVE);
         return ResponseEntity.ok(resource);
     }
-    
+
     /**
-     * Macht eine Kopie eines Büergers. Diese Kopie wird bei
-     * Erstellung in der DB gespeichert.
-     * 
+     * Macht eine Kopie eines Büergers. Diese Kopie wird bei Erstellung in der
+     * DB gespeichert.
+     *
      * @param oid
-     * @return 
+     * @return
      */
-    @RequestMapping(value = "/copy/{oid}", method = {RequestMethod.GET})
+@RolesAllowed({"PERM_copyBuerger"})
+@RequestMapping(value = "/copy/{oid}", method = {RequestMethod.GET})
     public ResponseEntity copyBuerger(@PathVariable String oid) {
-        if(LOG.isDebugEnabled())
+        if (LOG.isDebugEnabled()) {
             LOG.debug("copy buerger");
+        }
         Buerger entity = this.service.copy(oid);
         BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY);
         return ResponseEntity.ok(resource);
     }
-    
+
     /**
      * Liest einen Bürger zur OID.
-     * 
+     *
      * @param oid
-     * @return 
+     * @return
      */
-    @RequestMapping(value = "/{oid}", method = {RequestMethod.GET})
+@RolesAllowed({"PERM_readBuerger"})
+@RequestMapping(value = "/{oid}", method = {RequestMethod.GET})
     public ResponseEntity readBuerger(@PathVariable("oid") String oid) {
-        if(LOG.isDebugEnabled())
+        if (LOG.isDebugEnabled()) {
             LOG.debug("read buerger");
+        }
         Buerger entity = this.service.read(oid);
         BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY);
         return ResponseEntity.ok(resource);
     }
-    
+
     /**
      * Speichert Änderungen an einem bereits vorhandenen Bürger.
-     * 
+     *
      * @param oid
      * @param request
-     * @return 
+     * @return
      */
-    @RequestMapping(value = "/{oid}", method = {RequestMethod.POST})
+@RolesAllowed({"PERM_updateBuerger"})
+@RequestMapping(value = "/{oid}", method = {RequestMethod.POST})
     public ResponseEntity updateBuerger(@PathVariable("oid") String oid, @RequestBody BuergerResource request) {
-        if(LOG.isDebugEnabled())
+        if (LOG.isDebugEnabled()) {
             LOG.debug("update buerger");
+        }
         Buerger entity = service.read(request.getOid());
         LOG.info("davor > " + entity.toString());
         this.assembler.fromResource(request, entity);
         LOG.info("danach > " + entity.toString());
         this.service.update(entity);
-        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY);
+        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY, HateoasRelations.WOHNUNGEN, HateoasRelations.KINDER);
         return ResponseEntity.ok(resource);
     }
-    
+
     /**
      * Speichert einen neuen Bürger.
-     * 
+     *
      * @param request
-     * @return 
+     * @return
      */
-    @RequestMapping(value = "/save", method = {RequestMethod.POST})
+@RolesAllowed({"PERM_saveBuerger"})
+@RequestMapping(value = "/save", method = {RequestMethod.POST})
     public ResponseEntity saveBuerger(@RequestBody BuergerResource request) {
-        if(LOG.isDebugEnabled())
+        if (LOG.isDebugEnabled()) {
             LOG.debug("save buerger");
+        }
         Buerger entity = new Buerger();
         this.assembler.fromResource(request, entity);
         this.service.save(entity);
-        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY);
+        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY,HateoasRelations.WOHNUNGEN,HateoasRelations.KINDER);
         return ResponseEntity.ok(resource);
     }
-    
+
     /**
      * Löscht einen Bürger.
-     * 
+     *
      * @param oid
-     * @return 
+     * @return
      */
-    @RequestMapping(value = "/{oid}", method = {RequestMethod.DELETE})
+@RolesAllowed({"PERM_deleteBuerger"})
+@RequestMapping(value = "/{oid}", method = {RequestMethod.DELETE})
     public ResponseEntity deleteBuerger(@PathVariable("oid") String oid) {
-        if(LOG.isDebugEnabled())
+        if (LOG.isDebugEnabled()) {
             LOG.debug("delete buerger");
+        }
         this.service.delete(oid);
         return ResponseEntity.ok().build();
     }
+    /**
+     * Liest die Wohnunugen einer Bürger.
+     *
+     * @param oid
+     * @return
+     */
+@RolesAllowed({"PERM_readBuergerWohnungen"})
+@RequestMapping(value = "/Wohnungen/{oid}", method = {RequestMethod.GET})
+    public ResponseEntity readBuergerWohnungen(@PathVariable("oid") String oid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("read buerger Wohunungen");
+        }
+        Set<Wohnung> wohnungen = this.service.read(oid).getWohnungen();
+
+        List<WohnungResource> resources = wohnungAssembler.toResource(wohnungen, HateoasRelations.SELF);
+        return ResponseEntity.ok(resources);
+    }
+    /**
+     * Liest die Kinder einer Bürger.
+     *
+     * @param oid
+     * @return
+     */
+@RolesAllowed({"PERM_readBuergerKinder"})
+@RequestMapping(value = "/kinder/{oid}", method = {RequestMethod.GET})
+    public ResponseEntity readBuergerKinder(@PathVariable("oid") String oid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("read buerger  Kinder");
+        }
+        Set<Buerger> kinder = this.service.read(oid).getKinder();
+        List<BuergerResource> resources = assembler.toResource(kinder, HateoasRelations.SELF);
+        return ResponseEntity.ok(resources);
+    }
+    /**
+     * Erzeugt ein Kind als Buerger und assoziiert ihm mit einem Buerger .
+     *
+     * @param oid
+     * @return
+     */
+@RolesAllowed({"PERM_createKindBuerger"})
+@RequestMapping(value = "create/kind/{oid}", method = {RequestMethod.POST})
+    public ResponseEntity createKindBuerger(@PathVariable("oid") String oid, @RequestBody BuergerResource request) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Create Kind buerger");
+        }
+        Buerger kind = new Buerger();
+        this.assembler.fromResource(request, kind);
+        this.service.save(kind);
+        Buerger entity = service.read(oid);
+        entity.getKinder().add(kind);
+        this.service.update(entity);
+
+        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY,HateoasRelations.WOHNUNGEN,HateoasRelations.KINDER);
+        return ResponseEntity.ok(resource);
+    }
+    /**
+     * Assoziiert ein Kind mit einem Buerger .
+     *
+     * @param BuergerOid
+     * @param kindOid
+     * @return
+     */
+@RolesAllowed({"PERM_addKindBuerger"})
+@RequestMapping(value = "add/buerger/{bOid}/kind/{kOid}", method = {RequestMethod.GET})
+    public ResponseEntity addKindBuerger(@PathVariable("bOid") String bOid, @PathVariable("kOid") String kOid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Add Kind buerger");
+        }
+
+        Buerger kind = service.read(kOid);
+        Buerger entity = service.read(bOid);
+
+        entity.getKinder().add(kind);
+        this.service.update(entity);
+
+        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY,HateoasRelations.WOHNUNGEN,HateoasRelations.KINDER);
+        return ResponseEntity.ok(resource);
+    }
+    /**
+     * Assoziiert eine Wohnung mit einem Buerger .
+     *
+     * @param buergerOid
+     * @param wohnungOid
+     * @return
+     */
+@RolesAllowed({"PERM_addWohnungBuerger"})
+@RequestMapping(value = "add/buerger/{bOid}/wohnung/{wOid}", method = {RequestMethod.GET})
+    public ResponseEntity addWohnungBuerger(@PathVariable("bOid") String bOid, @PathVariable("wOid") String wOid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Add wohnung buerger");
+        }
+
+        Wohnung wohnung = wohnungService.read(wOid);
+        Buerger entity = service.read(bOid);
+
+        entity.getWohnungen().add(wohnung);
+        this.service.update(entity);
+
+        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY,HateoasRelations.WOHNUNGEN,HateoasRelations.KINDER);
+        return ResponseEntity.ok(resource);
+    }
+    /**
+     * Erzeugt eine Wohnung und assoziiert ihm mit einem Buerger .
+     *
+     * @param oid
+     * @return
+     */
+@RolesAllowed({"PERM_createWhonungBuerger"})
+@RequestMapping(value = "create/wohnung/{oid}", method = {RequestMethod.POST})
+    public ResponseEntity createWhonungBuerger(@PathVariable("oid") String oid, @RequestBody WohnungResource request) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Create wohnung buerger");
+        }
+        Wohnung wohnung = new Wohnung();
+        this.wohnungAssembler.fromResource(request, wohnung);
+        this.wohnungService.save(wohnung);
+        Buerger entity = service.read(oid);
+        entity.getWohnungen().add(wohnung);
+        this.service.update(entity);
+
+        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY,HateoasRelations.WOHNUNGEN,HateoasRelations.KINDER);
+        return ResponseEntity.ok(resource);
+    }
+        /**
+     * Assoziiert ein Staatsangehoerigkeit mit einem Buerger .
+     *
+     * @param buergerOid
+     * @param staatsOid
+     * @return
+     */
     
+@RolesAllowed({"PERM_addStaatangehoerigkeitBuerger"})
+@RequestMapping(value = "add/buerger/{bOid}/staats/{sOid}", method = {RequestMethod.GET})
+    public ResponseEntity addStaatangehoerigkeitBuerger(@PathVariable("bOid") String bOid, @PathVariable("sOid") String sOid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Add staatsangehoerigkeit buerger");
+        }
+
+        Staatsangehoerigkeit staats = staatsService.read(sOid);
+        Buerger entity = service.read(bOid);
+
+        entity.getStaatsangehoerigkeiten().add(staats);
+        this.service.update(entity);
+
+        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY,HateoasRelations.WOHNUNGEN,HateoasRelations.KINDER);
+        return ResponseEntity.ok(resource);
+    }
+
 }

@@ -1,0 +1,50 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package de.muenchen.demo.service.rest.api;
+
+import de.muenchen.demo.service.domain.Adresse;
+import de.muenchen.demo.service.domain.AdresseReference;
+
+/**
+ *
+ * @author praktikant.tmar
+ */
+public class WohnungResource extends BaseResource {
+
+    private String stock;
+    private String ausrichtung;
+    private AdresseReference adresse;
+
+    public String getStock() {
+        return stock;
+    }
+
+    public void setStock(String stock) {
+        this.stock = stock;
+    }
+
+    public String getAusrichtung() {
+        return ausrichtung;
+    }
+
+    public void setAusrichtung(String ausrichtung) {
+        this.ausrichtung = ausrichtung;
+    }
+
+    public AdresseReference getAdresse() {
+        return adresse;
+    }
+
+    public void setAdresse(AdresseReference adresse) {
+        this.adresse = adresse;
+    }
+
+    
+@Override
+    public String toString() {
+        return String.format("Oid > %s | ausrichtung > %s | stock > %s ", this.getOid(), this.ausrichtung, this.stock);
+    } 
+}

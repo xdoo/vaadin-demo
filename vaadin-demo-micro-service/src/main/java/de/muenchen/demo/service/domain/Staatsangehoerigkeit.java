@@ -11,4 +11,42 @@ package de.muenchen.demo.service.domain;
  */
 public class Staatsangehoerigkeit {
     
+    private String reference;
+    private String code;
+    private String land;
+    private String sprache;
+
+    
+    public String getReference() {
+        return reference;
+    }
+
+    public void setReference(String reference) {
+        this.reference = reference;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getLand() {
+        return land;
+    }
+
+    public void setLand(String land) {
+        this.land = land;
+    }
+
+    public String getSprache() {
+        return sprache;
+    }
+
+    public void setSprache(String sprache) {
+        this.sprache = sprache;
+    }
+     
 }

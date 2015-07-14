@@ -9,6 +9,7 @@ import de.muenchen.demo.service.util.HateoasRelations;
 import de.muenchen.demo.service.util.HateoasUtil;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import org.dozer.DozerBeanMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,77 +26,88 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 public class BuergerResourceAssembler {
 
     private static final Logger LOG = LoggerFactory.getLogger(BuergerResourceAssembler.class);
-    
-    @Autowired DozerBeanMapper dozer;
-    @Autowired BuergerService service;
-    @Autowired EntityLinks entityLinks;
-    
+
+    @Autowired
+    DozerBeanMapper dozer;
+    @Autowired
+    BuergerService service;
+    @Autowired
+    EntityLinks entityLinks;
+
     /**
      * Mapping einer Liste von Entities auf eine List von Resource Objekten.
-     * 
+     *
      * @param buerger
-     * @return 
+     * @return
      */
     public SearchResultResource<BuergerResource> toResource(final List<Buerger> buerger) {
         SearchResultResource<BuergerResource> resource = new SearchResultResource<>();
         buerger.stream().forEach((b) -> {
             resource.add(this.toResource(b, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE));
-        }); 
+        });
         // add query link
         resource.add(linkTo(methodOn(BuergerController.class).queryBuerger()).withRel(HateoasUtil.QUERY));
         return resource;
     }
-    
+
     /**
      * Mapping einer Entity auf eine Resource.
-     * 
+     *
      * @param buerger
      * @param r
-     * @return 
+     * @return
      */
     public BuergerResource toResource(final Buerger buerger, HateoasRelations... r) {
         // map
         BuergerResource resource = this.dozer.map(buerger, BuergerResource.class);
 
-        
         // add links
         ArrayList<HateoasRelations> relations = Lists.newArrayList(r);
-        if(relations.contains(HateoasRelations.NEW)) {
-           resource.add(linkTo(methodOn(BuergerController.class).newBuerger()).withRel(HateoasUtil.NEW)); 
-        } 
-        
-        if(relations.contains(HateoasRelations.UPDATE)) {
+        if (relations.contains(HateoasRelations.NEW)) {
+            resource.add(linkTo(methodOn(BuergerController.class).newBuerger()).withRel(HateoasUtil.NEW));
+
+        }
+
+        if (relations.contains(HateoasRelations.UPDATE)) {
             resource.add(linkTo(methodOn(BuergerController.class).updateBuerger(buerger.getOid(), null)).withRel(HateoasUtil.UPDATE));
         }
-        
-        if(relations.contains(HateoasRelations.SELF)) {
+
+        if (relations.contains(HateoasRelations.SELF)) {
             resource.add(linkTo(methodOn(BuergerController.class).readBuerger(buerger.getOid())).withSelfRel());
         }
-        
-        if(relations.contains(HateoasRelations.DELETE)) {
+
+        if (relations.contains(HateoasRelations.DELETE)) {
             resource.add(linkTo(methodOn(BuergerController.class).deleteBuerger(buerger.getOid())).withRel(HateoasUtil.DELETE));
         }
-        
-        if(relations.contains(HateoasRelations.SAVE)) {
+
+        if (relations.contains(HateoasRelations.SAVE)) {
             resource.add(linkTo(methodOn(BuergerController.class).saveBuerger(null)).withRel(HateoasUtil.SAVE));
         }
-        
-        if(relations.contains(HateoasRelations.COPY)) {
+
+        if (relations.contains(HateoasRelations.COPY)) {
             resource.add(linkTo(methodOn(BuergerController.class).copyBuerger(buerger.getOid())).withRel(HateoasUtil.COPY));
         }
+        if (relations.contains(HateoasRelations.WOHNUNGEN)) {
+            resource.add(linkTo(methodOn(BuergerController.class).readBuergerWohnungen(buerger.getOid())).withRel(HateoasUtil.WOHNUNGEN));
+        }
         
+        if (relations.contains(HateoasRelations.KINDER)) {
+            resource.add(linkTo(methodOn(BuergerController.class).readBuergerKinder(buerger.getOid())).withRel(HateoasUtil.KINDER));
+
+        }
+
         return resource;
     }
 
     /**
      * Mapping einer Resource auf eine Entity
-     * 
+     *
      * @param resource
      * @param entity
-     * @return 
+     * @return
      */
     public void fromResource(final BuergerResource resource, final Buerger entity) {
-        if(!Strings.isNullOrEmpty(resource.getOid())) {
+        if (!Strings.isNullOrEmpty(resource.getOid())) {
 //            this.dozer.map(resource, entity);
             entity.setOid(resource.getOid());
             // start field mapping
@@ -107,6 +119,15 @@ public class BuergerResourceAssembler {
             LOG.error(resource.toString());
             throw new IllegalArgumentException("The object id (oid) field must be filled.");
         }
+    }
+
+    public List<BuergerResource> toResource(Set<Buerger> kinder, HateoasRelations hateoasRelations) {
+
+        List<BuergerResource> resource = new ArrayList<>();
+        kinder.stream().forEach((b) -> {
+            resource.add(this.toResource(b, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE));
+        });
+        return resource;
     }
 
 }

@@ -11,9 +11,14 @@ package de.muenchen.demo.service.domain;
  */
 public class Adresse {
     
+    private String oid;
+
     private String strasse;
+
     private String hausnummer;
+
     private String stadt;
+
     private int plz;
 
     public String getStrasse() {
@@ -47,5 +52,17 @@ public class Adresse {
     public void setPlz(int plz) {
         this.plz = plz;
     }
-    
+
+    public String getOid() {
+        return oid;
+    }
+
+    public void setOid(String oid) {
+        this.oid = oid;
+    }
+
+    @Override
+    public String toString() {
+        return String.format(" Oid > %s |Strasse > %s | hausnummer > %s | stadt > %s| plz > %s  ", this.getOid(), this.strasse, this.hausnummer, this.stadt, this.plz);
+    }
 }

@@ -7,8 +7,11 @@ package de.muenchen.demo.service.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 /**
  *
@@ -19,20 +22,25 @@ import org.hibernate.envers.Audited;
 @Audited
 public class Wohnung extends BaseEntity {
     
+
+    
     @Column(name = "WOHN_STOCK")
-    private int stock;
+    private String stock;
     
     @Column(length = 20, name = "WOHN_AUSRICHTUNG")
     private String ausrichtung;
     
-    @Column(length = 30, nullable = false, name = "WOHN_ADRESSE_OID")
-    private String adresseOid;
+    @NotAudited
+    @OneToOne   
+    @JoinColumn(name="Adresse_Id",referencedColumnName="Id")
+    private AdresseReference adresse;
+    
 
-    public int getStock() {
+    public String getStock() {
         return stock;
     }
 
-    public void setStock(int stock) {
+    public void setStock(String stock) {
         this.stock = stock;
     }
 
@@ -44,11 +52,17 @@ public class Wohnung extends BaseEntity {
         this.ausrichtung = ausrichtung;
     }
 
-    public String getAdresseOid() {
-        return adresseOid;
+    public AdresseReference getAdresse() {
+        return adresse;
     }
 
-    public void setAdresseOid(String adresseOid) {
-        this.adresseOid = adresseOid;
-    }
+    public void setAdresse(AdresseReference adresse) {
+        this.adresse = adresse;
+    }  
+
+    @Override
+    public String toString() {
+       return String.format("id > %s | oid > %s  | ausrichtung > %s | stock > %s", this.getId(),this.getOid(), this.ausrichtung, this.stock);
+    } 
+    
 }

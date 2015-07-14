@@ -18,4 +18,8 @@ public interface HateoasUtil {
     public final static String NEW = HateoasRelations.NEW.toString().toLowerCase();
     public final static String SAVE = HateoasRelations.SAVE.toString().toLowerCase();
     public final static String COPY = HateoasRelations.COPY.toString().toLowerCase();
+        public final static String WOHNUNGEN = HateoasRelations.WOHNUNGEN.toString().toLowerCase();
+    public final static String KINDER = HateoasRelations.KINDER.toString().toLowerCase();
+
+    
 }

@@ -1,6 +1,7 @@
 package de.muenchen.demo.service.domain;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -24,28 +25,33 @@ import org.hibernate.search.annotations.Resolution;
 @Indexed
 @Table(name = "BUERGER")
 public class Buerger extends BaseEntity {
-    
-    @Field @Column(length = 70, nullable = true, name = "BUER_VORNAME")
+
+    @Field
+    @Column(length = 70, nullable = true, name = "BUER_VORNAME")
     private String vorname;
-    
-    @Field @Column(length = 70, nullable = false, name = "BUER_NACHNAME")
+
+    @Field
+    @Column(length = 70, nullable = false, name = "BUER_NACHNAME")
     private String nachname;
-    
+
     @Column(name = "BUER_GEBURTSDATUM")
     @Temporal(TemporalType.DATE)
     private Date geburtsdatum;
-    
-    @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
-    private Set<Wohnung> wohnungen;
-    
+
     @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
     private Set<Sachbearbeiter> sachbearbeiter;
     
     @Transient
-    private Set<Staatsangehoerigkeit> staatsangehoerigkeiten;
+    private Set<Staatsangehoerigkeit> staatsangehoerigkeiten= new HashSet<>();
     
     @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
     private Set<StaatsangehoerigkeitReference> staatsangehoerigkeitReferences;
+
+    @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    private Set<Buerger> kinder = new HashSet<>();
+    
+    @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    private Set<Wohnung> wohnungen= new HashSet<>();
 
     public String getVorname() {
         return vorname;
@@ -103,9 +109,18 @@ public class Buerger extends BaseEntity {
         this.staatsangehoerigkeitReferences = staatsangehoerigkeitReferences;
     }
 
+    public Set<Buerger> getKinder() {
+        return kinder;
+    }
+
+    
+    public void setKinder(Set<Buerger> kinder) {
+        this.kinder = kinder;
+    }
+
     @Override
     public String toString() {
-        return String.format("id > %s | oid > %s | vorname > %s | nachname > %s | geburtsdatum > %s", this.getId(), this.getOid(),  this.vorname, this.nachname, this.geburtsdatum);
-    } 
+        return String.format("id > %s | oid > %s | vorname > %s | nachname > %s | geburtsdatum > %s", this.getId(), this.getOid(), this.vorname, this.nachname, this.geburtsdatum);
+    }
 
 }
