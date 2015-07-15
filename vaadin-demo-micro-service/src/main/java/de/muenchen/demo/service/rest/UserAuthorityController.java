@@ -11,8 +11,6 @@ import de.muenchen.demo.service.services.AuthorityService;
 import de.muenchen.demo.service.services.UserAuthorityService;
 import de.muenchen.demo.service.services.UserService;
 import de.muenchen.demo.service.util.HateoasRelations;
-import java.util.List;
-import java.util.Set;
 import javax.annotation.security.RolesAllowed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +24,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  *
@@ -66,23 +63,42 @@ public class UserAuthorityController {
         resource.add(linkTo(methodOn(UserAuthorityController.class).queryUserAuthority()).withSelfRel()); // add self link
         return ResponseEntity.ok(resource);
     }
+    
+    /**
+     * UserAuthority by Username suchen.
+     *
+     * @param name
+     * @return
+     */
+    @RolesAllowed({"PERM_readByUsernameUserAuthority"})
+    @RequestMapping(value = "/user/{name}", method = {RequestMethod.GET})
+    public ResponseEntity readByUsernameUserAuthority(@PathVariable("name") String name) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("readByUsernameUserAuthority");
+        }
+        SearchResultResource<UserAuthorityResource> resource;
+        resource = this.assembler.toResource(this.service.readByUsername(name));
+        resource.add(linkTo(methodOn(UserAuthorityController.class).queryUserAuthority()).withSelfRel()); // add self link
+        return ResponseEntity.ok(resource);
+    }
 
     /**
      * Liest eine UserAuthority zur OID.
      *
-     * @param oid
+     * @param userOid
+     * @param authorityOid
      * @return
      */
     @RolesAllowed({"PERM_readUserAuthority"})
     @RequestMapping(value = "/{uoid}/{aoid}", method = {RequestMethod.GET})
-    public ResponseEntity readUserAuthority(@PathVariable("uoid") String uoid, @PathVariable("aoid") String aoid) {
+    public ResponseEntity readUserAuthority(@PathVariable("uoid") String userOid, @PathVariable("aoid") String authorityOid) {
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("read usersAuthoritys");
         }
 
-        User user = this.serviceUser.read(uoid);
-        Authority auth = this.authService.read(aoid);
+        User user = this.serviceUser.read(userOid);
+        Authority auth = this.authService.read(authorityOid);
         UserAuthId id = new UserAuthId(user, auth);
 
         UserAuthority entity = this.service.read(id);
@@ -93,18 +109,19 @@ public class UserAuthorityController {
     /**
      * Speichert eine neue UserAuthority.
      *
-     * @param request
+     * @param userOid
+     * @param authorityOid
      * @return
      */
     @RolesAllowed({"PERM_saveUserAuthority"})
     @RequestMapping(value = "/save/{uoid}/{aoid}", method = {RequestMethod.GET})
-    public ResponseEntity saveUserAuthority(@PathVariable("uoid") String uoid, @PathVariable("aoid") String aoid) {
+    public ResponseEntity saveUserAuthority(@PathVariable("uoid") String userOid, @PathVariable("aoid") String authorityOid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("save usersAuthoritys");
         }
         UserAuthority entity = new UserAuthority();
-        User user = this.serviceUser.read(uoid);
-        Authority auth = this.authService.read(aoid);
+        User user = this.serviceUser.read(userOid);
+        Authority auth = this.authService.read(authorityOid);
         entity.setId(new UserAuthId(user, auth));
         this.service.save(entity);
         UserAuthorityResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE);
@@ -114,7 +131,8 @@ public class UserAuthorityController {
     /**
      * Löscht eine UserAuthority.
      *
-     * @param oid
+     * @param uoid
+     * @param aoid
      * @return
      */
     @RolesAllowed({"PERM_deleteUserAuthority"})

@@ -52,7 +52,7 @@ public class ServiceInfoController {
     public ResponseEntity getInfo() {
         if(LOG.isDebugEnabled())
             LOG.debug("get info for service");
-        this.getResource().add(linkTo(methodOn(ServiceInfoController.class).getInfo()).withSelfRel());
+        //this.getResource().add(linkTo(methodOn(ServiceInfoController.class).getInfo()).withSelfRel());
         // hier müssen die 'query' und 'new' links aller Entitäten rein.
         this.getResource().addEntityLink(linkTo(methodOn(BuergerController.class).newBuerger()).withRel("buerger_new"));
         this.getResource().addEntityLink(linkTo(methodOn(BuergerController.class).queryBuerger()).withRel("buerger_query"));

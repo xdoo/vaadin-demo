@@ -26,6 +26,7 @@ public interface AuthorityPermissionService {
         
     public void delete(AuthPermId id);
     
-
+    public List<AuthorityPermission> readByAuthority(String authority);
     
+
 }

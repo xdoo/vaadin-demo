@@ -24,6 +24,8 @@ public interface UserService {
     
     public User read(String oid);
     
+    public User readByUsername(String username);
+    
     public User update(User users);
     
     public void delete(String oid);

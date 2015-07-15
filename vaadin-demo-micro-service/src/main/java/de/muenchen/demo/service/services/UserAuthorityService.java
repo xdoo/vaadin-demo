@@ -14,17 +14,17 @@ import java.util.List;
  * @author praktikant.tmar
  */
 public interface UserAuthorityService {
-    
-    public List<UserAuthority> query();
-    
-    public List<UserAuthority> query(String query);
-    
-    public UserAuthority save(UserAuthority usersAuthoritys);
-   
-    public UserAuthority  read(UserAuthId id);
-        
-    public void delete(UserAuthId usersAuthoritys);
-    
 
-    
+    public List<UserAuthority> query();
+
+    public List<UserAuthority> query(String query);
+
+    public UserAuthority save(UserAuthority usersAuthoritys);
+
+    public UserAuthority read(UserAuthId id);
+
+    public List<UserAuthority> readByUsername(String username);
+
+    public void delete(UserAuthId usersAuthoritys);
+
 }

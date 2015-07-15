@@ -13,7 +13,10 @@ import org.springframework.data.repository.CrudRepository;
  * @author praktikant.tmar
  */
 public interface UserAuthorityRepository extends CrudRepository<UserAuthority, Long> {
+
     public List<UserAuthority> findById(UserAuthId id);
 
+    public List<UserAuthority> findByIdAuthorityAuthority(String authority);
+        public List<UserAuthority> findByIdUserUsername(String username);
 
 }

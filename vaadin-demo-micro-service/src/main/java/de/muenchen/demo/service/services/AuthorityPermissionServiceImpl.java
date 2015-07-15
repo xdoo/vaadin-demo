@@ -7,7 +7,6 @@ package de.muenchen.demo.service.services;
 
 import com.google.common.collect.Lists;
 import de.muenchen.demo.service.domain.AuthPermId;
-import de.muenchen.demo.service.domain.UserAuthId;
 import de.muenchen.demo.service.domain.AuthorityPermission;
 import de.muenchen.demo.service.domain.AuthorityPermissionRepository;
 import de.muenchen.demo.service.util.QueryService;
@@ -24,9 +23,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class AuthorityPermissionServiceImpl implements AuthorityPermissionService {
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(AuthorityPermissionService.class);
-    
+
     AuthorityPermissionRepository repo;
     QueryService<AuthorityPermission> search;
 
@@ -36,9 +35,9 @@ public class AuthorityPermissionServiceImpl implements AuthorityPermissionServic
     @Autowired
     public AuthorityPermissionServiceImpl(AuthorityPermissionRepository repo, EntityManager em) {
         this.repo = repo;
-        this.search = new QueryService<>(em, AuthorityPermission.class, "adresseOid","ausrichtung","stock");
+        this.search = new QueryService<>(em, AuthorityPermission.class, "authority", "permission");
     }
-    
+
 
 
     @Override
@@ -55,7 +54,7 @@ public class AuthorityPermissionServiceImpl implements AuthorityPermissionServic
     }
 
     @Override
-    public List<AuthorityPermission> query(String query) { 
+    public List<AuthorityPermission> query(String query) {
         return this.search.query(query);
     }
 
@@ -68,14 +67,25 @@ public class AuthorityPermissionServiceImpl implements AuthorityPermissionServic
             return null;
         } else {
             return result.get(0);
-        }    }
+        }
+    }
 
     @Override
     public void delete(AuthPermId id) {
         AuthorityPermission item = this.read(id);
         this.repo.delete(item);    }
 
-    
-    
-}
+    @Override
+    public List<AuthorityPermission> readByAuthority(String authority) {
 
+        List<AuthorityPermission> result = this.repo.findByIdAuthorityAuthority(authority);
+        if (result.isEmpty()) {
+            // TODO
+            LOG.warn(String.format("found no users with oid '%s'", authority));
+            return null;
+        } else {
+            return result;
+        }
+    }
+
+}

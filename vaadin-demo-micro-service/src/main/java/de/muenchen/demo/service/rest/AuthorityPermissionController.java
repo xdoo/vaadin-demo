@@ -71,7 +71,22 @@ public class AuthorityPermissionController {
         resource.add(linkTo(methodOn(AuthorityPermissionController.class).queryAuthorityPermission()).withSelfRel()); // add self link
         return ResponseEntity.ok(resource);
     }
-
+/**
+     *  AuthorityPermission by Authority suchen.
+     *
+     * @return
+     */
+        @RolesAllowed({"PERM_readByAuthorityAuthorityPermission"})
+    @RequestMapping(value = "/authority/{authority}", method = {RequestMethod.GET})
+    public ResponseEntity readByAuthorityAuthorityPermission(@PathVariable("authority") String authority) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("query authoritysPermissions");
+        }
+        SearchResultResource<AuthorityPermissionResource> resource;
+        resource = this.assembler.toResource(this.service.readByAuthority(authority));
+        resource.add(linkTo(methodOn(AuthorityPermissionController.class).queryAuthorityPermission()).withSelfRel()); // add self link
+        return ResponseEntity.ok(resource);
+    }
 
     /**
      * Liest eine AuthorityPermission zur OID.

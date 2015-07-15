@@ -15,6 +15,7 @@ import org.springframework.data.repository.CrudRepository;
 public interface AuthorityPermissionRepository extends CrudRepository<AuthorityPermission, Long> {
 
     public List<AuthorityPermission> findById(AuthPermId id);
+    public List<AuthorityPermission> findByIdAuthorityAuthority(String authority);
 
 
 }

@@ -87,7 +87,18 @@ public class UserServiceImpl implements UserService {
         return this.search.query(query);
     }
 
-    
+    @Override
+    public User readByUsername(String username) {
+        List<User> result = this.repo.findByUsername(username);
+        if(result.isEmpty()) {
+            // TODO
+            LOG.warn(String.format("found no users with username '%s'", username));
+            return null;
+        } else {
+            return result.get(0);
+        }
+    }
+
     
 }
 

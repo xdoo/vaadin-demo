@@ -6,8 +6,6 @@ import de.muenchen.demo.service.rest.api.UserResource;
 import de.muenchen.demo.service.rest.api.UserResourceAssembler;
 import de.muenchen.demo.service.services.UserService;
 import de.muenchen.demo.service.util.HateoasRelations;
-import java.util.List;
-import java.util.Set;
 import javax.annotation.security.RolesAllowed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,6 +89,23 @@ public class UserController {
             LOG.debug("read users");
         }
         User entity = this.service.read(oid);
+        UserResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE);
+        return ResponseEntity.ok(resource);
+    }
+    
+    /**
+     * Liest eine User zur OID.
+     *
+     * @param name
+     * @return
+     */
+    @RolesAllowed({"PERM_readUsername"})
+    @RequestMapping(value = "/name/{name}", method = {RequestMethod.GET})
+    public ResponseEntity readUsername(@PathVariable("name") String name) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("read users");
+        }
+        User entity = this.service.readByUsername(name);
         UserResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE);
         return ResponseEntity.ok(resource);
     }

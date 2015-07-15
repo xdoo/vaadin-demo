@@ -23,9 +23,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class UserAuthorityServiceImpl implements UserAuthorityService {
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(UserAuthorityService.class);
-    
+
     UserAuthorityRepository repo;
     QueryService<UserAuthority> search;
 
@@ -35,17 +35,14 @@ public class UserAuthorityServiceImpl implements UserAuthorityService {
     @Autowired
     public UserAuthorityServiceImpl(UserAuthorityRepository repo, EntityManager em) {
         this.repo = repo;
-        this.search = new QueryService<>(em, UserAuthority.class, "adresseOid","ausrichtung","stock");
+        this.search = new QueryService<>(em, UserAuthority.class, "adresseOid", "ausrichtung", "stock");
     }
-    
-
 
     @Override
     public UserAuthority save(UserAuthority usersAuthoritys) {
         LOG.info(usersAuthoritys.toString());
         return this.repo.save(usersAuthoritys);
     }
-
 
     @Override
     public List<UserAuthority> query() {
@@ -54,28 +51,38 @@ public class UserAuthorityServiceImpl implements UserAuthorityService {
     }
 
     @Override
-    public List<UserAuthority> query(String query) { 
+    public List<UserAuthority> query(String query) {
         return this.search.query(query);
     }
 
     @Override
     public UserAuthority read(UserAuthId id) {
         List<UserAuthority> result = this.repo.findById(id);
-        if(result.isEmpty()) {
+        if (result.isEmpty()) {
             // TODO
             LOG.warn(String.format("found no users with oid '%s'", id));
             return null;
         } else {
             return result.get(0);
-        }   
+        }
     }
 
     @Override
     public void delete(UserAuthId id) {
         UserAuthority item = this.read(id);
-        this.repo.delete(item);    }
+        this.repo.delete(item);
+    }
 
-    
-    
+    @Override
+    public List<UserAuthority> readByUsername(String username) {
+        List<UserAuthority> result = this.repo.findByIdUserUsername(username);
+        if (result.isEmpty()) {
+            // TODO
+            LOG.warn(String.format("found no users with oid '%s'", username));
+            return null;
+        } else {
+            return result;
+        }
+    }
+
 }
-

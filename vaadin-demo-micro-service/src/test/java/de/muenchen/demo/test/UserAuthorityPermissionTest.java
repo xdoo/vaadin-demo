@@ -22,13 +22,10 @@ import de.muenchen.demo.service.domain.UserAuthority;
 import de.muenchen.demo.service.domain.UserAuthorityRepository;
 import de.muenchen.demo.service.domain.UserRepository;
 import de.muenchen.demo.service.rest.AuthorityPermissionController;
-import de.muenchen.demo.service.rest.BuergerController;
 import de.muenchen.demo.service.rest.UserAuthorityController;
 import de.muenchen.demo.service.rest.api.AuthorityPermissionResource;
-import de.muenchen.demo.service.rest.api.AuthorityResource;
 import de.muenchen.demo.service.rest.api.SearchResultResource;
 import de.muenchen.demo.service.rest.api.UserAuthorityResource;
-import de.muenchen.demo.service.rest.api.UserResource;
 import de.muenchen.demo.service.util.IdService;
 import static java.lang.Boolean.TRUE;
 import java.lang.reflect.Method;
@@ -47,10 +44,8 @@ import org.apache.http.conn.ssl.SSLContexts;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
-import static org.hamcrest.CoreMatchers.equalTo;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -77,11 +72,8 @@ public class UserAuthorityPermissionTest {
     private RestTemplate restTemplate;
     @Value("${local.server.port}")
     private int port;
-    private Authority auth1;
-    private Authority auth2;
-    private Authority auth3;
     @JsonProperty("result")
-    private SearchResultResource<UserResource> response;
+    private SearchResultResource response;
     @Autowired
 
     UserRepository usersRepo;
