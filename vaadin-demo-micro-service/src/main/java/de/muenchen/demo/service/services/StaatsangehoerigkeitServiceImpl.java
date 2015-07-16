@@ -27,7 +27,7 @@ public class StaatsangehoerigkeitServiceImpl implements StaatsangehoerigkeitServ
     @Value("${URL}")
     private String URL;
     RestTemplate restTemplate = new TestRestTemplate();
-        QueryService<Staatsangehoerigkeit> search;
+    QueryService<Staatsangehoerigkeit> search;
 
 
     StaatsangehoerigkeitReferenceRepository repo;
@@ -70,6 +70,6 @@ public class StaatsangehoerigkeitServiceImpl implements StaatsangehoerigkeitServ
     public void delete(String referencedOid) {
         List<StaatsangehoerigkeitReference> item = this.repo.findByReferencedOid(referencedOid);
         if (!item.isEmpty()) 
-            this.repo.delete(item);      
+            this.repo.delete(item);
+        }      
     }    
-}

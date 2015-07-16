@@ -46,6 +46,9 @@ public class Buerger extends BaseEntity {
     
     @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
     private Set<StaatsangehoerigkeitReference> staatsangehoerigkeitReferences;
+    
+    @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    private Set<Pass> Pass = new HashSet<>();
 
     @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
     private Set<Buerger> kinder = new HashSet<>();
@@ -116,6 +119,14 @@ public class Buerger extends BaseEntity {
     
     public void setKinder(Set<Buerger> kinder) {
         this.kinder = kinder;
+    }
+
+    public Set<Pass> getPass() {
+        return Pass;
+    }
+
+    public void setPass(Set<Pass> Pass) {
+        this.Pass = Pass;
     }
 
     @Override

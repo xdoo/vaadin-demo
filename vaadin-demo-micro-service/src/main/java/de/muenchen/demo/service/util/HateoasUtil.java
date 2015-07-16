@@ -10,7 +10,7 @@ package de.muenchen.demo.service.util;
  * @author claus.straube
  */
 public interface HateoasUtil {
-    
+
     public final static String SELF = HateoasRelations.SELF.toString().toLowerCase();
     public final static String UPDATE = HateoasRelations.UPDATE.toString().toLowerCase();
     public final static String DELETE = HateoasRelations.DELETE.toString().toLowerCase();
@@ -18,8 +18,8 @@ public interface HateoasUtil {
     public final static String NEW = HateoasRelations.NEW.toString().toLowerCase();
     public final static String SAVE = HateoasRelations.SAVE.toString().toLowerCase();
     public final static String COPY = HateoasRelations.COPY.toString().toLowerCase();
-        public final static String WOHNUNGEN = HateoasRelations.WOHNUNGEN.toString().toLowerCase();
+    public final static String WOHNUNGEN = HateoasRelations.WOHNUNGEN.toString().toLowerCase();
     public final static String KINDER = HateoasRelations.KINDER.toString().toLowerCase();
+    public final static String PASS = HateoasRelations.PASS.toString().toLowerCase();
 
-    
 }

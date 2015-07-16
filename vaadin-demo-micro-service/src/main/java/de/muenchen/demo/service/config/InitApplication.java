@@ -5,7 +5,6 @@
  */
 package de.muenchen.demo.service.config;
 
-import de.muenchen.demo.service.Application;
 import de.muenchen.demo.service.domain.AuthPermId;
 import de.muenchen.demo.service.domain.Authority;
 import de.muenchen.demo.service.domain.AuthorityPermission;
@@ -19,6 +18,7 @@ import de.muenchen.demo.service.domain.UserAuthority;
 import de.muenchen.demo.service.domain.UserAuthorityRepository;
 import de.muenchen.demo.service.domain.UserRepository;
 import de.muenchen.demo.service.rest.AccountController;
+import de.muenchen.demo.service.rest.PassController;
 import de.muenchen.demo.service.rest.AdresseController;
 import de.muenchen.demo.service.rest.AuthorityController;
 import de.muenchen.demo.service.rest.AuthorityPermissionController;
@@ -35,7 +35,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
 
 /**
  *
@@ -121,6 +120,10 @@ public class InitApplication {
             list.add("PERM_" + name);
         }
         for (Method method : AccountController.class.getDeclaredMethods()) {
+            String name = method.getName();
+            list.add("PERM_" + name);
+        }
+        for (Method method : PassController.class.getDeclaredMethods()) {
             String name = method.getName();
             list.add("PERM_" + name);
         }

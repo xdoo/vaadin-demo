@@ -91,6 +91,10 @@ public class BuergerResourceAssembler {
             resource.add(linkTo(methodOn(BuergerController.class).readBuergerWohnungen(buerger.getOid())).withRel(HateoasUtil.WOHNUNGEN));
         }
         
+        if (relations.contains(HateoasRelations.PASS)) {
+            resource.add(linkTo(methodOn(BuergerController.class).readBuergerPass(buerger.getOid())).withRel(HateoasUtil.PASS));
+        }
+        
         if (relations.contains(HateoasRelations.KINDER)) {
             resource.add(linkTo(methodOn(BuergerController.class).readBuergerKinder(buerger.getOid())).withRel(HateoasUtil.KINDER));
 

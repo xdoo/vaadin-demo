@@ -1,6 +1,7 @@
 package de.muenchen.demo.service.rest.api;
 
 import de.muenchen.demo.service.domain.Buerger;
+import de.muenchen.demo.service.domain.Pass;
 import de.muenchen.demo.service.domain.Sachbearbeiter;
 import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
 import de.muenchen.demo.service.domain.StaatsangehoerigkeitReference;
@@ -14,16 +15,16 @@ import java.util.Set;
  * @author claus.straube
  */
 public class BuergerResource extends BaseResource {
-    
+
     private String vorname;
     private String nachname;
     private Date geburtsdatum;
     private Set<Sachbearbeiter> sachbearbeiter;
-    private Set<Staatsangehoerigkeit> staatsangehoerigkeiten= new HashSet<>();
+    private Set<Staatsangehoerigkeit> staatsangehoerigkeiten = new HashSet<>();
     private Set<StaatsangehoerigkeitReference> staatsangehoerigkeitReferences;
     private Set<Buerger> kinder = new HashSet<>();
-    private Set<Wohnung> wohnungen= new HashSet<>();
-
+    private Set<Wohnung> wohnungen = new HashSet<>();
+    private Set<Pass> Pass = new HashSet<>();
 
     public String getVorname() {
         return vorname;
@@ -89,8 +90,16 @@ public class BuergerResource extends BaseResource {
         this.wohnungen = wohnungen;
     }
 
+    public Set<Pass> getPass() {
+        return Pass;
+    }
+
+    public void setPass(Set<Pass> Pass) {
+        this.Pass = Pass;
+    }
+
     @Override
     public String toString() {
         return String.format("oid > %s | vorname > %s | nachname > %s | geburtsdatum > %s", this.getOid(), this.vorname, this.nachname, this.geburtsdatum);
-    } 
+    }
 }

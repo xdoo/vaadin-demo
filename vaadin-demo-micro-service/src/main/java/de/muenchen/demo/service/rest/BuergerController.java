@@ -1,14 +1,18 @@
 package de.muenchen.demo.service.rest;
 
 import de.muenchen.demo.service.domain.Buerger;
+import de.muenchen.demo.service.domain.Pass;
 import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
 import de.muenchen.demo.service.domain.Wohnung;
 import de.muenchen.demo.service.rest.api.BuergerResource;
 import de.muenchen.demo.service.rest.api.BuergerResourceAssembler;
+import de.muenchen.demo.service.rest.api.PassResource;
+import de.muenchen.demo.service.rest.api.PassResourceAssembler;
 import de.muenchen.demo.service.rest.api.SearchResultResource;
 import de.muenchen.demo.service.rest.api.WohnungResource;
 import de.muenchen.demo.service.rest.api.WohnungResourceAssembler;
 import de.muenchen.demo.service.services.BuergerService;
+import de.muenchen.demo.service.services.PassService;
 import de.muenchen.demo.service.services.StaatsangehoerigkeitService;
 import de.muenchen.demo.service.services.WohnungService;
 import de.muenchen.demo.service.util.HateoasRelations;
@@ -32,7 +36,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * Schnittstelle um einen Bürger verwalten zu können.
- * 
+ *
  * @author claus.straube
  */
 @Controller
@@ -49,11 +53,15 @@ public class BuergerController {
     @Autowired
     WohnungService wohnungService;
     @Autowired
+    PassService passService;
+    @Autowired
     StaatsangehoerigkeitService staatsService;
     @Autowired
     BuergerResourceAssembler assembler;
     @Autowired
     WohnungResourceAssembler wohnungAssembler;
+    @Autowired
+    PassResourceAssembler passAssembler;
     @Value("${URL}")
     private String URL;
 
@@ -62,8 +70,8 @@ public class BuergerController {
      *
      * @return
      */
-@RolesAllowed({"PERM_queryBuerger"})
-@RequestMapping(value = "/query", method = {RequestMethod.GET})
+    @RolesAllowed({"PERM_queryBuerger"})
+    @RequestMapping(value = "/query", method = {RequestMethod.GET})
     public ResponseEntity queryBuerger() {
         if (LOG.isDebugEnabled()) {
             LOG.debug("query buerger");
@@ -79,8 +87,8 @@ public class BuergerController {
      * @param filter
      * @return
      */
-@RolesAllowed({"PERM_queryBuerger"})
-@RequestMapping(value = "/query", params = {"filter"})
+    @RolesAllowed({"PERM_queryBuerger"})
+    @RequestMapping(value = "/query", params = {"filter"})
     public ResponseEntity queryBuerger(@RequestParam(value = "filter") String filter) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("query buerger with filter > " + filter);
@@ -115,8 +123,8 @@ public class BuergerController {
      * @param oid
      * @return
      */
-@RolesAllowed({"PERM_copyBuerger"})
-@RequestMapping(value = "/copy/{oid}", method = {RequestMethod.GET})
+    @RolesAllowed({"PERM_copyBuerger"})
+    @RequestMapping(value = "/copy/{oid}", method = {RequestMethod.GET})
     public ResponseEntity copyBuerger(@PathVariable String oid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("copy buerger");
@@ -132,8 +140,8 @@ public class BuergerController {
      * @param oid
      * @return
      */
-@RolesAllowed({"PERM_readBuerger"})
-@RequestMapping(value = "/{oid}", method = {RequestMethod.GET})
+    @RolesAllowed({"PERM_readBuerger"})
+    @RequestMapping(value = "/{oid}", method = {RequestMethod.GET})
     public ResponseEntity readBuerger(@PathVariable("oid") String oid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("read buerger");
@@ -150,8 +158,8 @@ public class BuergerController {
      * @param request
      * @return
      */
-@RolesAllowed({"PERM_updateBuerger"})
-@RequestMapping(value = "/{oid}", method = {RequestMethod.POST})
+    @RolesAllowed({"PERM_updateBuerger"})
+    @RequestMapping(value = "/{oid}", method = {RequestMethod.POST})
     public ResponseEntity updateBuerger(@PathVariable("oid") String oid, @RequestBody BuergerResource request) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("update buerger");
@@ -171,8 +179,8 @@ public class BuergerController {
      * @param request
      * @return
      */
-@RolesAllowed({"PERM_saveBuerger"})
-@RequestMapping(value = "/save", method = {RequestMethod.POST})
+    @RolesAllowed({"PERM_saveBuerger"})
+    @RequestMapping(value = "/save", method = {RequestMethod.POST})
     public ResponseEntity saveBuerger(@RequestBody BuergerResource request) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("save buerger");
@@ -180,7 +188,7 @@ public class BuergerController {
         Buerger entity = new Buerger();
         this.assembler.fromResource(request, entity);
         this.service.save(entity);
-        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY,HateoasRelations.WOHNUNGEN,HateoasRelations.KINDER);
+        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY, HateoasRelations.WOHNUNGEN, HateoasRelations.KINDER);
         return ResponseEntity.ok(resource);
     }
 
@@ -190,8 +198,8 @@ public class BuergerController {
      * @param oid
      * @return
      */
-@RolesAllowed({"PERM_deleteBuerger"})
-@RequestMapping(value = "/{oid}", method = {RequestMethod.DELETE})
+    @RolesAllowed({"PERM_deleteBuerger"})
+    @RequestMapping(value = "/{oid}", method = {RequestMethod.DELETE})
     public ResponseEntity deleteBuerger(@PathVariable("oid") String oid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("delete buerger");
@@ -199,14 +207,15 @@ public class BuergerController {
         this.service.delete(oid);
         return ResponseEntity.ok().build();
     }
+
     /**
      * Liest die Wohnunugen einer Bürger.
      *
      * @param oid
      * @return
      */
-@RolesAllowed({"PERM_readBuergerWohnungen"})
-@RequestMapping(value = "/Wohnungen/{oid}", method = {RequestMethod.GET})
+    @RolesAllowed({"PERM_readBuergerWohnungen"})
+    @RequestMapping(value = "/Wohnungen/{oid}", method = {RequestMethod.GET})
     public ResponseEntity readBuergerWohnungen(@PathVariable("oid") String oid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("read buerger Wohunungen");
@@ -216,14 +225,15 @@ public class BuergerController {
         List<WohnungResource> resources = wohnungAssembler.toResource(wohnungen, HateoasRelations.SELF);
         return ResponseEntity.ok(resources);
     }
+
     /**
      * Liest die Kinder einer Bürger.
      *
      * @param oid
      * @return
      */
-@RolesAllowed({"PERM_readBuergerKinder"})
-@RequestMapping(value = "/kinder/{oid}", method = {RequestMethod.GET})
+    @RolesAllowed({"PERM_readBuergerKinder"})
+    @RequestMapping(value = "/kinder/{oid}", method = {RequestMethod.GET})
     public ResponseEntity readBuergerKinder(@PathVariable("oid") String oid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("read buerger  Kinder");
@@ -232,14 +242,15 @@ public class BuergerController {
         List<BuergerResource> resources = assembler.toResource(kinder, HateoasRelations.SELF);
         return ResponseEntity.ok(resources);
     }
+
     /**
      * Erzeugt ein Kind als Buerger und assoziiert ihm mit einem Buerger .
      *
      * @param oid
      * @return
      */
-@RolesAllowed({"PERM_createKindBuerger"})
-@RequestMapping(value = "create/kind/{oid}", method = {RequestMethod.POST})
+    @RolesAllowed({"PERM_createKindBuerger"})
+    @RequestMapping(value = "create/kind/{oid}", method = {RequestMethod.POST})
     public ResponseEntity createKindBuerger(@PathVariable("oid") String oid, @RequestBody BuergerResource request) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Create Kind buerger");
@@ -251,9 +262,10 @@ public class BuergerController {
         entity.getKinder().add(kind);
         this.service.update(entity);
 
-        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY,HateoasRelations.WOHNUNGEN,HateoasRelations.KINDER);
+        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY, HateoasRelations.WOHNUNGEN, HateoasRelations.KINDER);
         return ResponseEntity.ok(resource);
     }
+
     /**
      * Assoziiert ein Kind mit einem Buerger .
      *
@@ -261,8 +273,8 @@ public class BuergerController {
      * @param kindOid
      * @return
      */
-@RolesAllowed({"PERM_addKindBuerger"})
-@RequestMapping(value = "add/buerger/{bOid}/kind/{kOid}", method = {RequestMethod.GET})
+    @RolesAllowed({"PERM_addKindBuerger"})
+    @RequestMapping(value = "add/buerger/{bOid}/kind/{kOid}", method = {RequestMethod.GET})
     public ResponseEntity addKindBuerger(@PathVariable("bOid") String bOid, @PathVariable("kOid") String kOid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Add Kind buerger");
@@ -274,9 +286,10 @@ public class BuergerController {
         entity.getKinder().add(kind);
         this.service.update(entity);
 
-        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY,HateoasRelations.WOHNUNGEN,HateoasRelations.KINDER);
+        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY, HateoasRelations.WOHNUNGEN, HateoasRelations.KINDER);
         return ResponseEntity.ok(resource);
     }
+
     /**
      * Assoziiert eine Wohnung mit einem Buerger .
      *
@@ -284,8 +297,8 @@ public class BuergerController {
      * @param wohnungOid
      * @return
      */
-@RolesAllowed({"PERM_addWohnungBuerger"})
-@RequestMapping(value = "add/buerger/{bOid}/wohnung/{wOid}", method = {RequestMethod.GET})
+    @RolesAllowed({"PERM_addWohnungBuerger"})
+    @RequestMapping(value = "add/buerger/{bOid}/wohnung/{wOid}", method = {RequestMethod.GET})
     public ResponseEntity addWohnungBuerger(@PathVariable("bOid") String bOid, @PathVariable("wOid") String wOid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Add wohnung buerger");
@@ -297,17 +310,18 @@ public class BuergerController {
         entity.getWohnungen().add(wohnung);
         this.service.update(entity);
 
-        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY,HateoasRelations.WOHNUNGEN,HateoasRelations.KINDER);
+        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY, HateoasRelations.WOHNUNGEN, HateoasRelations.KINDER);
         return ResponseEntity.ok(resource);
     }
+
     /**
      * Erzeugt eine Wohnung und assoziiert ihm mit einem Buerger .
      *
      * @param oid
      * @return
      */
-@RolesAllowed({"PERM_createWhonungBuerger"})
-@RequestMapping(value = "create/wohnung/{oid}", method = {RequestMethod.POST})
+    @RolesAllowed({"PERM_createWhonungBuerger"})
+    @RequestMapping(value = "create/wohnung/{oid}", method = {RequestMethod.POST})
     public ResponseEntity createWhonungBuerger(@PathVariable("oid") String oid, @RequestBody WohnungResource request) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Create wohnung buerger");
@@ -319,19 +333,19 @@ public class BuergerController {
         entity.getWohnungen().add(wohnung);
         this.service.update(entity);
 
-        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY,HateoasRelations.WOHNUNGEN,HateoasRelations.KINDER);
+        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY, HateoasRelations.WOHNUNGEN, HateoasRelations.KINDER);
         return ResponseEntity.ok(resource);
     }
-        /**
+
+    /**
      * Assoziiert ein Staatsangehoerigkeit mit einem Buerger .
      *
      * @param buergerOid
      * @param staatsOid
      * @return
      */
-    
-@RolesAllowed({"PERM_addStaatangehoerigkeitBuerger"})
-@RequestMapping(value = "add/buerger/{bOid}/staats/{sOid}", method = {RequestMethod.GET})
+    @RolesAllowed({"PERM_addStaatangehoerigkeitBuerger"})
+    @RequestMapping(value = "add/buerger/{bOid}/staats/{sOid}", method = {RequestMethod.GET})
     public ResponseEntity addStaatangehoerigkeitBuerger(@PathVariable("bOid") String bOid, @PathVariable("sOid") String sOid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Add staatsangehoerigkeit buerger");
@@ -343,8 +357,49 @@ public class BuergerController {
         entity.getStaatsangehoerigkeiten().add(staats);
         this.service.update(entity);
 
-        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY,HateoasRelations.WOHNUNGEN,HateoasRelations.KINDER);
+        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY, HateoasRelations.WOHNUNGEN, HateoasRelations.KINDER);
         return ResponseEntity.ok(resource);
     }
 
+    /**
+     * Assoziiert ein Pass mit einem Buerger .
+     *
+     * @param buergerOid
+     * @param wohnungOid
+     * @return
+     */
+    @RolesAllowed({"PERM_addPassBuerger"})
+    @RequestMapping(value = "add/buerger/{bOid}/pass/{pOid}", method = {RequestMethod.GET})
+    public ResponseEntity addPassBuerger(@PathVariable("bOid") String buergerOid, @PathVariable("pOid") String passOid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Add Pass buerger");
+        }
+
+        Pass pass = passService.read(passOid);
+        Buerger entity = service.read(buergerOid);
+
+        entity.getPass().add(pass);
+        this.service.update(entity);
+
+        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY, HateoasRelations.WOHNUNGEN, HateoasRelations.KINDER, HateoasRelations.PASS);
+        return ResponseEntity.ok(resource);
+    }
+
+    /**
+     * Liest die Pass einer Bürger.
+     *
+     * @param oid
+     * @return
+     */
+    @RolesAllowed({"PERM_readBuergerPass"})
+    @RequestMapping(value = "/pass/{oid}", method = {RequestMethod.GET})
+    public ResponseEntity readBuergerPass(@PathVariable("oid") String oid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("read buerger Pass");
+        }
+        Set<Pass> pass = this.service.read(oid).getPass();
+
+        List<PassResource> resources = passAssembler.toResource(pass, HateoasRelations.SELF);
+        return ResponseEntity.ok(resources);
+    }
 }

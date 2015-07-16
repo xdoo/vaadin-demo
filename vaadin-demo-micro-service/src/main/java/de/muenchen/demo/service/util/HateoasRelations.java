@@ -10,5 +10,5 @@ package de.muenchen.demo.service.util;
  * @author claus.straube
  */
 public enum HateoasRelations {
-    UPDATE, SELF, DELETE, NEW, QUERY, SAVE, COPY, PREV, NEXT, WOHNUNGEN, KINDER;
+    UPDATE, SELF, DELETE, NEW, QUERY, SAVE, COPY, PREV, NEXT, WOHNUNGEN, KINDER, PASS;
 }
