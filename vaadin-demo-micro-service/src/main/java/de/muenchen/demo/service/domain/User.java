@@ -12,6 +12,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import org.hibernate.search.annotations.Indexed;
@@ -48,6 +49,18 @@ public class User extends SecurityEntity {
     
     @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
     private Set<Account> accounts= new HashSet<>();
+    
+    @ManyToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    private Mandant mandant;
+
+    public Mandant getMandant() {
+        return mandant;
+    }
+
+    public void setMandant(Mandant mandant) {
+        this.mandant = mandant;
+    }
+    
     
 
 

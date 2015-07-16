@@ -24,6 +24,7 @@ import de.muenchen.demo.service.rest.AuthorityController;
 import de.muenchen.demo.service.rest.AuthorityPermissionController;
 import de.muenchen.demo.service.rest.BuergerController;
 import de.muenchen.demo.service.rest.CompanyBaseInfoController;
+import de.muenchen.demo.service.rest.MandantController;
 import de.muenchen.demo.service.rest.PermissionController;
 import de.muenchen.demo.service.rest.StaatsangehoerigkeitController;
 import de.muenchen.demo.service.rest.UserAuthorityController;
@@ -124,6 +125,10 @@ public class InitApplication {
             list.add("PERM_" + name);
         }
         for (Method method : PassController.class.getDeclaredMethods()) {
+            String name = method.getName();
+            list.add("PERM_" + name);
+        }
+        for (Method method : MandantController.class.getDeclaredMethods()) {
             String name = method.getName();
             list.add("PERM_" + name);
         }

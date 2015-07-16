@@ -10,6 +10,7 @@ package de.muenchen.demo.service.rest.api;
  * @author praktikant.tmar
  */
 import de.muenchen.demo.service.domain.Account;
+import de.muenchen.demo.service.domain.Mandant;
 import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -31,6 +32,16 @@ public class UserResource extends SecurityResource {
     private String email;
 
     private Set<Account> accounts = new HashSet<>();
+    
+    private Mandant mandant;
+
+    public Mandant getMandant() {
+        return mandant;
+    }
+
+    public void setMandant(Mandant mandant) {
+        this.mandant = mandant;
+    }
 
     public Set<Account> getAccounts() {
         return accounts;

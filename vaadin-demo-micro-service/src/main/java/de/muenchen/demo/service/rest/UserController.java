@@ -1,9 +1,11 @@
 package de.muenchen.demo.service.rest;
 
+import de.muenchen.demo.service.domain.Mandant;
 import de.muenchen.demo.service.domain.User;
 import de.muenchen.demo.service.rest.api.SearchResultResource;
 import de.muenchen.demo.service.rest.api.UserResource;
 import de.muenchen.demo.service.rest.api.UserResourceAssembler;
+import de.muenchen.demo.service.services.MandantService;
 import de.muenchen.demo.service.services.UserService;
 import de.muenchen.demo.service.util.HateoasRelations;
 import javax.annotation.security.RolesAllowed;
@@ -38,6 +40,8 @@ public class UserController {
     UserService service;
     @Autowired
     UserResourceAssembler assembler;
+    @Autowired
+    MandantService madantService;
 
 
 
@@ -166,5 +170,27 @@ public class UserController {
         this.service.delete(oid);
         return ResponseEntity.ok().build();
     }
-    
+    /**
+     * Assoziiert ein Staatsangehoerigkeit mit einem Buerger .
+     *
+     * @param buergerOid
+     * @param staatsOid
+     * @return
+     */
+    @RolesAllowed({"PERM_addMandantUser"})
+    @RequestMapping(value = "add/user/{uOid}/mandant/{mOid}", method = {RequestMethod.GET})
+    public ResponseEntity addMandantUser(@PathVariable("uOid") String userOid, @PathVariable("mOid") String mandantOid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Add staatsangehoerigkeit buerger");
+        }
+
+        Mandant mandant = madantService.read(mandantOid);
+        User entity = service.read(userOid);
+
+        entity.setMandant(mandant);
+        this.service.update(entity);
+
+        UserResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY, HateoasRelations.WOHNUNGEN, HateoasRelations.KINDER);
+        return ResponseEntity.ok(resource);
+    }
 }

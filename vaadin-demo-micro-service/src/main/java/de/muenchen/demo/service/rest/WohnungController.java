@@ -1,11 +1,15 @@
 package de.muenchen.demo.service.rest;
 
 import de.muenchen.demo.service.domain.AdresseReference;
+import de.muenchen.demo.service.domain.Mandant;
+import de.muenchen.demo.service.domain.Wohnung;
 import de.muenchen.demo.service.domain.Wohnung;
 import de.muenchen.demo.service.rest.api.SearchResultResource;
 import de.muenchen.demo.service.rest.api.WohnungResource;
+import de.muenchen.demo.service.rest.api.WohnungResource;
 import de.muenchen.demo.service.rest.api.WohnungResourceAssembler;
 import de.muenchen.demo.service.services.AdresseService;
+import de.muenchen.demo.service.services.MandantService;
 import de.muenchen.demo.service.services.WohnungService;
 import de.muenchen.demo.service.util.HateoasRelations;
 import javax.annotation.security.RolesAllowed;
@@ -42,6 +46,8 @@ public class WohnungController {
     WohnungResourceAssembler assembler;
     @Autowired
     AdresseService adresseService;
+    @Autowired
+    MandantService madantService;
 
     /**
      * Alle Wohnungen suchen.
@@ -169,6 +175,13 @@ public class WohnungController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * Assoziiert eine Adresse mit einer Wonunug .
+     *
+     * @param wOid
+     * @param aOid
+     * @return
+     */
     @RolesAllowed({"PERM_addAdresseWohnung"})
     @RequestMapping(value = "add/wohnung/{wOid}/adresse/{aOid}", method = {RequestMethod.GET})
     public ResponseEntity addAdresseWohnung(@PathVariable("wOid") String wOid, @PathVariable("aOid") String aOid) {
@@ -186,4 +199,27 @@ public class WohnungController {
         return ResponseEntity.ok(resource);
     }
 
+    /**
+     * Assoziiert ein Mandant mit einer Wonunug .
+     *
+     * @param wohnungOid
+     * @param mandantOid
+     * @return
+     */
+    @RolesAllowed({"PERM_addMandantWohnung"})
+    @RequestMapping(value = "add/wohnung/{uOid}/mandant/{mOid}", method = {RequestMethod.GET})
+    public ResponseEntity addMandantWohnung(@PathVariable("uOid") String wohnungOid, @PathVariable("mOid") String mandantOid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Add Mandant Wohnung");
+        }
+
+        Mandant mandant = madantService.read(mandantOid);
+        Wohnung entity = service.read(wohnungOid);
+
+        entity.setMandant(mandant);
+        this.service.update(entity);
+
+        WohnungResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY);
+        return ResponseEntity.ok(resource);
+    }
 }

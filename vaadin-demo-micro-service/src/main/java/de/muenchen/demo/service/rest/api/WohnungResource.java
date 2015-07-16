@@ -7,6 +7,7 @@ package de.muenchen.demo.service.rest.api;
 
 import de.muenchen.demo.service.domain.Adresse;
 import de.muenchen.demo.service.domain.AdresseReference;
+import de.muenchen.demo.service.domain.Mandant;
 
 /**
  *
@@ -17,6 +18,15 @@ public class WohnungResource extends BaseResource {
     private String stock;
     private String ausrichtung;
     private AdresseReference adresse;
+    private Mandant mandant;
+
+    public Mandant getMandant() {
+        return mandant;
+    }
+
+    public void setMandant(Mandant mandant) {
+        this.mandant = mandant;
+    }
 
     public String getStock() {
         return stock;
@@ -42,9 +52,8 @@ public class WohnungResource extends BaseResource {
         this.adresse = adresse;
     }
 
-    
-@Override
+    @Override
     public String toString() {
         return String.format("Oid > %s | ausrichtung > %s | stock > %s ", this.getOid(), this.ausrichtung, this.stock);
-    } 
+    }
 }
