@@ -8,9 +8,9 @@ package de.muenchen.demo.test;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import de.muenchen.demo.service.Application;
-import de.muenchen.demo.service.config.InitApplication;
 import de.muenchen.demo.service.domain.AuthorityPermissionRepository;
 import de.muenchen.demo.service.domain.AuthorityRepository;
+import de.muenchen.demo.service.domain.MandantRepository;
 import de.muenchen.demo.service.domain.PermissionRepository;
 import de.muenchen.demo.service.domain.User;
 import de.muenchen.demo.service.domain.UserAuthorityRepository;
@@ -35,12 +35,10 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.OutputCapture;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.http.client.ClientHttpRequestFactory;
@@ -57,7 +55,6 @@ import org.springframework.web.client.RestTemplate;
 @SpringApplicationConfiguration(classes = Application.class)
 @WebIntegrationTest({"server.port=0", "management.port=0"})
 public class UserTest {
-
 
     private RestTemplate restTemplate;
     @Value("${local.server.port}")
@@ -79,6 +76,9 @@ public class UserTest {
     @Autowired
     AuthorityPermissionRepository authPermRepo;
 
+    @Autowired
+    MandantRepository mandantRepo;
+
     @Before
     public void setUp() throws JsonProcessingException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
 
@@ -87,9 +87,10 @@ public class UserTest {
         usersRepo.deleteAll();
         authRepo.deleteAll();
         permRepo.deleteAll();
+        mandantRepo.deleteAll();
 
-        InitApplication initApplication = new InitApplication( usersRepo,  authRepo,  permRepo,  userAuthRepo,  authPermRepo);
-        initApplication.init();
+        InitTest initTest = new InitTest(usersRepo, authRepo, permRepo, userAuthRepo, authPermRepo, mandantRepo);
+        initTest.init();
         SSLContext sslContext = SSLContexts.custom().loadTrustMaterial(null, new TrustSelfSignedStrategy()).useTLS().build();
         SSLConnectionSocketFactory connectionFactory = new SSLConnectionSocketFactory(sslContext, new AllowAllHostnameVerifier());
         BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
@@ -146,9 +147,10 @@ public class UserTest {
         String URL3 = "http://localhost:" + port + "/user/query";
         response = restTemplate.getForEntity(URL3, SearchResultResource.class).getBody();
 
-        assertEquals(3, response.getResult().size());
+        assertEquals(4, response.getResult().size());
 
     }
+
     @After
     public void TearDown() {
         authPermRepo.deleteAll();
@@ -156,5 +158,7 @@ public class UserTest {
         usersRepo.deleteAll();
         authRepo.deleteAll();
         permRepo.deleteAll();
+        mandantRepo.deleteAll();
+
     }
 }

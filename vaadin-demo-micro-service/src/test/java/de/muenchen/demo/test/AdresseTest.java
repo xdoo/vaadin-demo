@@ -14,10 +14,13 @@ import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import de.muenchen.demo.service.Application;
-import de.muenchen.demo.service.config.InitApplication;
 import de.muenchen.demo.service.domain.Adresse;
+import de.muenchen.demo.service.domain.AdresseExterneRepository;
+import de.muenchen.demo.service.domain.AdresseInterneRepository;
+import de.muenchen.demo.service.domain.AdresseReferenceRepository;
 import de.muenchen.demo.service.domain.AuthorityPermissionRepository;
 import de.muenchen.demo.service.domain.AuthorityRepository;
+import de.muenchen.demo.service.domain.MandantRepository;
 import de.muenchen.demo.service.domain.PermissionRepository;
 import de.muenchen.demo.service.domain.UserAuthorityRepository;
 import de.muenchen.demo.service.domain.UserRepository;
@@ -63,8 +66,6 @@ import org.springframework.web.client.RestTemplate;
 @WebIntegrationTest({"server.port=0", "management.port=0"})
 public class AdresseTest {
 
-
-
     private RestTemplate restTemplate;
     @Value("${local.server.port}")
     private int port;
@@ -78,7 +79,7 @@ public class AdresseTest {
     private SearchResultResource<AdresseResource> response;
     @Rule
     public WireMockRule wireMockRule = new WireMockRule(8089);
-   
+
     @Autowired
     UserRepository usersRepo;
     @Autowired
@@ -89,6 +90,14 @@ public class AdresseTest {
     UserAuthorityRepository userAuthRepo;
     @Autowired
     AuthorityPermissionRepository authPermRepo;
+    @Autowired
+    MandantRepository mandantRepo;
+    @Autowired
+    AdresseInterneRepository interneRepo;
+    @Autowired
+    AdresseExterneRepository externeRepo;
+    @Autowired
+    AdresseReferenceRepository referenceRepo;
 
     @Before
     public void setUp() throws JsonProcessingException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
@@ -98,9 +107,13 @@ public class AdresseTest {
         usersRepo.deleteAll();
         authRepo.deleteAll();
         permRepo.deleteAll();
+        referenceRepo.deleteAll();
+        interneRepo.deleteAll();
+        externeRepo.deleteAll();
+        mandantRepo.deleteAll();
 
-        InitApplication initApplication = new InitApplication( usersRepo,  authRepo,  permRepo,  userAuthRepo,  authPermRepo);
-        initApplication.init();
+        InitTest initTest = new InitTest(usersRepo, authRepo, permRepo, userAuthRepo, authPermRepo, mandantRepo);
+        initTest.init();
 
         ObjectMapper mapper = new ObjectMapper(); // can reuse, share globally
 
@@ -141,6 +154,7 @@ public class AdresseTest {
 
         String jsonListe80331 = mapper.writeValueAsString(adListe);
         String json12 = mapper.writeValueAsString(adresse2);
+        String json4 = mapper.writeValueAsString(adresse4);
 
         stubFor(get(urlEqualTo("/adresse/12")).willReturn(
                 aResponse().withHeader("Content-Type", "application/json")
@@ -150,6 +164,10 @@ public class AdresseTest {
         stubFor(get(urlEqualTo("/adresse/80331")).willReturn(
                 aResponse().withHeader("Content-Type", "application/json")
                 .withBody(jsonListe80331)
+        ));
+        stubFor(get(urlEqualTo("/adresse/12345")).willReturn(
+                aResponse().withHeader("Content-Type", "application/json")
+                .withBody(json4)
         ));
 
         SSLContext sslContext = SSLContexts.custom().loadTrustMaterial(null, new TrustSelfSignedStrategy()).useTLS().build();
@@ -174,8 +192,6 @@ public class AdresseTest {
     @SuppressWarnings("empty-statement")
     public void externeAdresseTest() throws JsonProcessingException, Exception {
 
-
-
         String URL = "http://localhost:" + port + "/adresse/save";
 
         restTemplate.postForEntity(URL, adresse, AdresseResource.class);
@@ -193,10 +209,10 @@ public class AdresseTest {
 
         AdresseResource response = restTemplate.postForEntity(URL, adresse4, AdresseResource.class).getBody();
         assertEquals("12345", response.getOid());
-        
+
         String URL4 = "http://localhost:" + port + "/adresse/12345";
         AdresseResource response2 = restTemplate.getForEntity(URL4, AdresseResource.class).getBody();
-        
+
         assertEquals(80331, response2.getPlz());
 
     }
@@ -206,13 +222,14 @@ public class AdresseTest {
         String URL = "http://localhost:" + port + "/adresse/save";
         restTemplate.postForEntity(URL, adresse2, AdresseResource.class);
         restTemplate.postForEntity(URL, adresse3, AdresseResource.class);
-        
+
         String URL3 = "http://localhost:" + port + "/adresse/query";
         response = restTemplate.getForEntity(URL3, SearchResultResource.class).getBody();
-        
-        assertEquals(4, response.getResult().size());
+
+        assertEquals(2, response.getResult().size());
 
     }
+
     @After
     public void TearDown() {
         authPermRepo.deleteAll();
@@ -220,5 +237,9 @@ public class AdresseTest {
         usersRepo.deleteAll();
         authRepo.deleteAll();
         permRepo.deleteAll();
+        referenceRepo.deleteAll();
+        interneRepo.deleteAll();
+        externeRepo.deleteAll();
+        mandantRepo.deleteAll();
     }
 }

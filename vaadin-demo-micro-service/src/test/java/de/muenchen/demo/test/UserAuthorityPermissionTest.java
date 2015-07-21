@@ -8,12 +8,12 @@ package de.muenchen.demo.test;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import de.muenchen.demo.service.Application;
-import de.muenchen.demo.service.config.InitApplication;
 import de.muenchen.demo.service.domain.AuthPermId;
 import de.muenchen.demo.service.domain.Authority;
 import de.muenchen.demo.service.domain.AuthorityPermission;
 import de.muenchen.demo.service.domain.AuthorityPermissionRepository;
 import de.muenchen.demo.service.domain.AuthorityRepository;
+import de.muenchen.demo.service.domain.MandantRepository;
 import de.muenchen.demo.service.domain.Permission;
 import de.muenchen.demo.service.domain.PermissionRepository;
 import de.muenchen.demo.service.domain.User;
@@ -24,8 +24,11 @@ import de.muenchen.demo.service.domain.UserRepository;
 import de.muenchen.demo.service.rest.AuthorityPermissionController;
 import de.muenchen.demo.service.rest.UserAuthorityController;
 import de.muenchen.demo.service.rest.api.AuthorityPermissionResource;
+import de.muenchen.demo.service.rest.api.AuthorityResource;
+import de.muenchen.demo.service.rest.api.PermissionResource;
 import de.muenchen.demo.service.rest.api.SearchResultResource;
 import de.muenchen.demo.service.rest.api.UserAuthorityResource;
+import de.muenchen.demo.service.rest.api.UserResource;
 import de.muenchen.demo.service.util.IdService;
 import static java.lang.Boolean.TRUE;
 import java.lang.reflect.Method;
@@ -90,6 +93,9 @@ public class UserAuthorityPermissionTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
+    @Autowired
+    MandantRepository mandantRepo;
+
     @Before
     public void setUp() throws JsonProcessingException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
 
@@ -98,9 +104,10 @@ public class UserAuthorityPermissionTest {
         usersRepo.deleteAll();
         authRepo.deleteAll();
         permRepo.deleteAll();
-        InitApplication initApplication = new InitApplication(usersRepo, authRepo, permRepo, userAuthRepo, authPermRepo);
-        initApplication.init();
+        mandantRepo.deleteAll();
 
+        InitTest initTest = new InitTest(usersRepo, authRepo, permRepo, userAuthRepo, authPermRepo, mandantRepo);
+        initTest.init();
         User user = new User();
         user.setEmail("hans2@muenchen.de");
         user.setPassword("test3");
@@ -186,24 +193,49 @@ public class UserAuthorityPermissionTest {
         /*Test User Authority  query*/
         String URL2 = "http://localhost:" + port + "/userAuthority/query";
         response = restTemplate.getForEntity(URL2, SearchResultResource.class).getBody();
-        assertEquals(2, response.getResult().size());
+        assertEquals(3, response.getResult().size());
 
     }
 
     @Test
     public void createUserAuthorityPermissionTest() throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
 
+        Authority auth3 = new Authority();
+        auth3.setAuthority("USER");
+        auth3.setOid("A74");
+
+        Permission permission1 = new Permission();
+        permission1.setPermision("PERM_readUser");
+        permission1.setOid("P74");
+        
+        User user3 = new User();
+        user3.setEmail("hans2@muenchen.de");
+        user3.setPassword("test4");
+        user3.setUsername("hans4");
+        user3.setOid("U74");
+        user3.setEnabled(TRUE);
+        
+        String URL22 = "http://localhost:" + port + "/permission/save";
+        restTemplate.postForEntity(URL22, permission1, PermissionResource.class);
+        
+        String URL24 = "http://localhost:" + port + "/user/save";
+        restTemplate.postForEntity(URL24, user3, UserResource.class);
+
+        String URL23 = "http://localhost:" + port + "/authority/save";
+        restTemplate.postForEntity(URL23, auth3, AuthorityResource.class);
+
         /*Test save Authority Permission */
-        String URL = "http://localhost:" + port + "/authorityPermission/save/P73/A73";
+        String URL = "http://localhost:" + port + "/authorityPermission/save/P74/A74";
         AuthorityPermissionResource response4 = restTemplate.getForEntity(URL, AuthorityPermissionResource.class).getBody();
         assertEquals("USER", response4.getId().getAuthority().getAuthority());
 
         /*Test save User Authority  */
-        String URL2 = "http://localhost:" + port + "/userAuthority/save/U73/A73";
+        String URL2 = "http://localhost:" + port + "/userAuthority/save/U74/A74";
         UserAuthorityResource response5 = restTemplate.getForEntity(URL2, UserAuthorityResource.class).getBody();
         assertEquals("USER", response5.getId().getAuthority().getAuthority());
 
     }
+
     @After
     public void TearDown() {
         authPermRepo.deleteAll();
@@ -211,6 +243,7 @@ public class UserAuthorityPermissionTest {
         usersRepo.deleteAll();
         authRepo.deleteAll();
         permRepo.deleteAll();
+        mandantRepo.deleteAll();
     }
 
 }

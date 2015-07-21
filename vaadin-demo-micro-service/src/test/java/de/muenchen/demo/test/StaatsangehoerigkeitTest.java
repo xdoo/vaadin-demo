@@ -11,17 +11,18 @@ import org.junit.Test;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import de.muenchen.demo.service.Application;
-import de.muenchen.demo.service.config.InitApplication;
 import de.muenchen.demo.service.domain.AuthorityPermissionRepository;
 import de.muenchen.demo.service.domain.AuthorityRepository;
 import de.muenchen.demo.service.domain.Buerger;
 import de.muenchen.demo.service.domain.BuergerRepository;
+import de.muenchen.demo.service.domain.MandantRepository;
 import de.muenchen.demo.service.domain.PermissionRepository;
 import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
 import de.muenchen.demo.service.domain.StaatsangehoerigkeitReferenceRepository;
 import de.muenchen.demo.service.domain.UserAuthorityRepository;
 import de.muenchen.demo.service.domain.UserRepository;
 import de.muenchen.demo.service.rest.api.BuergerResource;
+import de.muenchen.demo.service.rest.api.SearchResultResource;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -85,7 +86,8 @@ public class StaatsangehoerigkeitTest {
     StaatsangehoerigkeitReferenceRepository staatRepo;
     @Autowired
     BuergerRepository buergerRepo;
-
+    @Autowired
+    MandantRepository mandantRepo;
 
     @Before
     public void setUp() throws JsonProcessingException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
@@ -95,12 +97,13 @@ public class StaatsangehoerigkeitTest {
         usersRepo.deleteAll();
         authRepo.deleteAll();
         permRepo.deleteAll();
+        mandantRepo.deleteAll();
         buergerRepo.deleteAll();
         staatRepo.deleteAll();
 
+        InitTest initTest = new InitTest(usersRepo, authRepo, permRepo, userAuthRepo, authPermRepo, mandantRepo);
+        initTest.init();
 
-        InitApplication initApplication = new InitApplication( usersRepo,  authRepo,  permRepo,  userAuthRepo,  authPermRepo);
-        initApplication.init();
         SSLContext sslContext = SSLContexts.custom().loadTrustMaterial(null, new TrustSelfSignedStrategy()).useTLS().build();
         SSLConnectionSocketFactory connectionFactory = new SSLConnectionSocketFactory(sslContext, new AllowAllHostnameVerifier());
         BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
@@ -138,6 +141,18 @@ public class StaatsangehoerigkeitTest {
     @Test
     public void createStaatsangehoerigkeitTest() throws JsonProcessingException {
 
+        String URL2 = "http://localhost:" + port + "/staat/create/123";
+        Staatsangehoerigkeit staat = restTemplate.getForEntity(URL2, Staatsangehoerigkeit.class).getBody();
+        assertEquals("de", staat.getCode());
+
+        String URL = "http://localhost:" + port + "/staat/123";
+        Staatsangehoerigkeit staat2 = restTemplate.getForEntity(URL, Staatsangehoerigkeit.class).getBody();
+        assertEquals("de", staat2.getCode());
+
+    }
+
+    @Test
+    public void createStaatsangehoerigkeitBuergerTest() throws JsonProcessingException {
 
         String URL2 = "http://localhost:" + port + "/staat/create/123";
         Staatsangehoerigkeit staat = restTemplate.getForEntity(URL2, Staatsangehoerigkeit.class).getBody();
@@ -155,6 +170,35 @@ public class StaatsangehoerigkeitTest {
         BuergerResource response9 = (BuergerResource) response4.getBody();
         assertEquals(1, response9.getStaatsangehoerigkeiten().size());
     }
+
+    @Test
+    public void queryStaatsangehoerigkeitTest() throws JsonProcessingException {
+
+        String URL2 = "http://localhost:" + port + "/staat/create/123";
+        Staatsangehoerigkeit staat = restTemplate.getForEntity(URL2, Staatsangehoerigkeit.class).getBody();
+        assertEquals("de", staat.getCode());
+
+        String URL = "http://localhost:" + port + "/staat/query";
+        SearchResultResource response = restTemplate.getForEntity(URL, SearchResultResource.class).getBody();
+        assertEquals(1, response.getResult().size());
+
+    }
+
+    @Test
+    public void staatsangehoerigkeitDeleteTest() {
+
+        String URL2 = "http://localhost:" + port + "/staat/create/123";
+        Staatsangehoerigkeit staat = restTemplate.getForEntity(URL2, Staatsangehoerigkeit.class).getBody();
+        assertEquals("de", staat.getCode());
+        String URL = "http://localhost:" + port + "/staat/123";
+        restTemplate.delete(URL);
+        String URL3 = "http://localhost:" + port + "/staat/query";
+        SearchResultResource response = restTemplate.getForEntity(URL3, SearchResultResource.class).getBody();
+
+        assertEquals(true, response.getResult().isEmpty());
+
+    }
+
     @After
     public void TearDown() {
         authPermRepo.deleteAll();
@@ -164,5 +208,7 @@ public class StaatsangehoerigkeitTest {
         permRepo.deleteAll();
         buergerRepo.deleteAll();
         staatRepo.deleteAll();
+        mandantRepo.deleteAll();
+
     }
 }

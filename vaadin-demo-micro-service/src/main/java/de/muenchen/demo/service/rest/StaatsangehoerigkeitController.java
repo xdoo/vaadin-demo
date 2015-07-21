@@ -5,7 +5,11 @@
  */
 package de.muenchen.demo.service.rest;
 
+import de.muenchen.demo.service.rest.api.StaatsangehoerigkeitResourceAssembler;
 import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
+import de.muenchen.demo.service.rest.api.PermissionResource;
+import de.muenchen.demo.service.rest.api.SearchResultResource;
+import de.muenchen.demo.service.rest.api.StaatsangehoerigkeitResource;
 import de.muenchen.demo.service.services.StaatsangehoerigkeitService;
 import java.util.List;
 import javax.annotation.security.RolesAllowed;
@@ -14,6 +18,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.ExposesResourceFor;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,6 +41,8 @@ public class StaatsangehoerigkeitController {
     EntityLinks entityLinks;
     @Autowired
     StaatsangehoerigkeitService service;
+        @Autowired
+    StaatsangehoerigkeitResourceAssembler assembler;
 
     /**
      * Alle Staatsangehoerigkeiten suchen.
@@ -45,10 +53,12 @@ public class StaatsangehoerigkeitController {
     @RequestMapping(value = "/query", method = {RequestMethod.GET})
     public ResponseEntity queryStaatsangehoerigkeit() {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("query Staatsangehoerigkeit");
+            LOG.debug("query permission");
         }
-        List<Staatsangehoerigkeit> entity = this.service.query();
-        return ResponseEntity.ok(entity);
+        SearchResultResource<StaatsangehoerigkeitResource> resource;
+        resource = this.assembler.toResource(this.service.query());
+        resource.add(linkTo(methodOn(StaatsangehoerigkeitController.class).queryStaatsangehoerigkeit()).withSelfRel()); // add self link
+        return ResponseEntity.ok(resource);
     }
 
     /**

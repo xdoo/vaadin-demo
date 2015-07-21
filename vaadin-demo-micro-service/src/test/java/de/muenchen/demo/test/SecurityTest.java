@@ -8,12 +8,12 @@ package de.muenchen.demo.test;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import de.muenchen.demo.service.Application;
-import de.muenchen.demo.service.config.InitApplication;
 import de.muenchen.demo.service.domain.AuthPermId;
 import de.muenchen.demo.service.domain.Authority;
 import de.muenchen.demo.service.domain.AuthorityPermission;
 import de.muenchen.demo.service.domain.AuthorityPermissionRepository;
 import de.muenchen.demo.service.domain.AuthorityRepository;
+import de.muenchen.demo.service.domain.MandantRepository;
 import de.muenchen.demo.service.domain.Permission;
 import de.muenchen.demo.service.domain.PermissionRepository;
 import de.muenchen.demo.service.domain.User;
@@ -66,7 +66,7 @@ import org.springframework.web.client.RestTemplate;
 @SpringApplicationConfiguration(classes = Application.class)
 @WebIntegrationTest({"server.port=0", "management.port=0"})
 public class SecurityTest {
-    
+
     private RestTemplate restTemplate;
     @Value("${local.server.port}")
     private int port;
@@ -85,6 +85,9 @@ public class SecurityTest {
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
+    @Autowired
+    MandantRepository mandantRepo;
+
     @Before
     public void setUp() throws JsonProcessingException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
 
@@ -93,11 +96,13 @@ public class SecurityTest {
         usersRepo.deleteAll();
         authRepo.deleteAll();
         permRepo.deleteAll();
+        mandantRepo.deleteAll();
 
-        InitApplication initApplication = new InitApplication( usersRepo,  authRepo,  permRepo,  userAuthRepo,  authPermRepo);
-        initApplication.init();
+        InitTest initTest = new InitTest(usersRepo, authRepo, permRepo, userAuthRepo, authPermRepo, mandantRepo);
+        initTest.init();
     }
-     @Test
+
+    @Test
     public void acessDeniedTest() throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
 
         User user = new User();
@@ -155,12 +160,15 @@ public class SecurityTest {
         String URL2 = "http://localhost:" + port + "/userAuthority/query";
         response = restTemplate.getForEntity(URL2, SearchResultResource.class).getBody();
     }
-        @After
+
+    @After
     public void TearDown() {
         authPermRepo.deleteAll();
         userAuthRepo.deleteAll();
         usersRepo.deleteAll();
         authRepo.deleteAll();
         permRepo.deleteAll();
+        mandantRepo.deleteAll();
+
     }
 }

@@ -14,11 +14,11 @@ import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import de.muenchen.demo.service.Application;
-import de.muenchen.demo.service.config.InitApplication;
 import de.muenchen.demo.service.domain.AuthorityPermissionRepository;
 import de.muenchen.demo.service.domain.AuthorityRepository;
 import de.muenchen.demo.service.domain.Buerger;
 import de.muenchen.demo.service.domain.BuergerRepository;
+import de.muenchen.demo.service.domain.MandantRepository;
 import de.muenchen.demo.service.domain.Pass;
 import de.muenchen.demo.service.domain.PassRepository;
 import de.muenchen.demo.service.domain.PermissionRepository;
@@ -45,6 +45,7 @@ import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -97,6 +98,9 @@ public class PassTest {
     @Autowired
     PassRepository passRepo;
 
+    @Autowired
+    MandantRepository mandantRepo;
+
     @Before
     public void setUp() throws JsonProcessingException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
 
@@ -108,9 +112,11 @@ public class PassTest {
         buergerRepo.deleteAll();
         staatRepo.deleteAll();
         passRepo.deleteAll();
+        mandantRepo.deleteAll();
 
-        InitApplication initApplication = new InitApplication(usersRepo, authRepo, permRepo, userAuthRepo, authPermRepo);
-        initApplication.init();
+        InitTest initTest = new InitTest(usersRepo, authRepo, permRepo, userAuthRepo, authPermRepo, mandantRepo);
+        initTest.init();
+
         SSLContext sslContext = SSLContexts.custom().loadTrustMaterial(null, new TrustSelfSignedStrategy()).useTLS().build();
         SSLConnectionSocketFactory connectionFactory = new SSLConnectionSocketFactory(sslContext, new AllowAllHostnameVerifier());
         BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
@@ -219,7 +225,7 @@ public class PassTest {
 
         String URL10 = "http://localhost:" + port + "/buerger/save";
         ResponseEntity<BuergerResource> response = restTemplate.postForEntity(URL10, buerger, BuergerResource.class);
-        
+
         String URL13 = "http://localhost:" + port + "/pass/save";
         restTemplate.postForEntity(URL13, pass, PassResource.class).getBody();
 
@@ -227,6 +233,43 @@ public class PassTest {
         ResponseEntity response4 = restTemplate.getForEntity(URL12, BuergerResource.class);
         BuergerResource response9 = (BuergerResource) response4.getBody();
         assertEquals(1, response9.getPass().size());
+    }
+
+
+    @Test
+    public void passCopyTest() {
+
+        Pass passCopy = new Pass();
+        passCopy.setGroesse("173 CM");
+        passCopy.setBehoerde("Passau");
+        passCopy.setPassNummer("10111214");
+        passCopy.setOid("15");
+        String URL = "http://localhost:" + port + "/pass/save";
+        restTemplate.postForEntity(URL, passCopy, PassResource.class).getBody();
+        String URL2 = "http://localhost:" + port + "/pass/copy/15";
+        PassResource response2 = restTemplate.getForEntity(URL2, PassResource.class).getBody();
+
+        assertNotEquals("15", response2.getOid());
+
+    }
+
+    @Test
+    public void passDeleteTest() {
+
+        Pass passDelete = new Pass();
+        passDelete.setGroesse("173 CM");
+        passDelete.setBehoerde("Passau");
+        passDelete.setPassNummer("10111214");
+        passDelete.setOid("15");
+        String URL = "http://localhost:" + port + "/pass/save";
+        restTemplate.postForEntity(URL, passDelete, PassResource.class).getBody();
+        String URL2 = "http://localhost:" + port + "/pass/15";
+        restTemplate.delete(URL2, pass);
+        String URL3 = "http://localhost:" + port + "/pass/query";
+        SearchResultResource response = restTemplate.getForEntity(URL3, SearchResultResource.class).getBody();
+
+        assertEquals(true, response.getResult().isEmpty());
+
     }
 
     @After
@@ -238,5 +281,8 @@ public class PassTest {
         permRepo.deleteAll();
         buergerRepo.deleteAll();
         staatRepo.deleteAll();
+        passRepo.deleteAll();
+        mandantRepo.deleteAll();
+
     }
 }

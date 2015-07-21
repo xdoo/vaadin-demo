@@ -11,7 +11,7 @@ import de.muenchen.demo.service.Application;
 import de.muenchen.demo.service.domain.Authority;
 import de.muenchen.demo.service.domain.AuthorityPermissionRepository;
 import de.muenchen.demo.service.domain.AuthorityRepository;
-import de.muenchen.demo.service.config.InitApplication;
+import de.muenchen.demo.service.domain.MandantRepository;
 import de.muenchen.demo.service.domain.PermissionRepository;
 import de.muenchen.demo.service.domain.UserAuthorityRepository;
 import de.muenchen.demo.service.domain.UserRepository;
@@ -75,6 +75,9 @@ public class AuthorityTest {
     @Autowired
     AuthorityPermissionRepository authPermRepo;
 
+    @Autowired
+    MandantRepository mandantRepo;
+
     @Before
     public void setUp() throws JsonProcessingException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
 
@@ -83,10 +86,10 @@ public class AuthorityTest {
         usersRepo.deleteAll();
         authRepo.deleteAll();
         permRepo.deleteAll();
+        mandantRepo.deleteAll();
 
-        InitApplication initApplication = new InitApplication( usersRepo,  authRepo,  permRepo,  userAuthRepo,  authPermRepo);
-        initApplication.init();
-
+        InitTest initTest = new InitTest(usersRepo, authRepo, permRepo, userAuthRepo, authPermRepo, mandantRepo);
+        initTest.init();
         SSLContext sslContext = SSLContexts.custom().loadTrustMaterial(null, new TrustSelfSignedStrategy()).useTLS().build();
         SSLConnectionSocketFactory connectionFactory = new SSLConnectionSocketFactory(sslContext, new AllowAllHostnameVerifier());
         BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
@@ -137,6 +140,7 @@ public class AuthorityTest {
         assertEquals(3, response.getResult().size());
 
     }
+
     @After
     public void TearDown() {
         authPermRepo.deleteAll();
@@ -144,7 +148,8 @@ public class AuthorityTest {
         usersRepo.deleteAll();
         authRepo.deleteAll();
         permRepo.deleteAll();
+        mandantRepo.deleteAll();
+
     }
-    
-    
+
 }
