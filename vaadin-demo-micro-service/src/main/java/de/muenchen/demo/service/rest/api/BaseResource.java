@@ -5,6 +5,7 @@
  */
 package de.muenchen.demo.service.rest.api;
 
+import de.muenchen.demo.service.domain.Mandant;
 import org.springframework.hateoas.ResourceSupport;
 
 /**
@@ -14,6 +15,15 @@ import org.springframework.hateoas.ResourceSupport;
 public class BaseResource extends ResourceSupport {
     
     private String oid;
+    private Mandant mandant;
+
+    public Mandant getMandant() {
+        return mandant;
+    }
+
+    public void setMandant(Mandant mandant) {
+        this.mandant = mandant;
+    }
 
     public String getOid() {
         return oid;

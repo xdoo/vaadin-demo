@@ -11,14 +11,12 @@ import java.util.Date;
  *
  * @author praktikant.tmar
  */
-public class SecurityResource extends BaseResource{
-    
-       
+public class SecurityResource extends BaseResource {
+
     private String createdBy;
     private Date createdDate;
     private String lastModBy;
     private Date lastModDate;
-    
 
     public String getCreatedBy() {
         return createdBy;
@@ -51,5 +49,5 @@ public class SecurityResource extends BaseResource{
     public void setLastModDate(Date lastModDate) {
         this.lastModDate = lastModDate;
     }
-    
+
 }

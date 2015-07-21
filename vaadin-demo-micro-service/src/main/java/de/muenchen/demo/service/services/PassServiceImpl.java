@@ -23,12 +23,12 @@ import org.springframework.stereotype.Service;
  * @author praktikant.tmar
  */
 @Service
-public class PassServiceImpl implements PassService {
+public class PassServiceImpl extends BaseService<Pass> implements PassService {
 
     private static final Logger LOG = LoggerFactory.getLogger(PassService.class);
 
-    PassRepository repo;
-    QueryService<Pass> search;
+//    PassRepository repo;
+//    QueryService<Pass> search;
 
     public PassServiceImpl() {
     }
@@ -39,73 +39,73 @@ public class PassServiceImpl implements PassService {
         this.search = new QueryService<>(em, Pass.class, "passnummer", "kode","typ","austellungsdatum","gueltigBis","behoerde");
     }
 
-    @Override
-    public Pass create() {
-        Pass pass = new Pass();
-        pass.setOid(IdService.next());
-        return pass;
-    }
-
-    @Override
-    public Pass save(Pass pass) {
-        LOG.info(pass.toString());
-        Preconditions.checkArgument(pass.getId() == null, "On save, the ID must be empty");
-        return this.repo.save(pass);
-    }
-
-    @Override
-    public Pass read(String oid) {
-        List<Pass> result = this.repo.findByOid(oid);
-        if (result.isEmpty()) {
-            // TODO
-            LOG.warn(String.format("found no pass with oid '%s'", oid));
-            return null;
-        } else {
-            return result.get(0);
-        }
-    }
-
-    @Override
-    public Pass update(Pass pass) {
-        return this.repo.save(pass);
-    }
-
-    @Override
-    public void delete(String oid) {
-        Pass item = this.read(oid);
-        this.repo.delete(item);
-    }
-
-    @Override
-    public List<Pass> query() {
-        Iterable<Pass> all = this.repo.findAll();
-        return Lists.newArrayList(all);
-    }
-
-    @Override
-    public List<Pass> query(String query) {
-        return this.search.query(query);
-    }
-
-    @Override
-    public Pass copy(String oid) {
-        Pass source = this.read(oid);
-        Pass result = null;
-        Pass clone = new Pass();
-        clone.setOid(IdService.next());
-        // start mapping
-        clone.setAustellungsdatum(source.getAustellungsdatum());
-        clone.setBehoerde(source.getBehoerde());
-        clone.setGueltigBis(source.getGueltigBis());
-        clone.setKode(source.getKode());
-        clone.setTyp(source.getTyp());
-        clone.setPassNummer(source.getPassNummer());
-        clone.setStaatsangehoerigkeit(source.getStaatsangehoerigkeit());
-
-        // end mapping
-        LOG.info("clone --> " + clone.toString());
-        result = this.repo.save(clone);
-        return result;
-    }
+//    @Override
+//    public Pass create() {
+//        Pass pass = new Pass();
+//        pass.setOid(IdService.next());
+//        return pass;
+//    }
+//
+//    @Override
+//    public Pass save(Pass pass) {
+//        LOG.info(pass.toString());
+//        Preconditions.checkArgument(pass.getId() == null, "On save, the ID must be empty");
+//        return this.repo.save(pass);
+//    }
+//
+//    @Override
+//    public Pass read(String oid) {
+//        List<Pass> result = this.repo.findByOid(oid);
+//        if (result.isEmpty()) {
+//            // TODO
+//            LOG.warn(String.format("found no pass with oid '%s'", oid));
+//            return null;
+//        } else {
+//            return result.get(0);
+//        }
+//    }
+//
+//    @Override
+//    public Pass update(Pass pass) {
+//        return this.repo.save(pass);
+//    }
+//
+//    @Override
+//    public void delete(String oid) {
+//        Pass item = this.read(oid);
+//        this.repo.delete(item);
+//    }
+//
+//    @Override
+//    public List<Pass> query() {
+//        Iterable<Pass> all = this.repo.findAll();
+//        return Lists.newArrayList(all);
+//    }
+//
+//    @Override
+//    public List<Pass> query(String query) {
+//        return this.search.query(query);
+//    }
+//
+//    @Override
+//    public Pass copy(String oid) {
+//        Pass source = this.read(oid);
+//        Pass result = null;
+//        Pass clone = new Pass();
+//        clone.setOid(IdService.next());
+//        // start mapping
+//        clone.setAustellungsdatum(source.getAustellungsdatum());
+//        clone.setBehoerde(source.getBehoerde());
+//        clone.setGueltigBis(source.getGueltigBis());
+//        clone.setKode(source.getKode());
+//        clone.setTyp(source.getTyp());
+//        clone.setPassNummer(source.getPassNummer());
+//        clone.setStaatsangehoerigkeit(source.getStaatsangehoerigkeit());
+//
+//        // end mapping
+//        LOG.info("clone --> " + clone.toString());
+//        result = this.repo.save(clone);
+//        return result;
+//    }
 
 }

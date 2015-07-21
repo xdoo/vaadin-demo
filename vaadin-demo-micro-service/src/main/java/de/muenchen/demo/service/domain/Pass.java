@@ -31,7 +31,14 @@ public class Pass extends BaseEntity {
     private String Typ;
 
     @Column(length = 10, name = "PASS_KODE")
-    private String Kode;
+    private String kode;
+    
+    @Column(length = 20, name = "PASS_GROESSE")
+    private String groesse;
+    
+    @Column(length = 70, name = "PASS_AUGENFARBE")
+    private String augenFarbe;
+
 
     @Column(name = "PASS_AUSTELLUNGSDATUM")
     @Temporal(TemporalType.DATE)
@@ -67,12 +74,30 @@ public class Pass extends BaseEntity {
     }
 
     public String getKode() {
-        return Kode;
+        return kode;
     }
 
-    public void setKode(String Kode) {
-        this.Kode = Kode;
+    public void setKode(String kode) {
+        this.kode = kode;
     }
+
+    public String getGroesse() {
+        return groesse;
+    }
+
+    public void setGroesse(String groesse) {
+        this.groesse = groesse;
+    }
+
+    public String getAugenFarbe() {
+        return augenFarbe;
+    }
+
+    public void setAugenFarbe(String augenFarbe) {
+        this.augenFarbe = augenFarbe;
+    }
+
+
 
     public Date getAustellungsdatum() {
         return austellungsdatum;

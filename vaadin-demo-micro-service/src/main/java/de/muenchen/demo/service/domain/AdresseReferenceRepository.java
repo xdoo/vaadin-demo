@@ -12,7 +12,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  *
  * @author praktikant.tmar
  */
-public interface AdresseReferenceRepository extends PagingAndSortingRepository<AdresseReference, Long>{
+public interface AdresseReferenceRepository extends BaseRepository<AdresseReference>{
         
     public List<AdresseReference> findByOid(String oid);
 

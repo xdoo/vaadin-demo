@@ -20,7 +20,7 @@ import org.hibernate.envers.NotAudited;
 @Entity
 @Table(name = "WOHNUNGEN")
 @Audited
-public class Wohnung extends BaseEntity {
+public class Wohnung extends BaseEntity  {
 
     @Column(name = "WOHN_STOCK")
     private String stock;
@@ -32,17 +32,6 @@ public class Wohnung extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "Adresse_Id", referencedColumnName = "Id")
     private AdresseReference adresse;
-    @NotAudited
-    @OneToOne
-    private Mandant mandant;
-
-    public Mandant getMandant() {
-        return mandant;
-    }
-
-    public void setMandant(Mandant mandant) {
-        this.mandant = mandant;
-    }
 
     public String getStock() {
         return stock;
@@ -72,5 +61,7 @@ public class Wohnung extends BaseEntity {
     public String toString() {
         return String.format("id > %s | oid > %s  | ausrichtung > %s | stock > %s", this.getId(), this.getOid(), this.ausrichtung, this.stock);
     }
+
+
 
 }

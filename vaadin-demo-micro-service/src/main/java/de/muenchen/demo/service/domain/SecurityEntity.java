@@ -9,28 +9,26 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Temporal;
 
 /**
  *
  * @author praktikant.tmar
  */
-
-
-
 @MappedSuperclass
 public abstract class SecurityEntity extends BaseEntity implements Serializable {
 
-    
     @Column(length = 255, name = "CREATED_BY")
     private String createdBy;
     @Column(name = "CREATED_DATE")
+    @Temporal(javax.persistence.TemporalType.DATE)
     private Date createdDate;
     @Column(length = 255, name = "LAST_MOD_BY")
     private String lastModBy;
     @Column(name = "LAST_MOD_DATE")
+    @Temporal(javax.persistence.TemporalType.DATE)
     private Date lastModDate;
-
-    
+   
 
     public String getCreatedBy() {
         return createdBy;

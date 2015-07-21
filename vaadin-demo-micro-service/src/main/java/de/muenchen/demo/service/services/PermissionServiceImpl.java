@@ -23,12 +23,12 @@ import org.springframework.stereotype.Service;
  * @author praktikant.tmar
  */
 @Service
-public class PermissionServiceImpl implements PermissionService {
+public class PermissionServiceImpl extends BaseService<Permission>  implements PermissionService {
     
     private static final Logger LOG = LoggerFactory.getLogger(PermissionService.class);
     
-    PermissionRepository repo;
-    QueryService<Permission> search;
+//    PermissionRepository repo;
+//    QueryService<Permission> search;
 
     public PermissionServiceImpl() {
     }
@@ -39,53 +39,53 @@ public class PermissionServiceImpl implements PermissionService {
         this.search = new QueryService<>(em, Permission.class, "adresseOid","ausrichtung","stock");
     }
     
-    @Override
-    public Permission create() {
-        Permission permissions = new Permission();
-        permissions.setOid(IdService.next());
-        return permissions;
-    }
-
-    @Override
-    public Permission save(Permission permissions) {
-        LOG.info(permissions.toString());
-        Preconditions.checkArgument(permissions.getId() == null, "On save, the ID must be empty");
-        return this.repo.save(permissions);
-    }
-    
-    @Override
-    public Permission read(String oid) {
-        List<Permission> result = this.repo.findByOid(oid);
-        if(result.isEmpty()) {
-            // TODO
-            LOG.warn(String.format("found no permissions with oid '%s'", oid));
-            return null;
-        } else {
-            return result.get(0);
-        }
-    }
-    
-    @Override
-    public Permission update(Permission permissions) {
-        return this.repo.save(permissions);
-    }
-    
-    @Override
-    public void delete(String oid) {
-        Permission item = this.read(oid);
-        this.repo.delete(item);
-    }
-
-    @Override
-    public List<Permission> query() {
-        Iterable<Permission> all = this.repo.findAll();
-        return Lists.newArrayList(all);
-    }
-
-    @Override
-    public List<Permission> query(String query) { 
-        return this.search.query(query);
-    }
+//    @Override
+//    public Permission create() {
+//        Permission permissions = new Permission();
+//        permissions.setOid(IdService.next());
+//        return permissions;
+//    }
+//
+//    @Override
+//    public Permission save(Permission permissions) {
+//        LOG.info(permissions.toString());
+//        Preconditions.checkArgument(permissions.getId() == null, "On save, the ID must be empty");
+//        return this.repo.save(permissions);
+//    }
+//    
+//    @Override
+//    public Permission read(String oid) {
+//        List<Permission> result = this.repo.findByOid(oid);
+//        if(result.isEmpty()) {
+//            // TODO
+//            LOG.warn(String.format("found no permissions with oid '%s'", oid));
+//            return null;
+//        } else {
+//            return result.get(0);
+//        }
+//    }
+//    
+//    @Override
+//    public Permission update(Permission permissions) {
+//        return this.repo.save(permissions);
+//    }
+//    
+//    @Override
+//    public void delete(String oid) {
+//        Permission item = this.read(oid);
+//        this.repo.delete(item);
+//    }
+//
+//    @Override
+//    public List<Permission> query() {
+//        Iterable<Permission> all = this.repo.findAll();
+//        return Lists.newArrayList(all);
+//    }
+//
+//    @Override
+//    public List<Permission> query(String query) { 
+//        return this.search.query(query);
+//    }
 
     
     

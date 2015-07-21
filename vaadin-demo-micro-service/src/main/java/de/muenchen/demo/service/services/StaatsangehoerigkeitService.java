@@ -7,7 +7,6 @@ package de.muenchen.demo.service.services;
 
 import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
 import java.util.List;
-import org.springframework.stereotype.Service;
 
 /**
  *

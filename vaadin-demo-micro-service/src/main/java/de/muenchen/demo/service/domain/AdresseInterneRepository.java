@@ -7,9 +7,12 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  *
  * @author claus.straube
  */
-public interface AdresseInterneRepository extends PagingAndSortingRepository<AdresseInterne, Long>{
-        
-    public List<AdresseInterne> findByOid(String oid);
+public interface AdresseInterneRepository extends PagingAndSortingRepository<AdresseInterne, Long> {
 
-    
+    public List<AdresseInterne> findByReferencedOid(String oid);
+
+    public List<AdresseInterne> findByMandantOid(String oid);
+
+    public List<AdresseInterne> findByReferencedOidAndMandantOid(String referencedOid, String mOid);
+
 }

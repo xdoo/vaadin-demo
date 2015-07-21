@@ -23,12 +23,12 @@ import org.springframework.stereotype.Service;
  * @author praktikant.tmar
  */
 @Service
-public class AuthorityServiceImpl implements AuthorityService {
+public class AuthorityServiceImpl extends BaseService<Authority> implements AuthorityService {
     
     private static final Logger LOG = LoggerFactory.getLogger(AuthorityService.class);
     
-    AuthorityRepository repo;
-    QueryService<Authority> search;
+//    AuthorityRepository repo;
+//    QueryService<Authority> search;
 
     public AuthorityServiceImpl() {
     }
@@ -39,55 +39,55 @@ public class AuthorityServiceImpl implements AuthorityService {
         this.search = new QueryService<>(em, Authority.class, "adresseOid","ausrichtung","stock");
     }
     
-    @Override
-    public Authority create() {
-        Authority authoritys = new Authority();
-        authoritys.setOid(IdService.next());
-        return authoritys;
-    }
-
-    @Override
-    public Authority save(Authority authoritys) {
-        LOG.info(authoritys.toString());
-        Preconditions.checkArgument(authoritys.getId() == null, "On save, the ID must be empty");
-        return this.repo.save(authoritys);
-    }
-    
-    @Override
-    public Authority read(String oid) {
-        List<Authority> result = this.repo.findByOid(oid);
-        if(result.isEmpty()) {
-            // TODO
-            LOG.warn(String.format("found no authoritys with oid '%s'", oid));
-            return null;
-        } else {
-            return result.get(0);
-        }
-    }
-    
-    @Override
-    public Authority update(Authority authoritys) {
-        return this.repo.save(authoritys);
-    }
-    
-    @Override
-    public void delete(String oid) {
-        Authority item = this.read(oid);
-        this.repo.delete(item);
-    }
-
-    @Override
-    public List<Authority> query() {
-        Iterable<Authority> all = this.repo.findAll();
-        return Lists.newArrayList(all);
-    }
-
-    @Override
-    public List<Authority> query(String query) { 
-        return this.search.query(query);
-    }
-
-    
+//    @Override
+//    public Authority create() {
+//        Authority authoritys = new Authority();
+//        authoritys.setOid(IdService.next());
+//        return authoritys;
+//    }
+//
+//    @Override
+//    public Authority save(Authority authoritys) {
+//        LOG.info(authoritys.toString());
+//        Preconditions.checkArgument(authoritys.getId() == null, "On save, the ID must be empty");
+//        return this.repo.save(authoritys);
+//    }
+//    
+//    @Override
+//    public Authority read(String oid) {
+//        List<Authority> result = this.repo.findByOid(oid);
+//        if(result.isEmpty()) {
+//            // TODO
+//            LOG.warn(String.format("found no authoritys with oid '%s'", oid));
+//            return null;
+//        } else {
+//            return result.get(0);
+//        }
+//    }
+//    
+//    @Override
+//    public Authority update(Authority authoritys) {
+//        return this.repo.save(authoritys);
+//    }
+//    
+//    @Override
+//    public void delete(String oid) {
+//        Authority item = this.read(oid);
+//        this.repo.delete(item);
+//    }
+//
+//    @Override
+//    public List<Authority> query() {
+//        Iterable<Authority> all = this.repo.findAll();
+//        return Lists.newArrayList(all);
+//    }
+//
+//    @Override
+//    public List<Authority> query(String query) { 
+//        return this.search.query(query);
+//    }
+//
+//    
     
 }
 

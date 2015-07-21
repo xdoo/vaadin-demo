@@ -5,10 +5,13 @@
  */
 package de.muenchen.demo.service.services;
 
+import de.muenchen.demo.service.domain.Mandant;
 import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
 import de.muenchen.demo.service.domain.StaatsangehoerigkeitReference;
 import de.muenchen.demo.service.domain.StaatsangehoerigkeitReferenceRepository;
+import de.muenchen.demo.service.domain.User;
 import de.muenchen.demo.service.util.QueryService;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import org.springframework.stereotype.Service;
@@ -16,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.TestRestTemplate;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -24,43 +29,63 @@ import org.springframework.web.client.RestTemplate;
  */
 @Service
 public class StaatsangehoerigkeitServiceImpl implements StaatsangehoerigkeitService {
+
+    @Autowired
+    UserService userService;
+    @Autowired
+    MandantService madantService;
     @Value("${URL}")
     private String URL;
     RestTemplate restTemplate = new TestRestTemplate();
     QueryService<Staatsangehoerigkeit> search;
 
-
     StaatsangehoerigkeitReferenceRepository repo;
-    
-        @Autowired
+
+    @Autowired
     public StaatsangehoerigkeitServiceImpl(StaatsangehoerigkeitReferenceRepository repo, EntityManager em) {
         this.repo = repo;
-        this.search = new QueryService<>(em, Staatsangehoerigkeit.class, "reference","land","sprache");
+        this.search = new QueryService<>(em, Staatsangehoerigkeit.class, "reference", "land", "sprache");
     }
 
     @Override
     public Staatsangehoerigkeit read(String referencedOid) {
-        String URL2=URL+"staat/"+referencedOid;
-        ResponseEntity<Staatsangehoerigkeit> result = this.restTemplate.getForEntity(URL2,Staatsangehoerigkeit.class);
-        return result.getBody();
+
+        List<StaatsangehoerigkeitReference> result = this.repo.findByReferencedOidAndMandantOid(referencedOid, readUser().getMandant().getOid());
+        if (result.isEmpty()) {
+
+            return null;
+        } else {
+
+            String URL2 = URL + "staat/" + result.get(0).getReferencedOid();
+            ResponseEntity<Staatsangehoerigkeit> result2 = this.restTemplate.getForEntity(URL2, Staatsangehoerigkeit.class);
+            return result2.getBody();
+        }
     }
 
     @Override
     public List<Staatsangehoerigkeit> query() {
 
-        /*read All from the webservice */
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ArrayList<Staatsangehoerigkeit> list = new ArrayList();
+        Iterable<StaatsangehoerigkeitReference> all = this.repo.findByMandantOid(readUser().getMandant().getOid());
+
+        for (StaatsangehoerigkeitReference staat : all) {
+            list.add(read(staat.getReferencedOid()));
+        }
+        return list;
     }
 
     @Override
     public Staatsangehoerigkeit create(String referencedOid) {
 
-        Staatsangehoerigkeit resource = this.read(referencedOid);
+        String URL2 = URL + "staat/" + referencedOid;
+        Staatsangehoerigkeit resource = this.restTemplate.getForEntity(URL2, Staatsangehoerigkeit.class).getBody();
         if (resource == null) {
             return null;
         } else {
             StaatsangehoerigkeitReference staatsangehoerigkeitReference = new StaatsangehoerigkeitReference();
             staatsangehoerigkeitReference.setReferencedOid(referencedOid);
+            Mandant mandant = madantService.read(readUser().getMandant().getOid());
+            staatsangehoerigkeitReference.setMandant(mandant);
             this.repo.save(staatsangehoerigkeitReference);
             return resource;
         }
@@ -69,7 +94,14 @@ public class StaatsangehoerigkeitServiceImpl implements StaatsangehoerigkeitServ
     @Override
     public void delete(String referencedOid) {
         List<StaatsangehoerigkeitReference> item = this.repo.findByReferencedOid(referencedOid);
-        if (!item.isEmpty()) 
+        if (!item.isEmpty()) {
             this.repo.delete(item);
-        }      
-    }    
+        }
+    }
+
+    public User readUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+        return userService.readByUsername(name);
+    }
+}

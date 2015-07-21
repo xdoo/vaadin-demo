@@ -1,13 +1,12 @@
 package de.muenchen.demo.service.domain;
 
 import java.util.List;
-import org.springframework.data.repository.PagingAndSortingRepository;
 
 /**
  *
  * @author claus.straube
  */
-public interface BuergerRepository extends PagingAndSortingRepository<Buerger, Long> {
+public interface BuergerRepository extends BaseRepository<Buerger> {
     
     List<Buerger> findByOid(String oid);
     

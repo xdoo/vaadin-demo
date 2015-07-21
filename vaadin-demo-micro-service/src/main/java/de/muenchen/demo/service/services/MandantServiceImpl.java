@@ -95,7 +95,7 @@ public class MandantServiceImpl implements MandantService {
         clone.setOid(IdService.next());
         // start mapping
 
-        clone.setKode(source.getKode());
+        clone.setMid(source.getMid());
 
 
         // end mapping

@@ -6,13 +6,12 @@
 package de.muenchen.demo.service.domain;
 
 import java.util.List;
-import org.springframework.data.repository.PagingAndSortingRepository;
 
 /**
  *
  * @author praktikant.tmar
  */
-public interface PassRepository extends PagingAndSortingRepository<Pass, Long> {
+public interface PassRepository extends BaseRepository<Pass> {
     
     List<Pass> findByOid(String oid);
     

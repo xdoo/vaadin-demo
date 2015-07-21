@@ -7,9 +7,10 @@ import org.springframework.data.repository.CrudRepository;
  *
  * @author claus.straube
  */
-public interface WohnungRepository extends CrudRepository<Wohnung, Long> {
+public interface WohnungRepository extends BaseRepository<Wohnung> {
 
     public List<Wohnung> findByOid(String oid);
+
 
 
 }

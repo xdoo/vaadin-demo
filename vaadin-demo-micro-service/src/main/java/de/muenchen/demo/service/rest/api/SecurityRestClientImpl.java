@@ -12,12 +12,14 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 /**
  *
  * @author praktikant.tmar
  */
+@Service
 public class SecurityRestClientImpl implements SecurityRestClient {
     @Value("${info.url}")
     private String URL;

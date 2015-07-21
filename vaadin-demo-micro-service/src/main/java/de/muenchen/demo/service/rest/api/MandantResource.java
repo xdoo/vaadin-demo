@@ -5,20 +5,32 @@
  */
 package de.muenchen.demo.service.rest.api;
 
+import org.springframework.hateoas.ResourceSupport;
+
 /**
  *
  * @author praktikant.tmar
  */
-public class MandantResource extends BaseResource {
+public class MandantResource extends ResourceSupport {
 
-    private String Kode;
+    private String oid;
 
-    public String getKode() {
-        return Kode;
+    private String mid;
+
+    public String getMid() {
+        return mid;
     }
 
-    public void setKode(String Kode) {
-        this.Kode = Kode;
+    public void setMid(String mid) {
+        this.mid = mid;
+    }
+
+    public String getOid() {
+        return oid;
+    }
+
+    public void setOid(String oid) {
+        this.oid = oid;
     }
 
 }

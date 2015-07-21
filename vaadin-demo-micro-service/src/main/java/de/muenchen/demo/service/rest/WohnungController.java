@@ -1,11 +1,8 @@
 package de.muenchen.demo.service.rest;
 
 import de.muenchen.demo.service.domain.AdresseReference;
-import de.muenchen.demo.service.domain.Mandant;
-import de.muenchen.demo.service.domain.Wohnung;
 import de.muenchen.demo.service.domain.Wohnung;
 import de.muenchen.demo.service.rest.api.SearchResultResource;
-import de.muenchen.demo.service.rest.api.WohnungResource;
 import de.muenchen.demo.service.rest.api.WohnungResource;
 import de.muenchen.demo.service.rest.api.WohnungResourceAssembler;
 import de.muenchen.demo.service.services.AdresseService;
@@ -97,7 +94,7 @@ public class WohnungController {
             LOG.debug("copy wohnung");
         }
         Wohnung entity = this.service.copy(oid);
-        WohnungResource resource = this.assembler.toResource(entity);
+        WohnungResource resource = this.assembler.toResource(entity,HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY);
         return ResponseEntity.ok(resource);
     }
 
@@ -199,27 +196,27 @@ public class WohnungController {
         return ResponseEntity.ok(resource);
     }
 
-    /**
-     * Assoziiert ein Mandant mit einer Wonunug .
-     *
-     * @param wohnungOid
-     * @param mandantOid
-     * @return
-     */
-    @RolesAllowed({"PERM_addMandantWohnung"})
-    @RequestMapping(value = "add/wohnung/{uOid}/mandant/{mOid}", method = {RequestMethod.GET})
-    public ResponseEntity addMandantWohnung(@PathVariable("uOid") String wohnungOid, @PathVariable("mOid") String mandantOid) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Add Mandant Wohnung");
-        }
-
-        Mandant mandant = madantService.read(mandantOid);
-        Wohnung entity = service.read(wohnungOid);
-
-        entity.setMandant(mandant);
-        this.service.update(entity);
-
-        WohnungResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY);
-        return ResponseEntity.ok(resource);
-    }
+//    /**
+//     * Assoziiert ein Mandant mit einer Wonunug .
+//     *
+//     * @param wohnungOid
+//     * @param mandantOid
+//     * @return
+//     */
+//    @RolesAllowed({"PERM_addMandantWohnung"})
+//    @RequestMapping(value = "add/wohnung/{uOid}/mandant/{mOid}", method = {RequestMethod.GET})
+//    public ResponseEntity addMandantWohnung(@PathVariable("uOid") String wohnungOid, @PathVariable("mOid") String mandantOid) {
+//        if (LOG.isDebugEnabled()) {
+//            LOG.debug("Add Mandant Wohnung");
+//        }
+//
+//        Mandant mandant = madantService.read(mandantOid);
+//        Wohnung entity = service.read(wohnungOid);
+//
+//        entity.setMandant(mandant);
+//        this.service.update(entity);
+//
+//        WohnungResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY);
+//        return ResponseEntity.ok(resource);
+//    }
 }

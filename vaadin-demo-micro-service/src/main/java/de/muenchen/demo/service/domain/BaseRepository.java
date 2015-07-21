@@ -7,13 +7,18 @@ package de.muenchen.demo.service.domain;
 
 import java.util.List;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.NoRepositoryBean;
 
 /**
  *
  * @author praktikant.tmar
+ * @param <T>
  */
-public interface AccountRepository extends BaseRepository<Account> {
+@NoRepositoryBean
+public interface BaseRepository <T> extends CrudRepository<T, Long>  {
 
-    public List<Account> findByOid(String oid);
+
+    public List<T> findByMandantOid(String oid);
+    public List<T> findByOidAndMandantOid(String oid, String mOid);
+
 }
-

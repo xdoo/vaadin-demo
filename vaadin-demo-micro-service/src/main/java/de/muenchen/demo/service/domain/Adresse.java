@@ -10,12 +10,16 @@ package de.muenchen.demo.service.domain;
  * @author claus.straube
  */
 public class Adresse {
+
+
     
     private String oid;
 
     private String strasse;
 
     private String hausnummer;
+    
+    private Mandant mandant;
 
     private String stadt;
 
@@ -39,6 +43,14 @@ public class Adresse {
 
     public String getStadt() {
         return stadt;
+    }
+
+    public Mandant getMandant() {
+        return mandant;
+    }
+
+    public void setMandant(Mandant mandant) {
+        this.mandant = mandant;
     }
 
     public void setStadt(String stadt) {

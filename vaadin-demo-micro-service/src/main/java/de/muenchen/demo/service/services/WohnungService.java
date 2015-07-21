@@ -23,7 +23,7 @@ public interface WohnungService {
     public Wohnung save(Wohnung wohnung);
     
     public Wohnung read(String oid);
-    
+        
     public Wohnung update(Wohnung whonung);
     
     public void delete(String oid);

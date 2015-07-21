@@ -104,7 +104,7 @@ public class MandantResourceAssembler {
 //            this.dozer.map(resource, entity);
             entity.setOid(resource.getOid());
             // start field mapping
-        entity.setKode(resource.getKode());
+        entity.setMid(resource.getMid());
             // end field mapping
         } else {
             LOG.error(resource.toString());

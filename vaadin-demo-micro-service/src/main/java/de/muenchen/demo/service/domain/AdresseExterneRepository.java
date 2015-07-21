@@ -7,7 +7,7 @@ import org.springframework.data.repository.CrudRepository;
  *
  * @author claus.straube
  */
-public interface AdresseExterneRepository extends CrudRepository<AdresseExterne, Long> {
+public interface AdresseExterneRepository extends BaseRepository<AdresseExterne> {
 
     public List<AdresseExterne> findByOid(String oid);
 

@@ -11,11 +11,16 @@ package de.muenchen.demo.service.rest.api;
  */
 import de.muenchen.demo.service.domain.Account;
 import de.muenchen.demo.service.domain.Mandant;
-import java.sql.Date;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import org.springframework.hateoas.ResourceSupport;
 
-public class UserResource extends SecurityResource {
+
+
+public class UserResource extends ResourceSupport {
+
+    private String oid;
 
     private String username;
 
@@ -32,8 +37,57 @@ public class UserResource extends SecurityResource {
     private String email;
 
     private Set<Account> accounts = new HashSet<>();
-    
+
     private Mandant mandant;
+
+    private String createdBy;
+
+    private Date createdDate;
+
+    private String lastModBy;
+
+    private Date lastModDate;
+
+    
+    public String getOid() {
+        return oid;
+    }
+
+    public void setOid(String oid) {
+        this.oid = oid;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public java.util.Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public String getLastModBy() {
+        return lastModBy;
+    }
+
+    public void setLastModBy(String lastModBy) {
+        this.lastModBy = lastModBy;
+    }
+
+    public java.util.Date getLastModDate() {
+        return lastModDate;
+    }
+
+    public void setLastModDate(Date lastModDate) {
+        this.lastModDate = lastModDate;
+    }
 
     public Mandant getMandant() {
         return mandant;
