@@ -31,8 +31,6 @@ public class Wohnung extends BaseEntity  {
     @Column(length = 20, name = "WOHN_AUSRICHTUNG")
     private String ausrichtung;
     
-    @Column(length = 30, nullable = false, name = "WOHN_ADRESSE_OID")
-    private String adresseOid;
     
 
     @NotAudited
