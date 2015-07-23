@@ -14,6 +14,8 @@ public class Adresse {
 
     
     private String oid;
+    
+    private String strasseReference;
 
     private String strasse;
 
@@ -31,6 +33,14 @@ public class Adresse {
 
     public void setStrasse(String strasse) {
         this.strasse = strasse;
+    }
+
+    public String getStrasseReference() {
+        return strasseReference;
+    }
+
+    public void setStrasseReference(String strasseReference) {
+        this.strasseReference = strasseReference;
     }
 
     public String getHausnummer() {

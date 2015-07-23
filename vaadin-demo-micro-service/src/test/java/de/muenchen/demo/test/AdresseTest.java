@@ -145,27 +145,28 @@ public class AdresseTest {
         adresse5.setStadt("Passau");
         adresse5.setPlz(96452);
 
-        adresse4.setOid("12345");
         adresse4.setStrasse("goethe strasse");
-        adresse4.setHausnummer("16");
+        adresse4.setStrasseReference("goeth2500");
         adresse4.setStadt("München");
         adresse4.setPlz(80331);
         adListe.add(adresse4);
 
         String jsonListe80331 = mapper.writeValueAsString(adListe);
-        String json12 = mapper.writeValueAsString(adresse2);
+//        String json12 = mapper.writeValueAsString(adresse2);
         String json4 = mapper.writeValueAsString(adresse4);
+        adresse4.setHausnummer("16");
+        adresse4.setOid("12345");
 
-        stubFor(get(urlEqualTo("/adresse/12")).willReturn(
-                aResponse().withHeader("Content-Type", "application/json")
-                .withBody(json12)
-        ));
+//        stubFor(get(urlEqualTo("/adresse/12")).willReturn(
+//                aResponse().withHeader("Content-Type", "application/json")
+//                .withBody(json12)
+//        ));
 
         stubFor(get(urlEqualTo("/adresse/80331")).willReturn(
                 aResponse().withHeader("Content-Type", "application/json")
                 .withBody(jsonListe80331)
         ));
-        stubFor(get(urlEqualTo("/adresse/12345")).willReturn(
+        stubFor(get(urlEqualTo("/adresse/goeth2500")).willReturn(
                 aResponse().withHeader("Content-Type", "application/json")
                 .withBody(json4)
         ));
@@ -208,7 +209,7 @@ public class AdresseTest {
         String URL = "http://localhost:" + port + "/adresse/save";
 
         AdresseResource response = restTemplate.postForEntity(URL, adresse4, AdresseResource.class).getBody();
-        assertEquals("12345", response.getOid());
+        assertEquals("goeth2500", response.getStrasseReference());
 
         String URL4 = "http://localhost:" + port + "/adresse/12345";
         AdresseResource response2 = restTemplate.getForEntity(URL4, AdresseResource.class).getBody();

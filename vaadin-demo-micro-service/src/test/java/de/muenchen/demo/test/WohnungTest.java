@@ -44,7 +44,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.TestRestTemplate;
 import org.springframework.boot.test.WebIntegrationTest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -153,8 +152,7 @@ public class WohnungTest {
         wohnung.setOid("1");
 
         String URL = "http://localhost:" + port + "/buerger/save";
-        ResponseEntity<BuergerResource> response = restTemplate.postForEntity(URL, buerger, BuergerResource.class);
-        Object body = response.getBody();
+        restTemplate.postForEntity(URL, buerger, BuergerResource.class);
 
         String URL2 = "http://localhost:" + port + "/buerger/123";
         Buerger wo = restTemplate.getForEntity(URL2, Buerger.class).getBody();
@@ -162,7 +160,7 @@ public class WohnungTest {
 
         /* Test methode createWohnungBuerger*/
         String URL3 = "http://localhost:" + port + "/buerger/create/wohnung/123";
-        ResponseEntity<BuergerResource> response2 = restTemplate.postForEntity(URL3, wohnung, BuergerResource.class);
+        restTemplate.postForEntity(URL3, wohnung, BuergerResource.class);
         Buerger w = restTemplate.getForEntity(URL2, Buerger.class).getBody();
         assertEquals(false, w.getWohnungen().isEmpty());
 
@@ -188,11 +186,10 @@ public class WohnungTest {
         wohnung.setStock("2");
         wohnung.setOid("10");
         String URL = "http://localhost:" + port + "/wohnung/save";
-        WohnungResource response = restTemplate.postForEntity(URL, wohnung, WohnungResource.class).getBody();
+        restTemplate.postForEntity(URL, wohnung, WohnungResource.class).getBody();
 
         String URL2 = "http://localhost:" + port + "/adresse/save";
-        ResponseEntity<AdresseResource> response2;
-        response2 = restTemplate.postForEntity(URL2, adresse, AdresseResource.class);
+        restTemplate.postForEntity(URL2, adresse, AdresseResource.class);
 
         /* Test methode addAdresseWohnung*/
         String URL5 = "http://localhost:" + port + "/wohnung/add/wohnung/10/adresse/10";
@@ -254,7 +251,7 @@ public class WohnungTest {
         String URL2 = "http://localhost:" + port + "/wohnung/copy/10";
         WohnungResource response2 = restTemplate.getForEntity(URL2, WohnungResource.class).getBody();
 
-        assertNotEquals("10", response2.getOid());
+        assertEquals("2", response2.getStock());
 
     }
     @Test

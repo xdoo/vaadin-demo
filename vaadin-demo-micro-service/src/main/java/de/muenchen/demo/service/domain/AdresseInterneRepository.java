@@ -9,10 +9,10 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  */
 public interface AdresseInterneRepository extends PagingAndSortingRepository<AdresseInterne, Long> {
 
-    public List<AdresseInterne> findByReferencedOid(String oid);
+    public List<AdresseInterne> findByOid(String oid);
 
     public List<AdresseInterne> findByMandantOid(String oid);
 
-    public List<AdresseInterne> findByReferencedOidAndMandantOid(String referencedOid, String mOid);
+    public List<AdresseInterne> findByOidAndMandantOid(String Oid, String mOid);
 
 }

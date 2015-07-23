@@ -12,10 +12,19 @@ package de.muenchen.demo.service.rest.api;
 public class AdresseResource extends BaseResource{
     
 
+    private String strasseReference;
     private String strasse;
     private String hausnummer;
     private String stadt;
     private int plz;
+
+    public String getStrasseReference() {
+        return strasseReference;
+    }
+
+    public void setStrasseReference(String strasseReference) {
+        this.strasseReference = strasseReference;
+    }
 
 
     public String getStrasse() {

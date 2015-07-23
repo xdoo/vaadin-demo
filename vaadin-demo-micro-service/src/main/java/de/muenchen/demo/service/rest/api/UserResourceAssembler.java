@@ -112,6 +112,7 @@ public class UserResourceAssembler {
             entity.setCreatedDate(resource.getCreatedDate());
             entity.setLastModBy(resource.getLastModBy());
             entity.setLastModDate(resource.getLastModDate());
+            entity.setMandant(resource.getMandant());
 // end field mapping
         } else {
             LOG.error(resource.toString());

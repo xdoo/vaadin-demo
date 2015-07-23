@@ -13,7 +13,7 @@ import org.hibernate.envers.NotAudited;
  * @author claus.straube
  */
 @MappedSuperclass
-public abstract class BaseEntity implements Serializable {
+public abstract class BaseEntity implements Cloneable {
 
     @Id
     @GeneratedValue
