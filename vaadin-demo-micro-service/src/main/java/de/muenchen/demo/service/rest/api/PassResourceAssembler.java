@@ -88,7 +88,6 @@ public class PassResourceAssembler {
             resource.add(linkTo(methodOn(PassController.class).copyPass(pass.getOid())).withRel(HateoasUtil.COPY));
         }
 
-
         return resource;
     }
 
@@ -97,7 +96,6 @@ public class PassResourceAssembler {
      *
      * @param resource
      * @param entity
-     * @return
      */
     public void fromResource(final PassResource resource, final Pass entity) {
         if (!Strings.isNullOrEmpty(resource.getOid())) {
@@ -105,12 +103,12 @@ public class PassResourceAssembler {
             entity.setOid(resource.getOid());
             // start field mapping
             entity.setAustellungsdatum(resource.getAustellungsdatum());
-        entity.setBehoerde(resource.getBehoerde());
-        entity.setGueltigBis(resource.getGueltigBis());
-        entity.setKode(resource.getKode());
-        entity.setTyp(resource.getTyp());
-        entity.setPassNummer(resource.getPassNummer());
-        entity.setStaatsangehoerigkeit(resource.getStaatsangehoerigkeit());
+            entity.setBehoerde(resource.getBehoerde());
+            entity.setGueltigBis(resource.getGueltigBis());
+            entity.setKode(resource.getKode());
+            entity.setTyp(resource.getTyp());
+            entity.setPassNummer(resource.getPassNummer());
+            entity.setStaatsangehoerigkeit(resource.getStaatsangehoerigkeit());
             // end field mapping
         } else {
             LOG.error(resource.toString());

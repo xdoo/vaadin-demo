@@ -50,5 +50,8 @@ public class Sachbearbeiter extends BaseEntity {
 //    public void setBuerger(List<Buerger> buerger) {
 //        this.buerger = buerger;
 //    }
-    
+    @Override
+    public String toString() {
+        return String.format("id > %s | oid > %s | firstname > %s | lastname > %s",this.getId(), this.getOid(), this.firstname, this.lastname);
+    }
 }

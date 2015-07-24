@@ -5,6 +5,7 @@
  */
 package de.muenchen.demo.service.domain;
 
+import java.io.Serializable;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -19,7 +20,7 @@ import org.hibernate.envers.NotAudited;
  */
 @Entity
 @Table(name = "ADRESSE_REFERENCE")
-public class AdresseReference extends BaseEntity{
+public class AdresseReference extends BaseEntity implements Serializable{
     
     @NotAudited
     @OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)

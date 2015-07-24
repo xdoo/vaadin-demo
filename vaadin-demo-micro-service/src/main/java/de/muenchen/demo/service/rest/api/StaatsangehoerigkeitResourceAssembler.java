@@ -86,7 +86,6 @@ public class StaatsangehoerigkeitResourceAssembler {
      *
      * @param resource
      * @param entity
-     * @return
      */
     public void fromResource(final StaatsangehoerigkeitResource resource, final Staatsangehoerigkeit entity) {
         if (!Strings.isNullOrEmpty(resource.getOid())) {
@@ -106,8 +105,8 @@ public class StaatsangehoerigkeitResourceAssembler {
     /**
      * Mapping liste Resource auf liste Entity
      *
-     * @param resource
-     * @param entity
+     * @param staatsangehoerigkeit
+     * @param hateoasRelations
      * @return
      */
     public List<StaatsangehoerigkeitResource> toResource(Set<Staatsangehoerigkeit> staatsangehoerigkeit, HateoasRelations hateoasRelations) {

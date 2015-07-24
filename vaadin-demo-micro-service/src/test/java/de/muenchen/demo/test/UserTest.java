@@ -131,10 +131,10 @@ public class UserTest {
 
         restTemplate.postForEntity(URL, user1, UserResource.class);
         String URL4 = "http://localhost:" + port + "/user/51";
-        UserResource response;
-        response = restTemplate.getForEntity(URL4, UserResource.class).getBody();
+        UserResource responseUser;
+        responseUser = restTemplate.getForEntity(URL4, UserResource.class).getBody();
 
-        assertEquals("test2", response.getPassword());
+        assertEquals("test2", responseUser.getPassword());
 
     }
 

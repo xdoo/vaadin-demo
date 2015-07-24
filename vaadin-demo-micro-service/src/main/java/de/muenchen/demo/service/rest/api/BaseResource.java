@@ -5,7 +5,6 @@
  */
 package de.muenchen.demo.service.rest.api;
 
-import de.muenchen.demo.service.domain.Mandant;
 import org.springframework.hateoas.ResourceSupport;
 
 /**

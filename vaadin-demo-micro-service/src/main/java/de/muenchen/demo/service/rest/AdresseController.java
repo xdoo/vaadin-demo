@@ -1,7 +1,6 @@
 package de.muenchen.demo.service.rest;
 
 import de.muenchen.demo.service.domain.Adresse;
-import de.muenchen.demo.service.rest.api.BuergerResource;
 import de.muenchen.demo.service.rest.api.SearchResultResource;
 import de.muenchen.demo.service.rest.api.AdresseResource;
 import de.muenchen.demo.service.rest.api.AdresseResourceAssembler;

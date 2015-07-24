@@ -1,6 +1,7 @@
 
 package de.muenchen.demo.service.domain;
 
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -11,7 +12,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "ADRESSE_INTERNE")
-public class AdresseInterne extends BaseEntity {
+public class AdresseInterne extends BaseEntity implements Serializable {
     
     @Column(length = 70, nullable = true, name = "ADR_HAUSNUMMER")
     private String hausnummer;

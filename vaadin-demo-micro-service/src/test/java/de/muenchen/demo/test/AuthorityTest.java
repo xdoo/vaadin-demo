@@ -121,10 +121,10 @@ public class AuthorityTest {
 
         restTemplate.postForEntity(URL, auth1, AuthorityResource.class);
         String URL4 = "http://localhost:" + port + "/authority/60";
-        AuthorityResource response2;
-        response2 = restTemplate.getForEntity(URL4, AuthorityResource.class).getBody();
+        AuthorityResource responseAuthority;
+        responseAuthority = restTemplate.getForEntity(URL4, AuthorityResource.class).getBody();
 
-        assertEquals("ADMIN", response2.getAuthority());
+        assertEquals("ADMIN", responseAuthority.getAuthority());
 
     }
 

@@ -40,7 +40,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -59,7 +58,7 @@ public class KinderTest {
     @Value("${local.server.port}")
     private int port;
     BuergerService service;
-    private final Buerger bVater = new Buerger();
+    private final Buerger vater = new Buerger();
     private final Buerger son2 = new Buerger();
     private final Buerger son = new Buerger();
 
@@ -107,9 +106,9 @@ public class KinderTest {
         ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
         restTemplate = new RestTemplate(requestFactory);
 
-        bVater.setOid("20");
-        bVater.setNachname("hans");
-        bVater.setVorname("vater");
+        vater.setOid("20");
+        vater.setNachname("hans");
+        vater.setVorname("vater");
 
         son2.setOid("21");
         son2.setVorname("son");
@@ -124,19 +123,19 @@ public class KinderTest {
     public void BuergerKindTest() {
 
         String URL = "http://localhost:" + port + "/buerger/save";
-        restTemplate.postForEntity(URL, bVater, BuergerResource.class);
+        restTemplate.postForEntity(URL, vater, BuergerResource.class);
         restTemplate.postForEntity(URL, son2, BuergerResource.class);
 
         String URL2 = "http://localhost:" + port + "/buerger/20";
-        Buerger wo = restTemplate.getForEntity(URL2, Buerger.class).getBody();
-        assertEquals("hans", wo.getNachname());
+        Buerger response = restTemplate.getForEntity(URL2, Buerger.class).getBody();
+        assertEquals("hans", response.getNachname());
 
 
         /* Test methode createKindBuerger*/
         String URL3 = "http://localhost:" + port + "/buerger/create/kind/20";
-        ResponseEntity<BuergerResource> response2 = restTemplate.postForEntity(URL3, son, BuergerResource.class);
-        Buerger w = restTemplate.getForEntity(URL2, Buerger.class).getBody();
-        assertEquals(false, w.getKinder().isEmpty());
+        restTemplate.postForEntity(URL3, son, BuergerResource.class);
+        Buerger responseBuerger = restTemplate.getForEntity(URL2, Buerger.class).getBody();
+        assertEquals(false, responseBuerger.getKinder().isEmpty());
 
         /* Test methode addKindBuerger*/
         String URL5 = "http://localhost:" + port + "/buerger/add/buerger/20/kind/21";

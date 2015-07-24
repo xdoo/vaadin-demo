@@ -2,8 +2,6 @@ package de.muenchen.demo.service.rest;
 
 import de.muenchen.demo.service.domain.AuthPermId;
 import de.muenchen.demo.service.domain.Authority;
-import de.muenchen.demo.service.domain.User;
-import de.muenchen.demo.service.domain.UserAuthId;
 import de.muenchen.demo.service.domain.AuthorityPermission;
 import de.muenchen.demo.service.domain.Permission;
 import de.muenchen.demo.service.rest.api.SearchResultResource;
@@ -14,8 +12,6 @@ import de.muenchen.demo.service.services.AuthorityPermissionService;
 import de.muenchen.demo.service.services.PermissionService;
 import de.muenchen.demo.service.services.UserService;
 import de.muenchen.demo.service.util.HateoasRelations;
-import java.util.List;
-import java.util.Set;
 import javax.annotation.security.RolesAllowed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +25,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  *
@@ -60,7 +55,7 @@ public class AuthorityPermissionController {
      *
      * @return
      */
-        @RolesAllowed({"PERM_queryAuthorityPermission"})
+    @RolesAllowed({"PERM_queryAuthorityPermission"})
     @RequestMapping(value = "/query", method = {RequestMethod.GET})
     public ResponseEntity queryAuthorityPermission() {
         if (LOG.isDebugEnabled()) {
@@ -71,12 +66,14 @@ public class AuthorityPermissionController {
         resource.add(linkTo(methodOn(AuthorityPermissionController.class).queryAuthorityPermission()).withSelfRel()); // add self link
         return ResponseEntity.ok(resource);
     }
-/**
-     *  AuthorityPermission by Authority suchen.
+
+    /**
+     * AuthorityPermission by Authority suchen.
      *
+     * @param authority
      * @return
      */
-        @RolesAllowed({"PERM_readByAuthorityAuthorityPermission"})
+    @RolesAllowed({"PERM_readByAuthorityAuthorityPermission"})
     @RequestMapping(value = "/authority/{authority}", method = {RequestMethod.GET})
     public ResponseEntity readByAuthorityAuthorityPermission(@PathVariable("authority") String authority) {
         if (LOG.isDebugEnabled()) {
@@ -91,13 +88,14 @@ public class AuthorityPermissionController {
     /**
      * Liest eine AuthorityPermission zur OID.
      *
-     * @param oid
+     * @param poid
+     * @param aoid
      * @return
      */
-            @RolesAllowed({"PERM_readAuthorityPermission"})
-@RequestMapping(value = "/{poid}/{aoid}", method = {RequestMethod.GET})
+    @RolesAllowed({"PERM_readAuthorityPermission"})
+    @RequestMapping(value = "/{poid}/{aoid}", method = {RequestMethod.GET})
     public ResponseEntity readAuthorityPermission(@PathVariable("poid") String poid, @PathVariable("aoid") String aoid) {
-       
+
         if (LOG.isDebugEnabled()) {
             LOG.debug("read authoritysPermissions");
         }
@@ -105,7 +103,7 @@ public class AuthorityPermissionController {
         Permission permission = this.servicePermission.read(poid);
         Authority auth = this.authService.read(aoid);
         AuthPermId id = new AuthPermId(permission, auth);
-        
+
         AuthorityPermission entity = this.service.read(id);
         AuthorityPermissionResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE);
         return ResponseEntity.ok(resource);
@@ -114,11 +112,12 @@ public class AuthorityPermissionController {
     /**
      * Speichert eine neue AuthorityPermission.
      *
-     * @param request
+     * @param poid
+     * @param aoid
      * @return
      */
-            @RolesAllowed({"PERM_saveAuthorityPermission"})
-@RequestMapping(value = "/save/{poid}/{aoid}", method = {RequestMethod.GET})
+    @RolesAllowed({"PERM_saveAuthorityPermission"})
+    @RequestMapping(value = "/save/{poid}/{aoid}", method = {RequestMethod.GET})
     public ResponseEntity saveAuthorityPermission(@PathVariable("poid") String poid, @PathVariable("aoid") String aoid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("save authoritysPermissions");
@@ -135,13 +134,14 @@ public class AuthorityPermissionController {
     /**
      * Löscht eine AuthorityPermission.
      *
-     * @param oid
+     * @param poid
+     * @param aoid
      * @return
      */
-            @RolesAllowed({"PERM_deleteAuthorityPermission"})
-@RequestMapping(value = "/{poid}/{aoid}", method = {RequestMethod.DELETE})
+    @RolesAllowed({"PERM_deleteAuthorityPermission"})
+    @RequestMapping(value = "/{poid}/{aoid}", method = {RequestMethod.DELETE})
     public ResponseEntity deleteAuthorityPermission(@PathVariable("poid") String poid, @PathVariable("aoid") String aoid) {
-       
+
         if (LOG.isDebugEnabled()) {
             LOG.debug("delete authoritysPermissions");
         }

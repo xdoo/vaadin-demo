@@ -99,7 +99,6 @@ public class AdresseResourceAssembler {
      *
      * @param resource
      * @param entity
-     * @return
      */
     public void fromResource(final AdresseResource resource, final Adresse entity) {
         if (!Strings.isNullOrEmpty(resource.getOid())) {
@@ -120,8 +119,8 @@ public class AdresseResourceAssembler {
     /**
      * Mapping liste Resource auf liste Entity
      *
-     * @param resource
-     * @param entity
+     * @param adresse
+     * @param hateoasRelations
      * @return
      */
     public List<AdresseResource> toResource(Set<Adresse> adresse, HateoasRelations hateoasRelations) {

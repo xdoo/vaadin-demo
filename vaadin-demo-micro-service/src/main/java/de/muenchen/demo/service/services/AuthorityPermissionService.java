@@ -6,7 +6,6 @@
 package de.muenchen.demo.service.services;
 
 import de.muenchen.demo.service.domain.AuthPermId;
-import de.muenchen.demo.service.domain.UserAuthId;
 import de.muenchen.demo.service.domain.AuthorityPermission;
 import java.util.List;
 

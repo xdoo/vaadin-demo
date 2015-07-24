@@ -117,7 +117,7 @@ public class AdresseTest {
 
         ObjectMapper mapper = new ObjectMapper(); // can reuse, share globally
 
-        List adListe = new ArrayList();
+        List adresses = new ArrayList();
 
         adresse.setOid("123");
         adresse.setStrasse("Donau-Schwaben-Str");
@@ -130,14 +130,14 @@ public class AdresseTest {
         adresse2.setHausnummer("15");
         adresse2.setStadt("Passau");
         adresse2.setPlz(80331);
-        adListe.add(adresse2);
+        adresses.add(adresse2);
 
         adresse3.setOid("1234");
         adresse3.setStrasse("ampfing strasse");
         adresse3.setHausnummer("16");
         adresse3.setStadt("Passau");
         adresse3.setPlz(80331);
-        adListe.add(adresse3);
+        adresses.add(adresse3);
 
         adresse5.setOid("aa");
         adresse5.setStrasse("ampfing strasse");
@@ -149,26 +149,22 @@ public class AdresseTest {
         adresse4.setStrasseReference("goeth2500");
         adresse4.setStadt("München");
         adresse4.setPlz(80331);
-        adListe.add(adresse4);
+        adresses.add(adresse4);
 
-        String jsonListe80331 = mapper.writeValueAsString(adListe);
-//        String json12 = mapper.writeValueAsString(adresse2);
-        String json4 = mapper.writeValueAsString(adresse4);
+        String json80331 = mapper.writeValueAsString(adresses);
+        String jsonAdresse = mapper.writeValueAsString(adresse4);
         adresse4.setHausnummer("16");
         adresse4.setOid("12345");
 
-//        stubFor(get(urlEqualTo("/adresse/12")).willReturn(
-//                aResponse().withHeader("Content-Type", "application/json")
-//                .withBody(json12)
-//        ));
+
 
         stubFor(get(urlEqualTo("/adresse/80331")).willReturn(
                 aResponse().withHeader("Content-Type", "application/json")
-                .withBody(jsonListe80331)
+                .withBody(json80331)
         ));
         stubFor(get(urlEqualTo("/adresse/goeth2500")).willReturn(
                 aResponse().withHeader("Content-Type", "application/json")
-                .withBody(json4)
+                .withBody(jsonAdresse)
         ));
 
         SSLContext sslContext = SSLContexts.custom().loadTrustMaterial(null, new TrustSelfSignedStrategy()).useTLS().build();
@@ -197,10 +193,9 @@ public class AdresseTest {
 
         restTemplate.postForEntity(URL, adresse, AdresseResource.class);
         String URL4 = "http://localhost:" + port + "/adresse/123";
-        AdresseResource response;
-        response = restTemplate.getForEntity(URL4, AdresseResource.class).getBody();
+        AdresseResource responseAdresse = restTemplate.getForEntity(URL4, AdresseResource.class).getBody();
 
-        assertEquals(96034, response.getPlz());
+        assertEquals(96034, responseAdresse.getPlz());
 
     }
 
@@ -208,8 +203,8 @@ public class AdresseTest {
     public void muenchenAdresseTest() throws JsonProcessingException {
         String URL = "http://localhost:" + port + "/adresse/save";
 
-        AdresseResource response = restTemplate.postForEntity(URL, adresse4, AdresseResource.class).getBody();
-        assertEquals("goeth2500", response.getStrasseReference());
+        AdresseResource responseAdresse = restTemplate.postForEntity(URL, adresse4, AdresseResource.class).getBody();
+        assertEquals("goeth2500", responseAdresse.getStrasseReference());
 
         String URL4 = "http://localhost:" + port + "/adresse/12345";
         AdresseResource response2 = restTemplate.getForEntity(URL4, AdresseResource.class).getBody();

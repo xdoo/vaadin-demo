@@ -6,8 +6,6 @@ import de.muenchen.demo.service.rest.api.AuthorityResource;
 import de.muenchen.demo.service.rest.api.AuthorityResourceAssembler;
 import de.muenchen.demo.service.services.AuthorityService;
 import de.muenchen.demo.service.util.HateoasRelations;
-import java.util.List;
-import java.util.Set;
 import javax.annotation.security.RolesAllowed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

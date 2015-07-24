@@ -98,7 +98,6 @@ public class WohnungResourceAssembler {
      *
      * @param resource
      * @param entity
-     * @return
      */
     public void fromResource(final WohnungResource resource, final Wohnung entity) {
         if (!Strings.isNullOrEmpty(resource.getOid())) {
@@ -118,8 +117,8 @@ public class WohnungResourceAssembler {
     /**
      * Mapping liste Resource auf liste Entity
      *
-     * @param resource
-     * @param entity
+     * @param wohnung
+     * @param hateoasRelations
      * @return
      */
     public List<WohnungResource> toResource(Set<Wohnung> wohnung, HateoasRelations hateoasRelations) {

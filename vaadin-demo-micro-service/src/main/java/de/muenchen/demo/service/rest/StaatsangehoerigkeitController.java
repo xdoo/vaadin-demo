@@ -7,11 +7,10 @@ package de.muenchen.demo.service.rest;
 
 import de.muenchen.demo.service.rest.api.StaatsangehoerigkeitResourceAssembler;
 import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
-import de.muenchen.demo.service.rest.api.PermissionResource;
 import de.muenchen.demo.service.rest.api.SearchResultResource;
 import de.muenchen.demo.service.rest.api.StaatsangehoerigkeitResource;
 import de.muenchen.demo.service.services.StaatsangehoerigkeitService;
-import java.util.List;
+import de.muenchen.demo.service.util.HateoasRelations;
 import javax.annotation.security.RolesAllowed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +40,7 @@ public class StaatsangehoerigkeitController {
     EntityLinks entityLinks;
     @Autowired
     StaatsangehoerigkeitService service;
-        @Autowired
+    @Autowired
     StaatsangehoerigkeitResourceAssembler assembler;
 
     /**
@@ -64,7 +63,7 @@ public class StaatsangehoerigkeitController {
     /**
      * Erzeugt eine Staatsangehoerigkeit zur OID.
      *
-     * @param oid
+     * @param referencedOid
      * @return
      */
     @RolesAllowed({"PERM_createStaatsangehoerigkeit"})
@@ -74,13 +73,14 @@ public class StaatsangehoerigkeitController {
             LOG.debug("new Staatsangehoerigkeit");
         }
         Staatsangehoerigkeit entity = this.service.create(referencedOid);
-        return ResponseEntity.ok(entity);
+        StaatsangehoerigkeitResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY);
+        return ResponseEntity.ok(resource);
     }
 
     /**
      * Liest eine Staatsangehoerigkeit zur OID.
      *
-     * @param oid
+     * @param referencedOid
      * @return
      */
     @RolesAllowed({"PERM_readStaatsangehoerigkeit"})
@@ -90,13 +90,14 @@ public class StaatsangehoerigkeitController {
             LOG.debug("read Staatsangehoerigkeit");
         }
         Staatsangehoerigkeit entity = this.service.read(referencedOid);
-        return ResponseEntity.ok(entity);
+        StaatsangehoerigkeitResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE);
+        return ResponseEntity.ok(resource);
     }
 
     /**
      * Löscht eine Staatsangehoerigkeit.
      *
-     * @param oid
+     * @param referencedOid
      * @return
      */
     @RolesAllowed({"PERM_deleteStaatsangehoerigkeit"})

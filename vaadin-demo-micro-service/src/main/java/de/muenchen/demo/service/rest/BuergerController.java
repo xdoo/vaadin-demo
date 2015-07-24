@@ -3,6 +3,7 @@ package de.muenchen.demo.service.rest;
 import de.muenchen.demo.service.domain.Buerger;
 import de.muenchen.demo.service.domain.Pass;
 import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
+import de.muenchen.demo.service.domain.User;
 import de.muenchen.demo.service.domain.Wohnung;
 import de.muenchen.demo.service.rest.api.BuergerResource;
 import de.muenchen.demo.service.rest.api.BuergerResourceAssembler;
@@ -14,6 +15,7 @@ import de.muenchen.demo.service.rest.api.WohnungResourceAssembler;
 import de.muenchen.demo.service.services.BuergerService;
 import de.muenchen.demo.service.services.PassService;
 import de.muenchen.demo.service.services.StaatsangehoerigkeitService;
+import de.muenchen.demo.service.services.UserService;
 import de.muenchen.demo.service.services.WohnungService;
 import de.muenchen.demo.service.util.HateoasRelations;
 import java.util.List;
@@ -64,6 +66,8 @@ public class BuergerController {
     PassResourceAssembler passAssembler;
     @Value("${URL}")
     private String URL;
+    @Autowired
+    UserService  userService;
 
     /**
      * Alle Bürger suchen.
@@ -247,6 +251,7 @@ public class BuergerController {
      * Erzeugt ein Kind als Buerger und assoziiert ihm mit einem Buerger .
      *
      * @param oid
+     * @param request
      * @return
      */
     @RolesAllowed({"PERM_createKindBuerger"})
@@ -269,19 +274,19 @@ public class BuergerController {
     /**
      * Assoziiert ein Kind mit einem Buerger .
      *
-     * @param BuergerOid
+     * @param buergerOid
      * @param kindOid
      * @return
      */
     @RolesAllowed({"PERM_addKindBuerger"})
     @RequestMapping(value = "add/buerger/{bOid}/kind/{kOid}", method = {RequestMethod.GET})
-    public ResponseEntity addKindBuerger(@PathVariable("bOid") String bOid, @PathVariable("kOid") String kOid) {
+    public ResponseEntity addKindBuerger(@PathVariable("bOid") String buergerOid, @PathVariable("kOid") String kindOid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Add Kind buerger");
         }
 
-        Buerger kind = service.read(kOid);
-        Buerger entity = service.read(bOid);
+        Buerger kind = service.read(kindOid);
+        Buerger entity = service.read(buergerOid);
 
         entity.getKinder().add(kind);
         this.service.update(entity);
@@ -299,13 +304,13 @@ public class BuergerController {
      */
     @RolesAllowed({"PERM_addWohnungBuerger"})
     @RequestMapping(value = "add/buerger/{bOid}/wohnung/{wOid}", method = {RequestMethod.GET})
-    public ResponseEntity addWohnungBuerger(@PathVariable("bOid") String bOid, @PathVariable("wOid") String wOid) {
+    public ResponseEntity addWohnungBuerger(@PathVariable("bOid") String buergerOid, @PathVariable("wOid") String wohnungOid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Add wohnung buerger");
         }
 
-        Wohnung wohnung = wohnungService.read(wOid);
-        Buerger entity = service.read(bOid);
+        Wohnung wohnung = wohnungService.read(wohnungOid);
+        Buerger entity = service.read(buergerOid);
 
         entity.getWohnungen().add(wohnung);
         this.service.update(entity);
@@ -318,6 +323,7 @@ public class BuergerController {
      * Erzeugt eine Wohnung und assoziiert ihm mit einem Buerger .
      *
      * @param oid
+     * @param request
      * @return
      */
     @RolesAllowed({"PERM_createWhonungBuerger"})
@@ -346,13 +352,13 @@ public class BuergerController {
      */
     @RolesAllowed({"PERM_addStaatangehoerigkeitBuerger"})
     @RequestMapping(value = "add/buerger/{bOid}/staats/{sOid}", method = {RequestMethod.GET})
-    public ResponseEntity addStaatangehoerigkeitBuerger(@PathVariable("bOid") String bOid, @PathVariable("sOid") String sOid) {
+    public ResponseEntity addStaatangehoerigkeitBuerger(@PathVariable("bOid") String buergerOid, @PathVariable("sOid") String staatsOid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Add staatsangehoerigkeit buerger");
         }
 
-        Staatsangehoerigkeit staats = staatsService.read(sOid);
-        Buerger entity = service.read(bOid);
+        Staatsangehoerigkeit staats = staatsService.read(staatsOid);
+        Buerger entity = service.read(buergerOid);
 
         entity.getStaatsangehoerigkeiten().add(staats);
         this.service.update(entity);
@@ -365,7 +371,7 @@ public class BuergerController {
      * Assoziiert ein Pass mit einem Buerger .
      *
      * @param buergerOid
-     * @param wohnungOid
+     * @param passOid
      * @return
      */
     @RolesAllowed({"PERM_addPassBuerger"})
@@ -401,5 +407,28 @@ public class BuergerController {
 
         List<PassResource> resources = passAssembler.toResource(pass, HateoasRelations.SELF);
         return ResponseEntity.ok(resources);
+    }
+    /**
+     * Assoziiert ein Sachbearbeiter mit einem Buerger .
+     *
+     * @param buergerOid
+     * @param sachbearbeiterOid
+     * @return
+     */
+    @RolesAllowed({"PERM_addSachbearbeiterBuerger"})
+    @RequestMapping(value = "add/buerger/{bOid}/sachbearbeiter/{sOid}", method = {RequestMethod.GET})
+    public ResponseEntity addSachbearbeiterBuerger(@PathVariable("bOid") String buergerOid, @PathVariable("sOid") String sachbearbeiterOid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Add Pass buerger");
+        }
+
+        User sachbearbeiter = userService.read(sachbearbeiterOid);
+        Buerger entity = service.read(buergerOid);
+
+        entity.setSachbearbeiter(sachbearbeiter);
+        this.service.update(entity);
+
+        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY, HateoasRelations.WOHNUNGEN, HateoasRelations.KINDER, HateoasRelations.PASS);
+        return ResponseEntity.ok(resource);
     }
 }

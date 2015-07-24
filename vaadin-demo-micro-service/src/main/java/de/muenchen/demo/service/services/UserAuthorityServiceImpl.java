@@ -35,7 +35,7 @@ public class UserAuthorityServiceImpl implements UserAuthorityService {
     @Autowired
     public UserAuthorityServiceImpl(UserAuthorityRepository repo, EntityManager em) {
         this.repo = repo;
-        this.search = new QueryService<>(em, UserAuthority.class, "adresseOid", "ausrichtung", "stock");
+        this.search = new QueryService<>(em, UserAuthority.class, "authority", "permission");
     }
 
     @Override

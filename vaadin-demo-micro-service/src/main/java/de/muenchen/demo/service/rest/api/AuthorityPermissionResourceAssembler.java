@@ -79,7 +79,6 @@ public class AuthorityPermissionResourceAssembler {
      *
      * @param resource
      * @param entity
-     * @return
      */
     public void fromResource(final AuthorityPermissionResource resource, final AuthorityPermission entity) {
         

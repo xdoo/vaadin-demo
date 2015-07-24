@@ -1,36 +1,13 @@
 package de.muenchen.demo.service;
 
-import de.muenchen.demo.service.domain.AuthPermId;
-import de.muenchen.demo.service.domain.UserAuthId;
-import de.muenchen.demo.service.domain.Authority;
-import de.muenchen.demo.service.domain.AuthorityPermission;
 import de.muenchen.demo.service.domain.AuthorityPermissionRepository;
 import de.muenchen.demo.service.domain.AuthorityRepository;
 import de.muenchen.demo.service.config.InitApplication;
 import de.muenchen.demo.service.domain.MandantRepository;
-import de.muenchen.demo.service.domain.Permission;
 import de.muenchen.demo.service.domain.PermissionRepository;
 import de.muenchen.demo.service.domain.UserAuthorityRepository;
-import de.muenchen.demo.service.domain.User;
-import de.muenchen.demo.service.domain.UserAuthority;
 import de.muenchen.demo.service.domain.UserRepository;
-import de.muenchen.demo.service.rest.AccountController;
-import de.muenchen.demo.service.rest.AdresseController;
-import de.muenchen.demo.service.rest.AuthorityController;
-import de.muenchen.demo.service.rest.AuthorityPermissionController;
-import de.muenchen.demo.service.rest.BuergerController;
-import de.muenchen.demo.service.rest.CompanyBaseInfoController;
-import de.muenchen.demo.service.rest.PermissionController;
-import de.muenchen.demo.service.rest.StaatsangehoerigkeitController;
-import de.muenchen.demo.service.rest.UserAuthorityController;
-import de.muenchen.demo.service.rest.UserController;
-import de.muenchen.demo.service.rest.WohnungController;
-import de.muenchen.demo.service.util.IdService;
 import java.io.IOException;
-import static java.lang.Boolean.TRUE;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -80,14 +57,9 @@ public class Application {
     @Bean
     CommandLineRunner init(UserRepository usersRepo, AuthorityRepository authRepo, PermissionRepository permRepo, UserAuthorityRepository userAuthRepo, AuthorityPermissionRepository authPermRepo, MandantRepository mandantRepo) {
 
-        return new CommandLineRunner() {
-
-            public void run(String... arg0) {
-
-                InitApplication initApplication = new InitApplication(usersRepo, authRepo, permRepo, userAuthRepo, authPermRepo,mandantRepo);
-                initApplication.init();
-            }
-
+        return (String... arg0) -> {
+            InitApplication initApplication = new InitApplication(usersRepo, authRepo, permRepo, userAuthRepo, authPermRepo,mandantRepo);
+            initApplication.init();
         };
 
     }

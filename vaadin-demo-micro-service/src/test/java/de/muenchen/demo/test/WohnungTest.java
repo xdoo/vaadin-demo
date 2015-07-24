@@ -23,7 +23,6 @@ import de.muenchen.demo.service.rest.api.WohnungResource;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Date;
 import javax.net.ssl.SSLContext;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -144,7 +143,6 @@ public class WohnungTest {
         buerger.setOid("123");
         buerger.setNachname("hans");
         buerger.setVorname("vater");
-        Date dV = new Date();
 
         Wohnung wohnung = new Wohnung();
         wohnung.setAusrichtung("Nord");

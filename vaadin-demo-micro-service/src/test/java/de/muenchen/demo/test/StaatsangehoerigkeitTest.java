@@ -26,7 +26,6 @@ import de.muenchen.demo.service.rest.api.SearchResultResource;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Date;
 import javax.net.ssl.SSLContext;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -65,7 +64,7 @@ public class StaatsangehoerigkeitTest {
     private RestTemplate restTemplate = new TestRestTemplate();
     @Value("${local.server.port}")
     private int port;
-    private final Buerger bVater = new Buerger();
+    private final Buerger buerger = new Buerger();
 
     public StaatsangehoerigkeitTest() {
     }
@@ -119,23 +118,22 @@ public class StaatsangehoerigkeitTest {
 
         ObjectMapper mapper = new ObjectMapper(); // can reuse, share globally
 
-        Staatsangehoerigkeit s = new Staatsangehoerigkeit();
-        s.setCode("de");
-        s.setLand("Deutschland");
-        s.setSprache("Deutsch");
-        s.setReference("123");
+        Staatsangehoerigkeit staat = new Staatsangehoerigkeit();
+        staat.setCode("de");
+        staat.setLand("Deutschland");
+        staat.setSprache("Deutsch");
+        staat.setReference("123");
 
-        String json = mapper.writeValueAsString(s);
+        String json = mapper.writeValueAsString(staat);
 
         stubFor(get(urlEqualTo("/staat/123")).willReturn(
                 aResponse().withHeader("Content-Type", "application/json")
                 .withBody(json)
         ));
 
-        bVater.setOid("30");
-        bVater.setNachname("hans");
-        bVater.setVorname("vater");
-        Date dV = new Date();
+        buerger.setOid("30");
+        buerger.setNachname("hans");
+        buerger.setVorname("vater");
     }
 
     @Test
@@ -159,7 +157,7 @@ public class StaatsangehoerigkeitTest {
         assertEquals("de", staat.getCode());
 
         String URL10 = "http://localhost:" + port + "/buerger/save";
-        ResponseEntity<BuergerResource> response = restTemplate.postForEntity(URL10, bVater, BuergerResource.class);
+        ResponseEntity<BuergerResource> response = restTemplate.postForEntity(URL10, buerger, BuergerResource.class);
 
         String URL11 = "http://localhost:" + port + "/buerger/30";
         Buerger wo = restTemplate.getForEntity(URL11, Buerger.class).getBody();

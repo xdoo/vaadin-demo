@@ -36,7 +36,7 @@ public class MandantServiceImpl implements MandantService {
     @Autowired
     public MandantServiceImpl(MandantRepository repo, EntityManager em) {
         this.repo = repo;
-        this.search = new QueryService<>(em, Mandant.class,  "kode");
+        this.search = new QueryService<>(em, Mandant.class,  "mid");
     }
 
     @Override

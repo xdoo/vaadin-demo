@@ -173,8 +173,8 @@ public class UserController {
     /**
      * Assoziiert ein Staatsangehoerigkeit mit einem Buerger .
      *
-     * @param buergerOid
-     * @param staatsOid
+     * @param userOid
+     * @param mandantOid
      * @return
      */
     @RolesAllowed({"PERM_addMandantUser"})

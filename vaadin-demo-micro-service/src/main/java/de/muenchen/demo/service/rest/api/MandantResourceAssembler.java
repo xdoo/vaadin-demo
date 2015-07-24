@@ -97,7 +97,6 @@ public class MandantResourceAssembler {
      *
      * @param resource
      * @param entity
-     * @return
      */
     public void fromResource(final MandantResource resource, final Mandant entity) {
         if (!Strings.isNullOrEmpty(resource.getOid())) {

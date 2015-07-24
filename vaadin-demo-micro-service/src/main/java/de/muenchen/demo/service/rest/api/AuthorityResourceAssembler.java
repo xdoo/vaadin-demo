@@ -93,7 +93,6 @@ public class AuthorityResourceAssembler {
      *
      * @param resource
      * @param entity
-     * @return
      */
     public void fromResource(final AuthorityResource resource, final Authority entity) {
         if (!Strings.isNullOrEmpty(resource.getOid())) {

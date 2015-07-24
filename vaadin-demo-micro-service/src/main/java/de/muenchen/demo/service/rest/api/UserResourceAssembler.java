@@ -93,7 +93,6 @@ public class UserResourceAssembler {
      *
      * @param resource
      * @param entity
-     * @return
      */
     public void fromResource(final UserResource resource, final User entity) {
         if (!Strings.isNullOrEmpty(resource.getOid())) {

@@ -5,6 +5,7 @@ import de.muenchen.demo.service.domain.Pass;
 import de.muenchen.demo.service.domain.Sachbearbeiter;
 import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
 import de.muenchen.demo.service.domain.StaatsangehoerigkeitReference;
+import de.muenchen.demo.service.domain.User;
 import de.muenchen.demo.service.domain.Wohnung;
 import java.util.Date;
 import java.util.HashSet;
@@ -19,7 +20,7 @@ public class BuergerResource extends BaseResource {
     private String vorname;
     private String nachname;
     private Date geburtsdatum;
-    private Set<Sachbearbeiter> sachbearbeiter;
+    private User sachbearbeiter;
     private Set<Staatsangehoerigkeit> staatsangehoerigkeiten = new HashSet<>();
     private Set<StaatsangehoerigkeitReference> staatsangehoerigkeitReferences;
     private Set<Buerger> kinder = new HashSet<>();
@@ -50,22 +51,6 @@ public class BuergerResource extends BaseResource {
         this.geburtsdatum = geburtsdatum;
     }
 
-    public Set<Sachbearbeiter> getSachbearbeiter() {
-        return sachbearbeiter;
-    }
-
-    public void setSachbearbeiter(Set<Sachbearbeiter> sachbearbeiter) {
-        this.sachbearbeiter = sachbearbeiter;
-    }
-
-    public Set<Staatsangehoerigkeit> getStaatsangehoerigkeiten() {
-        return staatsangehoerigkeiten;
-    }
-
-    public void setStaatsangehoerigkeiten(Set<Staatsangehoerigkeit> staatsangehoerigkeiten) {
-        this.staatsangehoerigkeiten = staatsangehoerigkeiten;
-    }
-
     public Set<StaatsangehoerigkeitReference> getStaatsangehoerigkeitReferences() {
         return staatsangehoerigkeitReferences;
     }
@@ -80,6 +65,22 @@ public class BuergerResource extends BaseResource {
 
     public void setKinder(Set<Buerger> kinder) {
         this.kinder = kinder;
+    }
+
+    public User getSachbearbeiter() {
+        return sachbearbeiter;
+    }
+
+    public void setSachbearbeiter(User sachbearbeiter) {
+        this.sachbearbeiter = sachbearbeiter;
+    }
+
+    public Set<Staatsangehoerigkeit> getStaatsangehoerigkeiten() {
+        return staatsangehoerigkeiten;
+    }
+
+    public void setStaatsangehoerigkeiten(Set<Staatsangehoerigkeit> staatsangehoerigkeiten) {
+        this.staatsangehoerigkeiten = staatsangehoerigkeiten;
     }
 
     public Set<Wohnung> getWohnungen() {

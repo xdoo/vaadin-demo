@@ -63,9 +63,7 @@ public class PermissionResourceAssembler {
 
         // add links
         ArrayList<HateoasRelations> relations = Lists.newArrayList(r);
-        
 
-        
         if (relations.contains(HateoasRelations.SELF)) {
             resource.add(linkTo(methodOn(PermissionController.class).readPermission(permissions.getOid())).withSelfRel());
         }
@@ -86,7 +84,6 @@ public class PermissionResourceAssembler {
      *
      * @param resource
      * @param entity
-     * @return
      */
     public void fromResource(final PermissionResource resource, final Permission entity) {
         if (!Strings.isNullOrEmpty(resource.getOid())) {

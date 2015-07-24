@@ -1,14 +1,11 @@
 package de.muenchen.demo.service.rest.api;
 
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 import de.muenchen.demo.service.domain.UserAuthId;
 import de.muenchen.demo.service.domain.UserAuthority;
 import de.muenchen.demo.service.rest.UserAuthorityController;
 import de.muenchen.demo.service.services.UserAuthorityService;
 import de.muenchen.demo.service.util.HateoasRelations;
 import de.muenchen.demo.service.util.HateoasUtil;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -82,7 +79,6 @@ public class UserAuthorityResourceAssembler {
      *
      * @param resource
      * @param entity
-     * @return
      */
     public void fromResource(final UserAuthorityResource resource, final UserAuthority entity) {
         

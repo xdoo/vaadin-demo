@@ -121,27 +121,33 @@ public class UserAuthorityPermissionTest {
         auth.setOid("A71");
         authRepo.save(auth);
 
-        List<String> list = new ArrayList();
+        List<String> permissions = new ArrayList();
         for (Method method : AuthorityPermissionController.class.getDeclaredMethods()) {
             String name = method.getName();
-            list.add("PERM_" + name);
+            permissions.add("PERM_" + name);
         }
         for (Method method : UserAuthorityController.class.getDeclaredMethods()) {
             String name = method.getName();
-            list.add("PERM_" + name);
+            permissions.add("PERM_" + name);
         }
-        for (String list1 : list) {
+        permissions.stream().map((permission1) -> {
             Permission permission = new Permission();
-            permission.setPermision(list1);
+            permission.setPermision(permission1);
+            return permission;
+        }).map((permission) -> {
             permission.setOid(IdService.next());
+            return permission;
+        }).map((permission) -> {
             permRepo.save(permission);
-
+            return permission;
+        }).map((permission) -> {
             AuthorityPermission authPerm = new AuthorityPermission();
             AuthPermId idA = new AuthPermId(permission, auth);
             authPerm.setId(idA);
+            return authPerm;
+        }).forEach((authPerm) -> {
             authPermRepo.save(authPerm);
-
-        }
+        });
         UserAuthority userAuth = new UserAuthority();
         UserAuthId id = new UserAuthId(user, auth);
 

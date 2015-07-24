@@ -7,8 +7,6 @@ package de.muenchen.demo.service.rest.api;
 
 import de.muenchen.demo.service.domain.Authority;
 import de.muenchen.demo.service.domain.Permission;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 /**
  *

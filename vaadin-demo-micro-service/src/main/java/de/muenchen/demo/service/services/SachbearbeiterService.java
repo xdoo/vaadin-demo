@@ -1,7 +1,6 @@
 package de.muenchen.demo.service.services;
 
 import de.muenchen.demo.service.domain.Sachbearbeiter;
-import java.util.Date;
 import java.util.List;
 
 /**

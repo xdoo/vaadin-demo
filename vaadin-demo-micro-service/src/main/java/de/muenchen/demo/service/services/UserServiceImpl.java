@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     public UserServiceImpl(UserRepository repo, EntityManager em) {
         this.repo = repo;
-        this.search = new QueryService<>(em, User.class, "adresseOid","ausrichtung","stock");
+        this.search = new QueryService<>(em, User.class, "userName","password","email");
     }
     
     @Override

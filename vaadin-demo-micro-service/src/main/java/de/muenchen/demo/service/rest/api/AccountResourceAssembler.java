@@ -7,7 +7,6 @@ import de.muenchen.demo.service.rest.AccountController;
 import de.muenchen.demo.service.services.AccountService;
 import de.muenchen.demo.service.util.HateoasRelations;
 import de.muenchen.demo.service.util.HateoasUtil;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -93,7 +92,6 @@ public class AccountResourceAssembler {
      *
      * @param resource
      * @param entity
-     * @return
      */
     public void fromResource(final AccountResource resource, final Account entity) {
         if (!Strings.isNullOrEmpty(resource.getOid())) {

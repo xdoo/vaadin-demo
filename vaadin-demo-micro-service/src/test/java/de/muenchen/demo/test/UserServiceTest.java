@@ -13,17 +13,10 @@ import de.muenchen.demo.service.domain.MandantRepository;
 import de.muenchen.demo.service.domain.PermissionRepository;
 import de.muenchen.demo.service.domain.UserAuthorityRepository;
 import de.muenchen.demo.service.domain.UserRepository;
-import de.muenchen.demo.service.rest.api.AuthorityPermissionResource;
-import de.muenchen.demo.service.rest.api.SearchResultResource;
-import de.muenchen.demo.service.rest.api.UserResource;
 import de.muenchen.vaadin.demo.api.domain.Principal;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Optional;
 import javax.net.ssl.SSLContext;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -48,8 +41,6 @@ import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
 
@@ -61,11 +52,11 @@ import org.springframework.web.client.RestTemplate;
 @SpringApplicationConfiguration(classes = Application.class)
 @WebIntegrationTest//({"server.port=0", "management.port=0"})
 public class UserServiceTest {
-    
+
     private RestTemplate restTemplate;
     @Value("${local.server.port}")
     private int port;
-    
+
     @Autowired
     UserRepository usersRepo;
     @Autowired
@@ -74,13 +65,13 @@ public class UserServiceTest {
     PermissionRepository permRepo;
     @Autowired
     UserAuthorityRepository userAuthRepo;
-    
+
     @Autowired
     AuthorityPermissionRepository authPermRepo;
-    
+
     @Rule
     public ExpectedException thrown = ExpectedException.none();
-    
+
     @Autowired
     MandantRepository mandantRepo;
 
@@ -94,35 +85,33 @@ public class UserServiceTest {
         permRepo.deleteAll();
         mandantRepo.deleteAll();
 
-        InitTest initTest = new InitTest( usersRepo,  authRepo,  permRepo,  userAuthRepo,  authPermRepo, mandantRepo);
+        InitTest initTest = new InitTest(usersRepo, authRepo, permRepo, userAuthRepo, authPermRepo, mandantRepo);
         initTest.init();
-        
+
         SSLContext sslContext = SSLContexts.custom().loadTrustMaterial(null, new TrustSelfSignedStrategy()).useTLS().build();
         SSLConnectionSocketFactory connectionFactory = new SSLConnectionSocketFactory(sslContext, new AllowAllHostnameVerifier());
         BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
         credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials("hans", "test"));
-        
+
         HttpClient httpClient = HttpClientBuilder.create()
                 .setSSLSocketFactory(connectionFactory)
                 .setDefaultCredentialsProvider(credentialsProvider)
                 .build();
-        
+
         ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
         restTemplate = new RestTemplate(requestFactory);
     }
-    
+
     @Test
     public void getPrincipalTest() throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
 
-
-        
         String URL11 = "http://localhost:" + port + "/principal";
         ResponseEntity a = restTemplate.getForEntity(URL11, Principal.class);
-        Principal response =(Principal)a.getBody();
-        assertEquals("hans",response.getUsername());
-        
+        Principal response = (Principal) a.getBody();
+        assertEquals("hans", response.getUsername());
+
     }
-    
+
     @After
     public void TearDown() {
         authPermRepo.deleteAll();

@@ -1,21 +1,15 @@
 package de.muenchen.demo.service.rest;
 
-import de.muenchen.demo.service.domain.Buerger;
 import de.muenchen.demo.service.domain.Pass;
 import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
-import de.muenchen.demo.service.domain.Wohnung;
-import de.muenchen.demo.service.rest.api.BuergerResource;
 import de.muenchen.demo.service.rest.api.PassResource;
 import de.muenchen.demo.service.rest.api.PassResourceAssembler;
 import de.muenchen.demo.service.rest.api.SearchResultResource;
-import de.muenchen.demo.service.rest.api.WohnungResource;
 import de.muenchen.demo.service.rest.api.WohnungResourceAssembler;
 import de.muenchen.demo.service.services.PassService;
 import de.muenchen.demo.service.services.StaatsangehoerigkeitService;
 import de.muenchen.demo.service.services.WohnungService;
 import de.muenchen.demo.service.util.HateoasRelations;
-import java.util.List;
-import java.util.Set;
 import javax.annotation.security.RolesAllowed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -206,7 +200,7 @@ public class PassController {
      * Assoziiert ein Staatsangehoerigkeit mit einem Pass .
      *
      * @param passOid
-     * @param staatsOid
+     * @param statsOid
      * @return
      */
     @RolesAllowed({"PERM_addStaatangehoerigkeitPass"})
