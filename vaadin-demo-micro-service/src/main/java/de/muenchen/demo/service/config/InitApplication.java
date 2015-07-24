@@ -10,6 +10,8 @@ import de.muenchen.demo.service.domain.Authority;
 import de.muenchen.demo.service.domain.AuthorityPermission;
 import de.muenchen.demo.service.domain.AuthorityPermissionRepository;
 import de.muenchen.demo.service.domain.AuthorityRepository;
+import de.muenchen.demo.service.domain.Mandant;
+import de.muenchen.demo.service.domain.MandantRepository;
 import de.muenchen.demo.service.domain.Permission;
 import de.muenchen.demo.service.domain.PermissionRepository;
 import de.muenchen.demo.service.domain.User;
@@ -26,6 +28,8 @@ import de.muenchen.demo.service.rest.BuergerController;
 import de.muenchen.demo.service.rest.CompanyBaseInfoController;
 import de.muenchen.demo.service.rest.MandantController;
 import de.muenchen.demo.service.rest.PermissionController;
+import de.muenchen.demo.service.rest.SachbearbeiterController;
+import de.muenchen.demo.service.rest.SecurityRestClientController;
 import de.muenchen.demo.service.rest.StaatsangehoerigkeitController;
 import de.muenchen.demo.service.rest.UserAuthorityController;
 import de.muenchen.demo.service.rest.UserController;
@@ -52,18 +56,20 @@ public class InitApplication {
     UserAuthorityRepository userAuthRepo;
     @Autowired
     AuthorityPermissionRepository authPermRepo;
+    @Autowired
+    MandantRepository mandantRepo;
     public InitApplication() {
 
     }
 
-    public InitApplication(UserRepository usersRepo, AuthorityRepository authRepo, PermissionRepository permRepo, UserAuthorityRepository userAuthRepo, AuthorityPermissionRepository authPermRepo) {
+    public InitApplication(UserRepository usersRepo, AuthorityRepository authRepo, PermissionRepository permRepo, UserAuthorityRepository userAuthRepo, AuthorityPermissionRepository authPermRepo, MandantRepository mandantRepo) {
         this.usersRepo = usersRepo;
         this.authRepo = authRepo;
         this.permRepo = permRepo;
         this.userAuthRepo = userAuthRepo;
         this.authPermRepo = authPermRepo;
+        this.mandantRepo = mandantRepo;
     }
-
     public void init() {
         User user = new User();
         user.setEmail("hans@muenchen.de");
@@ -71,6 +77,10 @@ public class InitApplication {
         user.setUsername("hans");
         user.setOid(IdService.next());
         user.setEnabled(TRUE);
+        Mandant mandant = new Mandant();
+        mandant.setOid("1");
+        mandantRepo.save(mandant);
+        user.setMandant(mandant);
         usersRepo.save(user);
 
         Authority auth = new Authority();
@@ -116,11 +126,19 @@ public class InitApplication {
             String name = method.getName();
             list.add("PERM_" + name);
         }
+        for (Method method : SecurityRestClientController.class.getDeclaredMethods()) {
+            String name = method.getName();
+            list.add("PERM_" + name);
+        }
         for (Method method : AuthorityPermissionController.class.getDeclaredMethods()) {
             String name = method.getName();
             list.add("PERM_" + name);
         }
         for (Method method : AccountController.class.getDeclaredMethods()) {
+            String name = method.getName();
+            list.add("PERM_" + name);
+        }
+        for (Method method : SachbearbeiterController.class.getDeclaredMethods()) {
             String name = method.getName();
             list.add("PERM_" + name);
         }

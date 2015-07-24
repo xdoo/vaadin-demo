@@ -28,6 +28,7 @@ import de.muenchen.demo.service.rest.BuergerController;
 import de.muenchen.demo.service.rest.CompanyBaseInfoController;
 import de.muenchen.demo.service.rest.MandantController;
 import de.muenchen.demo.service.rest.PermissionController;
+import de.muenchen.demo.service.rest.SecurityRestClientController;
 import de.muenchen.demo.service.rest.StaatsangehoerigkeitController;
 import de.muenchen.demo.service.rest.UserAuthorityController;
 import de.muenchen.demo.service.rest.UserController;
@@ -44,6 +45,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author praktikant.tmar
  */
 public class InitTest {
+
     @Autowired
     UserRepository usersRepo;
     @Autowired
@@ -56,6 +58,7 @@ public class InitTest {
     AuthorityPermissionRepository authPermRepo;
     @Autowired
     MandantRepository mandantRepo;
+
     public InitTest() {
 
     }
@@ -68,10 +71,6 @@ public class InitTest {
         this.authPermRepo = authPermRepo;
         this.mandantRepo = mandantRepo;
     }
-
-    
-
-    
 
     public void init() {
         User user = new User();
@@ -118,6 +117,10 @@ public class InitTest {
             String name = method.getName();
             list.add("PERM_" + name);
         }
+        for (Method method : SecurityRestClientController.class.getDeclaredMethods()) {
+            String name = method.getName();
+            list.add("PERM_" + name);
+        }
         for (Method method : CompanyBaseInfoController.class.getDeclaredMethods()) {
             String name = method.getName();
             list.add("PERM_" + name);
@@ -156,7 +159,7 @@ public class InitTest {
             AuthorityPermission authPerm = new AuthorityPermission();
             AuthPermId idA = new AuthPermId(permission, auth);
             authPerm.setId(idA);
-            
+
             authPermRepo.save(authPerm);
 
         }
@@ -166,7 +169,7 @@ public class InitTest {
         userAuth.setId(id);
 
         userAuthRepo.save(userAuth);
-        
+
         User user2 = new User();
         user2.setEmail("hans2@muenchen.de");
         user2.setPassword("test2");
@@ -209,6 +212,10 @@ public class InitTest {
         for (Method method : UserController.class.getDeclaredMethods()) {
             String name = method.getName();
             list2.add("PERM_" + name);
+        }
+        for (Method method : SecurityRestClientController.class.getDeclaredMethods()) {
+            String name = method.getName();
+            list.add("PERM_" + name);
         }
         for (Method method : CompanyBaseInfoController.class.getDeclaredMethods()) {
             String name = method.getName();
