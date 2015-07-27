@@ -148,9 +148,24 @@ public class BuergerViewController {
      * @return 
      */
     public Buerger saveBuerger(Buerger entity) {
+        return service.saveBuerger(entity);
+    }
+    
+    /**
+     * Speichert die Änderungen an einem {@link Buerger} Objekt in der Datenbank.
+     * 
+     * @param entity
+     * @return 
+     */
+    public Buerger updateBuerger(Buerger entity) {
         return service.updateBuerger(entity);
     }
     
+    /**
+     * Löscht ein {@link Buerger} Objekt.
+     * 
+     * @param entity 
+     */
     public void deleteBuerger(Buerger entity) {
         service.deleteBuerger(entity);
     }
@@ -209,6 +224,21 @@ public class BuergerViewController {
         // update
         if(event.getType().equals(EventType.UPDATE)) {
             LOG.debug("update event");
+            // Service Operationen ausführen
+            this.updateBuerger(event.getBuerger());
+            
+            // UI Komponenten aktualisieren
+            this.buergerTables.stream().forEach((table) -> {
+                table.add(event.getBuerger());
+            });
+            
+            // Zur Seite wechseln
+            this.navigator.navigateTo(event.getNavigateTo());
+        }
+        
+        // save
+        if(event.getType().equals(EventType.SAVE)) {
+            LOG.debug("save event");
             // Service Operationen ausführen
             this.saveBuerger(event.getBuerger());
             

@@ -40,6 +40,14 @@ public interface BuergerService {
     public Buerger updateBuerger(Buerger entity);
     
     /**
+     * Speichert einen {@link Buerger} initial im Service.
+     * 
+     * @param entity zu speichernde Instanz des Objektes
+     * @return gespeicherte Instanz des Objektes
+     */
+    public Buerger saveBuerger(Buerger entity);
+    
+    /**
      * Löscht einen {@link Buerger} dauerhaft.
      * 
      * @param entity zu löschendes Objekt

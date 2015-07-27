@@ -20,9 +20,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.hateoas.config.EnableHypermediaSupport;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 
 @SpringBootApplication
+//@EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)
 public class Application  {
 
     public static void main(String[] args) throws Exception {

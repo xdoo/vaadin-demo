@@ -57,6 +57,11 @@ public class BuergerServiceImpl implements BuergerService {
     }
 
     @Override
+    public Buerger saveBuerger(Buerger entity) {
+       return client.saveBuerger(entity, this.template);
+    }
+    
+    @Override
     public void deleteBuerger(Buerger buerger) {
         client.deleteBuerger(buerger.getLinks(), this.template);
     }

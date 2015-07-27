@@ -21,6 +21,8 @@ public interface BuergerRestClient {
     
     public Buerger updateBuerger(Buerger buerger, RestTemplate restTemplate);
     
+    public Buerger saveBuerger(Buerger buerger, RestTemplate restTemplate);
+    
     public void deleteBuerger(List<Link> links, RestTemplate restTemplate);
     
 }

@@ -19,12 +19,8 @@ public class SecurityRestClientImpl implements SecurityRestClient {
     @Override
     public Optional<Principal> getPrincipal(RestTemplate template) {
         ServiceInfo serviceInfo = serviceInfoClient.getServiceInfo();
-        String URL= "http://localhost:8080/principal";
-        //template.getForEntity(URL, Principal.class);       
+        String URL= "http://localhost:8080/principal";       
         Principal principal = template.getForEntity(URL, Principal.class).getBody();
-//        principal.setUsername("hans");
-//        principal.setRoles(Lists.newArrayList("USER", "ADMIN"));
-//        principal.setPermissions(Lists.newArrayList("FOO", "BAR"));
         return Optional.of(principal);
     }
     

@@ -11,8 +11,8 @@ import org.springframework.hateoas.Resource;
  */
 public class BuergerAssembler {
     
-    public static List<Buerger> fromResources(List<BuergerResource> resources) {
-        return resources.stream().map(r -> fromResource(r)).collect(Collectors.toList());
+    public static List<Buerger> fromResources(SearchResultResource<BuergerResource> resource) {
+        return resource.getResult().stream().map(r -> fromResource(r)).collect(Collectors.toList());
     }
     
     public static Buerger fromResource(Resource<BuergerResource> resource) {

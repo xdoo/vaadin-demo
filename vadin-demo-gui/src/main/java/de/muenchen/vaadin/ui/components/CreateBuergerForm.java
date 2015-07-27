@@ -49,7 +49,7 @@ public class CreateBuergerForm extends CustomComponent {
                     // TODO --> i18n
                     Success succes = new Success("Person erstellt", "Die Person wurde erfolgreich erstellt und gespeichert.");
                     succes.show(Page.getCurrent());
-                    BuergerEvent event = new BuergerEvent(binder.getItemDataSource().getBean(), EventType.UPDATE);
+                    BuergerEvent event = new BuergerEvent(binder.getItemDataSource().getBean(), EventType.SAVE);
                     event.setNavigateTo(navigateTo);
                     controller.getEventbus().post(event);
                     //reset

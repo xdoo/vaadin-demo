@@ -40,10 +40,12 @@ import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.WebUtils;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.hateoas.config.EnableHypermediaSupport;
 
 @Configuration
 @ComponentScan
 @EnableAutoConfiguration
+@EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)
 @EnableGlobalMethodSecurity(jsr250Enabled = true)
 public class Application {
 
