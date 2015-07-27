@@ -27,6 +27,21 @@ public class BuergerServiceImpl extends BaseService<Buerger> implements BuergerS
         this.repo = repo;
         this.search = new QueryService<>(em, Buerger.class, "vorname", "nachname");
     }
+
+    @Override
+    public Buerger copy(String oid) {
+        Buerger in = super.read(oid);
+        Buerger out = super.create();
+        
+        // map
+        out.setVorname(in.getVorname());
+        out.setNachname(in.getNachname());
+        out.setGeburtsdatum(in.getGeburtsdatum());
+        
+        return out;
+    }
+    
+    
     
     
 }
