@@ -24,11 +24,11 @@ import org.springframework.web.client.RestTemplate;
  * @author praktikant.tmar
  */
 @Controller
-@ExposesResourceFor(SachbearbeiterController.class)
+@ExposesResourceFor(SecurityRestClientController.class)
 @RequestMapping("/principal")
 public class SecurityRestClientController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SachbearbeiterController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SecurityRestClientController.class);
     @Autowired
     SecurityRestClient service;
 
