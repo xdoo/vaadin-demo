@@ -38,6 +38,9 @@ public class BuergerServiceImpl extends BaseService<Buerger> implements BuergerS
         out.setNachname(in.getNachname());
         out.setGeburtsdatum(in.getGeburtsdatum());
         
+        // in DB speichern
+        super.save(out);
+        
         return out;
     }
     

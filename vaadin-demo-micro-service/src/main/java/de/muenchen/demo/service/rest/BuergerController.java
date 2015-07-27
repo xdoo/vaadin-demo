@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -168,13 +169,30 @@ public class BuergerController {
         if (LOG.isDebugEnabled()) {
             LOG.debug("update buerger");
         }
+        
+        if(!request.getOid().equals(oid)) {
+            LOG.warn(String.format("Provided two different oids: '%s' != '%s'", oid, request.getOid()));
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+        
         Buerger entity = service.read(request.getOid());
-        LOG.info("davor > " + entity.toString());
-        this.assembler.fromResource(request, entity);
-        LOG.info("danach > " + entity.toString());
-        this.service.update(entity);
-        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY, HateoasRelations.WOHNUNGEN, HateoasRelations.KINDER);
-        return ResponseEntity.ok(resource);
+        if (entity != null) {
+            this.assembler.fromResource(request, entity);
+            this.service.update(entity);
+            BuergerResource resource = this.assembler.toResource(entity, 
+                    HateoasRelations.SELF, 
+                    HateoasRelations.NEW, 
+                    HateoasRelations.DELETE, 
+                    HateoasRelations.UPDATE, 
+                    HateoasRelations.COPY, 
+                    // Relationen
+                    HateoasRelations.WOHNUNGEN, 
+                    HateoasRelations.KINDER);
+            return ResponseEntity.ok(resource);
+        } else {
+            LOG.warn(String.format("Could not find resource with id '%s'.", oid));
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
     }
 
     /**
