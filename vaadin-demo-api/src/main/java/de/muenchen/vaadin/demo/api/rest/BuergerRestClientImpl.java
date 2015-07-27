@@ -55,7 +55,11 @@ public class BuergerRestClientImpl implements BuergerRestClient {
     
     @Override
     public void deleteBuerger(List<Link> links, RestTemplate restTemplate) {
-        this.readSingleSource(HateoasUtil.REL_DELETE, links, restTemplate);
+        Optional<Link> link = HateoasUtil.findLinkForRel(HateoasUtil.REL_DELETE, links);
+        if (link.isPresent()) {
+            ResponseEntity<BuergerResource> exchange = restTemplate.exchange(link.get().getHref(), HttpMethod.DELETE, null, new ParameterizedTypeReference<BuergerResource>() {});
+            LOG.debug(exchange.toString());
+        }
     }
     
     public Buerger writeSingleSource(String rel, Buerger buerger, RestTemplate restTemplate) {
@@ -69,12 +73,10 @@ public class BuergerRestClientImpl implements BuergerRestClient {
     }
     
     public Buerger readSingleSource(String rel, List<Link> links, RestTemplate restTemplate) {
-        
         Optional<Link> link = HateoasUtil.findLinkForRel(rel, links);
         if (link.isPresent()) {
-            ResponseEntity<Resource<BuergerResource>> exchange = restTemplate.exchange(link.get().getHref(), HttpMethod.GET, null, new ParameterizedTypeReference<Resource<BuergerResource>>() {});
-//            ResponseEntity<BuergerResource> resource = restTemplate.getForEntity(link.get().getHref(), BuergerResource.class);
-            LOG.info(exchange.toString());
+            ResponseEntity<BuergerResource> exchange = restTemplate.exchange(link.get().getHref(), HttpMethod.GET, null, new ParameterizedTypeReference<BuergerResource>() {});
+            LOG.debug(exchange.toString());
             return BuergerAssembler.fromResource(exchange.getBody());
         }
         LOG.warn("Found no link.");
@@ -85,7 +87,7 @@ public class BuergerRestClientImpl implements BuergerRestClient {
         Optional<Link> link = HateoasUtil.findLinkForRel(rel, links);
         if (link.isPresent()) {
             ResponseEntity<SearchResultResource<BuergerResource>> exchange = restTemplate.exchange(link.get().getHref(), HttpMethod.GET, null, new ParameterizedTypeReference<SearchResultResource<BuergerResource>>() {});
-//            ResponseEntity<SearchResultResource> resource = restTemplate.getForEntity(link.get().getHref(), SearchResultResource.class);
+            LOG.debug(exchange.toString());
             return BuergerAssembler.fromResources(exchange.getBody());
         }
         LOG.warn("Found no link.");

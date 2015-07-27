@@ -39,8 +39,7 @@ public class BuergerAssembler {
         // end mapping
         
         // set links
-//        entity.setId(resource.getId().getHref());
-//        entity.setLinks(resource.getLinks());
+        entity.setLinks(resource.getLinks());
         return entity;
     }
     

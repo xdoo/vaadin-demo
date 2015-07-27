@@ -1,10 +1,12 @@
 package de.muenchen.vaadin.demo.api.rest;
 
+import org.springframework.hateoas.ResourceSupport;
+
 /**
  *
  * @author claus.straube
  */
-public class BaseResource {
+public class BaseResource extends ResourceSupport {
     
     private String oid;
 

@@ -43,7 +43,16 @@ public class BuergerResourceAssembler {
     public SearchResultResource<BuergerResource> toResource(final List<Buerger> buerger) {
         SearchResultResource<BuergerResource> resource = new SearchResultResource<>();
         buerger.stream().forEach((b) -> {
-            resource.add(this.toResource(b, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE));
+            resource.add(this.toResource(b, 
+                    HateoasRelations.SELF, 
+                    HateoasRelations.NEW, 
+                    HateoasRelations.DELETE, 
+                    HateoasRelations.UPDATE, 
+                    HateoasRelations.COPY, 
+                    // Relationen
+                    HateoasRelations.KINDER, 
+                    HateoasRelations.PASS, 
+                    HateoasRelations.WOHNUNGEN));
         });
         // add query link
         resource.add(linkTo(methodOn(BuergerController.class).queryBuerger()).withRel(HateoasUtil.QUERY));

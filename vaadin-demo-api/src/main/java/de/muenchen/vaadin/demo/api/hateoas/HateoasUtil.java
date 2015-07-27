@@ -27,7 +27,11 @@ public class HateoasUtil {
      * @return 
      */
     public static Optional<Link> findLinkForRel(String rel, List<Link> links) {
-        return links.stream().filter(l -> l.getRel().equals(rel)).findFirst();
+        Optional<Link> result = Optional.empty();
+        if(links != null) {
+            result = links.stream().filter(l -> l.getRel().equals(rel)).findFirst();
+        }
+        return result;
     }
     
     /**
