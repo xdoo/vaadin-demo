@@ -309,6 +309,14 @@ public class BuergerViewController {
             // Zur Seite wechseln
             this.navigator.navigateTo(event.getNavigateTo());
         }
+        
+        // cancel
+        if(event.getType().equals(EventType.CANCEL)) {
+            LOG.debug("cancel event");
+            
+            // Zur Seite wechseln
+            this.navigator.navigateTo(event.getNavigateTo()); 
+        }
     }
     
 }

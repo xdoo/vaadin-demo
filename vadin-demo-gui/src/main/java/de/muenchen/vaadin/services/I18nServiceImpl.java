@@ -1,6 +1,5 @@
 package de.muenchen.vaadin.services;
 
-import de.muenchen.vaadin.demo.api.services.SecurityService;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -10,7 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /**
- *
+ * TODO -> umstellen!
+ * 
  * @author claus.straube
  */
 @Service
@@ -39,6 +39,7 @@ public class I18nServiceImpl implements I18nService {
        this.messages.put("m1.buerger.form.create.headline.label", "Person erstellen");
        this.messages.put("m1.buerger.form.update.button.label", "aktualisieren");
        this.messages.put("m1.buerger.form.create.button.label", "neu");
+       this.messages.put("m1.buerger.form.cancel.button.label", "abbrechen");
        this.messages.put("m1.buerger.form.save.button.label", "speichern");
        this.messages.put("m1.buerger.vorname.label", "Vorname:");
        this.messages.put("m1.buerger.vorname.column_header", "Vorname");
