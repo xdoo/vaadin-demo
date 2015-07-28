@@ -74,7 +74,6 @@ public class UpdateBuergerForm extends CustomComponent {
             public void buttonClick(Button.ClickEvent click) {
                 try {
                     binder.commit();
-                    Notification.show("Thanks!");
                     Buerger entity = binder.getItemDataSource().getBean();
                     BuergerEvent event = new BuergerEvent(entity, EventType.UPDATE);
                     event.setNavigateTo(navigateTo);

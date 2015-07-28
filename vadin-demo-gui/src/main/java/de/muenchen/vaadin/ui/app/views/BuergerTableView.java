@@ -1,6 +1,5 @@
 package de.muenchen.vaadin.ui.app.views;
 
-import com.google.common.eventbus.EventBus;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.VerticalLayout;

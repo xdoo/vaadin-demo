@@ -5,6 +5,7 @@ import com.vaadin.navigator.Navigator;
 import com.vaadin.ui.UI;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import com.google.common.eventbus.Subscribe;
+import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import de.muenchen.vaadin.services.BuergerService;
@@ -13,6 +14,7 @@ import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.app.views.events.BuergerEvent;
 import de.muenchen.vaadin.ui.components.CreateBuergerForm;
 import de.muenchen.vaadin.ui.components.BuergerTable;
+import de.muenchen.vaadin.ui.components.Success;
 import de.muenchen.vaadin.ui.components.UpdateBuergerForm;
 import de.muenchen.vaadin.ui.util.EventBus;
 import de.muenchen.vaadin.ui.util.EventType;
@@ -232,6 +234,9 @@ public class BuergerViewController {
                 table.add(event.getBuerger());
             });
             
+            Success succes = new Success("Bürger angepasst", "Der Bürger wurde erfolgreich angepasst und gespeichert."); // TODO i18n
+            succes.show(Page.getCurrent());
+            
             // Zur Seite wechseln
             this.navigator.navigateTo(event.getNavigateTo());
         }
@@ -247,6 +252,9 @@ public class BuergerViewController {
                 table.add(event.getBuerger());
             });
             
+            Success succes = new Success("Bürger erstellt", "Der Bürger wurde erfolgreich erstellt und gespeichert."); // TODO i18n
+            succes.show(Page.getCurrent());
+            
             // Zur Seite wechseln
             this.navigator.navigateTo(event.getNavigateTo());
         }
@@ -261,6 +269,9 @@ public class BuergerViewController {
             this.buergerTables.stream().forEach((table) -> {
                 table.delete(event.getItemId());
             });
+            
+            Success succes = new Success("Bürger gelöscht", "Der Bürger wurde erfolgreich gelöscht."); // TODO i18n
+            succes.show(Page.getCurrent());
         }
         
         // copy
@@ -273,6 +284,9 @@ public class BuergerViewController {
             this.buergerTables.stream().forEach((table) -> {
                 table.add(copy);
             });
+            
+            Success succes = new Success("Bürger kopiert", "Der Bürger wurde erfolgreich kopiert."); // TODO i18n
+            succes.show(Page.getCurrent());
         }
         
         // select
