@@ -21,7 +21,7 @@ public class BuergerTableView extends DefaultBuergerView {
     public static final String NAME = "buerger_table_view";
     
     @Autowired
-    public BuergerTableView(BuergerViewController controller, EventBus eventbus, MainUI ui) {
+    public BuergerTableView(BuergerViewController controller, MainUI ui) {
         super(controller, ui);
     }
 
