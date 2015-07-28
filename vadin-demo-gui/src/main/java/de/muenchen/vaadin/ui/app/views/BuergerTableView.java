@@ -27,7 +27,7 @@ public class BuergerTableView extends DefaultBuergerView {
     @Override
     protected void site() {
         CreateBuergerButton button = new CreateBuergerButton(controller, BuergerCreateView.NAME);
-        BuergerTable table = this.controller.generatePersonTable(BuergerUpdateView.NAME);
+        BuergerTable table = this.controller.generateBuergerTable(BuergerUpdateView.NAME, BuergerReadView.NAME);
         
         VerticalLayout layout = new VerticalLayout(button, table);
         layout.setSpacing(true);

@@ -28,7 +28,8 @@ public class BuergerTable extends CustomComponent {
     private Table table;
     
     // Navigation
-    private String navigateToAfterEdit;
+    private String navigateToForEdit;
+    private String navigateToForSelect;
     
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerTable.class);
     
@@ -92,6 +93,7 @@ public class BuergerTable extends CustomComponent {
      * "Action" Buttons für jede Tabellenzeile. In jeder Tabellenzeile
      * gibt "Action" Buttons für folgende Ereignisse:
      * <ul>
+     *  <li>ansehen</li>
      *  <li>bearbeiten</li>
      *  <li>kopieren</li>
      *  <li>löschen</li>
@@ -102,14 +104,25 @@ public class BuergerTable extends CustomComponent {
      */
     public HorizontalLayout addButtons(final Object id) {
         
+        // select
+        Button select = new Button();
+        select.setIcon(FontAwesome.FILE_O);
+        select.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
+        select.addClickListener(e -> {
+            BeanItem<Buerger> item = container.getItem(id);
+            BuergerEvent event = new BuergerEvent(item, id, EventType.SELECT2READ);
+            event.setNavigateTo(this.navigateToForSelect);
+            controller.getEventbus().post(event);
+        });
+        
         //edit
         Button edit = new Button();
         edit.setIcon(FontAwesome.PENCIL);
         edit.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
         edit.addClickListener(e -> {
             BeanItem<Buerger> item = container.getItem(id);
-            BuergerEvent event = new BuergerEvent(item, id, EventType.SELECT);
-            event.setNavigateTo(navigateToAfterEdit);
+            BuergerEvent event = new BuergerEvent(item, id, EventType.SELECT2UPDATE);
+            event.setNavigateTo(navigateToForEdit);
             controller.getEventbus().post(event);
         });
         
@@ -135,7 +148,7 @@ public class BuergerTable extends CustomComponent {
             win.focus();
         });
 
-        HorizontalLayout layout = new HorizontalLayout(edit, copy, delete);
+        HorizontalLayout layout = new HorizontalLayout(select, edit, copy, delete);
         layout.setSpacing(true);
         
         return layout;
@@ -143,12 +156,19 @@ public class BuergerTable extends CustomComponent {
     
     // Members
 
-    public void setNavigateToAfterEdit(String navigateToAfterEdit) {
-        this.navigateToAfterEdit = navigateToAfterEdit;
+    public void setNavigateToForEdit(String navigateToForEdit) {
+        this.navigateToForEdit = navigateToForEdit;
     }
 
-    public String getNavigateToAfterEdit() {
-        return navigateToAfterEdit;
+    public String getNavigateToForEdit() {
+        return navigateToForEdit;
     }
 
+    public void setNavigateToForSelect(String navigateToForSelect) {
+        this.navigateToForSelect = navigateToForSelect;
+    }
+
+    public String getNavigateToForSelect() {
+        return navigateToForSelect;
+    }
 }

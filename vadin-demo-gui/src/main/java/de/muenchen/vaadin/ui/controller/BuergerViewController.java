@@ -180,25 +180,30 @@ public class BuergerViewController {
     // Setter und Getter für die UI Komponenten //
     //////////////////////////////////////////////
 
-    public CreateBuergerForm generateCreatePersonForm(String navigateTo) {
+    public CreateBuergerForm generateCreateBuergerForm(String navigateTo) {
         CreateBuergerForm form = new CreateBuergerForm(this, navigateTo);
         this.createBuergerForms.add(form);
         
         return form;
     }
 
-    public UpdateBuergerForm generateUpdatePersonForm(String navigateTo) {      
+    public UpdateBuergerForm generateUpdateBuergerForm(String navigateTo) {      
         UpdateBuergerForm form = new UpdateBuergerForm(this, navigateTo);
         this.updateBuergerForms.add(form);
         
         return form;
     }
+    
+    public BuergerTable generateBuergerTable(String navigateToForUpdateAndSelect){
+        return this.generateBuergerTable(navigateToForUpdateAndSelect, navigateToForUpdateAndSelect);
+    }
 
-    public BuergerTable generatePersonTable(String navigateToAfterEdit) {      
+    public BuergerTable generateBuergerTable(String navigateToForEdit, String navigateToForSelect) {      
         BuergerTable table = new BuergerTable(this);
         this.buergerTables.add(table);
         
-        table.setNavigateToAfterEdit(navigateToAfterEdit);
+        table.setNavigateToForEdit(navigateToForEdit);
+        table.setNavigateToForSelect(navigateToForSelect);
         
         return table;
     }
@@ -289,9 +294,9 @@ public class BuergerViewController {
             succes.show(Page.getCurrent());
         }
         
-        // select
-        if(event.getType().equals(EventType.SELECT)) {
-            LOG.debug("select event");
+        // select um den Bürger zu bearbeiten
+        if(event.getType().equals(EventType.SELECT2UPDATE)) {
+            LOG.debug("select to update event");
             
             // UI Komponenten aktualisieren
             updateBuergerForms.stream().forEach((form) -> {
@@ -305,6 +310,16 @@ public class BuergerViewController {
             // wird die Person unter 'current' gespeichert, damit sich
             // die Komponente selbst versorgen kann.
             this.current = event.getItem();
+            
+            // Zur Seite wechseln
+            this.navigator.navigateTo(event.getNavigateTo());
+        }
+        
+        // select um den Bürger anzusehen
+        if(event.getType().equals(EventType.SELECT2READ)) {
+            LOG.debug("select to read event");
+            
+            // TODO
             
             // Zur Seite wechseln
             this.navigator.navigateTo(event.getNavigateTo());

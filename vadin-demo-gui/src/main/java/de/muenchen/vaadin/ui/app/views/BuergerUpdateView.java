@@ -24,7 +24,7 @@ public class BuergerUpdateView extends DefaultBuergerView {
 
     @Override
     protected void site() {
-        addComponent(this.controller.generateUpdatePersonForm(BuergerTableView.NAME));
+        addComponent(this.controller.generateUpdateBuergerForm(BuergerTableView.NAME));
     }
     
 }

@@ -3,6 +3,7 @@ package de.muenchen.vaadin.ui.app.views;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import de.muenchen.vaadin.ui.app.MainUI;
+import de.muenchen.vaadin.ui.components.BuergerBackButton;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -10,20 +11,20 @@ import org.springframework.beans.factory.annotation.Autowired;
  *
  * @author claus
  */
-@SpringView(name = BuergerCreateView.NAME)
+@SpringView(name = BuergerReadView.NAME)
 @UIScope
-public class BuergerCreateView extends DefaultBuergerView {
-    
-    public static final String NAME = "buerger_create_view";
+public class BuergerReadView extends DefaultBuergerView {
 
+    public static final String NAME = "buerger_read_view";
+    
     @Autowired
-    public BuergerCreateView(BuergerViewController controller, MainUI ui) {
+    public BuergerReadView(BuergerViewController controller, MainUI ui) {
         super(controller, ui);
     }
 
     @Override
     protected void site() {
-        addComponent(this.controller.generateCreateBuergerForm(BuergerTableView.NAME));
+        addComponent(new BuergerBackButton(controller, BuergerTableView.NAME));
     }
     
 }
