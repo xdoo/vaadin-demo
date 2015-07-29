@@ -5,6 +5,7 @@ import com.vaadin.navigator.Navigator;
 import com.vaadin.ui.UI;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import com.google.common.eventbus.Subscribe;
+import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
@@ -19,6 +20,7 @@ import de.muenchen.vaadin.ui.components.UpdateBuergerForm;
 import de.muenchen.vaadin.ui.util.EventBus;
 import de.muenchen.vaadin.ui.util.EventType;
 import de.muenchen.vaadin.ui.util.VaadinUtil;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
@@ -31,7 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author claus.straube
  */
 @SpringComponent @UIScope
-public class BuergerViewController {
+public class BuergerViewController implements Serializable {
     
     public static final String I18N_BASE_PATH = "m1.buerger";
     
@@ -174,6 +176,10 @@ public class BuergerViewController {
     
     public List<Buerger> queryBuerger() {
         return service.queryBuerger();
+    }
+    
+    public List<Buerger> queryBuerger(String query) {
+        return service.queryBuerger(query);
     }
     
     //////////////////////////////////////////////
@@ -323,6 +329,16 @@ public class BuergerViewController {
             
             // Zur Seite wechseln
             this.navigator.navigateTo(event.getNavigateTo());
+        }
+        
+        // query
+        if(event.getType().equals(EventType.QUERY)) {
+            LOG.debug("query event");
+            
+            List<Buerger> buerger = this.queryBuerger(event.getQuery());
+            
+            // UI Komponenten aktualisieren
+            this.buergerTables.stream().forEach((table) -> {table.addAll(buerger);});
         }
         
         // cancel

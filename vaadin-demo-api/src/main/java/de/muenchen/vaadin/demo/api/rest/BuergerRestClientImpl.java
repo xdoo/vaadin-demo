@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.hateoas.Link;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -39,7 +40,12 @@ public class BuergerRestClientImpl implements BuergerRestClient {
     
     @Override
     public List<Buerger> queryBuerger(List<Link> links, RestTemplate restTemplate) {
-        return this.readMultiSource(HateoasUtil.REL_QUERY, links, restTemplate);
+        return this.requestMultiSource(HttpMethod.GET, HateoasUtil.REL_QUERY, links, restTemplate);
+    }
+    
+    @Override
+    public List<Buerger> queryBuerger(String query, List<Link> links, RestTemplate restTemplate) {
+        return this.requestMultiSource(HttpMethod.POST, HateoasUtil.REL_QUERY, links, restTemplate, new HttpEntity(query));
     }
     
     @Override
@@ -82,10 +88,16 @@ public class BuergerRestClientImpl implements BuergerRestClient {
         return null;
     }
     
-    public List<Buerger> readMultiSource(String rel, List<Link> links, RestTemplate restTemplate) {
+    
+    
+    public List<Buerger> requestMultiSource(HttpMethod httpMethod, String rel, List<Link> links, RestTemplate restTemplate) {
+        return this.requestMultiSource(httpMethod, rel, links, restTemplate, HttpEntity.EMPTY);
+    }
+    
+    public List<Buerger> requestMultiSource(HttpMethod httpMethod, String rel, List<Link> links, RestTemplate restTemplate, HttpEntity payload) {
         Optional<Link> link = HateoasUtil.findLinkForRel(rel, links);
         if (link.isPresent()) {
-            ResponseEntity<SearchResultResource<BuergerResource>> exchange = restTemplate.exchange(link.get().getHref(), HttpMethod.GET, null, new ParameterizedTypeReference<SearchResultResource<BuergerResource>>() {});
+            ResponseEntity<SearchResultResource<BuergerResource>> exchange = restTemplate.exchange(link.get().getHref(), httpMethod, payload, new ParameterizedTypeReference<SearchResultResource<BuergerResource>>() {});
             LOG.debug(exchange.toString());
             return BuergerAssembler.fromResources(exchange.getBody());
         }

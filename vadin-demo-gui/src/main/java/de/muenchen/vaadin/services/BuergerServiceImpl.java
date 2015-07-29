@@ -7,6 +7,7 @@ import de.muenchen.vaadin.demo.api.services.SecurityService;
 import com.google.common.collect.Lists;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
@@ -20,7 +21,7 @@ import org.springframework.web.client.RestTemplate;
  * @author claus.straube
  */
 @SpringComponent @UIScope
-public class BuergerServiceImpl implements BuergerService {
+public class BuergerServiceImpl implements BuergerService, Serializable {
     
     private static final Logger LOG = LoggerFactory.getLogger(BuergerService.class);
     
@@ -74,8 +75,15 @@ public class BuergerServiceImpl implements BuergerService {
     }
 
     @Override
+    public List<Buerger> queryBuerger(String query) {
+        Link link = this.infoService.getUrl("buerger_query");
+        ArrayList<Link> links = Lists.newArrayList(link.withRel(HateoasUtil.REL_QUERY));
+        return client.queryBuerger(query, links, this.template);
+    }
+    
+    @Override
     public Buerger copyBuerger(Buerger buerger) {
         return client.copyBuerger(buerger.getLinks(), this.template);
     }
-    
+  
 }

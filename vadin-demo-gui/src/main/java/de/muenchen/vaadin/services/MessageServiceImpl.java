@@ -3,6 +3,7 @@ package de.muenchen.vaadin.services;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
+import java.io.Serializable;
 import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -13,7 +14,7 @@ import org.springframework.util.StringUtils;
  */
 @SpringComponent
 @UIScope
-public class MessageServiceImpl implements MessageService {
+public class MessageServiceImpl implements MessageService, Serializable {
 
     @Autowired
     private I18nService i18n;

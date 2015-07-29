@@ -93,13 +93,14 @@ public class BuergerController {
      * @return
      */
     @RolesAllowed({"PERM_queryBuerger"})
-    @RequestMapping(value = "/query", params = {"filter"})
-    public ResponseEntity queryBuerger(@RequestParam(value = "filter") String filter) {
+    @RequestMapping(value = "/query", method = {RequestMethod.POST})
+    public ResponseEntity queryBuerger(@RequestBody String query) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("query buerger with filter > " + filter);
+            LOG.debug("query buerger with query > " + query);
         }
-        SearchResultResource<BuergerResource> resource = this.assembler.toResource(this.service.query(filter));
-        resource.add(linkTo(methodOn(BuergerController.class).queryBuerger(filter)).withSelfRel()); // add self link with params
+        List<Buerger> result = this.service.query(query);
+        SearchResultResource<BuergerResource> resource = this.assembler.toResource(result);
+        resource.add(linkTo(methodOn(BuergerController.class).queryBuerger(query)).withSelfRel()); // add self link with params
         return ResponseEntity.ok(resource);
     }
 

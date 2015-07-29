@@ -61,6 +61,8 @@ public interface BuergerService {
      */
     public List<Buerger> queryBuerger();
     
+    public List<Buerger> queryBuerger(String query);
+    
     /**
      * Kopiert die Instanz eines {@link Buerger}s. Diese
      * Kopie erhält eine neue OID und wird sofort in der 

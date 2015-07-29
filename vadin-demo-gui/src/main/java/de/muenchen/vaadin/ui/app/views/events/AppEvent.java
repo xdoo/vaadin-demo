@@ -11,6 +11,7 @@ public class AppEvent {
     protected EventType type;
     protected Object itemId;
     protected String navigateTo;
+    protected String query;
     
     public EventType getType() {
         return type;
@@ -35,5 +36,12 @@ public class AppEvent {
     public String getNavigateTo() {
         return navigateTo;
     }
-    
+
+    public String getQuery() {
+        return query;
+    }
+
+    public void setQuery(String query) {
+        this.query = query;
+    }
 }

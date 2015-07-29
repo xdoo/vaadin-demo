@@ -33,10 +33,10 @@ public class I18nServiceImpl implements I18nService {
     
     @PostConstruct
     private void init() {
-       this.messages.put("m1.buerger.page.title", "Person Beispiel View");
-       this.messages.put("m1.buerger.navigation.button.label", "Person Pflege");
-       this.messages.put("m1.buerger.form.update.headline.label", "Person bearbeiten");
-       this.messages.put("m1.buerger.form.create.headline.label", "Person erstellen");
+       this.messages.put("m1.buerger.page.title", "Bürger Beispiel View");
+       this.messages.put("m1.buerger.navigation.button.label", "Bürger Pflege");
+       this.messages.put("m1.buerger.form.update.headline.label", "Bürger bearbeiten");
+       this.messages.put("m1.buerger.form.create.headline.label", "Bürger erstellen");
        this.messages.put("m1.buerger.form.update.button.label", "aktualisieren");
        this.messages.put("m1.buerger.form.create.button.label", "neu");
        this.messages.put("m1.buerger.form.cancel.button.label", "abbrechen");

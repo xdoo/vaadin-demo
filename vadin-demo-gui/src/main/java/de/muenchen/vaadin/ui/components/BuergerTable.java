@@ -75,13 +75,19 @@ public class BuergerTable extends CustomComponent {
         setCompositionRoot(table);
     }
     
-    public void add(Buerger person) {
+    public void add(Buerger buerger) {
         LOG.debug("added person to table.");
-        this.container.addBean(person);
+        this.container.addBean(buerger);
     }
     
-    public void update(Buerger person) {
-        LOG.debug("updated person in table.");
+    public void addAll(List<Buerger> buerger) {
+        LOG.debug("added search result");
+        this.container.removeAllItems();
+        this.container.addAll(buerger);
+    }
+    
+    public void update(Buerger buerger) {
+        LOG.debug("updated buerger in table.");
     }
     
     public void delete(Object id) {

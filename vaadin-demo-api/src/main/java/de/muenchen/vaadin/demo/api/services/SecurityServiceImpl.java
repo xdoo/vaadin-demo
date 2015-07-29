@@ -7,6 +7,7 @@ import de.muenchen.vaadin.demo.api.rest.SecurityRestClient;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Optional;
 import org.apache.http.auth.AuthScope;
@@ -32,7 +33,7 @@ import org.springframework.web.client.RestTemplate;
  * @author claus.straube
  */
 @SpringComponent @UIScope
-public class SecurityServiceImpl implements SecurityService {
+public class SecurityServiceImpl implements SecurityService, Serializable {
     
     private static final Logger LOG = LoggerFactory.getLogger(SecurityService.class);
     
