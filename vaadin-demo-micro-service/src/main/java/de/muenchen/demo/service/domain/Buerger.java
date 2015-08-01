@@ -3,6 +3,7 @@ package de.muenchen.demo.service.domain;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,8 +14,15 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+
+import org.hibernate.search.annotations.Analyze;
+import org.hibernate.search.annotations.DateBridge;
+import org.hibernate.search.annotations.EncodingType;
 import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.Resolution;
+import org.hibernate.search.annotations.Store;
 
 /**
  *
@@ -33,6 +41,8 @@ public class Buerger extends BaseEntity {
     @Column(length = 70, nullable = false, name = "BUER_NACHNAME")
     private String nachname;
 
+//    @Field(index = Index.YES, store = Store.YES)
+//    @DateBridge(resolution = Resolution.DAY, encoding = EncodingType.STRING)
     @Column(name = "BUER_GEBURTSDATUM")
     @Temporal(TemporalType.DATE)
     private Date geburtsdatum;

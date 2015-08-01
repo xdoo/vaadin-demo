@@ -6,11 +6,14 @@
 package de.muenchen.demo.service.domain;
 
 import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.hibernate.search.annotations.Field;
 
 /**
  *
@@ -20,13 +23,17 @@ import javax.persistence.Table;
 @Table(name = "Mandant")
 public class Mandant implements Serializable {
 
-    @Id
+	private static final long serialVersionUID = 2279536262695714631L;
+
+	@Id
     @GeneratedValue
     @Column(name = "ID")
     private Long id;
 
+    @Field(name="mid")
     @Column(length = 30, unique = true, nullable = false, name = "OID")
     private String oid;
+    
     @Column(length = 70, name = "MANDANT_MID")
     private String mid;
 

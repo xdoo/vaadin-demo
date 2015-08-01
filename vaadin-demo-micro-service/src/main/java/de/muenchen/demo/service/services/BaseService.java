@@ -5,21 +5,24 @@
  */
 package de.muenchen.demo.service.services;
 
+import java.lang.reflect.ParameterizedType;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+
 import de.muenchen.demo.service.domain.BaseEntity;
 import de.muenchen.demo.service.domain.BaseRepository;
 import de.muenchen.demo.service.domain.Mandant;
 import de.muenchen.demo.service.domain.User;
 import de.muenchen.demo.service.util.IdService;
 import de.muenchen.demo.service.util.QueryService;
-import java.lang.reflect.ParameterizedType;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
  *
@@ -28,13 +31,18 @@ import org.springframework.security.core.context.SecurityContextHolder;
  */
 public abstract class BaseService<  T extends BaseEntity> {
 
-    @Autowired
-    UserService userService;
-    @Autowired
-    MandantService madantService;
+	@Autowired
+    private UserService userService;
+	@Autowired
+    MandantService mandantService;
     BaseRepository<T> repo;
     QueryService<T> search;
-
+    
+//    public BaseService(UserService userService, MandantService mandantService) {
+//    	this.userService = userService;
+//    	this.mandantService = mandantService;
+//	}
+    
     public T read(String oid) {
         List<T> result = this.repo.findByOidAndMandantOid(oid, readUser().getMandant().getOid());
         if (result.isEmpty()) {
@@ -52,9 +60,9 @@ public abstract class BaseService<  T extends BaseEntity> {
         return clazz.newInstance();
     }
 
-    public T create() {
+	public T create() {
         try {
-            T t = (T) ((Class) ((ParameterizedType) this.getClass().
+			T t = (T) ((Class<T>) ((ParameterizedType) this.getClass().
                     getGenericSuperclass()).getActualTypeArguments()[0]).newInstance();
 
             t.setOid(IdService.next());
@@ -73,7 +81,7 @@ public abstract class BaseService<  T extends BaseEntity> {
 
     public T save(T t) {
         Preconditions.checkArgument(t.getId() == null, "On save, the ID must be empty");
-        Mandant mandant = madantService.read(readUser().getMandant().getOid());
+        Mandant mandant = mandantService.read(readUser().getMandant().getOid());
         t.setMandant(mandant);
 
         return this.repo.save(t);
@@ -97,7 +105,7 @@ public abstract class BaseService<  T extends BaseEntity> {
         T source = this.read(oid);
         T result;
         try {
-            T clone = (T) ((Class) ((ParameterizedType) this.getClass().
+            T clone = (T) ((Class<T>) ((ParameterizedType) this.getClass().
                     getGenericSuperclass()).getActualTypeArguments()[0]).newInstance();
             try {
                 clone = (T) source.clone();
@@ -114,7 +122,7 @@ public abstract class BaseService<  T extends BaseEntity> {
         }
         return null;
     }
-
+    
     public List<T> query(String query) {
         return this.search.query(query);
     }

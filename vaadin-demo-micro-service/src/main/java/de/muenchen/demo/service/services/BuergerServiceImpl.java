@@ -18,14 +18,13 @@ public class BuergerServiceImpl extends BaseService<Buerger> implements BuergerS
     
     private static final Logger LOG = LoggerFactory.getLogger(BuergerService.class);
     
-
     public BuergerServiceImpl() {
     }
 
     @Autowired
-    public BuergerServiceImpl(BuergerRepository repo, EntityManager em) {
+    public BuergerServiceImpl(BuergerRepository repo, EntityManager em, UserService userService) {
         this.repo = repo;
-        this.search = new QueryService<>(em, Buerger.class, "vorname", "nachname");
+        this.search = new QueryService<>(userService, em, Buerger.class, "vorname", "nachname");
     }
 
     @Override
@@ -43,8 +42,5 @@ public class BuergerServiceImpl extends BaseService<Buerger> implements BuergerS
         
         return out;
     }
-    
-    
-    
     
 }

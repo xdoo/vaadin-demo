@@ -31,9 +31,8 @@ import org.springframework.web.client.RestTemplate;
 public class StaatsangehoerigkeitServiceImpl implements StaatsangehoerigkeitService {
 
     @Autowired
-    UserService userService;
-    @Autowired
     MandantService madantService;
+    UserService userService;
     @Value("${URL}")
     private String URL;
     RestTemplate restTemplate = new TestRestTemplate();
@@ -42,9 +41,10 @@ public class StaatsangehoerigkeitServiceImpl implements StaatsangehoerigkeitServ
     StaatsangehoerigkeitReferenceRepository repo;
 
     @Autowired
-    public StaatsangehoerigkeitServiceImpl(StaatsangehoerigkeitReferenceRepository repo, EntityManager em) {
+    public StaatsangehoerigkeitServiceImpl(StaatsangehoerigkeitReferenceRepository repo, UserService userService, EntityManager em) {
         this.repo = repo;
-        this.search = new QueryService<>(em, Staatsangehoerigkeit.class, "reference", "land", "sprache");
+        this.userService = userService;
+        this.search = new QueryService<>(userService, em, Staatsangehoerigkeit.class, "reference", "land", "sprache");
     }
 
     @Override

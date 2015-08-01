@@ -23,9 +23,9 @@ public class PassServiceImpl extends BaseService<Pass> implements PassService {
     }
 
     @Autowired
-    public PassServiceImpl(PassRepository repo, EntityManager em) {
+    public PassServiceImpl(PassRepository repo, UserService userService, EntityManager em) {
         this.repo = repo;
-        this.search = new QueryService<>(em, Pass.class, "passnummer", "kode","typ","austellungsdatum","gueltigBis","behoerde");
+        this.search = new QueryService<>(userService, em, Pass.class, "passnummer","kode","typ","austellungsdatum","gueltigBis", "behoerde");
     }
 
 }

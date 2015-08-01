@@ -14,13 +14,10 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class AccountServiceImpl extends BaseService<Account> implements AccountService {
-    
-    
 
-
-    public AccountServiceImpl() {
-    }
-
+   public AccountServiceImpl() {
+	// TODO Auto-generated constructor stub
+   }
     
 }
 

@@ -24,9 +24,9 @@ public class AuthorityServiceImpl extends BaseService<Authority> implements Auth
     }
 
     @Autowired
-    public AuthorityServiceImpl(AuthorityRepository repo, EntityManager em) {
+    public AuthorityServiceImpl(AuthorityRepository repo, UserService userService, EntityManager em) {
         this.repo = repo;
-        this.search = new QueryService<>(em, Authority.class, "authority");
+        this.search = new QueryService<>(userService, em, Authority.class, "authority");
     }
     
 }

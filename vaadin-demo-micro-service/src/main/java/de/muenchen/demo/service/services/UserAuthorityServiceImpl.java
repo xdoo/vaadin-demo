@@ -26,6 +26,7 @@ public class UserAuthorityServiceImpl implements UserAuthorityService {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserAuthorityService.class);
 
+    UserService userService;
     UserAuthorityRepository repo;
     QueryService<UserAuthority> search;
 
@@ -33,9 +34,10 @@ public class UserAuthorityServiceImpl implements UserAuthorityService {
     }
 
     @Autowired
-    public UserAuthorityServiceImpl(UserAuthorityRepository repo, EntityManager em) {
+    public UserAuthorityServiceImpl(UserAuthorityRepository repo, UserService userService, EntityManager em) {
         this.repo = repo;
-        this.search = new QueryService<>(em, UserAuthority.class, "authority", "permission");
+        this.userService = userService;
+        this.search = new QueryService<>(userService, em, UserAuthority.class, "authority", "permission");
     }
 
     @Override
