@@ -5,13 +5,13 @@ import com.vaadin.navigator.Navigator;
 import com.vaadin.ui.UI;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import com.google.common.eventbus.Subscribe;
-import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import de.muenchen.vaadin.services.BuergerService;
 import de.muenchen.vaadin.services.MessageService;
 import de.muenchen.vaadin.ui.app.MainUI;
+import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerEvent;
 import de.muenchen.vaadin.ui.components.CreateBuergerForm;
 import de.muenchen.vaadin.ui.components.BuergerTable;
@@ -193,10 +193,11 @@ public class BuergerViewController implements Serializable {
         return form;
     }
 
-    public UpdateBuergerForm generateUpdateBuergerForm(String navigateTo) {      
+    public UpdateBuergerForm generateUpdateBuergerForm(String navigateTo) { 
+        LOG.info("creating update buerger form");
         UpdateBuergerForm form = new UpdateBuergerForm(this, navigateTo);
-        this.updateBuergerForms.add(form);
-        
+        this.eventbus.register(form);
+        this.eventbus.post(new BuergerComponentEvent(this.current));
         return form;
     }
     
@@ -238,11 +239,11 @@ public class BuergerViewController implements Serializable {
         if(event.getType().equals(EventType.UPDATE)) {
             LOG.debug("update event");
             // Service Operationen ausführen
-            this.updateBuerger(event.getBuerger());
+            this.updateBuerger(event.getEntity());
             
             // UI Komponenten aktualisieren
             this.buergerTables.stream().forEach((table) -> {
-                table.add(event.getBuerger());
+                table.add(event.getEntity());
             });
             
             Success succes = new Success("Bürger angepasst", "Der Bürger wurde erfolgreich angepasst und gespeichert."); // TODO i18n
@@ -256,11 +257,11 @@ public class BuergerViewController implements Serializable {
         if(event.getType().equals(EventType.SAVE)) {
             LOG.debug("save event");
             // Service Operationen ausführen
-            this.saveBuerger(event.getBuerger());
+            this.saveBuerger(event.getEntity());
             
             // UI Komponenten aktualisieren
             this.buergerTables.stream().forEach((table) -> {
-                table.add(event.getBuerger());
+                table.add(event.getEntity());
             });
             
             Success succes = new Success("Bürger erstellt", "Der Bürger wurde erfolgreich erstellt und gespeichert."); // TODO i18n
@@ -274,7 +275,7 @@ public class BuergerViewController implements Serializable {
         if(event.getType().equals(EventType.DELETE)) {
             LOG.debug("delete event");
             // Service Operationen ausführen
-            this.deleteBuerger(event.getBuerger());
+            this.deleteBuerger(event.getEntity());
             
             // UI Komponenten aktualisieren
             this.buergerTables.stream().forEach((table) -> {
@@ -289,7 +290,7 @@ public class BuergerViewController implements Serializable {
         if(event.getType().equals(EventType.COPY)) {
             LOG.debug("copy event");
             // Service Operationen ausführen
-            Buerger copy = this.copyBuerger(event.getBuerger());
+            Buerger copy = this.copyBuerger(event.getEntity());
             
             // UI Komponenten aktualisieren
             this.buergerTables.stream().forEach((table) -> {
@@ -304,18 +305,14 @@ public class BuergerViewController implements Serializable {
         if(event.getType().equals(EventType.SELECT2UPDATE)) {
             LOG.debug("select to update event");
             
-            // UI Komponenten aktualisieren
-            updateBuergerForms.stream().forEach((form) -> {
-                form.select(event.getItem());
-            });
-            
-            // Wenn eine Seite das erste mal aufgerufen wird, dann
-            // ist die UI Komponente noch nicht in der 'updatePersons'
-            // Liste. In diesem Fall kann die ausgewählte Person
-            // nicht aktiv an die UI Komponente übergeben werden. Deshalb
-            // wird die Person unter 'current' gespeichert, damit sich
-            // die Komponente selbst versorgen kann.
+            // Das ist notwendig, weil beim ersten Aufruf der UPDATE
+            // Funktion erst die Komponente erstellt wird. Das Event
+            // läuft also zuerst ins Leere und muss deshalb nochmal 
+            // wiederholt werden.
             this.current = event.getItem();
+            
+            // UI Komponenten aktualisieren
+            this.eventbus.post(new BuergerComponentEvent(event.getItem().getBean()));
             
             // Zur Seite wechseln
             this.navigator.navigateTo(event.getNavigateTo());
