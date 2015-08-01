@@ -1,5 +1,6 @@
 package de.muenchen.vaadin.ui.components;
 
+import com.google.common.eventbus.Subscribe;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
@@ -10,10 +11,13 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
+import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerEvent;
+import de.muenchen.vaadin.ui.app.views.events.ComponentEvent;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.EventType;
 import de.muenchen.vaadin.ui.util.I18nPaths;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +33,7 @@ public class UpdateBuergerForm extends CustomComponent {
     protected static final Logger LOG = LoggerFactory.getLogger(UpdateBuergerForm.class);
     
     final BeanFieldGroup<Buerger> binder = new BeanFieldGroup<Buerger>(Buerger.class);
-    FormLayout layout = new FormLayout();
+    FormLayout layout;
     final BuergerViewController controller;
     
     
@@ -48,13 +52,15 @@ public class UpdateBuergerForm extends CustomComponent {
     
     private void createForm() {
         
-        // Beim ersten Aufruf der view kann die Komponente nicht
-        // aktiv mit einem Objekt versorgt werden. Hier muss sich
-        // die Komponente die Daten selbst holen.
-        if(this.entity == null) {
-           this.binder.setItemDataSource(this.controller.getCurrent());
-           this.entity = this.controller.getCurrent().getBean();
-        }
+        this.layout = new FormLayout();
+        
+//        // Beim ersten Aufruf der view kann die Komponente nicht
+//        // aktiv mit einem Objekt versorgt werden. Hier muss sich
+//        // die Komponente die Daten selbst holen.
+//        if(this.entity == null) {
+//           this.binder.setItemDataSource(this.controller.getCurrent());
+//           this.entity = this.controller.getCurrent().getBean();
+//        }
         
         layout.setMargin(true);
         
@@ -87,10 +93,19 @@ public class UpdateBuergerForm extends CustomComponent {
         setCompositionRoot(layout);
     }
     
-    public void select(BeanItem<Buerger> item) {
+    @Subscribe
+    public void select(BuergerComponentEvent event) {
         LOG.debug("seleted person to modify.");
-        this.binder.setItemDataSource(item);
-        this.entity = item.getBean();
+        Optional<BeanItem<Buerger>> opt = event.getItem();
+        if(opt.isPresent()) {
+            this.binder.setItemDataSource(opt.get());
+            this.entity = opt.get().getBean();
+        } else {
+            LOG.warn("No item present.");
+        }
+//        if(layout == null) {
+//            this.createForm();
+//        }
     }
 
 }
