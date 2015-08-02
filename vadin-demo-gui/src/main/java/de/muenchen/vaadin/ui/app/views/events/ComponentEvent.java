@@ -1,6 +1,7 @@
 package de.muenchen.vaadin.ui.app.views.events;
 
 import com.vaadin.data.util.BeanItem;
+import de.muenchen.vaadin.ui.util.EventType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,22 +19,33 @@ public class ComponentEvent<T> {
     
     private final List<T> entities = new ArrayList<>();
     private final List<BeanItem<T>> items = new ArrayList<>();
+    protected EventType eventType;
+    protected Object itemID;
 
-    public ComponentEvent() {
+    public ComponentEvent(EventType eventType) {
+        this.eventType = eventType;
     }
     
-    public ComponentEvent(T entity) {
+    public ComponentEvent(T entity, EventType eventType) {
         this.entities.add(entity);
+        this.eventType = eventType;
         this.items.add(new BeanItem<>(entity));
     }
     
-    public ComponentEvent(BeanItem<T> item) {
+    public ComponentEvent(BeanItem<T> item, EventType eventType) {
         this.items.add(item);
+        this.eventType = eventType;
     }
     
     public void addEntity(T entity) {
         this.entities.add(entity);
-        this.addBeanItem(entity);
+        this.createAndAddBeanItem(entity);
+    }
+    
+    public void addEntities(List<T> entities) {
+        entities.stream().forEach(e -> { 
+            this.addEntity(e);
+        });
     }
 
     public List<T> getEntities() {
@@ -48,8 +60,20 @@ public class ComponentEvent<T> {
         return Optional.empty();
     }
     
-    public void addBeanItem(T entity) {
+    public void createAndAddBeanItem(T entity) {
         this.items.add(new BeanItem(entity));
+    }
+    
+    public void addItem(BeanItem<T> item) {
+        this.items.add(item);
+        this.entities.add(item.getBean());
+    }
+    
+    public void addItems(List<BeanItem<T>> items) {
+        items.stream().forEach(i -> {
+            this.items.add(i);
+            this.entities.add(i.getBean());
+        });
     }
 
     public List<BeanItem<T>> getItems() {
@@ -62,5 +86,21 @@ public class ComponentEvent<T> {
         }
         LOG.warn(String.format("You're asking for one item. In the list are %s items.", this.items.size()));
         return Optional.empty();
+    }
+
+    public EventType getEventType() {
+        return eventType;
+    }
+
+    public void setEventType(EventType eventType) {
+        this.eventType = eventType;
+    }
+
+    public Object getItemID() {
+        return itemID;
+    }
+
+    public void setItemID(Object itemID) {
+        this.itemID = itemID;
     }
 }

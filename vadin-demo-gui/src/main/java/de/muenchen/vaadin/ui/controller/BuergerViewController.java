@@ -197,7 +197,7 @@ public class BuergerViewController implements Serializable {
         LOG.info("creating update buerger form");
         UpdateBuergerForm form = new UpdateBuergerForm(this, navigateTo);
         this.eventbus.register(form);
-        this.eventbus.post(new BuergerComponentEvent(this.current));
+        this.eventbus.post(new BuergerComponentEvent(this.current, EventType.SELECT2UPDATE));
         return form;
     }
     
@@ -207,10 +207,14 @@ public class BuergerViewController implements Serializable {
 
     public BuergerTable generateBuergerTable(String navigateToForEdit, String navigateToForSelect) {      
         BuergerTable table = new BuergerTable(this);
-        this.buergerTables.add(table);
         
         table.setNavigateToForEdit(navigateToForEdit);
         table.setNavigateToForSelect(navigateToForSelect);
+        
+        this.eventbus.register(table);
+        BuergerComponentEvent event = new BuergerComponentEvent(EventType.QUERY);
+        event.addEntities(this.queryBuerger());
+        this.eventbus.post(event);
         
         return table;
     }
@@ -242,9 +246,7 @@ public class BuergerViewController implements Serializable {
             this.updateBuerger(event.getEntity());
             
             // UI Komponenten aktualisieren
-            this.buergerTables.stream().forEach((table) -> {
-                table.add(event.getEntity());
-            });
+            this.eventbus.post(new BuergerComponentEvent(event.getEntity(), EventType.UPDATE));
             
             Success succes = new Success("Bürger angepasst", "Der Bürger wurde erfolgreich angepasst und gespeichert."); // TODO i18n
             succes.show(Page.getCurrent());
@@ -260,9 +262,7 @@ public class BuergerViewController implements Serializable {
             this.saveBuerger(event.getEntity());
             
             // UI Komponenten aktualisieren
-            this.buergerTables.stream().forEach((table) -> {
-                table.add(event.getEntity());
-            });
+            this.eventbus.post(new BuergerComponentEvent(event.getEntity(), EventType.SAVE));
             
             Success succes = new Success("Bürger erstellt", "Der Bürger wurde erfolgreich erstellt und gespeichert."); // TODO i18n
             succes.show(Page.getCurrent());
@@ -278,9 +278,9 @@ public class BuergerViewController implements Serializable {
             this.deleteBuerger(event.getEntity());
             
             // UI Komponenten aktualisieren
-            this.buergerTables.stream().forEach((table) -> {
-                table.delete(event.getItemId());
-            });
+            BuergerComponentEvent buergerComponentEvent = new BuergerComponentEvent(EventType.DELETE);
+            buergerComponentEvent.setItemID(event.getItemId());
+            this.eventbus.post(buergerComponentEvent);
             
             Success succes = new Success("Bürger gelöscht", "Der Bürger wurde erfolgreich gelöscht."); // TODO i18n
             succes.show(Page.getCurrent());
@@ -293,15 +293,13 @@ public class BuergerViewController implements Serializable {
             Buerger copy = this.copyBuerger(event.getEntity());
             
             // UI Komponenten aktualisieren
-            this.buergerTables.stream().forEach((table) -> {
-                table.add(copy);
-            });
+            this.eventbus.post(new BuergerComponentEvent(copy, EventType.COPY));
             
             Success succes = new Success("Bürger kopiert", "Der Bürger wurde erfolgreich kopiert."); // TODO i18n
             succes.show(Page.getCurrent());
         }
         
-        // select um den Bürger zu bearbeiten
+        // update um den Bürger zu bearbeiten
         if(event.getType().equals(EventType.SELECT2UPDATE)) {
             LOG.debug("select to update event");
             
@@ -312,13 +310,13 @@ public class BuergerViewController implements Serializable {
             this.current = event.getItem();
             
             // UI Komponenten aktualisieren
-            this.eventbus.post(new BuergerComponentEvent(event.getItem().getBean()));
+            this.eventbus.post(new BuergerComponentEvent(event.getItem().getBean(), EventType.SELECT2UPDATE));
             
             // Zur Seite wechseln
             this.navigator.navigateTo(event.getNavigateTo());
         }
         
-        // select um den Bürger anzusehen
+        // update um den Bürger anzusehen
         if(event.getType().equals(EventType.SELECT2READ)) {
             LOG.debug("select to read event");
             
@@ -335,7 +333,9 @@ public class BuergerViewController implements Serializable {
             List<Buerger> buerger = this.queryBuerger(event.getQuery());
             
             // UI Komponenten aktualisieren
-            this.buergerTables.stream().forEach((table) -> {table.addAll(buerger);});
+            BuergerComponentEvent buergerComponentEvent = new BuergerComponentEvent(EventType.QUERY);
+            buergerComponentEvent.addEntities(buerger);
+            this.eventbus.post(buergerComponentEvent);
         }
         
         // cancel

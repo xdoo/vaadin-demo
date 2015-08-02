@@ -2,6 +2,7 @@ package de.muenchen.vaadin.ui.app.views.events;
 
 import com.vaadin.data.util.BeanItem;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
+import de.muenchen.vaadin.ui.util.EventType;
 
 /**
  *
@@ -9,17 +10,16 @@ import de.muenchen.vaadin.demo.api.domain.Buerger;
  */
 public class BuergerComponentEvent extends ComponentEvent<Buerger> {
 
-    public BuergerComponentEvent() {
-    }
-    
-    public BuergerComponentEvent(Buerger entity) {
-        super(entity);
+    public BuergerComponentEvent(EventType eventType) {
+        super(eventType);
     }
 
-    public BuergerComponentEvent(BeanItem<Buerger> item) {
-        super(item);
+    public BuergerComponentEvent(BeanItem<Buerger> item, EventType eventType) {
+        super(item, eventType);
     }
-    
-    
+
+    public BuergerComponentEvent(Buerger entity, EventType eventType) {
+        super(entity, eventType);
+    }
     
 }

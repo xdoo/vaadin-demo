@@ -13,7 +13,6 @@ import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerEvent;
-import de.muenchen.vaadin.ui.app.views.events.ComponentEvent;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.EventType;
 import de.muenchen.vaadin.ui.util.I18nPaths;
@@ -94,18 +93,17 @@ public class UpdateBuergerForm extends CustomComponent {
     }
     
     @Subscribe
-    public void select(BuergerComponentEvent event) {
-        LOG.debug("seleted person to modify.");
-        Optional<BeanItem<Buerger>> opt = event.getItem();
-        if(opt.isPresent()) {
-            this.binder.setItemDataSource(opt.get());
-            this.entity = opt.get().getBean();
-        } else {
-            LOG.warn("No item present.");
+    public void update(BuergerComponentEvent event) {     
+        if (event.getEventType().equals(EventType.SELECT2UPDATE)) {
+            LOG.debug("seleted buerger to modify.");
+            Optional<BeanItem<Buerger>> opt = event.getItem();
+            if (opt.isPresent()) {
+                this.binder.setItemDataSource(opt.get());
+                this.entity = opt.get().getBean();
+            } else {
+                LOG.warn("No item present.");
+            }
         }
-//        if(layout == null) {
-//            this.createForm();
-//        }
     }
 
 }

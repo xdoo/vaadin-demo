@@ -1,5 +1,6 @@
 package de.muenchen.vaadin.ui.components;
 
+import com.google.common.eventbus.Subscribe;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.server.FontAwesome;
@@ -10,10 +11,12 @@ import com.vaadin.ui.Table;
 import com.vaadin.ui.Table.ColumnGenerator;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
+import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerEvent;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.EventType;
 import java.util.List;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,11 +40,8 @@ public class BuergerTable extends CustomComponent {
         
         this.controller = controller;
         
-        // Have some data
-        List<Buerger> all = controller.queryBuerger();
-        
         // Have a container of some type to contain the data
-        this.container = new BeanItemContainer<Buerger>(Buerger.class, all);
+        this.container = new BeanItemContainer<>(Buerger.class);
         
         // create table
         this.table = new Table();
@@ -75,9 +75,34 @@ public class BuergerTable extends CustomComponent {
         setCompositionRoot(table);
     }
     
-    public void add(Buerger buerger) {
-        LOG.debug("added person to table.");
-        this.container.addBean(buerger);
+    @Subscribe
+    public void update(BuergerComponentEvent event) {
+        if(event.getEventType().equals(EventType.SAVE)) {
+            this.add(event.getEntity());
+        }
+        
+        if(event.getEventType().equals(EventType.COPY)) {
+            this.add(event.getEntity());
+        }
+        
+        if(event.getEventType().equals(EventType.DELETE)) {
+            this.delete(event.getItemID());
+        }
+        
+        if(event.getEventType().equals(EventType.UPDATE)) {
+            this.add(event.getEntity());
+        }
+        
+        if(event.getEventType().equals(EventType.QUERY)) {
+            this.addAll(event.getEntities());
+        }
+    }
+    
+    public void add(Optional<Buerger> optional) {
+        if(optional.isPresent()) {
+            LOG.debug("added buerger to table.");
+            this.container.addBean(optional.get());
+        }
     }
     
     public void addAll(List<Buerger> buerger) {
@@ -86,12 +111,8 @@ public class BuergerTable extends CustomComponent {
         this.container.addAll(buerger);
     }
     
-    public void update(Buerger buerger) {
-        LOG.debug("updated buerger in table.");
-    }
-    
     public void delete(Object id) {
-        LOG.debug("deleted person from table.");
+        LOG.debug("deleted buerger from table.");
         this.container.removeItem(id);
     }
     
