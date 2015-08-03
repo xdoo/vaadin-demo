@@ -25,6 +25,8 @@ import de.muenchen.vaadin.ui.util.VaadinUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,7 +81,8 @@ public class BuergerViewController implements Serializable {
     }
     
     // item cache
-    BeanItem<Buerger> current;
+    private BeanItem<Buerger> current;
+    private List<Buerger> currentEntities;
     
     /**
      * Die Main wird über die {@link DefaulPersonView} registriert. Dies
@@ -226,6 +229,19 @@ public class BuergerViewController implements Serializable {
         return table;
     }
     
+    ////////////
+    // Filter //
+    ////////////
+    
+    public synchronized List<Buerger> filterEntities(String filter) {
+        ArrayList arrayList = new ArrayList();
+        List<Buerger> result = this.currentEntities.stream()
+                .filter(e -> e.toString().toLowerCase().contains(filter.toLowerCase()))
+                .map(e -> e.clone())
+                .collect(Collectors.toList());
+        return result;
+    }
+    
     /////////////////////
     // Event Steuerung //
     /////////////////////
@@ -339,16 +355,15 @@ public class BuergerViewController implements Serializable {
         // query
         if(event.getType().equals(EventType.QUERY)) {
             LOG.debug("query event");
-            List<Buerger> buerger = null;
             if(event.getQuery().isPresent()) {
-                buerger = this.queryBuerger(event.getQuery().get());
+                this.currentEntities = this.queryBuerger(event.getQuery().get());
             } else {
-                buerger = this.queryBuerger();
+                this.currentEntities = this.queryBuerger();
             }
             
             // UI Komponenten aktualisieren
             BuergerComponentEvent buergerComponentEvent = new BuergerComponentEvent(EventType.QUERY);
-            buergerComponentEvent.addEntities(buerger);
+            buergerComponentEvent.addEntities(this.currentEntities);
             this.eventbus.post(buergerComponentEvent);
         }
         
