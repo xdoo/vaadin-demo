@@ -10,9 +10,6 @@ import de.muenchen.vaadin.ui.util.EventType;
  */
 public class BuergerEvent extends AppEvent<Buerger> {
 
-    public BuergerEvent() {
-    }
-
     public BuergerEvent(EventType type) {
         super(type);
     }

@@ -15,7 +15,7 @@ public class AppEvent<T> {
     protected String query;
     private T entity;
     private BeanItem<T> item;
-    
+
     public AppEvent() {
     }
 
@@ -39,20 +39,23 @@ public class AppEvent<T> {
         return type;
     }
 
-    public void setType(EventType type) {
+    public AppEvent<T> setType(EventType type) {
         this.type = type;
+        return this;
     }
 
-    public void setItemId(Object itemId) {
+    public AppEvent<T> setItemId(Object itemId) {
         this.itemId = itemId;
+        return this;
     }
 
     public Object getItemId() {
         return itemId;
     }
 
-    public void setNavigateTo(String navigateTo) {
+    public AppEvent<T> setNavigateTo(String navigateTo) {
         this.navigateTo = navigateTo;
+        return this;
     }
 
     public String getNavigateTo() {
@@ -63,21 +66,24 @@ public class AppEvent<T> {
         return query;
     }
 
-    public void setQuery(String query) {
+    public AppEvent<T> setQuery(String query) {
         this.query = query;
+        return this;
     }
 
     public T getEntity() {
         return this.entity;
     }
 
-    public void setEntity(T entity) {
+    public AppEvent<T> setEntity(T entity) {
         this.entity = entity;
+        return this;
     }
     
-    public void setItem(BeanItem<T> item) {
+    public AppEvent<T> setItem(BeanItem<T> item) {
         this.entity = item.getBean();
         this.item = item;
+        return this;
     }
 
     public BeanItem<T> getItem() {
