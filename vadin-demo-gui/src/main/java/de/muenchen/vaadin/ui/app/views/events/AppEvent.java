@@ -2,6 +2,7 @@ package de.muenchen.vaadin.ui.app.views.events;
 
 import com.vaadin.data.util.BeanItem;
 import de.muenchen.vaadin.ui.util.EventType;
+import java.util.Optional;
 
 /**
  *
@@ -62,8 +63,8 @@ public class AppEvent<T> {
         return navigateTo;
     }
 
-    public String getQuery() {
-        return query;
+    public Optional<String> getQuery() {
+        return Optional.ofNullable(this.query);
     }
 
     public AppEvent<T> setQuery(String query) {

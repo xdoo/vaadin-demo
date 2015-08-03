@@ -329,8 +329,12 @@ public class BuergerViewController implements Serializable {
         // query
         if(event.getType().equals(EventType.QUERY)) {
             LOG.debug("query event");
-            
-            List<Buerger> buerger = this.queryBuerger(event.getQuery());
+            List<Buerger> buerger = null;
+            if(event.getQuery().isPresent()) {
+                buerger = this.queryBuerger(event.getQuery().get());
+            } else {
+                buerger = this.queryBuerger();
+            }
             
             // UI Komponenten aktualisieren
             BuergerComponentEvent buergerComponentEvent = new BuergerComponentEvent(EventType.QUERY);

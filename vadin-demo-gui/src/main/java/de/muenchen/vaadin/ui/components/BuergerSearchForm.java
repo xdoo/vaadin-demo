@@ -25,16 +25,23 @@ public class BuergerSearchForm extends CustomComponent {
         TextField query = new TextField();
         query.focus();
         query.setWidth("100%");
-        Button action = new Button(FontAwesome.SEARCH);
-        action.setStyleName(ValoTheme.BUTTON_ICON_ONLY);
-        action.setClickShortcut(ShortcutAction.KeyCode.ENTER);
-        action.addClickListener(e -> {
-            BuergerEvent event = new BuergerEvent(EventType.QUERY);
-            event.setQuery(query.getValue());
-            controller.getEventbus().post(event);
+        // Suche Schaltfläche
+        Button search = new Button(FontAwesome.SEARCH);
+        search.setStyleName(ValoTheme.BUTTON_ICON_ONLY);
+        search.setClickShortcut(ShortcutAction.KeyCode.ENTER);
+        search.addClickListener(e -> {
+            controller.getEventbus().post(new BuergerEvent(EventType.QUERY).setQuery(query.getValue()));
         });
         
-        group.addComponents(query, action);
+        // Reset Schaltfläche
+        Button reset = new Button(FontAwesome.TIMES);
+        reset.setStyleName(ValoTheme.BUTTON_ICON_ONLY);
+        reset.setClickShortcut(ShortcutAction.KeyCode.ESCAPE);
+        reset.addClickListener(e -> {
+            controller.getEventbus().post(new BuergerEvent(EventType.QUERY));
+            query.setValue("");
+        });
+        group.addComponents(query, search, reset);
         
         setCompositionRoot(group);
     }  
