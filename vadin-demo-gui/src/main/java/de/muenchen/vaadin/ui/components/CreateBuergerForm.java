@@ -10,6 +10,7 @@ import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.ui.app.views.events.BuergerEvent;
@@ -80,8 +81,13 @@ public class CreateBuergerForm extends CustomComponent {
         // Now use a binder to bind the members
         final BeanFieldGroup<Buerger> binder = new BeanFieldGroup<Buerger>(Buerger.class);
         binder.setItemDataSource(controller.createBuerger());
-
-        layout.addComponent(controller.getUtil().createFormTextField(binder, controller.getI18nBasePath(), Buerger.VORNAME, controller.getMsg()));
+        
+        // Fokus auf das erste Feld setzen
+        TextField firstField = controller.getUtil().createFormTextField(binder, controller.getI18nBasePath(), Buerger.VORNAME, controller.getMsg());
+        firstField.focus();
+        layout.addComponent(firstField);
+        
+        // alle anderen Felder
         layout.addComponent(controller.getUtil().createFormTextField(binder, controller.getI18nBasePath(), Buerger.NACHNAME, controller.getMsg()));
         layout.addComponent(controller.getUtil().createFormDateField(binder, controller.getI18nBasePath(), Buerger.GEBURTSDATUM, controller.getMsg()));
 
