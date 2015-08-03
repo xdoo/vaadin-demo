@@ -23,7 +23,7 @@ import de.muenchen.vaadin.ui.util.I18nPaths;
  * 
  * @author claus.straube
  */
-public class CreateBuergerForm extends CustomComponent {
+public class BuergerCreateForm extends CustomComponent {
     
     private final String navigateTo;
     private String navigateBack;
@@ -38,7 +38,7 @@ public class CreateBuergerForm extends CustomComponent {
      * @param controller der Entity Controller
      * @param navigateTo Zielseite nach Druck der 'erstellen' Schaltfläche
      */
-    public CreateBuergerForm(final BuergerViewController controller, final String navigateTo) {
+    public BuergerCreateForm(final BuergerViewController controller, final String navigateTo) {
         this.navigateTo = navigateTo;
         this.navigateBack = navigateTo;
         this.controller = controller;
@@ -56,7 +56,7 @@ public class CreateBuergerForm extends CustomComponent {
      * @param navigateTo Zielseite nach Druck der 'erstellen' Schaltfläche
      * @param navigateBack Zielseite nach Druck der 'abbrechen' Schaltfläche
      */
-    public CreateBuergerForm(final BuergerViewController controller, final String navigateTo, String navigateBack) {
+    public BuergerCreateForm(final BuergerViewController controller, final String navigateTo, String navigateBack) {
         this.navigateTo = navigateTo;
         this.navigateBack = navigateBack;
         this.controller = controller;
@@ -104,7 +104,7 @@ public class CreateBuergerForm extends CustomComponent {
                 binder.setItemDataSource(controller.createBuerger());
             } catch (CommitException e) {
                 // TODO --> i18n
-                Error error = new Error("Fehler", "Beim erstellen der Person ist ein Fehler aufgetreten. Der Service Desk wurde per E-Mail informiert");
+                GenericErrorNotification error = new GenericErrorNotification("Fehler", "Beim erstellen der Person ist ein Fehler aufgetreten. Der Service Desk wurde per E-Mail informiert");
                 error.show(Page.getCurrent());
             }
         });

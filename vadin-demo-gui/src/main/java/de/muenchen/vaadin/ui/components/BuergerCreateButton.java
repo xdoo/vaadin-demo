@@ -13,9 +13,9 @@ import de.muenchen.vaadin.ui.util.I18nPaths;
  *
  * @author claus
  */
-public class CreateBuergerButton extends CustomComponent {
+public class BuergerCreateButton extends CustomComponent {
 
-    public CreateBuergerButton(final BuergerViewController controller, String navigateTo) {
+    public BuergerCreateButton(final BuergerViewController controller, String navigateTo) {
         
         String label = controller.getMsg().readText(controller.getI18nBasePath(), I18nPaths.I18N_FORM_CREATE_BUTTON_LABEL);
         Button create = new Button(label, FontAwesome.MAGIC);

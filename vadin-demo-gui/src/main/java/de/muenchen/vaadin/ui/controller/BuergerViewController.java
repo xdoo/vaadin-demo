@@ -13,10 +13,10 @@ import de.muenchen.vaadin.services.MessageService;
 import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerEvent;
-import de.muenchen.vaadin.ui.components.CreateBuergerForm;
+import de.muenchen.vaadin.ui.components.BuergerCreateForm;
 import de.muenchen.vaadin.ui.components.BuergerTable;
-import de.muenchen.vaadin.ui.components.Success;
-import de.muenchen.vaadin.ui.components.UpdateBuergerForm;
+import de.muenchen.vaadin.ui.components.GenericSuccessNotification;
+import de.muenchen.vaadin.ui.components.BuergerUpdateForm;
 import de.muenchen.vaadin.ui.util.EventBus;
 import de.muenchen.vaadin.ui.util.EventType;
 import de.muenchen.vaadin.ui.util.VaadinUtil;
@@ -76,8 +76,8 @@ public class BuergerViewController implements Serializable {
         this.eventbus.register(this);
     }
     
-    List<CreateBuergerForm> createBuergerForms = new ArrayList<>();
-    List<UpdateBuergerForm> updateBuergerForms = new ArrayList<>();
+    List<BuergerCreateForm> createBuergerForms = new ArrayList<>();
+    List<BuergerUpdateForm> updateBuergerForms = new ArrayList<>();
     List<BuergerTable> buergerTables = new ArrayList<>();
     
     // item cache
@@ -186,16 +186,16 @@ public class BuergerViewController implements Serializable {
     // Setter und Getter für die UI Komponenten //
     //////////////////////////////////////////////
 
-    public CreateBuergerForm generateCreateBuergerForm(String navigateTo) {
-        CreateBuergerForm form = new CreateBuergerForm(this, navigateTo);
+    public BuergerCreateForm generateCreateBuergerForm(String navigateTo) {
+        BuergerCreateForm form = new BuergerCreateForm(this, navigateTo);
         this.createBuergerForms.add(form);
         
         return form;
     }
 
-    public UpdateBuergerForm generateUpdateBuergerForm(String navigateTo) { 
+    public BuergerUpdateForm generateUpdateBuergerForm(String navigateTo) { 
         LOG.info("creating update buerger form");
-        UpdateBuergerForm form = new UpdateBuergerForm(this, navigateTo);
+        BuergerUpdateForm form = new BuergerUpdateForm(this, navigateTo);
         this.eventbus.register(form);
         this.eventbus.post(new BuergerComponentEvent(this.current, EventType.SELECT2UPDATE));
         return form;
@@ -248,7 +248,7 @@ public class BuergerViewController implements Serializable {
             // UI Komponenten aktualisieren
             this.eventbus.post(new BuergerComponentEvent(event.getEntity(), EventType.UPDATE));
             
-            Success succes = new Success("Bürger angepasst", "Der Bürger wurde erfolgreich angepasst und gespeichert."); // TODO i18n
+            GenericSuccessNotification succes = new GenericSuccessNotification("Bürger angepasst", "Der Bürger wurde erfolgreich angepasst und gespeichert."); // TODO i18n
             succes.show(Page.getCurrent());
             
             // Zur Seite wechseln
@@ -264,7 +264,7 @@ public class BuergerViewController implements Serializable {
             // UI Komponenten aktualisieren
             this.eventbus.post(new BuergerComponentEvent(event.getEntity(), EventType.SAVE));
             
-            Success succes = new Success("Bürger erstellt", "Der Bürger wurde erfolgreich erstellt und gespeichert."); // TODO i18n
+            GenericSuccessNotification succes = new GenericSuccessNotification("Bürger erstellt", "Der Bürger wurde erfolgreich erstellt und gespeichert."); // TODO i18n
             succes.show(Page.getCurrent());
             
             // Zur Seite wechseln
@@ -282,7 +282,7 @@ public class BuergerViewController implements Serializable {
             buergerComponentEvent.setItemID(event.getItemId());
             this.eventbus.post(buergerComponentEvent);
             
-            Success succes = new Success("Bürger gelöscht", "Der Bürger wurde erfolgreich gelöscht."); // TODO i18n
+            GenericSuccessNotification succes = new GenericSuccessNotification("Bürger gelöscht", "Der Bürger wurde erfolgreich gelöscht."); // TODO i18n
             succes.show(Page.getCurrent());
         }
         
@@ -295,7 +295,7 @@ public class BuergerViewController implements Serializable {
             // UI Komponenten aktualisieren
             this.eventbus.post(new BuergerComponentEvent(copy, EventType.COPY));
             
-            Success succes = new Success("Bürger kopiert", "Der Bürger wurde erfolgreich kopiert."); // TODO i18n
+            GenericSuccessNotification succes = new GenericSuccessNotification("Bürger kopiert", "Der Bürger wurde erfolgreich kopiert."); // TODO i18n
             succes.show(Page.getCurrent());
         }
         

@@ -5,7 +5,6 @@ import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.ui.app.views.events.BuergerEvent;
@@ -19,10 +18,6 @@ import de.muenchen.vaadin.ui.util.EventType;
 public class BuergerSearchForm extends CustomComponent {
 
     public BuergerSearchForm(final BuergerViewController controller) {
-    
-//        HorizontalLayout layout = new HorizontalLayout();
-//        layout.setSpacing(true);
-//        layout.setWidth("100%");
         
         CssLayout group = new CssLayout();
         group.addStyleName("v-component-group");
@@ -40,8 +35,6 @@ public class BuergerSearchForm extends CustomComponent {
         });
         
         group.addComponents(query, action);
-//        layout.addComponents(query, action);
-//        layout.setExpandRatio(query, 1);
         
         setCompositionRoot(group);
     }  

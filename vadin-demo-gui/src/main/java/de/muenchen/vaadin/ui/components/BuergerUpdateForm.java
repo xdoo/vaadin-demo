@@ -26,12 +26,12 @@ import org.slf4j.LoggerFactory;
  *
  * @author claus
  */
-public class UpdateBuergerForm extends CustomComponent {
+public class BuergerUpdateForm extends CustomComponent {
     
     /**
      * Logger
      */
-    protected static final Logger LOG = LoggerFactory.getLogger(UpdateBuergerForm.class);
+    protected static final Logger LOG = LoggerFactory.getLogger(BuergerUpdateForm.class);
     
     final BeanFieldGroup<Buerger> binder = new BeanFieldGroup<Buerger>(Buerger.class);
     final BuergerViewController controller;
@@ -48,7 +48,7 @@ public class UpdateBuergerForm extends CustomComponent {
      * @param controller
      * @param navigateTo 
      */
-    public UpdateBuergerForm(BuergerViewController controller, String navigateTo) {
+    public BuergerUpdateForm(BuergerViewController controller, String navigateTo) {
         this.controller = controller;
         this.navigateTo = navigateTo;
         this.navigateBack = navigateTo;
@@ -67,7 +67,7 @@ public class UpdateBuergerForm extends CustomComponent {
      * @param navigateTo
      * @param navigateBack 
      */
-    public UpdateBuergerForm(BuergerViewController controller, final String navigateTo, String navigateBack) {
+    public BuergerUpdateForm(BuergerViewController controller, final String navigateTo, String navigateBack) {
         
         this.controller = controller;
         this.navigateTo = navigateTo;

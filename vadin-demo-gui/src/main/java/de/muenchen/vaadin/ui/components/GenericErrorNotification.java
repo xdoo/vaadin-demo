@@ -8,9 +8,9 @@ import com.vaadin.ui.themes.ValoTheme;
  *
  * @author claus.straube
  */
-public class Error extends Notification {
+public class GenericErrorNotification extends Notification {
 
-    public Error(String caption, String description) {
+    public GenericErrorNotification(String caption, String description) {
         super(caption, description);
         super.setStyleName(ValoTheme.NOTIFICATION_ERROR);
         super.setStyleName(ValoTheme.NOTIFICATION_CLOSABLE);

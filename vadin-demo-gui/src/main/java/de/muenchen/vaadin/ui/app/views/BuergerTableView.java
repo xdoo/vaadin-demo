@@ -6,7 +6,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.components.BuergerSearchForm;
-import de.muenchen.vaadin.ui.components.CreateBuergerButton;
+import de.muenchen.vaadin.ui.components.BuergerCreateButton;
 import de.muenchen.vaadin.ui.components.BuergerTable;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class BuergerTableView extends DefaultBuergerView {
 
     @Override
     protected void site() {
-        CreateBuergerButton create = new CreateBuergerButton(controller, BuergerCreateView.NAME);
+        BuergerCreateButton create = new BuergerCreateButton(controller, BuergerCreateView.NAME);
         BuergerTable table = this.controller.generateBuergerTable(BuergerUpdateView.NAME, BuergerReadView.NAME);
         BuergerSearchForm search = new BuergerSearchForm(this.controller);
         search.setWidth("100%");

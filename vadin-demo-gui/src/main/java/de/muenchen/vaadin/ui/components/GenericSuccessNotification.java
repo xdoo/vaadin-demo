@@ -8,9 +8,9 @@ import com.vaadin.ui.themes.ValoTheme;
  *
  * @author claus.straube
  */
-public class Success extends Notification {
+public class GenericSuccessNotification extends Notification {
 
-    public Success(String caption, String description) {
+    public GenericSuccessNotification(String caption, String description) {
         super(caption, description);
         super.setStyleName(ValoTheme.NOTIFICATION_SUCCESS);
         super.setStyleName(ValoTheme.NOTIFICATION_CLOSABLE);

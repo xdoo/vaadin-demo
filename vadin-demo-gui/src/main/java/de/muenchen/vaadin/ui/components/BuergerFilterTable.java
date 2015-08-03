@@ -14,11 +14,11 @@ import org.slf4j.LoggerFactory;
  *
  * @author claus.straube
  */
-public class FilterBuergerTable extends CustomComponent {
+public class BuergerFilterTable extends CustomComponent {
 
-    protected static final Logger LOG = LoggerFactory.getLogger(FilterBuergerTable.class);
+    protected static final Logger LOG = LoggerFactory.getLogger(BuergerFilterTable.class);
     
-    public FilterBuergerTable(final BuergerViewController controller) {
+    public BuergerFilterTable(final BuergerViewController controller) {
         
     }
     
