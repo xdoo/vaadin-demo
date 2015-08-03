@@ -23,7 +23,7 @@ public class BuergerCreateView extends DefaultBuergerView {
 
     @Override
     protected void site() {
-        addComponent(this.controller.generateCreateBuergerForm(BuergerTableView.NAME));
+        addComponent(this.controller.generateCreateForm(BuergerTableView.NAME));
     }
     
 }

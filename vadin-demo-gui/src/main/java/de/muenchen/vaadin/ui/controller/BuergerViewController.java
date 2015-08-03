@@ -14,6 +14,7 @@ import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerEvent;
 import de.muenchen.vaadin.ui.components.BuergerCreateForm;
+import de.muenchen.vaadin.ui.components.BuergerReadForm;
 import de.muenchen.vaadin.ui.components.BuergerSearchTable;
 import de.muenchen.vaadin.ui.components.BuergerTable;
 import de.muenchen.vaadin.ui.components.GenericSuccessNotification;
@@ -183,16 +184,23 @@ public class BuergerViewController implements Serializable {
     // Setter und Getter für die UI Komponenten //
     //////////////////////////////////////////////
 
-    public BuergerCreateForm generateCreateBuergerForm(String navigateTo) {
+    public BuergerCreateForm generateCreateForm(String navigateTo) {
         BuergerCreateForm form = new BuergerCreateForm(this, navigateTo);
         return form;
     }
 
-    public BuergerUpdateForm generateUpdateBuergerForm(String navigateTo) { 
+    public BuergerUpdateForm generateUpdateForm(String navigateTo) { 
         LOG.info("creating update buerger form");
         BuergerUpdateForm form = new BuergerUpdateForm(this, navigateTo);
         this.eventbus.register(form);
         this.eventbus.post(new BuergerComponentEvent(this.current, EventType.SELECT2UPDATE));
+        return form;
+    }
+    
+    public BuergerReadForm generateReadForm(String navigateToUpdate, String navigateBack) {
+        BuergerReadForm form = new BuergerReadForm(this, navigateToUpdate, navigateBack);
+        this.eventbus.register(form);
+        this.eventbus.post(new BuergerComponentEvent(this.current, EventType.SELECT2READ));
         return form;
     }
     
@@ -319,7 +327,10 @@ public class BuergerViewController implements Serializable {
         if(event.getType().equals(EventType.SELECT2READ)) {
             LOG.debug("select to read event");
             
-            // TODO
+            this.current = event.getItem();
+            
+            // UI Komponente aktualisieren
+            this.eventbus.post(new BuergerComponentEvent(event.getItem().getBean(), EventType.SELECT2READ));
             
             // Zur Seite wechseln
             this.navigator.navigateTo(event.getNavigateTo());

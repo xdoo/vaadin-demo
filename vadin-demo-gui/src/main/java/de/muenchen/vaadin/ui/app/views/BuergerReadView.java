@@ -3,7 +3,7 @@ package de.muenchen.vaadin.ui.app.views;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import de.muenchen.vaadin.ui.app.MainUI;
-import de.muenchen.vaadin.ui.components.BuergerBackButton;
+import de.muenchen.vaadin.ui.components.BuergerReadForm;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -24,7 +24,8 @@ public class BuergerReadView extends DefaultBuergerView {
 
     @Override
     protected void site() {
-        addComponent(new BuergerBackButton(controller, BuergerTableView.NAME));
+        BuergerReadForm readForm = this.controller.generateReadForm(BuergerUpdateView.NAME, BuergerTableView.NAME);
+        addComponent(readForm);
     }
     
 }
