@@ -1,7 +1,9 @@
 
 package de.muenchen.demo.service.domain;
 import java.io.Serializable;
+import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
@@ -14,9 +16,11 @@ import javax.persistence.ManyToOne;
 @Embeddable
 public class AuthPermId implements Serializable {
 
-   @ManyToOne@JoinColumn(name="PERMISSION_ID", referencedColumnName = "ID")   
+   @ManyToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
+   @JoinColumn(name="PERMISSION_ID", referencedColumnName = "ID")   
    private Permission permission;
-   @ManyToOne@JoinColumn(name="AUTHORITY_ID", referencedColumnName = "ID")   
+   @ManyToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
+   @JoinColumn(name="AUTHORITY_ID", referencedColumnName = "ID")   
    private Authority authority;
 
     public AuthPermId() {

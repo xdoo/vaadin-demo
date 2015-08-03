@@ -17,7 +17,7 @@ import javax.persistence.Table;
  * @author praktikant.tmar
  */
 @Entity
-@Table(name = "Mandant")
+@Table(name = "MANDANT")
 public class Mandant implements Serializable {
 
     @Id

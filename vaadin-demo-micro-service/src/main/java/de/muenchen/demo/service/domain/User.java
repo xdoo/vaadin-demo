@@ -72,7 +72,7 @@ public class User {
     @Temporal(javax.persistence.TemporalType.DATE)
     private java.util.Date lastModDate;
 
-    @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
     private Set<Account> accounts = new HashSet<>();
 
     @ManyToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)

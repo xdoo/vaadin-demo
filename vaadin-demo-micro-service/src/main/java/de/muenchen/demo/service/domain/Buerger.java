@@ -37,22 +37,22 @@ public class Buerger extends BaseEntity {
     @Temporal(TemporalType.DATE)
     private Date geburtsdatum;
 
-    @ManyToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
     private User sachbearbeiter;
     
     @Transient
     private Set<Staatsangehoerigkeit> staatsangehoerigkeiten= new HashSet<>();
     
-    @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
     private Set<StaatsangehoerigkeitReference> staatsangehoerigkeitReferences;
     
-    @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
     private Set<Pass> Pass = new HashSet<>();
 
-    @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
     private Set<Buerger> kinder = new HashSet<>();
     
-    @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
     private Set<Wohnung> wohnungen= new HashSet<>();
 
     public String getVorname() {
