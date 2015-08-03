@@ -27,19 +27,8 @@ public class BuergerTableView extends DefaultBuergerView {
     }
 
     @Override
-    protected void site() {
-        BuergerCreateButton create = new BuergerCreateButton(controller, BuergerCreateView.NAME);
-        BuergerTable table = this.controller.generateBuergerTable(BuergerUpdateView.NAME, BuergerReadView.NAME);
-        BuergerSearchForm search = new BuergerSearchForm(this.controller);
-        search.setWidth("100%");
-        
-        HorizontalLayout hlayout = new HorizontalLayout(create, search);
-        hlayout.setSpacing(true);
-//        hlayout.setExpandRatio(search, 0.7F);
-        VerticalLayout vlayout = new VerticalLayout(hlayout, table);
-        vlayout.setSpacing(true);
-        
-        addComponent(vlayout);
+    protected void site() {        
+        addComponent(this.controller.generateSearchTable(BuergerUpdateView.NAME, BuergerReadView.NAME, BuergerCreateView.NAME));
     }
     
 }

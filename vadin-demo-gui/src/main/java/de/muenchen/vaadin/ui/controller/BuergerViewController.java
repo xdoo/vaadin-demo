@@ -14,6 +14,7 @@ import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerEvent;
 import de.muenchen.vaadin.ui.components.BuergerCreateForm;
+import de.muenchen.vaadin.ui.components.BuergerSearchTable;
 import de.muenchen.vaadin.ui.components.BuergerTable;
 import de.muenchen.vaadin.ui.components.GenericSuccessNotification;
 import de.muenchen.vaadin.ui.components.BuergerUpdateForm;
@@ -45,17 +46,17 @@ public class BuergerViewController implements Serializable {
     /**
      * Die Service Klasse
      */
-    private BuergerService service;
+    private final BuergerService service;
     
     /**
      * Werkzeuge für Vaadin
      */
-    private VaadinUtil util;
+    private final VaadinUtil util;
     
     /**
      * Event Bus zur Kommunikation
      */
-    private EventBus eventbus;
+    private final EventBus eventbus;
     
     /**
      * {@link MessageService} zur Auflösung der Platzhalter
@@ -75,10 +76,6 @@ public class BuergerViewController implements Serializable {
         // controller im Session Event Bus registrieren
         this.eventbus.register(this);
     }
-    
-    List<BuergerCreateForm> createBuergerForms = new ArrayList<>();
-    List<BuergerUpdateForm> updateBuergerForms = new ArrayList<>();
-    List<BuergerTable> buergerTables = new ArrayList<>();
     
     // item cache
     BeanItem<Buerger> current;
@@ -188,8 +185,6 @@ public class BuergerViewController implements Serializable {
 
     public BuergerCreateForm generateCreateBuergerForm(String navigateTo) {
         BuergerCreateForm form = new BuergerCreateForm(this, navigateTo);
-        this.createBuergerForms.add(form);
-        
         return form;
     }
 
@@ -201,11 +196,15 @@ public class BuergerViewController implements Serializable {
         return form;
     }
     
-    public BuergerTable generateBuergerTable(String navigateToForUpdateAndSelect){
-        return this.generateBuergerTable(navigateToForUpdateAndSelect, navigateToForUpdateAndSelect);
+    public BuergerSearchTable generateSearchTable(String navigateToForEdit, String navigateToForSelect, String navigateForCreate) {
+        return new BuergerSearchTable(this, navigateToForEdit, navigateToForSelect, navigateForCreate);
+    }
+    
+    public BuergerTable generateTable(String navigateToForUpdateAndSelect){
+        return this.generateTable(navigateToForUpdateAndSelect, navigateToForUpdateAndSelect);
     }
 
-    public BuergerTable generateBuergerTable(String navigateToForEdit, String navigateToForSelect) {      
+    public BuergerTable generateTable(String navigateToForEdit, String navigateToForSelect) {      
         BuergerTable table = new BuergerTable(this);
         
         table.setNavigateToForEdit(navigateToForEdit);
