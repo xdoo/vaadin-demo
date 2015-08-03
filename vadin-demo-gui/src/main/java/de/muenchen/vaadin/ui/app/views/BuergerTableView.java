@@ -33,9 +33,9 @@ public class BuergerTableView extends DefaultBuergerView {
         BuergerSearchForm search = new BuergerSearchForm(this.controller);
         search.setWidth("100%");
         
-        HorizontalLayout hlayout = new HorizontalLayout(search, create);
+        HorizontalLayout hlayout = new HorizontalLayout(create, search);
         hlayout.setSpacing(true);
-        hlayout.setExpandRatio(search, 0.7F);
+//        hlayout.setExpandRatio(search, 0.7F);
         VerticalLayout vlayout = new VerticalLayout(hlayout, table);
         vlayout.setSpacing(true);
         
