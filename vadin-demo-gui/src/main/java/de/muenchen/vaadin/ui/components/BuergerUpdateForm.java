@@ -4,6 +4,7 @@ import com.google.common.eventbus.Subscribe;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CustomComponent;
@@ -113,6 +114,7 @@ public class BuergerUpdateForm extends CustomComponent {
         });
         updateButton.addStyleName(ValoTheme.BUTTON_FRIENDLY);
         updateButton.setIcon(FontAwesome.PENCIL);
+        updateButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         buttonLayout.addComponent(updateButton);
         // die Schaltfläche zum Abbrechen
         buttonLayout.addComponent(new GenericCancelButton(

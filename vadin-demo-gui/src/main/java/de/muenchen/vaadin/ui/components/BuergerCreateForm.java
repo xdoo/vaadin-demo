@@ -2,6 +2,7 @@ package de.muenchen.vaadin.ui.components;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
 import com.vaadin.ui.Button;
@@ -110,6 +111,7 @@ public class BuergerCreateForm extends CustomComponent {
         });
         createButton.addStyleName(ValoTheme.BUTTON_FRIENDLY);
         createButton.setIcon(FontAwesome.MAGIC);
+        createButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         buttonLayout.addComponent(createButton);
         // die 'abbrechen' Schaltfläche
         buttonLayout.addComponent(new GenericCancelButton(

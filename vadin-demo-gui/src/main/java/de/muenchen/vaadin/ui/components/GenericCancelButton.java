@@ -1,5 +1,6 @@
 package de.muenchen.vaadin.ui.components;
 
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CustomComponent;
@@ -19,7 +20,7 @@ public class GenericCancelButton extends CustomComponent {
             eventBus.post(event);
         });
         cancelButton.setIcon(FontAwesome.TIMES);
-        
+        cancelButton.setClickShortcut(ShortcutAction.KeyCode.ESCAPE);
         setCompositionRoot(cancelButton);
     } 
 }
