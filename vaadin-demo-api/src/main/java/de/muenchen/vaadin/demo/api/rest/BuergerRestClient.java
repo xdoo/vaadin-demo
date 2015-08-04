@@ -96,4 +96,6 @@ public interface BuergerRestClient {
      */
     public void deleteBuerger(List<Link> links, RestTemplate restTemplate);
     
+    public List<Buerger> queryKinder(List<Link> links, RestTemplate restTemplate);
+    
 }

@@ -82,8 +82,13 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
     }
     
     @Override
-    public Buerger copyBuerger(Buerger buerger) {
-        return client.copyBuerger(buerger.getLinks(), this.template);
+    public Buerger copyBuerger(Buerger entity) {
+        return client.copyBuerger(entity.getLinks(), this.template);
+    }
+
+    @Override
+    public List<Buerger> queryKinder(Buerger entity) {
+        return client.queryKinder(entity.getLinks(), this.template);
     }
   
 }

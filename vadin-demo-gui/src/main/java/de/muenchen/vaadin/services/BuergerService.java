@@ -73,4 +73,6 @@ public interface BuergerService {
      */
     public Buerger copyBuerger(Buerger entity);
     
+    public List<Buerger> queryKinder(Buerger entity);
+    
 }

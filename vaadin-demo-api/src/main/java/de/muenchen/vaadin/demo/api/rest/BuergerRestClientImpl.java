@@ -67,6 +67,11 @@ public class BuergerRestClientImpl implements BuergerRestClient {
         }
     }
     
+    @Override
+    public List<Buerger> queryKinder(List<Link> links, RestTemplate restTemplate) {
+        return this.requestMultiSource(HttpMethod.GET, "kinder", links, restTemplate);
+    }
+    
     public Buerger writeSingleSource(String rel, Buerger buerger, RestTemplate restTemplate) {
         Optional<Link> link = HateoasUtil.findLinkForRel(rel, buerger.getLinks());
         if(link.isPresent()) {

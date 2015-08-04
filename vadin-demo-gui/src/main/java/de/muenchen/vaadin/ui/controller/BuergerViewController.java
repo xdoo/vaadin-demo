@@ -11,7 +11,6 @@ import com.vaadin.spring.annotation.UIScope;
 import de.muenchen.vaadin.services.BuergerService;
 import de.muenchen.vaadin.services.MessageService;
 import de.muenchen.vaadin.ui.app.MainUI;
-import de.muenchen.vaadin.ui.app.views.events.AppEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.components.BuergerCreateForm;
@@ -185,6 +184,10 @@ public class BuergerViewController implements Serializable {
         return service.queryBuerger(query);
     }
     
+    public List<Buerger> queryKinder(Buerger entity) {
+        return service.queryKinder(entity);
+    }
+    
     //////////////////////////////////////////////
     // Setter und Getter für die UI Komponenten //
     //////////////////////////////////////////////
@@ -220,11 +223,15 @@ public class BuergerViewController implements Serializable {
         return new BuergerSearchTable(this, navigateToForEdit, navigateToForSelect, navigateForCreate, navigateFrom);
     }
     
-    public BuergerTable generateTable(String navigateToForUpdateAndSelect, String from){
-        return this.generateTable(navigateToForUpdateAndSelect, navigateToForUpdateAndSelect, from);
+    public BuergerTable generateChildTable(String navigateToForEdit, String navigateToForSelect, String from, Buerger entity) {
+        return this.createTable(navigateToForEdit, navigateToForSelect, from, this.queryKinder(entity));
     }
 
     public BuergerTable generateTable(String navigateToForEdit, String navigateToForSelect, String from) { 
+        return this.createTable(navigateToForEdit, navigateToForSelect, from, this.queryBuerger());
+    }
+    
+    private BuergerTable createTable(String navigateToForEdit, String navigateToForSelect, String from, List<Buerger> entities) {
         LOG.debug("creating table for buerger");
         BuergerTable table = new BuergerTable(this);
         
@@ -234,7 +241,7 @@ public class BuergerViewController implements Serializable {
         
         this.eventbus.register(table);
         BuergerComponentEvent event = new BuergerComponentEvent(EventType.QUERY);
-        event.addEntities(this.queryBuerger());
+        event.addEntities(entities);
         this.eventbus.post(event);
         
         return table;
