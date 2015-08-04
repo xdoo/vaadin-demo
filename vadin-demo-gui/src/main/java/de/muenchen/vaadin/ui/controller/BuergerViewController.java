@@ -229,19 +229,6 @@ public class BuergerViewController implements Serializable {
         return table;
     }
     
-    ////////////
-    // Filter //
-    ////////////
-    
-    public synchronized List<Buerger> filterEntities(String filter) {
-        ArrayList arrayList = new ArrayList();
-        List<Buerger> result = this.currentEntities.stream()
-                .filter(e -> e.toString().toLowerCase().contains(filter.toLowerCase()))
-                .map(e -> e.clone())
-                .collect(Collectors.toList());
-        return result;
-    }
-    
     /////////////////////
     // Event Steuerung //
     /////////////////////
