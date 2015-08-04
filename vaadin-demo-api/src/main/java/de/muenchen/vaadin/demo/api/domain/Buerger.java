@@ -40,6 +40,23 @@ public class Buerger extends BaseEntity {
     public void setGeburtsdatum(Date geburtsdatum) {
         this.geburtsdatum = geburtsdatum;
     }
-    
+
+    @Override
+    public String toString() {
+        return String.format("%s %s %s", this.vorname, this.nachname, this.geburtsdatum.toString());
+    }
+
+    @Override
+    public Buerger clone() {
+        Buerger clone = new Buerger();
+        
+        clone.setOid(this.getOid());
+        clone.setVorname(this.getVorname());
+        clone.setNachname(this.getNachname());
+        clone.setGeburtsdatum(this.getGeburtsdatum());
+        clone.setLinks(this.getLinks());
+        
+        return clone;
+    }
     
 }

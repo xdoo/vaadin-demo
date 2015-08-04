@@ -6,9 +6,16 @@
 package de.muenchen.demo.service.util;
 
 import java.util.List;
+
 import javax.persistence.EntityManager;
+
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.query.dsl.QueryBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import de.muenchen.demo.service.domain.User;
+import de.muenchen.demo.service.services.UserService;
 
 /**
  *
@@ -16,22 +23,26 @@ import org.hibernate.search.query.dsl.QueryBuilder;
  */
 public class QueryService<E> {
     
+    private UserService userService;
+	
     String[] fields;
     EntityManager em;
     Class<E> entity;
-
-    public QueryService(EntityManager em, Class<E> entity, String... fields) {
+    
+    public QueryService(UserService userService, EntityManager em, Class<E> entity, String... fields) {
         this.fields = fields;
         this.em = em;
         this.entity = entity;
+        this.userService = userService;
     }
     
-    public List<E> query(String text) {
+    @SuppressWarnings("unchecked")
+	public List<E> query(String text) {
         // get the full text entity manager
         FullTextEntityManager fullTextEntityManager
                 = org.hibernate.search.jpa.Search.
                 getFullTextEntityManager(em);
-
+        
         // create the query using Hibernate Search query DSL
         QueryBuilder queryBuilder
                 = fullTextEntityManager.getSearchFactory()
@@ -41,7 +52,10 @@ public class QueryService<E> {
         org.apache.lucene.search.Query query
                 = queryBuilder
                 .keyword()
+                	.fuzzy()
                 .onFields(fields)
+                // Dates muessen umgewandelt oder ignoriert werden
+//                	.ignoreFieldBridge()
                 .matching(text)
                 .createQuery();
 
@@ -49,10 +63,22 @@ public class QueryService<E> {
         org.hibernate.search.jpa.FullTextQuery jpaQuery
                 = fullTextEntityManager.createFullTextQuery(query, entity);
 
+        // limit query to tenant
+        jpaQuery.enableFullTextFilter("tenantSearchFilter").setParameter("mandant_mid", readMid());
+        
         // execute search and return results (sorted by relevance as default)
-        @SuppressWarnings("unchecked")
-        List results = jpaQuery.getResultList();
-        return results;
+        return jpaQuery.getResultList();
     }
     
+    private String readMid() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User readByUsername = userService.readByUsername(authentication.getName());
+		String mid = readByUsername.getMandant().getOid();
+		
+		if (mid == null) {
+			throw new IllegalStateException("tenat-id must not be null");
+		}
+		
+		return mid;
+    }
 }

@@ -1,6 +1,5 @@
 package de.muenchen.vaadin.services;
 
-import de.muenchen.vaadin.demo.api.services.SecurityService;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -10,7 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /**
- *
+ * TODO -> umstellen!
+ * 
  * @author claus.straube
  */
 @Service
@@ -33,12 +33,14 @@ public class I18nServiceImpl implements I18nService {
     
     @PostConstruct
     private void init() {
-       this.messages.put("m1.buerger.page.title", "Person Beispiel View");
-       this.messages.put("m1.buerger.navigation.button.label", "Person Pflege");
-       this.messages.put("m1.buerger.form.update.headline.label", "Person bearbeiten");
-       this.messages.put("m1.buerger.form.create.headline.label", "Person erstellen");
+       this.messages.put("m1.buerger.page.title", "Bürger Beispiel View");
+       this.messages.put("m1.buerger.navigation.button.label", "Bürger Pflege");
+       this.messages.put("m1.buerger.form.update.headline.label", "Bürger bearbeiten");
+       this.messages.put("m1.buerger.form.create.headline.label", "Bürger erstellen");
        this.messages.put("m1.buerger.form.update.button.label", "aktualisieren");
        this.messages.put("m1.buerger.form.create.button.label", "neu");
+       this.messages.put("m1.buerger.form.cancel.button.label", "abbrechen");
+       this.messages.put("m1.buerger.form.back.button.label", "zurück");
        this.messages.put("m1.buerger.form.save.button.label", "speichern");
        this.messages.put("m1.buerger.vorname.label", "Vorname:");
        this.messages.put("m1.buerger.vorname.column_header", "Vorname");

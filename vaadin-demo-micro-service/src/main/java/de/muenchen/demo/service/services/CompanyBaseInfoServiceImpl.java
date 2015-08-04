@@ -29,9 +29,9 @@ public class CompanyBaseInfoServiceImpl extends BaseService<CompanyBaseInfo> imp
     }
 
     @Autowired
-    public CompanyBaseInfoServiceImpl(CompanyBaseInfoRepository repo, EntityManager em) {
+    public CompanyBaseInfoServiceImpl(CompanyBaseInfoRepository repo, UserService userService, EntityManager em) {
         this.repo = repo;
-        this.search = new QueryService<>(em, CompanyBaseInfo.class, "name","adresse");
+        this.search = new QueryService<>(userService, em, CompanyBaseInfo.class,"name", "adresse");
     }
    
     

@@ -34,9 +34,8 @@ public class AdresseServiceImpl implements AdresseService {
     private static final Logger LOG = LoggerFactory.getLogger(AdresseService.class);
 
     @Autowired
+    MandantService mandantService;
     UserService userService;
-    @Autowired
-    MandantService madantService;
     AdresseInterneRepository interneRepo;
     AdresseExterneRepository externeRepo;
     AdresseReferenceRepository referenceRepo;
@@ -50,11 +49,12 @@ public class AdresseServiceImpl implements AdresseService {
     }
 
     @Autowired
-    public AdresseServiceImpl(AdresseInterneRepository interneRepo, AdresseExterneRepository externeRepo, AdresseReferenceRepository referenceRepo, EntityManager em) {
+    public AdresseServiceImpl(AdresseInterneRepository interneRepo, AdresseExterneRepository externeRepo, AdresseReferenceRepository referenceRepo, UserService userService, EntityManager em) {
         this.externeRepo = externeRepo;
         this.interneRepo = interneRepo;
         this.referenceRepo = referenceRepo;
-        this.search = new QueryService<>(em, Adresse.class, "stadt", "hausnummer", "strasse", "plz");
+        this.userService = userService;
+        this.search = new QueryService<>(userService, em, Adresse.class, "stadt", "hausnummer", "strasse", "plz");
     }
 
     @Override
@@ -90,7 +90,7 @@ public class AdresseServiceImpl implements AdresseService {
             Adresse[] responseListe = this.restTemplate.getForEntity(URL2, Adresse[].class).getBody();
             for (Adresse ad : responseListe) {
                 if (ad.getStrasse().equals(adresse.getStrasse())) {
-                    Mandant mandant = madantService.read(readUser().getMandant().getOid());
+                    Mandant mandant = mandantService.read(readUser().getMandant().getOid());
                     ad.setMandant(mandant);
                     ad.setHausnummer(adresse.getHausnummer());
                     ad.setOid(adresse.getOid());
@@ -101,7 +101,7 @@ public class AdresseServiceImpl implements AdresseService {
 
             }
         } else {
-            Mandant mandant = madantService.read(readUser().getMandant().getOid());
+            Mandant mandant = mandantService.read(readUser().getMandant().getOid());
             adresse.setMandant(mandant);
             this.referenceRepo.save(toReferenceExterne(adresse));
             return adresse;

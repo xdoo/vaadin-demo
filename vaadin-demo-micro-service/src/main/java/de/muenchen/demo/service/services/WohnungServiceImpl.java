@@ -24,8 +24,8 @@ public class WohnungServiceImpl extends BaseService<Wohnung> implements WohnungS
     }
 
     @Autowired
-    public WohnungServiceImpl(WohnungRepository repo, EntityManager em) {
+    public WohnungServiceImpl(WohnungRepository repo, UserService userService, EntityManager em) {
         this.repo = repo;
-        this.search = new QueryService<>(em, Wohnung.class, "adresseOid", "ausrichtung", "stock");
+        this.search = new QueryService<>(userService, em, Wohnung.class, "adresseOid", "ausrichtung", "stock");
     }
 }

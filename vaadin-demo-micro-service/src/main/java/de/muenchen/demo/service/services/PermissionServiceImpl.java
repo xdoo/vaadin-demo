@@ -27,9 +27,9 @@ public class PermissionServiceImpl extends BaseService<Permission>  implements P
     }
 
     @Autowired
-    public PermissionServiceImpl(PermissionRepository repo, EntityManager em) {
+    public PermissionServiceImpl(PermissionRepository repo, UserService userService, EntityManager em) {
         this.repo = repo;
-        this.search = new QueryService<>(em, Permission.class, "Permission");
+        this.search = new QueryService<>(userService, em, Permission.class, "Permission");
     }
     
 }

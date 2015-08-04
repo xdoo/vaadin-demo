@@ -5,20 +5,26 @@ import com.vaadin.navigator.Navigator;
 import com.vaadin.ui.UI;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import com.google.common.eventbus.Subscribe;
+import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import de.muenchen.vaadin.services.BuergerService;
 import de.muenchen.vaadin.services.MessageService;
 import de.muenchen.vaadin.ui.app.MainUI;
-import de.muenchen.vaadin.ui.app.views.events.BuergerEvent;
-import de.muenchen.vaadin.ui.components.CreateBuergerForm;
+import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
+import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
+import de.muenchen.vaadin.ui.components.BuergerCreateForm;
+import de.muenchen.vaadin.ui.components.BuergerReadForm;
+import de.muenchen.vaadin.ui.components.BuergerSearchTable;
 import de.muenchen.vaadin.ui.components.BuergerTable;
-import de.muenchen.vaadin.ui.components.UpdateBuergerForm;
+import de.muenchen.vaadin.ui.components.GenericSuccessNotification;
+import de.muenchen.vaadin.ui.components.BuergerUpdateForm;
 import de.muenchen.vaadin.ui.util.EventBus;
 import de.muenchen.vaadin.ui.util.EventType;
 import de.muenchen.vaadin.ui.util.VaadinUtil;
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.List;
+import java.util.Stack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +35,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author claus.straube
  */
 @SpringComponent @UIScope
-public class BuergerViewController {
+public class BuergerViewController implements Serializable {
     
     public static final String I18N_BASE_PATH = "m1.buerger";
     
@@ -41,17 +47,17 @@ public class BuergerViewController {
     /**
      * Die Service Klasse
      */
-    private BuergerService service;
+    private final BuergerService service;
     
     /**
      * Werkzeuge für Vaadin
      */
-    private VaadinUtil util;
+    private final VaadinUtil util;
     
     /**
      * Event Bus zur Kommunikation
      */
-    private EventBus eventbus;
+    private final EventBus eventbus;
     
     /**
      * {@link MessageService} zur Auflösung der Platzhalter
@@ -72,12 +78,12 @@ public class BuergerViewController {
         this.eventbus.register(this);
     }
     
-    List<CreateBuergerForm> createBuergerForms = new ArrayList<>();
-    List<UpdateBuergerForm> updateBuergerForms = new ArrayList<>();
-    List<BuergerTable> buergerTables = new ArrayList<>();
-    
     // item cache
-    BeanItem<Buerger> current;
+    private BeanItem<Buerger> current;
+    private List<Buerger> currentEntities;
+    
+    // navigation cache
+    private Stack<String> from = new Stack<>();
     
     /**
      * Die Main wird über die {@link DefaulPersonView} registriert. Dies
@@ -174,29 +180,69 @@ public class BuergerViewController {
         return service.queryBuerger();
     }
     
+    public List<Buerger> queryBuerger(String query) {
+        return service.queryBuerger(query);
+    }
+    
+    public List<Buerger> queryKinder(Buerger entity) {
+        return service.queryKinder(entity);
+    }
+    
     //////////////////////////////////////////////
     // Setter und Getter für die UI Komponenten //
     //////////////////////////////////////////////
 
-    public CreateBuergerForm generateCreatePersonForm(String navigateTo) {
-        CreateBuergerForm form = new CreateBuergerForm(this, navigateTo);
-        this.createBuergerForms.add(form);
-        
+    public BuergerCreateForm generateCreateForm(String navigateTo) {
+        LOG.debug("creating 'create' buerger form");
+        BuergerCreateForm form = new BuergerCreateForm(this, navigateTo);
         return form;
     }
 
-    public UpdateBuergerForm generateUpdatePersonForm(String navigateTo) {      
-        UpdateBuergerForm form = new UpdateBuergerForm(this, navigateTo);
-        this.updateBuergerForms.add(form);
-        
+    public BuergerUpdateForm generateUpdateForm(String navigateTo, String from) { 
+        LOG.debug("creating 'update' buerger form");
+        BuergerUpdateForm form = new BuergerUpdateForm(this, navigateTo, this.from.pop(), from);
+        this.eventbus.register(form);
+        this.eventbus.post(new BuergerComponentEvent(this.current, EventType.SELECT2UPDATE));
         return form;
     }
+    
+    public BuergerUpdateForm generateUpdateForm(String from) { 
+        return this.generateUpdateForm(this.from.peek(), from);
+    }
+    
+    public BuergerReadForm generateReadForm(String navigateToUpdate, String from) {
+        LOG.debug("creating 'read' buerger form");
+        BuergerReadForm form = new BuergerReadForm(this, navigateToUpdate, this.from.pop(), from);
+        this.eventbus.register(form);
+        this.eventbus.post(new BuergerComponentEvent(this.current, EventType.SELECT2READ));
+        return form;
+    }
+    
+    public BuergerSearchTable generateSearchTable(String navigateToForEdit, String navigateToForSelect, String navigateForCreate, String navigateFrom) {
+        LOG.debug("creating 'search' table for buerger");
+        return new BuergerSearchTable(this, navigateToForEdit, navigateToForSelect, navigateForCreate, navigateFrom);
+    }
+    
+    public BuergerTable generateChildTable(String navigateToForEdit, String navigateToForSelect, String from, Buerger entity) {
+        return this.createTable(navigateToForEdit, navigateToForSelect, from, this.queryKinder(entity));
+    }
 
-    public BuergerTable generatePersonTable(String navigateToAfterEdit) {      
+    public BuergerTable generateTable(String navigateToForEdit, String navigateToForSelect, String from) { 
+        return this.createTable(navigateToForEdit, navigateToForSelect, from, this.queryBuerger());
+    }
+    
+    private BuergerTable createTable(String navigateToForEdit, String navigateToForSelect, String from, List<Buerger> entities) {
+        LOG.debug("creating table for buerger");
         BuergerTable table = new BuergerTable(this);
-        this.buergerTables.add(table);
         
-        table.setNavigateToAfterEdit(navigateToAfterEdit);
+        table.setNavigateToForEdit(navigateToForEdit);
+        table.setNavigateToForSelect(navigateToForSelect);
+        table.setFrom(from);
+        
+        this.eventbus.register(table);
+        BuergerComponentEvent event = new BuergerComponentEvent(EventType.QUERY);
+        event.addEntities(entities);
+        this.eventbus.post(event);
         
         return table;
     }
@@ -212,11 +258,15 @@ public class BuergerViewController {
      * schaffen, ohne dass diese sich untereinander kennen müssen. 
      */
     @Subscribe
-    public void onEvent(BuergerEvent event) {
+    public void onEvent(BuergerAppEvent event) {
         
         // create
         if(event.getType().equals(EventType.CREATE)) {
             LOG.debug("create event");
+            
+            // Verlauf protokollieren
+            this.stack(event);
+            
             // Zur Seite wechseln
             this.navigator.navigateTo(event.getNavigateTo());
         } 
@@ -225,12 +275,16 @@ public class BuergerViewController {
         if(event.getType().equals(EventType.UPDATE)) {
             LOG.debug("update event");
             // Service Operationen ausführen
-            this.updateBuerger(event.getBuerger());
+            this.updateBuerger(event.getEntity());
             
             // UI Komponenten aktualisieren
-            this.buergerTables.stream().forEach((table) -> {
-                table.add(event.getBuerger());
-            });
+            this.eventbus.post(new BuergerComponentEvent(event.getEntity(), EventType.UPDATE));
+            
+            // Verlauf protokollieren
+            this.stack(event);
+            
+            GenericSuccessNotification succes = new GenericSuccessNotification("Bürger angepasst", "Der Bürger wurde erfolgreich angepasst und gespeichert."); // TODO i18n
+            succes.show(Page.getCurrent());
             
             // Zur Seite wechseln
             this.navigator.navigateTo(event.getNavigateTo());
@@ -240,12 +294,13 @@ public class BuergerViewController {
         if(event.getType().equals(EventType.SAVE)) {
             LOG.debug("save event");
             // Service Operationen ausführen
-            this.saveBuerger(event.getBuerger());
+            this.saveBuerger(event.getEntity());
             
             // UI Komponenten aktualisieren
-            this.buergerTables.stream().forEach((table) -> {
-                table.add(event.getBuerger());
-            });
+            this.eventbus.post(new BuergerComponentEvent(event.getEntity(), EventType.SAVE));
+            
+            GenericSuccessNotification succes = new GenericSuccessNotification("Bürger erstellt", "Der Bürger wurde erfolgreich erstellt und gespeichert."); // TODO i18n
+            succes.show(Page.getCurrent());
             
             // Zur Seite wechseln
             this.navigator.navigateTo(event.getNavigateTo());
@@ -255,45 +310,93 @@ public class BuergerViewController {
         if(event.getType().equals(EventType.DELETE)) {
             LOG.debug("delete event");
             // Service Operationen ausführen
-            this.deleteBuerger(event.getBuerger());
+            this.deleteBuerger(event.getEntity());
             
             // UI Komponenten aktualisieren
-            this.buergerTables.stream().forEach((table) -> {
-                table.delete(event.getItemId());
-            });
+            BuergerComponentEvent buergerComponentEvent = new BuergerComponentEvent(EventType.DELETE);
+            buergerComponentEvent.setItemID(event.getItemId());
+            this.eventbus.post(buergerComponentEvent);
+            
+            GenericSuccessNotification succes = new GenericSuccessNotification("Bürger gelöscht", "Der Bürger wurde erfolgreich gelöscht."); // TODO i18n
+            succes.show(Page.getCurrent());
         }
         
         // copy
         if(event.getType().equals(EventType.COPY)) {
             LOG.debug("copy event");
             // Service Operationen ausführen
-            Buerger copy = this.copyBuerger(event.getBuerger());
+            Buerger copy = this.copyBuerger(event.getEntity());
             
             // UI Komponenten aktualisieren
-            this.buergerTables.stream().forEach((table) -> {
-                table.add(copy);
-            });
+            this.eventbus.post(new BuergerComponentEvent(copy, EventType.COPY));
+            
+            GenericSuccessNotification succes = new GenericSuccessNotification("Bürger kopiert", "Der Bürger wurde erfolgreich kopiert."); // TODO i18n
+            succes.show(Page.getCurrent());
         }
         
-        // select
-        if(event.getType().equals(EventType.SELECT)) {
-            LOG.debug("select event");
+        // update um den Bürger zu bearbeiten
+        if(event.getType().equals(EventType.SELECT2UPDATE)) {
+            LOG.debug("select to update event");
+            
+            // Das ist notwendig, weil beim ersten Aufruf der UPDATE
+            // Funktion erst die Komponente erstellt wird. Das Event
+            // läuft also zuerst ins Leere und muss deshalb nochmal 
+            // wiederholt werden.
+            this.current = event.getItem();
             
             // UI Komponenten aktualisieren
-            updateBuergerForms.stream().forEach((form) -> {
-                form.select(event.getItem());
-            });
+            this.eventbus.post(new BuergerComponentEvent(event.getItem().getBean(), EventType.SELECT2UPDATE));
             
-            // Wenn eine Seite das erste mal aufgerufen wird, dann
-            // ist die UI Komponente noch nicht in der 'updatePersons'
-            // Liste. In diesem Fall kann die ausgewählte Person
-            // nicht aktiv an die UI Komponente übergeben werden. Deshalb
-            // wird die Person unter 'current' gespeichert, damit sich
-            // die Komponente selbst versorgen kann.
-            this.current = event.getItem();
+            // Verlauf protokollieren
+            this.stack(event);
             
             // Zur Seite wechseln
             this.navigator.navigateTo(event.getNavigateTo());
+        }
+        
+        // update um den Bürger anzusehen
+        if(event.getType().equals(EventType.SELECT2READ)) {
+            LOG.debug("select to read event");
+            
+            this.current = event.getItem();
+            
+            // UI Komponente aktualisieren
+            this.eventbus.post(new BuergerComponentEvent(event.getItem().getBean(), EventType.SELECT2READ));
+            
+            // Verlauf protokollieren
+            this.stack(event);
+            
+            // Zur Seite wechseln
+            this.navigator.navigateTo(event.getNavigateTo());
+        }
+        
+        // query
+        if(event.getType().equals(EventType.QUERY)) {
+            LOG.debug("query event");
+            if(event.getQuery().isPresent()) {
+                this.currentEntities = this.queryBuerger(event.getQuery().get());
+            } else {
+                this.currentEntities = this.queryBuerger();
+            }
+            
+            // UI Komponenten aktualisieren
+            BuergerComponentEvent buergerComponentEvent = new BuergerComponentEvent(EventType.QUERY);
+            buergerComponentEvent.addEntities(this.currentEntities);
+            this.eventbus.post(buergerComponentEvent);
+        }
+        
+        // cancel
+        if(event.getType().equals(EventType.CANCEL)) {
+            LOG.debug("cancel event");
+            
+            // Zur Seite wechseln
+            this.navigator.navigateTo(event.getNavigateTo()); 
+        }
+    }
+    
+    private void stack(BuergerAppEvent event) {
+        if(event.getFrom().isPresent()) {
+            this.from.push(event.getFrom().get());
         }
     }
     

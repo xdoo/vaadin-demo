@@ -38,9 +38,21 @@ public class VaadinUtil {
         return tf;
     }
     
+    public TextField createReadOnlyFormTextField(BeanFieldGroup binder, String basePath, String property, MessageService msg) {
+        TextField tf = this.createFormTextField(binder, basePath, property, msg);
+        tf.setReadOnly(Boolean.TRUE);
+        return tf;
+    }
+    
     public DateField createFormDateField(BeanFieldGroup binder, String basePath, String property, MessageService msg) {
         String label = msg.readLabel(basePath, property);
         DateField df = (DateField) binder.buildAndBind(label, property);
+        return df;
+    }
+    
+    public DateField createReadOnlyDateField(BeanFieldGroup binder, String basePath, String property, MessageService msg) {
+        DateField df = this.createFormDateField(binder, basePath, property, msg);
+        df.setReadOnly(Boolean.TRUE);
         return df;
     }
     

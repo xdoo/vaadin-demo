@@ -33,19 +33,16 @@ public class AuthorityPermissionServiceImpl implements AuthorityPermissionServic
     }
 
     @Autowired
-    public AuthorityPermissionServiceImpl(AuthorityPermissionRepository repo, EntityManager em) {
+    public AuthorityPermissionServiceImpl(AuthorityPermissionRepository repo, UserService userService, EntityManager em) {
         this.repo = repo;
-        this.search = new QueryService<>(em, AuthorityPermission.class, "authority", "permission");
+        this.search = new QueryService<>(userService, em, AuthorityPermission.class, "authority", "permission");
     }
-
-
 
     @Override
     public AuthorityPermission save(AuthorityPermission usersAuthoritys) {
         LOG.info(usersAuthoritys.toString());
         return this.repo.save(usersAuthoritys);
     }
-
 
     @Override
     public List<AuthorityPermission> query() {

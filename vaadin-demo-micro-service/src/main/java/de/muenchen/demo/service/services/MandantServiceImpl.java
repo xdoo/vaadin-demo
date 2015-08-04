@@ -27,6 +27,8 @@ public class MandantServiceImpl implements MandantService {
 
     private static final Logger LOG = LoggerFactory.getLogger(MandantService.class);
 
+    @Autowired
+    UserService userService;
     MandantRepository repo;
     QueryService<Mandant> search;
 
@@ -36,7 +38,7 @@ public class MandantServiceImpl implements MandantService {
     @Autowired
     public MandantServiceImpl(MandantRepository repo, EntityManager em) {
         this.repo = repo;
-        this.search = new QueryService<>(em, Mandant.class,  "mid");
+        this.search = new QueryService<>(userService, em,  Mandant.class, "mid");
     }
 
     @Override
