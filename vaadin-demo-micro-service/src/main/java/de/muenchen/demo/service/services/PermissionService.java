@@ -13,19 +13,17 @@ import java.util.List;
  * @author praktikant.tmar
  */
 public interface PermissionService {
-    
+
     public List<Permission> query();
-    
+
     public List<Permission> query(String query);
-    
+
     public Permission create();
-    
+
     public Permission save(Permission permissions);
-    
+
     public Permission read(String oid);
-    
-    public Permission update(Permission permissions);
-    
+
     public void delete(String oid);
-    
+
 }

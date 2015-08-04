@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.muenchen.demo.test;
+package de.muenchen.demo.test.integration;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -21,13 +21,8 @@ import de.muenchen.demo.service.domain.UserAuthId;
 import de.muenchen.demo.service.domain.UserAuthority;
 import de.muenchen.demo.service.domain.UserAuthorityRepository;
 import de.muenchen.demo.service.domain.UserRepository;
-import de.muenchen.demo.service.rest.AuthorityPermissionController;
-import de.muenchen.demo.service.rest.UserAuthorityController;
-import de.muenchen.demo.service.rest.api.AuthorityPermissionResource;
-import de.muenchen.demo.service.rest.api.AuthorityResource;
-import de.muenchen.demo.service.rest.api.PermissionResource;
+import de.muenchen.demo.service.rest.BuergerController;
 import de.muenchen.demo.service.rest.api.SearchResultResource;
-import de.muenchen.demo.service.rest.api.UserAuthorityResource;
 import de.muenchen.demo.service.rest.api.UserResource;
 import de.muenchen.demo.service.util.IdService;
 import static java.lang.Boolean.TRUE;
@@ -47,8 +42,8 @@ import org.apache.http.conn.ssl.SSLContexts;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
+import static org.hamcrest.CoreMatchers.equalTo;
 import org.junit.After;
-import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -70,15 +65,14 @@ import org.springframework.web.client.RestTemplate;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebIntegrationTest({"server.port=0", "management.port=0"})
-public class UserAuthorityPermissionTest {
+public class SecurityTest {
 
     private RestTemplate restTemplate;
     @Value("${local.server.port}")
     private int port;
     @JsonProperty("result")
-    private SearchResultResource response;
+    private SearchResultResource<UserResource> response;
     @Autowired
-
     UserRepository usersRepo;
     @Autowired
     AuthorityRepository authRepo;
@@ -86,13 +80,11 @@ public class UserAuthorityPermissionTest {
     PermissionRepository permRepo;
     @Autowired
     UserAuthorityRepository userAuthRepo;
-
     @Autowired
     AuthorityPermissionRepository authPermRepo;
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
-
     @Autowired
     MandantRepository mandantRepo;
 
@@ -108,31 +100,32 @@ public class UserAuthorityPermissionTest {
 
         InitTest initTest = new InitTest(usersRepo, authRepo, permRepo, userAuthRepo, authPermRepo, mandantRepo);
         initTest.init();
+    }
+
+    @Test
+    public void acessDeniedTest() throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
+
         User user = new User();
         user.setEmail("hans2@muenchen.de");
-        user.setPassword("test3");
-        user.setUsername("hans3");
-        user.setOid("U71");
+        user.setPassword("test5");
+        user.setUsername("hans5");
+        user.setOid("U80");
         user.setEnabled(TRUE);
         usersRepo.save(user);
 
         Authority auth = new Authority();
-        auth.setAuthority("ADMIN");
-        auth.setOid("A71");
+        auth.setAuthority("USER");
+        auth.setOid("A80");
         authRepo.save(auth);
 
         List<String> permissions = new ArrayList();
-        for (Method method : AuthorityPermissionController.class.getDeclaredMethods()) {
+        for (Method method : BuergerController.class.getDeclaredMethods()) {
             String name = method.getName();
             permissions.add("PERM_" + name);
         }
-        for (Method method : UserAuthorityController.class.getDeclaredMethods()) {
-            String name = method.getName();
-            permissions.add("PERM_" + name);
-        }
-        permissions.stream().map((permission1) -> {
+        permissions.stream().map((list1) -> {
             Permission permission = new Permission();
-            permission.setPermision(permission1);
+            permission.setPermision(list1);
             return permission;
         }).map((permission) -> {
             permission.setOid(IdService.next());
@@ -155,28 +148,10 @@ public class UserAuthorityPermissionTest {
 
         userAuthRepo.save(userAuth);
 
-        User user2 = new User();
-        user2.setEmail("hans2@muenchen.de");
-        user2.setPassword("test4");
-        user2.setUsername("hans4");
-        user2.setOid("U73");
-        user2.setEnabled(TRUE);
-        usersRepo.save(user2);
-
-        Authority auth2 = new Authority();
-        auth2.setAuthority("USER");
-        auth2.setOid("A73");
-        authRepo.save(auth2);
-
-        Permission permission = new Permission();
-        permission.setPermision("PERM_readUser");
-        permission.setOid("P73");
-        permRepo.save(permission);
-
         SSLContext sslContext = SSLContexts.custom().loadTrustMaterial(null, new TrustSelfSignedStrategy()).useTLS().build();
         SSLConnectionSocketFactory connectionFactory = new SSLConnectionSocketFactory(sslContext, new AllowAllHostnameVerifier());
         BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-        credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials("hans", "test"));
+        credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials("hans5", "test5"));
 
         HttpClient httpClient = HttpClientBuilder.create()
                 .setSSLSocketFactory(connectionFactory)
@@ -185,61 +160,11 @@ public class UserAuthorityPermissionTest {
 
         ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
         restTemplate = new RestTemplate(requestFactory);
-    }
 
-    @Test
-    public void queryUserAuthorityPermissionTest() throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
-
-        /*Test Authority Permission query*/
-        String URL = "http://localhost:" + port + "/authorityPermission/query";
-        response = restTemplate.getForEntity(URL, SearchResultResource.class).getBody();
-
-        assertEquals(false, response.getResult().isEmpty());
-
-        /*Test User Authority  query*/
+        thrown.expect(org.springframework.web.client.HttpClientErrorException.class);
+        thrown.expectMessage(equalTo("403 Forbidden"));
         String URL2 = "http://localhost:" + port + "/userAuthority/query";
         response = restTemplate.getForEntity(URL2, SearchResultResource.class).getBody();
-        assertEquals(3, response.getResult().size());
-
-    }
-
-    @Test
-    public void createUserAuthorityPermissionTest() throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
-
-        Authority auth3 = new Authority();
-        auth3.setAuthority("USER");
-        auth3.setOid("A74");
-
-        Permission permission1 = new Permission();
-        permission1.setPermision("PERM_readUser");
-        permission1.setOid("P74");
-        
-        User user3 = new User();
-        user3.setEmail("hans2@muenchen.de");
-        user3.setPassword("test4");
-        user3.setUsername("hans4");
-        user3.setOid("U74");
-        user3.setEnabled(TRUE);
-        
-        String URL22 = "http://localhost:" + port + "/permission/save";
-        restTemplate.postForEntity(URL22, permission1, PermissionResource.class);
-        
-        String URL24 = "http://localhost:" + port + "/user/save";
-        restTemplate.postForEntity(URL24, user3, UserResource.class);
-
-        String URL23 = "http://localhost:" + port + "/authority/save";
-        restTemplate.postForEntity(URL23, auth3, AuthorityResource.class);
-
-        /*Test save Authority Permission */
-        String URL = "http://localhost:" + port + "/authorityPermission/save/P74/A74";
-        AuthorityPermissionResource response4 = restTemplate.getForEntity(URL, AuthorityPermissionResource.class).getBody();
-        assertEquals("USER", response4.getId().getAuthority().getAuthority());
-
-        /*Test save User Authority  */
-        String URL2 = "http://localhost:" + port + "/userAuthority/save/U74/A74";
-        UserAuthorityResource response5 = restTemplate.getForEntity(URL2, UserAuthorityResource.class).getBody();
-        assertEquals("USER", response5.getId().getAuthority().getAuthority());
-
     }
 
     @After
@@ -250,6 +175,6 @@ public class UserAuthorityPermissionTest {
         authRepo.deleteAll();
         permRepo.deleteAll();
         mandantRepo.deleteAll();
-    }
 
+    }
 }

@@ -188,7 +188,12 @@ public class AdresseServiceImpl implements AdresseService {
 
     @Override
     public Adresse update(Adresse adresse) {
-        return this.save(adresse);
+        LOG.info(adresse.toString());
+        plz = Integer.toString(adresse.getPlz());
+        AdresseReference adR = readReference(adresse.getOid());
+        this.delete(adresse.getOid());        
+        return(this.save(adresse)) ;
+        
     }
 
     public AdresseExterne toExterne(Adresse adresse) {

@@ -2,9 +2,12 @@ package de.muenchen.demo.service.rest;
 
 import de.muenchen.demo.service.domain.Pass;
 import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
+import de.muenchen.demo.service.domain.StaatsangehoerigkeitReference;
 import de.muenchen.demo.service.rest.api.PassResource;
 import de.muenchen.demo.service.rest.api.PassResourceAssembler;
 import de.muenchen.demo.service.rest.api.SearchResultResource;
+import de.muenchen.demo.service.rest.api.StaatsangehoerigkeitResource;
+import de.muenchen.demo.service.rest.api.StaatsangehoerigkeitResourceAssembler;
 import de.muenchen.demo.service.rest.api.WohnungResourceAssembler;
 import de.muenchen.demo.service.services.PassService;
 import de.muenchen.demo.service.services.StaatsangehoerigkeitService;
@@ -50,6 +53,8 @@ public class PassController {
     PassResourceAssembler assembler;
     @Autowired
     WohnungResourceAssembler wohnungAssembler;
+    @Autowired
+    StaatsangehoerigkeitResourceAssembler staatAssembler;
     @Value("${URL}")
     private String URL;
 
@@ -105,8 +110,8 @@ public class PassController {
     }
 
     /**
-     * Macht eine Kopie eines Pass. Diese Kopie wird bei Erstellung in der
-     * DB gespeichert.
+     * Macht eine Kopie eines Pass. Diese Kopie wird bei Erstellung in der DB
+     * gespeichert.
      *
      * @param oid
      * @return
@@ -210,15 +215,37 @@ public class PassController {
             LOG.debug("Add staatsangehoerigkeit pass");
         }
 
-        Staatsangehoerigkeit staats = staatsService.read(statsOid);
-        Pass entity = service.read(passOid);
+        StaatsangehoerigkeitReference staatRef = staatsService.readReference(statsOid);
+        Staatsangehoerigkeit staat = staatsService.read(statsOid);
 
-        entity.setStaatsangehoerigkeit(staats);
+        Pass entity = service.read(passOid);
+        entity.setStaatsangehoerigkeit(staat);
+        entity.setStaatsangehoerigkeitReference(staatRef);
         this.service.update(entity);
 
         PassResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY, HateoasRelations.WOHNUNGEN, HateoasRelations.KINDER);
         return ResponseEntity.ok(resource);
     }
-    
+
+    /**
+     * Liest die Staatsangehoerigkeiten einer Bürger.
+     *
+     * @param oid
+     * @return
+     */
+    @RolesAllowed({"PERM_readPassStaatsangehoerigkeiten"})
+    @RequestMapping(value = "/staat/{oid}", method = {RequestMethod.GET})
+    @SuppressWarnings("empty-statement")
+    public ResponseEntity readPassStaatsangehoerigkeiten(@PathVariable("oid") String oid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("read Pass Staatsangehoerigkeiten");
+        }
+        Pass a = this.service.read(oid);
+        Staatsangehoerigkeit staat = this.staatsService.read(this.service.read(oid).getStaatsangehoerigkeitReference().getReferencedOid());
+
+        StaatsangehoerigkeitResource resources;
+        resources = staatAssembler.toResource(staat, HateoasRelations.SELF);
+        return ResponseEntity.ok(resources);
+    }
 
 }

@@ -21,5 +21,7 @@ public interface HateoasUtil {
     public final static String WOHNUNGEN = HateoasRelations.WOHNUNGEN.toString().toLowerCase();
     public final static String KINDER = HateoasRelations.KINDER.toString().toLowerCase();
     public final static String PASS = HateoasRelations.PASS.toString().toLowerCase();
+    public final static String ADRESSE = HateoasRelations.ADRESSE.toString().toLowerCase();
+    public final static String STAATSANGEHOERIGKEIT = HateoasRelations.STAATSANGEHOERIGKEIT.toString().toLowerCase();
 
 }

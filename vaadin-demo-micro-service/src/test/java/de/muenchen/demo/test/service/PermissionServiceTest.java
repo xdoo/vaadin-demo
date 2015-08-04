@@ -18,7 +18,7 @@ import de.muenchen.demo.service.domain.PermissionRepository;
 import de.muenchen.demo.service.domain.UserAuthorityRepository;
 import de.muenchen.demo.service.domain.UserRepository;
 import de.muenchen.demo.service.services.PermissionService;
-import de.muenchen.demo.test.InitTest;
+import de.muenchen.demo.test.integration.InitTest;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -110,17 +110,6 @@ public class PermissionServiceTest {
 
     }
 
-    @Test
-    public void updateTest() throws JsonProcessingException, AuthenticationException {
-        Permission permission = new Permission();
-        permission.setOid("123");
-        permission.setPermision("Perm_NewBuerger");
-        Permission response = service.save(permission);
-        response.setOid("12");
-        Permission a = service.update(response);
-        assertEquals(response.getId(), a.getId());
-
-    }
 
     @Test
     public void readTest() throws JsonProcessingException, AuthenticationException {
@@ -158,15 +147,6 @@ public class PermissionServiceTest {
         assertEquals(false, a.isEmpty());
     }
 
-    @Test
-    public void copyTest() throws JsonProcessingException, AuthenticationException {
-        Permission permission = new Permission();
-        permission.setOid("123");
-        permission.setPermision("Perm_NewBuerger");
-        service.save(permission);
-        Permission a = service.copy("123");
-        assertNotEquals(a.getId(), permission.getId());
-    }
     @After
     public void TearDown() {
         authPermRepo.deleteAll();

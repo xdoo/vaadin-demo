@@ -69,7 +69,7 @@ public class PermissionController {
             LOG.debug("read permissions");
         }
         Permission entity = this.service.read(oid);
-        PermissionResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE);
+        PermissionResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.SAVE, HateoasRelations.DELETE);
         return ResponseEntity.ok(resource);
     }
 
@@ -88,7 +88,7 @@ public class PermissionController {
         Permission entity = new Permission();
         this.assembler.fromResource(request, entity);
         this.service.save(entity);
-        PermissionResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE);
+        PermissionResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.SAVE, HateoasRelations.DELETE);
         return ResponseEntity.ok(resource);
     }
 

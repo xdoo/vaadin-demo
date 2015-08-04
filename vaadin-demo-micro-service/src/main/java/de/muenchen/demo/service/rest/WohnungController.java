@@ -1,7 +1,10 @@
 package de.muenchen.demo.service.rest;
 
+import de.muenchen.demo.service.domain.Adresse;
 import de.muenchen.demo.service.domain.AdresseReference;
 import de.muenchen.demo.service.domain.Wohnung;
+import de.muenchen.demo.service.rest.api.AdresseResource;
+import de.muenchen.demo.service.rest.api.AdresseResourceAssembler;
 import de.muenchen.demo.service.rest.api.SearchResultResource;
 import de.muenchen.demo.service.rest.api.WohnungResource;
 import de.muenchen.demo.service.rest.api.WohnungResourceAssembler;
@@ -45,6 +48,8 @@ public class WohnungController {
     AdresseService adresseService;
     @Autowired
     MandantService madantService;
+    @Autowired
+    AdresseResourceAssembler adresseAssembler;
 
     /**
      * Alle Wohnungen suchen.
@@ -94,7 +99,7 @@ public class WohnungController {
             LOG.debug("copy wohnung");
         }
         Wohnung entity = this.service.copy(oid);
-        WohnungResource resource = this.assembler.toResource(entity,HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY);
+        WohnungResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY,HateoasRelations.ADRESSE);
         return ResponseEntity.ok(resource);
     }
 
@@ -111,7 +116,7 @@ public class WohnungController {
             LOG.debug("read wohnung");
         }
         Wohnung entity = this.service.read(oid);
-        WohnungResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY);
+        WohnungResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY,HateoasRelations.ADRESSE);
         return ResponseEntity.ok(resource);
     }
 
@@ -133,7 +138,7 @@ public class WohnungController {
         this.assembler.fromResource(request, entity);
         LOG.info("danach > " + entity.toString());
         this.service.update(entity);
-        WohnungResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY);
+        WohnungResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY,HateoasRelations.ADRESSE);
         return ResponseEntity.ok(resource);
     }
 
@@ -152,7 +157,7 @@ public class WohnungController {
         Wohnung entity = new Wohnung();
         this.assembler.fromResource(request, entity);
         this.service.save(entity);
-        WohnungResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY);
+        WohnungResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY,HateoasRelations.ADRESSE);
         return ResponseEntity.ok(resource);
     }
 
@@ -173,6 +178,25 @@ public class WohnungController {
     }
 
     /**
+     * Liest die Adresse eine Wohnung.
+     *
+     * @param oid
+     * @return
+     */
+    @RolesAllowed({"PERM_readWohnungAdresse"})
+    @RequestMapping(value = "/adresse/{oid}", method = {RequestMethod.GET})
+    public ResponseEntity readWohnungAdresse(@PathVariable("oid") String oid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("read Wohunung Adresse");
+        }
+        Adresse adresse = adresseService.read(this.service.read(oid).getAdresse().getOid());
+
+        AdresseResource resources = adresseAssembler.toResource(adresse, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY,HateoasRelations.ADRESSE);
+        return ResponseEntity.ok(resources);
+    }
+
+    
+    /**
      * Assoziiert eine Adresse mit einer Wonunug .
      *
      * @param wOid
@@ -192,7 +216,7 @@ public class WohnungController {
         entity.setAdresse(adresse);
         this.service.update(entity);
 
-        WohnungResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY, HateoasRelations.WOHNUNGEN, HateoasRelations.KINDER);
+        WohnungResource resource = this.assembler.toResource(entity, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY,HateoasRelations.ADRESSE);
         return ResponseEntity.ok(resource);
     }
 

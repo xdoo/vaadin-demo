@@ -1,4 +1,4 @@
-package de.muenchen.demo.test;
+package de.muenchen.demo.test.integration;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -23,9 +23,12 @@ import de.muenchen.demo.service.domain.UserAuthorityRepository;
 import de.muenchen.demo.service.domain.UserRepository;
 import de.muenchen.demo.service.rest.api.BuergerResource;
 import de.muenchen.demo.service.rest.api.SearchResultResource;
+import de.muenchen.demo.service.rest.api.StaatsangehoerigkeitResource;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Collections;
+import java.util.List;
 import javax.net.ssl.SSLContext;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -38,6 +41,7 @@ import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.runner.RunWith;
@@ -46,9 +50,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.TestRestTemplate;
 import org.springframework.boot.test.WebIntegrationTest;
+import org.springframework.hateoas.hal.Jackson2HalModule;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
 
@@ -115,6 +122,12 @@ public class StaatsangehoerigkeitTest {
 
         ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
         restTemplate = new RestTemplate(requestFactory);
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new Jackson2HalModule());
+
+        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+        converter.setObjectMapper(objectMapper);
+        restTemplate.setMessageConverters(Collections.<HttpMessageConverter<?>>singletonList(converter));
 
         ObjectMapper mapper = new ObjectMapper(); // can reuse, share globally
 
@@ -137,56 +150,41 @@ public class StaatsangehoerigkeitTest {
     }
 
     @Test
-    public void createStaatsangehoerigkeitTest() throws JsonProcessingException {
+    public void createReadStaatsangehoerigkeitTest() throws JsonProcessingException {
 
         String URL2 = "http://localhost:" + port + "/staat/create/123";
-        Staatsangehoerigkeit staat = restTemplate.getForEntity(URL2, Staatsangehoerigkeit.class).getBody();
+        StaatsangehoerigkeitResource staat = restTemplate.getForEntity(URL2, StaatsangehoerigkeitResource.class).getBody();
         assertEquals("de", staat.getCode());
 
         String URL = "http://localhost:" + port + "/staat/123";
-        Staatsangehoerigkeit staat2 = restTemplate.getForEntity(URL, Staatsangehoerigkeit.class).getBody();
+        StaatsangehoerigkeitResource staat2 = restTemplate.getForEntity(URL, StaatsangehoerigkeitResource.class).getBody();
         assertEquals("de", staat2.getCode());
+        assertNotEquals(null, staat2.getLink("self"));
+        assertNotEquals(null, staat2.getLink("delete"));
 
     }
 
-    @Test
-    public void createStaatsangehoerigkeitBuergerTest() throws JsonProcessingException {
-
-        String URL2 = "http://localhost:" + port + "/staat/create/123";
-        Staatsangehoerigkeit staat = restTemplate.getForEntity(URL2, Staatsangehoerigkeit.class).getBody();
-        assertEquals("de", staat.getCode());
-
-        String URL10 = "http://localhost:" + port + "/buerger/save";
-        ResponseEntity<BuergerResource> response = restTemplate.postForEntity(URL10, buerger, BuergerResource.class);
-
-        String URL11 = "http://localhost:" + port + "/buerger/30";
-        Buerger wo = restTemplate.getForEntity(URL11, Buerger.class).getBody();
-        assertEquals("hans", wo.getNachname());
-
-        String URL12 = "http://localhost:" + port + "/buerger/add/buerger/30/staats/123";
-        ResponseEntity response4 = restTemplate.getForEntity(URL12, BuergerResource.class);
-        BuergerResource response9 = (BuergerResource) response4.getBody();
-        assertEquals(1, response9.getStaatsangehoerigkeiten().size());
-    }
-
+    
     @Test
     public void queryStaatsangehoerigkeitTest() throws JsonProcessingException {
 
         String URL2 = "http://localhost:" + port + "/staat/create/123";
-        Staatsangehoerigkeit staat = restTemplate.getForEntity(URL2, Staatsangehoerigkeit.class).getBody();
+        StaatsangehoerigkeitResource staat = restTemplate.getForEntity(URL2, StaatsangehoerigkeitResource.class).getBody();
         assertEquals("de", staat.getCode());
 
         String URL = "http://localhost:" + port + "/staat/query";
         SearchResultResource response = restTemplate.getForEntity(URL, SearchResultResource.class).getBody();
         assertEquals(1, response.getResult().size());
+        assertNotEquals(null, response.getLink("self"));
+        assertNotEquals(null, response.getLink("query"));
 
     }
 
     @Test
-    public void staatsangehoerigkeitDeleteTest() {
+    public void deleteStaatsangehoerigkeitTest() {
 
         String URL2 = "http://localhost:" + port + "/staat/create/123";
-        Staatsangehoerigkeit staat = restTemplate.getForEntity(URL2, Staatsangehoerigkeit.class).getBody();
+        StaatsangehoerigkeitResource staat = restTemplate.getForEntity(URL2, StaatsangehoerigkeitResource.class).getBody();
         assertEquals("de", staat.getCode());
         String URL = "http://localhost:" + port + "/staat/123";
         restTemplate.delete(URL);

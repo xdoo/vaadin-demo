@@ -61,6 +61,19 @@ public class StaatsangehoerigkeitServiceImpl implements StaatsangehoerigkeitServ
             return result2.getBody();
         }
     }
+    
+    @Override
+    public StaatsangehoerigkeitReference readReference(String referencedOid) {
+
+        List<StaatsangehoerigkeitReference> result = this.repo.findByReferencedOidAndMandantOid(referencedOid, readUser().getMandant().getOid());
+        if (result.isEmpty()) {
+
+            return null;
+        } else {
+
+            return result.get(0);
+        }
+    }
 
     @Override
     public List<Staatsangehoerigkeit> query() {

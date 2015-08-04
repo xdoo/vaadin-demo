@@ -27,7 +27,7 @@ import de.muenchen.demo.service.domain.UserRepository;
 import de.muenchen.demo.service.rest.api.AdresseResource;
 import de.muenchen.demo.service.rest.api.SearchResultResource;
 import de.muenchen.demo.service.services.AdresseService;
-import de.muenchen.demo.test.InitTest;
+import de.muenchen.demo.test.integration.InitTest;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;

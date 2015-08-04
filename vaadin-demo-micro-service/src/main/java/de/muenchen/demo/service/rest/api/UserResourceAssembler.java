@@ -7,7 +7,6 @@ import de.muenchen.demo.service.rest.UserController;
 import de.muenchen.demo.service.services.UserService;
 import de.muenchen.demo.service.util.HateoasRelations;
 import de.muenchen.demo.service.util.HateoasUtil;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -76,7 +75,9 @@ public class UserResourceAssembler {
         if (relations.contains(HateoasRelations.SELF)) {
             resource.add(linkTo(methodOn(UserController.class).readUser(user.getOid())).withSelfRel());
         }
-
+        if (relations.contains(HateoasRelations.COPY)) {
+            resource.add(linkTo(methodOn(UserController.class).copyUser(user.getOid())).withRel(HateoasUtil.COPY));
+        }
         if (relations.contains(HateoasRelations.DELETE)) {
             resource.add(linkTo(methodOn(UserController.class).deleteUser(user.getOid())).withRel(HateoasUtil.DELETE));
         }

@@ -28,6 +28,8 @@ public interface UserService {
     
     public User update(User users);
     
+    public User copy(String oid);
+    
     public void delete(String oid);
     
 }

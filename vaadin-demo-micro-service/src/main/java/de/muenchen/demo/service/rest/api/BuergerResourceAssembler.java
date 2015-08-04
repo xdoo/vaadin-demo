@@ -99,7 +99,9 @@ public class BuergerResourceAssembler {
         if (relations.contains(HateoasRelations.WOHNUNGEN)) {
             resource.add(linkTo(methodOn(BuergerController.class).readBuergerWohnungen(buerger.getOid())).withRel(HateoasUtil.WOHNUNGEN));
         }
-        
+        if (relations.contains(HateoasRelations.STAATSANGEHOERIGKEIT)) {
+            resource.add(linkTo(methodOn(BuergerController.class).readBuergerStaatsangehoerigkeiten(buerger.getOid())).withRel(HateoasUtil.STAATSANGEHOERIGKEIT));
+        }
         if (relations.contains(HateoasRelations.PASS)) {
             resource.add(linkTo(methodOn(BuergerController.class).readBuergerPass(buerger.getOid())).withRel(HateoasUtil.PASS));
         }
@@ -140,12 +142,12 @@ public class BuergerResourceAssembler {
         }
     }
 
-    public List<BuergerResource> toResource(Set<Buerger> kinder, HateoasRelations hateoasRelations) {
+    public List<BuergerResource> toResource(Set<Buerger> buerger, HateoasRelations hateoasRelations) {
 
         List<BuergerResource> resource = new ArrayList<>();
-        kinder.stream().forEach((b) -> {
-            resource.add(this.toResource(b, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE));
-        });
+        buerger.stream().forEach((b) -> {
+            resource.add(this.toResource(b, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY, HateoasRelations.WOHNUNGEN, HateoasRelations.KINDER, HateoasRelations.PASS, HateoasRelations.STAATSANGEHOERIGKEIT));
+              });
         return resource;
     }
 

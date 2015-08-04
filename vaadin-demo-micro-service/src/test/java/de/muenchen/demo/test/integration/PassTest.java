@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.muenchen.demo.test;
+package de.muenchen.demo.test.integration;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -26,12 +26,13 @@ import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
 import de.muenchen.demo.service.domain.StaatsangehoerigkeitReferenceRepository;
 import de.muenchen.demo.service.domain.UserAuthorityRepository;
 import de.muenchen.demo.service.domain.UserRepository;
-import de.muenchen.demo.service.rest.api.BuergerResource;
 import de.muenchen.demo.service.rest.api.PassResource;
 import de.muenchen.demo.service.rest.api.SearchResultResource;
+import de.muenchen.demo.service.rest.api.StaatsangehoerigkeitResource;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Collections;
 import java.util.Date;
 import javax.net.ssl.SSLContext;
 import org.apache.http.auth.AuthScope;
@@ -55,9 +56,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.TestRestTemplate;
 import org.springframework.boot.test.WebIntegrationTest;
-import org.springframework.http.ResponseEntity;
+import org.springframework.hateoas.hal.Jackson2HalModule;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
 
@@ -100,6 +103,10 @@ public class PassTest {
 
     @Autowired
     MandantRepository mandantRepo;
+    private String urlNew;
+    private String urlSave;
+    private PassResource response;
+    private SearchResultResource responseQuery;
 
     @Before
     public void setUp() throws JsonProcessingException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
@@ -129,6 +136,12 @@ public class PassTest {
 
         ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
         restTemplate = new RestTemplate(requestFactory);
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new Jackson2HalModule());
+
+        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+        converter.setObjectMapper(objectMapper);
+        restTemplate.setMessageConverters(Collections.<HttpMessageConverter<?>>singletonList(converter));
 
         ObjectMapper mapper = new ObjectMapper(); // can reuse, share globally
 
@@ -164,112 +177,123 @@ public class PassTest {
         pass2.setBehoerde("München");
         pass2.setKode("De");
         pass2.setTyp("D");
-    }
 
-    @Test
-    public void addPassStaatsangehoerigkeitTest() throws JsonProcessingException {
+        urlSave = "http://localhost:" + port + "/pass/save";
+        urlNew = "http://localhost:" + port + "/pass/new";
 
-        String URL2 = "http://localhost:" + port + "/staat/create/123";
-        Staatsangehoerigkeit staat = restTemplate.getForEntity(URL2, Staatsangehoerigkeit.class).getBody();
-        assertEquals("de", staat.getCode());
-
-        String URL10 = "http://localhost:" + port + "/pass/save";
-        PassResource response = restTemplate.postForEntity(URL10, pass, PassResource.class).getBody();
-        assertEquals(response.getBehoerde(), "München");
-
-        String URL12 = "http://localhost:" + port + "/pass/add/pass/90/staats/123";
-        ResponseEntity response4 = restTemplate.getForEntity(URL12, PassResource.class);
-        PassResource response9 = (PassResource) response4.getBody();
-        assertEquals("de", response9.getStaatsangehoerigkeit().getCode());
     }
 
     @Test
     public void savePassTest() throws JsonProcessingException {
 
-        String URL10 = "http://localhost:" + port + "/pass/save";
-        PassResource response = restTemplate.postForEntity(URL10, pass, PassResource.class).getBody();
+        response = restTemplate.postForEntity(urlSave, pass, PassResource.class).getBody();
         assertEquals(response.getBehoerde(), "München");
+        assertNotEquals(null, response.getLink("new"));
+        assertNotEquals(null, response.getLink("update"));
+        assertNotEquals(null, response.getLink("copy"));
+        assertNotEquals(null, response.getLink("self"));
+        assertNotEquals(null, response.getLink("delete"));
 
     }
 
     @Test
     public void readPassTest() throws JsonProcessingException {
 
-        String URL10 = "http://localhost:" + port + "/pass/save";
-        PassResource response = restTemplate.postForEntity(URL10, pass, PassResource.class).getBody();
-        assertEquals(response.getBehoerde(), "München");
+        response = restTemplate.postForEntity(urlSave, pass, PassResource.class).getBody();
+
         String URL11 = "http://localhost:" + port + "/pass/90";
-        PassResource response2 = restTemplate.getForEntity(URL11, PassResource.class).getBody();
-        assertEquals(response2, response);
+        response = restTemplate.getForEntity(URL11, PassResource.class).getBody();
+        assertEquals(response, response);
+        assertNotEquals(null, response.getLink("new"));
+        assertNotEquals(null, response.getLink("update"));
+        assertNotEquals(null, response.getLink("copy"));
+        assertNotEquals(null, response.getLink("self"));
+        assertNotEquals(null, response.getLink("delete"));
 
     }
 
     @Test
     public void queryPassTest() throws JsonProcessingException {
 
-        String URL10 = "http://localhost:" + port + "/pass/save";
-        restTemplate.postForEntity(URL10, pass, PassResource.class).getBody();
-        restTemplate.postForEntity(URL10, pass2, PassResource.class).getBody();
+        restTemplate.postForEntity(urlSave, pass, PassResource.class).getBody();
+        restTemplate.postForEntity(urlSave, pass2, PassResource.class).getBody();
 
         String URL11 = "http://localhost:" + port + "/pass/query";
         queryResponse = restTemplate.getForEntity(URL11, SearchResultResource.class).getBody();
         assertEquals(2, queryResponse.getResult().size());
+        assertNotEquals(null, queryResponse.getLink("self"));
+        assertNotEquals(null, queryResponse.getLink("query"));
 
     }
 
     @Test
-    public void addBuergerPassTest() throws JsonProcessingException {
+    public void copyPassTest() {
 
-        String URL2 = "http://localhost:" + port + "/staat/create/123";
-        Staatsangehoerigkeit staat = restTemplate.getForEntity(URL2, Staatsangehoerigkeit.class).getBody();
-
-        String URL10 = "http://localhost:" + port + "/buerger/save";
-        ResponseEntity<BuergerResource> response = restTemplate.postForEntity(URL10, buerger, BuergerResource.class);
-
-        String URL13 = "http://localhost:" + port + "/pass/save";
-        restTemplate.postForEntity(URL13, pass, PassResource.class).getBody();
-
-        String URL12 = "http://localhost:" + port + "/buerger/add/buerger/90/pass/90";
-        ResponseEntity response4 = restTemplate.getForEntity(URL12, BuergerResource.class);
-        BuergerResource response9 = (BuergerResource) response4.getBody();
-        assertEquals(1, response9.getPass().size());
-    }
-
-
-    @Test
-    public void passCopyTest() {
-
-        Pass passCopy = new Pass();
-        passCopy.setGroesse("173 CM");
-        passCopy.setBehoerde("Passau");
-        passCopy.setPassNummer("10111214");
-        passCopy.setOid("15");
-        String URL = "http://localhost:" + port + "/pass/save";
-        restTemplate.postForEntity(URL, passCopy, PassResource.class).getBody();
-        String URL2 = "http://localhost:" + port + "/pass/copy/15";
+        restTemplate.postForEntity(urlSave, pass, PassResource.class).getBody();
+        String URL2 = "http://localhost:" + port + "/pass/copy/90";
         PassResource response2 = restTemplate.getForEntity(URL2, PassResource.class).getBody();
 
-        assertNotEquals("15", response2.getOid());
+        assertNotEquals("90", response2.getOid());
+        assertNotEquals(null, response2.getLink("new"));
+        assertNotEquals(null, response2.getLink("update"));
+        assertNotEquals(null, response2.getLink("copy"));
+        assertNotEquals(null, response2.getLink("self"));
+        assertNotEquals(null, response2.getLink("delete"));
 
     }
 
     @Test
-    public void passDeleteTest() {
+    public void PassUpdateTest() {
 
-        Pass passDelete = new Pass();
-        passDelete.setGroesse("173 CM");
-        passDelete.setBehoerde("Passau");
-        passDelete.setPassNummer("10111214");
-        passDelete.setOid("15");
-        String URL = "http://localhost:" + port + "/pass/save";
-        restTemplate.postForEntity(URL, passDelete, PassResource.class).getBody();
-        String URL2 = "http://localhost:" + port + "/pass/15";
+        Pass passUpdate = new Pass();
+        passUpdate.setPassNummer("204");
+        passUpdate.setOid("90");
+
+        restTemplate.postForEntity(urlSave, pass, PassResource.class).getBody();
+        String URL2 = "http://localhost:" + port + "/pass/90";
+        response = restTemplate.postForEntity(URL2, passUpdate, PassResource.class).getBody();
+
+        assertEquals("204", response.getPassNummer());
+        assertNotEquals(null, response.getLink("new"));
+        assertNotEquals(null, response.getLink("update"));
+        assertNotEquals(null, response.getLink("copy"));
+        assertNotEquals(null, response.getLink("self"));
+        assertNotEquals(null, response.getLink("delete"));
+
+    }
+
+    @Test
+    public void deletePassTest() {
+
+        restTemplate.postForEntity(urlSave, pass, PassResource.class).getBody();
+        String URL2 = "http://localhost:" + port + "/pass/90";
         restTemplate.delete(URL2, pass);
         String URL3 = "http://localhost:" + port + "/pass/query";
-        SearchResultResource response = restTemplate.getForEntity(URL3, SearchResultResource.class).getBody();
+        responseQuery = restTemplate.getForEntity(URL3, SearchResultResource.class).getBody();
 
-        assertEquals(true, response.getResult().isEmpty());
+        assertEquals(true, responseQuery.getResult().isEmpty());
 
+    }
+
+    @Test
+    public void staatsangehoerigkeitPassTest() throws JsonProcessingException {
+
+        String URL2 = "http://localhost:" + port + "/staat/create/123";
+        StaatsangehoerigkeitResource staat = restTemplate.getForEntity(URL2, StaatsangehoerigkeitResource.class).getBody();
+        assertEquals("de", staat.getCode());
+
+        response = restTemplate.postForEntity(urlSave, pass, PassResource.class).getBody();
+        assertEquals(response.getBehoerde(), "München");
+
+        /*Test methode addStaatsangehoerigkeitPass*/
+        String URL12 = "http://localhost:" + port + "/pass/add/pass/90/staats/123";
+        response = restTemplate.getForEntity(URL12, PassResource.class).getBody();
+        assertEquals("de", response.getStaatsangehoerigkeit().getCode());
+
+        /*Test methode readStaatsangehoerigkeitPass*/
+        String URL1 = "http://localhost:" + port + "/pass/staat/90";
+        StaatsangehoerigkeitResource responseStaat = restTemplate.getForEntity(URL1, StaatsangehoerigkeitResource.class).getBody();
+        assertEquals("de", responseStaat.getCode());
     }
 
     @After
@@ -280,8 +304,8 @@ public class PassTest {
         authRepo.deleteAll();
         permRepo.deleteAll();
         buergerRepo.deleteAll();
-        staatRepo.deleteAll();
         passRepo.deleteAll();
+        staatRepo.deleteAll();
         mandantRepo.deleteAll();
 
     }

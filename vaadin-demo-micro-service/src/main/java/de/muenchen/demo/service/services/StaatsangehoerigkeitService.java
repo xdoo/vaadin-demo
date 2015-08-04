@@ -6,6 +6,7 @@
 package de.muenchen.demo.service.services;
 
 import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
+import de.muenchen.demo.service.domain.StaatsangehoerigkeitReference;
 import java.util.List;
 
 /**
@@ -16,6 +17,8 @@ public interface StaatsangehoerigkeitService {
         
     public Staatsangehoerigkeit read(String referencedOid);
     
+    public StaatsangehoerigkeitReference readReference(String referencedOid);
+
     public List<Staatsangehoerigkeit> query();
     
     public Staatsangehoerigkeit create(String oid);

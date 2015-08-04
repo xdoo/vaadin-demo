@@ -1,27 +1,22 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package de.muenchen.demo.test;
+package de.muenchen.demo.test.integration;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.demo.service.Application;
-import de.muenchen.demo.service.domain.Authority;
 import de.muenchen.demo.service.domain.AuthorityPermissionRepository;
 import de.muenchen.demo.service.domain.AuthorityRepository;
+import de.muenchen.demo.service.domain.Buerger;
+import de.muenchen.demo.service.domain.BuergerRepository;
 import de.muenchen.demo.service.domain.MandantRepository;
 import de.muenchen.demo.service.domain.PermissionRepository;
 import de.muenchen.demo.service.domain.UserAuthorityRepository;
 import de.muenchen.demo.service.domain.UserRepository;
-import de.muenchen.demo.service.rest.api.AuthorityResource;
-import de.muenchen.demo.service.rest.api.UserResource;
+import de.muenchen.demo.service.rest.api.BuergerResource;
 import de.muenchen.demo.service.rest.api.SearchResultResource;
-import de.muenchen.demo.service.util.IdService;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Collections;
 import javax.net.ssl.SSLContext;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -40,13 +35,21 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.TestRestTemplate;
 import org.springframework.boot.test.WebIntegrationTest;
+import org.springframework.hateoas.hal.Jackson2HalModule;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
 
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 /**
  *
  * @author praktikant.tmar
@@ -54,16 +57,13 @@ import org.springframework.web.client.RestTemplate;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebIntegrationTest({"server.port=0", "management.port=0"})
-public class AuthorityTest {
+public class MandantTest {
 
-    private RestTemplate restTemplate;
+    private RestTemplate restTemplate = new TestRestTemplate();
+    private RestTemplate restTemplate2 = new TestRestTemplate();
     @Value("${local.server.port}")
     private int port;
-    private Authority auth1;
-    private Authority auth2;
-    private Authority auth3;
-    @JsonProperty("result")
-    private SearchResultResource<UserResource> response;
+
     @Autowired
     UserRepository usersRepo;
     @Autowired
@@ -77,6 +77,8 @@ public class AuthorityTest {
 
     @Autowired
     MandantRepository mandantRepo;
+    @Autowired
+    BuergerRepository buergerRepo;
 
     @Before
     public void setUp() throws JsonProcessingException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
@@ -86,6 +88,7 @@ public class AuthorityTest {
         usersRepo.deleteAll();
         authRepo.deleteAll();
         permRepo.deleteAll();
+        buergerRepo.deleteAll();
         mandantRepo.deleteAll();
 
         InitTest initTest = new InitTest(usersRepo, authRepo, permRepo, userAuthRepo, authPermRepo, mandantRepo);
@@ -102,42 +105,45 @@ public class AuthorityTest {
 
         ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
         restTemplate = new RestTemplate(requestFactory);
+        BasicCredentialsProvider credentialsProvider2 = new BasicCredentialsProvider();
+        credentialsProvider2.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials("hans2", "test2"));
 
-        auth1 = new Authority();
-        auth1.setAuthority("ADMIN");
-        auth1.setOid("60");
-        auth2 = new Authority();
-        auth2.setAuthority("USER");
-        auth2.setOid(IdService.next());
-        auth3 = new Authority();
-        auth3.setAuthority("USER");
-        auth3.setOid(IdService.next());
-    }
+        HttpClient httpClient2 = HttpClientBuilder.create()
+                .setSSLSocketFactory(connectionFactory)
+                .setDefaultCredentialsProvider(credentialsProvider2)
+                .build();
 
-    @Test
-    public void saveAuthorityTest() {
+        ClientHttpRequestFactory requestFactory2 = new HttpComponentsClientHttpRequestFactory(httpClient2);
+        restTemplate2 = new RestTemplate(requestFactory2);
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new Jackson2HalModule());
 
-        String URL = "http://localhost:" + port + "/authority/save";
-
-        restTemplate.postForEntity(URL, auth1, AuthorityResource.class);
-        String URL4 = "http://localhost:" + port + "/authority/60";
-        AuthorityResource responseAuthority;
-        responseAuthority = restTemplate.getForEntity(URL4, AuthorityResource.class).getBody();
-
-        assertEquals("ADMIN", responseAuthority.getAuthority());
+        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+        converter.setObjectMapper(objectMapper);
+        restTemplate.setMessageConverters(Collections.<HttpMessageConverter<?>>singletonList(converter));
 
     }
 
     @Test
-    public void queryAuthorityTest() {
-        String URL = "http://localhost:" + port + "/authority/save";
-        restTemplate.postForEntity(URL, auth2, AuthorityResource.class);
-        restTemplate.postForEntity(URL, auth3, AuthorityResource.class);
+    public void mandantTest() throws JsonProcessingException {
+        Buerger buerger = new Buerger();
+        buerger.setOid("123");
+        buerger.setNachname("hans");
+        buerger.setVorname("peter");
 
-        String URL3 = "http://localhost:" + port + "/authority/query";
-        response = restTemplate.getForEntity(URL3, SearchResultResource.class).getBody();
+        String URL = "http://localhost:" + port + "/buerger/save";
+        restTemplate.postForEntity(URL, buerger, BuergerResource.class);
 
-        assertEquals(3, response.getResult().size());
+        String URL2 = "http://localhost:" + port + "/buerger/123";
+        BuergerResource buergerHans = restTemplate.getForEntity(URL2, BuergerResource.class).getBody();
+        assertEquals("hans", buergerHans.getNachname());
+
+        String URL4 = "http://localhost:" + port + "/buerger/query";
+        SearchResultResource responseQuery = restTemplate.getForEntity(URL4, SearchResultResource.class).getBody();
+        assertEquals(1, responseQuery.getResult().size());
+
+        SearchResultResource response2 = restTemplate2.getForEntity(URL4, SearchResultResource.class).getBody();
+        assertEquals(0, response2.getResult().size());
 
     }
 
@@ -148,8 +154,8 @@ public class AuthorityTest {
         usersRepo.deleteAll();
         authRepo.deleteAll();
         permRepo.deleteAll();
+        buergerRepo.deleteAll();
         mandantRepo.deleteAll();
 
     }
-
 }

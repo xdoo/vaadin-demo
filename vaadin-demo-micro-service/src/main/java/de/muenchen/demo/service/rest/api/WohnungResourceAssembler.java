@@ -85,6 +85,10 @@ public class WohnungResourceAssembler {
         if (relations.contains(HateoasRelations.SAVE)) {
             resource.add(linkTo(methodOn(WohnungController.class).saveWohnung(null)).withRel(HateoasUtil.SAVE));
         }
+        
+         if (relations.contains(HateoasRelations.ADRESSE)) {
+            resource.add(linkTo(methodOn(WohnungController.class).readWohnungAdresse(wohnung.getOid())).withRel(HateoasUtil.ADRESSE));
+        }
 
         if (relations.contains(HateoasRelations.COPY)) {
             resource.add(linkTo(methodOn(WohnungController.class).copyWohnung(wohnung.getOid())).withRel(HateoasUtil.COPY));

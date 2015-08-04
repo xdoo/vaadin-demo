@@ -88,7 +88,7 @@ public class AuthorityController {
             LOG.debug("read authoritys");
         }
         Authority entity = this.service.read(oid);
-        AuthorityResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE);
+        AuthorityResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.COPY, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE);
         return ResponseEntity.ok(resource);
     }
 
@@ -110,7 +110,7 @@ public class AuthorityController {
         this.assembler.fromResource(request, entity);
         LOG.info("danach > " + entity.toString());
         this.service.update(entity);
-        AuthorityResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE);
+        AuthorityResource resource = this.assembler.toResource(entity, HateoasRelations.SELF,HateoasRelations.COPY,  HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE);
         return ResponseEntity.ok(resource);
     }
 
@@ -129,7 +129,7 @@ public class AuthorityController {
         Authority entity = new Authority();
         this.assembler.fromResource(request, entity);
         this.service.save(entity);
-        AuthorityResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE);
+        AuthorityResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.COPY,HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE);
         return ResponseEntity.ok(resource);
     }
 
@@ -148,5 +148,21 @@ public class AuthorityController {
         this.service.delete(oid);
         return ResponseEntity.ok().build();
     }
-    
+    /**
+     * Macht eine Kopie eines Büergers. Diese Kopie wird bei Erstellung in der
+     * DB gespeichert.
+     *
+     * @param oid
+     * @return
+     */
+    @RolesAllowed({"PERM_copyAuthority"})
+    @RequestMapping(value = "/copy/{oid}", method = {RequestMethod.GET})
+    public ResponseEntity copyAuthority(@PathVariable String oid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("copy buerger");
+        }
+        Authority entity = this.service.copy(oid);
+        AuthorityResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY);
+        return ResponseEntity.ok(resource);
+    }
 }

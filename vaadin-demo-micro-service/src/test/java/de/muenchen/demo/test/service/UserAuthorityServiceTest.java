@@ -24,7 +24,7 @@ import de.muenchen.demo.service.domain.UserAuthorityRepository;
 import de.muenchen.demo.service.domain.UserRepository;
 import de.muenchen.demo.service.services.UserAuthorityService;
 import de.muenchen.demo.service.util.IdService;
-import de.muenchen.demo.test.InitTest;
+import de.muenchen.demo.test.integration.InitTest;
 import static java.lang.Boolean.TRUE;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;

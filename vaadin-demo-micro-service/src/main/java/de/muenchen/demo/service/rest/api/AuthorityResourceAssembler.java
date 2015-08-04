@@ -3,6 +3,7 @@ package de.muenchen.demo.service.rest.api;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import de.muenchen.demo.service.domain.Authority;
+import de.muenchen.demo.service.rest.AdresseController;
 import de.muenchen.demo.service.rest.AuthorityController;
 import de.muenchen.demo.service.services.AuthorityService;
 import de.muenchen.demo.service.util.HateoasRelations;
@@ -66,13 +67,13 @@ public class AuthorityResourceAssembler {
         ArrayList<HateoasRelations> relations = Lists.newArrayList(r);
         if (relations.contains(HateoasRelations.NEW)) {
             resource.add(linkTo(methodOn(AuthorityController.class).newAuthority()).withRel(HateoasUtil.NEW));
-
         }
-
         if (relations.contains(HateoasRelations.UPDATE)) {
             resource.add(linkTo(methodOn(AuthorityController.class).updateAuthority(authoritys.getOid(), null)).withRel(HateoasUtil.UPDATE));
         }
-
+        if (relations.contains(HateoasRelations.COPY)) {
+            resource.add(linkTo(methodOn(AuthorityController.class).copyAuthority(authoritys.getOid())).withRel(HateoasUtil.COPY));
+        }
         if (relations.contains(HateoasRelations.SELF)) {
             resource.add(linkTo(methodOn(AuthorityController.class).readAuthority(authoritys.getOid())).withSelfRel());
         }
