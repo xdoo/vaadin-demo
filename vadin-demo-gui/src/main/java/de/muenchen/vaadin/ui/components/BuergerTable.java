@@ -35,6 +35,13 @@ public class BuergerTable extends CustomComponent {
     private String navigateToForSelect;
     private String from;
     
+    // Buttons ein / aus blenden
+    private boolean read = Boolean.TRUE;
+    private boolean edit = Boolean.TRUE;
+    private boolean copy = Boolean.TRUE;
+    private boolean delete = Boolean.TRUE;
+    
+    
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerTable.class);
     
     public BuergerTable(final BuergerViewController controller) {
@@ -131,48 +138,60 @@ public class BuergerTable extends CustomComponent {
      * @return 
      */
     public HorizontalLayout addButtons(final Object id) {
-        
+        HorizontalLayout layout = new HorizontalLayout();
         // select
-        Button select = new Button();
-        select.setIcon(FontAwesome.FILE_O);
-        select.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
-        select.addClickListener(e -> {
-            BeanItem<Buerger> item = container.getItem(id);
-            controller.getEventbus().post(new BuergerAppEvent(item, id, EventType.SELECT2READ).navigateTo(this.navigateToForSelect).from(this.from));
-        });
+        if (this.read) {
+            Button select = new Button();
+            select.setIcon(FontAwesome.FILE_O);
+            select.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
+            select.addClickListener(e -> {
+                BeanItem<Buerger> item = container.getItem(id);
+                controller.getEventbus().post(new BuergerAppEvent(item, id, EventType.SELECT2READ).navigateTo(this.navigateToForSelect).from(this.from));
+            });
+            layout.addComponent(select);
+        }
+        
         
         //edit
-        Button edit = new Button();
-        edit.setIcon(FontAwesome.PENCIL);
-        edit.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
-        edit.addClickListener(e -> {
-            BeanItem<Buerger> item = container.getItem(id);
-            controller.getEventbus().post(new BuergerAppEvent(item, id, EventType.SELECT2UPDATE).navigateTo(navigateToForEdit).from(this.from));
-        });
+        if (this.edit) {
+            Button edit = new Button();
+            edit.setIcon(FontAwesome.PENCIL);
+            edit.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
+            edit.addClickListener(e -> {
+                BeanItem<Buerger> item = container.getItem(id);
+                controller.getEventbus().post(new BuergerAppEvent(item, id, EventType.SELECT2UPDATE).navigateTo(navigateToForEdit).from(this.from));
+            });
+            layout.addComponent(edit);
+        }
         
         //copy
-        Button copy = new Button();
-        copy.setIcon(FontAwesome.COPY);
-        copy.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
-        copy.addClickListener(e -> {
-            BeanItem<Buerger> item = container.getItem(id);
-            controller.getEventbus().post(new BuergerAppEvent(item, id, EventType.COPY));
-        });
+        if (this.copy) {
+            Button copy = new Button();
+            copy.setIcon(FontAwesome.COPY);
+            copy.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
+            copy.addClickListener(e -> {
+                BeanItem<Buerger> item = container.getItem(id);
+                controller.getEventbus().post(new BuergerAppEvent(item, id, EventType.COPY));
+            });
+            layout.addComponent(copy);
+        }
         
         //delete
-        Button delete = new Button();
-        delete.setIcon(FontAwesome.TRASH_O);
-        delete.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
-        delete.addStyleName(ValoTheme.BUTTON_DANGER);
-        delete.addClickListener(e -> {
-            BeanItem<Buerger> item = container.getItem(id);            
-            GenericConfirmationWindow win = new GenericConfirmationWindow( new BuergerAppEvent(item, id, EventType.DELETE), controller.getEventbus());
-            getUI().addWindow(win);
-            win.center();
-            win.focus();
-        });
+        if (this.delete) {
+            Button delete = new Button();
+            delete.setIcon(FontAwesome.TRASH_O);
+            delete.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
+            delete.addStyleName(ValoTheme.BUTTON_DANGER);
+            delete.addClickListener(e -> {
+                BeanItem<Buerger> item = container.getItem(id);
+                GenericConfirmationWindow win = new GenericConfirmationWindow(new BuergerAppEvent(item, id, EventType.DELETE), controller.getEventbus());
+                getUI().addWindow(win);
+                win.center();
+                win.focus();
+            });
+            layout.addComponent(delete);
+        }
 
-        HorizontalLayout layout = new HorizontalLayout(select, edit, copy, delete);
         layout.setSpacing(true);
         
         return layout;
@@ -203,4 +222,37 @@ public class BuergerTable extends CustomComponent {
     public void setFrom(String from) {
         this.from = from;
     }
+
+    public boolean isRead() {
+        return read;
+    }
+
+    public void setRead(boolean read) {
+        this.read = read;
+    }
+
+    public boolean isEdit() {
+        return edit;
+    }
+
+    public void setEdit(boolean edit) {
+        this.edit = edit;
+    }
+
+    public boolean isCopy() {
+        return copy;
+    }
+
+    public void setCopy(boolean copy) {
+        this.copy = copy;
+    }
+
+    public boolean isDelete() {
+        return delete;
+    }
+
+    public void setDelete(boolean delete) {
+        this.delete = delete;
+    }
+    
 }
