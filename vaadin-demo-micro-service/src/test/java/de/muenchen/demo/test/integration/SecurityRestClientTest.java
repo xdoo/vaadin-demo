@@ -51,7 +51,7 @@ import org.springframework.web.client.RestTemplate;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebIntegrationTest//({"server.port=0", "management.port=0"})
-public class UserServiceTest {
+public class SecurityRestClientTest {
 
     private RestTemplate restTemplate;
     @Value("${local.server.port}")
