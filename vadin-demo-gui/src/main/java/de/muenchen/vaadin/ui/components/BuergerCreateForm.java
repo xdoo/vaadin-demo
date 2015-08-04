@@ -14,7 +14,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
-import de.muenchen.vaadin.ui.app.views.events.BuergerEvent;
+import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.EventType;
 import de.muenchen.vaadin.ui.util.I18nPaths;
@@ -27,7 +27,7 @@ import de.muenchen.vaadin.ui.util.I18nPaths;
 public class BuergerCreateForm extends CustomComponent {
     
     private final String navigateTo;
-    private String navigateBack;
+    private String back;
     private final BuergerViewController controller;
 
     /**
@@ -41,7 +41,7 @@ public class BuergerCreateForm extends CustomComponent {
      */
     public BuergerCreateForm(final BuergerViewController controller, final String navigateTo) {
         this.navigateTo = navigateTo;
-        this.navigateBack = navigateTo;
+        this.back = navigateTo;
         this.controller = controller;
         
         this.createForm();
@@ -55,11 +55,11 @@ public class BuergerCreateForm extends CustomComponent {
      * 
      * @param controller der Entity Controller
      * @param navigateTo Zielseite nach Druck der 'erstellen' Schaltfläche
-     * @param navigateBack Zielseite nach Druck der 'abbrechen' Schaltfläche
+     * @param back Zielseite nach Druck der 'abbrechen' Schaltfläche
      */
-    public BuergerCreateForm(final BuergerViewController controller, final String navigateTo, String navigateBack) {
+    public BuergerCreateForm(final BuergerViewController controller, final String navigateTo, String back) {
         this.navigateTo = navigateTo;
-        this.navigateBack = navigateBack;
+        this.back = back;
         this.controller = controller;
         
         this.createForm();
@@ -98,8 +98,8 @@ public class BuergerCreateForm extends CustomComponent {
         Button createButton = new Button(createLabel, (ClickEvent click) -> {
             try {
                 binder.commit();
-                BuergerEvent event = new BuergerEvent(binder.getItemDataSource().getBean(), EventType.SAVE);
-                event.setNavigateTo(navigateTo);
+                BuergerAppEvent event = new BuergerAppEvent(binder.getItemDataSource().getBean(), EventType.SAVE);
+                event.navigateTo(navigateTo);
                 controller.getEventbus().post(event);
                 //reset
                 binder.setItemDataSource(controller.createBuerger());
@@ -116,7 +116,7 @@ public class BuergerCreateForm extends CustomComponent {
         // die 'abbrechen' Schaltfläche
         buttonLayout.addComponent(new GenericCancelButton(
                 controller.getMsg().readText(controller.getI18nBasePath(), I18nPaths.I18N_FORM_CANCEL_BUTTON_LABEL), 
-                new BuergerEvent(binder.getItemDataSource().getBean(), EventType.CANCEL).setNavigateTo(this.navigateBack), 
+                new BuergerAppEvent(binder.getItemDataSource().getBean(), EventType.CANCEL).navigateTo(this.back), 
                 this.controller.getEventbus()));
         setCompositionRoot(layout);
     }
@@ -130,10 +130,10 @@ public class BuergerCreateForm extends CustomComponent {
     }
 
     public String getNavigateBack() {
-        return navigateBack;
+        return back;
     }
 
     public void setNavigateBack(String navigateBack) {
-        this.navigateBack = navigateBack;
+        this.back = navigateBack;
     }
 }

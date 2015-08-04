@@ -11,8 +11,9 @@ import com.vaadin.spring.annotation.UIScope;
 import de.muenchen.vaadin.services.BuergerService;
 import de.muenchen.vaadin.services.MessageService;
 import de.muenchen.vaadin.ui.app.MainUI;
+import de.muenchen.vaadin.ui.app.views.events.AppEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
-import de.muenchen.vaadin.ui.app.views.events.BuergerEvent;
+import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.components.BuergerCreateForm;
 import de.muenchen.vaadin.ui.components.BuergerReadForm;
 import de.muenchen.vaadin.ui.components.BuergerSearchTable;
@@ -23,10 +24,8 @@ import de.muenchen.vaadin.ui.util.EventBus;
 import de.muenchen.vaadin.ui.util.EventType;
 import de.muenchen.vaadin.ui.util.VaadinUtil;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.stream.Collectors;
+import java.util.Stack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,6 +82,9 @@ public class BuergerViewController implements Serializable {
     // item cache
     private BeanItem<Buerger> current;
     private List<Buerger> currentEntities;
+    
+    // navigation cache
+    private Stack<String> from = new Stack<>();
     
     /**
      * Die Main wird über die {@link DefaulPersonView} registriert. Dies
@@ -188,38 +190,47 @@ public class BuergerViewController implements Serializable {
     //////////////////////////////////////////////
 
     public BuergerCreateForm generateCreateForm(String navigateTo) {
+        LOG.debug("creating 'create' buerger form");
         BuergerCreateForm form = new BuergerCreateForm(this, navigateTo);
         return form;
     }
 
-    public BuergerUpdateForm generateUpdateForm(String navigateTo) { 
-        LOG.info("creating update buerger form");
-        BuergerUpdateForm form = new BuergerUpdateForm(this, navigateTo);
+    public BuergerUpdateForm generateUpdateForm(String navigateTo, String from) { 
+        LOG.debug("creating 'update' buerger form");
+        BuergerUpdateForm form = new BuergerUpdateForm(this, navigateTo, this.from.pop(), from);
         this.eventbus.register(form);
         this.eventbus.post(new BuergerComponentEvent(this.current, EventType.SELECT2UPDATE));
         return form;
     }
     
-    public BuergerReadForm generateReadForm(String navigateToUpdate, String navigateBack) {
-        BuergerReadForm form = new BuergerReadForm(this, navigateToUpdate, navigateBack);
+    public BuergerUpdateForm generateUpdateForm(String from) { 
+        return this.generateUpdateForm(this.from.peek(), from);
+    }
+    
+    public BuergerReadForm generateReadForm(String navigateToUpdate, String from) {
+        LOG.debug("creating 'read' buerger form");
+        BuergerReadForm form = new BuergerReadForm(this, navigateToUpdate, this.from.pop(), from);
         this.eventbus.register(form);
         this.eventbus.post(new BuergerComponentEvent(this.current, EventType.SELECT2READ));
         return form;
     }
     
-    public BuergerSearchTable generateSearchTable(String navigateToForEdit, String navigateToForSelect, String navigateForCreate) {
-        return new BuergerSearchTable(this, navigateToForEdit, navigateToForSelect, navigateForCreate);
+    public BuergerSearchTable generateSearchTable(String navigateToForEdit, String navigateToForSelect, String navigateForCreate, String navigateFrom) {
+        LOG.debug("creating 'search' table for buerger");
+        return new BuergerSearchTable(this, navigateToForEdit, navigateToForSelect, navigateForCreate, navigateFrom);
     }
     
-    public BuergerTable generateTable(String navigateToForUpdateAndSelect){
-        return this.generateTable(navigateToForUpdateAndSelect, navigateToForUpdateAndSelect);
+    public BuergerTable generateTable(String navigateToForUpdateAndSelect, String from){
+        return this.generateTable(navigateToForUpdateAndSelect, navigateToForUpdateAndSelect, from);
     }
 
-    public BuergerTable generateTable(String navigateToForEdit, String navigateToForSelect) {      
+    public BuergerTable generateTable(String navigateToForEdit, String navigateToForSelect, String from) { 
+        LOG.debug("creating table for buerger");
         BuergerTable table = new BuergerTable(this);
         
         table.setNavigateToForEdit(navigateToForEdit);
         table.setNavigateToForSelect(navigateToForSelect);
+        table.setFrom(from);
         
         this.eventbus.register(table);
         BuergerComponentEvent event = new BuergerComponentEvent(EventType.QUERY);
@@ -240,11 +251,15 @@ public class BuergerViewController implements Serializable {
      * schaffen, ohne dass diese sich untereinander kennen müssen. 
      */
     @Subscribe
-    public void onEvent(BuergerEvent event) {
+    public void onEvent(BuergerAppEvent event) {
         
         // create
         if(event.getType().equals(EventType.CREATE)) {
             LOG.debug("create event");
+            
+            // Verlauf protokollieren
+            this.stack(event);
+            
             // Zur Seite wechseln
             this.navigator.navigateTo(event.getNavigateTo());
         } 
@@ -257,6 +272,9 @@ public class BuergerViewController implements Serializable {
             
             // UI Komponenten aktualisieren
             this.eventbus.post(new BuergerComponentEvent(event.getEntity(), EventType.UPDATE));
+            
+            // Verlauf protokollieren
+            this.stack(event);
             
             GenericSuccessNotification succes = new GenericSuccessNotification("Bürger angepasst", "Der Bürger wurde erfolgreich angepasst und gespeichert."); // TODO i18n
             succes.show(Page.getCurrent());
@@ -322,6 +340,9 @@ public class BuergerViewController implements Serializable {
             // UI Komponenten aktualisieren
             this.eventbus.post(new BuergerComponentEvent(event.getItem().getBean(), EventType.SELECT2UPDATE));
             
+            // Verlauf protokollieren
+            this.stack(event);
+            
             // Zur Seite wechseln
             this.navigator.navigateTo(event.getNavigateTo());
         }
@@ -334,6 +355,9 @@ public class BuergerViewController implements Serializable {
             
             // UI Komponente aktualisieren
             this.eventbus.post(new BuergerComponentEvent(event.getItem().getBean(), EventType.SELECT2READ));
+            
+            // Verlauf protokollieren
+            this.stack(event);
             
             // Zur Seite wechseln
             this.navigator.navigateTo(event.getNavigateTo());
@@ -360,6 +384,12 @@ public class BuergerViewController implements Serializable {
             
             // Zur Seite wechseln
             this.navigator.navigateTo(event.getNavigateTo()); 
+        }
+    }
+    
+    private void stack(BuergerAppEvent event) {
+        if(event.getFrom().isPresent()) {
+            this.from.push(event.getFrom().get());
         }
     }
     

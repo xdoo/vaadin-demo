@@ -21,6 +21,7 @@ public class ComponentEvent<T> {
     private final List<BeanItem<T>> items = new ArrayList<>();
     protected EventType eventType;
     protected Object itemID;
+    protected String from;
 
     public ComponentEvent(EventType eventType) {
         this.eventType = eventType;
@@ -37,9 +38,10 @@ public class ComponentEvent<T> {
         this.eventType = eventType;
     }
     
-    public void addEntity(T entity) {
+    public ComponentEvent<T> addEntity(T entity) {
         this.entities.add(entity);
         this.createAndAddBeanItem(entity);
+        return this;
     }
     
     public void addEntities(List<T> entities) {
@@ -60,20 +62,23 @@ public class ComponentEvent<T> {
         return Optional.empty();
     }
     
-    public void createAndAddBeanItem(T entity) {
+    public ComponentEvent<T> createAndAddBeanItem(T entity) {
         this.items.add(new BeanItem(entity));
+        return this;
     }
     
-    public void addItem(BeanItem<T> item) {
+    public ComponentEvent<T> addItem(BeanItem<T> item) {
         this.items.add(item);
         this.entities.add(item.getBean());
+        return this;
     }
     
-    public void addItems(List<BeanItem<T>> items) {
+    public ComponentEvent<T> addItems(List<BeanItem<T>> items) {
         items.stream().forEach(i -> {
             this.items.add(i);
             this.entities.add(i.getBean());
         });
+        return this;
     }
 
     public List<BeanItem<T>> getItems() {
@@ -92,15 +97,27 @@ public class ComponentEvent<T> {
         return eventType;
     }
 
-    public void setEventType(EventType eventType) {
+    public ComponentEvent<T> setEventType(EventType eventType) {
         this.eventType = eventType;
+        return this;
     }
 
     public Object getItemID() {
         return itemID;
     }
 
-    public void setItemID(Object itemID) {
+    public ComponentEvent<T> setItemID(Object itemID) {
         this.itemID = itemID;
+        return this;
     }
+
+    public String getFrom() {
+        return from;
+    }
+
+    public ComponentEvent<T> setFrom(String from) {
+        this.from = from;
+        return this;
+    }
+    
 }

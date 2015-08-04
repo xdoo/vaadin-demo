@@ -8,6 +8,8 @@ import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.components.BuergerChildTabSheet;
 import de.muenchen.vaadin.ui.components.BuergerReadForm;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -19,10 +21,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class BuergerReadView extends DefaultBuergerView {
 
     public static final String NAME = "buerger_read_view";
+    protected static final Logger LOG = LoggerFactory.getLogger(BuergerReadView.class);
     
     @Autowired
     public BuergerReadView(BuergerViewController controller, MainUI ui) {
         super(controller, ui);
+        LOG.debug("creating 'buerger_read_view'");
     }
 
     @Override
@@ -31,7 +35,7 @@ public class BuergerReadView extends DefaultBuergerView {
         layout.setSpacing(true);
         
         // read form
-        BuergerReadForm readForm = this.controller.generateReadForm(BuergerUpdateView.NAME, BuergerTableView.NAME);
+        BuergerReadForm readForm = this.controller.generateReadForm(BuergerUpdateView.NAME, this.NAME);
         layout.addComponent(readForm);
         
         // tab sheet

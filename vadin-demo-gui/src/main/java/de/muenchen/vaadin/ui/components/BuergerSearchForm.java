@@ -7,7 +7,7 @@ import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.vaadin.ui.app.views.events.BuergerEvent;
+import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.EventType;
 
@@ -30,7 +30,7 @@ public class BuergerSearchForm extends CustomComponent {
         search.setStyleName(ValoTheme.BUTTON_ICON_ONLY);
         search.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         search.addClickListener(e -> {
-            controller.getEventbus().post(new BuergerEvent(EventType.QUERY).setQuery(query.getValue()));
+            controller.getEventbus().post(new BuergerAppEvent(EventType.QUERY).query(query.getValue()));
         });
         
         // Reset Schaltfläche
@@ -38,7 +38,7 @@ public class BuergerSearchForm extends CustomComponent {
         reset.setStyleName(ValoTheme.BUTTON_ICON_ONLY);
         reset.setClickShortcut(ShortcutAction.KeyCode.ESCAPE);
         reset.addClickListener(e -> {
-            controller.getEventbus().post(new BuergerEvent(EventType.QUERY));
+            controller.getEventbus().post(new BuergerAppEvent(EventType.QUERY));
             query.setValue("");
         });
         group.addComponents(query, search, reset);

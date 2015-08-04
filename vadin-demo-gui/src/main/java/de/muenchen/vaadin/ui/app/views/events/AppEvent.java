@@ -13,6 +13,7 @@ public class AppEvent<T> {
     protected EventType type;
     protected Object itemId;
     protected String navigateTo;
+    protected String from;
     protected String query;
     private T entity;
     private BeanItem<T> item;
@@ -54,7 +55,7 @@ public class AppEvent<T> {
         return itemId;
     }
 
-    public AppEvent<T> setNavigateTo(String navigateTo) {
+    public AppEvent<T> navigateTo(String navigateTo) {
         this.navigateTo = navigateTo;
         return this;
     }
@@ -63,11 +64,20 @@ public class AppEvent<T> {
         return navigateTo;
     }
 
+    public Optional<String> getFrom() {
+        return Optional.ofNullable(this.from);
+    }
+
+    public AppEvent<T> from(String navigateFrom) {
+        this.from = navigateFrom;
+        return this;
+    }
+
     public Optional<String> getQuery() {
         return Optional.ofNullable(this.query);
     }
 
-    public AppEvent<T> setQuery(String query) {
+    public AppEvent<T> query(String query) {
         this.query = query;
         return this;
     }

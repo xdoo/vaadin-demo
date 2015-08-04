@@ -12,7 +12,7 @@ import com.vaadin.ui.Table.ColumnGenerator;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
-import de.muenchen.vaadin.ui.app.views.events.BuergerEvent;
+import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.EventType;
 import java.util.List;
@@ -33,6 +33,7 @@ public class BuergerTable extends CustomComponent {
     // Navigation
     private String navigateToForEdit;
     private String navigateToForSelect;
+    private String from;
     
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerTable.class);
     
@@ -137,9 +138,7 @@ public class BuergerTable extends CustomComponent {
         select.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
         select.addClickListener(e -> {
             BeanItem<Buerger> item = container.getItem(id);
-            BuergerEvent event = new BuergerEvent(item, id, EventType.SELECT2READ);
-            event.setNavigateTo(this.navigateToForSelect);
-            controller.getEventbus().post(event);
+            controller.getEventbus().post(new BuergerAppEvent(item, id, EventType.SELECT2READ).navigateTo(this.navigateToForSelect).from(this.from));
         });
         
         //edit
@@ -148,9 +147,7 @@ public class BuergerTable extends CustomComponent {
         edit.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
         edit.addClickListener(e -> {
             BeanItem<Buerger> item = container.getItem(id);
-            BuergerEvent event = new BuergerEvent(item, id, EventType.SELECT2UPDATE);
-            event.setNavigateTo(navigateToForEdit);
-            controller.getEventbus().post(event);
+            controller.getEventbus().post(new BuergerAppEvent(item, id, EventType.SELECT2UPDATE).navigateTo(navigateToForEdit).from(this.from));
         });
         
         //copy
@@ -159,7 +156,7 @@ public class BuergerTable extends CustomComponent {
         copy.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
         copy.addClickListener(e -> {
             BeanItem<Buerger> item = container.getItem(id);
-            controller.getEventbus().post(new BuergerEvent(item, id, EventType.COPY));
+            controller.getEventbus().post(new BuergerAppEvent(item, id, EventType.COPY));
         });
         
         //delete
@@ -169,7 +166,7 @@ public class BuergerTable extends CustomComponent {
         delete.addStyleName(ValoTheme.BUTTON_DANGER);
         delete.addClickListener(e -> {
             BeanItem<Buerger> item = container.getItem(id);            
-            GenericConfirmationWindow win = new GenericConfirmationWindow( new BuergerEvent(item, id, EventType.DELETE), controller.getEventbus());
+            GenericConfirmationWindow win = new GenericConfirmationWindow( new BuergerAppEvent(item, id, EventType.DELETE), controller.getEventbus());
             getUI().addWindow(win);
             win.center();
             win.focus();
@@ -197,5 +194,13 @@ public class BuergerTable extends CustomComponent {
 
     public String getNavigateToForSelect() {
         return navigateToForSelect;
+    }
+
+    public String getFrom() {
+        return from;
+    }
+
+    public void setFrom(String from) {
+        this.from = from;
     }
 }

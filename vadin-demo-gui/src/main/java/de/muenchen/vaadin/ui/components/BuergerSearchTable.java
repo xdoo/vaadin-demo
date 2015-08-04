@@ -15,9 +15,9 @@ public class BuergerSearchTable extends CustomComponent {
 
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerSearchTable.class);
     
-    public BuergerSearchTable(final BuergerViewController controller, String navigateToForEdit, String navigateToForSelect, String navigateToForCreate) {
-        BuergerCreateButton create = new BuergerCreateButton(controller, navigateToForCreate);
-        BuergerTable table = controller.generateTable(navigateToForEdit, navigateToForSelect);
+    public BuergerSearchTable(final BuergerViewController controller, String navigateToForEdit, String navigateToForSelect, String navigateToForCreate, String from) {
+        BuergerCreateButton create = new BuergerCreateButton(controller, navigateToForCreate, from);
+        BuergerTable table = controller.generateTable(navigateToForEdit, navigateToForSelect, from);
         BuergerSearchForm search = new BuergerSearchForm(controller);
         search.setWidth("100%"); 
         

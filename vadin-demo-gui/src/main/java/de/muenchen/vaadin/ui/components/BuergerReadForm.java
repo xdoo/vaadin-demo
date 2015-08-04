@@ -33,7 +33,8 @@ public class BuergerReadForm extends CustomComponent {
     final BuergerViewController controller;
     
     private final String navigateToUpdate;
-    private String navigateBack;
+    private String back;
+    private final String from;
 
 
     /**
@@ -43,13 +44,15 @@ public class BuergerReadForm extends CustomComponent {
      * 
      * @param controller
      * @param navigateToUpdate
-     * @param navigateBack 
+     * @param back 
+     * @param from 
      */
-    public BuergerReadForm(BuergerViewController controller, final String navigateToUpdate, String navigateBack) {
+    public BuergerReadForm(BuergerViewController controller, final String navigateToUpdate, String back, final String from) {
         
         this.controller = controller;
         this.navigateToUpdate = navigateToUpdate;
-        this.navigateBack = navigateBack;
+        this.back = back;
+        this.from = from;
         
         // create form
         this.createForm();
@@ -79,9 +82,9 @@ public class BuergerReadForm extends CustomComponent {
         this.binder.setReadOnly(true);
         layout.addComponent(buttonLayout);
         // die Schaltfläche zum Aktualisieren        
-        buttonLayout.addComponent(new BuergerBackButton(this.controller, this.navigateBack));
+        buttonLayout.addComponent(new BuergerBackButton(this.controller, this.back));
         // die Schaltfläche zum Bearbeiten
-        this.updateButton = new BuergerUpdateButton(this.controller, this.navigateToUpdate);
+        this.updateButton = new BuergerUpdateButton(this.controller, this.navigateToUpdate, this.from);
         buttonLayout.addComponent(this.updateButton);
         setCompositionRoot(layout);
     }
@@ -101,11 +104,11 @@ public class BuergerReadForm extends CustomComponent {
     }
 
     public String getNavigateBack() {
-        return navigateBack;
+        return back;
     }
 
-    public void setNavigateBack(String navigateBack) {
-        this.navigateBack = navigateBack;
+    public void setNavigateBack(String back) {
+        this.back = back;
     }
 
 }

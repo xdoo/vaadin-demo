@@ -8,18 +8,17 @@ import de.muenchen.vaadin.ui.util.EventType;
  *
  * @author claus.straube
  */
-public class BuergerEvent extends AppEvent<Buerger> {
+public class BuergerAppEvent extends AppEvent<Buerger> {
 
-    public BuergerEvent(EventType type) {
+    public BuergerAppEvent(EventType type) {
         super(type);
     }
 
-    public BuergerEvent(Buerger entity, EventType type) {
+    public BuergerAppEvent(Buerger entity, EventType type) {
         super(entity, type);
     }
 
-    public BuergerEvent(BeanItem<Buerger> item, Object itemId, EventType type) {
+    public BuergerAppEvent(BeanItem<Buerger> item, Object itemId, EventType type) {
         super(item, itemId, type);
     }
-    
 }
