@@ -1,5 +1,6 @@
 package de.muenchen.demo.service.rest;
 
+import com.google.gwt.thirdparty.guava.common.collect.Lists;
 import de.muenchen.demo.service.domain.Buerger;
 import de.muenchen.demo.service.domain.Pass;
 import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
@@ -262,8 +263,9 @@ public class BuergerController {
             LOG.debug("read buerger  Kinder");
         }
         Set<Buerger> kinder = this.service.read(oid).getKinder();
-        List<BuergerResource> resources = assembler.toResource(kinder, HateoasRelations.SELF);
-        return ResponseEntity.ok(resources);
+        SearchResultResource<BuergerResource> resource = this.assembler.toResource(Lists.newArrayList(kinder));
+        resource.add(linkTo(methodOn(BuergerController.class).readBuergerKinder(oid)).withSelfRel());
+        return ResponseEntity.ok(resource);
     }
 
     /**

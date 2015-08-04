@@ -44,10 +44,11 @@ public class ComponentEvent<T> {
         return this;
     }
     
-    public void addEntities(List<T> entities) {
+    public ComponentEvent<T> addEntities(List<T> entities) {
         entities.stream().forEach(e -> { 
             this.addEntity(e);
         });
+        return this;
     }
 
     public List<T> getEntities() {

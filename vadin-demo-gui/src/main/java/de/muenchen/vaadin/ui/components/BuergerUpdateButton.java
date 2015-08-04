@@ -1,7 +1,5 @@
 package de.muenchen.vaadin.ui.components;
 
-import com.vaadin.data.util.BeanItem;
-import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CustomComponent;

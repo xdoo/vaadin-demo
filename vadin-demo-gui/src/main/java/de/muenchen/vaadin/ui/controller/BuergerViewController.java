@@ -223,8 +223,8 @@ public class BuergerViewController implements Serializable {
         return new BuergerSearchTable(this, navigateToForEdit, navigateToForSelect, navigateForCreate, navigateFrom);
     }
     
-    public BuergerTable generateChildTable(String navigateToForEdit, String navigateToForSelect, String from, Buerger entity) {
-        return this.createTable(navigateToForEdit, navigateToForSelect, from, this.queryKinder(entity));
+    public BuergerTable generateChildTable(String navigateToForEdit, String navigateToForSelect, String from) {
+        return this.createTable(navigateToForEdit, navigateToForSelect, from, this.queryKinder(this.current.getBean()));
     }
 
     public BuergerTable generateTable(String navigateToForEdit, String navigateToForSelect, String from) { 
@@ -380,9 +380,14 @@ public class BuergerViewController implements Serializable {
             }
             
             // UI Komponenten aktualisieren
-            BuergerComponentEvent buergerComponentEvent = new BuergerComponentEvent(EventType.QUERY);
-            buergerComponentEvent.addEntities(this.currentEntities);
-            this.eventbus.post(buergerComponentEvent);
+            this.eventbus.post(new BuergerComponentEvent(EventType.QUERY).addEntities(this.currentEntities));
+        }
+        
+        if(event.getType().equals(EventType.QUERY_CHILD)) {
+            LOG.debug("query child event");
+            
+            // UI Komponenten aktualisieren
+            this.eventbus.post(new BuergerComponentEvent(EventType.QUERY).addEntities(this.queryKinder(event.getEntity())));
         }
         
         // cancel
