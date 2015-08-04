@@ -7,7 +7,7 @@ import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
 import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.components.BuergerChildTabSheet;
-import de.muenchen.vaadin.ui.components.BuergerKindTab;
+import de.muenchen.vaadin.ui.components.BuergerChildTab;
 import de.muenchen.vaadin.ui.components.BuergerReadForm;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.slf4j.Logger;
@@ -44,7 +44,8 @@ public class BuergerReadView extends DefaultBuergerView {
         TabSheet tabSheet = new TabSheet();
         
         // add kind tab
-        TabSheet.Tab kindTab = tabSheet.addTab(new BuergerKindTab(controller, BuergerUpdateView.NAME, BuergerReadView.NAME, this.NAME));
+        TabSheet.Tab kindTab = tabSheet.addTab(new BuergerChildTab(controller, BuergerUpdateView.NAME, BuergerReadView.NAME, BuergerCreateChildView.NAME, NAME));
+        kindTab.setCaption("Kinder"); // TODO -> i18n
         
         layout.addComponent(tabSheet);
         

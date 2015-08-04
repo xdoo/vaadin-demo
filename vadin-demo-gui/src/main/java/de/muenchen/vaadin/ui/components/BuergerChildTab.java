@@ -17,18 +17,19 @@ import java.util.Optional;
  *
  * @author claus
  */
-public class BuergerKindTab extends CustomComponent {
+public class BuergerChildTab extends CustomComponent {
 
     BuergerViewController controller;
     
-    public BuergerKindTab(BuergerViewController controller, String navigateToForEdit, String navigateToForSelect, String from) {
+    public BuergerChildTab(BuergerViewController controller, String navigateToForEdit, String navigateToForSelect, String navigateToForCreate, String from) {
         
         this.controller = controller;
         
+        BuergerCreateButton create = new BuergerCreateButton(controller, navigateToForCreate, from);
         BuergerTable table = controller.generateChildTable(navigateToForEdit, navigateToForSelect, from);
         
         // Layout für die Schaltflächen über der Tabelle
-        HorizontalLayout hlayout = new HorizontalLayout();
+        HorizontalLayout hlayout = new HorizontalLayout(create);
         hlayout.setSpacing(true);
         // Gesamtlayout
         VerticalLayout vlayout = new VerticalLayout(hlayout, table);

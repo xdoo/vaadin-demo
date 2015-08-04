@@ -157,6 +157,10 @@ public class BuergerViewController implements Serializable {
         return service.saveBuerger(entity);
     }
     
+    public Buerger saveBuergerKind(Buerger entity) {
+        return null;
+    }
+    
     /**
      * Speichert die Änderungen an einem {@link Buerger} Objekt in der Datenbank.
      * 
@@ -189,13 +193,24 @@ public class BuergerViewController implements Serializable {
     }
     
     //////////////////////////////////////////////
-    // Setter und Getter für die UI Komponenten //
+    // Factory Methoden für die UI Komponenten //
     //////////////////////////////////////////////
 
     public BuergerCreateForm generateCreateForm(String navigateTo) {
         LOG.debug("creating 'create' buerger form");
         BuergerCreateForm form = new BuergerCreateForm(this, navigateTo);
         return form;
+    }
+    
+    public BuergerCreateForm generateCreateChildForm(String navigateTo) {
+        LOG.debug("creating 'create child' buerger form");
+        BuergerCreateForm form = new BuergerCreateForm(this, navigateTo);
+        form.setType(EventType.SAVE_CHILD);
+        return form;
+    }
+    
+    public BuergerCreateForm generateCreateChildForm() {
+        return this.generateCreateChildForm(this.from.pop());
     }
 
     public BuergerUpdateForm generateUpdateForm(String navigateTo, String from) { 
@@ -304,6 +319,12 @@ public class BuergerViewController implements Serializable {
             
             // Zur Seite wechseln
             this.navigator.navigateTo(event.getNavigateTo());
+        }
+        
+        // save child
+        if(event.getType().equals(EventType.SAVE_CHILD)) {
+            LOG.debug("save child event");
+            
         }
         
         // delete

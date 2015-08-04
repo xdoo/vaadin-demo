@@ -29,6 +29,7 @@ public class BuergerCreateForm extends CustomComponent {
     private final String navigateTo;
     private String back;
     private final BuergerViewController controller;
+    private EventType type = EventType.SAVE;
 
     /**
      * Formular zum Erstellen eines {@link Buerger}s. Über diesen
@@ -98,9 +99,7 @@ public class BuergerCreateForm extends CustomComponent {
         Button createButton = new Button(createLabel, (ClickEvent click) -> {
             try {
                 binder.commit();
-                BuergerAppEvent event = new BuergerAppEvent(binder.getItemDataSource().getBean(), EventType.SAVE);
-                event.navigateTo(navigateTo);
-                controller.getEventbus().post(event);
+                controller.getEventbus().post(new BuergerAppEvent(binder.getItemDataSource().getBean(), this.type).navigateTo(navigateTo));
                 //reset
                 binder.setItemDataSource(controller.createBuerger());
             } catch (CommitException e) {
@@ -135,5 +134,13 @@ public class BuergerCreateForm extends CustomComponent {
 
     public void setNavigateBack(String navigateBack) {
         this.back = navigateBack;
+    }
+
+    public EventType getType() {
+        return type;
+    }
+
+    public void setType(EventType type) {
+        this.type = type;
     }
 }

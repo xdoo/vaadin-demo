@@ -72,6 +72,11 @@ public class BuergerRestClientImpl implements BuergerRestClient {
         return this.requestMultiSource(HttpMethod.GET, "kinder", links, restTemplate);
     }
     
+    @Override
+    public Buerger saveBuergerKind(Buerger buerger, RestTemplate restTemplate) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
     public Buerger writeSingleSource(String rel, Buerger buerger, RestTemplate restTemplate) {
         Optional<Link> link = HateoasUtil.findLinkForRel(rel, buerger.getLinks());
         if(link.isPresent()) {
