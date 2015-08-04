@@ -202,7 +202,7 @@ public class BuergerTest {
     public void updateBuergerTest() {
 
         restTemplate.postForEntity(urlSave, buerger, BuergerResource.class).getBody();
-        String URL2 = "http://localhost:" + port + "/buerger/10";
+        String URL2 = "http://localhost:" + port + "/buerger/b";
         response = restTemplate.postForEntity(URL2, buergerUpdate, BuergerResource.class).getBody();
 
         assertEquals("max", response.getNachname());

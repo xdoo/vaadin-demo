@@ -124,6 +124,10 @@ public class PassTest {
         InitTest initTest = new InitTest(usersRepo, authRepo, permRepo, userAuthRepo, authPermRepo, mandantRepo);
         initTest.init();
 
+        ObjectMapper mapper = new ObjectMapper(); // can reuse, share globally
+
+
+        
         SSLContext sslContext = SSLContexts.custom().loadTrustMaterial(null, new TrustSelfSignedStrategy()).useTLS().build();
         SSLConnectionSocketFactory connectionFactory = new SSLConnectionSocketFactory(sslContext, new AllowAllHostnameVerifier());
         BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
@@ -142,8 +146,6 @@ public class PassTest {
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
         converter.setObjectMapper(objectMapper);
         restTemplate.setMessageConverters(Collections.<HttpMessageConverter<?>>singletonList(converter));
-
-        ObjectMapper mapper = new ObjectMapper(); // can reuse, share globally
 
         Staatsangehoerigkeit s = new Staatsangehoerigkeit();
         s.setCode("de");
