@@ -265,21 +265,21 @@ public class BuergerTest {
 
     }
 
-//    @Test
-//    public void copyBuergerTest() {
-//
-//        restTemplate.postForEntity(urlSave, buerger, BuergerResource.class).getBody();
-//        String URL2 = "http://localhost:" + port + "/buerger/copy/b";
-//        response = restTemplate.getForEntity(URL2, BuergerResource.class).getBody();
-//
-//        assertNotEquals("b", response.getOid());
-//        assertNotEquals(null, response.getLink("new"));
-//        assertNotEquals(null, response.getLink("update"));
-//        assertNotEquals(null, response.getLink("copy"));
-//        assertNotEquals(null, response.getLink("self"));
-//        assertNotEquals(null, response.getLink("delete"));
-//
-//    }
+    @Test
+    public void copyBuergerTest() {
+
+        restTemplate.postForEntity(urlSave, buerger, BuergerResource.class).getBody();
+        String URL2 = "http://localhost:" + port + "/buerger/copy/b";
+        response = restTemplate.getForEntity(URL2, BuergerResource.class).getBody();
+
+        assertNotEquals("b", response.getOid());
+        assertNotEquals(null, response.getLink("new"));
+        assertNotEquals(null, response.getLink("update"));
+        assertNotEquals(null, response.getLink("copy"));
+        assertNotEquals(null, response.getLink("self"));
+        assertNotEquals(null, response.getLink("delete"));
+
+    }
     @Test
     public void buergerDeleteTest() {
 
