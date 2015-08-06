@@ -192,9 +192,9 @@ public class BuergerTest {
     public void newBuergerTest() throws JsonProcessingException {
 
         response = restTemplate.getForEntity(urlNew, BuergerResource.class).getBody();
-        assertNotEquals(null, response.getLink("new"));
-        assertNotEquals(null, response.getLink("save"));
-        assertNotEquals(null, response.getOid());
+        assertNotNull(response.getLink("new"));
+        assertNotNull(response.getLink("save"));
+        assertNotNull(response.getOid());
 
     }
 
@@ -206,15 +206,15 @@ public class BuergerTest {
         response = restTemplate.postForEntity(URL2, buergerUpdate, BuergerResource.class).getBody();
 
         assertEquals("max", response.getNachname());
-        assertNotEquals(null, response.getLink("new"));
-        assertNotEquals(null, response.getLink("update"));
-        assertNotEquals(null, response.getLink("copy"));
-        assertNotEquals(null, response.getLink("self"));
-        assertNotEquals(null, response.getLink("delete"));
-        assertNotEquals(null, response.getLink("pass"));
-        assertNotEquals(null, response.getLink("wohnungen"));
-        assertNotEquals(null, response.getLink("kinder"));
-        assertNotEquals(null, response.getLink("staatsangehoerigkeit"));
+        assertNotNull(response.getLink("new"));
+        assertNotNull(response.getLink("update"));
+        assertNotNull(response.getLink("copy"));
+        assertNotNull(response.getLink("self"));
+        assertNotNull(response.getLink("delete"));
+        assertNotNull(response.getLink("pass"));
+        assertNotNull(response.getLink("wohnungen"));
+        assertNotNull(response.getLink("kinder"));
+        assertNotNull(response.getLink("staatsangehoerigkeit"));
     }
 
     @Test
@@ -222,15 +222,15 @@ public class BuergerTest {
 
         response = restTemplate.postForEntity(urlSave, buerger, BuergerResource.class).getBody();
         assertEquals(response.getNachname(), "hans");
-        assertNotEquals(null, response.getLink("new"));
-        assertNotEquals(null, response.getLink("update"));
-        assertNotEquals(null, response.getLink("copy"));
-        assertNotEquals(null, response.getLink("self"));
-        assertNotEquals(null, response.getLink("delete"));
-        assertNotEquals(null, response.getLink("pass"));
-        assertNotEquals(null, response.getLink("wohnungen"));
-        assertNotEquals(null, response.getLink("kinder"));
-        assertNotEquals(null, response.getLink("staatsangehoerigkeit"));
+        assertNotNull(response.getLink("new"));
+        assertNotNull(response.getLink("update"));
+        assertNotNull(response.getLink("copy"));
+        assertNotNull(response.getLink("self"));
+        assertNotNull(response.getLink("delete"));
+        assertNotNull(response.getLink("pass"));
+        assertNotNull(response.getLink("wohnungen"));
+        assertNotNull(response.getLink("kinder"));
+        assertNotNull(response.getLink("staatsangehoerigkeit"));
     }
 
     @Test
@@ -240,15 +240,15 @@ public class BuergerTest {
         String URL11 = "http://localhost:" + port + "/buerger/b";
         response = restTemplate.getForEntity(URL11, BuergerResource.class).getBody();
         assertEquals(response.getNachname(), "hans");
-        assertNotEquals(null, response.getLink("new"));
-        assertNotEquals(null, response.getLink("update"));
-        assertNotEquals(null, response.getLink("copy"));
-        assertNotEquals(null, response.getLink("self"));
-        assertNotEquals(null, response.getLink("delete"));
-        assertNotEquals(null, response.getLink("pass"));
-        assertNotEquals(null, response.getLink("wohnungen"));
-        assertNotEquals(null, response.getLink("kinder"));
-        assertNotEquals(null, response.getLink("staatsangehoerigkeit"));
+        assertNotNull(response.getLink("new"));
+        assertNotNull(response.getLink("update"));
+        assertNotNull(response.getLink("copy"));
+        assertNotNull(response.getLink("self"));
+        assertNotNull(response.getLink("delete"));
+        assertNotNull(response.getLink("pass"));
+        assertNotNull(response.getLink("wohnungen"));
+        assertNotNull(response.getLink("kinder"));
+        assertNotNull(response.getLink("staatsangehoerigkeit"));
 
     }
 
@@ -260,8 +260,8 @@ public class BuergerTest {
         String URL11 = "http://localhost:" + port + "/buerger/query";
         SearchResultResource queryResponse = restTemplate.getForEntity(URL11, SearchResultResource.class).getBody();
         assertEquals(1, queryResponse.getResult().size());
-        assertNotEquals(null, queryResponse.getLink("self"));
-        assertNotEquals(null, queryResponse.getLink("query"));
+        assertNotNull(null, queryResponse.getLink("self"));
+        assertNotNull(null, queryResponse.getLink("query"));
 
     }
 
@@ -273,11 +273,12 @@ public class BuergerTest {
         response = restTemplate.getForEntity(URL2, BuergerResource.class).getBody();
 
         assertNotEquals("b", response.getOid());
-        assertNotEquals(null, response.getLink("new"));
-        assertNotEquals(null, response.getLink("update"));
-        assertNotEquals(null, response.getLink("copy"));
-        assertNotEquals(null, response.getLink("self"));
-        assertNotEquals(null, response.getLink("delete"));
+        assertEquals(buerger.getNachname(), response.getNachname());
+        assertNotNull(response.getLink("new"));
+        assertNotNull(response.getLink("update"));
+        assertNotNull(response.getLink("copy"));
+        assertNotNull(response.getLink("self"));
+        assertNotNull(response.getLink("delete"));
 
     }
     @Test
@@ -306,29 +307,29 @@ public class BuergerTest {
         restTemplate.postForEntity(URL3, kind2, BuergerResource.class);
         response = restTemplate.getForEntity(URL2, BuergerResource.class).getBody();
         assertEquals(false, response.getKinder().isEmpty());
-        assertNotEquals(null, response.getLink("new"));
-        assertNotEquals(null, response.getLink("update"));
-        assertNotEquals(null, response.getLink("copy"));
-        assertNotEquals(null, response.getLink("self"));
-        assertNotEquals(null, response.getLink("delete"));
-        assertNotEquals(null, response.getLink("pass"));
-        assertNotEquals(null, response.getLink("wohnungen"));
-        assertNotEquals(null, response.getLink("kinder"));
-        assertNotEquals(null, response.getLink("staatsangehoerigkeit"));
+        assertNotNull(response.getLink("new"));
+        assertNotNull(response.getLink("update"));
+        assertNotNull(response.getLink("copy"));
+        assertNotNull(response.getLink("self"));
+        assertNotNull(response.getLink("delete"));
+        assertNotNull(response.getLink("pass"));
+        assertNotNull(response.getLink("wohnungen"));
+        assertNotNull(response.getLink("kinder"));
+        assertNotNull(response.getLink("staatsangehoerigkeit"));
 
         /* Test methode addKindBuerger*/
         String URL5 = "http://localhost:" + port + "/buerger/add/buerger/b/kind/bk";
         response = restTemplate.getForEntity(URL5, BuergerResource.class).getBody();
         assertEquals(2, response.getKinder().size());
-        assertNotEquals(null, response.getLink("new"));
-        assertNotEquals(null, response.getLink("update"));
-        assertNotEquals(null, response.getLink("copy"));
-        assertNotEquals(null, response.getLink("self"));
-        assertNotEquals(null, response.getLink("delete"));
-        assertNotEquals(null, response.getLink("pass"));
-        assertNotEquals(null, response.getLink("wohnungen"));
-        assertNotEquals(null, response.getLink("kinder"));
-        assertNotEquals(null, response.getLink("staatsangehoerigkeit"));
+        assertNotNull(response.getLink("new"));
+        assertNotNull(response.getLink("update"));
+        assertNotNull(response.getLink("copy"));
+        assertNotNull(response.getLink("self"));
+        assertNotNull(response.getLink("delete"));
+        assertNotNull(response.getLink("pass"));
+        assertNotNull(response.getLink("wohnungen"));
+        assertNotNull(response.getLink("kinder"));
+        assertNotNull(response.getLink("staatsangehoerigkeit"));
 
 
         /*Test methode readKinderBuerger*/
@@ -349,29 +350,29 @@ public class BuergerTest {
         restTemplate.postForEntity(URL3, wohnung, BuergerResource.class);
         response = restTemplate.getForEntity(URL2, BuergerResource.class).getBody();
         assertEquals(false, response.getWohnungen().isEmpty());
-        assertNotEquals(null, response.getLink("new"));
-        assertNotEquals(null, response.getLink("update"));
-        assertNotEquals(null, response.getLink("copy"));
-        assertNotEquals(null, response.getLink("self"));
-        assertNotEquals(null, response.getLink("delete"));
-        assertNotEquals(null, response.getLink("pass"));
-        assertNotEquals(null, response.getLink("wohnungen"));
-        assertNotEquals(null, response.getLink("kinder"));
-        assertNotEquals(null, response.getLink("staatsangehoerigkeit"));
+        assertNotNull(response.getLink("new"));
+        assertNotNull(response.getLink("update"));
+        assertNotNull(response.getLink("copy"));
+        assertNotNull(response.getLink("self"));
+        assertNotNull(response.getLink("delete"));
+        assertNotNull(response.getLink("pass"));
+        assertNotNull(response.getLink("wohnungen"));
+        assertNotNull(response.getLink("kinder"));
+        assertNotNull(response.getLink("staatsangehoerigkeit"));
 
         /* Test methode addWohnungBuerger*/
         String URL5 = "http://localhost:" + port + "/buerger/add/buerger/b/wohnung/bw";
         response = restTemplate.getForEntity(URL5, BuergerResource.class).getBody();
         assertEquals(1, response.getWohnungen().size());
-        assertNotEquals(null, response.getLink("new"));
-        assertNotEquals(null, response.getLink("update"));
-        assertNotEquals(null, response.getLink("copy"));
-        assertNotEquals(null, response.getLink("self"));
-        assertNotEquals(null, response.getLink("delete"));
-        assertNotEquals(null, response.getLink("pass"));
-        assertNotEquals(null, response.getLink("wohnungen"));
-        assertNotEquals(null, response.getLink("kinder"));
-        assertNotEquals(null, response.getLink("staatsangehoerigkeit"));
+        assertNotNull(response.getLink("new"));
+        assertNotNull(response.getLink("update"));
+        assertNotNull(response.getLink("copy"));
+        assertNotNull(response.getLink("self"));
+        assertNotNull(response.getLink("delete"));
+        assertNotNull(response.getLink("pass"));
+        assertNotNull(response.getLink("wohnungen"));
+        assertNotNull(response.getLink("kinder"));
+        assertNotNull(response.getLink("staatsangehoerigkeit"));
 
         /*Test methode readBuergerWohnungen*/
         String URL1 = "http://localhost:" + port + "/buerger/wohnungen/b";
@@ -393,15 +394,15 @@ public class BuergerTest {
         String URL12 = "http://localhost:" + port + "/buerger/add/buerger/b/staats/123";
         response = restTemplate.getForEntity(URL12, BuergerResource.class).getBody();
         assertEquals(1, response.getStaatsangehoerigkeiten().size());
-        assertNotEquals(null, response.getLink("new"));
-        assertNotEquals(null, response.getLink("update"));
-        assertNotEquals(null, response.getLink("copy"));
-        assertNotEquals(null, response.getLink("self"));
-        assertNotEquals(null, response.getLink("delete"));
-        assertNotEquals(null, response.getLink("pass"));
-        assertNotEquals(null, response.getLink("wohnungen"));
-        assertNotEquals(null, response.getLink("kinder"));
-        assertNotEquals(null, response.getLink("staatsangehoerigkeit"));
+        assertNotNull(response.getLink("new"));
+        assertNotNull(response.getLink("update"));
+        assertNotNull(response.getLink("copy"));
+        assertNotNull(response.getLink("self"));
+        assertNotNull(response.getLink("delete"));
+        assertNotNull(response.getLink("pass"));
+        assertNotNull(response.getLink("wohnungen"));
+        assertNotNull(response.getLink("kinder"));
+        assertNotNull(response.getLink("staatsangehoerigkeit"));
 
         /*Test methode readStaatsangehoerigkeitenBuerger*/
         String URL1 = "http://localhost:" + port + "/buerger/staats/b";
@@ -421,15 +422,15 @@ public class BuergerTest {
         String URL12 = "http://localhost:" + port + "/buerger/add/buerger/b/pass/bp";
         response = restTemplate.getForEntity(URL12, BuergerResource.class).getBody();
         assertEquals(1, response.getPass().size());
-        assertNotEquals(null, response.getLink("new"));
-        assertNotEquals(null, response.getLink("update"));
-        assertNotEquals(null, response.getLink("copy"));
-        assertNotEquals(null, response.getLink("self"));
-        assertNotEquals(null, response.getLink("delete"));
-        assertNotEquals(null, response.getLink("pass"));
-        assertNotEquals(null, response.getLink("wohnungen"));
-        assertNotEquals(null, response.getLink("kinder"));
-        assertNotEquals(null, response.getLink("staatsangehoerigkeit"));
+        assertNotNull(response.getLink("new"));
+        assertNotNull(response.getLink("update"));
+        assertNotNull(response.getLink("copy"));
+        assertNotNull(response.getLink("self"));
+        assertNotNull(response.getLink("delete"));
+        assertNotNull(response.getLink("pass"));
+        assertNotNull(response.getLink("wohnungen"));
+        assertNotNull(response.getLink("kinder"));
+        assertNotNull(response.getLink("staatsangehoerigkeit"));
 
         /*Test methode readPassBuerger*/
         String URL1 = "http://localhost:" + port + "/buerger/pass/b";

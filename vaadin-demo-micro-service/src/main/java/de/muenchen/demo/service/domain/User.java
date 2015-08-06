@@ -78,6 +78,24 @@ public class User {
     @ManyToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
     private Mandant mandant;
 
+    public User() {
+    }
+
+    public User(User user) {
+        this.username = user.username;
+        this.password = user.password;
+        this.enabled = user.enabled;
+        this.forname = user.forname;
+        this.surname = user.surname;
+        this.birthdate = user.birthdate;
+        this.email = user.email;
+        this.createdBy = user.createdBy;
+        this.createdDate = user.createdDate;
+        this.lastModBy = user.lastModBy;
+        this.lastModDate = user.lastModDate;
+        this.mandant = user.mandant;
+    }
+
     public Long getId() {
         return id;
     }

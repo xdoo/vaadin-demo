@@ -46,7 +46,7 @@ import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -190,11 +190,11 @@ public class PassTest {
 
         response = restTemplate.postForEntity(urlSave, pass, PassResource.class).getBody();
         assertEquals(response.getBehoerde(), "München");
-        assertNotEquals(null, response.getLink("new"));
-        assertNotEquals(null, response.getLink("update"));
-        assertNotEquals(null, response.getLink("copy"));
-        assertNotEquals(null, response.getLink("self"));
-        assertNotEquals(null, response.getLink("delete"));
+        assertNotNull(response.getLink("new"));
+        assertNotNull(response.getLink("update"));
+        assertNotNull(response.getLink("copy"));
+        assertNotNull(response.getLink("self"));
+        assertNotNull(response.getLink("delete"));
 
     }
 
@@ -206,11 +206,11 @@ public class PassTest {
         String URL11 = "http://localhost:" + port + "/pass/90";
         response = restTemplate.getForEntity(URL11, PassResource.class).getBody();
         assertEquals(response, response);
-        assertNotEquals(null, response.getLink("new"));
-        assertNotEquals(null, response.getLink("update"));
-        assertNotEquals(null, response.getLink("copy"));
-        assertNotEquals(null, response.getLink("self"));
-        assertNotEquals(null, response.getLink("delete"));
+        assertNotNull(response.getLink("new"));
+        assertNotNull(response.getLink("update"));
+        assertNotNull(response.getLink("copy"));
+        assertNotNull(response.getLink("self"));
+        assertNotNull(response.getLink("delete"));
 
     }
 
@@ -223,8 +223,8 @@ public class PassTest {
         String URL11 = "http://localhost:" + port + "/pass/query";
         queryResponse = restTemplate.getForEntity(URL11, SearchResultResource.class).getBody();
         assertEquals(2, queryResponse.getResult().size());
-        assertNotEquals(null, queryResponse.getLink("self"));
-        assertNotEquals(null, queryResponse.getLink("query"));
+        assertNotNull(null, queryResponse.getLink("self"));
+        assertNotNull(null, queryResponse.getLink("query"));
 
     }
 
@@ -235,12 +235,12 @@ public class PassTest {
         String URL2 = "http://localhost:" + port + "/pass/copy/90";
         PassResource response2 = restTemplate.getForEntity(URL2, PassResource.class).getBody();
 
-        assertNotEquals("90", response2.getOid());
-        assertNotEquals(null, response2.getLink("new"));
-        assertNotEquals(null, response2.getLink("update"));
-        assertNotEquals(null, response2.getLink("copy"));
-        assertNotEquals(null, response2.getLink("self"));
-        assertNotEquals(null, response2.getLink("delete"));
+        assertNotNull("90", response2.getOid());
+        assertNotNull(response2.getLink("new"));
+        assertNotNull(response2.getLink("update"));
+        assertNotNull(response2.getLink("copy"));
+        assertNotNull(response2.getLink("self"));
+        assertNotNull(response2.getLink("delete"));
 
     }
 
@@ -256,11 +256,11 @@ public class PassTest {
         response = restTemplate.postForEntity(URL2, passUpdate, PassResource.class).getBody();
 
         assertEquals("204", response.getPassNummer());
-        assertNotEquals(null, response.getLink("new"));
-        assertNotEquals(null, response.getLink("update"));
-        assertNotEquals(null, response.getLink("copy"));
-        assertNotEquals(null, response.getLink("self"));
-        assertNotEquals(null, response.getLink("delete"));
+        assertNotNull(response.getLink("new"));
+        assertNotNull(response.getLink("update"));
+        assertNotNull(response.getLink("copy"));
+        assertNotNull(response.getLink("self"));
+        assertNotNull(response.getLink("delete"));
 
     }
 

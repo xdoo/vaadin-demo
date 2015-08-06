@@ -101,31 +101,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User copy(String oid) {
-        User source = this.read(oid);
-        User result = null;
-        User clone = new User();
-        clone.setOid(IdService.next());
-        // start mapping
 
-       // clone.setAccounts(source.getAccounts());
-        clone.setBirthdate(source.getBirthdate());
-        clone.setCreatedBy(source.getCreatedBy());
-        clone.setCreatedDate(source.getCreatedDate());
-        clone.setEmail(source.getEmail());
-        clone.setEnabled(source.isEnabled());
-        clone.setForname(source.getForname());
-        clone.setLastModBy(source.getLastModBy());
-        clone.setLastModDate(source.getLastModDate());
-        clone.setMandant(source.getMandant());
-        clone.setPassword(source.getPassword());
-        clone.setSurname(source.getSurname());
-        clone.setUsername(source.getUsername());
+        User in = this.read(oid);
 
+        // map
+        User out = new User(in);
+        out.setOid(IdService.next());
 
-        // end mapping
-        LOG.info("clone --> " + clone.toString());
-        result = this.repo.save(clone);
-        return result;    }
+        // in DB speichern
+        this.save(out);
+
+        return out;
+    }
+
 
     
 }

@@ -48,8 +48,8 @@ public class Buerger extends BaseEntity implements Serializable {
     @Transient
     private Set<Staatsangehoerigkeit> staatsangehoerigkeiten = new HashSet<>();
 
-    @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
-    private Set<StaatsangehoerigkeitReference> staatsangehoerigkeitReferences;
+    @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    private Set<StaatsangehoerigkeitReference> staatsangehoerigkeitReferences = new HashSet<>();
 
     @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
     private Set<Pass> Pass = new HashSet<>();
@@ -67,6 +67,11 @@ public class Buerger extends BaseEntity implements Serializable {
         this.vorname = buerger.vorname;
         this.nachname = buerger.nachname;
         this.geburtsdatum = buerger.geburtsdatum;
+        this.staatsangehoerigkeitReferences.addAll(buerger.staatsangehoerigkeitReferences);
+        this.Pass.addAll(buerger.Pass);
+        this.wohnungen.addAll(buerger.wohnungen);
+        this.staatsangehoerigkeiten.addAll(buerger.staatsangehoerigkeiten);
+        this.kinder.addAll(buerger.kinder);
     }
 
     public String getVorname() {

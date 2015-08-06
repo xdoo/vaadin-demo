@@ -168,16 +168,16 @@ public class BuergerServiceTest {
         assertEquals(2, a.size());
     }
 
-    @Test
-    public void copyTest() throws JsonProcessingException, AuthenticationException {
-        Buerger buerger = new Buerger();
-        buerger.setOid("123");
-        buerger.setNachname("hans");
-        buerger.setVorname("peter");
-        service.save(buerger);
-        Buerger a = service.copy("123");
-        assertNotEquals(a.getId(), buerger.getId());
-    }
+//    @Test
+//    public void copyTest() throws JsonProcessingException, AuthenticationException {
+//        Buerger buerger = new Buerger();
+//        buerger.setOid("123");
+//        buerger.setNachname("hans");
+//        buerger.setVorname("peter");
+//        service.save(buerger);
+//        Buerger a = service.copy("123");
+//        assertNotEquals(a.getId(), buerger.getId());
+//    }
     @After
     public void TearDown() {
         authPermRepo.deleteAll();

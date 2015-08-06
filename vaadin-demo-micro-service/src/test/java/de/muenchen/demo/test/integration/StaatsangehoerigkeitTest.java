@@ -21,14 +21,12 @@ import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
 import de.muenchen.demo.service.domain.StaatsangehoerigkeitReferenceRepository;
 import de.muenchen.demo.service.domain.UserAuthorityRepository;
 import de.muenchen.demo.service.domain.UserRepository;
-import de.muenchen.demo.service.rest.api.BuergerResource;
 import de.muenchen.demo.service.rest.api.SearchResultResource;
 import de.muenchen.demo.service.rest.api.StaatsangehoerigkeitResource;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
-import java.util.List;
 import javax.net.ssl.SSLContext;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -41,7 +39,7 @@ import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.runner.RunWith;
@@ -51,7 +49,6 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.TestRestTemplate;
 import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.hateoas.hal.Jackson2HalModule;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -159,8 +156,8 @@ public class StaatsangehoerigkeitTest {
         String URL = "http://localhost:" + port + "/staat/123";
         StaatsangehoerigkeitResource staat2 = restTemplate.getForEntity(URL, StaatsangehoerigkeitResource.class).getBody();
         assertEquals("de", staat2.getCode());
-        assertNotEquals(null, staat2.getLink("self"));
-        assertNotEquals(null, staat2.getLink("delete"));
+        assertNotNull(null, staat2.getLink("self"));
+        assertNotNull(null, staat2.getLink("delete"));
 
     }
 
@@ -175,8 +172,8 @@ public class StaatsangehoerigkeitTest {
         String URL = "http://localhost:" + port + "/staat/query";
         SearchResultResource response = restTemplate.getForEntity(URL, SearchResultResource.class).getBody();
         assertEquals(1, response.getResult().size());
-        assertNotEquals(null, response.getLink("self"));
-        assertNotEquals(null, response.getLink("query"));
+        assertNotNull(response.getLink("self"));
+        assertNotNull(response.getLink("query"));
 
     }
 

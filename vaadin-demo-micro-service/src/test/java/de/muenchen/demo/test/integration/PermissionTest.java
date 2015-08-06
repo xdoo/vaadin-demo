@@ -34,7 +34,7 @@ import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -135,8 +135,8 @@ public class PermissionTest {
         response = restTemplate.getForEntity(URL4, PermissionResource.class).getBody();
 
         assertEquals("PERM_newBuerger", response.getPermision());
-        assertNotEquals(null, response.getLink("self"));
-        assertNotEquals(null, response.getLink("delete"));
+        assertNotNull(response.getLink("self"));
+        assertNotNull(response.getLink("delete"));
 
     }
 
@@ -148,8 +148,8 @@ public class PermissionTest {
         SearchResultResource responseQuery2 = restTemplate.getForEntity(URL3, SearchResultResource.class).getBody();
 
         assertEquals(responseQuery2.getResult().size() - 1, responseQuery.getResult().size());
-        assertNotEquals(null, responseQuery.getLink("self"));
-        assertNotEquals(null, responseQuery.getLink("query"));
+        assertNotNull(responseQuery.getLink("self"));
+        assertNotNull(responseQuery.getLink("query"));
 
     }
 

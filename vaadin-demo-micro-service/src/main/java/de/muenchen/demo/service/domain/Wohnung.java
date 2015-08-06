@@ -5,13 +5,12 @@
  */
 package de.muenchen.demo.service.domain;
 
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import org.hibernate.annotations.NaturalId;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 
@@ -22,7 +21,7 @@ import org.hibernate.envers.NotAudited;
 @Entity
 @Table(name = "WOHNUNGEN")
 @Audited
-public class Wohnung extends BaseEntity  {
+public class Wohnung extends BaseEntity implements Serializable  {
 
   
     @Column(name = "WOHN_STOCK")
@@ -37,6 +36,15 @@ public class Wohnung extends BaseEntity  {
     @OneToOne
     @JoinColumn(name = "Adresse_Id", referencedColumnName = "Id")
     private AdresseReference adresse;
+
+    public Wohnung() {
+    }
+
+    public Wohnung(Wohnung wohnung) {
+        this.stock = wohnung.stock;
+        this.ausrichtung = wohnung.ausrichtung;
+        this.adresse = wohnung.adresse;
+    }
 
     public String getStock() {
         return stock;

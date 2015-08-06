@@ -51,7 +51,7 @@ import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -213,8 +213,8 @@ public class UserAuthorityPermissionTest {
         String URL2 = "http://localhost:" + port + "/userAuthority/query";
         response = restTemplate.getForEntity(URL2, SearchResultResource.class).getBody();
         assertEquals(3, response.getResult().size());
-        assertNotEquals(null, response.getLink("self"));
-        assertNotEquals(null, response.getLink("query"));
+        assertNotNull(response.getLink("self"));
+        assertNotNull(null, response.getLink("query"));
 
     }
 

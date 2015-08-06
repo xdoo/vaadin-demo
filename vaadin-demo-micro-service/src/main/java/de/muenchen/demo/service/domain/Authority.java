@@ -21,6 +21,14 @@ public class Authority extends SecurityEntity {
     @Column(name = "AUTH_AUTHORITY")
     private String authority;
 
+    public Authority() {
+    }
+
+    public Authority(Authority authority) {
+        this.authority = authority.authority;
+        
+    }
+
 
     public String getAuthority() {
         return authority;

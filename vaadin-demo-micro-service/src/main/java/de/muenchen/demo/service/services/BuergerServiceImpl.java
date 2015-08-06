@@ -2,7 +2,6 @@ package de.muenchen.demo.service.services;
 
 import de.muenchen.demo.service.domain.Buerger;
 import de.muenchen.demo.service.domain.BuergerRepository;
-import de.muenchen.demo.service.util.IdService;
 import de.muenchen.demo.service.util.QueryService;
 import javax.persistence.EntityManager;
 import org.slf4j.Logger;
@@ -28,18 +27,4 @@ public class BuergerServiceImpl extends BaseService<Buerger> implements BuergerS
         this.search = new QueryService<>(userService, em, Buerger.class, "vorname", "nachname");
     }
 
-    @Override
-    public Buerger copy(String oid) {
-        Buerger in = super.read(oid);
-        
-        // map
-        Buerger out = new Buerger(in);
-        out.setOid(IdService.next());
-        
-        // in DB speichern
-        super.save(out);
-        
-        return out;
-    }
-    
 }

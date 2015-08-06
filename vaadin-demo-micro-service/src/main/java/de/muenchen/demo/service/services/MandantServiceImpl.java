@@ -91,19 +91,16 @@ public class MandantServiceImpl implements MandantService {
 
     @Override
     public Mandant copy(String oid) {
-        Mandant source = this.read(oid);
-        Mandant result = null;
-        Mandant clone = new Mandant();
-        clone.setOid(IdService.next());
-        // start mapping
+        Mandant in = this.read(oid);
 
-        clone.setMid(source.getMid());
+        // map
+        Mandant out = new Mandant(in);
+        out.setOid(IdService.next());
 
+        // in DB speichern
+        this.save(out);
 
-        // end mapping
-        LOG.info("clone --> " + clone.toString());
-        result = this.repo.save(clone);
-        return result;
+        return out;
     }
 
 }

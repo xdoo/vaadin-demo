@@ -18,7 +18,6 @@ import de.muenchen.demo.service.domain.UserRepository;
 import de.muenchen.demo.service.domain.Wohnung;
 import de.muenchen.demo.service.domain.WohnungRepository;
 import de.muenchen.demo.service.rest.api.AdresseResource;
-import de.muenchen.demo.service.rest.api.BuergerResource;
 import de.muenchen.demo.service.rest.api.SearchResultResource;
 import de.muenchen.demo.service.rest.api.WohnungResource;
 import java.security.KeyManagementException;
@@ -159,12 +158,12 @@ public class WohnungTest {
         String URL2 = "http://localhost:" + port + "/wohnung/10";
         response = restTemplate.getForEntity(URL2, WohnungResource.class).getBody();
         assertEquals("2", response.getStock());
-        assertNotEquals(null, response.getLink("new"));
-        assertNotEquals(null, response.getLink("update"));
-        assertNotEquals(null, response.getLink("copy"));
-        assertNotEquals(null, response.getLink("self"));
-        assertNotEquals(null, response.getLink("delete"));
-        assertNotEquals(null, response.getLink("adresse"));
+        assertNotNull(response.getLink("new"));
+        assertNotNull(response.getLink("update"));
+        assertNotNull(response.getLink("copy"));
+        assertNotNull(response.getLink("self"));
+        assertNotNull(response.getLink("delete"));
+        assertNotNull(response.getLink("adresse"));
 
     }
 
@@ -181,12 +180,12 @@ public class WohnungTest {
         response = restTemplate.postForEntity(URL2, wohnungUpdate, WohnungResource.class).getBody();
 
         assertEquals("3", response.getStock());
-        assertNotEquals(null, response.getLink("new"));
-        assertNotEquals(null, response.getLink("update"));
-        assertNotEquals(null, response.getLink("copy"));
-        assertNotEquals(null, response.getLink("self"));
-        assertNotEquals(null, response.getLink("delete"));
-        assertNotEquals(null, response.getLink("adresse"));
+        assertNotNull(response.getLink("new"));
+        assertNotNull(response.getLink("update"));
+        assertNotNull(response.getLink("copy"));
+        assertNotNull(response.getLink("self"));
+        assertNotNull(response.getLink("delete"));
+        assertNotNull(response.getLink("adresse"));
 
     }
 
@@ -198,8 +197,8 @@ public class WohnungTest {
         responseQuery = restTemplate.getForEntity(URL3, SearchResultResource.class).getBody();
 
         assertEquals(1, responseQuery.getResult().size());
-        assertNotEquals(null, responseQuery.getLink("query"));
-        assertNotEquals(null, responseQuery.getLink("self"));
+        assertNotNull(responseQuery.getLink("query"));
+        assertNotNull(responseQuery.getLink("self"));
     }
 
     @Test
@@ -210,11 +209,11 @@ public class WohnungTest {
         response = restTemplate.getForEntity(URL2, WohnungResource.class).getBody();
 
         assertEquals("2", response.getStock());
-        assertNotEquals(null, response.getLink("new"));
-        assertNotEquals(null, response.getLink("update"));
-        assertNotEquals(null, response.getLink("copy"));
-        assertNotEquals(null, response.getLink("self"));
-        assertNotEquals(null, response.getLink("delete"));
+        assertNotNull(response.getLink("new"));
+        assertNotNull(response.getLink("update"));
+        assertNotNull(response.getLink("copy"));
+        assertNotNull(response.getLink("self"));
+        assertNotNull(response.getLink("delete"));
     }
 
     @Test
@@ -234,9 +233,9 @@ public class WohnungTest {
     public void newWohnungTest() throws JsonProcessingException {
 
         response = restTemplate.getForEntity(urlNew, WohnungResource.class).getBody();
-        assertNotEquals(null, response.getLink("new"));
-        assertNotEquals(null, response.getLink("save"));
-        assertNotEquals(null, response.getOid());
+        assertNotNull(response.getLink("new"));
+        assertNotNull(response.getLink("save"));
+        assertNotNull(response.getOid());
 
     }
 

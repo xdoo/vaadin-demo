@@ -36,7 +36,7 @@ import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -141,11 +141,11 @@ public class AuthorityTest {
         response = restTemplate.getForEntity(URL4, AuthorityResource.class).getBody();
 
         assertEquals("ADMIN", response.getAuthority());
-        assertNotEquals(null, response.getLink("new"));
-        assertNotEquals(null, response.getLink("update"));
-        assertNotEquals(null, response.getLink("copy"));
-        assertNotEquals(null, response.getLink("self"));
-        assertNotEquals(null, response.getLink("delete"));
+        assertNotNull(response.getLink("new"));
+        assertNotNull(response.getLink("update"));
+        assertNotNull(response.getLink("copy"));
+        assertNotNull(response.getLink("self"));
+        assertNotNull(response.getLink("delete"));
 
     }
 
@@ -158,8 +158,8 @@ public class AuthorityTest {
         responseList = restTemplate.getForEntity(URL3, SearchResultResource.class).getBody();
 
         assertEquals(3, responseList.getResult().size());
-        assertNotEquals(null, responseList.getLink("self"));
-        assertNotEquals(null, responseList.getLink("query"));
+        assertNotNull(responseList.getLink("self"));
+        assertNotNull(responseList.getLink("query"));
 
     }
     @Test
@@ -174,11 +174,11 @@ public class AuthorityTest {
         response = restTemplate.postForEntity(URL2, authorityUpdate, AuthorityResource.class).getBody();
 
         assertEquals("User", response.getAuthority());
-        assertNotEquals(null, response.getLink("new"));
-        assertNotEquals(null, response.getLink("update"));
-        assertNotEquals(null, response.getLink("copy"));
-        assertNotEquals(null, response.getLink("self"));
-        assertNotEquals(null, response.getLink("delete"));
+        assertNotNull(response.getLink("new"));
+        assertNotNull(response.getLink("update"));
+        assertNotNull(response.getLink("copy"));
+        assertNotNull(response.getLink("self"));
+        assertNotNull(response.getLink("delete"));
 
     }
 
@@ -191,11 +191,11 @@ public class AuthorityTest {
         response = restTemplate.getForEntity(URL2, AuthorityResource.class).getBody();
 
         assertEquals("ADMIN", response.getAuthority());
-        assertNotEquals(null, response.getLink("new"));
-        assertNotEquals(null, response.getLink("update"));
-        assertNotEquals(null, response.getLink("copy"));
-        assertNotEquals(null, response.getLink("self"));
-        assertNotEquals(null, response.getLink("delete"));
+        assertNotNull(response.getLink("new"));
+        assertNotNull(response.getLink("update"));
+        assertNotNull(response.getLink("copy"));
+        assertNotNull(response.getLink("self"));
+        assertNotNull(response.getLink("delete"));
     }
 
     @Test
@@ -215,9 +215,9 @@ public class AuthorityTest {
     public void newAuthorityTest() throws JsonProcessingException {
 
         response = restTemplate.getForEntity(urlNew, AuthorityResource.class).getBody();
-        assertNotEquals(null, response.getLink("new"));
-        assertNotEquals(null, response.getLink("save"));
-        assertNotEquals(null, response.getOid());
+        assertNotNull(response.getLink("new"));
+        assertNotNull(response.getLink("save"));
+        assertNotNull(response.getOid());
 
     }
     @After

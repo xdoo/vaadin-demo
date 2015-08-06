@@ -23,19 +23,26 @@ import org.hibernate.search.annotations.Field;
 @Table(name = "MANDANT")
 public class Mandant implements Serializable {
 
-	private static final long serialVersionUID = 2279536262695714631L;
+    private static final long serialVersionUID = 2279536262695714631L;
 
-	@Id
+    @Id
     @GeneratedValue
     @Column(name = "ID")
     private Long id;
 
-    @Field(name="mid")
+    @Field(name = "mid")
     @Column(length = 30, unique = true, nullable = false, name = "OID")
     private String oid;
-    
+
     @Column(length = 70, name = "MANDANT_MID")
     private String mid;
+
+    public Mandant() {
+    }
+
+    public Mandant(Mandant mandant) {
+        this.mid = mandant.mid;
+    }
 
     public Long getId() {
         return id;

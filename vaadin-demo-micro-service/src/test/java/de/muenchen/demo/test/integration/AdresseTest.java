@@ -45,6 +45,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -211,11 +212,11 @@ public class AdresseTest {
         AdresseResource responseAdresse = restTemplate.getForEntity(URL4, AdresseResource.class).getBody();
 
         assertEquals(96034, responseAdresse.getPlz());
-        assertNotEquals(null, responseAdresse.getLink("new"));
-        assertNotEquals(null, responseAdresse.getLink("update"));
-        assertNotEquals(null, responseAdresse.getLink("copy"));
-        assertNotEquals(null, responseAdresse.getLink("self"));
-        assertNotEquals(null, responseAdresse.getLink("delete"));
+        assertNotNull(responseAdresse.getLink("new"));
+        assertNotNull(responseAdresse.getLink("update"));
+        assertNotNull(responseAdresse.getLink("copy"));
+        assertNotNull(responseAdresse.getLink("self"));
+        assertNotNull(responseAdresse.getLink("delete"));
 
     }
 
@@ -230,11 +231,11 @@ public class AdresseTest {
         AdresseResource response2 = restTemplate.getForEntity(URL4, AdresseResource.class).getBody();
 
         assertEquals(80331, response2.getPlz());
-        assertNotEquals(null, response2.getLink("new"));
-        assertNotEquals(null, response2.getLink("update"));
-        assertNotEquals(null, response2.getLink("copy"));
-        assertNotEquals(null, response2.getLink("self"));
-        assertNotEquals(null, response2.getLink("delete"));
+        assertNotNull(response2.getLink("new"));
+        assertNotNull(response2.getLink("update"));
+        assertNotNull(response2.getLink("copy"));
+        assertNotNull(response2.getLink("self"));
+        assertNotNull(response2.getLink("delete"));
     }
 
     @Test
@@ -247,17 +248,17 @@ public class AdresseTest {
         responseQuery = restTemplate.getForEntity(URL3, SearchResultResource.class).getBody();
 
         assertEquals(2, responseQuery.getResult().size());
-        assertNotEquals(null, responseQuery.getLink("self"));
-        assertNotEquals(null, responseQuery.getLink("query"));
+        assertNotNull(responseQuery.getLink("self"));
+        assertNotNull(responseQuery.getLink("query"));
     }
 
     @Test
     public void newAdresseTest() throws JsonProcessingException {
 
         response = restTemplate.getForEntity(urlNew, AdresseResource.class).getBody();
-        assertNotEquals(null, response.getLink("new"));
-        assertNotEquals(null, response.getLink("save"));
-        assertNotEquals(null, response.getOid());
+        assertNotNull(response.getLink("new"));
+        assertNotNull(response.getLink("save"));
+        assertNotNull(response.getOid());
 
     }
 
@@ -276,11 +277,11 @@ public class AdresseTest {
         response = restTemplate.postForEntity(URL2, adresseUpdate, AdresseResource.class).getBody();
 
         assertEquals("30", response.getHausnummer());
-        assertNotEquals(null, response.getLink("new"));
-        assertNotEquals(null, response.getLink("update"));
-        assertNotEquals(null, response.getLink("copy"));
-        assertNotEquals(null, response.getLink("self"));
-        assertNotEquals(null, response.getLink("delete"));
+        assertNotNull(response.getLink("new"));
+        assertNotNull(response.getLink("update"));
+        assertNotNull(response.getLink("copy"));
+        assertNotNull(response.getLink("self"));
+        assertNotNull(response.getLink("delete"));
 
     }
 
@@ -292,11 +293,11 @@ public class AdresseTest {
         response = restTemplate.getForEntity(URL2, AdresseResource.class).getBody();
 
         assertNotEquals("123", response.getOid());
-        assertNotEquals(null, response.getLink("new"));
-        assertNotEquals(null, response.getLink("update"));
-        assertNotEquals(null, response.getLink("copy"));
-        assertNotEquals(null, response.getLink("self"));
-        assertNotEquals(null, response.getLink("delete"));
+        assertNotNull(response.getLink("new"));
+        assertNotNull(response.getLink("update"));
+        assertNotNull(response.getLink("copy"));
+        assertNotNull(response.getLink("self"));
+        assertNotNull(response.getLink("delete"));
 
     }
 

@@ -36,7 +36,7 @@ import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -151,11 +151,11 @@ public class UserTest {
         response = restTemplate.getForEntity(URL4, UserResource.class).getBody();
 
         assertEquals("test2", response.getPassword());
-        assertNotEquals(null, response.getLink("new"));
-        assertNotEquals(null, response.getLink("update"));
-        assertNotEquals(null, response.getLink("copy"));
-        assertNotEquals(null, response.getLink("self"));
-        assertNotEquals(null, response.getLink("delete"));
+        assertNotNull(response.getLink("new"));
+        assertNotNull(response.getLink("update"));
+        assertNotNull(response.getLink("copy"));
+        assertNotNull(response.getLink("self"));
+        assertNotNull(response.getLink("delete"));
 
     }
 
@@ -168,8 +168,8 @@ public class UserTest {
         responseQuery = restTemplate.getForEntity(URL3, SearchResultResource.class).getBody();
 
         assertEquals(4, responseQuery.getResult().size());
-        assertNotEquals(null, responseQuery.getLink("self"));
-        assertNotEquals(null, responseQuery.getLink("query"));
+        assertNotNull(responseQuery.getLink("self"));
+        assertNotNull(responseQuery.getLink("query"));
 
     }
     @Test
@@ -185,11 +185,11 @@ public class UserTest {
         response = restTemplate.postForEntity(URL2, userUpdate, UserResource.class).getBody();
 
         assertEquals("test22", response.getPassword());
-        assertNotEquals(null, response.getLink("new"));
-        assertNotEquals(null, response.getLink("update"));
-        assertNotEquals(null, response.getLink("copy"));
-        assertNotEquals(null, response.getLink("self"));
-        assertNotEquals(null, response.getLink("delete"));
+        assertNotNull(response.getLink("new"));
+        assertNotNull(response.getLink("update"));
+        assertNotNull(response.getLink("copy"));
+        assertNotNull(response.getLink("self"));
+        assertNotNull(response.getLink("delete"));
 
     }
 
@@ -202,11 +202,11 @@ public class UserTest {
         response = restTemplate.getForEntity(URL2, UserResource.class).getBody();
 
         assertEquals("test2", response.getPassword());
-        assertNotEquals(null, response.getLink("new"));
-        assertNotEquals(null, response.getLink("update"));
-        assertNotEquals(null, response.getLink("copy"));
-        assertNotEquals(null, response.getLink("self"));
-        assertNotEquals(null, response.getLink("delete"));
+        assertNotNull(response.getLink("new"));
+        assertNotNull(response.getLink("update"));
+        assertNotNull(response.getLink("copy"));
+        assertNotNull(response.getLink("self"));
+        assertNotNull(response.getLink("delete"));
     }
 
     @Test
@@ -226,9 +226,9 @@ public class UserTest {
     public void newUserTest() throws JsonProcessingException {
 
         response = restTemplate.getForEntity(urlNew, UserResource.class).getBody();
-        assertNotEquals(null, response.getLink("new"));
-        assertNotEquals(null, response.getLink("save"));
-        assertNotEquals(null, response.getOid());
+        assertNotNull(response.getLink("new"));
+        assertNotNull(response.getLink("save"));
+        assertNotNull(response.getOid());
 
     }
     @After
