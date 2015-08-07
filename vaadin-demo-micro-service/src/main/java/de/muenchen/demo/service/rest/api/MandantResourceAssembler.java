@@ -69,15 +69,15 @@ public class MandantResourceAssembler {
         }
 
         if (relations.contains(HateoasRelations.UPDATE)) {
-            resource.add(linkTo(methodOn(MandantController.class).updateMandant(mandant.getOid(), null)).withRel(HateoasUtil.UPDATE));
+            resource.add(linkTo(methodOn(MandantController.class).updateMandant(mandant.getMid(), null)).withRel(HateoasUtil.UPDATE));
         }
 
         if (relations.contains(HateoasRelations.SELF)) {
-            resource.add(linkTo(methodOn(MandantController.class).readMandant(mandant.getOid())).withSelfRel());
+            resource.add(linkTo(methodOn(MandantController.class).readMandant(mandant.getMid())).withSelfRel());
         }
 
         if (relations.contains(HateoasRelations.DELETE)) {
-            resource.add(linkTo(methodOn(MandantController.class).deleteMandant(mandant.getOid())).withRel(HateoasUtil.DELETE));
+            resource.add(linkTo(methodOn(MandantController.class).deleteMandant(mandant.getMid())).withRel(HateoasUtil.DELETE));
         }
 
         if (relations.contains(HateoasRelations.SAVE)) {
@@ -85,7 +85,7 @@ public class MandantResourceAssembler {
         }
 
         if (relations.contains(HateoasRelations.COPY)) {
-            resource.add(linkTo(methodOn(MandantController.class).copyMandant(mandant.getOid())).withRel(HateoasUtil.COPY));
+            resource.add(linkTo(methodOn(MandantController.class).copyMandant(mandant.getMid())).withRel(HateoasUtil.COPY));
         }
 
 
@@ -99,12 +99,10 @@ public class MandantResourceAssembler {
      * @param entity
      */
     public void fromResource(final MandantResource resource, final Mandant entity) {
-        if (!Strings.isNullOrEmpty(resource.getOid())) {
+        if (!Strings.isNullOrEmpty(resource.getMid())) {
 //            this.dozer.map(resource, entity);
-            entity.setOid(resource.getOid());
-            // start field mapping
-        entity.setMid(resource.getMid());
-            // end field mapping
+            entity.setMid(resource.getMid());
+
         } else {
             LOG.error(resource.toString());
             throw new IllegalArgumentException("The object id (oid) field must be filled.");

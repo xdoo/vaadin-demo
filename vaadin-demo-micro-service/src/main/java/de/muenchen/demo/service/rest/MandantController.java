@@ -151,7 +151,7 @@ public class MandantController {
         if (LOG.isDebugEnabled()) {
             LOG.debug("update mandant");
         }
-        Mandant entity = service.read(request.getOid());
+        Mandant entity = service.read(request.getMid());
         LOG.info("davor > " + entity.toString());
         this.assembler.fromResource(request, entity);
         LOG.info("danach > " + entity.toString());

@@ -80,7 +80,7 @@ public class InitTest {
         user.setOid(IdService.next());
         user.setEnabled(TRUE);
         Mandant mandant = new Mandant();
-        mandant.setOid("1");
+        mandant.setMid("1");
         mandantRepo.save(mandant);
         user.setMandant(mandant);
         usersRepo.save(user);
@@ -184,7 +184,7 @@ public class InitTest {
         user2.setOid(IdService.next());
         user2.setEnabled(TRUE);
         Mandant mandant2 = new Mandant();
-        mandant2.setOid("2");
+        mandant2.setMid("2");
         mandantRepo.save(mandant2);
         user2.setMandant(mandant2);
         usersRepo.save(user2);

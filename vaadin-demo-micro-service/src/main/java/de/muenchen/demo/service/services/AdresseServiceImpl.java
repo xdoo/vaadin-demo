@@ -59,8 +59,8 @@ public class AdresseServiceImpl implements AdresseService {
 
     @Override
     public List<Adresse> query() {
-        Iterable<AdresseExterne> allExterne = this.externeRepo.findByMandantOid(readUser().getMandant().getOid());
-        Iterable<AdresseInterne> allInterne = this.interneRepo.findByMandantOid(readUser().getMandant().getOid());
+        Iterable<AdresseExterne> allExterne = this.externeRepo.findByMandantMid(readUser().getMandant().getMid());
+        Iterable<AdresseInterne> allInterne = this.interneRepo.findByMandantMid(readUser().getMandant().getMid());
         ArrayList<Adresse> list = new ArrayList();
         for (AdresseExterne ad : allExterne) {
             list.add(read(ad.getOid()));
@@ -90,7 +90,7 @@ public class AdresseServiceImpl implements AdresseService {
             Adresse[] responseListe = this.restTemplate.getForEntity(URL2, Adresse[].class).getBody();
             for (Adresse ad : responseListe) {
                 if (ad.getStrasse().equals(adresse.getStrasse())) {
-                    Mandant mandant = mandantService.read(readUser().getMandant().getOid());
+                    Mandant mandant = mandantService.read(readUser().getMandant().getMid());
                     ad.setMandant(mandant);
                     ad.setHausnummer(adresse.getHausnummer());
                     ad.setOid(adresse.getOid());
@@ -101,7 +101,7 @@ public class AdresseServiceImpl implements AdresseService {
 
             }
         } else {
-            Mandant mandant = mandantService.read(readUser().getMandant().getOid());
+            Mandant mandant = mandantService.read(readUser().getMandant().getMid());
             adresse.setMandant(mandant);
             this.referenceRepo.save(toReferenceExterne(adresse));
             return adresse;
@@ -112,7 +112,7 @@ public class AdresseServiceImpl implements AdresseService {
 
     @Override
     public Adresse read(String oid) {
-        List<AdresseReference> resultReference = this.referenceRepo.findByOidAndMandantOid(oid, readUser().getMandant().getOid());
+        List<AdresseReference> resultReference = this.referenceRepo.findByOidAndMandantMid(oid, readUser().getMandant().getMid());
         if (resultReference.isEmpty()) {
             // TODO
             LOG.warn(String.format("found no users with oid '%s'", oid));
@@ -120,11 +120,11 @@ public class AdresseServiceImpl implements AdresseService {
 
         } else {
             if (resultReference.get(0).getAdresseInterne() == null) {
-                List<AdresseExterne> resultExterne = this.externeRepo.findByOidAndMandantOid(oid, readUser().getMandant().getOid());
+                List<AdresseExterne> resultExterne = this.externeRepo.findByOidAndMandantMid(oid, readUser().getMandant().getMid());
                 return fromExterne(resultExterne.get(0));
 
             } else {
-                List<AdresseInterne> resultInterne = this.interneRepo.findByOidAndMandantOid(oid, readUser().getMandant().getOid());
+                List<AdresseInterne> resultInterne = this.interneRepo.findByOidAndMandantMid(oid, readUser().getMandant().getMid());
                 String URL2 = URL + "adresse/" + resultInterne.get(0).getStrasseReference();
                 Adresse result2 = this.restTemplate.getForEntity(URL2, Adresse.class).getBody();
                 result2.setHausnummer(resultInterne.get(0).getHausnummer());
@@ -136,7 +136,7 @@ public class AdresseServiceImpl implements AdresseService {
 
     @Override
     public AdresseReference readReference(String oid) {
-        List<AdresseReference> result = this.referenceRepo.findByOidAndMandantOid(oid, readUser().getMandant().getOid());
+        List<AdresseReference> result = this.referenceRepo.findByOidAndMandantMid(oid, readUser().getMandant().getMid());
         if (result.isEmpty()) {
             // TODO
             LOG.warn(String.format("found no users with oid '%s'", oid));
@@ -149,14 +149,14 @@ public class AdresseServiceImpl implements AdresseService {
     @Override
     public void delete(String oid) {
 
-        List<AdresseReference> resultReference = this.referenceRepo.findByOidAndMandantOid(oid, readUser().getMandant().getOid());
+        List<AdresseReference> resultReference = this.referenceRepo.findByOidAndMandantMid(oid, readUser().getMandant().getMid());
         if (resultReference.isEmpty()) {
             // TODO
             LOG.warn(String.format("found no users with oid '%s'", oid));
 
         } else {
             if (resultReference.get(0).getAdresseInterne() == null) {
-                List<AdresseExterne> resultExterne = this.externeRepo.findByOidAndMandantOid(oid, readUser().getMandant().getOid());
+                List<AdresseExterne> resultExterne = this.externeRepo.findByOidAndMandantMid(oid, readUser().getMandant().getMid());
                 this.referenceRepo.delete(resultReference);
                 this.externeRepo.delete(resultExterne);
             } else {

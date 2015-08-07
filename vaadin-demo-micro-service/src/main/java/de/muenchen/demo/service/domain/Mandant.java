@@ -32,16 +32,13 @@ public class Mandant implements Serializable {
 
     @Field(name = "mid")
     @Column(length = 30, unique = true, nullable = false, name = "OID")
-    private String oid;
-
-    @Column(length = 70, name = "MANDANT_MID")
     private String mid;
+
 
     public Mandant() {
     }
 
     public Mandant(Mandant mandant) {
-        this.mid = mandant.mid;
     }
 
     public Long getId() {
@@ -52,14 +49,6 @@ public class Mandant implements Serializable {
         this.id = id;
     }
 
-    public String getOid() {
-        return oid;
-    }
-
-    public void setOid(String oid) {
-        this.oid = oid;
-    }
-
     public String getMid() {
         return mid;
     }
@@ -67,5 +56,7 @@ public class Mandant implements Serializable {
     public void setMid(String mid) {
         this.mid = mid;
     }
+
+
 
 }

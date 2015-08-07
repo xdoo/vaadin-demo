@@ -78,7 +78,7 @@ public class InitApplication {
         user.setOid(IdService.next());
         user.setEnabled(TRUE);
         Mandant mandant = new Mandant();
-        mandant.setOid("1");
+        mandant.setMid("1");
         mandantRepo.save(mandant);
         user.setMandant(mandant);
         usersRepo.save(user);

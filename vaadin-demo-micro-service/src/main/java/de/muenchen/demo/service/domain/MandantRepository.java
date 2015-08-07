@@ -14,6 +14,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  */
 public interface MandantRepository extends PagingAndSortingRepository<Mandant, Long> {
     
-    List<Mandant> findByOid(String oid);
+    List<Mandant> findByMid(String mid);
     
 }

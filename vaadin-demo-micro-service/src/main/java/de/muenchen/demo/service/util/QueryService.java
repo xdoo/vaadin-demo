@@ -73,7 +73,7 @@ public class QueryService<E> {
     private String readMid() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User readByUsername = userService.readByUsername(authentication.getName());
-		String mid = readByUsername.getMandant().getOid();
+		String mid = readByUsername.getMandant().getMid();
 		
 		if (mid == null) {
 			throw new IllegalStateException("tenat-id must not be null");
