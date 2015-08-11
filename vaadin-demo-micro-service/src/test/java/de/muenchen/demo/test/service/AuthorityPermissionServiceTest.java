@@ -99,7 +99,7 @@ public class AuthorityPermissionServiceTest {
     @Test
     public void saveTest() throws JsonProcessingException, AuthenticationException {
         Mandant mandant = new Mandant();
-        mandant.setMid("10");
+        mandant.setOid("10");
         mandantRepo.save(mandant);
         Authority auth = new Authority();
         auth.setAuthority("ADMIN");
@@ -124,7 +124,7 @@ public class AuthorityPermissionServiceTest {
     @Test
     public void deleteTest() throws JsonProcessingException, AuthenticationException {
         Mandant mandant = new Mandant();
-        mandant.setMid("10");
+        mandant.setOid("10");
         mandantRepo.save(mandant);
         Authority auth = new Authority();
         auth.setAuthority("SACHBEARBEITER");
@@ -148,7 +148,7 @@ public class AuthorityPermissionServiceTest {
     @Test
     public void queryTest() throws JsonProcessingException, AuthenticationException {
         Mandant mandant = new Mandant();
-        mandant.setMid("10");
+        mandant.setOid("10");
         mandantRepo.save(mandant);
         Authority auth = new Authority();
         auth.setAuthority("ADMIN");

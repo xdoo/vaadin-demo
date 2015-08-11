@@ -96,24 +96,24 @@ public class MandantServiceTest {
     public void createTest() throws JsonProcessingException {
 
         Mandant a = service.create();
-        assertNotEquals(null, a.getMid());
+        assertNotEquals(null, a.getOid());
     }
 
     @Test
     public void saveTest() throws JsonProcessingException, AuthenticationException {
         Mandant mandant = new Mandant();
-        mandant.setMid("123");
+        mandant.setOid("123");
         Mandant a = service.save(mandant);
-        assertNotEquals(null, a.getMid());
+        assertNotEquals(null, a.getOid());
 
     }
 
     @Test
     public void updateTest() throws JsonProcessingException, AuthenticationException {
         Mandant mandant = new Mandant();
-        mandant.setMid("123");
+        mandant.setOid("123");
         Mandant response = service.save(mandant);
-        response.setMid("12");
+        response.setOid("12");
         Mandant a = service.update(response);
         assertEquals(response.getId(), a.getId());
 
@@ -122,17 +122,17 @@ public class MandantServiceTest {
     @Test
     public void readTest() throws JsonProcessingException, AuthenticationException {
         Mandant mandant = new Mandant();
-        mandant.setMid("123");
+        mandant.setOid("123");
         service.save(mandant);
         Mandant a = service.read("123");
-        assertEquals("123", a.getMid());
+        assertEquals("123", a.getOid());
 
     }
 
     @Test
     public void deleteTest() throws JsonProcessingException, AuthenticationException {
         Mandant mandant = new Mandant();
-        mandant.setMid("123");
+        mandant.setOid("123");
         service.save(mandant);
         service.delete("123");
         Mandant a = service.read("123");
@@ -142,10 +142,10 @@ public class MandantServiceTest {
     @Test
     public void queryTest() throws JsonProcessingException, AuthenticationException {
         Mandant mandant = new Mandant();
-        mandant.setMid("123");
+        mandant.setOid("123");
         service.save(mandant);
         Mandant mandant2 = new Mandant();
-        mandant2.setMid("124");
+        mandant2.setOid("124");
         service.save(mandant2);
         List<Mandant> a = service.query();
         assertEquals(4, a.size());
@@ -154,7 +154,7 @@ public class MandantServiceTest {
     @Test
     public void copyTest() throws JsonProcessingException, AuthenticationException {
         Mandant mandant = new Mandant();
-        mandant.setMid("123");
+        mandant.setOid("123");
         service.save(mandant);
         Mandant a = service.copy("123");
         assertNotEquals(a.getId(), mandant.getId());

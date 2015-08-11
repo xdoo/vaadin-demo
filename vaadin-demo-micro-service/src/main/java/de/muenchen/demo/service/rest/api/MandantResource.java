@@ -13,15 +13,17 @@ import org.springframework.hateoas.ResourceSupport;
  */
 public class MandantResource extends ResourceSupport {
 
-    private String mid;
+    private String oid;
 
-
-    public String getMid() {
-        return mid;
+    public String getOid() {
+        return oid;
     }
 
-    public void setMid(String mid) {
-        this.mid = mid;
+    public void setOid(String oid) {
+        this.oid = oid;
     }
+
+
+
 
 }

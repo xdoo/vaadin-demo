@@ -50,7 +50,7 @@ public class StaatsangehoerigkeitServiceImpl implements StaatsangehoerigkeitServ
     @Override
     public Staatsangehoerigkeit read(String referencedOid) {
 
-        List<StaatsangehoerigkeitReference> result = this.repo.findByReferencedOidAndMandantMid(referencedOid, readUser().getMandant().getMid());
+        List<StaatsangehoerigkeitReference> result = this.repo.findByReferencedOidAndMandantOid(referencedOid, readUser().getMandant().getOid());
         if (result.isEmpty()) {
 
             return null;
@@ -65,7 +65,7 @@ public class StaatsangehoerigkeitServiceImpl implements StaatsangehoerigkeitServ
     @Override
     public StaatsangehoerigkeitReference readReference(String referencedOid) {
 
-        List<StaatsangehoerigkeitReference> result = this.repo.findByReferencedOidAndMandantMid(referencedOid, readUser().getMandant().getMid());
+        List<StaatsangehoerigkeitReference> result = this.repo.findByReferencedOidAndMandantOid(referencedOid, readUser().getMandant().getOid());
         if (result.isEmpty()) {
 
             return null;
@@ -79,7 +79,7 @@ public class StaatsangehoerigkeitServiceImpl implements StaatsangehoerigkeitServ
     public List<Staatsangehoerigkeit> query() {
 
         ArrayList<Staatsangehoerigkeit> list = new ArrayList();
-        Iterable<StaatsangehoerigkeitReference> all = this.repo.findByMandantMid(readUser().getMandant().getMid());
+        Iterable<StaatsangehoerigkeitReference> all = this.repo.findByMandantOid(readUser().getMandant().getOid());
 
         for (StaatsangehoerigkeitReference staat : all) {
             list.add(read(staat.getReferencedOid()));
@@ -97,7 +97,7 @@ public class StaatsangehoerigkeitServiceImpl implements StaatsangehoerigkeitServ
         } else {
             StaatsangehoerigkeitReference staatsangehoerigkeitReference = new StaatsangehoerigkeitReference();
             staatsangehoerigkeitReference.setReferencedOid(referencedOid);
-            Mandant mandant = madantService.read(readUser().getMandant().getMid());
+            Mandant mandant = madantService.read(readUser().getMandant().getOid());
             staatsangehoerigkeitReference.setMandant(mandant);
             this.repo.save(staatsangehoerigkeitReference);
             return resource;

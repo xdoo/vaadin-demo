@@ -44,7 +44,7 @@ public class MandantServiceImpl implements MandantService {
     @Override
     public Mandant create() {
         Mandant mandant = new Mandant();
-        mandant.setMid(IdService.next());
+        mandant.setOid(IdService.next());
         return mandant;
     }
 
@@ -57,7 +57,7 @@ public class MandantServiceImpl implements MandantService {
 
     @Override
     public Mandant read(String oid) {
-        List<Mandant> result = this.repo.findByMid(oid);
+        List<Mandant> result = this.repo.findByOid(oid);
         if (result.isEmpty()) {
             // TODO
             LOG.warn(String.format("found no mandant with oid '%s'", oid));
@@ -95,7 +95,7 @@ public class MandantServiceImpl implements MandantService {
 
         // map
         Mandant out = new Mandant(in);
-        out.setMid(IdService.next());
+        out.setOid(IdService.next());
 
         // in DB speichern
         this.save(out);

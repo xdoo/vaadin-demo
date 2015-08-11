@@ -110,7 +110,7 @@ public class UserAuthorityServiceTest {
         user.setOid(IdService.next());
         user.setEnabled(TRUE);
         Mandant mandant = new Mandant();
-        mandant.setMid("10");
+        mandant.setOid("10");
         mandantRepo.save(mandant);
         user.setMandant(mandant);
         usersRepo.save(user);
@@ -138,7 +138,7 @@ public class UserAuthorityServiceTest {
         user.setOid(IdService.next());
         user.setEnabled(TRUE);
         Mandant mandant = new Mandant();
-        mandant.setMid("10");
+        mandant.setOid("10");
         mandantRepo.save(mandant);
         user.setMandant(mandant);
         usersRepo.save(user);
@@ -165,7 +165,7 @@ public class UserAuthorityServiceTest {
         user.setOid(IdService.next());
         user.setEnabled(TRUE);
         Mandant mandant = new Mandant();
-        mandant.setMid("10");
+        mandant.setOid("10");
         mandantRepo.save(mandant);
         user.setMandant(mandant);
         usersRepo.save(user);

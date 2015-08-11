@@ -42,7 +42,7 @@ public abstract class BaseService<  T extends BaseEntity> {
 
 
     public T read(String oid) {
-        List<T> result = this.repo.findByOidAndMandantMid(oid, readUser().getMandant().getMid());
+        List<T> result = this.repo.findByOidAndMandantOid(oid, readUser().getMandant().getOid());
         if (result.isEmpty()) {
             // TODO
             return null;
@@ -75,7 +75,7 @@ public abstract class BaseService<  T extends BaseEntity> {
 
     public T save(T t) {
         Preconditions.checkArgument(t.getId() == null, "On save, the ID must be empty");
-        Mandant mandant = mandantService.read(readUser().getMandant().getMid());
+        Mandant mandant = mandantService.read(readUser().getMandant().getOid());
         t.setMandant(mandant);
 
         return this.repo.save(t);
@@ -91,7 +91,7 @@ public abstract class BaseService<  T extends BaseEntity> {
     }
 
     public List<T> query() {
-        Iterable<T> all = this.repo.findByMandantMid(readUser().getMandant().getMid());
+        Iterable<T> all = this.repo.findByMandantOid(readUser().getMandant().getOid());
         return Lists.newArrayList(all);
     }
 

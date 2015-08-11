@@ -32,7 +32,7 @@ public class Mandant implements Serializable {
 
     @Field(name = "mid")
     @Column(length = 30, unique = true, nullable = false, name = "OID")
-    private String mid;
+    private String oid;
 
 
     public Mandant() {
@@ -49,14 +49,15 @@ public class Mandant implements Serializable {
         this.id = id;
     }
 
-    public String getMid() {
-        return mid;
+    public String getOid() {
+        return oid;
     }
 
-    public void setMid(String mid) {
-        this.mid = mid;
+    public void setOid(String oid) {
+        this.oid = oid;
     }
 
+    
 
 
 }
