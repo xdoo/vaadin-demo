@@ -46,6 +46,7 @@ public class AuthorityController {
      *
      * @return
      */
+    @RolesAllowed({"PERM_queryAuthority"})
     @RequestMapping(value = "/query", method = {RequestMethod.GET})
     public ResponseEntity queryAuthority() {
         if (LOG.isDebugEnabled()) {

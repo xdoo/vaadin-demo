@@ -48,11 +48,11 @@ public class Buerger extends BaseEntity implements Serializable {
     @Transient
     private Set<Staatsangehoerigkeit> staatsangehoerigkeiten = new HashSet<>();
 
-    @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
     private Set<StaatsangehoerigkeitReference> staatsangehoerigkeitReferences = new HashSet<>();
 
     @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
-    private Set<Pass> Pass = new HashSet<>();
+    private Set<Pass> pass = new HashSet<>();
 
     @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
     private Set<Buerger> kinder = new HashSet<>();
@@ -68,7 +68,7 @@ public class Buerger extends BaseEntity implements Serializable {
         this.nachname = buerger.nachname;
         this.geburtsdatum = buerger.geburtsdatum;
         this.staatsangehoerigkeitReferences.addAll(buerger.staatsangehoerigkeitReferences);
-        this.Pass.addAll(buerger.Pass);
+        this.pass.addAll(buerger.pass);
         this.wohnungen.addAll(buerger.wohnungen);
         this.staatsangehoerigkeiten.addAll(buerger.staatsangehoerigkeiten);
         this.kinder.addAll(buerger.kinder);
@@ -139,11 +139,11 @@ public class Buerger extends BaseEntity implements Serializable {
     }
 
     public Set<Pass> getPass() {
-        return Pass;
+        return pass;
     }
 
     public void setPass(Set<Pass> Pass) {
-        this.Pass = Pass;
+        this.pass = Pass;
     }
 
     @Override

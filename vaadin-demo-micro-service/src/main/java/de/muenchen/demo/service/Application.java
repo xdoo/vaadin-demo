@@ -56,15 +56,15 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
 
-    @Bean
-    CommandLineRunner init(UserRepository usersRepo, AuthorityRepository authRepo, PermissionRepository permRepo, UserAuthorityRepository userAuthRepo, AuthorityPermissionRepository authPermRepo, MandantRepository mandantRepo) {
-
-        return (String... arg0) -> {
-            InitApplication initApplication = new InitApplication(usersRepo, authRepo, permRepo, userAuthRepo, authPermRepo,mandantRepo);
-            initApplication.init();
-        };
-
-    }
+//    @Bean
+//    CommandLineRunner init(UserRepository usersRepo, AuthorityRepository authRepo, PermissionRepository permRepo, UserAuthorityRepository userAuthRepo, AuthorityPermissionRepository authPermRepo, MandantRepository mandantRepo) {
+//
+//        return (String... arg0) -> {
+//            InitApplication initApplication = new InitApplication(usersRepo, authRepo, permRepo, userAuthRepo, authPermRepo,mandantRepo);
+//            initApplication.init();
+//        };
+//
+//    }
 
 //    Dozer
     @Bean
