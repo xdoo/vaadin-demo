@@ -8,6 +8,14 @@ import java.util.Date;
  */
 public class BuergerResource extends BaseResource {
     
+    // HATEOAS Relations zu den Relationen
+    public static final String KINDER = "kinder";
+    public static final String SAVE_KIND = "save_kind";
+    public static final String WOHNUNGEN = "wohnungen";
+    public static final String SAVE_WOHNUNG = "save_wohnung";
+    public static final String PAESSE = "paesse";
+    public static final String SAVE_PASS = "save_pass";
+    
     private String vorname;
     private String nachname;
     private Date geburtsdatum;

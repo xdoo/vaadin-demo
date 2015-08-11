@@ -4,8 +4,7 @@ import de.muenchen.demo.service.domain.UserAuthId;
 import de.muenchen.demo.service.domain.UserAuthority;
 import de.muenchen.demo.service.rest.UserAuthorityController;
 import de.muenchen.demo.service.services.UserAuthorityService;
-import de.muenchen.demo.service.util.HateoasRelations;
-import de.muenchen.demo.service.util.HateoasUtil;
+import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -42,10 +41,10 @@ public class UserAuthorityResourceAssembler {
     public SearchResultResource<UserAuthorityResource> toResource(final List<UserAuthority> usersAuthoritys) {
         SearchResultResource<UserAuthorityResource> resource = new SearchResultResource<>();
         usersAuthoritys.stream().forEach((b) -> {
-            resource.add(this.toResource(b, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE));
+            resource.add(this.toResource(b, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE));
         });
         // add query link
-        resource.add(linkTo(methodOn(UserAuthorityController.class).queryUserAuthority()).withRel(HateoasUtil.QUERY));
+        resource.add(linkTo(methodOn(UserAuthorityController.class).queryUserAuthority()).withRel(HateoasUtil.REL_QUERY));
         return resource;
     }
 
@@ -56,20 +55,9 @@ public class UserAuthorityResourceAssembler {
      * @param r
      * @return
      */
-    public UserAuthorityResource toResource(final UserAuthority usersAuthoritys, HateoasRelations... r) {
+    public UserAuthorityResource toResource(final UserAuthority usersAuthoritys, String... r) {
         // map
         UserAuthorityResource resource = this.dozer.map(usersAuthoritys, UserAuthorityResource.class);
-
-        // add links
-//        ArrayList<HateoasRelations> relations = Lists.newArrayList(r);
-//        if (relations.contains(HateoasRelations.NEW)) {
-//            resource.add(linkTo(methodOn(UserAuthorityController.class).newUsersAuthoritys()).withRel(HateoasUtil.NEW));
-//
-//        }
-//
-//        if (relations.contains(HateoasRelations.SAVE)) {
-//            resource.add(linkTo(methodOn(UserAuthorityController.class).saveUserAuthority(null)).withRel(HateoasUtil.SAVE));
-//        }
 
         return resource;
     }
@@ -90,11 +78,11 @@ public class UserAuthorityResourceAssembler {
         }
     }
 
-    public List<UserAuthorityResource> toResource(Set<UserAuthority> usersAuthoritys, HateoasRelations hateoasRelations) {
+    public List<UserAuthorityResource> toResource(Set<UserAuthority> usersAuthoritys, String hateoasRelations) {
 
         List<UserAuthorityResource> resource = new ArrayList<>();
         usersAuthoritys.stream().forEach((b) -> {
-            resource.add(this.toResource(b, HateoasRelations.SELF));
+            resource.add(this.toResource(b, HateoasUtil.REL_SELF));
         });
         return resource;
     }

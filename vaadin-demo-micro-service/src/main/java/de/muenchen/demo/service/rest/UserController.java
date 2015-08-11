@@ -7,7 +7,7 @@ import de.muenchen.demo.service.rest.api.UserResource;
 import de.muenchen.demo.service.rest.api.UserResourceAssembler;
 import de.muenchen.demo.service.services.MandantService;
 import de.muenchen.demo.service.services.UserService;
-import de.muenchen.demo.service.util.HateoasRelations;
+import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
 import javax.annotation.security.RolesAllowed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,7 +75,7 @@ public class UserController {
             LOG.debug("new user");
         }
         User entity = this.service.create();
-        UserResource resource = this.assembler.toResource(entity, HateoasRelations.NEW, HateoasRelations.SAVE);
+        UserResource resource = this.assembler.toResource(entity, HateoasUtil.REL_NEW, HateoasUtil.REL_SAVE);
         return ResponseEntity.ok(resource);
     }
 
@@ -93,7 +93,7 @@ public class UserController {
             LOG.debug("read users");
         }
         User entity = this.service.read(oid);
-        UserResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE);
+        UserResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE);
         return ResponseEntity.ok(resource);
     }
     
@@ -110,7 +110,7 @@ public class UserController {
             LOG.debug("read users");
         }
         User entity = this.service.readByUsername(name);
-        UserResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE);
+        UserResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE);
         return ResponseEntity.ok(resource);
     }
 
@@ -132,7 +132,7 @@ public class UserController {
         this.assembler.fromResource(request, entity);
         LOG.info("danach > " + entity.toString());
         this.service.update(entity);
-        UserResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE);
+        UserResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE);
         return ResponseEntity.ok(resource);
     }
 
@@ -151,7 +151,7 @@ public class UserController {
         User entity = new User();
         this.assembler.fromResource(request, entity);
         this.service.save(entity);
-        UserResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE);
+        UserResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE);
         return ResponseEntity.ok(resource);
     }
 
@@ -190,7 +190,7 @@ public class UserController {
         entity.setMandant(mandant);
         this.service.update(entity);
 
-        UserResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY, HateoasRelations.WOHNUNGEN, HateoasRelations.KINDER);
+        UserResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
         return ResponseEntity.ok(resource);
     }
 }

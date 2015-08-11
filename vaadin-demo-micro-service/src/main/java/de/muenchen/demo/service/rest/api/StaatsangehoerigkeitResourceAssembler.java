@@ -5,8 +5,7 @@ import com.google.common.collect.Lists;
 import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
 import de.muenchen.demo.service.rest.StaatsangehoerigkeitController;
 import de.muenchen.demo.service.services.StaatsangehoerigkeitService;
-import de.muenchen.demo.service.util.HateoasRelations;
-import de.muenchen.demo.service.util.HateoasUtil;
+import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -44,10 +43,10 @@ public class StaatsangehoerigkeitResourceAssembler {
     public SearchResultResource<StaatsangehoerigkeitResource> toResource(final List<Staatsangehoerigkeit> staatsangehoerigkeit) {
         SearchResultResource<StaatsangehoerigkeitResource> resource = new SearchResultResource<>();
         staatsangehoerigkeit.stream().forEach((b) -> {
-            resource.add(this.toResource(b, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE));
+            resource.add(this.toResource(b, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE));
         });
         // add query link
-        resource.add(linkTo(methodOn(StaatsangehoerigkeitController.class).queryStaatsangehoerigkeit()).withRel(HateoasUtil.QUERY));
+        resource.add(linkTo(methodOn(StaatsangehoerigkeitController.class).queryStaatsangehoerigkeit()).withRel(HateoasUtil.REL_QUERY));
         List<StaatsangehoerigkeitResource> liste = resource.getResult();
         return resource;
     }
@@ -59,22 +58,22 @@ public class StaatsangehoerigkeitResourceAssembler {
      * @param r
      * @return
      */
-    public StaatsangehoerigkeitResource toResource(final Staatsangehoerigkeit staatsangehoerigkeit, HateoasRelations... r) {
+    public StaatsangehoerigkeitResource toResource(final Staatsangehoerigkeit staatsangehoerigkeit, String... r) {
         // map
         StaatsangehoerigkeitResource resource = this.dozer.map(staatsangehoerigkeit, StaatsangehoerigkeitResource.class);
 
         // add links
-        ArrayList<HateoasRelations> relations = Lists.newArrayList(r);
+        ArrayList<String> relations = Lists.newArrayList(r);
       
 
 
-        if (relations.contains(HateoasRelations.SELF)) {
+        if (relations.contains(HateoasUtil.REL_SELF)) {
             resource.add(linkTo(methodOn(StaatsangehoerigkeitController.class).readStaatsangehoerigkeit(staatsangehoerigkeit.getReference())).withSelfRel());
 
         }
 
-        if (relations.contains(HateoasRelations.DELETE)) {
-            resource.add(linkTo(methodOn(StaatsangehoerigkeitController.class).deleteStaatsangehoerigkeit(staatsangehoerigkeit.getReference())).withRel(HateoasUtil.DELETE));
+        if (relations.contains(HateoasUtil.REL_DELETE)) {
+            resource.add(linkTo(methodOn(StaatsangehoerigkeitController.class).deleteStaatsangehoerigkeit(staatsangehoerigkeit.getReference())).withRel(HateoasUtil.REL_DELETE));
         }
 
 
@@ -109,11 +108,11 @@ public class StaatsangehoerigkeitResourceAssembler {
      * @param hateoasRelations
      * @return
      */
-    public List<StaatsangehoerigkeitResource> toResource(Set<Staatsangehoerigkeit> staatsangehoerigkeit, HateoasRelations hateoasRelations) {
+    public List<StaatsangehoerigkeitResource> toResource(Set<Staatsangehoerigkeit> staatsangehoerigkeit, String hateoasRelations) {
 
         List<StaatsangehoerigkeitResource> resource = new ArrayList<>();
         staatsangehoerigkeit.stream().forEach((b) -> {
-            resource.add(this.toResource(b, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE));
+            resource.add(this.toResource(b, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE));
         });
         return resource;
     }

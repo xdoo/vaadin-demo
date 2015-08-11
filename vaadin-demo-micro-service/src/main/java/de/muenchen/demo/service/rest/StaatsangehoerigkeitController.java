@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package de.muenchen.demo.service.rest;
 
 import de.muenchen.demo.service.rest.api.StaatsangehoerigkeitResourceAssembler;
@@ -10,7 +5,7 @@ import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
 import de.muenchen.demo.service.rest.api.SearchResultResource;
 import de.muenchen.demo.service.rest.api.StaatsangehoerigkeitResource;
 import de.muenchen.demo.service.services.StaatsangehoerigkeitService;
-import de.muenchen.demo.service.util.HateoasRelations;
+import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
 import javax.annotation.security.RolesAllowed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,7 +68,7 @@ public class StaatsangehoerigkeitController {
             LOG.debug("new Staatsangehoerigkeit");
         }
         Staatsangehoerigkeit entity = this.service.create(referencedOid);
-        StaatsangehoerigkeitResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY);
+        StaatsangehoerigkeitResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
         return ResponseEntity.ok(resource);
     }
 
@@ -90,7 +85,7 @@ public class StaatsangehoerigkeitController {
             LOG.debug("read Staatsangehoerigkeit");
         }
         Staatsangehoerigkeit entity = this.service.read(referencedOid);
-        StaatsangehoerigkeitResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE);
+        StaatsangehoerigkeitResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE);
         return ResponseEntity.ok(resource);
     }
 

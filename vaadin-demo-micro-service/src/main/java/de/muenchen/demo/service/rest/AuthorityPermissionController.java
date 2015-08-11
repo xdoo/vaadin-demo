@@ -11,7 +11,7 @@ import de.muenchen.demo.service.services.AuthorityService;
 import de.muenchen.demo.service.services.AuthorityPermissionService;
 import de.muenchen.demo.service.services.PermissionService;
 import de.muenchen.demo.service.services.UserService;
-import de.muenchen.demo.service.util.HateoasRelations;
+import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
 import javax.annotation.security.RolesAllowed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -105,7 +105,7 @@ public class AuthorityPermissionController {
         AuthPermId id = new AuthPermId(permission, auth);
 
         AuthorityPermission entity = this.service.read(id);
-        AuthorityPermissionResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE);
+        AuthorityPermissionResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE);
         return ResponseEntity.ok(resource);
     }
 
@@ -127,7 +127,7 @@ public class AuthorityPermissionController {
         Authority auth = this.authService.read(aoid);
         entity.setId(new AuthPermId(permission, auth));
         this.service.save(entity);
-        AuthorityPermissionResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE);
+        AuthorityPermissionResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE);
         return ResponseEntity.ok(resource);
     }
 

@@ -5,9 +5,7 @@ import com.google.common.collect.Lists;
 import de.muenchen.demo.service.domain.User;
 import de.muenchen.demo.service.rest.UserController;
 import de.muenchen.demo.service.services.UserService;
-import de.muenchen.demo.service.util.HateoasRelations;
-import de.muenchen.demo.service.util.HateoasUtil;
-import java.sql.Date;
+import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -44,10 +42,10 @@ public class UserResourceAssembler {
     public SearchResultResource<UserResource> toResource(final List<User> users) {
         SearchResultResource<UserResource> resource = new SearchResultResource<>();
         users.stream().forEach((b) -> {
-            resource.add(this.toResource(b, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE));
+            resource.add(this.toResource(b, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE));
         });
         // add query link
-        resource.add(linkTo(methodOn(UserController.class).queryUser()).withRel(HateoasUtil.QUERY));
+        resource.add(linkTo(methodOn(UserController.class).queryUser()).withRel(HateoasUtil.REL_QUERY));
         return resource;
     }
 
@@ -58,31 +56,31 @@ public class UserResourceAssembler {
      * @param r
      * @return
      */
-    public UserResource toResource(final User user, HateoasRelations... r) {
+    public UserResource toResource(final User user, String... r) {
         // map
         UserResource resource = this.dozer.map(user, UserResource.class);
 
         // add links
-        ArrayList<HateoasRelations> relations = Lists.newArrayList(r);
-        if (relations.contains(HateoasRelations.NEW)) {
-            resource.add(linkTo(methodOn(UserController.class).newUser()).withRel(HateoasUtil.NEW));
+        ArrayList<String> relations = Lists.newArrayList(r);
+        if (relations.contains(HateoasUtil.REL_NEW)) {
+            resource.add(linkTo(methodOn(UserController.class).newUser()).withRel(HateoasUtil.REL_NEW));
 
         }
 
-        if (relations.contains(HateoasRelations.UPDATE)) {
-            resource.add(linkTo(methodOn(UserController.class).updateUser(user.getOid(), null)).withRel(HateoasUtil.UPDATE));
+        if (relations.contains(HateoasUtil.REL_UPDATE)) {
+            resource.add(linkTo(methodOn(UserController.class).updateUser(user.getOid(), null)).withRel(HateoasUtil.REL_UPDATE));
         }
 
-        if (relations.contains(HateoasRelations.SELF)) {
+        if (relations.contains(HateoasUtil.REL_SELF)) {
             resource.add(linkTo(methodOn(UserController.class).readUser(user.getOid())).withSelfRel());
         }
 
-        if (relations.contains(HateoasRelations.DELETE)) {
-            resource.add(linkTo(methodOn(UserController.class).deleteUser(user.getOid())).withRel(HateoasUtil.DELETE));
+        if (relations.contains(HateoasUtil.REL_DELETE)) {
+            resource.add(linkTo(methodOn(UserController.class).deleteUser(user.getOid())).withRel(HateoasUtil.REL_DELETE));
         }
 
-        if (relations.contains(HateoasRelations.SAVE)) {
-            resource.add(linkTo(methodOn(UserController.class).saveUser(null)).withRel(HateoasUtil.SAVE));
+        if (relations.contains(HateoasUtil.REL_SAVE)) {
+            resource.add(linkTo(methodOn(UserController.class).saveUser(null)).withRel(HateoasUtil.REL_SAVE));
         }
 
         return resource;
@@ -119,11 +117,11 @@ public class UserResourceAssembler {
         }
     }
 
-    public List<UserResource> toResource(Set<User> user, HateoasRelations hateoasRelations) {
+    public List<UserResource> toResource(Set<User> user, String hateoasRelations) {
 
         List<UserResource> resource = new ArrayList<>();
         user.stream().forEach((b) -> {
-            resource.add(this.toResource(b, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE));
+            resource.add(this.toResource(b, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE));
         });
         return resource;
     }

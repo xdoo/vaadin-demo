@@ -5,9 +5,7 @@ import com.google.common.collect.Lists;
 import de.muenchen.demo.service.domain.Authority;
 import de.muenchen.demo.service.rest.AuthorityController;
 import de.muenchen.demo.service.services.AuthorityService;
-import de.muenchen.demo.service.util.HateoasRelations;
-import de.muenchen.demo.service.util.HateoasUtil;
-import java.sql.Date;
+import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -44,10 +42,10 @@ public class AuthorityResourceAssembler {
     public SearchResultResource<AuthorityResource> toResource(final List<Authority> authoritys) {
         SearchResultResource<AuthorityResource> resource = new SearchResultResource<>();
         authoritys.stream().forEach((b) -> {
-            resource.add(this.toResource(b, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE));
+            resource.add(this.toResource(b, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE));
         });
         // add query link
-        resource.add(linkTo(methodOn(AuthorityController.class).queryAuthority()).withRel(HateoasUtil.QUERY));
+        resource.add(linkTo(methodOn(AuthorityController.class).queryAuthority()).withRel(HateoasUtil.REL_QUERY));
         return resource;
     }
 
@@ -58,31 +56,31 @@ public class AuthorityResourceAssembler {
      * @param r
      * @return
      */
-    public AuthorityResource toResource(final Authority authoritys, HateoasRelations... r) {
+    public AuthorityResource toResource(final Authority authoritys, String... r) {
         // map
         AuthorityResource resource = this.dozer.map(authoritys, AuthorityResource.class);
 
         // add links
-        ArrayList<HateoasRelations> relations = Lists.newArrayList(r);
-        if (relations.contains(HateoasRelations.NEW)) {
-            resource.add(linkTo(methodOn(AuthorityController.class).newAuthority()).withRel(HateoasUtil.NEW));
+        ArrayList<String> relations = Lists.newArrayList(r);
+        if (relations.contains(HateoasUtil.REL_NEW)) {
+            resource.add(linkTo(methodOn(AuthorityController.class).newAuthority()).withRel(HateoasUtil.REL_NEW));
 
         }
 
-        if (relations.contains(HateoasRelations.UPDATE)) {
-            resource.add(linkTo(methodOn(AuthorityController.class).updateAuthority(authoritys.getOid(), null)).withRel(HateoasUtil.UPDATE));
+        if (relations.contains(HateoasUtil.REL_UPDATE)) {
+            resource.add(linkTo(methodOn(AuthorityController.class).updateAuthority(authoritys.getOid(), null)).withRel(HateoasUtil.REL_UPDATE));
         }
 
-        if (relations.contains(HateoasRelations.SELF)) {
+        if (relations.contains(HateoasUtil.REL_SELF)) {
             resource.add(linkTo(methodOn(AuthorityController.class).readAuthority(authoritys.getOid())).withSelfRel());
         }
 
-        if (relations.contains(HateoasRelations.DELETE)) {
-            resource.add(linkTo(methodOn(AuthorityController.class).deleteAuthority(authoritys.getOid())).withRel(HateoasUtil.DELETE));
+        if (relations.contains(HateoasUtil.REL_DELETE)) {
+            resource.add(linkTo(methodOn(AuthorityController.class).deleteAuthority(authoritys.getOid())).withRel(HateoasUtil.REL_DELETE));
         }
 
-        if (relations.contains(HateoasRelations.SAVE)) {
-            resource.add(linkTo(methodOn(AuthorityController.class).saveAuthority(null)).withRel(HateoasUtil.SAVE));
+        if (relations.contains(HateoasUtil.REL_SAVE)) {
+            resource.add(linkTo(methodOn(AuthorityController.class).saveAuthority(null)).withRel(HateoasUtil.REL_SAVE));
         }
 
         return resource;
@@ -112,11 +110,11 @@ public class AuthorityResourceAssembler {
         }
     }
 
-    public List<AuthorityResource> toResource(Set<Authority> authoritys, HateoasRelations hateoasRelations) {
+    public List<AuthorityResource> toResource(Set<Authority> authoritys, String hateoasRelations) {
 
         List<AuthorityResource> resource = new ArrayList<>();
         authoritys.stream().forEach((b) -> {
-            resource.add(this.toResource(b, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE));
+            resource.add(this.toResource(b, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE));
         });
         return resource;
     }

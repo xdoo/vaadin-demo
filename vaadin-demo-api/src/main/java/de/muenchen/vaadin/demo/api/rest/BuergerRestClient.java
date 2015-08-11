@@ -98,6 +98,6 @@ public interface BuergerRestClient {
     
     public List<Buerger> queryKinder(List<Link> links, RestTemplate restTemplate);
     
-    public Buerger saveBuergerKind(Buerger buerger, RestTemplate restTemplate);
+    public Buerger saveBuergerKind(Buerger buerger, Buerger child, RestTemplate restTemplate);
     
 }

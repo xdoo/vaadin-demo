@@ -73,7 +73,7 @@ public class BuergerRestClientImpl implements BuergerRestClient {
     }
     
     @Override
-    public Buerger saveBuergerKind(Buerger buerger, RestTemplate restTemplate) {
+    public Buerger saveBuergerKind(Buerger buerger, Buerger child, RestTemplate restTemplate) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

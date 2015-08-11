@@ -4,8 +4,7 @@ import de.muenchen.demo.service.domain.AuthPermId;
 import de.muenchen.demo.service.domain.AuthorityPermission;
 import de.muenchen.demo.service.rest.AuthorityPermissionController;
 import de.muenchen.demo.service.services.AuthorityPermissionService;
-import de.muenchen.demo.service.util.HateoasRelations;
-import de.muenchen.demo.service.util.HateoasUtil;
+import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -42,10 +41,10 @@ public class AuthorityPermissionResourceAssembler {
     public SearchResultResource<AuthorityPermissionResource> toResource(final List<AuthorityPermission> authoritysPermissions) {
         SearchResultResource<AuthorityPermissionResource> resource = new SearchResultResource<>();
         authoritysPermissions.stream().forEach((b) -> {
-            resource.add(this.toResource(b, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE));
+            resource.add(this.toResource(b, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE));
         });
         // add query link
-        resource.add(linkTo(methodOn(AuthorityPermissionController.class).queryAuthorityPermission()).withRel(HateoasUtil.QUERY));
+        resource.add(linkTo(methodOn(AuthorityPermissionController.class).queryAuthorityPermission()).withRel(HateoasUtil.REL_QUERY));
         return resource;
     }
 
@@ -56,20 +55,9 @@ public class AuthorityPermissionResourceAssembler {
      * @param r
      * @return
      */
-    public AuthorityPermissionResource toResource(final AuthorityPermission authoritysPermissions, HateoasRelations... r) {
+    public AuthorityPermissionResource toResource(final AuthorityPermission authoritysPermissions, String... r) {
         // map
         AuthorityPermissionResource resource = this.dozer.map(authoritysPermissions, AuthorityPermissionResource.class);
-
-        // add links
-//        ArrayList<HateoasRelations> relations = Lists.newArrayList(r);
-//        if (relations.contains(HateoasRelations.NEW)) {
-//            resource.add(linkTo(methodOn(AuthorityPermissionController.class).newAuthoritysPermissions()).withRel(HateoasUtil.NEW));
-//
-//        }
-//
-//        if (relations.contains(HateoasRelations.SAVE)) {
-//            resource.add(linkTo(methodOn(AuthorityPermissionController.class).saveAuthorityPermission(null)).withRel(HateoasUtil.SAVE));
-//        }
 
         return resource;
     }
@@ -90,11 +78,11 @@ public class AuthorityPermissionResourceAssembler {
         }
     }
 
-    public List<AuthorityPermissionResource> toResource(Set<AuthorityPermission> authoritysPermissions, HateoasRelations hateoasRelations) {
+    public List<AuthorityPermissionResource> toResource(Set<AuthorityPermission> authoritysPermissions, String hateoasRelations) {
 
         List<AuthorityPermissionResource> resource = new ArrayList<>();
         authoritysPermissions.stream().forEach((b) -> {
-            resource.add(this.toResource(b, HateoasRelations.SELF));
+            resource.add(this.toResource(b, HateoasUtil.REL_SELF));
         });
         return resource;
     }

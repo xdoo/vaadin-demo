@@ -10,7 +10,7 @@ import de.muenchen.demo.service.rest.api.UserAuthorityResourceAssembler;
 import de.muenchen.demo.service.services.AuthorityService;
 import de.muenchen.demo.service.services.UserAuthorityService;
 import de.muenchen.demo.service.services.UserService;
-import de.muenchen.demo.service.util.HateoasRelations;
+import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
 import javax.annotation.security.RolesAllowed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -102,7 +102,7 @@ public class UserAuthorityController {
         UserAuthId id = new UserAuthId(user, auth);
 
         UserAuthority entity = this.service.read(id);
-        UserAuthorityResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE);
+        UserAuthorityResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE);
         return ResponseEntity.ok(resource);
     }
 
@@ -124,7 +124,7 @@ public class UserAuthorityController {
         Authority auth = this.authService.read(authorityOid);
         entity.setId(new UserAuthId(user, auth));
         this.service.save(entity);
-        UserAuthorityResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE);
+        UserAuthorityResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE);
         return ResponseEntity.ok(resource);
     }
 

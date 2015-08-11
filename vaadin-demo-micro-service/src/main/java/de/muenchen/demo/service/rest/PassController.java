@@ -9,7 +9,7 @@ import de.muenchen.demo.service.rest.api.WohnungResourceAssembler;
 import de.muenchen.demo.service.services.PassService;
 import de.muenchen.demo.service.services.StaatsangehoerigkeitService;
 import de.muenchen.demo.service.services.WohnungService;
-import de.muenchen.demo.service.util.HateoasRelations;
+import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
 import javax.annotation.security.RolesAllowed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,7 +100,7 @@ public class PassController {
         }
         System.out.println(URL);
         Pass entity = this.service.create();
-        PassResource resource = this.assembler.toResource(entity, HateoasRelations.NEW, HateoasRelations.SAVE);
+        PassResource resource = this.assembler.toResource(entity, HateoasUtil.REL_NEW, HateoasUtil.REL_SAVE);
         return ResponseEntity.ok(resource);
     }
 
@@ -118,7 +118,7 @@ public class PassController {
             LOG.debug("copy pass");
         }
         Pass entity = this.service.copy(oid);
-        PassResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY);
+        PassResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
         return ResponseEntity.ok(resource);
     }
 
@@ -135,7 +135,7 @@ public class PassController {
             LOG.debug("read pass");
         }
         Pass entity = this.service.read(oid);
-        PassResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY);
+        PassResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
         return ResponseEntity.ok(resource);
     }
 
@@ -157,7 +157,7 @@ public class PassController {
         this.assembler.fromResource(request, entity);
         LOG.info("danach > " + entity.toString());
         this.service.update(entity);
-        PassResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY, HateoasRelations.WOHNUNGEN, HateoasRelations.KINDER);
+        PassResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
         return ResponseEntity.ok(resource);
     }
 
@@ -176,7 +176,7 @@ public class PassController {
         Pass entity = new Pass();
         this.assembler.fromResource(request, entity);
         this.service.save(entity);
-        PassResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY, HateoasRelations.WOHNUNGEN, HateoasRelations.KINDER);
+        PassResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
         return ResponseEntity.ok(resource);
     }
 
@@ -216,7 +216,7 @@ public class PassController {
         entity.setStaatsangehoerigkeit(staats);
         this.service.update(entity);
 
-        PassResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY, HateoasRelations.WOHNUNGEN, HateoasRelations.KINDER);
+        PassResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
         return ResponseEntity.ok(resource);
     }
     

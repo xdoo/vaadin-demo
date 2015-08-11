@@ -8,7 +8,7 @@ import de.muenchen.demo.service.rest.api.WohnungResourceAssembler;
 import de.muenchen.demo.service.services.MandantService;
 import de.muenchen.demo.service.services.StaatsangehoerigkeitService;
 import de.muenchen.demo.service.services.WohnungService;
-import de.muenchen.demo.service.util.HateoasRelations;
+import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
 import javax.annotation.security.RolesAllowed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -99,7 +99,7 @@ public class MandantController {
         }
         System.out.println(URL);
         Mandant entity = this.service.create();
-        MandantResource resource = this.assembler.toResource(entity, HateoasRelations.NEW, HateoasRelations.SAVE);
+        MandantResource resource = this.assembler.toResource(entity, HateoasUtil.REL_NEW, HateoasUtil.REL_SAVE);
         return ResponseEntity.ok(resource);
     }
 
@@ -117,7 +117,7 @@ public class MandantController {
             LOG.debug("copy mandant");
         }
         Mandant entity = this.service.copy(oid);
-        MandantResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY);
+        MandantResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
         return ResponseEntity.ok(resource);
     }
 
@@ -134,7 +134,7 @@ public class MandantController {
             LOG.debug("read mandant");
         }
         Mandant entity = this.service.read(oid);
-        MandantResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY);
+        MandantResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
         return ResponseEntity.ok(resource);
     }
 
@@ -156,7 +156,7 @@ public class MandantController {
         this.assembler.fromResource(request, entity);
         LOG.info("danach > " + entity.toString());
         this.service.update(entity);
-        MandantResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY, HateoasRelations.WOHNUNGEN, HateoasRelations.KINDER);
+        MandantResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
         return ResponseEntity.ok(resource);
     }
 
@@ -175,7 +175,7 @@ public class MandantController {
         Mandant entity = new Mandant();
         this.assembler.fromResource(request, entity);
         this.service.save(entity);
-        MandantResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY, HateoasRelations.WOHNUNGEN, HateoasRelations.KINDER);
+        MandantResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
         return ResponseEntity.ok(resource);
     }
 

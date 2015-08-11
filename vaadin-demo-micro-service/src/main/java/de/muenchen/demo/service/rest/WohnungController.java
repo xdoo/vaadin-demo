@@ -8,7 +8,7 @@ import de.muenchen.demo.service.rest.api.WohnungResourceAssembler;
 import de.muenchen.demo.service.services.AdresseService;
 import de.muenchen.demo.service.services.MandantService;
 import de.muenchen.demo.service.services.WohnungService;
-import de.muenchen.demo.service.util.HateoasRelations;
+import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
 import javax.annotation.security.RolesAllowed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,7 +76,7 @@ public class WohnungController {
             LOG.debug("new wohnung");
         }
         Wohnung entity = this.service.create();
-        WohnungResource resource = this.assembler.toResource(entity, HateoasRelations.NEW, HateoasRelations.SAVE);
+        WohnungResource resource = this.assembler.toResource(entity, HateoasUtil.REL_NEW, HateoasUtil.REL_SAVE);
         return ResponseEntity.ok(resource);
     }
 
@@ -94,7 +94,7 @@ public class WohnungController {
             LOG.debug("copy wohnung");
         }
         Wohnung entity = this.service.copy(oid);
-        WohnungResource resource = this.assembler.toResource(entity,HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY);
+        WohnungResource resource = this.assembler.toResource(entity,HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
         return ResponseEntity.ok(resource);
     }
 
@@ -111,7 +111,7 @@ public class WohnungController {
             LOG.debug("read wohnung");
         }
         Wohnung entity = this.service.read(oid);
-        WohnungResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY);
+        WohnungResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
         return ResponseEntity.ok(resource);
     }
 
@@ -133,7 +133,7 @@ public class WohnungController {
         this.assembler.fromResource(request, entity);
         LOG.info("danach > " + entity.toString());
         this.service.update(entity);
-        WohnungResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY);
+        WohnungResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
         return ResponseEntity.ok(resource);
     }
 
@@ -152,7 +152,7 @@ public class WohnungController {
         Wohnung entity = new Wohnung();
         this.assembler.fromResource(request, entity);
         this.service.save(entity);
-        WohnungResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY);
+        WohnungResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
         return ResponseEntity.ok(resource);
     }
 
@@ -192,7 +192,7 @@ public class WohnungController {
         entity.setAdresse(adresse);
         this.service.update(entity);
 
-        WohnungResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY, HateoasRelations.WOHNUNGEN, HateoasRelations.KINDER);
+        WohnungResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
         return ResponseEntity.ok(resource);
     }
 

@@ -5,7 +5,7 @@ import de.muenchen.demo.service.rest.api.SearchResultResource;
 import de.muenchen.demo.service.rest.api.CompanyBaseInfoResource;
 import de.muenchen.demo.service.rest.api.CompanyBaseInfoResourceAssembler;
 import de.muenchen.demo.service.services.CompanyBaseInfoService;
-import de.muenchen.demo.service.util.HateoasRelations;
+import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
 import javax.annotation.security.RolesAllowed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,7 +71,7 @@ public class CompanyBaseInfoController {
             LOG.debug("new companyBaseInfo");
         }
         CompanyBaseInfo entity = this.service.create();
-        CompanyBaseInfoResource resource = this.assembler.toResource(entity, HateoasRelations.NEW, HateoasRelations.SAVE);
+        CompanyBaseInfoResource resource = this.assembler.toResource(entity, HateoasUtil.REL_NEW, HateoasUtil.REL_SAVE);
         return ResponseEntity.ok(resource);
     }
 
@@ -89,7 +89,7 @@ public class CompanyBaseInfoController {
             LOG.debug("read companyBaseInfos");
         }
         CompanyBaseInfo entity = this.service.read(oid);
-        CompanyBaseInfoResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE);
+        CompanyBaseInfoResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE);
         return ResponseEntity.ok(resource);
     }
 
@@ -111,7 +111,7 @@ public class CompanyBaseInfoController {
         this.assembler.fromResource(request, entity);
         LOG.info("danach > " + entity.toString());
         this.service.update(entity);
-        CompanyBaseInfoResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE);
+        CompanyBaseInfoResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE);
         return ResponseEntity.ok(resource);
     }
 
@@ -130,7 +130,7 @@ public class CompanyBaseInfoController {
         CompanyBaseInfo entity = new CompanyBaseInfo();
         this.assembler.fromResource(request, entity);
         this.service.save(entity);
-        CompanyBaseInfoResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE);
+        CompanyBaseInfoResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE);
         return ResponseEntity.ok(resource);
     }
 

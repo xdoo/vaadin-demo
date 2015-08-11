@@ -5,8 +5,7 @@ import com.google.common.collect.Lists;
 import de.muenchen.demo.service.domain.Mandant;
 import de.muenchen.demo.service.rest.MandantController;
 import de.muenchen.demo.service.services.MandantService;
-import de.muenchen.demo.service.util.HateoasRelations;
-import de.muenchen.demo.service.util.HateoasUtil;
+import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -43,10 +42,10 @@ public class MandantResourceAssembler {
     public SearchResultResource<MandantResource> toResource(final List<Mandant> mandant) {
         SearchResultResource<MandantResource> resource = new SearchResultResource<>();
         mandant.stream().forEach((b) -> {
-            resource.add(this.toResource(b, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE));
+            resource.add(this.toResource(b, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE));
         });
         // add query link
-        resource.add(linkTo(methodOn(MandantController.class).queryMandant()).withRel(HateoasUtil.QUERY));
+        resource.add(linkTo(methodOn(MandantController.class).queryMandant()).withRel(HateoasUtil.REL_QUERY));
         return resource;
     }
 
@@ -57,35 +56,35 @@ public class MandantResourceAssembler {
      * @param r
      * @return
      */
-    public MandantResource toResource(final Mandant mandant, HateoasRelations... r) {
+    public MandantResource toResource(final Mandant mandant, String... r) {
         // map
         MandantResource resource = this.dozer.map(mandant, MandantResource.class);
 
         // add links
-        ArrayList<HateoasRelations> relations = Lists.newArrayList(r);
-        if (relations.contains(HateoasRelations.NEW)) {
-            resource.add(linkTo(methodOn(MandantController.class).newMandant()).withRel(HateoasUtil.NEW));
+        ArrayList<String> relations = Lists.newArrayList(r);
+        if (relations.contains(HateoasUtil.REL_NEW)) {
+            resource.add(linkTo(methodOn(MandantController.class).newMandant()).withRel(HateoasUtil.REL_NEW));
 
         }
 
-        if (relations.contains(HateoasRelations.UPDATE)) {
-            resource.add(linkTo(methodOn(MandantController.class).updateMandant(mandant.getOid(), null)).withRel(HateoasUtil.UPDATE));
+        if (relations.contains(HateoasUtil.REL_UPDATE)) {
+            resource.add(linkTo(methodOn(MandantController.class).updateMandant(mandant.getOid(), null)).withRel(HateoasUtil.REL_UPDATE));
         }
 
-        if (relations.contains(HateoasRelations.SELF)) {
+        if (relations.contains(HateoasUtil.REL_SELF)) {
             resource.add(linkTo(methodOn(MandantController.class).readMandant(mandant.getOid())).withSelfRel());
         }
 
-        if (relations.contains(HateoasRelations.DELETE)) {
-            resource.add(linkTo(methodOn(MandantController.class).deleteMandant(mandant.getOid())).withRel(HateoasUtil.DELETE));
+        if (relations.contains(HateoasUtil.REL_DELETE)) {
+            resource.add(linkTo(methodOn(MandantController.class).deleteMandant(mandant.getOid())).withRel(HateoasUtil.REL_DELETE));
         }
 
-        if (relations.contains(HateoasRelations.SAVE)) {
-            resource.add(linkTo(methodOn(MandantController.class).saveMandant(null)).withRel(HateoasUtil.SAVE));
+        if (relations.contains(HateoasUtil.REL_SAVE)) {
+            resource.add(linkTo(methodOn(MandantController.class).saveMandant(null)).withRel(HateoasUtil.REL_SAVE));
         }
 
-        if (relations.contains(HateoasRelations.COPY)) {
-            resource.add(linkTo(methodOn(MandantController.class).copyMandant(mandant.getOid())).withRel(HateoasUtil.COPY));
+        if (relations.contains(HateoasUtil.REL_COPY)) {
+            resource.add(linkTo(methodOn(MandantController.class).copyMandant(mandant.getOid())).withRel(HateoasUtil.REL_COPY));
         }
 
 
@@ -111,11 +110,11 @@ public class MandantResourceAssembler {
         }
     }
 
-    public List<MandantResource> toResource(Set<Mandant> kinder, HateoasRelations hateoasRelations) {
+    public List<MandantResource> toResource(Set<Mandant> kinder, String hateoasRelations) {
 
         List<MandantResource> resource = new ArrayList<>();
         kinder.stream().forEach((b) -> {
-            resource.add(this.toResource(b, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE));
+            resource.add(this.toResource(b, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE));
         });
         return resource;
     }

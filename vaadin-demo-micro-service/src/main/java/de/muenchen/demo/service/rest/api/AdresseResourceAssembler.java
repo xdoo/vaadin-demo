@@ -5,8 +5,7 @@ import com.google.common.collect.Lists;
 import de.muenchen.demo.service.domain.Adresse;
 import de.muenchen.demo.service.rest.AdresseController;
 import de.muenchen.demo.service.services.AdresseService;
-import de.muenchen.demo.service.util.HateoasRelations;
-import de.muenchen.demo.service.util.HateoasUtil;
+import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -44,10 +43,10 @@ public class AdresseResourceAssembler {
     public SearchResultResource<AdresseResource> toResource(final List<Adresse> adresse) {
         SearchResultResource<AdresseResource> resource = new SearchResultResource<>();
         adresse.stream().forEach((b) -> {
-            resource.add(this.toResource(b, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE));
+            resource.add(this.toResource(b, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE));
         });
         // add query link
-        resource.add(linkTo(methodOn(AdresseController.class).queryAdresse()).withRel(HateoasUtil.QUERY));
+        resource.add(linkTo(methodOn(AdresseController.class).queryAdresse()).withRel(HateoasUtil.REL_QUERY));
         List<AdresseResource> liste = resource.getResult();
         return resource;
     }
@@ -59,36 +58,36 @@ public class AdresseResourceAssembler {
      * @param r
      * @return
      */
-    public AdresseResource toResource(final Adresse adresse, HateoasRelations... r) {
+    public AdresseResource toResource(final Adresse adresse, String... r) {
         // map
         AdresseResource resource = this.dozer.map(adresse, AdresseResource.class);
 
         // add links
-        ArrayList<HateoasRelations> relations = Lists.newArrayList(r);
-        if (relations.contains(HateoasRelations.NEW)) {
-            resource.add(linkTo(methodOn(AdresseController.class).newAdresse()).withRel(HateoasUtil.NEW));
+        ArrayList<String> relations = Lists.newArrayList(r);
+        if (relations.contains(HateoasUtil.REL_NEW)) {
+            resource.add(linkTo(methodOn(AdresseController.class).newAdresse()).withRel(HateoasUtil.REL_NEW));
 
         }
 
-        if (relations.contains(HateoasRelations.UPDATE)) {
-            resource.add(linkTo(methodOn(AdresseController.class).updateAdresse(adresse.getOid(), null)).withRel(HateoasUtil.UPDATE));
+        if (relations.contains(HateoasUtil.REL_UPDATE)) {
+            resource.add(linkTo(methodOn(AdresseController.class).updateAdresse(adresse.getOid(), null)).withRel(HateoasUtil.REL_UPDATE));
         }
 
-        if (relations.contains(HateoasRelations.SELF)) {
+        if (relations.contains(HateoasUtil.REL_SELF)) {
             resource.add(linkTo(methodOn(AdresseController.class).readAdresse(adresse.getOid())).withSelfRel());
 
         }
 
-        if (relations.contains(HateoasRelations.DELETE)) {
-            resource.add(linkTo(methodOn(AdresseController.class).deleteAdresse(adresse.getOid())).withRel(HateoasUtil.DELETE));
+        if (relations.contains(HateoasUtil.REL_DELETE)) {
+            resource.add(linkTo(methodOn(AdresseController.class).deleteAdresse(adresse.getOid())).withRel(HateoasUtil.REL_DELETE));
         }
 
-        if (relations.contains(HateoasRelations.SAVE)) {
-            resource.add(linkTo(methodOn(AdresseController.class).saveAdresse(null)).withRel(HateoasUtil.SAVE));
+        if (relations.contains(HateoasUtil.REL_SAVE)) {
+            resource.add(linkTo(methodOn(AdresseController.class).saveAdresse(null)).withRel(HateoasUtil.REL_SAVE));
         }
 
-        if (relations.contains(HateoasRelations.COPY)) {
-            resource.add(linkTo(methodOn(AdresseController.class).copyAdresse(adresse.getOid())).withRel(HateoasUtil.COPY));
+        if (relations.contains(HateoasUtil.REL_COPY)) {
+            resource.add(linkTo(methodOn(AdresseController.class).copyAdresse(adresse.getOid())).withRel(HateoasUtil.REL_COPY));
         }
 
         return resource;
@@ -123,11 +122,11 @@ public class AdresseResourceAssembler {
      * @param hateoasRelations
      * @return
      */
-    public List<AdresseResource> toResource(Set<Adresse> adresse, HateoasRelations hateoasRelations) {
+    public List<AdresseResource> toResource(Set<Adresse> adresse, String hateoasRelations) {
 
         List<AdresseResource> resource = new ArrayList<>();
         adresse.stream().forEach((b) -> {
-            resource.add(this.toResource(b, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE));
+            resource.add(this.toResource(b, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE));
         });
         return resource;
     }

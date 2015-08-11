@@ -5,8 +5,7 @@ import com.google.common.collect.Lists;
 import de.muenchen.demo.service.domain.Wohnung;
 import de.muenchen.demo.service.rest.WohnungController;
 import de.muenchen.demo.service.services.WohnungService;
-import de.muenchen.demo.service.util.HateoasRelations;
-import de.muenchen.demo.service.util.HateoasUtil;
+import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -44,10 +43,10 @@ public class WohnungResourceAssembler {
     public SearchResultResource<WohnungResource> toResource(final List<Wohnung> wohnung) {
         SearchResultResource<WohnungResource> resource = new SearchResultResource<>();
         wohnung.stream().forEach((b) -> {
-            resource.add(this.toResource(b, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE));
+            resource.add(this.toResource(b, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE));
         });
         // add query link
-        resource.add(linkTo(methodOn(WohnungController.class).queryWohnung()).withRel(HateoasUtil.QUERY));
+        resource.add(linkTo(methodOn(WohnungController.class).queryWohnung()).withRel(HateoasUtil.REL_QUERY));
         return resource;
     }
 
@@ -58,36 +57,36 @@ public class WohnungResourceAssembler {
      * @param r
      * @return
      */
-    public WohnungResource toResource(final Wohnung wohnung, HateoasRelations... r) {
+    public WohnungResource toResource(final Wohnung wohnung, String... r) {
         // map
         WohnungResource resource = this.dozer.map(wohnung, WohnungResource.class);
 
         // add links
-        ArrayList<HateoasRelations> relations = Lists.newArrayList(r);
-        if (relations.contains(HateoasRelations.NEW)) {
-            resource.add(linkTo(methodOn(WohnungController.class).newWohnung()).withRel(HateoasUtil.NEW));
+        ArrayList<String> relations = Lists.newArrayList(r);
+        if (relations.contains(HateoasUtil.REL_NEW)) {
+            resource.add(linkTo(methodOn(WohnungController.class).newWohnung()).withRel(HateoasUtil.REL_NEW));
 
         }
 
-        if (relations.contains(HateoasRelations.UPDATE)) {
-            resource.add(linkTo(methodOn(WohnungController.class).updateWohnung(wohnung.getOid(), null)).withRel(HateoasUtil.UPDATE));
+        if (relations.contains(HateoasUtil.REL_UPDATE)) {
+            resource.add(linkTo(methodOn(WohnungController.class).updateWohnung(wohnung.getOid(), null)).withRel(HateoasUtil.REL_UPDATE));
         }
 
-        if (relations.contains(HateoasRelations.SELF)) {
+        if (relations.contains(HateoasUtil.REL_SELF)) {
             resource.add(linkTo(methodOn(WohnungController.class).readWohnung(wohnung.getOid())).withSelfRel());
 
         }
 
-        if (relations.contains(HateoasRelations.DELETE)) {
-            resource.add(linkTo(methodOn(WohnungController.class).deleteWohnung(wohnung.getOid())).withRel(HateoasUtil.DELETE));
+        if (relations.contains(HateoasUtil.REL_DELETE)) {
+            resource.add(linkTo(methodOn(WohnungController.class).deleteWohnung(wohnung.getOid())).withRel(HateoasUtil.REL_DELETE));
         }
 
-        if (relations.contains(HateoasRelations.SAVE)) {
-            resource.add(linkTo(methodOn(WohnungController.class).saveWohnung(null)).withRel(HateoasUtil.SAVE));
+        if (relations.contains(HateoasUtil.REL_SAVE)) {
+            resource.add(linkTo(methodOn(WohnungController.class).saveWohnung(null)).withRel(HateoasUtil.REL_SAVE));
         }
 
-        if (relations.contains(HateoasRelations.COPY)) {
-            resource.add(linkTo(methodOn(WohnungController.class).copyWohnung(wohnung.getOid())).withRel(HateoasUtil.COPY));
+        if (relations.contains(HateoasUtil.REL_COPY)) {
+            resource.add(linkTo(methodOn(WohnungController.class).copyWohnung(wohnung.getOid())).withRel(HateoasUtil.REL_COPY));
         }
 
         return resource;
@@ -121,11 +120,11 @@ public class WohnungResourceAssembler {
      * @param hateoasRelations
      * @return
      */
-    public List<WohnungResource> toResource(Set<Wohnung> wohnung, HateoasRelations hateoasRelations) {
+    public List<WohnungResource> toResource(Set<Wohnung> wohnung, String hateoasRelations) {
 
         List<WohnungResource> resource = new ArrayList<>();
         wohnung.stream().forEach((b) -> {
-            resource.add(this.toResource(b, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE));
+            resource.add(this.toResource(b, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE));
         });
         return resource;
     }

@@ -14,4 +14,15 @@
                 <exec.executable>java</exec.executable>
             </properties>
         </action>
+        <action>
+            <actionName>CUSTOM-build without tests</actionName>
+            <displayName>build without tests</displayName>
+            <goals>
+                <goal>clean</goal>
+                <goal>install</goal>
+            </goals>
+            <properties>
+                <skipTests>true</skipTests>
+            </properties>
+        </action>
     </actions>

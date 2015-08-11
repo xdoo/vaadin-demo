@@ -5,8 +5,7 @@ import com.google.common.collect.Lists;
 import de.muenchen.demo.service.domain.Buerger;
 import de.muenchen.demo.service.rest.BuergerController;
 import de.muenchen.demo.service.services.BuergerService;
-import de.muenchen.demo.service.util.HateoasRelations;
-import de.muenchen.demo.service.util.HateoasUtil;
+import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -42,20 +41,11 @@ public class BuergerResourceAssembler {
      */
     public SearchResultResource<BuergerResource> toResource(final List<Buerger> buerger) {
         SearchResultResource<BuergerResource> resource = new SearchResultResource<>();
-        buerger.stream().forEach((b) -> {
-            resource.add(this.toResource(b, 
-                    HateoasRelations.SELF, 
-                    HateoasRelations.NEW, 
-                    HateoasRelations.DELETE, 
-                    HateoasRelations.UPDATE, 
-                    HateoasRelations.COPY, 
-                    // Relationen
-                    HateoasRelations.KINDER, 
-                    HateoasRelations.PASS, 
-                    HateoasRelations.WOHNUNGEN));
+        buerger.stream().forEach((e) -> {
+            resource.add(this.assembleWithAllLinks(e));
         });
         // add query link
-        resource.add(linkTo(methodOn(BuergerController.class).queryBuerger()).withRel(HateoasUtil.QUERY));
+        resource.add(linkTo(methodOn(BuergerController.class).queryBuerger()).withRel(HateoasUtil.REL_QUERY));
         return resource;
     }
 
@@ -66,47 +56,55 @@ public class BuergerResourceAssembler {
      * @param r
      * @return
      */
-    public BuergerResource toResource(final Buerger buerger, HateoasRelations... r) {
+    public BuergerResource toResource(final Buerger buerger, String... r) {
         // map
         BuergerResource resource = this.dozer.map(buerger, BuergerResource.class);
 
         // add links
-        ArrayList<HateoasRelations> relations = Lists.newArrayList(r);
-        if (relations.contains(HateoasRelations.NEW)) {
-            resource.add(linkTo(methodOn(BuergerController.class).newBuerger()).withRel(HateoasUtil.NEW));
+        ArrayList<String> relations = Lists.newArrayList(r);
+        if (relations.contains(HateoasUtil.REL_NEW)) {
+            resource.add(linkTo(methodOn(BuergerController.class).newBuerger()).withRel(HateoasUtil.REL_NEW));
 
         }
 
-        if (relations.contains(HateoasRelations.UPDATE)) {
-            resource.add(linkTo(methodOn(BuergerController.class).updateBuerger(buerger.getOid(), null)).withRel(HateoasUtil.UPDATE));
+        if (relations.contains(HateoasUtil.REL_UPDATE)) {
+            resource.add(linkTo(methodOn(BuergerController.class).updateBuerger(buerger.getOid(), null)).withRel(HateoasUtil.REL_UPDATE));
         }
 
-        if (relations.contains(HateoasRelations.SELF)) {
+        if (relations.contains(HateoasUtil.REL_SELF)) {
             resource.add(linkTo(methodOn(BuergerController.class).readBuerger(buerger.getOid())).withSelfRel());
         }
 
-        if (relations.contains(HateoasRelations.DELETE)) {
-            resource.add(linkTo(methodOn(BuergerController.class).deleteBuerger(buerger.getOid())).withRel(HateoasUtil.DELETE));
+        if (relations.contains(HateoasUtil.REL_DELETE)) {
+            resource.add(linkTo(methodOn(BuergerController.class).deleteBuerger(buerger.getOid())).withRel(HateoasUtil.REL_DELETE));
         }
 
-        if (relations.contains(HateoasRelations.SAVE)) {
-            resource.add(linkTo(methodOn(BuergerController.class).saveBuerger(null)).withRel(HateoasUtil.SAVE));
+        if (relations.contains(HateoasUtil.REL_SAVE)) {
+            resource.add(linkTo(methodOn(BuergerController.class).saveBuerger(null)).withRel(HateoasUtil.REL_SAVE));
         }
 
-        if (relations.contains(HateoasRelations.COPY)) {
-            resource.add(linkTo(methodOn(BuergerController.class).copyBuerger(buerger.getOid())).withRel(HateoasUtil.COPY));
-        }
-        if (relations.contains(HateoasRelations.WOHNUNGEN)) {
-            resource.add(linkTo(methodOn(BuergerController.class).readBuergerWohnungen(buerger.getOid())).withRel(HateoasUtil.WOHNUNGEN));
+        if (relations.contains(HateoasUtil.REL_COPY)) {
+            resource.add(linkTo(methodOn(BuergerController.class).copyBuerger(buerger.getOid())).withRel(HateoasUtil.REL_COPY));
         }
         
-        if (relations.contains(HateoasRelations.PASS)) {
-            resource.add(linkTo(methodOn(BuergerController.class).readBuergerPass(buerger.getOid())).withRel(HateoasUtil.PASS));
+        if (relations.contains(de.muenchen.vaadin.demo.api.rest.BuergerResource.WOHNUNGEN)) {
+            resource.add(linkTo(methodOn(BuergerController.class).readBuergerWohnungen(buerger.getOid())).withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.WOHNUNGEN));
         }
         
-        if (relations.contains(HateoasRelations.KINDER)) {
-            resource.add(linkTo(methodOn(BuergerController.class).readBuergerKinder(buerger.getOid())).withRel(HateoasUtil.KINDER));
-
+        if (relations.contains(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_WOHNUNG)) {
+            resource.add(linkTo(methodOn(BuergerController.class).createWhonungBuerger(buerger.getOid(), null)).withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_WOHNUNG));
+        }
+        
+        if (relations.contains(de.muenchen.vaadin.demo.api.rest.BuergerResource.PAESSE)) {
+            resource.add(linkTo(methodOn(BuergerController.class).readBuergerPass(buerger.getOid())).withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.PAESSE));
+        }
+        
+        if (relations.contains(de.muenchen.vaadin.demo.api.rest.BuergerResource.KINDER)) {
+            resource.add(linkTo(methodOn(BuergerController.class).readBuergerKinder(buerger.getOid())).withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.KINDER));
+        }
+        
+        if (relations.contains(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_KIND)) {
+            resource.add(linkTo(methodOn(BuergerController.class).createKindBuerger(buerger.getOid(), null)).withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_KIND));
         }
 
         return resource;
@@ -140,13 +138,35 @@ public class BuergerResourceAssembler {
         }
     }
 
-    public List<BuergerResource> toResource(Set<Buerger> kinder, HateoasRelations hateoasRelations) {
+    public List<BuergerResource> toResource(Set<Buerger> kinder, String hateoasRelations) {
 
         List<BuergerResource> resource = new ArrayList<>();
         kinder.stream().forEach((b) -> {
-            resource.add(this.toResource(b, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE));
+            resource.add(this.toResource(b, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE));
         });
         return resource;
+    }
+    
+        /**
+     * 
+     * 
+     * @param entity
+     * @return 
+     */
+    public BuergerResource assembleWithAllLinks(Buerger entity) {
+        return this.toResource(entity, 
+                HateoasUtil.REL_SELF, 
+                HateoasUtil.REL_NEW, 
+                HateoasUtil.REL_DELETE, 
+                HateoasUtil.REL_UPDATE, 
+                HateoasUtil.REL_COPY, 
+                // Relationen
+                de.muenchen.vaadin.demo.api.rest.BuergerResource.WOHNUNGEN, 
+                de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_WOHNUNG,
+                de.muenchen.vaadin.demo.api.rest.BuergerResource.KINDER,
+                de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_KIND, 
+                de.muenchen.vaadin.demo.api.rest.BuergerResource.PAESSE,
+                de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_PASS);
     }
 
 }

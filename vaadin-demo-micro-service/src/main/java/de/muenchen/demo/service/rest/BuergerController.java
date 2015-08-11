@@ -18,7 +18,7 @@ import de.muenchen.demo.service.services.PassService;
 import de.muenchen.demo.service.services.StaatsangehoerigkeitService;
 import de.muenchen.demo.service.services.UserService;
 import de.muenchen.demo.service.services.WohnungService;
-import de.muenchen.demo.service.util.HateoasRelations;
+import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
 import java.util.List;
 import java.util.Set;
 import javax.annotation.security.RolesAllowed;
@@ -119,7 +119,7 @@ public class BuergerController {
         }
         System.out.println(URL);
         Buerger entity = this.service.create();
-        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.NEW, HateoasRelations.SAVE);
+        BuergerResource resource = this.assembler.toResource(entity, HateoasUtil.REL_NEW, HateoasUtil.REL_SAVE);
         return ResponseEntity.ok(resource);
     }
 
@@ -137,7 +137,7 @@ public class BuergerController {
             LOG.debug("copy buerger");
         }
         Buerger entity = this.service.copy(oid);
-        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY);
+        BuergerResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
         return ResponseEntity.ok(resource);
     }
 
@@ -154,7 +154,7 @@ public class BuergerController {
             LOG.debug("read buerger");
         }
         Buerger entity = this.service.read(oid);
-        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY);
+        BuergerResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
         return ResponseEntity.ok(resource);
     }
 
@@ -181,15 +181,7 @@ public class BuergerController {
         if (entity != null) {
             this.assembler.fromResource(request, entity);
             this.service.update(entity);
-            BuergerResource resource = this.assembler.toResource(entity, 
-                    HateoasRelations.SELF, 
-                    HateoasRelations.NEW, 
-                    HateoasRelations.DELETE, 
-                    HateoasRelations.UPDATE, 
-                    HateoasRelations.COPY, 
-                    // Relationen
-                    HateoasRelations.WOHNUNGEN, 
-                    HateoasRelations.KINDER);
+            BuergerResource resource = this.assembler.assembleWithAllLinks(entity);
             return ResponseEntity.ok(resource);
         } else {
             LOG.warn(String.format("Could not find resource with id '%s'.", oid));
@@ -212,7 +204,7 @@ public class BuergerController {
         Buerger entity = new Buerger();
         this.assembler.fromResource(request, entity);
         this.service.save(entity);
-        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY, HateoasRelations.WOHNUNGEN, HateoasRelations.KINDER);
+        BuergerResource resource = this.assembler.assembleWithAllLinks(entity);
         return ResponseEntity.ok(resource);
     }
 
@@ -246,7 +238,7 @@ public class BuergerController {
         }
         Set<Wohnung> wohnungen = this.service.read(oid).getWohnungen();
 
-        List<WohnungResource> resources = wohnungAssembler.toResource(wohnungen, HateoasRelations.SELF);
+        List<WohnungResource> resources = wohnungAssembler.toResource(wohnungen, HateoasUtil.REL_SELF);
         return ResponseEntity.ok(resources);
     }
 
@@ -288,7 +280,7 @@ public class BuergerController {
         entity.getKinder().add(kind);
         this.service.update(entity);
 
-        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY, HateoasRelations.WOHNUNGEN, HateoasRelations.KINDER);
+        BuergerResource resource = this.assembler.assembleWithAllLinks(entity);
         return ResponseEntity.ok(resource);
     }
 
@@ -312,7 +304,7 @@ public class BuergerController {
         entity.getKinder().add(kind);
         this.service.update(entity);
 
-        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY, HateoasRelations.WOHNUNGEN, HateoasRelations.KINDER);
+        BuergerResource resource = this.assembler.assembleWithAllLinks(entity);
         return ResponseEntity.ok(resource);
     }
 
@@ -336,7 +328,7 @@ public class BuergerController {
         entity.getWohnungen().add(wohnung);
         this.service.update(entity);
 
-        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY, HateoasRelations.WOHNUNGEN, HateoasRelations.KINDER);
+        BuergerResource resource = this.assembler.assembleWithAllLinks(entity);
         return ResponseEntity.ok(resource);
     }
 
@@ -360,7 +352,7 @@ public class BuergerController {
         entity.getWohnungen().add(wohnung);
         this.service.update(entity);
 
-        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY, HateoasRelations.WOHNUNGEN, HateoasRelations.KINDER);
+        BuergerResource resource = this.assembler.assembleWithAllLinks(entity);
         return ResponseEntity.ok(resource);
     }
 
@@ -384,7 +376,7 @@ public class BuergerController {
         entity.getStaatsangehoerigkeiten().add(staats);
         this.service.update(entity);
 
-        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY, HateoasRelations.WOHNUNGEN, HateoasRelations.KINDER);
+        BuergerResource resource = this.assembler.assembleWithAllLinks(entity);
         return ResponseEntity.ok(resource);
     }
 
@@ -408,7 +400,7 @@ public class BuergerController {
         entity.getPass().add(pass);
         this.service.update(entity);
 
-        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY, HateoasRelations.WOHNUNGEN, HateoasRelations.KINDER, HateoasRelations.PASS);
+        BuergerResource resource = this.assembler.assembleWithAllLinks(entity);
         return ResponseEntity.ok(resource);
     }
 
@@ -426,7 +418,7 @@ public class BuergerController {
         }
         Set<Pass> pass = this.service.read(oid).getPass();
 
-        List<PassResource> resources = passAssembler.toResource(pass, HateoasRelations.SELF);
+        List<PassResource> resources = passAssembler.toResource(pass, HateoasUtil.REL_SELF);
         return ResponseEntity.ok(resources);
     }
     /**
@@ -449,7 +441,9 @@ public class BuergerController {
         entity.setSachbearbeiter(sachbearbeiter);
         this.service.update(entity);
 
-        BuergerResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY, HateoasRelations.WOHNUNGEN, HateoasRelations.KINDER, HateoasRelations.PASS);
+        BuergerResource resource = this.assembler.assembleWithAllLinks(entity);
         return ResponseEntity.ok(resource);
     }
+    
+
 }
