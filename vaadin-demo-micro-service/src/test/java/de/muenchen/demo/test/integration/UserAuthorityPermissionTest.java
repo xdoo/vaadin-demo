@@ -62,6 +62,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.hateoas.hal.Jackson2HalModule;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -247,13 +248,13 @@ public class UserAuthorityPermissionTest {
 
         /*Test save Authority Permission */
         String URL = "http://localhost:" + port + "/authorityPermission/save/P74/A74";
-        AuthorityPermissionResource response4 = restTemplate.getForEntity(URL, AuthorityPermissionResource.class).getBody();
-        assertEquals("USER", response4.getId().getAuthority().getAuthority());
+        ResponseEntity<AuthorityPermissionResource> response4 = restTemplate.getForEntity(URL, AuthorityPermissionResource.class);
+        assertNotNull(response4.getBody().getId());
 
         /*Test save User Authority  */
         String URL2 = "http://localhost:" + port + "/userAuthority/save/U74/A74";
         UserAuthorityResource response5 = restTemplate.getForEntity(URL2, UserAuthorityResource.class).getBody();
-        assertEquals("USER", response5.getId().getAuthority().getAuthority());
+        assertNotNull(response5.getId());
 
     }
 

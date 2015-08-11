@@ -128,12 +128,7 @@ public class BuergerResourceAssembler {
             entity.setVorname(resource.getVorname());
             entity.setNachname(resource.getNachname());
             entity.setGeburtsdatum(resource.getGeburtsdatum());
-            entity.setKinder(resource.getKinder());
-            entity.setSachbearbeiter(resource.getSachbearbeiter());
-            entity.setPass(resource.getPass());
-            entity.setStaatsangehoerigkeitReferences(resource.getStaatsangehoerigkeitReferences());
-            entity.setStaatsangehoerigkeiten(resource.getStaatsangehoerigkeiten());
-            entity.setWohnungen(resource.getWohnungen());
+            
 
             // end field mapping
         } else {

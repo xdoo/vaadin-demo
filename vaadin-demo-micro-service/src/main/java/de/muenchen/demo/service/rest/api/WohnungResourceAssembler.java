@@ -108,7 +108,6 @@ public class WohnungResourceAssembler {
 //            this.dozer.map(resource, entity);
             entity.setOid(resource.getOid());
             // start field mapping
-            entity.setAdresse(resource.getAdresse());
             entity.setAusrichtung(resource.getAusrichtung());
             entity.setStock(resource.getStock());
             // end field mapping
