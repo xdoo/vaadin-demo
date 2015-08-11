@@ -1,12 +1,5 @@
 package de.muenchen.demo.service;
 
-import de.muenchen.demo.service.domain.AuthorityPermissionRepository;
-import de.muenchen.demo.service.domain.AuthorityRepository;
-import de.muenchen.demo.service.config.InitApplication;
-import de.muenchen.demo.service.domain.MandantRepository;
-import de.muenchen.demo.service.domain.PermissionRepository;
-import de.muenchen.demo.service.domain.UserAuthorityRepository;
-import de.muenchen.demo.service.domain.UserRepository;
 import java.io.IOException;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -20,7 +13,6 @@ import org.dozer.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -56,15 +48,6 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
 
-//    @Bean
-//    CommandLineRunner init(UserRepository usersRepo, AuthorityRepository authRepo, PermissionRepository permRepo, UserAuthorityRepository userAuthRepo, AuthorityPermissionRepository authPermRepo, MandantRepository mandantRepo) {
-//
-//        return (String... arg0) -> {
-//            InitApplication initApplication = new InitApplication(usersRepo, authRepo, permRepo, userAuthRepo, authPermRepo,mandantRepo);
-//            initApplication.init();
-//        };
-//
-//    }
 
 //    Dozer
     @Bean
