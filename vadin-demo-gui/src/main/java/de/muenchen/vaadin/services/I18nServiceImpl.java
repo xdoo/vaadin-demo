@@ -37,6 +37,7 @@ public class I18nServiceImpl implements I18nService {
        this.messages.put("m1.buerger.navigation.button.label", "Bürger Pflege");
        this.messages.put("m1.buerger.form.update.headline.label", "Bürger bearbeiten");
        this.messages.put("m1.buerger.form.create.headline.label", "Bürger erstellen");
+       this.messages.put("m1.buerger.form.read.headline.label", "Bürger Details");
        this.messages.put("m1.buerger.form.update.button.label", "aktualisieren");
        this.messages.put("m1.buerger.form.create.button.label", "neu");
        this.messages.put("m1.buerger.form.cancel.button.label", "abbrechen");

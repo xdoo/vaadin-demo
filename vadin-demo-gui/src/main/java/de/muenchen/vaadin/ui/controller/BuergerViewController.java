@@ -158,7 +158,7 @@ public class BuergerViewController implements Serializable {
     }
     
     public Buerger saveBuergerKind(Buerger entity) {
-        return null;
+        return service.saveKind(this.current.getBean(), entity);
     }
     
     /**
@@ -239,7 +239,9 @@ public class BuergerViewController implements Serializable {
     }
     
     public BuergerTable generateChildTable(String navigateToForEdit, String navigateToForSelect, String from) {
-        return this.createTable(navigateToForEdit, navigateToForSelect, from, this.queryKinder(this.current.getBean()));
+        BuergerTable table = this.createTable(navigateToForEdit, navigateToForSelect, from, this.queryKinder(this.current.getBean()));
+        table.setCopy(Boolean.FALSE);
+        return table;
     }
 
     public BuergerTable generateTable(String navigateToForEdit, String navigateToForSelect, String from) { 
@@ -324,6 +326,14 @@ public class BuergerViewController implements Serializable {
         // save child
         if(event.getType().equals(EventType.SAVE_CHILD)) {
             LOG.debug("save child event");
+            // Service Operation ausführen
+            this.saveBuergerKind(event.getEntity());
+            
+            GenericSuccessNotification succes = new GenericSuccessNotification("Bürger erstellt", "Der Bürger wurde erfolgreich erstellt und gespeichert."); // TODO i18n
+            succes.show(Page.getCurrent());
+            
+            // Zur Seite wechseln
+            this.navigator.navigateTo(event.getNavigateTo());
             
         }
         

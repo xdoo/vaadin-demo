@@ -73,12 +73,17 @@ public class BuergerRestClientImpl implements BuergerRestClient {
     }
     
     @Override
-    public Buerger saveBuergerKind(Buerger buerger, Buerger child, RestTemplate restTemplate) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Buerger saveBuergerKind(Buerger buerger, Buerger kind, RestTemplate restTemplate) {
+        Optional<Link> link = HateoasUtil.findLinkForRel(BuergerResource.SAVE_KIND, buerger.getLinks());
+        return this.writeSingleSource(link, kind, restTemplate);
     }
     
     public Buerger writeSingleSource(String rel, Buerger buerger, RestTemplate restTemplate) {
         Optional<Link> link = HateoasUtil.findLinkForRel(rel, buerger.getLinks());
+        return this.writeSingleSource(link, buerger, restTemplate);
+    }
+    
+    public Buerger writeSingleSource(Optional<Link> link, Buerger buerger, RestTemplate restTemplate) {
         if(link.isPresent()) {
             ResponseEntity<BuergerResource> resource = restTemplate.postForEntity(link.get().getHref(), buerger, BuergerResource.class);
             return BuergerAssembler.fromResource(resource.getBody());

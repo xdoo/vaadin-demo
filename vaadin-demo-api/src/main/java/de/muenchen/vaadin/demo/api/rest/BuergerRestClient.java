@@ -96,8 +96,21 @@ public interface BuergerRestClient {
      */
     public void deleteBuerger(List<Link> links, RestTemplate restTemplate);
     
+    /**
+     * 
+     * @param links
+     * @param restTemplate
+     * @return 
+     */
     public List<Buerger> queryKinder(List<Link> links, RestTemplate restTemplate);
     
-    public Buerger saveBuergerKind(Buerger buerger, Buerger child, RestTemplate restTemplate);
+    /**
+     * 
+     * @param buerger
+     * @param kind
+     * @param restTemplate
+     * @return 
+     */
+    public Buerger saveBuergerKind(Buerger buerger, Buerger kind, RestTemplate restTemplate);
     
 }

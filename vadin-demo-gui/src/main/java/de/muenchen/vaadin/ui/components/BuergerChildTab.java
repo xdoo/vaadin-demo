@@ -34,6 +34,7 @@ public class BuergerChildTab extends CustomComponent {
         // Gesamtlayout
         VerticalLayout vlayout = new VerticalLayout(hlayout, table);
         vlayout.setSpacing(true);
+        vlayout.setMargin(true);
         
         setCompositionRoot(vlayout);
     } 

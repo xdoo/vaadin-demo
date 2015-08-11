@@ -75,4 +75,6 @@ public interface BuergerService {
     
     public List<Buerger> queryKinder(Buerger entity);
     
+    public Buerger saveKind(Buerger entity, Buerger kind);
+    
 }

@@ -231,7 +231,7 @@ public class BuergerController {
      * @return
      */
     @RolesAllowed({"PERM_readBuergerWohnungen"})
-    @RequestMapping(value = "/Wohnungen/{oid}", method = {RequestMethod.GET})
+    @RequestMapping(value = "/wohnungen/{oid}", method = {RequestMethod.GET})
     public ResponseEntity readBuergerWohnungen(@PathVariable("oid") String oid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("read buerger Wohunungen");
@@ -268,7 +268,7 @@ public class BuergerController {
      * @return
      */
     @RolesAllowed({"PERM_createKindBuerger"})
-    @RequestMapping(value = "create/kind/{oid}", method = {RequestMethod.POST})
+    @RequestMapping(value = "/create/kind/{oid}", method = {RequestMethod.POST})
     public ResponseEntity createKindBuerger(@PathVariable("oid") String oid, @RequestBody BuergerResource request) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Create Kind buerger");

@@ -5,6 +5,7 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.components.BuergerChildTabSheet;
 import de.muenchen.vaadin.ui.components.BuergerChildTab;
@@ -42,6 +43,7 @@ public class BuergerReadView extends DefaultBuergerView {
         
         // tab sheet
         TabSheet tabSheet = new TabSheet();
+        tabSheet.addStyleName(ValoTheme.TABSHEET_FRAMED);
         
         // add kind tab
         TabSheet.Tab kindTab = tabSheet.addTab(new BuergerChildTab(controller, BuergerUpdateView.NAME, BuergerReadView.NAME, BuergerCreateChildView.NAME, NAME));

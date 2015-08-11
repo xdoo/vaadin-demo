@@ -70,7 +70,7 @@ public class BuergerReadForm extends CustomComponent {
         layout.setMargin(true);
         
         // headline
-        Label headline = new Label(controller.getMsg().readText(controller.getI18nBasePath(), I18nPaths.I18N_FORM_UPDATE_HEADLINE_LABEL));
+        Label headline = new Label(controller.getMsg().readText(controller.getI18nBasePath(), I18nPaths.I18N_FORM_READ_HEADLINE_LABEL));
         headline.addStyleName(ValoTheme.LABEL_H3);
         layout.addComponent(headline);
 

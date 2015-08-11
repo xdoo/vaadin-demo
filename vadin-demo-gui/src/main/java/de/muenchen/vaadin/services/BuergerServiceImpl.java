@@ -90,5 +90,10 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
     public List<Buerger> queryKinder(Buerger entity) {
         return client.queryKinder(entity.getLinks(), this.template);
     }
+
+    @Override
+    public Buerger saveKind(Buerger entity, Buerger kind) {
+        return client.saveBuergerKind(entity, kind, template);
+    }
   
 }
