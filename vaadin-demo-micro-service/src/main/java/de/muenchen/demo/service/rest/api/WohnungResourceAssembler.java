@@ -85,8 +85,8 @@ public class WohnungResourceAssembler {
             resource.add(linkTo(methodOn(WohnungController.class).saveWohnung(null)).withRel(HateoasUtil.REL_SAVE));
         }
         
-         if (relations.contains(HateoasRelations.ADRESSE)) {
-            resource.add(linkTo(methodOn(WohnungController.class).readWohnungAdresse(wohnung.getOid())).withRel(HateoasUtil.ADRESSE));
+         if (relations.contains(WohnungResource.ADRESSEN)) {
+            resource.add(linkTo(methodOn(WohnungController.class).readWohnungAdresse(wohnung.getOid())).withRel(WohnungResource.ADRESSEN));
         }
 
         if (relations.contains(HateoasUtil.REL_COPY)) {
@@ -130,6 +130,18 @@ public class WohnungResourceAssembler {
             resource.add(this.toResource(b, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE));
         });
         return resource;
+    }
+
+    public WohnungResource assembleWithAllLinks(Wohnung entity) {
+        return this.toResource(entity,
+                HateoasUtil.REL_SELF,
+                HateoasUtil.REL_NEW,
+                HateoasUtil.REL_DELETE,
+                HateoasUtil.REL_UPDATE,
+                HateoasUtil.REL_COPY,
+                // Relationen
+                WohnungResource.ADRESSEN
+        );
     }
 
 }

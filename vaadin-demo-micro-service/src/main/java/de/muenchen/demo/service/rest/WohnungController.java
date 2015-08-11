@@ -116,7 +116,7 @@ public class WohnungController {
             LOG.debug("read wohnung");
         }
         Wohnung entity = this.service.read(oid);
-        WohnungResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
+        WohnungResource resource = this.assembler.assembleWithAllLinks(entity);
         return ResponseEntity.ok(resource);
     }
 
@@ -138,7 +138,7 @@ public class WohnungController {
         this.assembler.fromResource(request, entity);
         LOG.info("danach > " + entity.toString());
         this.service.update(entity);
-        WohnungResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
+        WohnungResource resource = this.assembler.assembleWithAllLinks(entity);
         return ResponseEntity.ok(resource);
     }
 
@@ -157,7 +157,7 @@ public class WohnungController {
         Wohnung entity = new Wohnung();
         this.assembler.fromResource(request, entity);
         this.service.save(entity);
-        WohnungResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
+        WohnungResource resource = this.assembler.assembleWithAllLinks(entity);
         return ResponseEntity.ok(resource);
     }
 
@@ -191,7 +191,7 @@ public class WohnungController {
         }
         Adresse adresse = adresseService.read(this.service.read(oid).getAdresse().getOid());
 
-        AdresseResource resources = adresseAssembler.toResource(adresse, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY,HateoasRelations.ADRESSE);
+        AdresseResource resources = adresseAssembler.toResource(adresse, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY, WohnungResource.ADRESSEN);
         return ResponseEntity.ok(resources);
     }
 
@@ -216,7 +216,7 @@ public class WohnungController {
         entity.setAdresse(adresse);
         this.service.update(entity);
 
-        WohnungResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
+        WohnungResource resource = this.assembler.assembleWithAllLinks(entity);
         return ResponseEntity.ok(resource);
     }
 

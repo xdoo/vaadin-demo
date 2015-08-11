@@ -71,6 +71,8 @@ public class AuthorityResourceAssembler {
         if (relations.contains(HateoasUtil.REL_UPDATE)) {
             resource.add(linkTo(methodOn(AuthorityController.class).updateAuthority(authoritys.getOid(), null)).withRel(HateoasUtil.REL_UPDATE));
         }
+        
+        if (relations.contains(HateoasUtil.REL_SELF)) {
             resource.add(linkTo(methodOn(AuthorityController.class).readAuthority(authoritys.getOid())).withSelfRel());
         }
 
@@ -80,6 +82,9 @@ public class AuthorityResourceAssembler {
 
         if (relations.contains(HateoasUtil.REL_SAVE)) {
             resource.add(linkTo(methodOn(AuthorityController.class).saveAuthority(null)).withRel(HateoasUtil.REL_SAVE));
+        }
+        if (relations.contains(HateoasUtil.REL_COPY)) {
+            resource.add(linkTo(methodOn(AuthorityController.class).copyAuthority(authoritys.getOid())).withRel(HateoasUtil.REL_COPY));
         }
 
         return resource;
@@ -119,5 +124,3 @@ public class AuthorityResourceAssembler {
     }
 
 }
-
-        if (relations.contains(HateoasUtil.REL_SELF)) {

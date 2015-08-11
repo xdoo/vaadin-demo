@@ -82,6 +82,10 @@ public class UserResourceAssembler {
         if (relations.contains(HateoasUtil.REL_SAVE)) {
             resource.add(linkTo(methodOn(UserController.class).saveUser(null)).withRel(HateoasUtil.REL_SAVE));
         }
+        
+        if (relations.contains(HateoasUtil.REL_COPY)) {
+            resource.add(linkTo(methodOn(UserController.class).saveUser(null)).withRel(HateoasUtil.REL_COPY));
+        }
 
         return resource;
     }
@@ -121,9 +125,18 @@ public class UserResourceAssembler {
 
         List<UserResource> resource = new ArrayList<>();
         user.stream().forEach((b) -> {
-            resource.add(this.toResource(b, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE));
+            resource.add(this.toResource(b, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY));
         });
         return resource;
     }
 
+    public UserResource assembleWithAllLinks(User entity) {
+        return this.toResource(entity,
+                HateoasUtil.REL_SELF,
+                HateoasUtil.REL_NEW,
+                HateoasUtil.REL_DELETE,
+                HateoasUtil.REL_UPDATE,
+                HateoasUtil.REL_COPY
+        );
+    }
 }

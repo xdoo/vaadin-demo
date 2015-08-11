@@ -163,7 +163,7 @@ public class WohnungTest {
         assertNotNull(response.getLink("copy"));
         assertNotNull(response.getLink("self"));
         assertNotNull(response.getLink("delete"));
-        assertNotNull(response.getLink("adresse"));
+        assertNotNull(response.getLink("adressen"));
 
     }
 
@@ -185,7 +185,7 @@ public class WohnungTest {
         assertNotNull(response.getLink("copy"));
         assertNotNull(response.getLink("self"));
         assertNotNull(response.getLink("delete"));
-        assertNotNull(response.getLink("adresse"));
+        assertNotNull(response.getLink("adressen"));
 
     }
 

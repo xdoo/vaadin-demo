@@ -244,7 +244,7 @@ public class PassController {
         Staatsangehoerigkeit staat = this.staatsService.read(this.service.read(oid).getStaatsangehoerigkeitReference().getReferencedOid());
 
         StaatsangehoerigkeitResource resources;
-        resources = staatAssembler.toResource(staat, HateoasRelations.SELF);
+        resources = staatAssembler.toResource(staat, HateoasUtil.REL_SELF);
         return ResponseEntity.ok(resources);
     }
 

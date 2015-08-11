@@ -86,27 +86,30 @@ public class BuergerResourceAssembler {
         if (relations.contains(HateoasUtil.REL_COPY)) {
             resource.add(linkTo(methodOn(BuergerController.class).copyBuerger(buerger.getOid())).withRel(HateoasUtil.REL_COPY));
         }
-        
+
         if (relations.contains(de.muenchen.vaadin.demo.api.rest.BuergerResource.WOHNUNGEN)) {
             resource.add(linkTo(methodOn(BuergerController.class).readBuergerWohnungen(buerger.getOid())).withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.WOHNUNGEN));
         }
-        
+
         if (relations.contains(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_WOHNUNG)) {
             resource.add(linkTo(methodOn(BuergerController.class).createWhonungBuerger(buerger.getOid(), null)).withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_WOHNUNG));
         }
-        
+
         if (relations.contains(de.muenchen.vaadin.demo.api.rest.BuergerResource.PAESSE)) {
             resource.add(linkTo(methodOn(BuergerController.class).readBuergerPass(buerger.getOid())).withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.PAESSE));
         }
-        
+
         if (relations.contains(de.muenchen.vaadin.demo.api.rest.BuergerResource.KINDER)) {
             resource.add(linkTo(methodOn(BuergerController.class).readBuergerKinder(buerger.getOid())).withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.KINDER));
         }
-        
+
         if (relations.contains(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_KIND)) {
             resource.add(linkTo(methodOn(BuergerController.class).createKindBuerger(buerger.getOid(), null)).withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_KIND));
         }
 
+        if (relations.contains(de.muenchen.vaadin.demo.api.rest.BuergerResource.STAATSANGEHOERIGKEITEN)) {
+            resource.add(linkTo(methodOn(BuergerController.class).readBuergerStaatsangehoerigkeiten(buerger.getOid())).withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.STAATSANGEHOERIGKEITEN));
+        }
         return resource;
     }
 
@@ -124,7 +127,6 @@ public class BuergerResourceAssembler {
             entity.setVorname(resource.getVorname());
             entity.setNachname(resource.getNachname());
             entity.setGeburtsdatum(resource.getGeburtsdatum());
-            
 
             // end field mapping
         } else {
@@ -141,27 +143,28 @@ public class BuergerResourceAssembler {
         });
         return resource;
     }
-    
-        /**
-     * 
-     * 
+
+    /**
+     *
+     *
      * @param entity
-     * @return 
+     * @return
      */
     public BuergerResource assembleWithAllLinks(Buerger entity) {
-        return this.toResource(entity, 
-                HateoasUtil.REL_SELF, 
-                HateoasUtil.REL_NEW, 
-                HateoasUtil.REL_DELETE, 
-                HateoasUtil.REL_UPDATE, 
-                HateoasUtil.REL_COPY, 
+        return this.toResource(entity,
+                HateoasUtil.REL_SELF,
+                HateoasUtil.REL_NEW,
+                HateoasUtil.REL_DELETE,
+                HateoasUtil.REL_UPDATE,
+                HateoasUtil.REL_COPY,
                 // Relationen
-                de.muenchen.vaadin.demo.api.rest.BuergerResource.WOHNUNGEN, 
+                de.muenchen.vaadin.demo.api.rest.BuergerResource.WOHNUNGEN,
                 de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_WOHNUNG,
                 de.muenchen.vaadin.demo.api.rest.BuergerResource.KINDER,
-                de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_KIND, 
+                de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_KIND,
                 de.muenchen.vaadin.demo.api.rest.BuergerResource.PAESSE,
-                de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_PASS);
+                de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_PASS,
+                de.muenchen.vaadin.demo.api.rest.BuergerResource.STAATSANGEHOERIGKEITEN);
     }
 
 }

@@ -87,7 +87,7 @@ public class AdresseController {
             LOG.debug("copy adresse");
         }
         Adresse entity = this.service.copy(oid);
-        AdresseResource resource = this.assembler.toResource(entity,HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY);
+        AdresseResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
         return ResponseEntity.ok(resource);
     }
 

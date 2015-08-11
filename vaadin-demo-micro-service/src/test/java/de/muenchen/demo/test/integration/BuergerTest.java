@@ -32,6 +32,7 @@ import de.muenchen.demo.service.rest.api.PassResource;
 import de.muenchen.demo.service.rest.api.SearchResultResource;
 import de.muenchen.demo.service.rest.api.StaatsangehoerigkeitResource;
 import de.muenchen.demo.service.services.BuergerService;
+import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -83,6 +84,8 @@ public class BuergerTest {
     private final Buerger kind = new Buerger();
     private final Buerger kind2 = new Buerger();
     private final Pass pass = new Pass();
+    private final Pass pass2 = new Pass();
+
     private final Wohnung wohnung = new Wohnung();
     private BuergerResource response;
     private List responseList;
@@ -112,7 +115,6 @@ public class BuergerTest {
     MandantRepository mandantRepo;
     @Rule
     public WireMockRule wireMockRule = new WireMockRule(8089);
-
 
     @Before
     public void setUp() throws JsonProcessingException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
@@ -187,6 +189,10 @@ public class BuergerTest {
         pass.setOid("bp");
         pass.setPassNummer("208040");
         pass.setKode("D");
+
+        pass2.setOid("bp2");
+        pass2.setPassNummer("2080402");
+        pass2.setKode("E");
     }
 
     @Test
@@ -207,34 +213,34 @@ public class BuergerTest {
         response = restTemplate.postForEntity(URL2, buergerUpdate, BuergerResource.class).getBody();
 
         assertEquals("max", response.getNachname());
-        assertNotNull(response.getLink("new"));
-        assertNotNull(response.getLink("update"));
-        assertNotNull(response.getLink("copy"));
-        assertNotNull(response.getLink("self"));
-        assertNotNull(response.getLink("delete"));
-        assertNotNull(response.getLink("pass"));
-        assertNotNull(response.getLink("wohnungen"));
-        assertNotNull(response.getLink("kinder"));
-        assertNotNull(response.getLink("staatsangehoerigkeit"));
+        assertNotNull(response.getLink(HateoasUtil.REL_NEW));
+        assertNotNull(response.getLink(HateoasUtil.REL_UPDATE));
+        assertNotNull(response.getLink(HateoasUtil.REL_COPY));
+        assertNotNull(response.getLink(HateoasUtil.REL_SELF));
+        assertNotNull(response.getLink(HateoasUtil.REL_DELETE));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.PAESSE));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.WOHNUNGEN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.KINDER));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_WOHNUNG));
     }
 
     @Test
     public void saveBuergerTest() throws JsonProcessingException {
-        BuergerResource buerger2 = new BuergerResource() ;
+        BuergerResource buerger2 = new BuergerResource();
         buerger2.setOid("b");
         buerger2.setNachname("hans");
         buerger2.setVorname("hans");
         response = restTemplate.postForEntity(urlSave, buerger, BuergerResource.class).getBody();
         assertEquals(response.getNachname(), "hans");
-        assertNotNull(response.getLink("new"));
-        assertNotNull(response.getLink("update"));
-        assertNotNull(response.getLink("copy"));
-        assertNotNull(response.getLink("self"));
-        assertNotNull(response.getLink("delete"));
-        assertNotNull(response.getLink("pass"));
-        assertNotNull(response.getLink("wohnungen"));
-        assertNotNull(response.getLink("kinder"));
-        assertNotNull(response.getLink("staatsangehoerigkeit"));
+        assertNotNull(response.getLink(HateoasUtil.REL_NEW));
+        assertNotNull(response.getLink(HateoasUtil.REL_UPDATE));
+        assertNotNull(response.getLink(HateoasUtil.REL_COPY));
+        assertNotNull(response.getLink(HateoasUtil.REL_SELF));
+        assertNotNull(response.getLink(HateoasUtil.REL_DELETE));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.PAESSE));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.WOHNUNGEN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.KINDER));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_WOHNUNG));;
     }
 
     @Test
@@ -244,15 +250,15 @@ public class BuergerTest {
         String URL11 = "http://localhost:" + port + "/buerger/b";
         response = restTemplate.getForEntity(URL11, BuergerResource.class).getBody();
         assertEquals(response.getNachname(), "hans");
-        assertNotNull(response.getLink("new"));
-        assertNotNull(response.getLink("update"));
-        assertNotNull(response.getLink("copy"));
-        assertNotNull(response.getLink("self"));
-        assertNotNull(response.getLink("delete"));
-        assertNotNull(response.getLink("pass"));
-        assertNotNull(response.getLink("wohnungen"));
-        assertNotNull(response.getLink("kinder"));
-        assertNotNull(response.getLink("staatsangehoerigkeit"));
+        assertNotNull(response.getLink(HateoasUtil.REL_NEW));
+        assertNotNull(response.getLink(HateoasUtil.REL_UPDATE));
+        assertNotNull(response.getLink(HateoasUtil.REL_COPY));
+        assertNotNull(response.getLink(HateoasUtil.REL_SELF));
+        assertNotNull(response.getLink(HateoasUtil.REL_DELETE));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.PAESSE));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.WOHNUNGEN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.KINDER));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_WOHNUNG));
 
     }
 
@@ -278,13 +284,18 @@ public class BuergerTest {
 
         assertNotEquals("b", response.getOid());
         assertEquals(buerger.getNachname(), response.getNachname());
-        assertNotNull(response.getLink("new"));
-        assertNotNull(response.getLink("update"));
-        assertNotNull(response.getLink("copy"));
-        assertNotNull(response.getLink("self"));
-        assertNotNull(response.getLink("delete"));
+        assertNotNull(response.getLink(HateoasUtil.REL_NEW));
+        assertNotNull(response.getLink(HateoasUtil.REL_UPDATE));
+        assertNotNull(response.getLink(HateoasUtil.REL_COPY));
+        assertNotNull(response.getLink(HateoasUtil.REL_SELF));
+        assertNotNull(response.getLink(HateoasUtil.REL_DELETE));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.PAESSE));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.WOHNUNGEN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.KINDER));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_WOHNUNG));
 
     }
+
     @Test
     public void buergerDeleteTest() {
 
@@ -308,38 +319,37 @@ public class BuergerTest {
 
         /* Test methode createKindBuerger*/
         String URL3 = "http://localhost:" + port + "/buerger/create/kind/b";
-        restTemplate.postForEntity(URL3, kind2, BuergerResource.class);
-        response = restTemplate.getForEntity(URL2, BuergerResource.class).getBody();
+        response = restTemplate.postForEntity(URL3, kind2, BuergerResource.class).getBody();
         assertNotNull(response.getOid());
-        assertNotNull(response.getLink("new"));
-        assertNotNull(response.getLink("update"));
-        assertNotNull(response.getLink("copy"));
-        assertNotNull(response.getLink("self"));
-        assertNotNull(response.getLink("delete"));
-        assertNotNull(response.getLink("pass"));
-        assertNotNull(response.getLink("wohnungen"));
-        assertNotNull(response.getLink("kinder"));
-        assertNotNull(response.getLink("staatsangehoerigkeit"));
+        assertNotNull(response.getLink(HateoasUtil.REL_NEW));
+        assertNotNull(response.getLink(HateoasUtil.REL_UPDATE));
+        assertNotNull(response.getLink(HateoasUtil.REL_COPY));
+        assertNotNull(response.getLink(HateoasUtil.REL_SELF));
+        assertNotNull(response.getLink(HateoasUtil.REL_DELETE));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.PAESSE));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.WOHNUNGEN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.KINDER));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_WOHNUNG));
 
         /* Test methode addKindBuerger*/
         String URL5 = "http://localhost:" + port + "/buerger/add/buerger/b/kind/bk";
         response = restTemplate.getForEntity(URL5, BuergerResource.class).getBody();
         assertNotNull(response.getOid());
-        assertNotNull(response.getLink("new"));
-        assertNotNull(response.getLink("update"));
-        assertNotNull(response.getLink("copy"));
-        assertNotNull(response.getLink("self"));
-        assertNotNull(response.getLink("delete"));
-        assertNotNull(response.getLink("pass"));
-        assertNotNull(response.getLink("wohnungen"));
-        assertNotNull(response.getLink("kinder"));
-        assertNotNull(response.getLink("staatsangehoerigkeit"));
+        assertNotNull(response.getLink(HateoasUtil.REL_NEW));
+        assertNotNull(response.getLink(HateoasUtil.REL_UPDATE));
+        assertNotNull(response.getLink(HateoasUtil.REL_COPY));
+        assertNotNull(response.getLink(HateoasUtil.REL_SELF));
+        assertNotNull(response.getLink(HateoasUtil.REL_DELETE));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.PAESSE));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.WOHNUNGEN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.KINDER));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_WOHNUNG));
 
 
         /*Test methode readKinderBuerger*/
         String URL1 = "http://localhost:" + port + "/buerger/kinder/b";
-        responseList = restTemplate.getForEntity(URL1, List.class).getBody();
-        assertEquals(2, responseList.size());
+        SearchResultResource responseList2 = restTemplate.getForEntity(URL1, SearchResultResource.class).getBody();
+        assertEquals(2, responseList2.getResult().size());
     }
 
     @Test
@@ -351,32 +361,32 @@ public class BuergerTest {
 
         /* Test methode createWohnungBuerger*/
         String URL3 = "http://localhost:" + port + "/buerger/create/wohnung/b";
-        restTemplate.postForEntity(URL3, wohnung, BuergerResource.class);
-        response = restTemplate.getForEntity(URL2, BuergerResource.class).getBody();
+        response = restTemplate.postForEntity(URL3, wohnung, BuergerResource.class).getBody();
+        restTemplate.getForEntity(URL2, BuergerResource.class).getBody();
         assertNotNull(response.getOid());
-        assertNotNull(response.getLink("new"));
-        assertNotNull(response.getLink("update"));
-        assertNotNull(response.getLink("copy"));
-        assertNotNull(response.getLink("self"));
-        assertNotNull(response.getLink("delete"));
-        assertNotNull(response.getLink("pass"));
-        assertNotNull(response.getLink("wohnungen"));
-        assertNotNull(response.getLink("kinder"));
-        assertNotNull(response.getLink("staatsangehoerigkeit"));
+        assertNotNull(response.getLink(HateoasUtil.REL_NEW));
+        assertNotNull(response.getLink(HateoasUtil.REL_UPDATE));
+        assertNotNull(response.getLink(HateoasUtil.REL_COPY));
+        assertNotNull(response.getLink(HateoasUtil.REL_SELF));
+        assertNotNull(response.getLink(HateoasUtil.REL_DELETE));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.PAESSE));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.WOHNUNGEN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.KINDER));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_WOHNUNG));
 
         /* Test methode addWohnungBuerger*/
         String URL5 = "http://localhost:" + port + "/buerger/add/buerger/b/wohnung/bw";
         response = restTemplate.getForEntity(URL5, BuergerResource.class).getBody();
         assertNotNull(response.getOid());
-        assertNotNull(response.getLink("new"));
-        assertNotNull(response.getLink("update"));
-        assertNotNull(response.getLink("copy"));
-        assertNotNull(response.getLink("self"));
-        assertNotNull(response.getLink("delete"));
-        assertNotNull(response.getLink("pass"));
-        assertNotNull(response.getLink("wohnungen"));
-        assertNotNull(response.getLink("kinder"));
-        assertNotNull(response.getLink("staatsangehoerigkeit"));
+        assertNotNull(response.getLink(HateoasUtil.REL_NEW));
+        assertNotNull(response.getLink(HateoasUtil.REL_UPDATE));
+        assertNotNull(response.getLink(HateoasUtil.REL_COPY));
+        assertNotNull(response.getLink(HateoasUtil.REL_SELF));
+        assertNotNull(response.getLink(HateoasUtil.REL_DELETE));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.PAESSE));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.WOHNUNGEN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.KINDER));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_WOHNUNG));
 
         /*Test methode readBuergerWohnungen*/
         String URL1 = "http://localhost:" + port + "/buerger/wohnungen/b";
@@ -398,15 +408,15 @@ public class BuergerTest {
         String URL12 = "http://localhost:" + port + "/buerger/add/buerger/b/staats/123";
         response = restTemplate.getForEntity(URL12, BuergerResource.class).getBody();
         assertNotNull(response.getOid());
-        assertNotNull(response.getLink("new"));
-        assertNotNull(response.getLink("update"));
-        assertNotNull(response.getLink("copy"));
-        assertNotNull(response.getLink("self"));
-        assertNotNull(response.getLink("delete"));
-        assertNotNull(response.getLink("pass"));
-        assertNotNull(response.getLink("wohnungen"));
-        assertNotNull(response.getLink("kinder"));
-        assertNotNull(response.getLink("staatsangehoerigkeit"));
+        assertNotNull(response.getLink(HateoasUtil.REL_NEW));
+        assertNotNull(response.getLink(HateoasUtil.REL_UPDATE));
+        assertNotNull(response.getLink(HateoasUtil.REL_COPY));
+        assertNotNull(response.getLink(HateoasUtil.REL_SELF));
+        assertNotNull(response.getLink(HateoasUtil.REL_DELETE));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.PAESSE));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.WOHNUNGEN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.KINDER));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_WOHNUNG));
 
         /*Test methode readStaatsangehoerigkeitenBuerger*/
         String URL1 = "http://localhost:" + port + "/buerger/staats/b";
@@ -421,25 +431,28 @@ public class BuergerTest {
 
         String URL13 = "http://localhost:" + port + "/pass/save";
         restTemplate.postForEntity(URL13, pass, PassResource.class).getBody();
+        restTemplate.postForEntity(URL13, pass2, PassResource.class).getBody();
 
         /* Test methode addPassBuerger*/
         String URL12 = "http://localhost:" + port + "/buerger/add/buerger/b/pass/bp";
         response = restTemplate.getForEntity(URL12, BuergerResource.class).getBody();
+        String URL18 = "http://localhost:" + port + "/buerger/add/buerger/b/pass/bp2";
+        response = restTemplate.getForEntity(URL18, BuergerResource.class).getBody();
         assertNotNull(response.getOid());
-        assertNotNull(response.getLink("new"));
-        assertNotNull(response.getLink("update"));
-        assertNotNull(response.getLink("copy"));
-        assertNotNull(response.getLink("self"));
-        assertNotNull(response.getLink("delete"));
-        assertNotNull(response.getLink("pass"));
-        assertNotNull(response.getLink("wohnungen"));
-        assertNotNull(response.getLink("kinder"));
-        assertNotNull(response.getLink("staatsangehoerigkeit"));
+        assertNotNull(response.getLink(HateoasUtil.REL_NEW));
+        assertNotNull(response.getLink(HateoasUtil.REL_UPDATE));
+        assertNotNull(response.getLink(HateoasUtil.REL_COPY));
+        assertNotNull(response.getLink(HateoasUtil.REL_SELF));
+        assertNotNull(response.getLink(HateoasUtil.REL_DELETE));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.PAESSE));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.WOHNUNGEN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.KINDER));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_WOHNUNG));
 
         /*Test methode readPassBuerger*/
         String URL1 = "http://localhost:" + port + "/buerger/pass/b";
         responseList = restTemplate.getForEntity(URL1, List.class).getBody();
-        assertEquals(1, responseList.size());
+        assertEquals(2, responseList.size());
     }
 
     @After

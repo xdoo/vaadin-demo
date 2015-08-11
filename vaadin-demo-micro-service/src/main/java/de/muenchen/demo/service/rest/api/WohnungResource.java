@@ -12,6 +12,8 @@ import de.muenchen.demo.service.domain.AdresseReference;
  * @author praktikant.tmar
  */
 public class WohnungResource extends BaseResource {
+    
+    public final static String ADRESSEN = "adressen";
 
     private String stock;
     private String ausrichtung;
