@@ -157,6 +157,12 @@ public class BuergerViewController implements Serializable {
         return service.saveBuerger(entity);
     }
     
+    /**
+     * Speichert ein Kind zu einem {@link Buerger} Objekt in der Datenbank.
+     * 
+     * @param entity
+     * @return 
+     */
     public Buerger saveBuergerKind(Buerger entity) {
         return service.saveKind(this.current.getBean(), entity);
     }
