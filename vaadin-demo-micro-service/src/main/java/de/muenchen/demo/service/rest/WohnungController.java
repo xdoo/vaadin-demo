@@ -1,7 +1,10 @@
 package de.muenchen.demo.service.rest;
 
+import de.muenchen.demo.service.domain.Adresse;
 import de.muenchen.demo.service.domain.AdresseReference;
 import de.muenchen.demo.service.domain.Wohnung;
+import de.muenchen.demo.service.rest.api.AdresseResource;
+import de.muenchen.demo.service.rest.api.AdresseResourceAssembler;
 import de.muenchen.demo.service.rest.api.SearchResultResource;
 import de.muenchen.demo.service.rest.api.WohnungResource;
 import de.muenchen.demo.service.rest.api.WohnungResourceAssembler;
@@ -45,6 +48,8 @@ public class WohnungController {
     AdresseService adresseService;
     @Autowired
     MandantService madantService;
+    @Autowired
+    AdresseResourceAssembler adresseAssembler;
 
     /**
      * Alle Wohnungen suchen.
@@ -172,6 +177,25 @@ public class WohnungController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * Liest die Adresse eine Wohnung.
+     *
+     * @param oid
+     * @return
+     */
+    @RolesAllowed({"PERM_readWohnungAdresse"})
+    @RequestMapping(value = "/adresse/{oid}", method = {RequestMethod.GET})
+    public ResponseEntity readWohnungAdresse(@PathVariable("oid") String oid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("read Wohunung Adresse");
+        }
+        Adresse adresse = adresseService.read(this.service.read(oid).getAdresse().getOid());
+
+        AdresseResource resources = adresseAssembler.toResource(adresse, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY,HateoasRelations.ADRESSE);
+        return ResponseEntity.ok(resources);
+    }
+
+    
     /**
      * Assoziiert eine Adresse mit einer Wonunug .
      *

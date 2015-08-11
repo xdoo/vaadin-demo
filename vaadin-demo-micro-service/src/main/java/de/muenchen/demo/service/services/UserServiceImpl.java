@@ -99,6 +99,22 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public User copy(String oid) {
+
+        User in = this.read(oid);
+
+        // map
+        User out = new User(in);
+        out.setOid(IdService.next());
+
+        // in DB speichern
+        this.save(out);
+
+        return out;
+    }
+
+
     
 }
 

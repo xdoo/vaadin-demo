@@ -101,9 +101,7 @@ public class MandantResourceAssembler {
         if (!Strings.isNullOrEmpty(resource.getOid())) {
 //            this.dozer.map(resource, entity);
             entity.setOid(resource.getOid());
-            // start field mapping
-        entity.setMid(resource.getMid());
-            // end field mapping
+
         } else {
             LOG.error(resource.toString());
             throw new IllegalArgumentException("The object id (oid) field must be filled.");

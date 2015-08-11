@@ -23,6 +23,8 @@ import de.muenchen.demo.service.domain.Mandant;
 import de.muenchen.demo.service.domain.User;
 import de.muenchen.demo.service.util.IdService;
 import de.muenchen.demo.service.util.QueryService;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  *
@@ -31,18 +33,14 @@ import de.muenchen.demo.service.util.QueryService;
  */
 public abstract class BaseService<  T extends BaseEntity> {
 
-	@Autowired
+    @Autowired
     private UserService userService;
-	@Autowired
+    @Autowired
     MandantService mandantService;
     BaseRepository<T> repo;
     QueryService<T> search;
-    
-//    public BaseService(UserService userService, MandantService mandantService) {
-//    	this.userService = userService;
-//    	this.mandantService = mandantService;
-//	}
-    
+
+
     public T read(String oid) {
         List<T> result = this.repo.findByOidAndMandantOid(oid, readUser().getMandant().getOid());
         if (result.isEmpty()) {
@@ -56,13 +54,9 @@ public abstract class BaseService<  T extends BaseEntity> {
 
     }
 
-    T createContents(Class<T> clazz) throws InstantiationException, IllegalAccessException {
-        return clazz.newInstance();
-    }
-
-	public T create() {
+    public T create() {
         try {
-			T t = (T) ((Class<T>) ((ParameterizedType) this.getClass().
+            T t = (T) ((Class<T>) ((ParameterizedType) this.getClass().
                     getGenericSuperclass()).getActualTypeArguments()[0]).newInstance();
 
             t.setOid(IdService.next());
@@ -102,27 +96,37 @@ public abstract class BaseService<  T extends BaseEntity> {
     }
 
     public T copy(String oid) {
-        T source = this.read(oid);
-        T result;
         try {
-            T clone = (T) ((Class<T>) ((ParameterizedType) this.getClass().
-                    getGenericSuperclass()).getActualTypeArguments()[0]).newInstance();
+            T in = this.read(oid);
+
+            
             try {
-                clone = (T) source.clone();
-            } catch (CloneNotSupportedException ex) {
-                java.util.logging.Logger.getLogger(WohnungServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+                try {
+
+                    Class<?> clazz = in.getClass();
+                    Constructor<?> copyConstructor = clazz.getConstructor(clazz);
+
+                    @SuppressWarnings("unchecked")
+                    T out = (T) copyConstructor.newInstance(in);
+
+                    // in DB speichern
+                    out.setOid(IdService.next());
+                    this.save(out);
+                    return out;
+                } catch (NoSuchMethodException | SecurityException ex) {
+                    Logger.getLogger(BaseService.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            } catch (IllegalArgumentException | InvocationTargetException ex) {
+                Logger.getLogger(BaseService.class.getName()).log(Level.SEVERE, null, ex);
             }
-            clone.setOid(IdService.next());
-            clone.setId(null);
-            result = save(clone);
-            return result;
 
         } catch (InstantiationException | IllegalAccessException ex) {
             Logger.getLogger(BaseService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
-    
+
     public List<T> query(String query) {
         return this.search.query(query);
     }

@@ -46,6 +46,7 @@ public class AuthorityController {
      *
      * @return
      */
+    @RolesAllowed({"PERM_queryAuthority"})
     @RequestMapping(value = "/query", method = {RequestMethod.GET})
     public ResponseEntity queryAuthority() {
         if (LOG.isDebugEnabled()) {
@@ -148,5 +149,21 @@ public class AuthorityController {
         this.service.delete(oid);
         return ResponseEntity.ok().build();
     }
-    
+    /**
+     * Macht eine Kopie eines Büergers. Diese Kopie wird bei Erstellung in der
+     * DB gespeichert.
+     *
+     * @param oid
+     * @return
+     */
+    @RolesAllowed({"PERM_copyAuthority"})
+    @RequestMapping(value = "/copy/{oid}", method = {RequestMethod.GET})
+    public ResponseEntity copyAuthority(@PathVariable String oid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("copy buerger");
+        }
+        Authority entity = this.service.copy(oid);
+        AuthorityResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY);
+        return ResponseEntity.ok(resource);
+    }
 }

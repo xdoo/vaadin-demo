@@ -18,7 +18,7 @@ import org.springframework.data.repository.NoRepositoryBean;
 public interface BaseRepository <T> extends CrudRepository<T, Long>  {
 
 
-    public List<T> findByMandantOid(String oid);
-    public List<T> findByOidAndMandantOid(String oid, String mOid);
+    public List<T> findByMandantOid(String mid);
+    public List<T> findByOidAndMandantOid(String oid, String mid);
 
 }

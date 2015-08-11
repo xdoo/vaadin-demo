@@ -27,6 +27,18 @@ public class Adresse {
 
     private int plz;
 
+    public Adresse(Adresse ad) {
+        this.strasseReference = ad.strasseReference;
+        this.strasse = ad.strasse;
+        this.hausnummer = ad.hausnummer;
+        this.mandant = ad.mandant;
+        this.stadt = ad.stadt;
+        this.plz = ad.plz;
+    }
+
+    public Adresse() {
+    }
+
     public String getStrasse() {
         return strasse;
     }

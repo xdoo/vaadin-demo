@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.muenchen.demo.test;
+package de.muenchen.demo.test.integration;
 
 import de.muenchen.demo.service.domain.AuthPermId;
 import de.muenchen.demo.service.domain.Authority;

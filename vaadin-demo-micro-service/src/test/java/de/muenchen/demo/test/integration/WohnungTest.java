@@ -1,6 +1,7 @@
-package de.muenchen.demo.test;
+package de.muenchen.demo.test.integration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.demo.service.Application;
 import de.muenchen.demo.service.domain.Adresse;
 import de.muenchen.demo.service.domain.AdresseExterneRepository;
@@ -17,12 +18,13 @@ import de.muenchen.demo.service.domain.UserRepository;
 import de.muenchen.demo.service.domain.Wohnung;
 import de.muenchen.demo.service.domain.WohnungRepository;
 import de.muenchen.demo.service.rest.api.AdresseResource;
-import de.muenchen.demo.service.rest.api.BuergerResource;
 import de.muenchen.demo.service.rest.api.SearchResultResource;
 import de.muenchen.demo.service.rest.api.WohnungResource;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Collections;
+import java.util.List;
 import javax.net.ssl.SSLContext;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -43,8 +45,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.TestRestTemplate;
 import org.springframework.boot.test.WebIntegrationTest;
+import org.springframework.hateoas.hal.Jackson2HalModule;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
 
@@ -61,6 +66,9 @@ import org.springframework.web.client.RestTemplate;
 @SpringApplicationConfiguration(classes = Application.class)
 @WebIntegrationTest({"server.port=0", "management.port=0"})
 public class WohnungTest {
+
+    Wohnung wohnung = new Wohnung();
+    Buerger buerger = new Buerger();
 
     private RestTemplate restTemplate = new TestRestTemplate();
     @Value("${local.server.port}")
@@ -89,6 +97,11 @@ public class WohnungTest {
 
     @Autowired
     MandantRepository mandantRepo;
+    private String urlSave;
+    private String urlNew;
+    private WohnungResource response;
+    private SearchResultResource responseQuery;
+    private List responseList;
 
     @Before
     public void setUp() throws JsonProcessingException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
@@ -119,53 +132,110 @@ public class WohnungTest {
 
         ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
         restTemplate = new RestTemplate(requestFactory);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new Jackson2HalModule());
+
+        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+        converter.setObjectMapper(objectMapper);
+        restTemplate.setMessageConverters(Collections.<HttpMessageConverter<?>>singletonList(converter));
+        urlSave = "http://localhost:" + port + "/wohnung/save";
+        urlNew = "http://localhost:" + port + "/wohnung/new";
+
+        wohnung.setAusrichtung("Nord");
+        wohnung.setStock("2");
+        wohnung.setOid("10");
+
+        buerger.setOid("123");
+        buerger.setNachname("hans");
+        buerger.setVorname("vater");
     }
 
     @Test
     public void createWohnungTest() throws JsonProcessingException {
 
-        Wohnung w = new Wohnung();
-        w.setAusrichtung("Nord");
-        w.setStock("2");
-        w.setOid("123");
+        restTemplate.postForEntity(urlSave, wohnung, WohnungResource.class);
+        String URL2 = "http://localhost:" + port + "/wohnung/10";
+        response = restTemplate.getForEntity(URL2, WohnungResource.class).getBody();
+        assertEquals("2", response.getStock());
+        assertNotNull(response.getLink("new"));
+        assertNotNull(response.getLink("update"));
+        assertNotNull(response.getLink("copy"));
+        assertNotNull(response.getLink("self"));
+        assertNotNull(response.getLink("delete"));
+        assertNotNull(response.getLink("adresse"));
 
-        String URL = "http://localhost:" + port + "/wohnung/save";
-        restTemplate.postForEntity(URL, w, WohnungResource.class);
-        String URL2 = "http://localhost:" + port + "/wohnung/123";
-        WohnungResource wohnung = restTemplate.getForEntity(URL2, WohnungResource.class).getBody();
-        assertEquals("2", wohnung.getStock());
     }
 
     @Test
-    public void wohnungBuergerTest() {
+    public void updateWohnungTest() {
 
-        Buerger buerger = new Buerger();
-        buerger.setOid("123");
-        buerger.setNachname("hans");
-        buerger.setVorname("vater");
+        Wohnung wohnungUpdate = new Wohnung();
+        wohnungUpdate.setAusrichtung("West");
+        wohnungUpdate.setStock("3");
+        wohnungUpdate.setOid("10");
 
-        Wohnung wohnung = new Wohnung();
-        wohnung.setAusrichtung("Nord");
-        wohnung.setStock("2");
-        wohnung.setOid("1");
+        restTemplate.postForEntity(urlSave, wohnung, WohnungResource.class).getBody();
+        String URL2 = "http://localhost:" + port + "/wohnung/10";
+        response = restTemplate.postForEntity(URL2, wohnungUpdate, WohnungResource.class).getBody();
 
-        String URL = "http://localhost:" + port + "/buerger/save";
-        restTemplate.postForEntity(URL, buerger, BuergerResource.class);
+        assertEquals("3", response.getStock());
+        assertNotNull(response.getLink("new"));
+        assertNotNull(response.getLink("update"));
+        assertNotNull(response.getLink("copy"));
+        assertNotNull(response.getLink("self"));
+        assertNotNull(response.getLink("delete"));
+        assertNotNull(response.getLink("adresse"));
 
-        String URL2 = "http://localhost:" + port + "/buerger/123";
-        Buerger wo = restTemplate.getForEntity(URL2, Buerger.class).getBody();
-        assertEquals("hans", wo.getNachname());
+    }
 
-        /* Test methode createWohnungBuerger*/
-        String URL3 = "http://localhost:" + port + "/buerger/create/wohnung/123";
-        restTemplate.postForEntity(URL3, wohnung, BuergerResource.class);
-        Buerger w = restTemplate.getForEntity(URL2, Buerger.class).getBody();
-        assertEquals(false, w.getWohnungen().isEmpty());
+    @Test
+    public void queryWohnungTest() {
 
-        /* Test methode addWohnungBuerger*/
-        String URL5 = "http://localhost:" + port + "/buerger/add/buerger/123/wohnung/1";
-        BuergerResource response4 = restTemplate.getForEntity(URL5, BuergerResource.class).getBody();
-        assertEquals(1, response4.getWohnungen().size());
+        restTemplate.postForEntity(urlSave, wohnung, WohnungResource.class).getBody();
+        String URL3 = "http://localhost:" + port + "/wohnung/query";
+        responseQuery = restTemplate.getForEntity(URL3, SearchResultResource.class).getBody();
+
+        assertEquals(1, responseQuery.getResult().size());
+        assertNotNull(responseQuery.getLink("query"));
+        assertNotNull(responseQuery.getLink("self"));
+    }
+
+    @Test
+    public void copyWohnungTest() {
+
+        restTemplate.postForEntity(urlSave, wohnung, WohnungResource.class).getBody();
+        String URL2 = "http://localhost:" + port + "/wohnung/copy/10";
+        response = restTemplate.getForEntity(URL2, WohnungResource.class).getBody();
+
+        assertEquals("2", response.getStock());
+        assertNotNull(response.getLink("new"));
+        assertNotNull(response.getLink("update"));
+        assertNotNull(response.getLink("copy"));
+        assertNotNull(response.getLink("self"));
+        assertNotNull(response.getLink("delete"));
+    }
+
+    @Test
+    public void deleteWohnungTest() {
+
+        restTemplate.postForEntity(urlSave, wohnung, WohnungResource.class).getBody();
+        String URL2 = "http://localhost:" + port + "/wohnung/10";
+        restTemplate.delete(URL2, wohnung);
+        String URL3 = "http://localhost:" + port + "/wohnung/query";
+        responseQuery = restTemplate.getForEntity(URL3, SearchResultResource.class).getBody();
+
+        assertEquals(true, responseQuery.getResult().isEmpty());
+
+    }
+
+    @Test
+    public void newWohnungTest() throws JsonProcessingException {
+
+        response = restTemplate.getForEntity(urlNew, WohnungResource.class).getBody();
+        assertNotNull(response.getLink("new"));
+        assertNotNull(response.getLink("save"));
+        assertNotNull(response.getOid());
 
     }
 
@@ -179,12 +249,7 @@ public class WohnungTest {
         adresse.setStrasse("MarinenStr");
         adresse.setStadt("Passau");
 
-        Wohnung wohnung = new Wohnung();
-        wohnung.setAusrichtung("Nord");
-        wohnung.setStock("2");
-        wohnung.setOid("10");
-        String URL = "http://localhost:" + port + "/wohnung/save";
-        restTemplate.postForEntity(URL, wohnung, WohnungResource.class).getBody();
+        restTemplate.postForEntity(urlSave, wohnung, WohnungResource.class).getBody();
 
         String URL2 = "http://localhost:" + port + "/adresse/save";
         restTemplate.postForEntity(URL2, adresse, AdresseResource.class);
@@ -192,81 +257,12 @@ public class WohnungTest {
         /* Test methode addAdresseWohnung*/
         String URL5 = "http://localhost:" + port + "/wohnung/add/wohnung/10/adresse/10";
         WohnungResource response4 = restTemplate.getForEntity(URL5, WohnungResource.class).getBody();
-        assertEquals(94032, response4.getAdresse().getAdresseExterne().getPlz());
-
-    }
-
-    @Test
-    public void wohnungUpdateTest() {
-
-        Wohnung wohnung = new Wohnung();
-        wohnung.setAusrichtung("Nord");
-        wohnung.setStock("2");
-        wohnung.setOid("10");
-        Wohnung wohnungUpdate = new Wohnung();
-        wohnungUpdate.setAusrichtung("West");
-        wohnungUpdate.setStock("3");
-        wohnungUpdate.setOid("10");
-        String URL = "http://localhost:" + port + "/wohnung/save";
-        restTemplate.postForEntity(URL, wohnung, WohnungResource.class).getBody();
-        String URL2 = "http://localhost:" + port + "/wohnung/10";
-        WohnungResource response2 = restTemplate.postForEntity(URL2, wohnungUpdate, WohnungResource.class).getBody();
-
-        assertEquals("3", response2.getStock());
-
-    }
-    
-    @Test
-    public void wohnungQueryTest() {
-
-        Wohnung wohnung = new Wohnung();
-        wohnung.setAusrichtung("Nord");
-        wohnung.setStock("2");
-        wohnung.setOid("10");
-        Wohnung wohnung2 = new Wohnung();
-        wohnung2.setAusrichtung("West");
-        wohnung2.setStock("3");
-        wohnung2.setOid("11");
-        String URL = "http://localhost:" + port + "/wohnung/save";
-        restTemplate.postForEntity(URL, wohnung, WohnungResource.class).getBody();
-        restTemplate.postForEntity(URL, wohnung2, WohnungResource.class).getBody();
-        String URL3 = "http://localhost:" + port + "/wohnung/query";
-        SearchResultResource response = restTemplate.getForEntity(URL3, SearchResultResource.class).getBody();
-
-        assertEquals(2, response.getResult().size());
-
-    }
-    
-    @Test
-    public void wohnungCopyTest() {
-
-        Wohnung wohnung = new Wohnung();
-        wohnung.setAusrichtung("Nord");
-        wohnung.setStock("2");
-        wohnung.setOid("10");
-        String URL = "http://localhost:" + port + "/wohnung/save";
-        restTemplate.postForEntity(URL, wohnung, WohnungResource.class).getBody();
-        String URL2 = "http://localhost:" + port + "/wohnung/copy/10";
-        WohnungResource response2 = restTemplate.getForEntity(URL2, WohnungResource.class).getBody();
-
-        assertEquals("2", response2.getStock());
-
-    }
-    @Test
-    public void wohnungDeleteTest() {
-
-        Wohnung wohnung = new Wohnung();
-        wohnung.setAusrichtung("Nord");
-        wohnung.setStock("2");
-        wohnung.setOid("10");
-        String URL = "http://localhost:" + port + "/wohnung/save";
-        restTemplate.postForEntity(URL, wohnung, WohnungResource.class).getBody();
-        String URL2 = "http://localhost:" + port + "/wohnung/10";
-        restTemplate.delete(URL2,wohnung);
-        String URL3 = "http://localhost:" + port + "/wohnung/query";
-        SearchResultResource response = restTemplate.getForEntity(URL3, SearchResultResource.class).getBody();
-
-        assertEquals(true, response.getResult().isEmpty());
+        assertNotNull(response4.getOid());
+        
+        /*Test methode readAdresseWohnung*/
+        String URL1 = "http://localhost:" + port + "/wohnung/adresse/10";
+        AdresseResource responseAdresse = restTemplate.getForEntity(URL1, AdresseResource.class).getBody();
+        assertEquals("Passau", responseAdresse.getStadt());
 
     }
 

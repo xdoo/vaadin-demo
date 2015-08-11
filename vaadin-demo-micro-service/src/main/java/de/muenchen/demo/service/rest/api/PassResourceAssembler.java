@@ -108,6 +108,9 @@ public class PassResourceAssembler {
             entity.setTyp(resource.getTyp());
             entity.setPassNummer(resource.getPassNummer());
             entity.setStaatsangehoerigkeit(resource.getStaatsangehoerigkeit());
+            entity.setGroesse(resource.getGroesse());
+            entity.setAugenFarbe(resource.getAugenFarbe());
+            entity.setStaatsangehoerigkeitReference(resource.getStaatsangehoerigkeitReference());
             // end field mapping
         } else {
             LOG.error(resource.toString());

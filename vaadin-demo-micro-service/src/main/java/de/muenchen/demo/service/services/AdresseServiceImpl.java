@@ -169,26 +169,27 @@ public class AdresseServiceImpl implements AdresseService {
 
     @Override
     public Adresse copy(String oid) {
-        Adresse source = this.read(oid);
-        Adresse result = null;
-        Adresse clone = new Adresse();
-        clone.setOid(IdService.next());
-        // start mapping
-        clone.setHausnummer(source.getHausnummer());
-        clone.setPlz(source.getPlz());
-        clone.setStadt(source.getStadt());
-        clone.setStrasse(source.getStrasse());
-        clone.setStrasseReference(source.getStrasseReference());
 
-        // end mapping
-        LOG.info("clone --> " + clone.toString());
-        result = this.save(clone);
-        return result;
+        Adresse in = this.read(oid);
+        
+        // map
+        Adresse out = new Adresse(in);
+        out.setOid(IdService.next());
+        
+        // in DB speichern
+        this.save(out);
+        
+        return out;
+    
     }
 
     @Override
     public Adresse update(Adresse adresse) {
-        return this.save(adresse);
+        LOG.info(adresse.toString());
+        plz = Integer.toString(adresse.getPlz());
+        this.delete(adresse.getOid());        
+        return(this.save(adresse)) ;
+        
     }
 
     public AdresseExterne toExterne(Adresse adresse) {

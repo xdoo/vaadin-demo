@@ -10,7 +10,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 public interface StaatsangehoerigkeitReferenceRepository extends PagingAndSortingRepository<StaatsangehoerigkeitReference, Long>{
         
     public List<StaatsangehoerigkeitReference> findByReferencedOid(String referencedOid);
-    public List<StaatsangehoerigkeitReference> findByMandantOid(String oid);
-    public List<StaatsangehoerigkeitReference> findByReferencedOidAndMandantOid(String referencedOid, String mOid);
+    public List<StaatsangehoerigkeitReference> findByMandantOid(String mid);
+    public List<StaatsangehoerigkeitReference> findByReferencedOidAndMandantOid(String referencedOid, String mid);
     
 }

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.muenchen.demo.test;
+package de.muenchen.demo.test.integration;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -30,6 +30,7 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.net.ssl.SSLContext;
 import org.apache.http.auth.AuthScope;
@@ -43,6 +44,8 @@ import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -51,8 +54,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
+import org.springframework.hateoas.hal.Jackson2HalModule;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
@@ -76,7 +82,7 @@ public class AdresseTest {
     private final Adresse adresse5 = new Adresse();
 
     @JsonProperty("result")
-    private SearchResultResource<AdresseResource> response;
+    private SearchResultResource<AdresseResource> responseQuery;
     @Rule
     public WireMockRule wireMockRule = new WireMockRule(8089);
 
@@ -98,6 +104,9 @@ public class AdresseTest {
     AdresseExterneRepository externeRepo;
     @Autowired
     AdresseReferenceRepository referenceRepo;
+    private String urlSave;
+    private String urlNew;
+    private AdresseResource response;
 
     @Before
     public void setUp() throws JsonProcessingException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
@@ -156,8 +165,6 @@ public class AdresseTest {
         adresse4.setHausnummer("16");
         adresse4.setOid("12345");
 
-
-
         stubFor(get(urlEqualTo("/adresse/80331")).willReturn(
                 aResponse().withHeader("Content-Type", "application/json")
                 .withBody(json80331)
@@ -179,6 +186,15 @@ public class AdresseTest {
 
         ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
         restTemplate = new RestTemplate(requestFactory);
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new Jackson2HalModule());
+
+        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+        converter.setObjectMapper(objectMapper);
+        restTemplate.setMessageConverters(Collections.<HttpMessageConverter<?>>singletonList(converter));
+        urlSave = "http://localhost:" + port + "/adresse/save";
+        urlNew = "http://localhost:" + port + "/adresse/new";
+
     }
 
     /**
@@ -187,7 +203,7 @@ public class AdresseTest {
      */
     @Test
     @SuppressWarnings("empty-statement")
-    public void externeAdresseTest() throws JsonProcessingException, Exception {
+    public void createExterneAdresseTest() throws JsonProcessingException, Exception {
 
         String URL = "http://localhost:" + port + "/adresse/save";
 
@@ -196,11 +212,16 @@ public class AdresseTest {
         AdresseResource responseAdresse = restTemplate.getForEntity(URL4, AdresseResource.class).getBody();
 
         assertEquals(96034, responseAdresse.getPlz());
+        assertNotNull(responseAdresse.getLink("new"));
+        assertNotNull(responseAdresse.getLink("update"));
+        assertNotNull(responseAdresse.getLink("copy"));
+        assertNotNull(responseAdresse.getLink("self"));
+        assertNotNull(responseAdresse.getLink("delete"));
 
     }
 
     @Test
-    public void muenchenAdresseTest() throws JsonProcessingException {
+    public void CreateMuenchenerAdresseTest() throws JsonProcessingException {
         String URL = "http://localhost:" + port + "/adresse/save";
 
         AdresseResource responseAdresse = restTemplate.postForEntity(URL, adresse4, AdresseResource.class).getBody();
@@ -210,7 +231,11 @@ public class AdresseTest {
         AdresseResource response2 = restTemplate.getForEntity(URL4, AdresseResource.class).getBody();
 
         assertEquals(80331, response2.getPlz());
-
+        assertNotNull(response2.getLink("new"));
+        assertNotNull(response2.getLink("update"));
+        assertNotNull(response2.getLink("copy"));
+        assertNotNull(response2.getLink("self"));
+        assertNotNull(response2.getLink("delete"));
     }
 
     @Test
@@ -220,9 +245,72 @@ public class AdresseTest {
         restTemplate.postForEntity(URL, adresse3, AdresseResource.class);
 
         String URL3 = "http://localhost:" + port + "/adresse/query";
-        response = restTemplate.getForEntity(URL3, SearchResultResource.class).getBody();
+        responseQuery = restTemplate.getForEntity(URL3, SearchResultResource.class).getBody();
 
-        assertEquals(2, response.getResult().size());
+        assertEquals(2, responseQuery.getResult().size());
+        assertNotNull(responseQuery.getLink("self"));
+        assertNotNull(responseQuery.getLink("query"));
+    }
+
+    @Test
+    public void newAdresseTest() throws JsonProcessingException {
+
+        response = restTemplate.getForEntity(urlNew, AdresseResource.class).getBody();
+        assertNotNull(response.getLink("new"));
+        assertNotNull(response.getLink("save"));
+        assertNotNull(response.getOid());
+
+    }
+
+    @Test
+    public void adresseUpdateTest() {
+
+        Adresse adresseUpdate = new Adresse();
+        adresseUpdate.setOid("123");
+        adresseUpdate.setStrasse("Panorama Str");
+        adresseUpdate.setHausnummer("30");
+        adresseUpdate.setStadt("Heidelberg");
+        adresseUpdate.setPlz(96034);
+
+        restTemplate.postForEntity(urlSave, adresse, AdresseResource.class).getBody();
+        String URL2 = "http://localhost:" + port + "/adresse/123";
+        response = restTemplate.postForEntity(URL2, adresseUpdate, AdresseResource.class).getBody();
+
+        assertEquals("30", response.getHausnummer());
+        assertNotNull(response.getLink("new"));
+        assertNotNull(response.getLink("update"));
+        assertNotNull(response.getLink("copy"));
+        assertNotNull(response.getLink("self"));
+        assertNotNull(response.getLink("delete"));
+
+    }
+
+    @Test
+    public void copyAdresseTest() {
+
+        restTemplate.postForEntity(urlSave, adresse, AdresseResource.class).getBody();
+        String URL2 = "http://localhost:" + port + "/adresse/copy/123";
+        response = restTemplate.getForEntity(URL2, AdresseResource.class).getBody();
+
+        assertNotEquals("123", response.getOid());
+        assertNotNull(response.getLink("new"));
+        assertNotNull(response.getLink("update"));
+        assertNotNull(response.getLink("copy"));
+        assertNotNull(response.getLink("self"));
+        assertNotNull(response.getLink("delete"));
+
+    }
+
+    @Test
+    public void adresseDeleteTest() {
+
+        restTemplate.postForEntity(urlSave, adresse, AdresseResource.class).getBody();
+        String URL2 = "http://localhost:" + port + "/adresse/123";
+        restTemplate.delete(URL2, adresse);
+        String URL3 = "http://localhost:" + port + "/adresse/query";
+        responseQuery = restTemplate.getForEntity(URL3, SearchResultResource.class).getBody();
+
+        assertEquals(true, responseQuery.getResult().isEmpty());
 
     }
 

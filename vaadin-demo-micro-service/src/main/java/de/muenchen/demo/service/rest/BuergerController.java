@@ -4,13 +4,15 @@ import com.google.gwt.thirdparty.guava.common.collect.Lists;
 import de.muenchen.demo.service.domain.Buerger;
 import de.muenchen.demo.service.domain.Pass;
 import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
-import de.muenchen.demo.service.domain.User;
+import de.muenchen.demo.service.domain.StaatsangehoerigkeitReference;
 import de.muenchen.demo.service.domain.Wohnung;
 import de.muenchen.demo.service.rest.api.BuergerResource;
 import de.muenchen.demo.service.rest.api.BuergerResourceAssembler;
 import de.muenchen.demo.service.rest.api.PassResource;
 import de.muenchen.demo.service.rest.api.PassResourceAssembler;
 import de.muenchen.demo.service.rest.api.SearchResultResource;
+import de.muenchen.demo.service.rest.api.StaatsangehoerigkeitResource;
+import de.muenchen.demo.service.rest.api.StaatsangehoerigkeitResourceAssembler;
 import de.muenchen.demo.service.rest.api.WohnungResource;
 import de.muenchen.demo.service.rest.api.WohnungResourceAssembler;
 import de.muenchen.demo.service.services.BuergerService;
@@ -69,7 +71,9 @@ public class BuergerController {
     @Value("${URL}")
     private String URL;
     @Autowired
-    UserService  userService;
+    UserService userService;
+    @Autowired
+    StaatsangehoerigkeitResourceAssembler staatsAssembler;
 
     /**
      * Alle Bürger suchen.
@@ -204,7 +208,6 @@ public class BuergerController {
         Buerger entity = new Buerger();
         this.assembler.fromResource(request, entity);
         this.service.save(entity);
-        BuergerResource resource = this.assembler.assembleWithAllLinks(entity);
         return ResponseEntity.ok(resource);
     }
 
@@ -280,7 +283,6 @@ public class BuergerController {
         entity.getKinder().add(kind);
         this.service.update(entity);
 
-        BuergerResource resource = this.assembler.assembleWithAllLinks(entity);
         return ResponseEntity.ok(resource);
     }
 
@@ -357,6 +359,31 @@ public class BuergerController {
     }
 
     /**
+     * Liest die Staatsangehoerigkeiten einer Bürger.
+     *
+     * @param oid
+     * @return
+     */
+    @RolesAllowed({"PERM_readBuergerStaatsangehoerigkeiten"})
+    @RequestMapping(value = "/staats/{oid}", method = {RequestMethod.GET})
+    @SuppressWarnings("empty-statement")
+    public ResponseEntity readBuergerStaatsangehoerigkeiten(@PathVariable("oid") String oid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("read Buerger Staatsangehoerigkeiten");
+        }
+        Set<Staatsangehoerigkeit> staats = new HashSet<>();
+        Buerger d = this.service.read(oid);
+        Set<StaatsangehoerigkeitReference> a = d.getStaatsangehoerigkeitReferences();
+        for (StaatsangehoerigkeitReference staat : this.service.read(oid).getStaatsangehoerigkeitReferences()) {
+
+            staats.add(staatsService.read(staat.getReferencedOid()));
+
+        }
+        List<StaatsangehoerigkeitResource> resources = staatsAssembler.toResource(staats, HateoasRelations.SELF);
+        return ResponseEntity.ok(resources);
+    }
+
+    /**
      * Assoziiert ein Staatsangehoerigkeit mit einem Buerger .
      *
      * @param buergerOid
@@ -374,6 +401,8 @@ public class BuergerController {
         Buerger entity = service.read(buergerOid);
 
         entity.getStaatsangehoerigkeiten().add(staats);
+        StaatsangehoerigkeitReference staatRef = staatsService.readReference(staatsOid);
+        entity.getStaatsangehoerigkeitReferences().add(staatRef);
         this.service.update(entity);
 
         BuergerResource resource = this.assembler.assembleWithAllLinks(entity);
@@ -421,29 +450,5 @@ public class BuergerController {
         List<PassResource> resources = passAssembler.toResource(pass, HateoasUtil.REL_SELF);
         return ResponseEntity.ok(resources);
     }
-    /**
-     * Assoziiert ein Sachbearbeiter mit einem Buerger .
-     *
-     * @param buergerOid
-     * @param sachbearbeiterOid
-     * @return
-     */
-    @RolesAllowed({"PERM_addSachbearbeiterBuerger"})
-    @RequestMapping(value = "add/buerger/{bOid}/sachbearbeiter/{sOid}", method = {RequestMethod.GET})
-    public ResponseEntity addSachbearbeiterBuerger(@PathVariable("bOid") String buergerOid, @PathVariable("sOid") String sachbearbeiterOid) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Add Pass buerger");
-        }
-
-        User sachbearbeiter = userService.read(sachbearbeiterOid);
-        Buerger entity = service.read(buergerOid);
-
-        entity.setSachbearbeiter(sachbearbeiter);
-        this.service.update(entity);
-
         BuergerResource resource = this.assembler.assembleWithAllLinks(entity);
-        return ResponseEntity.ok(resource);
-    }
-    
-
 }

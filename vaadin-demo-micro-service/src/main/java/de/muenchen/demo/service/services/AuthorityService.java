@@ -13,19 +13,21 @@ import java.util.List;
  * @author praktikant.tmar
  */
 public interface AuthorityService {
-    
+
     public List<Authority> query();
-    
+
     public List<Authority> query(String query);
-    
+
     public Authority create();
-    
+
     public Authority save(Authority authoritys);
-    
+
     public Authority read(String oid);
-    
+
     public Authority update(Authority authoritys);
-    
+
     public void delete(String oid);
-    
+
+    public Authority copy(String oid);
+
 }

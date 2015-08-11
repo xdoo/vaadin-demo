@@ -3,35 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.muenchen.demo.test;
+package de.muenchen.demo.test.integration;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import de.muenchen.demo.service.Application;
-import de.muenchen.demo.service.domain.AuthPermId;
-import de.muenchen.demo.service.domain.Authority;
-import de.muenchen.demo.service.domain.AuthorityPermission;
 import de.muenchen.demo.service.domain.AuthorityPermissionRepository;
 import de.muenchen.demo.service.domain.AuthorityRepository;
 import de.muenchen.demo.service.domain.MandantRepository;
-import de.muenchen.demo.service.domain.Permission;
 import de.muenchen.demo.service.domain.PermissionRepository;
-import de.muenchen.demo.service.domain.User;
-import de.muenchen.demo.service.domain.UserAuthId;
-import de.muenchen.demo.service.domain.UserAuthority;
 import de.muenchen.demo.service.domain.UserAuthorityRepository;
 import de.muenchen.demo.service.domain.UserRepository;
-import de.muenchen.demo.service.rest.BuergerController;
-import de.muenchen.demo.service.rest.api.SearchResultResource;
-import de.muenchen.demo.service.rest.api.UserResource;
-import de.muenchen.demo.service.util.IdService;
-import static java.lang.Boolean.TRUE;
-import java.lang.reflect.Method;
+import de.muenchen.vaadin.demo.api.domain.Principal;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.List;
 import javax.net.ssl.SSLContext;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -42,8 +27,8 @@ import org.apache.http.conn.ssl.SSLContexts;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
-import static org.hamcrest.CoreMatchers.equalTo;
 import org.junit.After;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -53,6 +38,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -64,14 +50,13 @@ import org.springframework.web.client.RestTemplate;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
-@WebIntegrationTest({"server.port=0", "management.port=0"})
-public class SecurityTest {
+@WebIntegrationTest//({"server.port=0", "management.port=0"})
+public class SecurityRestClientTest {
 
     private RestTemplate restTemplate;
     @Value("${local.server.port}")
     private int port;
-    @JsonProperty("result")
-    private SearchResultResource<UserResource> response;
+
     @Autowired
     UserRepository usersRepo;
     @Autowired
@@ -80,11 +65,13 @@ public class SecurityTest {
     PermissionRepository permRepo;
     @Autowired
     UserAuthorityRepository userAuthRepo;
+
     @Autowired
     AuthorityPermissionRepository authPermRepo;
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
+
     @Autowired
     MandantRepository mandantRepo;
 
@@ -100,58 +87,11 @@ public class SecurityTest {
 
         InitTest initTest = new InitTest(usersRepo, authRepo, permRepo, userAuthRepo, authPermRepo, mandantRepo);
         initTest.init();
-    }
-
-    @Test
-    public void acessDeniedTest() throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
-
-        User user = new User();
-        user.setEmail("hans2@muenchen.de");
-        user.setPassword("test5");
-        user.setUsername("hans5");
-        user.setOid("U80");
-        user.setEnabled(TRUE);
-        usersRepo.save(user);
-
-        Authority auth = new Authority();
-        auth.setAuthority("USER");
-        auth.setOid("A80");
-        authRepo.save(auth);
-
-        List<String> permissions = new ArrayList();
-        for (Method method : BuergerController.class.getDeclaredMethods()) {
-            String name = method.getName();
-            permissions.add("PERM_" + name);
-        }
-        permissions.stream().map((list1) -> {
-            Permission permission = new Permission();
-            permission.setPermision(list1);
-            return permission;
-        }).map((permission) -> {
-            permission.setOid(IdService.next());
-            return permission;
-        }).map((permission) -> {
-            permRepo.save(permission);
-            return permission;
-        }).map((permission) -> {
-            AuthorityPermission authPerm = new AuthorityPermission();
-            AuthPermId idA = new AuthPermId(permission, auth);
-            authPerm.setId(idA);
-            return authPerm;
-        }).forEach((authPerm) -> {
-            authPermRepo.save(authPerm);
-        });
-        UserAuthority userAuth = new UserAuthority();
-        UserAuthId id = new UserAuthId(user, auth);
-
-        userAuth.setId(id);
-
-        userAuthRepo.save(userAuth);
 
         SSLContext sslContext = SSLContexts.custom().loadTrustMaterial(null, new TrustSelfSignedStrategy()).useTLS().build();
         SSLConnectionSocketFactory connectionFactory = new SSLConnectionSocketFactory(sslContext, new AllowAllHostnameVerifier());
         BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-        credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials("hans5", "test5"));
+        credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials("hans", "test"));
 
         HttpClient httpClient = HttpClientBuilder.create()
                 .setSSLSocketFactory(connectionFactory)
@@ -160,11 +100,16 @@ public class SecurityTest {
 
         ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
         restTemplate = new RestTemplate(requestFactory);
+    }
 
-        thrown.expect(org.springframework.web.client.HttpClientErrorException.class);
-        thrown.expectMessage(equalTo("403 Forbidden"));
-        String URL2 = "http://localhost:" + port + "/userAuthority/query";
-        response = restTemplate.getForEntity(URL2, SearchResultResource.class).getBody();
+    @Test
+    public void getPrincipalTest() throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
+
+        String URL11 = "http://localhost:" + port + "/principal";
+        ResponseEntity a = restTemplate.getForEntity(URL11, Principal.class);
+        Principal response = (Principal) a.getBody();
+        assertEquals("hans", response.getUsername());
+
     }
 
     @After
@@ -174,7 +119,5 @@ public class SecurityTest {
         usersRepo.deleteAll();
         authRepo.deleteAll();
         permRepo.deleteAll();
-        mandantRepo.deleteAll();
-
     }
 }

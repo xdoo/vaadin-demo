@@ -1,5 +1,6 @@
 package de.muenchen.demo.service.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -15,14 +16,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
-import org.hibernate.search.annotations.Analyze;
-import org.hibernate.search.annotations.DateBridge;
-import org.hibernate.search.annotations.EncodingType;
 import org.hibernate.search.annotations.Field;
-import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
-import org.hibernate.search.annotations.Resolution;
-import org.hibernate.search.annotations.Store;
 
 /**
  *
@@ -31,7 +26,7 @@ import org.hibernate.search.annotations.Store;
 @Entity
 @Indexed
 @Table(name = "BUERGER")
-public class Buerger extends BaseEntity {
+public class Buerger extends BaseEntity implements Serializable {
 
     @Field
     @Column(length = 70, nullable = true, name = "BUER_VORNAME")
@@ -49,21 +44,35 @@ public class Buerger extends BaseEntity {
 
     @ManyToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
     private User sachbearbeiter;
-    
+
     @Transient
-    private Set<Staatsangehoerigkeit> staatsangehoerigkeiten= new HashSet<>();
-    
+    private Set<Staatsangehoerigkeit> staatsangehoerigkeiten = new HashSet<>();
+
     @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
-    private Set<StaatsangehoerigkeitReference> staatsangehoerigkeitReferences;
-    
+    private Set<StaatsangehoerigkeitReference> staatsangehoerigkeitReferences = new HashSet<>();
+
     @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
-    private Set<Pass> Pass = new HashSet<>();
+    private Set<Pass> pass = new HashSet<>();
 
     @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
     private Set<Buerger> kinder = new HashSet<>();
-    
+
     @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
-    private Set<Wohnung> wohnungen= new HashSet<>();
+    private Set<Wohnung> wohnungen = new HashSet<>();
+
+    public Buerger() {
+    }
+
+    public Buerger(Buerger buerger) {
+        this.vorname = buerger.vorname;
+        this.nachname = buerger.nachname;
+        this.geburtsdatum = buerger.geburtsdatum;
+        this.staatsangehoerigkeitReferences.addAll(buerger.staatsangehoerigkeitReferences);
+        this.pass.addAll(buerger.pass);
+        this.wohnungen.addAll(buerger.wohnungen);
+        this.staatsangehoerigkeiten.addAll(buerger.staatsangehoerigkeiten);
+        this.kinder.addAll(buerger.kinder);
+    }
 
     public String getVorname() {
         return vorname;
@@ -103,7 +112,7 @@ public class Buerger extends BaseEntity {
 
     public void setSachbearbeiter(User sachbearbeiter) {
         this.sachbearbeiter = sachbearbeiter;
-    }    
+    }
 
     public Set<Staatsangehoerigkeit> getStaatsangehoerigkeiten() {
         return staatsangehoerigkeiten;
@@ -125,17 +134,16 @@ public class Buerger extends BaseEntity {
         return kinder;
     }
 
-    
     public void setKinder(Set<Buerger> kinder) {
         this.kinder = kinder;
     }
 
     public Set<Pass> getPass() {
-        return Pass;
+        return pass;
     }
 
     public void setPass(Set<Pass> Pass) {
-        this.Pass = Pass;
+        this.pass = Pass;
     }
 
     @Override

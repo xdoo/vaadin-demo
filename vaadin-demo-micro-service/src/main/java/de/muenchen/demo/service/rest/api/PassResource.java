@@ -6,6 +6,7 @@
 package de.muenchen.demo.service.rest.api;
 
 import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
+import de.muenchen.demo.service.domain.StaatsangehoerigkeitReference;
 import java.util.Date;
 
 /**
@@ -13,21 +14,26 @@ import java.util.Date;
  * @author praktikant.tmar
  */
 public class PassResource extends BaseResource {
-    
+
     private String passNummer;
 
     private String Typ;
 
-    private String Kode;
+    private String kode;
+    
+    private String groesse;
+    
+    private String augenFarbe;
 
     private Date austellungsdatum;
 
     private Date gueltigBis;
-    
+
     private String behoerde;
-    
+
+    private StaatsangehoerigkeitReference staatsangehoerigkeitReference;
+
     private Staatsangehoerigkeit staatsangehoerigkeit;
-    
 
     public String getPassNummer() {
         return passNummer;
@@ -46,12 +52,30 @@ public class PassResource extends BaseResource {
     }
 
     public String getKode() {
-        return Kode;
+        return kode;
     }
 
-    public void setKode(String Kode) {
-        this.Kode = Kode;
+    public void setKode(String kode) {
+        this.kode = kode;
     }
+
+    public String getGroesse() {
+        return groesse;
+    }
+
+    public void setGroesse(String groesse) {
+        this.groesse = groesse;
+    }
+
+    public String getAugenFarbe() {
+        return augenFarbe;
+    }
+
+    public void setAugenFarbe(String augenFarbe) {
+        this.augenFarbe = augenFarbe;
+    }
+
+
 
     public Date getAustellungsdatum() {
         return austellungsdatum;
@@ -85,5 +109,12 @@ public class PassResource extends BaseResource {
         this.staatsangehoerigkeit = staatsangehoerigkeit;
     }
 
-    
+    public StaatsangehoerigkeitReference getStaatsangehoerigkeitReference() {
+        return staatsangehoerigkeitReference;
+    }
+
+    public void setStaatsangehoerigkeitReference(StaatsangehoerigkeitReference staatsangehoerigkeitReference) {
+        this.staatsangehoerigkeitReference = staatsangehoerigkeitReference;
+    }
+
 }

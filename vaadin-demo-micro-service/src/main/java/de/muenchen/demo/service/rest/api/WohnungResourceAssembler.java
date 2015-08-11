@@ -84,6 +84,10 @@ public class WohnungResourceAssembler {
         if (relations.contains(HateoasUtil.REL_SAVE)) {
             resource.add(linkTo(methodOn(WohnungController.class).saveWohnung(null)).withRel(HateoasUtil.REL_SAVE));
         }
+        
+         if (relations.contains(HateoasRelations.ADRESSE)) {
+            resource.add(linkTo(methodOn(WohnungController.class).readWohnungAdresse(wohnung.getOid())).withRel(HateoasUtil.ADRESSE));
+        }
 
         if (relations.contains(HateoasUtil.REL_COPY)) {
             resource.add(linkTo(methodOn(WohnungController.class).copyWohnung(wohnung.getOid())).withRel(HateoasUtil.REL_COPY));
@@ -103,7 +107,6 @@ public class WohnungResourceAssembler {
 //            this.dozer.map(resource, entity);
             entity.setOid(resource.getOid());
             // start field mapping
-            entity.setAdresse(resource.getAdresse());
             entity.setAusrichtung(resource.getAusrichtung());
             entity.setStock(resource.getStock());
             // end field mapping

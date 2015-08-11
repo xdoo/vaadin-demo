@@ -15,16 +15,6 @@ public class MandantResource extends ResourceSupport {
 
     private String oid;
 
-    private String mid;
-
-    public String getMid() {
-        return mid;
-    }
-
-    public void setMid(String mid) {
-        this.mid = mid;
-    }
-
     public String getOid() {
         return oid;
     }
@@ -32,5 +22,8 @@ public class MandantResource extends ResourceSupport {
     public void setOid(String oid) {
         this.oid = oid;
     }
+
+
+
 
 }

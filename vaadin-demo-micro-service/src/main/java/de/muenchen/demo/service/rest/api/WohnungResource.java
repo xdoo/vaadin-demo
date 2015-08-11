@@ -15,7 +15,6 @@ public class WohnungResource extends BaseResource {
 
     private String stock;
     private String ausrichtung;
-    private AdresseReference adresse;
     
     public String getStock() {
         return stock;
@@ -33,14 +32,7 @@ public class WohnungResource extends BaseResource {
         this.ausrichtung = ausrichtung;
     }
 
-    public AdresseReference getAdresse() {
-        return adresse;
-    }
-
-    public void setAdresse(AdresseReference adresse) {
-        this.adresse = adresse;
-    }
-
+   
     @Override
     public String toString() {
         return String.format("Oid > %s | ausrichtung > %s | stock > %s ", this.getOid(), this.ausrichtung, this.stock);

@@ -56,6 +56,22 @@ public class Pass extends BaseEntity {
 
     @Transient
     private Staatsangehoerigkeit staatsangehoerigkeit;
+    
+    public Pass(Pass pass) {
+        this.passNummer = pass.passNummer;
+        this.Typ = pass.Typ;
+        this.kode = pass.kode;
+        this.groesse = pass.groesse;
+        this.augenFarbe = pass.augenFarbe;
+        this.austellungsdatum = pass.austellungsdatum;
+        this.gueltigBis = pass.gueltigBis;
+        this.behoerde = pass.behoerde;
+        this.staatsangehoerigkeitReference = pass.staatsangehoerigkeitReference;
+        this.staatsangehoerigkeit = pass.staatsangehoerigkeit;
+    }
+
+    public Pass() {
+    }
 
     public String getPassNummer() {
         return passNummer;

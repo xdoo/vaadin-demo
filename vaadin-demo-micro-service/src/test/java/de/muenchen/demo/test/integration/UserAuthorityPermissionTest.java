@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.muenchen.demo.test;
+package de.muenchen.demo.test.integration;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.demo.service.Application;
 import de.muenchen.demo.service.domain.AuthPermId;
 import de.muenchen.demo.service.domain.Authority;
@@ -36,6 +37,7 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.net.ssl.SSLContext;
 import org.apache.http.auth.AuthScope;
@@ -49,6 +51,7 @@ import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -58,8 +61,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
+import org.springframework.hateoas.hal.Jackson2HalModule;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
 
@@ -185,6 +192,13 @@ public class UserAuthorityPermissionTest {
 
         ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
         restTemplate = new RestTemplate(requestFactory);
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new Jackson2HalModule());
+
+        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+        converter.setObjectMapper(objectMapper);
+        restTemplate.setMessageConverters(Collections.<HttpMessageConverter<?>>singletonList(converter));
+
     }
 
     @Test
@@ -200,6 +214,8 @@ public class UserAuthorityPermissionTest {
         String URL2 = "http://localhost:" + port + "/userAuthority/query";
         response = restTemplate.getForEntity(URL2, SearchResultResource.class).getBody();
         assertEquals(3, response.getResult().size());
+        assertNotNull(response.getLink("self"));
+        assertNotNull(null, response.getLink("query"));
 
     }
 
@@ -213,17 +229,17 @@ public class UserAuthorityPermissionTest {
         Permission permission1 = new Permission();
         permission1.setPermision("PERM_readUser");
         permission1.setOid("P74");
-        
+
         User user3 = new User();
         user3.setEmail("hans2@muenchen.de");
         user3.setPassword("test4");
         user3.setUsername("hans4");
         user3.setOid("U74");
         user3.setEnabled(TRUE);
-        
+
         String URL22 = "http://localhost:" + port + "/permission/save";
         restTemplate.postForEntity(URL22, permission1, PermissionResource.class);
-        
+
         String URL24 = "http://localhost:" + port + "/user/save";
         restTemplate.postForEntity(URL24, user3, UserResource.class);
 
@@ -232,13 +248,13 @@ public class UserAuthorityPermissionTest {
 
         /*Test save Authority Permission */
         String URL = "http://localhost:" + port + "/authorityPermission/save/P74/A74";
-        AuthorityPermissionResource response4 = restTemplate.getForEntity(URL, AuthorityPermissionResource.class).getBody();
-        assertEquals("USER", response4.getId().getAuthority().getAuthority());
+        ResponseEntity<AuthorityPermissionResource> response4 = restTemplate.getForEntity(URL, AuthorityPermissionResource.class);
+        assertNotNull(response4.getBody().getId());
 
         /*Test save User Authority  */
         String URL2 = "http://localhost:" + port + "/userAuthority/save/U74/A74";
         UserAuthorityResource response5 = restTemplate.getForEntity(URL2, UserAuthorityResource.class).getBody();
-        assertEquals("USER", response5.getId().getAuthority().getAuthority());
+        assertNotNull(response5.getId());
 
     }
 

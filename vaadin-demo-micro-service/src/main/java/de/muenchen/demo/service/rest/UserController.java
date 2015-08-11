@@ -68,8 +68,8 @@ public class UserController {
      *
      * @return
      */
-@RolesAllowed({"PERM_newUser"})
-@RequestMapping(value = "/new", method = {RequestMethod.GET})
+    @RolesAllowed({"PERM_newUser"})
+    @RequestMapping(value = "/new", method = {RequestMethod.GET})
     public ResponseEntity newUser() {
         if (LOG.isDebugEnabled()) {
             LOG.debug("new user");
@@ -96,7 +96,7 @@ public class UserController {
         UserResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE);
         return ResponseEntity.ok(resource);
     }
-    
+
     /**
      * Liest eine User zur OID.
      *
@@ -171,7 +171,7 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
     /**
-     * Assoziiert ein Staatsangehoerigkeit mit einem Buerger .
+     * Assoziiert ein Mandant mit einem User .
      *
      * @param userOid
      * @param mandantOid
@@ -191,6 +191,24 @@ public class UserController {
         this.service.update(entity);
 
         UserResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
+        return ResponseEntity.ok(resource);
+    }
+
+    /**
+     * Macht eine Kopie eines Users. Diese Kopie wird bei Erstellung in der
+     * DB gespeichert.
+     *
+     * @param oid
+     * @return
+     */
+    @RolesAllowed({"PERM_copyUser"})
+    @RequestMapping(value = "/copy/{oid}", method = {RequestMethod.GET})
+    public ResponseEntity copyUser(@PathVariable String oid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("copy buerger");
+        }
+        User entity = this.service.copy(oid);
+        UserResource resource = this.assembler.toResource(entity, HateoasRelations.SELF, HateoasRelations.NEW, HateoasRelations.DELETE, HateoasRelations.UPDATE, HateoasRelations.COPY);
         return ResponseEntity.ok(resource);
     }
 }
