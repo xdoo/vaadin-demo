@@ -266,6 +266,24 @@ public class BuergerController {
     }
 
     /**
+     * Liest die Vater einer Bürger.
+     *
+     * @param oid
+     * @return
+     */
+    @RolesAllowed({"PERM_readBuergerKinder"})
+    @RequestMapping(value = "/eltern/{oid}", method = {RequestMethod.GET})
+    public ResponseEntity readBuergerEltern(@PathVariable("oid") String oid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("read Buerger Eltern");
+        }
+        Iterable<Buerger> buerger = this.service.readEltern(oid);
+        SearchResultResource<BuergerResource> resource = this.assembler.toResource(Lists.newArrayList(buerger));
+        resource.add(linkTo(methodOn(BuergerController.class).readBuergerKinder(oid)).withSelfRel());
+        return ResponseEntity.ok(resource);
+    }
+
+    /**
      * Erzeugt ein Kind als Buerger und assoziiert ihm mit einem Buerger .
      *
      * @param oid

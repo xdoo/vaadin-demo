@@ -350,6 +350,14 @@ public class BuergerTest {
         String URL1 = "http://localhost:" + port + "/buerger/kinder/b";
         SearchResultResource responseList2 = restTemplate.getForEntity(URL1, SearchResultResource.class).getBody();
         assertEquals(2, responseList2.getResult().size());
+
+        /*Test methode readKinderBuerger*/
+        String URL100 = "http://localhost:" + port + "/buerger/eltern/bk";
+        SearchResultResource responseList20 = restTemplate.getForEntity(URL100, SearchResultResource.class).getBody();
+        assertEquals(1, responseList20.getResult().size());
+        /* Test delete Kind */
+        String urlDelete = "http://localhost:" + port + "/buerger/bk";
+        restTemplate.delete(urlDelete, buerger);
     }
 
     @Test
@@ -392,6 +400,9 @@ public class BuergerTest {
         String URL1 = "http://localhost:" + port + "/buerger/wohnungen/b";
         responseList = restTemplate.getForEntity(URL1, List.class).getBody();
         assertEquals(1, responseList.size());
+        /* Test delete wohnung */
+        String urlDelete = "http://localhost:" + port + "/wohnung/bw";
+        restTemplate.delete(urlDelete, wohnung);
 
     }
 
@@ -422,6 +433,9 @@ public class BuergerTest {
         String URL1 = "http://localhost:" + port + "/buerger/staats/b";
         responseList = restTemplate.getForEntity(URL1, List.class).getBody();
         assertEquals(1, responseList.size());
+        /* Test delete Staat */
+        String URL = "http://localhost:" + port + "/staat/123";
+        restTemplate.delete(URL);
     }
 
     @Test
@@ -449,10 +463,13 @@ public class BuergerTest {
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.KINDER));
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_WOHNUNG));
 
-        /*Test methode readPassBuerger*/
+        /* Test methode readPassBuerger */
         String URL1 = "http://localhost:" + port + "/buerger/pass/b";
         responseList = restTemplate.getForEntity(URL1, List.class).getBody();
         assertEquals(2, responseList.size());
+        /* Test delete Pass */
+        String urlDelete = "http://localhost:" + port + "/pass/bp";
+        restTemplate.delete(urlDelete, pass);
     }
 
     @After

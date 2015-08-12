@@ -258,11 +258,14 @@ public class WohnungTest {
         String URL5 = "http://localhost:" + port + "/wohnung/add/wohnung/10/adresse/10";
         WohnungResource response4 = restTemplate.getForEntity(URL5, WohnungResource.class).getBody();
         assertNotNull(response4.getOid());
-        
+
         /*Test methode readAdresseWohnung*/
         String URL1 = "http://localhost:" + port + "/wohnung/adresse/10";
         AdresseResource responseAdresse = restTemplate.getForEntity(URL1, AdresseResource.class).getBody();
         assertEquals("Passau", responseAdresse.getStadt());
+
+        String urlDelete = "http://localhost:" + port + "/adresse/10";
+        restTemplate.delete(urlDelete, adresse);
 
     }
 

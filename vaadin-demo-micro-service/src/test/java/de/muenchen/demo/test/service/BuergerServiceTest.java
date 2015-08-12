@@ -178,6 +178,7 @@ public class BuergerServiceTest {
         Buerger a = service.copy("123");
         assertNotEquals(a.getId(), buerger.getId());
     }
+
     @After
     public void TearDown() {
         authPermRepo.deleteAll();

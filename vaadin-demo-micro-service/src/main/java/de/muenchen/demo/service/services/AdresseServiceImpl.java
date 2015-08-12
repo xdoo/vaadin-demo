@@ -44,6 +44,8 @@ public class AdresseServiceImpl implements AdresseService {
     private String URL;
     RestTemplate restTemplate = new TestRestTemplate();
     private String plz;
+    @Autowired
+    private WohnungService wohnungService;
 
     public AdresseServiceImpl() {
     }
@@ -157,10 +159,12 @@ public class AdresseServiceImpl implements AdresseService {
         } else {
             if (resultReference.get(0).getAdresseInterne() == null) {
                 List<AdresseExterne> resultExterne = this.externeRepo.findByOidAndMandantOid(oid, readUser().getMandant().getOid());
+                this.wohnungService.deleteWohnungAdresse(oid);
                 this.referenceRepo.delete(resultReference);
                 this.externeRepo.delete(resultExterne);
             } else {
                 List<AdresseInterne> resultInterne = this.interneRepo.findByOid(oid);
+                this.wohnungService.deleteWohnungAdresse(oid);
                 this.referenceRepo.delete(resultReference);
                 this.interneRepo.delete(resultInterne);
             }
@@ -171,25 +175,25 @@ public class AdresseServiceImpl implements AdresseService {
     public Adresse copy(String oid) {
 
         Adresse in = this.read(oid);
-        
+
         // map
         Adresse out = new Adresse(in);
         out.setOid(IdService.next());
-        
+
         // in DB speichern
         this.save(out);
-        
+
         return out;
-    
+
     }
 
     @Override
     public Adresse update(Adresse adresse) {
         LOG.info(adresse.toString());
         plz = Integer.toString(adresse.getPlz());
-        this.delete(adresse.getOid());        
-        return(this.save(adresse)) ;
-        
+        this.delete(adresse.getOid());
+        return (this.save(adresse));
+
     }
 
     public AdresseExterne toExterne(Adresse adresse) {
