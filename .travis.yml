@@ -2,5 +2,9 @@
 
 language: java
 
-jdk: 
-   - oraclejdk8
+jdk: oraclejdk8
+
+install: mvn clean
+
+script: mvn install -DskipTests=true
+
