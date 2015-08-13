@@ -8,11 +8,16 @@ import com.google.common.eventbus.Subscribe;
 import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
+import com.vaadin.ui.TabSheet;
 import de.muenchen.vaadin.services.BuergerService;
 import de.muenchen.vaadin.services.MessageService;
 import de.muenchen.vaadin.ui.app.MainUI;
+import de.muenchen.vaadin.ui.app.views.BuergerCreateChildView;
+import de.muenchen.vaadin.ui.app.views.BuergerDetailView;
+import static de.muenchen.vaadin.ui.app.views.BuergerDetailView.NAME;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
+import de.muenchen.vaadin.ui.components.BuergerChildTab;
 import de.muenchen.vaadin.ui.components.BuergerCreateForm;
 import de.muenchen.vaadin.ui.components.BuergerReadForm;
 import de.muenchen.vaadin.ui.components.BuergerSearchTable;
@@ -33,6 +38,7 @@ import java.util.Stack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.controller;
 
 /**
  * Der Controller ist die zentrale Klasse um die Logik im Kontext Buerger abzubilden.
@@ -218,6 +224,20 @@ public class BuergerViewController implements Serializable {
         BuergerCreateForm form = new BuergerCreateForm(this, navigateTo);
         form.setType(EventType.SAVE_CHILD);
         return form;
+    }
+    
+    /**
+     * Erzeugt eine neue Instanz eines "Child" Tabs.
+     * 
+     * @param navigateToForDetail Zielseite um sich die Details des 'Child' Objektes anzeigen zu lassen
+     * @param navigateForCreate Zielseite um ein neues 'Child' Objekt zu erstellen
+     * @param from Ausgangsseite zu der zurück navigiert werden soll
+     * @return {@link TabSheet.Tab} das Tab
+     */
+    public BuergerChildTab generateChildTab(String navigateToForDetail, String navigateForCreate, String from) {
+        BuergerChildTab tab = new BuergerChildTab(this, navigateToForDetail, navigateForCreate, from);
+        this.eventbus.register(tab);
+        return tab;
     }
     
     public BuergerCreateForm generateCreateChildForm() {

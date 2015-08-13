@@ -54,6 +54,7 @@ public class MainUI extends UI {
 
     @Autowired
     public MainUI(SpringViewProvider ViewProvider, SecurityService security, MessageService i18n, EventBus eventBus) {
+        LOG.info("starting UI");
         this.viewProvider = ViewProvider;
         this.security = security;
         this.i18n = i18n;
