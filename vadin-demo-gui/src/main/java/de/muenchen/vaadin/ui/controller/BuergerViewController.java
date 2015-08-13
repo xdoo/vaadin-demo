@@ -17,6 +17,11 @@ import de.muenchen.vaadin.ui.components.BuergerCreateForm;
 import de.muenchen.vaadin.ui.components.BuergerReadForm;
 import de.muenchen.vaadin.ui.components.BuergerSearchTable;
 import de.muenchen.vaadin.ui.components.BuergerTable;
+import de.muenchen.vaadin.ui.components.BuergerTableButtonFactory;
+import de.muenchen.vaadin.ui.components.BuergerTableCopyButton;
+import de.muenchen.vaadin.ui.components.BuergerTableDeleteButton;
+import de.muenchen.vaadin.ui.components.BuergerTableDetailButton;
+import de.muenchen.vaadin.ui.components.BuergerTableEditButton;
 import de.muenchen.vaadin.ui.components.GenericSuccessNotification;
 import de.muenchen.vaadin.ui.components.BuergerUpdateForm;
 import de.muenchen.vaadin.ui.util.EventBus;
@@ -239,27 +244,43 @@ public class BuergerViewController implements Serializable {
         return form;
     }
     
-    public BuergerSearchTable generateSearchTable(String navigateToForEdit, String navigateToForSelect, String navigateForCreate, String navigateFrom) {
+    public BuergerSearchTable generateSearchTable(String navigateToForEdit, String navigateToForDetail, String navigateForCreate, String navigateFrom) {
         LOG.debug("creating 'search' table for buerger");
-        return new BuergerSearchTable(this, navigateToForEdit, navigateToForSelect, navigateForCreate, navigateFrom);
+        BuergerTableButtonFactory detail = BuergerTableButtonFactory.getFactory(navigateToForDetail, BuergerTableDetailButton.class);
+        BuergerTableButtonFactory edit = BuergerTableButtonFactory.getFactory(navigateToForEdit, BuergerTableEditButton.class);
+        BuergerTableButtonFactory copy = BuergerTableButtonFactory.getFactory(null, BuergerTableCopyButton.class);
+        BuergerTableButtonFactory delete = BuergerTableButtonFactory.getFactory(null, BuergerTableDeleteButton.class);
+        
+        return new BuergerSearchTable(
+                this, 
+                navigateToForEdit, 
+                navigateToForDetail, 
+                navigateForCreate, 
+                navigateFrom,
+                // Schaltflächen
+                detail,
+                edit,
+                copy,
+                delete
+        );
     }
     
-    public BuergerTable generateChildTable(String navigateToForEdit, String navigateToForSelect, String from) {
-        BuergerTable table = this.createTable(navigateToForEdit, navigateToForSelect, from, this.queryKinder(this.current.getBean()));
-        table.setCopy(Boolean.FALSE);
+    public BuergerTable generateChildTable(String navigateToForEdit, String navigateToForDetail, String from) {
+        BuergerTableButtonFactory detail = BuergerTableButtonFactory.getFactory(navigateToForDetail, BuergerTableDetailButton.class);
+        BuergerTableButtonFactory edit = BuergerTableButtonFactory.getFactory(navigateToForEdit, BuergerTableEditButton.class);
+        
+        BuergerTable table = this.createTable(from, this.queryKinder(this.current.getBean()), detail, edit);
         return table;
     }
 
-    public BuergerTable generateTable(String navigateToForEdit, String navigateToForSelect, String from) { 
-        return this.createTable(navigateToForEdit, navigateToForSelect, from, this.queryBuerger());
+    public BuergerTable generateTable(String navigateToForEdit, String navigateToForSelect, String from, final BuergerTableButtonFactory... buttonfactory) { 
+        return this.createTable(from, this.queryBuerger(), buttonfactory);
     }
     
-    private BuergerTable createTable(String navigateToForEdit, String navigateToForSelect, String from, List<Buerger> entities) {
+    private BuergerTable createTable(String from, List<Buerger> entities, final BuergerTableButtonFactory... buttonfactory) {
         LOG.debug("creating table for buerger");
-        BuergerTable table = new BuergerTable(this);
+        BuergerTable table = new BuergerTable(this, buttonfactory);
         
-        table.setNavigateToForEdit(navigateToForEdit);
-        table.setNavigateToForSelect(navigateToForSelect);
         table.setFrom(from);
         
         this.eventbus.register(table);
