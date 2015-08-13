@@ -30,18 +30,12 @@ alter table adresse_interne add constraint UK_OID_ON_adresse_interne  unique (oi
 alter table adresse_reference add constraint UK_OID_ON_adresse_reference  unique (oid);
 alter table authoritys add constraint UK_OID_ON_authoritys  unique (oid);
 alter table buerger add constraint UK_OID_ON_buerger  unique (oid);
-alter table buerger_kinder add constraint UK_KINDER_ON_buerger_kinder  unique (kinder);
-alter table buerger_pass add constraint UK_PASS_ON_buerger_pass  unique (pass);
-alter table buerger_staatsangehoerigkeit_references add constraint UK_OID_ON_buerger_staatsangehoerigkeit_references  unique (staatsangehoerigkeit_references);
-alter table buerger_wohnungen add constraint UK_wohnungen_ON_buerger_wohnungen  unique (wohnungen);
 alter table company_base_infos add constraint UK_OID_ON_company_base_infos  unique (oid);
-alter table company_base_infos_accounts add constraint UK_accounts_ON_company_base_infos_accounts  unique (accounts);
 alter table mandant add constraint UK_OID_ON_mandant  unique (oid);
 alter table pass add constraint UK_OID_ON_pass  unique (oid);
 alter table permissions add constraint UK_OID_ON_permissions  unique (oid);
 alter table sachbearbeiter add constraint UK_OID_ON_sachbearbeiter  unique (oid);
 alter table users add constraint UK_OID_ON_users  unique (oid);
-alter table users_accounts add constraint UK_accounts_ON_users_accounts  unique (accounts);
 alter table wohnungen add constraint UK_OID_ON_wohnungen  unique (oid);
 alter table accounts add constraint FK_accounts_TO_mandant foreign key (mandant) references mandant;
 alter table adresse_externe add constraint FK_adresse_externe_TO_mandant foreign key (mandant) references mandant;
