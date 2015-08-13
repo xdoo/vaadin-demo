@@ -6,15 +6,16 @@ import de.muenchen.demo.service.domain.Buerger;
 import de.muenchen.demo.service.domain.BuergerRepository;
 import de.muenchen.demo.service.domain.Mandant;
 import de.muenchen.demo.service.domain.Pass;
-import de.muenchen.demo.service.domain.PassRepository;
-import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
 import de.muenchen.demo.service.domain.StaatsangehoerigkeitReference;
 import de.muenchen.demo.service.domain.User;
 import de.muenchen.demo.service.domain.Wohnung;
 import de.muenchen.demo.service.util.IdService;
 import de.muenchen.demo.service.util.QueryService;
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -95,8 +96,7 @@ public class BuergerServiceImpl implements BuergerService {
     @Override
     public void delete(String oid) {
         Buerger item = this.read(oid);
-        this.deleteBuergerEltern(oid);
-
+        this.deleteKindAllBuerger(oid);
         this.repo.delete(item);
     }
 
@@ -123,26 +123,56 @@ public class BuergerServiceImpl implements BuergerService {
         return out;
     }
 
+
     @Override
-    public Iterable<Buerger> readEltern(String oid) {
+    public Iterable<Buerger> readKinder(String oid) {
         return repo.findByKinderOid(oid);
     }
 
     @Override
-    public Buerger deleteBuergerEltern(String kindOid) {
-        Iterator<Buerger> iter = this.readEltern(kindOid).iterator();
+    public void deleteKindAllBuerger(String kindOid) {
+        Iterator<Buerger> iter = this.readKinder(kindOid).iterator();
+        for (Iterator iterator = iter; iterator.hasNext();) {
+
+            Buerger buerger = iter.next();
+
+            Set<Buerger> kinder = (Set<Buerger>) buerger.getKinder();
+            Collection<Buerger> removeKinder = new LinkedList<Buerger>();
+            for (Buerger element : kinder) {
+
+                if (element == this.read(kindOid)) {
+                    removeKinder.add(element);
+
+                }
+
+            }
+            kinder.removeAll(removeKinder);
+            this.update(buerger);
+
+        }
+    }
+
+    @Override
+    public void deleteKindBuerger(String kindOid, String buergerOid) {
+        Iterator<Buerger> iter = this.readKinder(kindOid).iterator();
         while (iter.hasNext()) {
             Buerger buerger = iter.next();
-            Iterator<Buerger> kinderIter = buerger.getKinder().iterator();
-            while (kinderIter.hasNext()) {
-                Buerger kind = kinderIter.next();
-                if (kind == this.read(kindOid)) {
-                    kinderIter.remove();
-                    return this.update(buerger);
+            if (buerger == this.read(buergerOid)) {
+                Set<Buerger> kinder = (Set<Buerger>) buerger.getKinder();
+                Collection<Buerger> removeKinder = new LinkedList<Buerger>();
+                for (Buerger element : kinder) {
+
+                    if (element == this.read(kindOid)) {
+                        removeKinder.add(element);
+
+                    }
+
                 }
+                kinder.removeAll(removeKinder);
+                this.update(buerger);
+
             }
         }
-        return null;
     }
 
     @Override
@@ -151,20 +181,48 @@ public class BuergerServiceImpl implements BuergerService {
     }
 
     @Override
-    public Buerger deleteBuergerPass(String passOid) {
+    public void deleteBuergerPass(String passOid) {
+
         Iterator<Buerger> iter = this.readPass(passOid).iterator();
         while (iter.hasNext()) {
             Buerger buerger = iter.next();
-            Iterator<Pass> passItr = buerger.getPass().iterator();
-            while (passItr.hasNext()) {
-                Pass pass = passItr.next();
-                if (pass == this.passService.read(passOid)) {
-                    passItr.remove();
-                    return this.update(buerger);
+            Set<Pass> pass = (Set<Pass>) buerger.getPass();
+            Collection<Pass> removePass = new LinkedList<Pass>();
+            for (Pass element : pass) {
+
+                if (element == this.passService.read(passOid)) {
+                    removePass.add(element);
+
                 }
+
+            }
+            pass.removeAll(removePass);
+            this.update(buerger);
+
+        }
+    }
+
+    @Override
+    public void deleteBuergerPass(String passOid, String buergerOid) {
+        Iterator<Buerger> iter = this.readPass(passOid).iterator();
+        while (iter.hasNext()) {
+            Buerger buerger = iter.next();
+            if (buerger == this.read(buergerOid)) {
+                Set<Pass> pass = (Set<Pass>) buerger.getPass();
+                Collection<Pass> removePass = new LinkedList<Pass>();
+                for (Pass element : pass) {
+
+                    if (element == this.passService.read(passOid)) {
+                        removePass.add(element);
+
+                    }
+
+                }
+                pass.removeAll(removePass);
+                this.update(buerger);
+
             }
         }
-        return null;
     }
 
     @Override
@@ -173,29 +231,51 @@ public class BuergerServiceImpl implements BuergerService {
     }
 
     @Override
-    public Buerger deleteBuergerWohnung(String wohnungOid) {
+    public void deleteWohnungAllBuerger(String wohnungOid) {
         Iterator<Buerger> iter = this.readWohnung(wohnungOid).iterator();
         while (iter.hasNext()) {
             Buerger buerger = iter.next();
-            Iterator<Wohnung> wohnungIter = buerger.getWohnungen().iterator();
-            while (wohnungIter.hasNext()) {
-                Wohnung wohnung = wohnungIter.next();
-                if (wohnung == this.wohnungService.read(wohnungOid)) {
-                    wohnungIter.remove();
-                    return this.update(buerger);
+            Set<Wohnung> wohnung = (Set<Wohnung>) buerger.getWohnungen();
+            Collection<Wohnung> removeWohnung = new LinkedList<Wohnung>();
+            for (Wohnung element : wohnung) {
+
+                if (element == this.wohnungService.read(wohnungOid)) {
+                    removeWohnung.add(element);
+
                 }
+
             }
+            wohnung.removeAll(removeWohnung);
+            this.update(buerger);
+
         }
-        return null;
     }
 
+    @Override
+    public void deleteWohnungBuerger(String wohnungOid, String buergerOid) {
+        Iterator<Buerger> iter = this.readWohnung(wohnungOid).iterator();
+        while (iter.hasNext()) {
+            Buerger buerger = iter.next();
+            if (buerger == this.read(buergerOid)) {
+                Set<Wohnung> wohnung = (Set<Wohnung>) buerger.getWohnungen();
+                Collection<Wohnung> remove = new LinkedList<>();
+                
+                wohnung.stream().filter((element) -> (element == this.wohnungService.read(wohnungOid))).forEach((element) -> {
+                    remove.add(element);
+                });
+                wohnung.removeAll(remove);
+                this.update(buerger);
+
+            }
+        }
+    }
     @Override
     public Iterable<Buerger> readStaatsangehoerigkeit(String oid) {
         return repo.findByStaatsangehoerigkeitReferencesReferencedOid(oid);
     }
 
     @Override
-    public Buerger deleteBuergerStaatsangehoerigkeit(String staatOid) {
+    public void deleteBuergerStaatsangehoerigkeit(String staatOid) {
         Iterator<Buerger> iter = this.readStaatsangehoerigkeit(staatOid).iterator();
         while (iter.hasNext()) {
             Buerger buerger = iter.next();
@@ -206,11 +286,31 @@ public class BuergerServiceImpl implements BuergerService {
 
                 if (staatRef == this.staatService.readReference(staatOid)) {
                     staatRefIter.remove();
-                    return this.update(buerger);
+                    this.update(buerger);
                 }
             }
         }
-        return null;
+    }
+
+    @Override
+    public void deleteBuergerStaatsangehoerigkeit(String staatOid, String buergerOid) {
+        Iterator<Buerger> iter = this.readStaatsangehoerigkeit(staatOid).iterator();
+        while (iter.hasNext()) {
+            Buerger buerger = iter.next();
+            if (buerger == this.read(buergerOid)) {
+
+                Iterator<StaatsangehoerigkeitReference> staatRefIter = buerger.getStaatsangehoerigkeitReferences().iterator();
+
+                while (staatRefIter.hasNext()) {
+                    StaatsangehoerigkeitReference staatRef = staatRefIter.next();
+
+                    if (staatRef == this.staatService.readReference(staatOid)) {
+                        staatRefIter.remove();
+                        this.update(buerger);
+                    }
+                }
+            }
+        }
     }
 
 }

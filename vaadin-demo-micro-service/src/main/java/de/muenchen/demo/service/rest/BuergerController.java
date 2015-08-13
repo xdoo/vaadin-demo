@@ -39,7 +39,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * Schnittstelle um einen Bürger verwalten zu können.
@@ -95,7 +94,7 @@ public class BuergerController {
     /**
      * Bürger mit Parametern suchen.
      *
-     * @param filter
+     * @param query
      * @return
      */
     @RolesAllowed({"PERM_queryBuerger"})
@@ -266,21 +265,56 @@ public class BuergerController {
     }
 
     /**
-     * Liest die Vater einer Bürger.
+     * Liest die Eltern einer Bürger.
      *
-     * @param oid
+     * @param kindOid
      * @return
      */
-    @RolesAllowed({"PERM_readBuergerKinder"})
-    @RequestMapping(value = "/eltern/{oid}", method = {RequestMethod.GET})
-    public ResponseEntity readBuergerEltern(@PathVariable("oid") String oid) {
+    @RolesAllowed({"PERM_readKindBuerger"})
+    @RequestMapping(value = "/kind/{kindOid}", method = {RequestMethod.GET})
+    public ResponseEntity readKindBuerger(@PathVariable("kindOid") String kindOid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("read Buerger Eltern");
         }
-        Iterable<Buerger> buerger = this.service.readEltern(oid);
+        Iterable<Buerger> buerger = this.service.readKinder(kindOid);
         SearchResultResource<BuergerResource> resource = this.assembler.toResource(Lists.newArrayList(buerger));
-        resource.add(linkTo(methodOn(BuergerController.class).readBuergerKinder(oid)).withSelfRel());
+        resource.add(linkTo(methodOn(BuergerController.class).readBuergerKinder(kindOid)).withSelfRel());
         return ResponseEntity.ok(resource);
+    }
+    
+    /**
+     * Entfernt die Beziehung zwischen Eltern und ein Kind.
+     *
+     * @param kindOid
+     * @return
+     */
+    @RolesAllowed({"PERM_deleteKindAllBuerger"})
+    @RequestMapping(value = "/delete/kind/{kindOid}", method = {RequestMethod.DELETE})
+    public ResponseEntity deleteKindAllBuerger(@PathVariable("kindOid") String kindOid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("delete Buerger Eltern");
+        }
+        this.service.deleteKindAllBuerger(kindOid);
+        return ResponseEntity.ok().build();
+
+    }
+    
+    /**
+     * Entfernt die Beziehung zwischen einen Buerger und seinen Kind.
+     *
+     * @param kindOid
+     * @param buergerOid
+     * @return
+     */
+    @RolesAllowed({"PERM_deleteKindBuerger"})
+    @RequestMapping(value = "/delete/kind/{kindOid}/{buergerOid}", method = {RequestMethod.DELETE})
+    public ResponseEntity deleteKindBuerger(@PathVariable("kindOid") String kindOid,@PathVariable("buergerOid") String buergerOid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("delete Buerger Kinder");
+        }
+        this.service.deleteKindBuerger(kindOid,buergerOid);
+        return ResponseEntity.ok().build();
+
     }
 
     /**
