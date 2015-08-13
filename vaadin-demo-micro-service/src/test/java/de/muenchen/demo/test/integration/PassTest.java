@@ -126,8 +126,6 @@ public class PassTest {
 
         ObjectMapper mapper = new ObjectMapper(); // can reuse, share globally
 
-
-        
         SSLContext sslContext = SSLContexts.custom().loadTrustMaterial(null, new TrustSelfSignedStrategy()).useTLS().build();
         SSLConnectionSocketFactory connectionFactory = new SSLConnectionSocketFactory(sslContext, new AllowAllHostnameVerifier());
         BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
@@ -296,6 +294,8 @@ public class PassTest {
         String URL1 = "http://localhost:" + port + "/pass/staat/90";
         StaatsangehoerigkeitResource responseStaat = restTemplate.getForEntity(URL1, StaatsangehoerigkeitResource.class).getBody();
         assertEquals("de", responseStaat.getCode());
+        String urlDelete = "http://localhost:" + port + "/staat/123";
+        restTemplate.delete(urlDelete);
     }
 
     @After

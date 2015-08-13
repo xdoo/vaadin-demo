@@ -85,6 +85,7 @@ public class StaatsangehoerigkeitServiceTest {
     AuthenticationManager authenticationManager;
     @Rule
     public WireMockRule wireMockRule = new WireMockRule(8089);
+
     @Before
     public void setUp() throws JsonProcessingException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
 
@@ -135,7 +136,7 @@ public class StaatsangehoerigkeitServiceTest {
 
     @Test
     public void deleteTest() throws JsonProcessingException, AuthenticationException {
-
+        service.create("123");
         service.delete("123");
         Staatsangehoerigkeit a = service.read("123");
         assertEquals(null, a);
