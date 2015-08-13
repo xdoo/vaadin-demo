@@ -1,17 +1,16 @@
 package de.muenchen.vaadin.ui.components;
 
 import com.vaadin.data.util.BeanItem;
-import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
-import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.EventType;
 
 /**
- *
+ * Schaltfläche zum kopieren eines {@link Buerger}.
+ * 
  * @author claus.straube
  */
 public class BuergerTableCopyButton extends BuergerTableButtonBase {

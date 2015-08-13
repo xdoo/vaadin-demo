@@ -1,11 +1,11 @@
 package de.muenchen.vaadin.ui.components;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
+ * Die Factory wird an die Tabelle übergeben. Die Tabelle ist dann dafür zuständig
+ * über die Factory neue Instanzen der Schaltflächen zu erzeugen. 
+ * 
  * @author claus.straube
  */
 public class BuergerTableButtonFactory {
@@ -19,11 +19,27 @@ public class BuergerTableButtonFactory {
         this.navigateTo = navigateTo;
         this.clazz = clazz;
     }
-      
+     
+    /**
+     * Erzeugt eine Instanz der Factory.
+     * 
+     * @param navigateTo Die Seite, zu der bei drücken der Schaltfläche navigiert werden soll. Null, wenn keine Navigation erfolgen soll.
+     * @param clazz Die eigene Schaltflächen Klasse. Wichtig ist, dass diese von {@link BuergerTableButtonBase} abgeleitet wird. 
+     * @return eine Instanz der Factory
+     */
     public static BuergerTableButtonFactory getFactory(String navigateTo, Class clazz) {
         return new BuergerTableButtonFactory(navigateTo, clazz);
     }
     
+    /**
+     * Erzeugt die Schaltfläche. <br/> 
+     * <b>wichtig:</b><br/>
+     * Diese muss noch mit zusätzlichen Parametern versorgt werden. Die passiert 
+     * üblicherweise innerhalb der Tabellen Instanz. D.h. der Entwickler muss sich 
+     * nicht darum kümmern.
+     * 
+     * @return 
+     */
     public BuergerTableButton createButton() {
         BuergerTableButton button = null;
         try {

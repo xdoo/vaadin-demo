@@ -11,7 +11,8 @@ import de.muenchen.vaadin.ui.util.EventType;
 
 
 /**
- *
+ * Schaltfläche zum bearbeiten eines {@link Buerger}.
+ * 
  * @author claus.straube
  */
 public class BuergerTableEditButton extends BuergerTableButtonBase {

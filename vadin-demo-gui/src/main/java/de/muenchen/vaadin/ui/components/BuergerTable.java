@@ -2,21 +2,15 @@ package de.muenchen.vaadin.ui.components;
 
 import com.google.common.collect.Lists;
 import com.google.common.eventbus.Subscribe;
-import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.server.FontAwesome;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.Table.ColumnGenerator;
-import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
-import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.EventType;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -153,6 +147,17 @@ public class BuergerTable extends CustomComponent {
 
     public void setFrom(String from) {
         this.from = from;
+    }
+
+    /**
+     * Über diese Liste können der Tabelle weitere Schaltflächen hinzu gefügt,
+     * bzw. die vorhandenen Schaltflächen in eine neue reihenfolge gebracht
+     * werden.
+     * 
+     * @return Liste der {@link BuergerTableButtonFactory}
+     */
+    public List<BuergerTableButtonFactory> getButtonFactories() {
+        return buttonFactories;
     }
     
 }

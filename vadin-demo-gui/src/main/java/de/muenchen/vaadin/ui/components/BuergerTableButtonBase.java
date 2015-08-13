@@ -1,14 +1,14 @@
 package de.muenchen.vaadin.ui.components;
 
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
 /**
- *
+ * Basisklasse für alle selbst entwickelten Tabellen Schaltflächen.
+ * 
  * @author claus.straube
  */
 public abstract class BuergerTableButtonBase extends CustomComponent implements BuergerTableButton {
