@@ -83,7 +83,7 @@ public class BuergerViewController implements Serializable {
     private List<Buerger> currentEntities;
     
     // navigation cache
-    private Stack<String> from = new Stack<>();
+    private final Stack<String> from = new Stack<>();
     
     /**
      * Die Main wird über die {@link DefaulPersonView} registriert. Dies
@@ -157,6 +157,12 @@ public class BuergerViewController implements Serializable {
         return service.saveBuerger(entity);
     }
     
+    /**
+     * Speichert ein Kind zu einem {@link Buerger} Objekt in der Datenbank.
+     * 
+     * @param entity
+     * @return 
+     */
     public Buerger saveBuergerKind(Buerger entity) {
         return service.saveKind(this.current.getBean(), entity);
     }
@@ -210,24 +216,24 @@ public class BuergerViewController implements Serializable {
     }
     
     public BuergerCreateForm generateCreateChildForm() {
-        return this.generateCreateChildForm(this.from.pop());
+        return this.generateCreateChildForm(this.popFrom());
     }
 
     public BuergerUpdateForm generateUpdateForm(String navigateTo, String from) { 
         LOG.debug("creating 'update' buerger form");
-        BuergerUpdateForm form = new BuergerUpdateForm(this, navigateTo, this.from.pop(), from);
+        BuergerUpdateForm form = new BuergerUpdateForm(this, navigateTo, this.popFrom(), from);
         this.eventbus.register(form);
         this.eventbus.post(new BuergerComponentEvent(this.current, EventType.SELECT2UPDATE));
         return form;
     }
     
     public BuergerUpdateForm generateUpdateForm(String from) { 
-        return this.generateUpdateForm(this.from.peek(), from);
+        return this.generateUpdateForm(this.peekFrom(), from);
     }
     
     public BuergerReadForm generateReadForm(String navigateToUpdate, String from) {
         LOG.debug("creating 'read' buerger form");
-        BuergerReadForm form = new BuergerReadForm(this, navigateToUpdate, this.from.pop(), from);
+        BuergerReadForm form = new BuergerReadForm(this, navigateToUpdate, this.peekFrom(), from);
         this.eventbus.register(form);
         this.eventbus.post(new BuergerComponentEvent(this.current, EventType.SELECT2READ));
         return form;
@@ -282,7 +288,7 @@ public class BuergerViewController implements Serializable {
             LOG.debug("create event");
             
             // Verlauf protokollieren
-            this.stack(event);
+            this.pushFrom(event);
             
             // Zur Seite wechseln
             this.navigator.navigateTo(event.getNavigateTo());
@@ -298,7 +304,7 @@ public class BuergerViewController implements Serializable {
             this.eventbus.post(new BuergerComponentEvent(event.getEntity(), EventType.UPDATE));
             
             // Verlauf protokollieren
-            this.stack(event);
+            this.pushFrom(event);
             
             GenericSuccessNotification succes = new GenericSuccessNotification("Bürger angepasst", "Der Bürger wurde erfolgreich angepasst und gespeichert."); // TODO i18n
             succes.show(Page.getCurrent());
@@ -379,7 +385,7 @@ public class BuergerViewController implements Serializable {
             this.eventbus.post(new BuergerComponentEvent(event.getItem().getBean(), EventType.SELECT2UPDATE));
             
             // Verlauf protokollieren
-            this.stack(event);
+            this.pushFrom(event);
             
             // Zur Seite wechseln
             this.navigator.navigateTo(event.getNavigateTo());
@@ -395,7 +401,7 @@ public class BuergerViewController implements Serializable {
             this.eventbus.post(new BuergerComponentEvent(event.getItem().getBean(), EventType.SELECT2READ));
             
             // Verlauf protokollieren
-            this.stack(event);
+            this.pushFrom(event);
             
             // Zur Seite wechseln
             this.navigator.navigateTo(event.getNavigateTo());
@@ -430,10 +436,18 @@ public class BuergerViewController implements Serializable {
         }
     }
     
-    private void stack(BuergerAppEvent event) {
+    private void pushFrom(BuergerAppEvent event) {
         if(event.getFrom().isPresent()) {
             this.from.push(event.getFrom().get());
         }
+    }
+    
+    private String popFrom() {
+        return this.from.pop();
+    }
+    
+    private String peekFrom() {
+        return this.from.peek();
     }
     
 }
