@@ -235,7 +235,7 @@ public class WohnungController {
      * @return
      */
     @RolesAllowed({"PERM_readWohnungBuerger"})
-    @RequestMapping(value = "/woung/{wohnungOid}", method = {RequestMethod.GET})
+    @RequestMapping(value = "/wohnung/{wohnungOid}", method = {RequestMethod.GET})
     public ResponseEntity readWohnungBuerger(@PathVariable("wohnungOid") String wohnungOid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("read Wohnung Buerger");
@@ -252,7 +252,7 @@ public class WohnungController {
      * @param wohnungOid
      * @return
      */
-    @RolesAllowed({"PERM_deleteBuergerKinder"})
+    @RolesAllowed({"PERM_deleteWohnungAllBuerger"})
     @RequestMapping(value = "/delete/buerger/{wohnungOid}", method = {RequestMethod.GET})
     public ResponseEntity deleteWohnungAllBuerger(@PathVariable("wohnungOid") String wohnungOid) {
         if (LOG.isDebugEnabled()) {
