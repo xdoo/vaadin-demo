@@ -2,12 +2,10 @@ package de.muenchen.vaadin.ui.app.views;
 
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.ui.app.MainUI;
-import de.muenchen.vaadin.ui.components.BuergerChildTabSheet;
 import de.muenchen.vaadin.ui.components.BuergerChildTab;
 import de.muenchen.vaadin.ui.components.BuergerReadForm;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
