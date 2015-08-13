@@ -265,11 +265,10 @@ public class BuergerViewController implements Serializable {
         );
     }
     
-    public BuergerTable generateChildTable(String navigateToForEdit, String navigateToForDetail, String from) {
+    public BuergerTable generateChildTable(String navigateToForDetail, String from) {
         BuergerTableButtonFactory detail = BuergerTableButtonFactory.getFactory(navigateToForDetail, BuergerTableDetailButton.class);
-        BuergerTableButtonFactory edit = BuergerTableButtonFactory.getFactory(navigateToForEdit, BuergerTableEditButton.class);
         
-        BuergerTable table = this.createTable(from, this.queryKinder(this.current.getBean()), detail, edit);
+        BuergerTable table = this.createTable(from, this.queryKinder(this.current.getBean()), detail);
         return table;
     }
 
