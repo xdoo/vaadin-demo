@@ -8,6 +8,7 @@ import com.vaadin.data.validator.DateRangeValidator;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.server.Page;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.DateField;
@@ -113,7 +114,8 @@ public class BuergerUpdateForm extends CustomComponent {
                 Buerger entity = binder.getItemDataSource().getBean();
                 controller.getEventbus().post(new BuergerAppEvent(entity, EventType.UPDATE).navigateTo(navigateTo).from(this.from));
             } catch (FieldGroup.CommitException e) {
-                Notification.show("You fail!");
+                GenericErrorNotification error = new GenericErrorNotification("Fehler","Beim erstellen der Person ist ein Fehler aufgetreten. Bitte füllen Sie alle Felder mit gültigen Werten aus.");
+                error.show(Page.getCurrent());
             }
         });
         updateButton.addStyleName(ValoTheme.BUTTON_FRIENDLY);

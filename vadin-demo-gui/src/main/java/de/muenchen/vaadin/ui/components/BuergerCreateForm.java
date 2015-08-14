@@ -114,8 +114,7 @@ public class BuergerCreateForm extends CustomComponent {
                 //reset
                 binder.setItemDataSource(controller.createBuerger());
             } catch (CommitException e) {
-                // TODO --> i18n
-                GenericErrorNotification error = new GenericErrorNotification("Fehler","Beim erstellen der Person ist ein Fehler aufgetreten. Der Service Desk wurde per E-Mail informiert");
+                GenericErrorNotification error = new GenericErrorNotification("Fehler","Beim erstellen der Person ist ein Fehler aufgetreten. Bitte füllen Sie alle Felder mit gültigen Werten aus.");
                 error.show(Page.getCurrent());
             }
         });
