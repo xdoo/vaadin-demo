@@ -98,6 +98,7 @@ public class BuergerUpdateForm extends CustomComponent {
         updateButton.addStyleName(ValoTheme.BUTTON_FRIENDLY);
         updateButton.setIcon(FontAwesome.PENCIL);
         updateButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
+        updateButton.setId(String.format("%s_UPDATE_BUTTON_FORM", controller.getI18nBasePath()));
         buttonLayout.addComponent(updateButton);
         // die Schaltfläche zum Abbrechen
         buttonLayout.addComponent(new GenericCancelButton(

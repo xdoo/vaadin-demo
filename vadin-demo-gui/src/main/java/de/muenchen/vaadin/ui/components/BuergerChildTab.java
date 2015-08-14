@@ -36,6 +36,7 @@ public class BuergerChildTab extends CustomComponent {
         vlayout.setSpacing(true);
         vlayout.setMargin(true);
         
+        setId(String.format("%s_%s_%s_CHILD_TAB", navigateToForDetail, from, controller.getI18nBasePath()));
         setCompositionRoot(vlayout);
     } 
     

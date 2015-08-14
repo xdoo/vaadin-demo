@@ -215,6 +215,7 @@ public class MainUI extends UI {
             });
             b.setHtmlContentAllowed(true);
             b.setPrimaryStyleName("valo-menu-item");
+            b.setId(String.format("MENU_ITEM_BUTTON_%s", item.getKey()).toUpperCase());
 //            b.setIcon(testIcon.get());
             menuItemsLayout.addComponent(b);
         }
