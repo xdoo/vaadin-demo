@@ -6,6 +6,7 @@ import de.muenchen.demo.service.domain.Permission;
 import de.muenchen.demo.service.rest.PermissionController;
 import de.muenchen.demo.service.services.PermissionService;
 import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
+import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;

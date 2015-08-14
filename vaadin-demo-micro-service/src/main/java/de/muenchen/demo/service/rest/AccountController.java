@@ -1,7 +1,7 @@
 package de.muenchen.demo.service.rest;
 
 import de.muenchen.demo.service.domain.Account;
-import de.muenchen.demo.service.rest.api.SearchResultResource;
+import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
 import de.muenchen.demo.service.rest.api.AccountResource;
 import de.muenchen.demo.service.rest.api.AccountResourceAssembler;
 import de.muenchen.demo.service.services.AccountService;

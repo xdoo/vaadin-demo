@@ -18,7 +18,7 @@ import de.muenchen.demo.service.domain.UserRepository;
 import de.muenchen.demo.service.domain.Wohnung;
 import de.muenchen.demo.service.domain.WohnungRepository;
 import de.muenchen.demo.service.rest.api.AdresseResource;
-import de.muenchen.demo.service.rest.api.SearchResultResource;
+import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
 import de.muenchen.demo.service.rest.api.WohnungResource;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;

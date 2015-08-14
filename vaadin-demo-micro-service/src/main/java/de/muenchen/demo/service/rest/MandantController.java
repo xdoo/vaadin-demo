@@ -3,7 +3,7 @@ package de.muenchen.demo.service.rest;
 import de.muenchen.demo.service.domain.Mandant;
 import de.muenchen.demo.service.rest.api.MandantResource;
 import de.muenchen.demo.service.rest.api.MandantResourceAssembler;
-import de.muenchen.demo.service.rest.api.SearchResultResource;
+import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
 import de.muenchen.demo.service.rest.api.WohnungResourceAssembler;
 import de.muenchen.demo.service.services.MandantService;
 import de.muenchen.demo.service.services.StaatsangehoerigkeitService;

@@ -25,7 +25,7 @@ import de.muenchen.demo.service.domain.PermissionRepository;
 import de.muenchen.demo.service.domain.UserAuthorityRepository;
 import de.muenchen.demo.service.domain.UserRepository;
 import de.muenchen.demo.service.rest.api.AdresseResource;
-import de.muenchen.demo.service.rest.api.SearchResultResource;
+import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;

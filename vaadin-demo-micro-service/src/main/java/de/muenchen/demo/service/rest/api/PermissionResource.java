@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package de.muenchen.demo.service.rest.api;
+import de.muenchen.vaadin.demo.api.rest.SecurityResource;
 
 /**
  *

@@ -21,7 +21,7 @@ import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
 import de.muenchen.demo.service.domain.StaatsangehoerigkeitReferenceRepository;
 import de.muenchen.demo.service.domain.UserAuthorityRepository;
 import de.muenchen.demo.service.domain.UserRepository;
-import de.muenchen.demo.service.rest.api.SearchResultResource;
+import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
 import de.muenchen.demo.service.rest.api.StaatsangehoerigkeitResource;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;

@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityLinks;
 import org.springframework.stereotype.Service;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
+import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
+import de.muenchen.vaadin.demo.api.rest.SecurityResource;
 
 /**
  *

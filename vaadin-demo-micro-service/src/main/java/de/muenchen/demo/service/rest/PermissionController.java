@@ -1,7 +1,7 @@
 package de.muenchen.demo.service.rest;
 
 import de.muenchen.demo.service.domain.Permission;
-import de.muenchen.demo.service.rest.api.SearchResultResource;
+import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
 import de.muenchen.demo.service.rest.api.PermissionResource;
 import de.muenchen.demo.service.rest.api.PermissionResourceAssembler;
 import de.muenchen.demo.service.services.PermissionService;

@@ -5,7 +5,7 @@ import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
 import de.muenchen.demo.service.domain.StaatsangehoerigkeitReference;
 import de.muenchen.demo.service.rest.api.PassResource;
 import de.muenchen.demo.service.rest.api.PassResourceAssembler;
-import de.muenchen.demo.service.rest.api.SearchResultResource;
+import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
 import de.muenchen.demo.service.rest.api.StaatsangehoerigkeitResource;
 import de.muenchen.demo.service.rest.api.StaatsangehoerigkeitResourceAssembler;
 import de.muenchen.demo.service.rest.api.WohnungResourceAssembler;
