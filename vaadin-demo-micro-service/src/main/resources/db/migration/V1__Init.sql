@@ -176,16 +176,16 @@ insert  into permissions (id,  mandant,perm_permission,oid) values ('1092','2','
 insert  into permissions (id,  mandant,perm_permission,oid) values ('1093','2','PERM_deleteWohnung','1093');										
 insert  into permissions (id,  mandant,perm_permission,oid) values ('1094','2','PERM_readWohnungAdresse','1094');										
 insert  into permissions (id,  mandant,perm_permission,oid) values ('1095','2','PERM_addAdresseWohnung','1095');										
-insert  into permissions (id,  mandant,perm_permission,oid) values ('1096','2','PERM_deleteWohnungBuerger','1096');								
-insert  into permissions (id,  mandant,perm_permission,oid) values ('1097','2','PERM_deleteWohnungAllBuerger','1097');								
-insert  into permissions (id,  mandant,perm_permission,oid) values ('1098','2','PERM_readWohnungBuerger','1098');								
-insert  into permissions (id,  mandant,perm_permission,oid) values ('1099','2','PERM_deleteKindBuerger','1099');								
-insert  into permissions (id,  mandant,perm_permission,oid) values ('1100','2','PERM_deleteKindAllBuerger','1100');								
-insert  into permissions (id,  mandant,perm_permission,oid) values ('1101','2','PERM_readKindBuerger','1101');								
-								
+insert  into permissions (id,  mandant,perm_permission,oid) values ('1096','2','PERM_releaseWohnungBuerger','1096');									
+insert  into permissions (id,  mandant,perm_permission,oid) values ('1097','2','PERM_releaseWohnungAllBuerger','1097');									
+insert  into permissions (id,  mandant,perm_permission,oid) values ('1098','2','PERM_readWohnungBuerger','1098');
+insert  into permissions (id,  mandant,perm_permission,oid) values ('1099','2','PERM_releaseBuergerElternteil','1099');									
+insert  into permissions (id,  mandant,perm_permission,oid) values ('1100','2','PERM_releaseBuergerEltern','1100');									
+insert  into permissions (id,  mandant,perm_permission,oid) values ('1101','2','PERM_readEltern','1101');									
+									
 							
 								
-
+							
 insert into authoritys_permissions (authority_id, permission_id) values ('2','1000');					
 insert into authoritys_permissions (authority_id, permission_id) values ('2','1001');					
 insert into authoritys_permissions (authority_id, permission_id) values ('2','1002');					
