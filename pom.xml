@@ -10,6 +10,7 @@
         <module>vaadin-demo-api</module>
     <module>vadin-demo-gui</module>
         <module>vaadin-demo</module>
+        <module>vaadin-demo-configcloud</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
