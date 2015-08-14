@@ -2,12 +2,15 @@ package de.muenchen.vaadin.ui.components;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
+import com.vaadin.data.validator.DateRangeValidator;
+import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.DateField;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -18,6 +21,7 @@ import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.EventType;
 import de.muenchen.vaadin.ui.util.I18nPaths;
+import java.util.Date;
 
 /**
  * Formular zum Erstellen eines {@link Buerger}s.
@@ -87,11 +91,18 @@ public class BuergerCreateForm extends CustomComponent {
         // Fokus auf das erste Feld setzen
         TextField firstField = controller.getUtil().createFormTextField(binder, controller.getI18nBasePath(), Buerger.VORNAME, controller.getMsg());
         firstField.focus();
+        firstField.addValidator(new StringLengthValidator(controller.getMsg().get("m1.buerger.nachname.validation"),1,Integer.MAX_VALUE, false));
         layout.addComponent(firstField);
         
         // alle anderen Felder
-        layout.addComponent(controller.getUtil().createFormTextField(binder, controller.getI18nBasePath(), Buerger.NACHNAME, controller.getMsg()));
-        layout.addComponent(controller.getUtil().createFormDateField(binder, controller.getI18nBasePath(), Buerger.GEBURTSDATUM, controller.getMsg()));
+        TextField secField = controller.getUtil().createFormTextField(binder, controller.getI18nBasePath(), Buerger.NACHNAME, controller.getMsg());
+        secField.addValidator(new StringLengthValidator(controller.getMsg().get("m1.buerger.nachname.validation"),1,Integer.MAX_VALUE, false));
+        layout.addComponent(secField);
+        DateField birthdayfield = controller.getUtil().createFormDateField(binder, controller.getI18nBasePath(), Buerger.GEBURTSDATUM, controller.getMsg());
+        //String errorMsg = controller.getUtil().createFormTextField(binder, controller.getI18nBasePath(), Buerger.GEBURTSDATUM+".validation", controller.getMsg()).getValue();
+        String errorMsg = controller.getMsg().get("m1.buerger.geburtsdatum.validation");
+        birthdayfield.addValidator(new DateRangeValidator(errorMsg,new Date(0),new Date(),DateField.RESOLUTION_YEAR));
+        layout.addComponent(birthdayfield);    
 
         layout.addComponent(buttonLayout);
         // die 'speichern' Schaltfläche
@@ -104,7 +115,7 @@ public class BuergerCreateForm extends CustomComponent {
                 binder.setItemDataSource(controller.createBuerger());
             } catch (CommitException e) {
                 // TODO --> i18n
-                GenericErrorNotification error = new GenericErrorNotification("Fehler", "Beim erstellen der Person ist ein Fehler aufgetreten. Der Service Desk wurde per E-Mail informiert");
+                GenericErrorNotification error = new GenericErrorNotification("Fehler","Beim erstellen der Person ist ein Fehler aufgetreten. Der Service Desk wurde per E-Mail informiert");
                 error.show(Page.getCurrent());
             }
         });
