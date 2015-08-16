@@ -64,13 +64,13 @@ public class QueryService<E> {
                 = fullTextEntityManager.createFullTextQuery(query, entity);
 
         // limit query to tenant
-        jpaQuery.enableFullTextFilter("tenantSearchFilter").setParameter("mandant_mid", readMid());
+        jpaQuery.enableFullTextFilter("tenantSearchFilter").setParameter("mandantoid", readTenantOid());
         
         // execute search and return results (sorted by relevance as default)
         return jpaQuery.getResultList();
     }
     
-    private String readMid() {
+    private String readTenantOid() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User readByUsername = userService.readByUsername(authentication.getName());
 		String mid = readByUsername.getMandant().getOid();
