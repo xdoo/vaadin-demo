@@ -21,6 +21,9 @@ public class ConfigServerApplication {
      * @param args 
      */
     public static void main(String[] args) {
+        System.setProperty("https.proxyHost","10.158.0.79");
+        System.setProperty("https.proxyPort","80");
+
         SpringApplication.run(ConfigServerApplication.class, args);
     }
 }
