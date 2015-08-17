@@ -16,7 +16,7 @@ import de.muenchen.demo.service.domain.Permission;
 import de.muenchen.demo.service.domain.PermissionRepository;
 import de.muenchen.demo.service.domain.UserAuthorityRepository;
 import de.muenchen.demo.service.domain.UserRepository;
-import de.muenchen.demo.service.rest.api.PermissionResource;
+import de.muenchen.vaadin.demo.api.rest.PermissionResource;
 import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;

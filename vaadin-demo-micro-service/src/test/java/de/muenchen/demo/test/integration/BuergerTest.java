@@ -30,7 +30,7 @@ import de.muenchen.demo.service.domain.WohnungRepository;
 import de.muenchen.vaadin.demo.api.rest.BuergerResource;
 import de.muenchen.demo.service.rest.api.PassResource;
 import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
-import de.muenchen.demo.service.rest.api.StaatsangehoerigkeitResource;
+import de.muenchen.vaadin.demo.api.rest.StaatsangehoerigkeitResource;
 import de.muenchen.demo.service.services.BuergerService;
 import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
 import java.security.KeyManagementException;

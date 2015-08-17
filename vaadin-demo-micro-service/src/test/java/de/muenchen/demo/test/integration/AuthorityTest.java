@@ -16,7 +16,7 @@ import de.muenchen.demo.service.domain.MandantRepository;
 import de.muenchen.demo.service.domain.PermissionRepository;
 import de.muenchen.demo.service.domain.UserAuthorityRepository;
 import de.muenchen.demo.service.domain.UserRepository;
-import de.muenchen.demo.service.rest.api.AuthorityResource;
+import de.muenchen.vaadin.demo.api.rest.AuthorityResource;
 import de.muenchen.demo.service.rest.api.UserResource;
 import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
 import de.muenchen.demo.service.util.IdService;

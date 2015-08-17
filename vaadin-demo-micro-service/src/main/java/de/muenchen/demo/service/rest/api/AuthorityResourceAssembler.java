@@ -9,6 +9,7 @@ import de.muenchen.demo.service.services.AuthorityService;
 import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
 import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
 import de.muenchen.vaadin.demo.api.rest.SecurityResource;
+import de.muenchen.vaadin.demo.api.rest.AuthorityResource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;

@@ -2,7 +2,7 @@ package de.muenchen.demo.service.rest;
 
 import de.muenchen.demo.service.domain.Authority;
 import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
-import de.muenchen.demo.service.rest.api.AuthorityResource;
+import de.muenchen.vaadin.demo.api.rest.AuthorityResource;
 import de.muenchen.demo.service.rest.api.AuthorityResourceAssembler;
 import de.muenchen.demo.service.services.AuthorityService;
 import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;

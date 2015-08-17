@@ -2,7 +2,7 @@ package de.muenchen.demo.service.rest;
 
 import de.muenchen.demo.service.domain.Adresse;
 import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
-import de.muenchen.demo.service.rest.api.AdresseResource;
+import de.muenchen.vaadin.demo.api.rest.AdresseResource;
 import de.muenchen.demo.service.rest.api.AdresseResourceAssembler;
 import de.muenchen.demo.service.services.AdresseService;
 import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
