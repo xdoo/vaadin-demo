@@ -240,7 +240,7 @@ public class WohnungController {
         if (LOG.isDebugEnabled()) {
             LOG.debug("read Wohnung Buerger");
         }
-        Iterable<Buerger> buerger = this.buergerService.readWohnung(wohnungOid);
+        Iterable<Buerger> buerger = this.buergerService.readWohnungBuerger(wohnungOid);
         SearchResultResource<BuergerResource> resource = this.buergerAssembler.toResource(Lists.newArrayList(buerger));
         resource.add(linkTo(methodOn(BuergerController.class).readBuergerKinder(wohnungOid)).withSelfRel());
         return ResponseEntity.ok(resource);

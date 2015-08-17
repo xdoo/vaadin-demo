@@ -126,7 +126,7 @@ public class StaatsangehoerigkeitController {
         if (LOG.isDebugEnabled()) {
             LOG.debug("read Staatsangehoerigkeit Buerger");
         }
-        Iterable<Buerger> buerger = this.buergerService.readStaatsangehoerigkeit(staatsangehoerigkeitOid);
+        Iterable<Buerger> buerger = this.buergerService.readStaatsangehoerigkeitBuerger(staatsangehoerigkeitOid);
         SearchResultResource<BuergerResource> resource = this.buergerAssembler.toResource(Lists.newArrayList(buerger));
         resource.add(linkTo(methodOn(BuergerController.class).readBuergerKinder(staatsangehoerigkeitOid)).withSelfRel());
         return ResponseEntity.ok(resource);

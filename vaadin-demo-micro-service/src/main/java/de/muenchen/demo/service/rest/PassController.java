@@ -227,6 +227,7 @@ public class PassController {
         this.service.update(entity);
 
         PassResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
+        resource.add(linkTo(methodOn(PassController.class).addStaatangehoerigkeitPass(passOid, statsOid)).withSelfRel()); // add self link with params
         return ResponseEntity.ok(resource);
     }
 
@@ -252,54 +253,36 @@ public class PassController {
     }
 
     /**
-     * Liest die Buerger einer Pass.
+     * Liest der Buerger einer Pass.
      *
-     * @param PassOid
+     * @param passOid
      * @return
      */
     @RolesAllowed({"PERM_readPassBuerger"})
-    @RequestMapping(value = "/buerger/{PassOid}", method = {RequestMethod.GET})
-    public ResponseEntity readPassBuerger(@PathVariable("PassOid") String PassOid) {
+    @RequestMapping(value = "/buerger/{passOid}", method = {RequestMethod.GET})
+    public ResponseEntity readPassBuerger(@PathVariable("passOid") String passOid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("read Pass Buerger");
         }
-        Iterable<Buerger> buerger = this.buergerService.readPass(PassOid);
-        SearchResultResource<BuergerResource> resource = this.buergerAssembler.toResource(Lists.newArrayList(buerger));
-        resource.add(linkTo(methodOn(BuergerController.class).readBuergerKinder(PassOid)).withSelfRel());
+        Buerger buerger = this.buergerService.readPassBuerger(passOid);
+        BuergerResource resource = this.buergerAssembler.assembleWithAllLinks(buerger);
+        resource.add(linkTo(methodOn(PassController.class).readPassBuerger(passOid)).withSelfRel());
         return ResponseEntity.ok(resource);
     }
 
     /**
-     * Entfernt die Beziehung zwischen eine Pass und Alle Buerger.
+     * Release Operation für den Pass eines Bürgers.
      *
-     * @param PassOid
-     * @return
-     */
-    @RolesAllowed({"PERM_releasePassAllBuerger"})
-    @RequestMapping(value = "/release/buerger/{PassOid}", method = {RequestMethod.GET})
-    public ResponseEntity releasePassAllBuerger(@PathVariable("PassOid") String PassOid) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("delete Pass Buerger");
-        }
-        this.buergerService.releasePassAllBuerger(PassOid);
-        return ResponseEntity.ok().build();
-
-    }
-
-    /**
-     * Entfernt die Beziehung zwischen eine Pass und ein Buerger.
-     *
-     * @param PassOid
-     * @param buergerOid
+     * @param passOid
      * @return
      */
     @RolesAllowed({"PERM_releasePassBuerger"})
-    @RequestMapping(value = "/release/buerger/{PassOid}/{buergerOid}", method = {RequestMethod.GET})
-    public ResponseEntity releasePassBuerger(@PathVariable("PassOid") String PassOid, @PathVariable("buergerOid") String buergerOid) {
+    @RequestMapping(value = "/release/buerger/{passOid}", method = {RequestMethod.GET})
+    public ResponseEntity releasePassBuerger(@PathVariable("passOid") String passOid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("delete Pass Buerger");
         }
-        this.buergerService.releasePassBuerger(PassOid, buergerOid);
+        this.buergerService.releasePassBuerger(passOid);
         return ResponseEntity.ok().build();
 
     }
