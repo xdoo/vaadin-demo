@@ -1,5 +1,7 @@
 package de.muenchen.vaadin.ui.components;
 
+import com.oracle.jrockit.jfr.InvalidValueException;
+import com.vaadin.data.Validator;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
 import com.vaadin.data.validator.DateRangeValidator;
@@ -21,6 +23,7 @@ import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.EventType;
 import de.muenchen.vaadin.ui.util.I18nPaths;
+import de.muenchen.vaadin.ui.util.ValidatorFactory;
 import java.util.Date;
 
 /**
@@ -91,12 +94,12 @@ public class BuergerCreateForm extends CustomComponent {
         // Fokus auf das erste Feld setzen
         TextField firstField = controller.getUtil().createFormTextField(binder, controller.getI18nBasePath(), Buerger.VORNAME, controller.getMsg());
         firstField.focus();
-        firstField.addValidator(new StringLengthValidator(controller.getMsg().get("m1.buerger.nachname.validation"),1,Integer.MAX_VALUE, false));
+        firstField.addValidator(new StringLengthValidator(controller.getMsg().get("m1.buerger.nachname.validation"),1,Integer.MAX_VALUE, true));
         layout.addComponent(firstField);
         
         // alle anderen Felder
         TextField secField = controller.getUtil().createFormTextField(binder, controller.getI18nBasePath(), Buerger.NACHNAME, controller.getMsg());
-        secField.addValidator(new StringLengthValidator(controller.getMsg().get("m1.buerger.nachname.validation"),1,Integer.MAX_VALUE, false));
+        secField.addValidator(ValidatorFactory.getValidator("StringLength",controller.getMsg().get("m1.buerger.nachname.validation"),1+"",""+Integer.MAX_VALUE, "true"));
         layout.addComponent(secField);
         DateField birthdayfield = controller.getUtil().createFormDateField(binder, controller.getI18nBasePath(), Buerger.GEBURTSDATUM, controller.getMsg());
         //String errorMsg = controller.getUtil().createFormTextField(binder, controller.getI18nBasePath(), Buerger.GEBURTSDATUM+".validation", controller.getMsg()).getValue();
@@ -109,11 +112,18 @@ public class BuergerCreateForm extends CustomComponent {
         String createLabel = controller.getMsg().readText(controller.getI18nBasePath(), I18nPaths.I18N_FORM_CREATE_BUTTON_LABEL);
         Button createButton = new Button(createLabel, (ClickEvent click) -> {
             try {
+                Validator val = ValidatorFactory.getValidator("Null",controller.getMsg().get("m1.buerger.nachname.validation"),"false");
+                firstField.addValidator(val);
+                secField.addValidator(val);
+                birthdayfield.addValidator(val);
+                firstField.validate();                
+                secField.validate();
+                birthdayfield.validate();
                 binder.commit();
                 controller.getEventbus().post(new BuergerAppEvent(binder.getItemDataSource().getBean(), this.type).navigateTo(navigateTo));
                 //reset
                 binder.setItemDataSource(controller.createBuerger());
-            } catch (CommitException e) {
+            } catch (CommitException | Validator.InvalidValueException e) {
                 GenericErrorNotification error = new GenericErrorNotification("Fehler","Beim erstellen der Person ist ein Fehler aufgetreten. Bitte füllen Sie alle Felder mit gültigen Werten aus.");
                 error.show(Page.getCurrent());
             }
