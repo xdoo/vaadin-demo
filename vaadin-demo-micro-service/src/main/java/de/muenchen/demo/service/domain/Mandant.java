@@ -30,7 +30,7 @@ public class Mandant implements Serializable {
     @Column(name = "ID")
     private Long id;
 
-    @Field(name = "mid")
+    @Field(name = "oid")
     @Column(length = 30, unique = true, nullable = false, name = "OID")
     private String oid;
 

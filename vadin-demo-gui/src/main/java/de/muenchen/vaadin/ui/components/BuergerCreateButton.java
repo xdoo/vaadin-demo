@@ -23,7 +23,7 @@ public class BuergerCreateButton extends CustomComponent {
         create.addClickListener(e -> {
             controller.getEventbus().post(new BuergerAppEvent(EventType.CREATE).navigateTo(navigateTo).from(from));
         });
-        
+        create.setId(String.format("%s_%s_%s_CREATE_BUTTON", navigateTo, from, controller.getI18nBasePath()).toUpperCase());
         setCompositionRoot(create);
     }
       

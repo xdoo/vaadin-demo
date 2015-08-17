@@ -4,7 +4,7 @@ import de.muenchen.demo.service.domain.Authority;
 import de.muenchen.demo.service.domain.User;
 import de.muenchen.demo.service.domain.UserAuthId;
 import de.muenchen.demo.service.domain.UserAuthority;
-import de.muenchen.demo.service.rest.api.SearchResultResource;
+import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
 import de.muenchen.demo.service.rest.api.UserAuthorityResource;
 import de.muenchen.demo.service.rest.api.UserAuthorityResourceAssembler;
 import de.muenchen.demo.service.services.AuthorityService;

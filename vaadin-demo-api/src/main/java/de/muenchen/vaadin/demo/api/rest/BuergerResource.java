@@ -7,7 +7,7 @@ import java.util.Date;
  * @author claus.straube
  */
 public class BuergerResource extends BaseResource {
-    
+
     // HATEOAS Relations zu den Relationen
     public static final String KINDER = "kinder";
     public static final String SAVE_KIND = "save_kind";
@@ -16,11 +16,13 @@ public class BuergerResource extends BaseResource {
     public static final String SAVE_WOHNUNG = "save_wohnung";
     public static final String PAESSE = "paesse";
     public static final String SAVE_PASS = "save_pass";
-    
+    public static final String ELTERN = "eltern";
+    public static final String RELEASE_ELTERN = "release_eltern";
+
     private String vorname;
     private String nachname;
     private Date geburtsdatum;
-    
+
     public String getVorname() {
         return vorname;
     }
@@ -48,5 +50,5 @@ public class BuergerResource extends BaseResource {
     @Override
     public String toString() {
         return String.format("oid > %s | vorname > %s | nachname > %s | geburtsdatum > %s", this.getOid(), this.vorname, this.nachname, this.geburtsdatum);
-    } 
+    }
 }

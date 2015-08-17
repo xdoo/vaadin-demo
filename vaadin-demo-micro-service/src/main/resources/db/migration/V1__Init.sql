@@ -30,18 +30,12 @@ alter table adresse_interne add constraint UK_OID_ON_adresse_interne  unique (oi
 alter table adresse_reference add constraint UK_OID_ON_adresse_reference  unique (oid);
 alter table authoritys add constraint UK_OID_ON_authoritys  unique (oid);
 alter table buerger add constraint UK_OID_ON_buerger  unique (oid);
-alter table buerger_kinder add constraint UK_KINDER_ON_buerger_kinder  unique (kinder);
-alter table buerger_pass add constraint UK_PASS_ON_buerger_pass  unique (pass);
-alter table buerger_staatsangehoerigkeit_references add constraint UK_OID_ON_buerger_staatsangehoerigkeit_references  unique (staatsangehoerigkeit_references);
-alter table buerger_wohnungen add constraint UK_wohnungen_ON_buerger_wohnungen  unique (wohnungen);
 alter table company_base_infos add constraint UK_OID_ON_company_base_infos  unique (oid);
-alter table company_base_infos_accounts add constraint UK_accounts_ON_company_base_infos_accounts  unique (accounts);
 alter table mandant add constraint UK_OID_ON_mandant  unique (oid);
 alter table pass add constraint UK_OID_ON_pass  unique (oid);
 alter table permissions add constraint UK_OID_ON_permissions  unique (oid);
 alter table sachbearbeiter add constraint UK_OID_ON_sachbearbeiter  unique (oid);
 alter table users add constraint UK_OID_ON_users  unique (oid);
-alter table users_accounts add constraint UK_accounts_ON_users_accounts  unique (accounts);
 alter table wohnungen add constraint UK_OID_ON_wohnungen  unique (oid);
 alter table accounts add constraint FK_accounts_TO_mandant foreign key (mandant) references mandant;
 alter table adresse_externe add constraint FK_adresse_externe_TO_mandant foreign key (mandant) references mandant;
@@ -81,10 +75,13 @@ alter table wohnungen add constraint FK_wohnungen_TO_adresse_reference foreign k
 alter table wohnungen_aud add constraint FK_wohnungen_TO_revinfo foreign key (rev) references revinfo;
 
 insert into MANDANT (ID,OID) values ('2','2');
+insert into MANDANT (ID,OID) values ('3','3');
 
-insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (2,'hans@test.de',TRUE,'oid1','test','hans',2);									
+insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (2,'hans@test.de',TRUE,'oid1','test','hans',2);
+insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (3,'franz@test.de',TRUE,'oid2','test','franz',3);									
 
 insert into authoritys (id, mandant, oid, auth_authority) values (2, 2, 2, 'ADMIN');
+insert into authoritys (id, mandant, oid, auth_authority) values (3, 3, 3, 'ADMIN');
 
 insert  into permissions (id,  mandant,perm_permission,oid) values ('1000','2','PERM_newAdresse','1000');										
 insert  into permissions (id,  mandant,perm_permission,oid) values ('1001','2','PERM_queryAdresse','1001');										
@@ -182,10 +179,16 @@ insert  into permissions (id,  mandant,perm_permission,oid) values ('1092','2','
 insert  into permissions (id,  mandant,perm_permission,oid) values ('1093','2','PERM_deleteWohnung','1093');										
 insert  into permissions (id,  mandant,perm_permission,oid) values ('1094','2','PERM_readWohnungAdresse','1094');										
 insert  into permissions (id,  mandant,perm_permission,oid) values ('1095','2','PERM_addAdresseWohnung','1095');										
-								
+insert  into permissions (id,  mandant,perm_permission,oid) values ('1096','2','PERM_releaseWohnungBuerger','1096');									
+insert  into permissions (id,  mandant,perm_permission,oid) values ('1097','2','PERM_releaseWohnungAllBuerger','1097');									
+insert  into permissions (id,  mandant,perm_permission,oid) values ('1098','2','PERM_readWohnungBuerger','1098');
+insert  into permissions (id,  mandant,perm_permission,oid) values ('1099','2','PERM_releaseBuergerElternteil','1099');									
+insert  into permissions (id,  mandant,perm_permission,oid) values ('1100','2','PERM_releaseBuergerEltern','1100');									
+insert  into permissions (id,  mandant,perm_permission,oid) values ('1101','2','PERM_readEltern','1101');									
+									
 							
 								
-
+							
 insert into authoritys_permissions (authority_id, permission_id) values ('2','1000');					
 insert into authoritys_permissions (authority_id, permission_id) values ('2','1001');					
 insert into authoritys_permissions (authority_id, permission_id) values ('2','1002');					
@@ -281,7 +284,19 @@ insert into authoritys_permissions (authority_id, permission_id) values ('2','10
 insert into authoritys_permissions (authority_id, permission_id) values ('2','1092');					
 insert into authoritys_permissions (authority_id, permission_id) values ('2','1093');					
 insert into authoritys_permissions (authority_id, permission_id) values ('2','1094');					
-insert into authoritys_permissions (authority_id, permission_id) values ('2','1095');					
+insert into authoritys_permissions (authority_id, permission_id) values ('2','1095');	
+insert into authoritys_permissions (authority_id, permission_id) values ('2','1096');					
+insert into authoritys_permissions (authority_id, permission_id) values ('2','1097');					
+insert into authoritys_permissions (authority_id, permission_id) values ('2','1098');					
+insert into authoritys_permissions (authority_id, permission_id) values ('2','1099');					
+insert into authoritys_permissions (authority_id, permission_id) values ('2','1100');					
+insert into authoritys_permissions (authority_id, permission_id) values ('2','1101');					
 				
 				
-insert into users_authoritys (authority_id, user_id) values (2, 2)
+insert into users_authoritys (authority_id, user_id) values (2, 2);
+insert into users_authoritys (authority_id, user_id) values (3, 3);
+
+insert into buerger (id, oid, buer_nachname, buer_vorname, mandant) values (1,1,'test','hans',2);
+insert into buerger (id, oid, buer_nachname, buer_vorname, mandant) values (2,2,'test','franz',3);
+insert into buerger (id, oid, buer_nachname, buer_vorname, mandant) values (3,3,'test','hans',3);
+

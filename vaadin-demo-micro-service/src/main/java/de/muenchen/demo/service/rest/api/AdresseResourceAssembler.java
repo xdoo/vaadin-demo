@@ -6,6 +6,7 @@ import de.muenchen.demo.service.domain.Adresse;
 import de.muenchen.demo.service.rest.AdresseController;
 import de.muenchen.demo.service.services.AdresseService;
 import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
+import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -15,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityLinks;
 import org.springframework.stereotype.Service;
+import de.muenchen.vaadin.demo.api.rest.AdresseResource;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 
 /**

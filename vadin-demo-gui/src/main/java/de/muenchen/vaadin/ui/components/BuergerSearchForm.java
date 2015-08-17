@@ -23,6 +23,7 @@ public class BuergerSearchForm extends CustomComponent {
         group.addStyleName("v-component-group");
         
         TextField query = new TextField();
+        query.setId(String.format("%s_QUERY_FIELD", controller.getI18nBasePath()));
         query.focus();
         query.setWidth("100%");
         // Suche Schaltfläche
@@ -32,6 +33,7 @@ public class BuergerSearchForm extends CustomComponent {
         search.addClickListener(e -> {
             controller.getEventbus().post(new BuergerAppEvent(EventType.QUERY).query(query.getValue()));
         });
+        search.setId(String.format("%s_SEARCH_BUTTON", controller.getI18nBasePath()));
         
         // Reset Schaltfläche
         Button reset = new Button(FontAwesome.TIMES);
@@ -41,6 +43,7 @@ public class BuergerSearchForm extends CustomComponent {
             controller.getEventbus().post(new BuergerAppEvent(EventType.QUERY));
             query.setValue("");
         });
+        reset.setId(String.format("%s_RESET_BUTTON", controller.getI18nBasePath()));
         group.addComponents(query, search, reset);
         
         setCompositionRoot(group);

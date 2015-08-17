@@ -1,9 +1,21 @@
 package de.muenchen.demo.service.rest;
 
+import com.google.common.collect.Lists;
+import de.muenchen.demo.service.domain.Buerger;
 import de.muenchen.demo.service.rest.api.StaatsangehoerigkeitResourceAssembler;
 import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
-import de.muenchen.demo.service.rest.api.SearchResultResource;
-import de.muenchen.demo.service.rest.api.StaatsangehoerigkeitResource;
+
+import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
+import de.muenchen.vaadin.demo.api.rest.StaatsangehoerigkeitResource;
+
+import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
+import de.muenchen.vaadin.demo.api.rest.BuergerResource;
+import de.muenchen.demo.service.rest.api.BuergerResourceAssembler;
+
+import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
+import de.muenchen.vaadin.demo.api.rest.StaatsangehoerigkeitResource;
+import de.muenchen.demo.service.services.BuergerService;
+
 import de.muenchen.demo.service.services.StaatsangehoerigkeitService;
 import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
 import javax.annotation.security.RolesAllowed;
@@ -37,6 +49,10 @@ public class StaatsangehoerigkeitController {
     StaatsangehoerigkeitService service;
     @Autowired
     StaatsangehoerigkeitResourceAssembler assembler;
+    @Autowired
+    BuergerService buergerService;
+    @Autowired
+    BuergerResourceAssembler buergerAssembler;
 
     /**
      * Alle Staatsangehoerigkeiten suchen.
@@ -103,6 +119,61 @@ public class StaatsangehoerigkeitController {
         }
         this.service.delete(referencedOid);
         return ResponseEntity.ok().build();
+    }
+
+    /**
+     * Liest die Buerger einer Staatsangehoerigkeit.
+     *
+     * @param staatsangehoerigkeitOid
+     * @return
+     */
+    @RolesAllowed({"PERM_readStaatsangehoerigkeitBuerger"})
+    @RequestMapping(value = "/buerger/{staatsangehoerigkeitOid}", method = {RequestMethod.GET})
+    public ResponseEntity readStaatsangehoerigkeitBuerger(@PathVariable("staatsangehoerigkeitOid") String staatsangehoerigkeitOid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("read Staatsangehoerigkeit Buerger");
+        }
+        Iterable<Buerger> buerger = this.buergerService.readStaatsangehoerigkeitBuerger(staatsangehoerigkeitOid);
+        SearchResultResource<BuergerResource> resource = this.buergerAssembler.toResource(Lists.newArrayList(buerger));
+        resource.add(linkTo(methodOn(BuergerController.class).readBuergerKinder(staatsangehoerigkeitOid)).withSelfRel());
+        return ResponseEntity.ok(resource);
+    }
+
+    /**
+     * Entfernt die Beziehung zwischen eine Staatsangehoerigkeit und Alle
+     * Buerger.
+     *
+     * @param staatsangehoerigkeitOid
+     * @return
+     */
+    @RolesAllowed({"PERM_releaseStaatsangehoerigkeitAllBuerger"})
+    @RequestMapping(value = "/release/buerger/{staatsangehoerigkeitOid}", method = {RequestMethod.GET})
+    public ResponseEntity releaseStaatsangehoerigkeitAllBuerger(@PathVariable("staatsangehoerigkeitOid") String staatsangehoerigkeitOid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("delete Staatsangehoerigkeit Buerger");
+        }
+        this.buergerService.releaseStaatsangehoerigkeitAllBuerger(staatsangehoerigkeitOid);
+        return ResponseEntity.ok().build();
+
+    }
+
+    /**
+     * Entfernt die Beziehung zwischen eine Staatsangehoerigkeit und ein
+     * Buerger.
+     *
+     * @param staatsangehoerigkeitOid
+     * @param buergerOid
+     * @return
+     */
+    @RolesAllowed({"PERM_releaseStaatsangehoerigkeitBuerger"})
+    @RequestMapping(value = "/release/buerger/{staatsangehoerigkeitOid}/{buergerOid}", method = {RequestMethod.GET})
+    public ResponseEntity releaseStaatsangehoerigkeitBuerger(@PathVariable("staatsangehoerigkeitOid") String staatsangehoerigkeitOid, @PathVariable("buergerOid") String buergerOid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("delete Staatsangehoerigkeit Buerger");
+        }
+        this.buergerService.releaseStaatsangehoerigkeitBuerger(staatsangehoerigkeitOid, buergerOid);
+        return ResponseEntity.ok().build();
+
     }
 
 }

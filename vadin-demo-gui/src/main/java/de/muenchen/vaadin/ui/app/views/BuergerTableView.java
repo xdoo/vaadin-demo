@@ -27,7 +27,7 @@ public class BuergerTableView extends DefaultBuergerView {
 
     @Override
     protected void site() {        
-        addComponent(this.controller.generateSearchTable(BuergerUpdateView.NAME, BuergerReadView.NAME, BuergerCreateView.NAME, this.NAME));
+        addComponent(this.controller.generateSearchTable(BuergerUpdateView.NAME, BuergerDetailView.NAME, BuergerCreateView.NAME, this.NAME));
     }
     
 }

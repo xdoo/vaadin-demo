@@ -2,7 +2,7 @@ package de.muenchen.demo.service.rest;
 
 import de.muenchen.demo.service.domain.Mandant;
 import de.muenchen.demo.service.domain.User;
-import de.muenchen.demo.service.rest.api.SearchResultResource;
+import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
 import de.muenchen.demo.service.rest.api.UserResource;
 import de.muenchen.demo.service.rest.api.UserResourceAssembler;
 import de.muenchen.demo.service.services.MandantService;

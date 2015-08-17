@@ -18,12 +18,15 @@ import de.muenchen.demo.service.domain.AdresseInterneRepository;
 import de.muenchen.demo.service.domain.AdresseReferenceRepository;
 import de.muenchen.demo.service.domain.AuthorityPermissionRepository;
 import de.muenchen.demo.service.domain.AuthorityRepository;
+import de.muenchen.demo.service.domain.BuergerRepository;
 import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
 import de.muenchen.demo.service.domain.StaatsangehoerigkeitReferenceRepository;
 import de.muenchen.demo.service.domain.MandantRepository;
+import de.muenchen.demo.service.domain.PassRepository;
 import de.muenchen.demo.service.domain.PermissionRepository;
 import de.muenchen.demo.service.domain.UserAuthorityRepository;
 import de.muenchen.demo.service.domain.UserRepository;
+import de.muenchen.demo.service.domain.WohnungRepository;
 import de.muenchen.demo.service.services.StaatsangehoerigkeitService;
 import de.muenchen.demo.test.integration.InitTest;
 import java.security.KeyManagementException;
@@ -78,13 +81,20 @@ public class StaatsangehoerigkeitServiceTest {
     @Autowired
     AdresseReferenceRepository referenceRepo;
     @Autowired
-    StaatsangehoerigkeitReferenceRepository staatsangehoerigkeitRepo;
+    BuergerRepository buergerRepo;
+    @Autowired
+    PassRepository passRepo;
+    @Autowired
+    WohnungRepository wohnRepo;
+    @Autowired
+    StaatsangehoerigkeitReferenceRepository staatRepo;
 
     @Autowired
     //@Qualifier("authenticationManager")
     AuthenticationManager authenticationManager;
     @Rule
     public WireMockRule wireMockRule = new WireMockRule(8089);
+
     @Before
     public void setUp() throws JsonProcessingException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
 
@@ -93,7 +103,13 @@ public class StaatsangehoerigkeitServiceTest {
         usersRepo.deleteAll();
         authRepo.deleteAll();
         permRepo.deleteAll();
-        staatsangehoerigkeitRepo.deleteAll();
+        buergerRepo.deleteAll();
+        staatRepo.deleteAll();
+        wohnRepo.deleteAll();
+        passRepo.deleteAll();
+        referenceRepo.deleteAll();
+        interneRepo.deleteAll();
+        externeRepo.deleteAll();
         mandantRepo.deleteAll();
         InitTest initTest = new InitTest(usersRepo, authRepo, permRepo, userAuthRepo, authPermRepo, mandantRepo);
         initTest.init();
@@ -135,7 +151,7 @@ public class StaatsangehoerigkeitServiceTest {
 
     @Test
     public void deleteTest() throws JsonProcessingException, AuthenticationException {
-
+        service.create("123");
         service.delete("123");
         Staatsangehoerigkeit a = service.read("123");
         assertEquals(null, a);
@@ -156,7 +172,13 @@ public class StaatsangehoerigkeitServiceTest {
         usersRepo.deleteAll();
         authRepo.deleteAll();
         permRepo.deleteAll();
-        staatsangehoerigkeitRepo.deleteAll();
+        buergerRepo.deleteAll();
+        staatRepo.deleteAll();
+        wohnRepo.deleteAll();
+        passRepo.deleteAll();
+        referenceRepo.deleteAll();
+        interneRepo.deleteAll();
+        externeRepo.deleteAll();
         mandantRepo.deleteAll();
 
     }

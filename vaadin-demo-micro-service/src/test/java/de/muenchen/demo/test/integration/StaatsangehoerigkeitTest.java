@@ -11,18 +11,23 @@ import org.junit.Test;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import de.muenchen.demo.service.Application;
+import de.muenchen.demo.service.domain.AdresseExterneRepository;
+import de.muenchen.demo.service.domain.AdresseInterneRepository;
+import de.muenchen.demo.service.domain.AdresseReferenceRepository;
 import de.muenchen.demo.service.domain.AuthorityPermissionRepository;
 import de.muenchen.demo.service.domain.AuthorityRepository;
 import de.muenchen.demo.service.domain.Buerger;
 import de.muenchen.demo.service.domain.BuergerRepository;
 import de.muenchen.demo.service.domain.MandantRepository;
+import de.muenchen.demo.service.domain.PassRepository;
 import de.muenchen.demo.service.domain.PermissionRepository;
 import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
 import de.muenchen.demo.service.domain.StaatsangehoerigkeitReferenceRepository;
 import de.muenchen.demo.service.domain.UserAuthorityRepository;
 import de.muenchen.demo.service.domain.UserRepository;
-import de.muenchen.demo.service.rest.api.SearchResultResource;
-import de.muenchen.demo.service.rest.api.StaatsangehoerigkeitResource;
+import de.muenchen.demo.service.domain.WohnungRepository;
+import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
+import de.muenchen.vaadin.demo.api.rest.StaatsangehoerigkeitResource;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -90,6 +95,16 @@ public class StaatsangehoerigkeitTest {
     @Autowired
     BuergerRepository buergerRepo;
     @Autowired
+    WohnungRepository wohnRepo;
+    @Autowired
+    PassRepository passRepo;
+    @Autowired
+    AdresseInterneRepository interneRepo;
+    @Autowired
+    AdresseExterneRepository externeRepo;
+    @Autowired
+    AdresseReferenceRepository referenceRepo;
+    @Autowired
     MandantRepository mandantRepo;
 
     @Before
@@ -100,9 +115,14 @@ public class StaatsangehoerigkeitTest {
         usersRepo.deleteAll();
         authRepo.deleteAll();
         permRepo.deleteAll();
-        mandantRepo.deleteAll();
         buergerRepo.deleteAll();
         staatRepo.deleteAll();
+        wohnRepo.deleteAll();
+        passRepo.deleteAll();
+        referenceRepo.deleteAll();
+        interneRepo.deleteAll();
+        externeRepo.deleteAll();
+        mandantRepo.deleteAll();
 
         InitTest initTest = new InitTest(usersRepo, authRepo, permRepo, userAuthRepo, authPermRepo, mandantRepo);
         initTest.init();
@@ -161,7 +181,6 @@ public class StaatsangehoerigkeitTest {
 
     }
 
-    
     @Test
     public void queryStaatsangehoerigkeitTest() throws JsonProcessingException {
 
@@ -201,6 +220,11 @@ public class StaatsangehoerigkeitTest {
         permRepo.deleteAll();
         buergerRepo.deleteAll();
         staatRepo.deleteAll();
+        wohnRepo.deleteAll();
+        passRepo.deleteAll();
+        referenceRepo.deleteAll();
+        interneRepo.deleteAll();
+        externeRepo.deleteAll();
         mandantRepo.deleteAll();
 
     }

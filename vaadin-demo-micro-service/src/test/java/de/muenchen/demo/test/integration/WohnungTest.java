@@ -12,14 +12,16 @@ import de.muenchen.demo.service.domain.AuthorityRepository;
 import de.muenchen.demo.service.domain.Buerger;
 import de.muenchen.demo.service.domain.BuergerRepository;
 import de.muenchen.demo.service.domain.MandantRepository;
+import de.muenchen.demo.service.domain.PassRepository;
 import de.muenchen.demo.service.domain.PermissionRepository;
+import de.muenchen.demo.service.domain.StaatsangehoerigkeitReferenceRepository;
 import de.muenchen.demo.service.domain.UserAuthorityRepository;
 import de.muenchen.demo.service.domain.UserRepository;
 import de.muenchen.demo.service.domain.Wohnung;
 import de.muenchen.demo.service.domain.WohnungRepository;
-import de.muenchen.demo.service.rest.api.AdresseResource;
-import de.muenchen.demo.service.rest.api.SearchResultResource;
-import de.muenchen.demo.service.rest.api.WohnungResource;
+import de.muenchen.vaadin.demo.api.rest.AdresseResource;
+import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
+import de.muenchen.vaadin.demo.api.rest.WohnungResource;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -85,18 +87,22 @@ public class WohnungTest {
     @Autowired
     AuthorityPermissionRepository authPermRepo;
     @Autowired
-    WohnungRepository wohnRepo;
+    StaatsangehoerigkeitReferenceRepository staatRepo;
     @Autowired
     BuergerRepository buergerRepo;
     @Autowired
-    AdresseExterneRepository adresseExtRepo;
+    WohnungRepository wohnRepo;
     @Autowired
-    AdresseInterneRepository adresseIntRepo;
+    PassRepository passRepo;
     @Autowired
-    AdresseReferenceRepository adresseRefRepo;
-
+    AdresseInterneRepository interneRepo;
+    @Autowired
+    AdresseExterneRepository externeRepo;
+    @Autowired
+    AdresseReferenceRepository referenceRepo;
     @Autowired
     MandantRepository mandantRepo;
+
     private String urlSave;
     private String urlNew;
     private WohnungResource response;
@@ -111,12 +117,14 @@ public class WohnungTest {
         usersRepo.deleteAll();
         authRepo.deleteAll();
         permRepo.deleteAll();
-        mandantRepo.deleteAll();
         buergerRepo.deleteAll();
+        staatRepo.deleteAll();
         wohnRepo.deleteAll();
-        adresseRefRepo.deleteAll();
-        adresseExtRepo.deleteAll();
-        adresseIntRepo.deleteAll();
+        passRepo.deleteAll();
+        referenceRepo.deleteAll();
+        interneRepo.deleteAll();
+        externeRepo.deleteAll();
+        mandantRepo.deleteAll();
 
         InitTest initTest = new InitTest(usersRepo, authRepo, permRepo, userAuthRepo, authPermRepo, mandantRepo);
         initTest.init();
@@ -258,11 +266,14 @@ public class WohnungTest {
         String URL5 = "http://localhost:" + port + "/wohnung/add/wohnung/10/adresse/10";
         WohnungResource response4 = restTemplate.getForEntity(URL5, WohnungResource.class).getBody();
         assertNotNull(response4.getOid());
-        
+
         /*Test methode readAdresseWohnung*/
         String URL1 = "http://localhost:" + port + "/wohnung/adresse/10";
         AdresseResource responseAdresse = restTemplate.getForEntity(URL1, AdresseResource.class).getBody();
         assertEquals("Passau", responseAdresse.getStadt());
+
+        String urlDelete = "http://localhost:" + port + "/adresse/10";
+        restTemplate.delete(urlDelete, adresse);
 
     }
 
@@ -274,10 +285,13 @@ public class WohnungTest {
         authRepo.deleteAll();
         permRepo.deleteAll();
         buergerRepo.deleteAll();
+        staatRepo.deleteAll();
         wohnRepo.deleteAll();
-        adresseRefRepo.deleteAll();
-        adresseExtRepo.deleteAll();
-        adresseIntRepo.deleteAll();
+        passRepo.deleteAll();
+        referenceRepo.deleteAll();
+        interneRepo.deleteAll();
+        externeRepo.deleteAll();
+        mandantRepo.deleteAll();
 
     }
 

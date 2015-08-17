@@ -57,6 +57,7 @@ public class MainUI extends UI {
 
     @Autowired
     public MainUI(SpringViewProvider ViewProvider, SecurityService security, MessageService i18n, EventBus eventBus) {
+        LOG.info("starting UI");
         this.viewProvider = ViewProvider;
         this.security = security;
         this.i18n = i18n;
@@ -219,6 +220,7 @@ public class MainUI extends UI {
             });
             b.setHtmlContentAllowed(true);
             b.setPrimaryStyleName("valo-menu-item");
+            b.setId(String.format("MENU_ITEM_BUTTON_%s", item.getKey()).toUpperCase());
 //            b.setIcon(testIcon.get());
             menuItemsLayout.addComponent(b);
         }

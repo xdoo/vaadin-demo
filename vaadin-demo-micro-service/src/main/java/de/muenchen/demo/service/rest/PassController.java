@@ -1,17 +1,28 @@
 package de.muenchen.demo.service.rest;
 
+import com.google.common.collect.Lists;
+import de.muenchen.demo.service.domain.Buerger;
 import de.muenchen.demo.service.domain.Pass;
 import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
 import de.muenchen.demo.service.domain.StaatsangehoerigkeitReference;
+import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
+import de.muenchen.vaadin.demo.api.rest.BuergerResource;
+import de.muenchen.demo.service.rest.api.BuergerResourceAssembler;
 import de.muenchen.demo.service.rest.api.PassResource;
+
 import de.muenchen.demo.service.rest.api.PassResourceAssembler;
-import de.muenchen.demo.service.rest.api.SearchResultResource;
-import de.muenchen.demo.service.rest.api.StaatsangehoerigkeitResource;
+import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
+import de.muenchen.vaadin.demo.api.rest.StaatsangehoerigkeitResource;
+
+
+import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
+import de.muenchen.vaadin.demo.api.rest.StaatsangehoerigkeitResource;
+
 import de.muenchen.demo.service.rest.api.StaatsangehoerigkeitResourceAssembler;
-import de.muenchen.demo.service.rest.api.WohnungResourceAssembler;
+import de.muenchen.demo.service.rest.api.PassResourceAssembler;
+import de.muenchen.demo.service.services.BuergerService;
 import de.muenchen.demo.service.services.PassService;
 import de.muenchen.demo.service.services.StaatsangehoerigkeitService;
-import de.muenchen.demo.service.services.WohnungService;
 import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
 import javax.annotation.security.RolesAllowed;
 import org.slf4j.Logger;
@@ -46,13 +57,13 @@ public class PassController {
     @Autowired
     PassService service;
     @Autowired
-    WohnungService wohnungService;
+    BuergerService buergerService;
     @Autowired
     StaatsangehoerigkeitService staatsService;
     @Autowired
     PassResourceAssembler assembler;
     @Autowired
-    WohnungResourceAssembler wohnungAssembler;
+    BuergerResourceAssembler buergerAssembler;
     @Autowired
     StaatsangehoerigkeitResourceAssembler staatAssembler;
     @Value("${URL}")
@@ -224,6 +235,7 @@ public class PassController {
         this.service.update(entity);
 
         PassResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
+        resource.add(linkTo(methodOn(PassController.class).addStaatangehoerigkeitPass(passOid, statsOid)).withSelfRel()); // add self link with params
         return ResponseEntity.ok(resource);
     }
 
@@ -246,6 +258,41 @@ public class PassController {
         StaatsangehoerigkeitResource resources;
         resources = staatAssembler.toResource(staat, HateoasUtil.REL_SELF);
         return ResponseEntity.ok(resources);
+    }
+
+    /**
+     * Liest der Buerger einer Pass.
+     *
+     * @param passOid
+     * @return
+     */
+    @RolesAllowed({"PERM_readPassBuerger"})
+    @RequestMapping(value = "/buerger/{passOid}", method = {RequestMethod.GET})
+    public ResponseEntity readPassBuerger(@PathVariable("passOid") String passOid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("read Pass Buerger");
+        }
+        Buerger buerger = this.buergerService.readPassBuerger(passOid);
+        BuergerResource resource = this.buergerAssembler.assembleWithAllLinks(buerger);
+        resource.add(linkTo(methodOn(PassController.class).readPassBuerger(passOid)).withSelfRel());
+        return ResponseEntity.ok(resource);
+    }
+
+    /**
+     * Release Operation für den Pass eines Bürgers.
+     *
+     * @param passOid
+     * @return
+     */
+    @RolesAllowed({"PERM_releasePassBuerger"})
+    @RequestMapping(value = "/release/buerger/{passOid}", method = {RequestMethod.GET})
+    public ResponseEntity releasePassBuerger(@PathVariable("passOid") String passOid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("delete Pass Buerger");
+        }
+        this.buergerService.releasePassBuerger(passOid);
+        return ResponseEntity.ok().build();
+
     }
 
 }

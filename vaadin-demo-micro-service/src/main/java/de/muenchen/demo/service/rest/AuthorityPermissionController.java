@@ -4,7 +4,7 @@ import de.muenchen.demo.service.domain.AuthPermId;
 import de.muenchen.demo.service.domain.Authority;
 import de.muenchen.demo.service.domain.AuthorityPermission;
 import de.muenchen.demo.service.domain.Permission;
-import de.muenchen.demo.service.rest.api.SearchResultResource;
+import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
 import de.muenchen.demo.service.rest.api.AuthorityPermissionResource;
 import de.muenchen.demo.service.rest.api.AuthorityPermissionResourceAssembler;
 import de.muenchen.demo.service.services.AuthorityService;

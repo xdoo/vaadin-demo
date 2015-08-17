@@ -5,6 +5,7 @@ import de.muenchen.demo.service.domain.UserAuthority;
 import de.muenchen.demo.service.rest.UserAuthorityController;
 import de.muenchen.demo.service.services.UserAuthorityService;
 import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
+import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;

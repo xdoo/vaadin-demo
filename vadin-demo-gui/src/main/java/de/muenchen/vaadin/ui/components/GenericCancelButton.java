@@ -21,6 +21,7 @@ public class GenericCancelButton extends CustomComponent {
         });
         cancelButton.setIcon(FontAwesome.TIMES);
         cancelButton.setClickShortcut(ShortcutAction.KeyCode.ESCAPE);
+        setId("GENERIC_CANCEL_BUTTON");
         setCompositionRoot(cancelButton);
     } 
 }
