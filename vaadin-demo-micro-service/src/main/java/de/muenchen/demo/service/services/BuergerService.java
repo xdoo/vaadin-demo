@@ -13,19 +13,27 @@ public interface BuergerService {
 
     public Iterable<Buerger> readEltern(String oid);
 
-    public Buerger deleteBuergerEltern(String oid);
+    public void releaseBuergerEltern(String oid);
+
+    public void releaseBuergerElternteil(String kindOid, String buergerOid);
 
     public Iterable<Buerger> readWohnung(String oid);
 
-    public Buerger deleteBuergerWohnung(String oid);
+    public void releaseWohnungAllBuerger(String oid);
+
+    public void releaseWohnungBuerger(String wohnungOid, String buergerOid);
 
     public Iterable<Buerger> readPass(String oid);
 
-    public Buerger deleteBuergerPass(String oid);
+    public void releasePassAllBuerger(String oid);
+
+    public void releasePassBuerger(String passOid, String buergerOid);
 
     public Iterable<Buerger> readStaatsangehoerigkeit(String oid);
 
-    public Buerger deleteBuergerStaatsangehoerigkeit(String staatOid);
+    public void releaseStaatsangehoerigkeitAllBuerger(String staatOid);
+
+    public void releaseStaatsangehoerigkeitBuerger(String staatOid, String buergerOid);
 
     public List<Buerger> query(String query);
 

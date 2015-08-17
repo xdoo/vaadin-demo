@@ -1,14 +1,19 @@
 package de.muenchen.demo.service.rest;
 
+import com.google.common.collect.Lists;
 import de.muenchen.demo.service.domain.Adresse;
 import de.muenchen.demo.service.domain.AdresseReference;
+import de.muenchen.demo.service.domain.Buerger;
 import de.muenchen.demo.service.domain.Wohnung;
 import de.muenchen.demo.service.rest.api.AdresseResource;
 import de.muenchen.demo.service.rest.api.AdresseResourceAssembler;
+import de.muenchen.demo.service.rest.api.BuergerResource;
+import de.muenchen.demo.service.rest.api.BuergerResourceAssembler;
 import de.muenchen.demo.service.rest.api.SearchResultResource;
 import de.muenchen.demo.service.rest.api.WohnungResource;
 import de.muenchen.demo.service.rest.api.WohnungResourceAssembler;
 import de.muenchen.demo.service.services.AdresseService;
+import de.muenchen.demo.service.services.BuergerService;
 import de.muenchen.demo.service.services.MandantService;
 import de.muenchen.demo.service.services.WohnungService;
 import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
@@ -50,6 +55,10 @@ public class WohnungController {
     MandantService madantService;
     @Autowired
     AdresseResourceAssembler adresseAssembler;
+    @Autowired
+    BuergerService buergerService;
+    @Autowired
+    BuergerResourceAssembler buergerAssembler;
 
     /**
      * Alle Wohnungen suchen.
@@ -99,7 +108,7 @@ public class WohnungController {
             LOG.debug("copy wohnung");
         }
         Wohnung entity = this.service.copy(oid);
-        WohnungResource resource = this.assembler.toResource(entity,HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
+        WohnungResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
         return ResponseEntity.ok(resource);
     }
 
@@ -195,7 +204,6 @@ public class WohnungController {
         return ResponseEntity.ok(resources);
     }
 
-    
     /**
      * Assoziiert eine Adresse mit einer Wonunug .
      *
@@ -218,6 +226,59 @@ public class WohnungController {
 
         WohnungResource resource = this.assembler.assembleWithAllLinks(entity);
         return ResponseEntity.ok(resource);
+    }
+
+    /**
+     * Liest die Buerger einer Wohnung.
+     *
+     * @param wohnungOid
+     * @return
+     */
+    @RolesAllowed({"PERM_readWohnungBuerger"})
+    @RequestMapping(value = "/buerger/{wohnungOid}", method = {RequestMethod.GET})
+    public ResponseEntity readWohnungBuerger(@PathVariable("wohnungOid") String wohnungOid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("read Wohnung Buerger");
+        }
+        Iterable<Buerger> buerger = this.buergerService.readWohnung(wohnungOid);
+        SearchResultResource<BuergerResource> resource = this.buergerAssembler.toResource(Lists.newArrayList(buerger));
+        resource.add(linkTo(methodOn(BuergerController.class).readBuergerKinder(wohnungOid)).withSelfRel());
+        return ResponseEntity.ok(resource);
+    }
+
+    /**
+     * Entfernt die Beziehung zwischen eine Wohnung und Alle Buerger.
+     *
+     * @param wohnungOid
+     * @return
+     */
+    @RolesAllowed({"PERM_releaseWohnungAllBuerger"})
+    @RequestMapping(value = "/release/buerger/{wohnungOid}", method = {RequestMethod.GET})
+    public ResponseEntity releaseWohnungAllBuerger(@PathVariable("wohnungOid") String wohnungOid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("delete Wohnung Buerger");
+        }
+        this.buergerService.releaseWohnungAllBuerger(wohnungOid);
+        return ResponseEntity.ok().build();
+
+    }
+
+    /**
+     * Entfernt die Beziehung zwischen eine Wohnung und ein Buerger.
+     *
+     * @param wohnungOid
+     * @param buergerOid
+     * @return
+     */
+    @RolesAllowed({"PERM_releaseWohnungBuerger"})
+    @RequestMapping(value = "/release/buerger/{wohnungOid}/{buergerOid}", method = {RequestMethod.GET})
+    public ResponseEntity releaseWohnungBuerger(@PathVariable("wohnungOid") String wohnungOid, @PathVariable("buergerOid") String buergerOid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("delete Wohnung Buerger");
+        }
+        this.buergerService.releaseWohnungBuerger(wohnungOid, buergerOid);
+        return ResponseEntity.ok().build();
+
     }
 
 }
