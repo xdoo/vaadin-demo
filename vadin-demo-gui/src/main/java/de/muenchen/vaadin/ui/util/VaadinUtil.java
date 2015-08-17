@@ -15,6 +15,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class VaadinUtil {
     
+    public static final String TABLE_COLUMN_ACTIONS = "actions";
+    
     public Button createNavigationButton(String label, final String path) {
         Button button = new Button(label);
         button.addClickListener(new Button.ClickListener() {

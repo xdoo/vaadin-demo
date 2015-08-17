@@ -2,9 +2,9 @@ package de.muenchen.vaadin.demo.api.services;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vaadin.navigator.Navigator;
 import de.muenchen.vaadin.demo.api.domain.Principal;
 import de.muenchen.vaadin.demo.api.rest.SecurityRestClient;
-import com.vaadin.navigator.Navigator;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import java.io.Serializable;
