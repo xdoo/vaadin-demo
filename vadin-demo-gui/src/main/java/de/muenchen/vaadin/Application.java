@@ -16,17 +16,27 @@
 package de.muenchen.vaadin;
 
 
+import de.muenchen.vaadin.services.I18nService;
+import de.muenchen.vaadin.services.I18nServiceConfigImpl;
+import java.util.Locale;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 
 @SpringBootApplication
 @EnableEurekaClient
 //@EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)
-public class Application  {
+public class Application{
+    
+    @Autowired
+    Environment env;
 
     public static void main(String[] args) throws Exception {
         new SpringApplicationBuilder(Application.class).run(args);

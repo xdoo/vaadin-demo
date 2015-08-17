@@ -2,6 +2,7 @@ package de.muenchen.vaadin.ui.controller;
 
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.navigator.Navigator;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.UI;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import com.google.common.eventbus.Subscribe;
@@ -21,6 +22,7 @@ import de.muenchen.vaadin.ui.components.GenericSuccessNotification;
 import de.muenchen.vaadin.ui.components.BuergerUpdateForm;
 import de.muenchen.vaadin.ui.util.EventBus;
 import de.muenchen.vaadin.ui.util.EventType;
+import static de.muenchen.vaadin.ui.util.I18nPaths.*;
 import de.muenchen.vaadin.ui.util.VaadinUtil;
 import java.io.Serializable;
 import java.util.List;
@@ -37,7 +39,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 @SpringComponent @UIScope
 public class BuergerViewController implements Serializable {
     
-    public static final String I18N_BASE_PATH = "m1.buerger";
+    // TODO entweder hier oder im I18nServiceConfigImpl angeben
+    public static final String I18N_BASE_PATH = "buerger";
     
     /**
      * Logger
@@ -105,10 +108,6 @@ public class BuergerViewController implements Serializable {
         return util;
     }
 
-    public String getI18nBasePath() {
-        return I18N_BASE_PATH;
-    }
-
     public Navigator getNavigator() {
         return navigator;
     }
@@ -117,8 +116,27 @@ public class BuergerViewController implements Serializable {
         return current;
     }
 
-    public MessageService getMsg() {
-        return msg;
+
+    /**
+     * Resolve the relative path (e.g. ".asdf.label").
+     *
+     * The base path will be appended at start and then read from the properties.
+     * @param relativePath the path to add to the base path.
+     * @return the resolved String.
+     */
+    public String resolve(String relativePath) {
+        return msg.get(I18N_BASE_PATH + relativePath);
+    }
+
+    /**
+     * Resolve the relative path (e.g. ".asdf.label") to a icon.
+     *
+     * The base path will be appended at start and then read from the properties.
+     * @param relativePath the path to add to the base path.
+     * @return the resolved String.
+     */
+    public FontAwesome resolveIcon(String relativePath) {
+        return msg.getFontAwesome(I18N_BASE_PATH + relativePath + ".icon");
     }
     
     ////////////////////////
@@ -306,7 +324,9 @@ public class BuergerViewController implements Serializable {
             // Verlauf protokollieren
             this.pushFrom(event);
             
-            GenericSuccessNotification succes = new GenericSuccessNotification("Bürger angepasst", "Der Bürger wurde erfolgreich angepasst und gespeichert."); // TODO i18n
+            GenericSuccessNotification succes = new GenericSuccessNotification(
+                    resolve(getSuccessNotificationPath(Action.update, Type.label)),
+                    resolve(getSuccessNotificationPath(Action.update, Type.text)));
             succes.show(Page.getCurrent());
             
             // Zur Seite wechseln
@@ -322,7 +342,9 @@ public class BuergerViewController implements Serializable {
             // UI Komponenten aktualisieren
             this.eventbus.post(new BuergerComponentEvent(event.getEntity(), EventType.SAVE));
             
-            GenericSuccessNotification succes = new GenericSuccessNotification("Bürger erstellt", "Der Bürger wurde erfolgreich erstellt und gespeichert."); // TODO i18n
+            GenericSuccessNotification succes = new GenericSuccessNotification(
+                    resolve(getSuccessNotificationPath(Action.save, Type.label)),
+                    resolve(getSuccessNotificationPath(Action.save, Type.text)));
             succes.show(Page.getCurrent());
             
             // Zur Seite wechseln
@@ -335,7 +357,9 @@ public class BuergerViewController implements Serializable {
             // Service Operation ausführen
             this.saveBuergerKind(event.getEntity());
             
-            GenericSuccessNotification succes = new GenericSuccessNotification("Bürger erstellt", "Der Bürger wurde erfolgreich erstellt und gespeichert."); // TODO i18n
+            GenericSuccessNotification succes = new GenericSuccessNotification(
+                    resolve(getSuccessNotificationPath(Action.save, Type.label)),
+                    resolve(getSuccessNotificationPath(Action.save, Type.text)));
             succes.show(Page.getCurrent());
             
             // Zur Seite wechseln
@@ -354,7 +378,9 @@ public class BuergerViewController implements Serializable {
             buergerComponentEvent.setItemID(event.getItemId());
             this.eventbus.post(buergerComponentEvent);
             
-            GenericSuccessNotification succes = new GenericSuccessNotification("Bürger gelöscht", "Der Bürger wurde erfolgreich gelöscht."); // TODO i18n
+            GenericSuccessNotification succes = new GenericSuccessNotification(
+                    resolve(getSuccessNotificationPath(Action.delete, Type.label)),
+                    resolve(getSuccessNotificationPath(Action.delete, Type.text)));
             succes.show(Page.getCurrent());
         }
         
@@ -367,7 +393,9 @@ public class BuergerViewController implements Serializable {
             // UI Komponenten aktualisieren
             this.eventbus.post(new BuergerComponentEvent(copy, EventType.COPY));
             
-            GenericSuccessNotification succes = new GenericSuccessNotification("Bürger kopiert", "Der Bürger wurde erfolgreich kopiert."); // TODO i18n
+            GenericSuccessNotification succes = new GenericSuccessNotification(
+                    resolve(getSuccessNotificationPath(Action.copy, Type.label)),
+                    resolve(getSuccessNotificationPath(Action.copy, Type.text)));
             succes.show(Page.getCurrent());
         }
         
