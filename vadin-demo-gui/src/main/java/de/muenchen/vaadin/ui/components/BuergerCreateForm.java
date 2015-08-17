@@ -9,6 +9,7 @@ import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
+import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.CustomComponent;
@@ -94,17 +95,19 @@ public class BuergerCreateForm extends CustomComponent {
         // Fokus auf das erste Feld setzen
         TextField firstField = controller.getUtil().createFormTextField(binder, controller.getI18nBasePath(), Buerger.VORNAME, controller.getMsg());
         firstField.focus();
-        firstField.addValidator(new StringLengthValidator(controller.getMsg().get("m1.buerger.nachname.validation"),1,Integer.MAX_VALUE, true));
+        Validator val1 = ValidatorFactory.getValidator("StringLength",controller.getMsg().get("m1.buerger.nachname.validation"),1+"",""+Integer.MAX_VALUE, "true");
+        firstField.addValidator(val1);
         layout.addComponent(firstField);
         
         // alle anderen Felder
         TextField secField = controller.getUtil().createFormTextField(binder, controller.getI18nBasePath(), Buerger.NACHNAME, controller.getMsg());
-        secField.addValidator(ValidatorFactory.getValidator("StringLength",controller.getMsg().get("m1.buerger.nachname.validation"),1+"",""+Integer.MAX_VALUE, "true"));
+        Validator val2 = ValidatorFactory.getValidator("StringLength",controller.getMsg().get("m1.buerger.nachname.validation"),1+"",""+Integer.MAX_VALUE, "true");
+        secField.addValidator(val2);
         layout.addComponent(secField);
-        DateField birthdayfield = controller.getUtil().createFormDateField(binder, controller.getI18nBasePath(), Buerger.GEBURTSDATUM, controller.getMsg());
-        //String errorMsg = controller.getUtil().createFormTextField(binder, controller.getI18nBasePath(), Buerger.GEBURTSDATUM+".validation", controller.getMsg()).getValue();
+        DateField birthdayfield = controller.getUtil().createFormDateField(binder, controller.getI18nBasePath(), Buerger.GEBURTSDATUM, controller.getMsg());       
         String errorMsg = controller.getMsg().get("m1.buerger.geburtsdatum.validation");
-        birthdayfield.addValidator(new DateRangeValidator(errorMsg,new Date(0),new Date(),DateField.RESOLUTION_YEAR));
+        Validator val3 = ValidatorFactory.getValidator("DateRange",errorMsg,"0",null);
+        birthdayfield.addValidator(val3);
         layout.addComponent(birthdayfield);    
 
         layout.addComponent(buttonLayout);

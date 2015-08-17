@@ -55,7 +55,7 @@ public class I18nServiceImpl implements I18nService {
        this.messages.put("m1.buerger.geburtsdatum.column_header", "Geburtsdatum");
        this.messages.put("m1.buerger.geburtsdatum.column_header.icon", "");
        this.messages.put("m1.buerger.geburtsdatum.validation", "The Birthdate has to be in the Past!");
-       this.messages.put("m1.buerger.nachname.validation", "The name musn't be empty!");
+       this.messages.put("m1.buerger.nachname.validation", "This field musn't be empty!");
        
     }
     
