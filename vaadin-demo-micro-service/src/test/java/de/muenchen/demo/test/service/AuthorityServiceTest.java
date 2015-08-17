@@ -14,10 +14,14 @@ import de.muenchen.demo.service.domain.AuthorityPermissionRepository;
 import de.muenchen.demo.service.domain.AuthorityRepository;
 import de.muenchen.demo.service.domain.Authority;
 import de.muenchen.demo.service.domain.AuthorityRepository;
+import de.muenchen.demo.service.domain.BuergerRepository;
 import de.muenchen.demo.service.domain.MandantRepository;
+import de.muenchen.demo.service.domain.PassRepository;
 import de.muenchen.demo.service.domain.PermissionRepository;
+import de.muenchen.demo.service.domain.StaatsangehoerigkeitReferenceRepository;
 import de.muenchen.demo.service.domain.UserAuthorityRepository;
 import de.muenchen.demo.service.domain.UserRepository;
+import de.muenchen.demo.service.domain.WohnungRepository;
 import de.muenchen.demo.service.services.AuthorityService;
 import de.muenchen.demo.test.integration.InitTest;
 import java.security.KeyManagementException;
@@ -71,7 +75,13 @@ public class AuthorityServiceTest {
     @Autowired
     AdresseReferenceRepository referenceRepo;
     @Autowired
-    AuthorityRepository authorityRepo;
+    BuergerRepository buergerRepo;
+    @Autowired
+    PassRepository passRepo;
+    @Autowired
+    WohnungRepository wohnRepo;
+    @Autowired
+    StaatsangehoerigkeitReferenceRepository staatRepo;
 
     @Autowired
     //@Qualifier("authenticationManager")
@@ -85,7 +95,13 @@ public class AuthorityServiceTest {
         usersRepo.deleteAll();
         authRepo.deleteAll();
         permRepo.deleteAll();
-        authorityRepo.deleteAll();
+        buergerRepo.deleteAll();
+        staatRepo.deleteAll();
+        wohnRepo.deleteAll();
+        passRepo.deleteAll();
+        referenceRepo.deleteAll();
+        interneRepo.deleteAll();
+        externeRepo.deleteAll();
         mandantRepo.deleteAll();
         InitTest initTest = new InitTest(usersRepo, authRepo, permRepo, userAuthRepo, authPermRepo, mandantRepo);
         initTest.init();
@@ -175,10 +191,13 @@ public class AuthorityServiceTest {
         usersRepo.deleteAll();
         authRepo.deleteAll();
         permRepo.deleteAll();
+        buergerRepo.deleteAll();
+        staatRepo.deleteAll();
+        wohnRepo.deleteAll();
+        passRepo.deleteAll();
         referenceRepo.deleteAll();
         interneRepo.deleteAll();
         externeRepo.deleteAll();
-        authorityRepo.deleteAll();
         mandantRepo.deleteAll();
 
     }

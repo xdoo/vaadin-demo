@@ -135,7 +135,7 @@ public class BuergerServiceImpl implements BuergerService {
 
             Buerger buerger = iter.next();
 
-            Set<Buerger> kinder = (Set<Buerger>) buerger.getKinder();
+            Set<Buerger> kinder = buerger.getKinder();
             Collection<Buerger> removeKinder = new LinkedList<>();
             kinder.stream().filter((element) -> (element == this.read(kindOid))).forEach((element) -> {
                 removeKinder.add(element);
@@ -150,7 +150,7 @@ public class BuergerServiceImpl implements BuergerService {
     public void releaseBuergerElternteil(String kindOid, String buergerOid) {
 
         Buerger buerger = this.read(buergerOid);
-        Set<Buerger> kinder = (Set<Buerger>) buerger.getKinder();
+        Set<Buerger> kinder = buerger.getKinder();
         Collection<Buerger> removeKinder = new LinkedList<>();
         kinder.stream().filter((element) -> (element == this.read(kindOid))).forEach((element) -> {
             removeKinder.add(element);
@@ -161,52 +161,43 @@ public class BuergerServiceImpl implements BuergerService {
     }
 
     @Override
-    public Iterable<Buerger> readPass(String oid) {
-        return repo.findByPassOid(oid);
-    }
-
-    @Override
-    public void releasePassAllBuerger(String passOid) {
-
-        Iterator<Buerger> iter = this.readPass(passOid).iterator();
-        while (iter.hasNext()) {
-            Buerger buerger = iter.next();
-            Set<Pass> pass = (Set<Pass>) buerger.getPass();
-            Collection<Pass> removePass = new LinkedList<>();
-            pass.stream().filter((element) -> (element == this.passService.read(passOid))).forEach((element) -> {
-                removePass.add(element);
-            });
-            pass.removeAll(removePass);
-            this.update(buerger);
-
+    public Buerger readPassBuerger(String oid) {
+        List<Buerger> result = this.repo.findByPassOid(oid);
+        if (result.isEmpty()) {
+// TODO
+            LOG.warn(String.format("found no buerger with PassOid '%s'", oid));
+            return null;
+        } else {
+            return result.get(0);
         }
     }
 
     @Override
-    public void releasePassBuerger(String passOid, String buergerOid) {
+    public void releasePassBuerger(String passOid) {
 
-        Buerger buerger = this.read(buergerOid);
-        Set<Pass> pass = (Set<Pass>) buerger.getPass();
+        Buerger buerger = this.readPassBuerger(passOid);
+        if (buerger != null){
+        Set<Pass> pass = buerger.getPass();
         Collection<Pass> removePass = new LinkedList<>();
         pass.stream().filter((element) -> (element == this.passService.read(passOid))).forEach((element) -> {
             removePass.add(element);
         });
         pass.removeAll(removePass);
         this.update(buerger);
-
+        }
     }
 
     @Override
-    public Iterable<Buerger> readWohnung(String oid) {
+    public Iterable<Buerger> readWohnungBuerger(String oid) {
         return repo.findByWohnungenOid(oid);
     }
 
     @Override
     public void releaseWohnungAllBuerger(String wohnungOid) {
-        Iterator<Buerger> iter = this.readWohnung(wohnungOid).iterator();
+        Iterator<Buerger> iter = this.readWohnungBuerger(wohnungOid).iterator();
         while (iter.hasNext()) {
             Buerger buerger = iter.next();
-            Set<Wohnung> wohnung = (Set<Wohnung>) buerger.getWohnungen();
+            Set<Wohnung> wohnung = buerger.getWohnungen();
             Collection<Wohnung> removeWohnung = new LinkedList<>();
             wohnung.stream().filter((element) -> (element == this.wohnungService.read(wohnungOid))).forEach((element) -> {
                 removeWohnung.add(element);
@@ -221,7 +212,7 @@ public class BuergerServiceImpl implements BuergerService {
     public void releaseWohnungBuerger(String wohnungOid, String buergerOid) {
 
         Buerger buerger = this.read(buergerOid);
-        Set<Wohnung> wohnung = (Set<Wohnung>) buerger.getWohnungen();
+        Set<Wohnung> wohnung = buerger.getWohnungen();
         Collection<Wohnung> remove = new LinkedList<>();
 
         wohnung.stream().filter((element) -> (element == this.wohnungService.read(wohnungOid))).forEach((element) -> {
@@ -233,13 +224,13 @@ public class BuergerServiceImpl implements BuergerService {
     }
 
     @Override
-    public Iterable<Buerger> readStaatsangehoerigkeit(String oid) {
+    public Iterable<Buerger> readStaatsangehoerigkeitBuerger(String oid) {
         return repo.findByStaatsangehoerigkeitReferencesReferencedOid(oid);
     }
 
     @Override
     public void releaseStaatsangehoerigkeitAllBuerger(String staatOid) {
-        Iterator<Buerger> iter = this.readStaatsangehoerigkeit(staatOid).iterator();
+        Iterator<Buerger> iter = this.readStaatsangehoerigkeitBuerger(staatOid).iterator();
         while (iter.hasNext()) {
             Buerger buerger = iter.next();
             Iterator<StaatsangehoerigkeitReference> staatRefIter = buerger.getStaatsangehoerigkeitReferences().iterator();

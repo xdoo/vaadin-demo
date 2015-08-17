@@ -17,19 +17,17 @@ public interface BuergerService {
 
     public void releaseBuergerElternteil(String kindOid, String buergerOid);
 
-    public Iterable<Buerger> readWohnung(String oid);
+    public Iterable<Buerger> readWohnungBuerger(String oid);
 
     public void releaseWohnungAllBuerger(String oid);
 
     public void releaseWohnungBuerger(String wohnungOid, String buergerOid);
 
-    public Iterable<Buerger> readPass(String oid);
+    public Buerger readPassBuerger(String oid);
 
-    public void releasePassAllBuerger(String oid);
+    public void releasePassBuerger(String passOid);
 
-    public void releasePassBuerger(String passOid, String buergerOid);
-
-    public Iterable<Buerger> readStaatsangehoerigkeit(String oid);
+    public Iterable<Buerger> readStaatsangehoerigkeitBuerger(String oid);
 
     public void releaseStaatsangehoerigkeitAllBuerger(String staatOid);
 

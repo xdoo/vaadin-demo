@@ -6,14 +6,14 @@ import de.muenchen.demo.service.domain.Pass;
 import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
 import de.muenchen.demo.service.domain.StaatsangehoerigkeitReference;
 import de.muenchen.demo.service.domain.Wohnung;
-import de.muenchen.demo.service.rest.api.BuergerResource;
+import de.muenchen.vaadin.demo.api.rest.BuergerResource;
 import de.muenchen.demo.service.rest.api.BuergerResourceAssembler;
 import de.muenchen.demo.service.rest.api.PassResource;
 import de.muenchen.demo.service.rest.api.PassResourceAssembler;
-import de.muenchen.demo.service.rest.api.SearchResultResource;
-import de.muenchen.demo.service.rest.api.StaatsangehoerigkeitResource;
+import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
+import de.muenchen.vaadin.demo.api.rest.StaatsangehoerigkeitResource;
 import de.muenchen.demo.service.rest.api.StaatsangehoerigkeitResourceAssembler;
-import de.muenchen.demo.service.rest.api.WohnungResource;
+import de.muenchen.vaadin.demo.api.rest.WohnungResource;
 import de.muenchen.demo.service.rest.api.WohnungResourceAssembler;
 import de.muenchen.demo.service.services.BuergerService;
 import de.muenchen.demo.service.services.PassService;
@@ -28,7 +28,6 @@ import javax.annotation.security.RolesAllowed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.http.ResponseEntity;
@@ -384,6 +383,7 @@ public class BuergerController {
         this.service.update(entity);
 
         BuergerResource resource = this.assembler.assembleWithAllLinks(entity);
+        resource.add(linkTo(methodOn(BuergerController.class).addWohnungBuerger(buergerOid, wohnungOid)).withSelfRel()); // add self link with params
         return ResponseEntity.ok(resource);
     }
 
@@ -457,6 +457,7 @@ public class BuergerController {
         this.service.update(entity);
 
         BuergerResource resource = this.assembler.assembleWithAllLinks(entity);
+        resource.add(linkTo(methodOn(BuergerController.class).addStaatangehoerigkeitBuerger(buergerOid, staatsOid)).withSelfRel()); // add self link with params
         return ResponseEntity.ok(resource);
     }
 
@@ -481,6 +482,7 @@ public class BuergerController {
         this.service.update(entity);
 
         BuergerResource resource = this.assembler.assembleWithAllLinks(entity);
+        resource.add(linkTo(methodOn(BuergerController.class).addPassBuerger(buergerOid, passOid)).withSelfRel()); // add self link with params
         return ResponseEntity.ok(resource);
     }
 

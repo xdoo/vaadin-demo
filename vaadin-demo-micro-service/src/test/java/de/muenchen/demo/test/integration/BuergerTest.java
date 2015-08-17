@@ -13,6 +13,9 @@ import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import de.muenchen.demo.service.Application;
+import de.muenchen.demo.service.domain.AdresseExterneRepository;
+import de.muenchen.demo.service.domain.AdresseInterneRepository;
+import de.muenchen.demo.service.domain.AdresseReferenceRepository;
 import de.muenchen.demo.service.domain.AuthorityPermissionRepository;
 import de.muenchen.demo.service.domain.AuthorityRepository;
 import de.muenchen.demo.service.domain.Buerger;
@@ -27,11 +30,10 @@ import de.muenchen.demo.service.domain.UserAuthorityRepository;
 import de.muenchen.demo.service.domain.UserRepository;
 import de.muenchen.demo.service.domain.Wohnung;
 import de.muenchen.demo.service.domain.WohnungRepository;
-import de.muenchen.demo.service.rest.api.BuergerResource;
+import de.muenchen.vaadin.demo.api.rest.BuergerResource;
 import de.muenchen.demo.service.rest.api.PassResource;
-import de.muenchen.demo.service.rest.api.SearchResultResource;
-import de.muenchen.demo.service.rest.api.StaatsangehoerigkeitResource;
-import de.muenchen.demo.service.services.BuergerService;
+import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
+import de.muenchen.vaadin.demo.api.rest.StaatsangehoerigkeitResource;
 import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
@@ -110,7 +112,12 @@ public class BuergerTest {
     WohnungRepository wohnRepo;
     @Autowired
     PassRepository passRepo;
-
+    @Autowired
+    AdresseInterneRepository interneRepo;
+    @Autowired
+    AdresseExterneRepository externeRepo;
+    @Autowired
+    AdresseReferenceRepository referenceRepo;
     @Autowired
     MandantRepository mandantRepo;
     @Rule
@@ -128,6 +135,9 @@ public class BuergerTest {
         staatRepo.deleteAll();
         wohnRepo.deleteAll();
         passRepo.deleteAll();
+        referenceRepo.deleteAll();
+        interneRepo.deleteAll();
+        externeRepo.deleteAll();
         mandantRepo.deleteAll();
 
         InitTest initTest = new InitTest(usersRepo, authRepo, permRepo, userAuthRepo, authPermRepo, mandantRepo);
@@ -616,8 +626,11 @@ public class BuergerTest {
         permRepo.deleteAll();
         buergerRepo.deleteAll();
         staatRepo.deleteAll();
-        passRepo.deleteAll();
         wohnRepo.deleteAll();
+        passRepo.deleteAll();
+        referenceRepo.deleteAll();
+        interneRepo.deleteAll();
+        externeRepo.deleteAll();
         mandantRepo.deleteAll();
 
     }

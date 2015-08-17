@@ -5,12 +5,12 @@ import de.muenchen.demo.service.domain.Adresse;
 import de.muenchen.demo.service.domain.AdresseReference;
 import de.muenchen.demo.service.domain.Buerger;
 import de.muenchen.demo.service.domain.Wohnung;
-import de.muenchen.demo.service.rest.api.AdresseResource;
+import de.muenchen.vaadin.demo.api.rest.AdresseResource;
 import de.muenchen.demo.service.rest.api.AdresseResourceAssembler;
-import de.muenchen.demo.service.rest.api.BuergerResource;
+import de.muenchen.vaadin.demo.api.rest.BuergerResource;
 import de.muenchen.demo.service.rest.api.BuergerResourceAssembler;
-import de.muenchen.demo.service.rest.api.SearchResultResource;
-import de.muenchen.demo.service.rest.api.WohnungResource;
+import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
+import de.muenchen.vaadin.demo.api.rest.WohnungResource;
 import de.muenchen.demo.service.rest.api.WohnungResourceAssembler;
 import de.muenchen.demo.service.services.AdresseService;
 import de.muenchen.demo.service.services.BuergerService;
@@ -240,7 +240,7 @@ public class WohnungController {
         if (LOG.isDebugEnabled()) {
             LOG.debug("read Wohnung Buerger");
         }
-        Iterable<Buerger> buerger = this.buergerService.readWohnung(wohnungOid);
+        Iterable<Buerger> buerger = this.buergerService.readWohnungBuerger(wohnungOid);
         SearchResultResource<BuergerResource> resource = this.buergerAssembler.toResource(Lists.newArrayList(buerger));
         resource.add(linkTo(methodOn(BuergerController.class).readBuergerKinder(wohnungOid)).withSelfRel());
         return ResponseEntity.ok(resource);
