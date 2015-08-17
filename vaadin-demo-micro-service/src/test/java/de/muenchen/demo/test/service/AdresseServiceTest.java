@@ -20,10 +20,14 @@ import de.muenchen.demo.service.domain.AdresseReferenceRepository;
 import de.muenchen.demo.service.domain.AuthorityPermissionRepository;
 import de.muenchen.demo.service.domain.AuthorityRepository;
 import de.muenchen.demo.service.domain.Adresse;
+import de.muenchen.demo.service.domain.BuergerRepository;
 import de.muenchen.demo.service.domain.MandantRepository;
+import de.muenchen.demo.service.domain.PassRepository;
 import de.muenchen.demo.service.domain.PermissionRepository;
+import de.muenchen.demo.service.domain.StaatsangehoerigkeitReferenceRepository;
 import de.muenchen.demo.service.domain.UserAuthorityRepository;
 import de.muenchen.demo.service.domain.UserRepository;
+import de.muenchen.demo.service.domain.WohnungRepository;
 import de.muenchen.vaadin.demo.api.rest.AdresseResource;
 import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
 import de.muenchen.demo.service.services.AdresseService;
@@ -91,6 +95,15 @@ public class AdresseServiceTest {
     @Autowired
     AdresseReferenceRepository referenceRepo;
     @Autowired
+    BuergerRepository buergerRepo;
+    @Autowired
+    PassRepository passRepo;
+    @Autowired
+    WohnungRepository wohnRepo;
+    @Autowired
+    StaatsangehoerigkeitReferenceRepository staatRepo;
+
+    @Autowired
     //@Qualifier("authenticationManager")
     AuthenticationManager authenticationManager;
 
@@ -102,6 +115,10 @@ public class AdresseServiceTest {
         usersRepo.deleteAll();
         authRepo.deleteAll();
         permRepo.deleteAll();
+        buergerRepo.deleteAll();
+        staatRepo.deleteAll();
+        wohnRepo.deleteAll();
+        passRepo.deleteAll();
         referenceRepo.deleteAll();
         interneRepo.deleteAll();
         externeRepo.deleteAll();
@@ -233,6 +250,10 @@ public class AdresseServiceTest {
         usersRepo.deleteAll();
         authRepo.deleteAll();
         permRepo.deleteAll();
+        buergerRepo.deleteAll();
+        staatRepo.deleteAll();
+        wohnRepo.deleteAll();
+        passRepo.deleteAll();
         referenceRepo.deleteAll();
         interneRepo.deleteAll();
         externeRepo.deleteAll();

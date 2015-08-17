@@ -30,7 +30,7 @@ import de.muenchen.demo.service.domain.StaatsangehoerigkeitReferenceRepository;
 import de.muenchen.demo.service.domain.UserAuthorityRepository;
 import de.muenchen.demo.service.domain.UserRepository;
 import de.muenchen.demo.service.domain.WohnungRepository;
-import de.muenchen.demo.service.rest.api.BuergerResource;
+import de.muenchen.vaadin.demo.api.rest.BuergerResource;
 import de.muenchen.demo.service.rest.api.PassResource;
 import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
 import de.muenchen.vaadin.demo.api.rest.StaatsangehoerigkeitResource;
