@@ -108,7 +108,7 @@ public class WohnungController {
             LOG.debug("copy wohnung");
         }
         Wohnung entity = this.service.copy(oid);
-        WohnungResource resource = this.assembler.toResource(entity,HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
+        WohnungResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
         return ResponseEntity.ok(resource);
     }
 
@@ -204,7 +204,6 @@ public class WohnungController {
         return ResponseEntity.ok(resources);
     }
 
-    
     /**
      * Assoziiert eine Adresse mit einer Wonunug .
      *
@@ -228,14 +227,15 @@ public class WohnungController {
         WohnungResource resource = this.assembler.assembleWithAllLinks(entity);
         return ResponseEntity.ok(resource);
     }
-/**
+
+    /**
      * Liest die Buerger einer Wohnung.
      *
      * @param wohnungOid
      * @return
      */
     @RolesAllowed({"PERM_readWohnungBuerger"})
-    @RequestMapping(value = "/wohnung/{wohnungOid}", method = {RequestMethod.GET})
+    @RequestMapping(value = "/buerger/{wohnungOid}", method = {RequestMethod.GET})
     public ResponseEntity readWohnungBuerger(@PathVariable("wohnungOid") String wohnungOid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("read Wohnung Buerger");
@@ -245,41 +245,40 @@ public class WohnungController {
         resource.add(linkTo(methodOn(BuergerController.class).readBuergerKinder(wohnungOid)).withSelfRel());
         return ResponseEntity.ok(resource);
     }
-    
+
     /**
-     * Entfernt dir Beziehung zwischen eine Wohnung und Alle Buerger.
+     * Entfernt die Beziehung zwischen eine Wohnung und Alle Buerger.
      *
      * @param wohnungOid
      * @return
      */
-    @RolesAllowed({"PERM_deleteWohnungAllBuerger"})
-    @RequestMapping(value = "/delete/buerger/{wohnungOid}", method = {RequestMethod.GET})
-    public ResponseEntity deleteWohnungAllBuerger(@PathVariable("wohnungOid") String wohnungOid) {
+    @RolesAllowed({"PERM_releaseWohnungAllBuerger"})
+    @RequestMapping(value = "/release/buerger/{wohnungOid}", method = {RequestMethod.GET})
+    public ResponseEntity releaseWohnungAllBuerger(@PathVariable("wohnungOid") String wohnungOid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("delete Wohnung Buerger");
         }
-        this.buergerService.deleteWohnungAllBuerger(wohnungOid);
+        this.buergerService.releaseWohnungAllBuerger(wohnungOid);
         return ResponseEntity.ok().build();
 
     }
-    
+
     /**
-     * Entfernt dir Beziehung zwischen eine Wohnung und ein Buerger.
+     * Entfernt die Beziehung zwischen eine Wohnung und ein Buerger.
      *
      * @param wohnungOid
      * @param buergerOid
      * @return
      */
-    @RolesAllowed({"PERM_deleteWohnungBuerger"})
-    @RequestMapping(value = "/delete/buerger/{wohnungOid}/{buergerOid}", method = {RequestMethod.GET})
-    public ResponseEntity deleteWohnungBuerger(@PathVariable("wohnungOid") String wohnungOid, @PathVariable("buergerOid") String buergerOid) {
+    @RolesAllowed({"PERM_releaseWohnungBuerger"})
+    @RequestMapping(value = "/release/buerger/{wohnungOid}/{buergerOid}", method = {RequestMethod.GET})
+    public ResponseEntity releaseWohnungBuerger(@PathVariable("wohnungOid") String wohnungOid, @PathVariable("buergerOid") String buergerOid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("delete Wohnung Buerger");
         }
-         this.buergerService.deleteWohnungBuerger(wohnungOid,buergerOid);
+        this.buergerService.releaseWohnungBuerger(wohnungOid, buergerOid);
         return ResponseEntity.ok().build();
 
     }
-    
-   
+
 }

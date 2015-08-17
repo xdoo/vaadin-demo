@@ -75,10 +75,13 @@ alter table wohnungen add constraint FK_wohnungen_TO_adresse_reference foreign k
 alter table wohnungen_aud add constraint FK_wohnungen_TO_revinfo foreign key (rev) references revinfo;
 
 insert into MANDANT (ID,OID) values ('2','2');
+insert into MANDANT (ID,OID) values ('3','3');
 
-insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (2,'hans@test.de',TRUE,'oid1','test','hans',2);									
+insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (2,'hans@test.de',TRUE,'oid1','test','hans',2);
+insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (3,'franz@test.de',TRUE,'oid2','test','franz',3);									
 
 insert into authoritys (id, mandant, oid, auth_authority) values (2, 2, 2, 'ADMIN');
+insert into authoritys (id, mandant, oid, auth_authority) values (3, 3, 3, 'ADMIN');
 
 insert  into permissions (id,  mandant,perm_permission,oid) values ('1000','2','PERM_newAdresse','1000');										
 insert  into permissions (id,  mandant,perm_permission,oid) values ('1001','2','PERM_queryAdresse','1001');										
@@ -176,16 +179,16 @@ insert  into permissions (id,  mandant,perm_permission,oid) values ('1092','2','
 insert  into permissions (id,  mandant,perm_permission,oid) values ('1093','2','PERM_deleteWohnung','1093');										
 insert  into permissions (id,  mandant,perm_permission,oid) values ('1094','2','PERM_readWohnungAdresse','1094');										
 insert  into permissions (id,  mandant,perm_permission,oid) values ('1095','2','PERM_addAdresseWohnung','1095');										
-insert  into permissions (id,  mandant,perm_permission,oid) values ('1096','2','PERM_deleteWohnungBuerger','1096');								
-insert  into permissions (id,  mandant,perm_permission,oid) values ('1097','2','PERM_deleteWohnungAllBuerger','1097');								
-insert  into permissions (id,  mandant,perm_permission,oid) values ('1098','2','PERM_readWohnungBuerger','1098');								
-insert  into permissions (id,  mandant,perm_permission,oid) values ('1099','2','PERM_deleteKindBuerger','1099');								
-insert  into permissions (id,  mandant,perm_permission,oid) values ('1100','2','PERM_deleteKindAllBuerger','1100');								
-insert  into permissions (id,  mandant,perm_permission,oid) values ('1101','2','PERM_readKindBuerger','1101');								
-								
+insert  into permissions (id,  mandant,perm_permission,oid) values ('1096','2','PERM_releaseWohnungBuerger','1096');									
+insert  into permissions (id,  mandant,perm_permission,oid) values ('1097','2','PERM_releaseWohnungAllBuerger','1097');									
+insert  into permissions (id,  mandant,perm_permission,oid) values ('1098','2','PERM_readWohnungBuerger','1098');
+insert  into permissions (id,  mandant,perm_permission,oid) values ('1099','2','PERM_releaseBuergerElternteil','1099');									
+insert  into permissions (id,  mandant,perm_permission,oid) values ('1100','2','PERM_releaseBuergerEltern','1100');									
+insert  into permissions (id,  mandant,perm_permission,oid) values ('1101','2','PERM_readEltern','1101');									
+									
 							
 								
-
+							
 insert into authoritys_permissions (authority_id, permission_id) values ('2','1000');					
 insert into authoritys_permissions (authority_id, permission_id) values ('2','1001');					
 insert into authoritys_permissions (authority_id, permission_id) values ('2','1002');					
@@ -290,5 +293,10 @@ insert into authoritys_permissions (authority_id, permission_id) values ('2','11
 insert into authoritys_permissions (authority_id, permission_id) values ('2','1101');					
 				
 				
-				
-insert into users_authoritys (authority_id, user_id) values (2, 2)
+insert into users_authoritys (authority_id, user_id) values (2, 2);
+insert into users_authoritys (authority_id, user_id) values (3, 3);
+
+insert into buerger (id, oid, buer_nachname, buer_vorname, mandant) values (1,1,'test','hans',2);
+insert into buerger (id, oid, buer_nachname, buer_vorname, mandant) values (2,2,'test','franz',3);
+insert into buerger (id, oid, buer_nachname, buer_vorname, mandant) values (3,3,'test','hans',3);
+

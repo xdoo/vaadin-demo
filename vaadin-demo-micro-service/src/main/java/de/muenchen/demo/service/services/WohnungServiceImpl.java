@@ -51,7 +51,7 @@ public class WohnungServiceImpl implements WohnungService {
     @Override
     public void delete(String oid) {
         Wohnung item = this.read(oid);
-        this.buergerService.deleteWohnungAllBuerger(oid);
+        this.buergerService.releaseWohnungAllBuerger(oid);
 
         this.repo.delete(item);
 

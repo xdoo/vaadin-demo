@@ -78,8 +78,8 @@ public class BuergerTest {
     private RestTemplate restTemplate;
     @Value("${local.server.port}")
     private int port;
-    BuergerService service;
     private final Buerger buerger = new Buerger();
+    private final Buerger buerger2 = new Buerger();
     private final Buerger buergerUpdate = new Buerger();
     private final Buerger kind = new Buerger();
     private final Buerger kind2 = new Buerger();
@@ -172,6 +172,10 @@ public class BuergerTest {
         buerger.setNachname("hans");
         buerger.setVorname("hans");
 
+        buerger2.setOid("b2");
+        buerger2.setNachname("hans");
+        buerger2.setVorname("hans");
+
         buergerUpdate.setOid("b");
         buergerUpdate.setNachname("max");
         buergerUpdate.setVorname("hans");
@@ -179,9 +183,11 @@ public class BuergerTest {
         kind.setOid("bk");
         kind.setVorname("son");
         kind.setNachname("hans");
+
         kind2.setOid("bk2");
         kind2.setVorname("son");
         kind2.setNachname("hans");
+
         wohnung.setOid("bw");
         wohnung.setAusrichtung("West");
         wohnung.setStock("2");
@@ -222,6 +228,11 @@ public class BuergerTest {
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.WOHNUNGEN));
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.KINDER));
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_WOHNUNG));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.ELTERN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_ELTERN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.STAATSANGEHOERIGKEITEN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_KIND));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_PASS));
     }
 
     @Test
@@ -237,7 +248,12 @@ public class BuergerTest {
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.PAESSE));
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.WOHNUNGEN));
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.KINDER));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_WOHNUNG));;
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_WOHNUNG));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.ELTERN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_ELTERN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.STAATSANGEHOERIGKEITEN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_KIND));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_PASS));
     }
 
     @Test
@@ -256,6 +272,11 @@ public class BuergerTest {
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.WOHNUNGEN));
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.KINDER));
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_WOHNUNG));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.ELTERN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_ELTERN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.STAATSANGEHOERIGKEITEN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_KIND));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_PASS));
 
     }
 
@@ -290,6 +311,11 @@ public class BuergerTest {
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.WOHNUNGEN));
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.KINDER));
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_WOHNUNG));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.ELTERN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_ELTERN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.STAATSANGEHOERIGKEITEN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_KIND));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_PASS));
 
     }
 
@@ -307,17 +333,12 @@ public class BuergerTest {
     }
 
     @Test
-    public void BuergerKindTest() {
+    public void buergerKindTest() {
 
         restTemplate.postForEntity(urlSave, buerger, BuergerResource.class);
         restTemplate.postForEntity(urlSave, kind, BuergerResource.class);
-        Buerger buerger2 = new Buerger();
-        buerger2.setOid("b2");
-        buerger2.setNachname("hans");
-        buerger2.setVorname("hans");
         restTemplate.postForEntity(urlSave, buerger2, BuergerResource.class);
 
-        String URL2 = "http://localhost:" + port + "/buerger/b";
 
         /* Test methode createKindBuerger*/
         String URL3 = "http://localhost:" + port + "/buerger/create/kind/b";
@@ -332,6 +353,11 @@ public class BuergerTest {
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.WOHNUNGEN));
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.KINDER));
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_WOHNUNG));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.ELTERN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_ELTERN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.STAATSANGEHOERIGKEITEN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_KIND));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_PASS));
 
         /* Test methode addKindBuerger*/
         String URL5 = "http://localhost:" + port + "/buerger/add/buerger/b/kind/bk";
@@ -349,6 +375,11 @@ public class BuergerTest {
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.WOHNUNGEN));
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.KINDER));
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_WOHNUNG));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.ELTERN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_ELTERN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.STAATSANGEHOERIGKEITEN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_KIND));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_PASS));
 
 
         /*Test methode readBuergerKinder*/
@@ -356,23 +387,82 @@ public class BuergerTest {
         SearchResultResource responseList2 = restTemplate.getForEntity(URL1, SearchResultResource.class).getBody();
         assertEquals(2, responseList2.getResult().size());
 
-        /*Test methode readKindBuerger*/
-        String URL100 = "http://localhost:" + port + "/buerger/kind/bk";
-        SearchResultResource responseList20 = restTemplate.getForEntity(URL100, SearchResultResource.class).getBody();
-        assertEquals(2, responseList20.getResult().size());
-        /* Test delete KindAllBuerger */
-        String urlDeletevater = "http://localhost:" + port + "/buerger/delete/kind/bk/b";
-        restTemplate.delete(urlDeletevater, BuergerResource.class);
-        SearchResultResource responseListKinder = restTemplate.getForEntity(URL100, SearchResultResource.class).getBody();
-        assertEquals(1, responseListKinder.getResult().size());
-        /* Test delete KindAllBuerger */
-        String urlDeleteEltern = "http://localhost:" + port + "/buerger/delete/kind/bk";
-        restTemplate.delete(urlDeleteEltern, BuergerResource.class);
-        SearchResultResource responseListBuerger = restTemplate.getForEntity(URL100, SearchResultResource.class).getBody();
-        assertEquals(0, responseListBuerger.getResult().size());
         /* Test delete Kind */
         String urlDelete = "http://localhost:" + port + "/buerger/bk";
         restTemplate.delete(urlDelete, buerger);
+    }
+
+    @Test
+    public void releaseBuergerElternteilTest() {
+
+        restTemplate.postForEntity(urlSave, buerger, BuergerResource.class);
+        restTemplate.postForEntity(urlSave, kind, BuergerResource.class);
+        restTemplate.postForEntity(urlSave, buerger2, BuergerResource.class);
+
+        /* Create 3 Kinder*/
+        String URL1 = "http://localhost:" + port + "/buerger/create/kind/b";
+        String URL2 = "http://localhost:" + port + "/buerger/add/buerger/b/kind/bk";
+        String URL3 = "http://localhost:" + port + "/buerger/add/buerger/b2/kind/bk";
+        restTemplate.postForEntity(URL1, kind2, BuergerResource.class).getBody();
+        restTemplate.getForEntity(URL3, BuergerResource.class).getBody();
+        restTemplate.getForEntity(URL2, BuergerResource.class).getBody();
+
+
+        /* Test releaseBuergerElternteil */
+        String urlEltern = "http://localhost:" + port + "/buerger/eltern/bk";
+        String urlReleaseEltern = "http://localhost:" + port + "/buerger/release/eltern/bk";
+        restTemplate.getForEntity(urlReleaseEltern, BuergerResource.class);
+        SearchResultResource responseListBuerger = restTemplate.getForEntity(urlEltern, SearchResultResource.class).getBody();
+        assertEquals(0, responseListBuerger.getResult().size());
+
+    }
+
+    @Test
+    public void readElternTest() {
+
+        restTemplate.postForEntity(urlSave, buerger, BuergerResource.class);
+        restTemplate.postForEntity(urlSave, kind, BuergerResource.class);
+        restTemplate.postForEntity(urlSave, buerger2, BuergerResource.class);
+
+        /* Create 3 Kinder*/
+        String URL1 = "http://localhost:" + port + "/buerger/create/kind/b";
+        String URL2 = "http://localhost:" + port + "/buerger/add/buerger/b/kind/bk";
+        String URL3 = "http://localhost:" + port + "/buerger/add/buerger/b2/kind/bk";
+        restTemplate.postForEntity(URL1, kind2, BuergerResource.class).getBody();
+        restTemplate.getForEntity(URL3, BuergerResource.class).getBody();
+        restTemplate.getForEntity(URL2, BuergerResource.class).getBody();
+
+        /*Test methode readEltern*/
+        String urlEltern = "http://localhost:" + port + "/buerger/eltern/bk";
+        SearchResultResource responseListEltern = restTemplate.getForEntity(urlEltern, SearchResultResource.class).getBody();
+        assertEquals(2, responseListEltern.getResult().size());
+        String urleltern2 = "http://localhost:" + port + "/buerger/eltern/b";
+        SearchResultResource responseEltern2 = restTemplate.getForEntity(urleltern2, SearchResultResource.class).getBody();
+        assertEquals(0, responseEltern2.getResult().size());
+    }
+
+    @Test
+    public void releaseBuergerElternTest() {
+
+        restTemplate.postForEntity(urlSave, buerger, BuergerResource.class);
+        restTemplate.postForEntity(urlSave, kind, BuergerResource.class);
+        restTemplate.postForEntity(urlSave, buerger2, BuergerResource.class);
+
+        /* Create 3 Kinder*/
+        String URL1 = "http://localhost:" + port + "/buerger/create/kind/b";
+        String URL2 = "http://localhost:" + port + "/buerger/add/buerger/b/kind/bk";
+        String URL3 = "http://localhost:" + port + "/buerger/add/buerger/b2/kind/bk";
+        restTemplate.postForEntity(URL1, kind2, BuergerResource.class).getBody();
+        restTemplate.getForEntity(URL3, BuergerResource.class).getBody();
+        restTemplate.getForEntity(URL2, BuergerResource.class).getBody();
+
+
+        /* Test delete releaseBuergerElternteil */
+        String urlEltern = "http://localhost:" + port + "/buerger/eltern/bk";
+        String urlReleasevater = "http://localhost:" + port + "/buerger/release/elternteil/bk/b";
+        restTemplate.getForEntity(urlReleasevater, BuergerResource.class);
+        SearchResultResource responseListKinder = restTemplate.getForEntity(urlEltern, SearchResultResource.class).getBody();
+        assertEquals(1, responseListKinder.getResult().size());
     }
 
     @Test
@@ -396,6 +486,11 @@ public class BuergerTest {
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.WOHNUNGEN));
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.KINDER));
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_WOHNUNG));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.ELTERN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_ELTERN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.STAATSANGEHOERIGKEITEN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_KIND));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_PASS));
 
         /* Test methode addWohnungBuerger*/
         String URL5 = "http://localhost:" + port + "/buerger/add/buerger/b/wohnung/bw";
@@ -410,14 +505,19 @@ public class BuergerTest {
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.WOHNUNGEN));
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.KINDER));
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_WOHNUNG));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.ELTERN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_ELTERN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.STAATSANGEHOERIGKEITEN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_KIND));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_PASS));
 
         /*Test methode readBuergerWohnungen*/
         String URL1 = "http://localhost:" + port + "/buerger/wohnungen/b";
         responseList = restTemplate.getForEntity(URL1, List.class).getBody();
         assertEquals(1, responseList.size());
         /* Test delete wohnung */
-        String urlDeleteEltern = "http://localhost:" + port + "/wohnung/delete/buerger/bw/b";
-        BuergerResource a = restTemplate.getForEntity(urlDeleteEltern, BuergerResource.class).getBody();
+        String urlReleaseWohnung = "http://localhost:" + port + "/wohnung/release/buerger/bw/b";
+        BuergerResource a = restTemplate.getForEntity(urlReleaseWohnung, BuergerResource.class).getBody();
         responseList = restTemplate.getForEntity(URL1, List.class).getBody();
         assertEquals(0, responseList.size());
         /* Test delete wohnung */
@@ -448,6 +548,11 @@ public class BuergerTest {
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.WOHNUNGEN));
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.KINDER));
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_WOHNUNG));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.ELTERN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_ELTERN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.STAATSANGEHOERIGKEITEN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_KIND));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_PASS));
 
         /*Test methode readStaatsangehoerigkeitenBuerger*/
         String URL1 = "http://localhost:" + port + "/buerger/staats/b";
@@ -482,6 +587,11 @@ public class BuergerTest {
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.WOHNUNGEN));
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.KINDER));
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_WOHNUNG));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.ELTERN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_ELTERN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.STAATSANGEHOERIGKEITEN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_KIND));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_PASS));
 
         /* Test methode readPassBuerger */
         String URL1 = "http://localhost:" + port + "/buerger/pass/b";
@@ -490,6 +600,11 @@ public class BuergerTest {
         /* Test delete Pass */
         String urlDelete = "http://localhost:" + port + "/pass/bp2";
         restTemplate.delete(urlDelete, pass);
+        /* Test release Passs */
+        String urlReleasePass = "http://localhost:" + port + "/pass/release/buerger/bp";
+        BuergerResource a = restTemplate.getForEntity(urlReleasePass, BuergerResource.class).getBody();
+        responseList = restTemplate.getForEntity(URL1, List.class).getBody();
+        assertEquals(0, responseList.size());
     }
 
     @After

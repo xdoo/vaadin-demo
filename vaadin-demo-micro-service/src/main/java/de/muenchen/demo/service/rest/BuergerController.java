@@ -68,8 +68,6 @@ public class BuergerController {
     WohnungResourceAssembler wohnungAssembler;
     @Autowired
     PassResourceAssembler passAssembler;
-    @Value("${URL}")
-    private String URL;
     @Autowired
     UserService userService;
     @Autowired
@@ -121,7 +119,6 @@ public class BuergerController {
         if (LOG.isDebugEnabled()) {
             LOG.debug("new buerger");
         }
-        System.out.println(URL);
         Buerger entity = this.service.create();
         BuergerResource resource = this.assembler.toResource(entity, HateoasUtil.REL_NEW, HateoasUtil.REL_SAVE);
         return ResponseEntity.ok(resource);
@@ -267,52 +264,52 @@ public class BuergerController {
     /**
      * Liest die Eltern einer Bürger.
      *
-     * @param kindOid
+     * @param oid
      * @return
      */
-    @RolesAllowed({"PERM_readKindBuerger"})
-    @RequestMapping(value = "/kind/{kindOid}", method = {RequestMethod.GET})
-    public ResponseEntity readKindBuerger(@PathVariable("kindOid") String kindOid) {
+    @RolesAllowed({"PERM_readEltern"})
+    @RequestMapping(value = "/eltern/{oid}", method = {RequestMethod.GET})
+    public ResponseEntity readEltern(@PathVariable("oid") String oid) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("read Buerger Eltern");
+            LOG.debug("read Eltern");
         }
-        Iterable<Buerger> buerger = this.service.readKinder(kindOid);
+        Iterable<Buerger> buerger = this.service.readEltern(oid);
         SearchResultResource<BuergerResource> resource = this.assembler.toResource(Lists.newArrayList(buerger));
-        resource.add(linkTo(methodOn(BuergerController.class).readBuergerKinder(kindOid)).withSelfRel());
+        resource.add(linkTo(methodOn(BuergerController.class).readBuergerKinder(oid)).withSelfRel());
         return ResponseEntity.ok(resource);
     }
-    
+
     /**
-     * Entfernt die Beziehung zwischen Eltern und ein Kind.
+     * Entfernt die Beziehung zwischen einem Buerger und seinen Eltern.
      *
-     * @param kindOid
+     * @param oid
      * @return
      */
-    @RolesAllowed({"PERM_deleteKindAllBuerger"})
-    @RequestMapping(value = "/delete/kind/{kindOid}", method = {RequestMethod.DELETE})
-    public ResponseEntity deleteKindAllBuerger(@PathVariable("kindOid") String kindOid) {
+    @RolesAllowed({"PERM_releaseBuergerEltern"})
+    @RequestMapping(value = "/release/eltern/{oid}", method = {RequestMethod.GET})
+    public ResponseEntity releaseBuergerEltern(@PathVariable("oid") String oid) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("delete Buerger Eltern");
+            LOG.debug("release Buerger Eltern");
         }
-        this.service.deleteKindAllBuerger(kindOid);
+        this.service.releaseBuergerEltern(oid);
         return ResponseEntity.ok().build();
 
     }
-    
+
     /**
-     * Entfernt die Beziehung zwischen einen Buerger und seinen Kind.
+     * Entfernt die Beziehung zwischen einem Buerger und seinem Elternteil.
      *
-     * @param kindOid
-     * @param buergerOid
+     * @param oid
+     * @param elternteilOid
      * @return
      */
-    @RolesAllowed({"PERM_deleteKindBuerger"})
-    @RequestMapping(value = "/delete/kind/{kindOid}/{buergerOid}", method = {RequestMethod.DELETE})
-    public ResponseEntity deleteKindBuerger(@PathVariable("kindOid") String kindOid,@PathVariable("buergerOid") String buergerOid) {
+    @RolesAllowed({"PERM_releaseBuergerElternteil"})
+    @RequestMapping(value = "/release/elternteil/{oid}/{elternteilOid}", method = {RequestMethod.GET})
+    public ResponseEntity releaseBuergerElternteil(@PathVariable("oid") String oid, @PathVariable("elternteilOid") String elternteilOid) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("delete Buerger Kinder");
+            LOG.debug("release Buerger elternteil");
         }
-        this.service.deleteKindBuerger(kindOid,buergerOid);
+        this.service.releaseBuergerElternteil(oid, elternteilOid);
         return ResponseEntity.ok().build();
 
     }
@@ -349,7 +346,7 @@ public class BuergerController {
      * @return
      */
     @RolesAllowed({"PERM_addKindBuerger"})
-    @RequestMapping(value = "add/buerger/{bOid}/kind/{kOid}", method = {RequestMethod.GET})
+    @RequestMapping(value = "/add/buerger/{bOid}/kind/{kOid}", method = {RequestMethod.GET})
     public ResponseEntity addKindBuerger(@PathVariable("bOid") String buergerOid, @PathVariable("kOid") String kindOid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Add Kind buerger");
@@ -362,6 +359,7 @@ public class BuergerController {
         this.service.update(entity);
 
         BuergerResource resource = this.assembler.assembleWithAllLinks(entity);
+        resource.add(linkTo(methodOn(BuergerController.class).addKindBuerger(buergerOid, kindOid)).withSelfRel()); // add self link with params
         return ResponseEntity.ok(resource);
     }
 
@@ -373,7 +371,7 @@ public class BuergerController {
      * @return
      */
     @RolesAllowed({"PERM_addWohnungBuerger"})
-    @RequestMapping(value = "add/buerger/{bOid}/wohnung/{wOid}", method = {RequestMethod.GET})
+    @RequestMapping(value = "/add/buerger/{bOid}/wohnung/{wOid}", method = {RequestMethod.GET})
     public ResponseEntity addWohnungBuerger(@PathVariable("bOid") String buergerOid, @PathVariable("wOid") String wohnungOid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Add wohnung buerger");
@@ -396,9 +394,9 @@ public class BuergerController {
      * @param request
      * @return
      */
-    @RolesAllowed({"PERM_createWhonungBuerger"})
-    @RequestMapping(value = "create/wohnung/{oid}", method = {RequestMethod.POST})
-    public ResponseEntity createWhonungBuerger(@PathVariable("oid") String oid, @RequestBody WohnungResource request) {
+    @RolesAllowed({"PERM_createWohnungBuerger"})
+    @RequestMapping(value = "/create/wohnung/{oid}", method = {RequestMethod.POST})
+    public ResponseEntity createWohnungBuerger(@PathVariable("oid") String oid, @RequestBody WohnungResource request) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Create wohnung buerger");
         }
@@ -427,13 +425,11 @@ public class BuergerController {
             LOG.debug("read Buerger Staatsangehoerigkeiten");
         }
         Set<Staatsangehoerigkeit> staats = new HashSet<>();
-        Buerger d = this.service.read(oid);
-        Set<StaatsangehoerigkeitReference> a = d.getStaatsangehoerigkeitReferences();
-        for (StaatsangehoerigkeitReference staat : this.service.read(oid).getStaatsangehoerigkeitReferences()) {
-
+        Buerger buerger = this.service.read(oid);
+        buerger.getStaatsangehoerigkeitReferences();
+        this.service.read(oid).getStaatsangehoerigkeitReferences().stream().forEach((staat) -> {
             staats.add(staatsService.read(staat.getReferencedOid()));
-
-        }
+        });
         List<StaatsangehoerigkeitResource> resources = staatsAssembler.toResource(staats, HateoasUtil.REL_SELF);
         return ResponseEntity.ok(resources);
     }
@@ -446,7 +442,7 @@ public class BuergerController {
      * @return
      */
     @RolesAllowed({"PERM_addStaatangehoerigkeitBuerger"})
-    @RequestMapping(value = "add/buerger/{bOid}/staats/{sOid}", method = {RequestMethod.GET})
+    @RequestMapping(value = "/add/buerger/{bOid}/staats/{sOid}", method = {RequestMethod.GET})
     public ResponseEntity addStaatangehoerigkeitBuerger(@PathVariable("bOid") String buergerOid, @PathVariable("sOid") String staatsOid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Add staatsangehoerigkeit buerger");
@@ -472,7 +468,7 @@ public class BuergerController {
      * @return
      */
     @RolesAllowed({"PERM_addPassBuerger"})
-    @RequestMapping(value = "add/buerger/{bOid}/pass/{pOid}", method = {RequestMethod.GET})
+    @RequestMapping(value = "/add/buerger/{bOid}/pass/{pOid}", method = {RequestMethod.GET})
     public ResponseEntity addPassBuerger(@PathVariable("bOid") String buergerOid, @PathVariable("pOid") String passOid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Add Pass buerger");
@@ -481,6 +477,30 @@ public class BuergerController {
         Pass pass = passService.read(passOid);
         Buerger entity = service.read(buergerOid);
 
+        entity.getPass().add(pass);
+        this.service.update(entity);
+
+        BuergerResource resource = this.assembler.assembleWithAllLinks(entity);
+        return ResponseEntity.ok(resource);
+    }
+
+    /**
+     * Erzeugt eine Pass und assoziiert ihm mit einem Buerger .
+     *
+     * @param oid
+     * @param request
+     * @return
+     */
+    @RolesAllowed({"PERM_createPassBuerger"})
+    @RequestMapping(value = "/create/pass/{oid}", method = {RequestMethod.POST})
+    public ResponseEntity createPassBuerger(@PathVariable("oid") String oid, @RequestBody PassResource request) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Create pass buerger");
+        }
+        Pass pass = new Pass();
+        this.passAssembler.fromResource(request, pass);
+        this.passService.save(pass);
+        Buerger entity = service.read(oid);
         entity.getPass().add(pass);
         this.service.update(entity);
 

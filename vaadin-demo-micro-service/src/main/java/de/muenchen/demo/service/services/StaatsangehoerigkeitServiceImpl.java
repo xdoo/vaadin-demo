@@ -111,7 +111,7 @@ public class StaatsangehoerigkeitServiceImpl implements StaatsangehoerigkeitServ
     @Override
     public void delete(String referencedOid) {
         StaatsangehoerigkeitReference item = this.readReference(referencedOid);
-        this.buergerService.deleteBuergerStaatsangehoerigkeit(referencedOid);
+        this.buergerService.releaseStaatsangehoerigkeitAllBuerger(referencedOid);
         this.passService.deletePassStaat(referencedOid);
 
         this.repo.delete(item);

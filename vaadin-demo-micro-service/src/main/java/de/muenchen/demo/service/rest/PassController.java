@@ -1,17 +1,28 @@
 package de.muenchen.demo.service.rest;
 
+import com.google.common.collect.Lists;
+import de.muenchen.demo.service.domain.Buerger;
 import de.muenchen.demo.service.domain.Pass;
 import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
 import de.muenchen.demo.service.domain.StaatsangehoerigkeitReference;
+import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
+import de.muenchen.vaadin.demo.api.rest.BuergerResource;
+import de.muenchen.demo.service.rest.api.BuergerResourceAssembler;
 import de.muenchen.demo.service.rest.api.PassResource;
+
 import de.muenchen.demo.service.rest.api.PassResourceAssembler;
 import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
 import de.muenchen.vaadin.demo.api.rest.StaatsangehoerigkeitResource;
+
+
+import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
+import de.muenchen.vaadin.demo.api.rest.StaatsangehoerigkeitResource;
+
 import de.muenchen.demo.service.rest.api.StaatsangehoerigkeitResourceAssembler;
-import de.muenchen.demo.service.rest.api.WohnungResourceAssembler;
+import de.muenchen.demo.service.rest.api.PassResourceAssembler;
+import de.muenchen.demo.service.services.BuergerService;
 import de.muenchen.demo.service.services.PassService;
 import de.muenchen.demo.service.services.StaatsangehoerigkeitService;
-import de.muenchen.demo.service.services.WohnungService;
 import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
 import javax.annotation.security.RolesAllowed;
 import org.slf4j.Logger;
@@ -46,13 +57,13 @@ public class PassController {
     @Autowired
     PassService service;
     @Autowired
-    WohnungService wohnungService;
+    BuergerService buergerService;
     @Autowired
     StaatsangehoerigkeitService staatsService;
     @Autowired
     PassResourceAssembler assembler;
     @Autowired
-    WohnungResourceAssembler wohnungAssembler;
+    BuergerResourceAssembler buergerAssembler;
     @Autowired
     StaatsangehoerigkeitResourceAssembler staatAssembler;
     @Value("${URL}")
@@ -246,6 +257,59 @@ public class PassController {
         StaatsangehoerigkeitResource resources;
         resources = staatAssembler.toResource(staat, HateoasUtil.REL_SELF);
         return ResponseEntity.ok(resources);
+    }
+
+    /**
+     * Liest die Buerger einer Pass.
+     *
+     * @param PassOid
+     * @return
+     */
+    @RolesAllowed({"PERM_readPassBuerger"})
+    @RequestMapping(value = "/buerger/{PassOid}", method = {RequestMethod.GET})
+    public ResponseEntity readPassBuerger(@PathVariable("PassOid") String PassOid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("read Pass Buerger");
+        }
+        Iterable<Buerger> buerger = this.buergerService.readPass(PassOid);
+        SearchResultResource<BuergerResource> resource = this.buergerAssembler.toResource(Lists.newArrayList(buerger));
+        resource.add(linkTo(methodOn(BuergerController.class).readBuergerKinder(PassOid)).withSelfRel());
+        return ResponseEntity.ok(resource);
+    }
+
+    /**
+     * Entfernt die Beziehung zwischen eine Pass und Alle Buerger.
+     *
+     * @param PassOid
+     * @return
+     */
+    @RolesAllowed({"PERM_releasePassAllBuerger"})
+    @RequestMapping(value = "/release/buerger/{PassOid}", method = {RequestMethod.GET})
+    public ResponseEntity releasePassAllBuerger(@PathVariable("PassOid") String PassOid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("delete Pass Buerger");
+        }
+        this.buergerService.releasePassAllBuerger(PassOid);
+        return ResponseEntity.ok().build();
+
+    }
+
+    /**
+     * Entfernt die Beziehung zwischen eine Pass und ein Buerger.
+     *
+     * @param PassOid
+     * @param buergerOid
+     * @return
+     */
+    @RolesAllowed({"PERM_releasePassBuerger"})
+    @RequestMapping(value = "/release/buerger/{PassOid}/{buergerOid}", method = {RequestMethod.GET})
+    public ResponseEntity releasePassBuerger(@PathVariable("PassOid") String PassOid, @PathVariable("buergerOid") String buergerOid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("delete Pass Buerger");
+        }
+        this.buergerService.releasePassBuerger(PassOid, buergerOid);
+        return ResponseEntity.ok().build();
+
     }
 
 }
