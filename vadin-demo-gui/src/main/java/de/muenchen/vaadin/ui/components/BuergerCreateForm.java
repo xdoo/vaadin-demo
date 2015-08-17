@@ -78,6 +78,7 @@ public class BuergerCreateForm extends CustomComponent {
      * Erzeugt das eigentliche Formular.
      */
     private void createForm() {
+        Validator val = ValidatorFactory.getValidator("Null",controller.getMsg().get("m1.buerger.nachname.validation"),"false");
         FormLayout layout = new FormLayout();
         HorizontalLayout buttonLayout = new HorizontalLayout();
         buttonLayout.setSpacing(true);
@@ -114,11 +115,12 @@ public class BuergerCreateForm extends CustomComponent {
         // die 'speichern' Schaltfläche
         String createLabel = controller.getMsg().readText(controller.getI18nBasePath(), I18nPaths.I18N_FORM_CREATE_BUTTON_LABEL);
         Button createButton = new Button(createLabel, (ClickEvent click) -> {
-            try {
-                Validator val = ValidatorFactory.getValidator("Null",controller.getMsg().get("m1.buerger.nachname.validation"),"false");
-                firstField.addValidator(val);
-                secField.addValidator(val);
-                birthdayfield.addValidator(val);
+            try {                
+                if(!firstField.getValidators().contains(val)){
+                    firstField.addValidator(val);
+                    secField.addValidator(val);                
+                    birthdayfield.addValidator(val);
+                }
                 firstField.validate();                
                 secField.validate();
                 birthdayfield.validate();
