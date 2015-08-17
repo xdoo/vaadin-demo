@@ -9,19 +9,26 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.demo.service.Application;
+import de.muenchen.demo.service.domain.AdresseExterneRepository;
+import de.muenchen.demo.service.domain.AdresseInterneRepository;
+import de.muenchen.demo.service.domain.AdresseReferenceRepository;
 import de.muenchen.demo.service.domain.AuthPermId;
 import de.muenchen.demo.service.domain.Authority;
 import de.muenchen.demo.service.domain.AuthorityPermission;
 import de.muenchen.demo.service.domain.AuthorityPermissionRepository;
 import de.muenchen.demo.service.domain.AuthorityRepository;
+import de.muenchen.demo.service.domain.BuergerRepository;
 import de.muenchen.demo.service.domain.MandantRepository;
+import de.muenchen.demo.service.domain.PassRepository;
 import de.muenchen.demo.service.domain.Permission;
 import de.muenchen.demo.service.domain.PermissionRepository;
+import de.muenchen.demo.service.domain.StaatsangehoerigkeitReferenceRepository;
 import de.muenchen.demo.service.domain.User;
 import de.muenchen.demo.service.domain.UserAuthId;
 import de.muenchen.demo.service.domain.UserAuthority;
 import de.muenchen.demo.service.domain.UserAuthorityRepository;
 import de.muenchen.demo.service.domain.UserRepository;
+import de.muenchen.demo.service.domain.WohnungRepository;
 import de.muenchen.demo.service.rest.AuthorityPermissionController;
 import de.muenchen.demo.service.rest.UserAuthorityController;
 import de.muenchen.demo.service.rest.api.AuthorityPermissionResource;
@@ -85,7 +92,6 @@ public class UserAuthorityPermissionTest {
     @JsonProperty("result")
     private SearchResultResource response;
     @Autowired
-
     UserRepository usersRepo;
     @Autowired
     AuthorityRepository authRepo;
@@ -93,15 +99,28 @@ public class UserAuthorityPermissionTest {
     PermissionRepository permRepo;
     @Autowired
     UserAuthorityRepository userAuthRepo;
-
     @Autowired
     AuthorityPermissionRepository authPermRepo;
+    @Autowired
+    StaatsangehoerigkeitReferenceRepository staatRepo;
+    @Autowired
+    BuergerRepository buergerRepo;
+    @Autowired
+    WohnungRepository wohnRepo;
+    @Autowired
+    PassRepository passRepo;
+    @Autowired
+    AdresseInterneRepository interneRepo;
+    @Autowired
+    AdresseExterneRepository externeRepo;
+    @Autowired
+    AdresseReferenceRepository referenceRepo;
+    @Autowired
+    MandantRepository mandantRepo;
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    @Autowired
-    MandantRepository mandantRepo;
 
     @Before
     public void setUp() throws JsonProcessingException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
@@ -111,6 +130,13 @@ public class UserAuthorityPermissionTest {
         usersRepo.deleteAll();
         authRepo.deleteAll();
         permRepo.deleteAll();
+        buergerRepo.deleteAll();
+        staatRepo.deleteAll();
+        wohnRepo.deleteAll();
+        passRepo.deleteAll();
+        referenceRepo.deleteAll();
+        interneRepo.deleteAll();
+        externeRepo.deleteAll();
         mandantRepo.deleteAll();
 
         InitTest initTest = new InitTest(usersRepo, authRepo, permRepo, userAuthRepo, authPermRepo, mandantRepo);
@@ -265,6 +291,13 @@ public class UserAuthorityPermissionTest {
         usersRepo.deleteAll();
         authRepo.deleteAll();
         permRepo.deleteAll();
+        buergerRepo.deleteAll();
+        staatRepo.deleteAll();
+        wohnRepo.deleteAll();
+        passRepo.deleteAll();
+        referenceRepo.deleteAll();
+        interneRepo.deleteAll();
+        externeRepo.deleteAll();
         mandantRepo.deleteAll();
     }
 
