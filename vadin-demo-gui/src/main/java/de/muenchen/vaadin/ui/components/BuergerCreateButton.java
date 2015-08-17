@@ -7,7 +7,7 @@ import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.EventType;
-import de.muenchen.vaadin.ui.util.I18nPaths;
+import static de.muenchen.vaadin.ui.util.I18nPaths.*;
 
 /**
  *
@@ -17,7 +17,7 @@ public class BuergerCreateButton extends CustomComponent {
 
     public BuergerCreateButton(final BuergerViewController controller, final String navigateTo, final String from) {
         
-        String label = controller.getMsg().readText(controller.getI18nBasePath(), I18nPaths.I18N_FORM_CREATE_BUTTON_LABEL);
+        String label = controller.resolve(getFormPath(Action.create,Component.button,Type.label));
         Button create = new Button(label, FontAwesome.MAGIC);
         create.addStyleName(ValoTheme.BUTTON_FRIENDLY);
         create.addClickListener(e -> {

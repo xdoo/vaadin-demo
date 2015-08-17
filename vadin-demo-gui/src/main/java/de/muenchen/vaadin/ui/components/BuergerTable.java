@@ -15,6 +15,7 @@ import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.EventType;
+import static de.muenchen.vaadin.ui.util.I18nPaths.*;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -72,12 +73,15 @@ public class BuergerTable extends CustomComponent {
         table.setVisibleColumns(Buerger.VORNAME, Buerger.NACHNAME, Buerger.GEBURTSDATUM, "button");
         
         // set headers
-        table.setColumnHeader(Buerger.VORNAME, controller.getMsg().readColumnHeader(controller.getI18nBasePath(), Buerger.VORNAME));
-        table.setColumnIcon(Buerger.VORNAME, controller.getMsg().readColumnHeaderIcon(controller.getI18nBasePath(), Buerger.VORNAME));
-        table.setColumnHeader(Buerger.GEBURTSDATUM, controller.getMsg().readColumnHeader(controller.getI18nBasePath(), Buerger.GEBURTSDATUM));
-        table.setColumnIcon(Buerger.GEBURTSDATUM, controller.getMsg().readColumnHeaderIcon(controller.getI18nBasePath(), Buerger.GEBURTSDATUM));
-        table.setColumnHeader(Buerger.NACHNAME, controller.getMsg().readColumnHeader(controller.getI18nBasePath(), Buerger.NACHNAME));
-        table.setColumnIcon(Buerger.NACHNAME, controller.getMsg().readColumnHeaderIcon(controller.getI18nBasePath(),Buerger.NACHNAME));
+        table.setColumnHeader(Buerger.VORNAME, controller.resolve(getEntityFieldPath(Buerger.VORNAME, Type.column_header)));
+
+        table.setColumnIcon(Buerger.VORNAME, controller.resolveIcon(getEntityFieldPath(Buerger.VORNAME, Type.column_header)));
+
+
+        table.setColumnHeader(Buerger.GEBURTSDATUM, controller.resolve(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.column_header)));
+        table.setColumnIcon(Buerger.GEBURTSDATUM, controller.resolveIcon(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.column_header)));
+        table.setColumnHeader(Buerger.NACHNAME, controller.resolve(getEntityFieldPath(Buerger.NACHNAME, Type.column_header)));
+        table.setColumnIcon(Buerger.NACHNAME, controller.resolveIcon(getEntityFieldPath(Buerger.NACHNAME, Type.column_header)));
         table.setColumnHeader("button", "");
         
         setCompositionRoot(table);

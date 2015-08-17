@@ -12,7 +12,7 @@ import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.EventType;
-import de.muenchen.vaadin.ui.util.I18nPaths;
+import static de.muenchen.vaadin.ui.util.I18nPaths.*;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,13 +70,21 @@ public class BuergerReadForm extends CustomComponent {
         layout.setMargin(true);
         
         // headline
-        Label headline = new Label(controller.getMsg().readText(controller.getI18nBasePath(), I18nPaths.I18N_FORM_READ_HEADLINE_LABEL));
+        Label headline = new Label(controller.resolve(getFormPath(Action.read, Component.headline, Type.label)));
         headline.addStyleName(ValoTheme.LABEL_H3);
         layout.addComponent(headline);
 
-        layout.addComponent(controller.getUtil().createFormTextField(binder, controller.getI18nBasePath(), Buerger.VORNAME, controller.getMsg()));
-        layout.addComponent(controller.getUtil().createFormTextField(binder, controller.getI18nBasePath(), Buerger.NACHNAME, controller.getMsg()));
-        layout.addComponent(controller.getUtil().createFormDateField(binder, controller.getI18nBasePath(), Buerger.GEBURTSDATUM, controller.getMsg()));
+        layout.addComponent(controller.getUtil().createFormTextField(binder,
+                controller.resolve(getEntityFieldPath(Buerger.VORNAME, Type.label)),
+                controller.resolve(getEntityFieldPath(Buerger.VORNAME, Type.input_prompt)),
+                Buerger.VORNAME));
+        layout.addComponent(controller.getUtil().createFormTextField(binder,
+                controller.resolve(getEntityFieldPath(Buerger.NACHNAME, Type.label)),
+                controller.resolve(getEntityFieldPath(Buerger.NACHNAME, Type.input_prompt)),
+                Buerger.NACHNAME));
+        layout.addComponent(controller.getUtil().createFormDateField(
+                binder, controller.resolve(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.label)),
+                Buerger.GEBURTSDATUM));
         
         // auf 'read only setzen
         this.binder.setReadOnly(true);

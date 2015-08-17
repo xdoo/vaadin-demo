@@ -12,9 +12,6 @@ import java.util.stream.Stream;
  */
 public class I18nPaths {
 
-    public enum Group implements I18nPath {
-        form,navigation,page,notification
-    }
     /**
      * Ist ein GUI-Komponententyp.
      */
@@ -27,14 +24,14 @@ public class I18nPaths {
      * Aktion der GUI Komponente.
      */
     public enum Action implements I18nPath {
-        create,read,update,back,save
+        create, read, update, back, save, delete, cancel, copy
     }
 
     /**
      * Type des Texts
      */
     public enum Type implements I18nPath {
-        label,text,title
+        label,text,title, column_header, input_prompt
     }
 
     private static String get(final I18nPath... paths) {
@@ -43,20 +40,28 @@ public class I18nPaths {
     }
 
 
-    public static String getFormPath(String base, Action a, Component c, Type t) {
-        return base + ".form" + get(a, c, t);
+    public static String getFormPath(Action a, Component c, Type t) {
+        return ".form" + get(a, c, t);
     }
 
-    public static String getPagePath(String base, Type t) {
-        return base + ".page" + get(t);
+    public static String getPagePath(Type t) {
+        return ".page" + get(t);
     }
 
-    public static String getNavigationPath(String base, Component c, Type t) {
-        return base + ".navigation" + get(c,t);
+    public static String getNavigationPath(Component c, Type t) {
+        return ".navigation" + get(c,t);
+    }
+
+    public static String getSuccessNotificationPath(Action a, Type t) {
+        return ".notification.success" + get(a,t);
+    }
+
+    public static String getEntityFieldPath(String field, Type t){
+        return "." + field + get(t);
     }
 
     public static void main(String[] args) {
-        System.out.println(I18nPaths.getFormPath("buerger",Action.create,Component.button, Type.label));
+        System.out.println(I18nPaths.getFormPath(Action.create,Component.button, Type.label));
     }
     
 }

@@ -17,7 +17,7 @@ import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.EventType;
-import de.muenchen.vaadin.ui.util.I18nPaths;
+import static de.muenchen.vaadin.ui.util.I18nPaths.*;
 
 /**
  * Formular zum Erstellen eines {@link Buerger}s.
@@ -76,7 +76,10 @@ public class BuergerCreateForm extends CustomComponent {
         layout.setMargin(true);
         
         // headline
-        Label headline = new Label(controller.getMsg().readText(controller.getI18nBasePath(), I18nPaths.I18N_FORM_CREATE_HEADLINE_LABEL));
+        Label headline = new Label(controller.resolve(
+                getFormPath(Action.create,
+                Component.headline,
+                Type.label)));
         headline.addStyleName(ValoTheme.LABEL_H3);
         layout.addComponent(headline);
 
@@ -85,17 +88,28 @@ public class BuergerCreateForm extends CustomComponent {
         binder.setItemDataSource(controller.createBuerger());
         
         // Fokus auf das erste Feld setzen
-        TextField firstField = controller.getUtil().createFormTextField(binder, controller.getI18nBasePath(), Buerger.VORNAME, controller.getMsg());
+        TextField firstField = controller.getUtil().createFormTextField(binder,
+                controller.resolve(getEntityFieldPath(Buerger.VORNAME, Type.label)),
+                controller.resolve(getEntityFieldPath(Buerger.VORNAME, Type.input_prompt)),
+                Buerger.VORNAME);
         firstField.focus();
         layout.addComponent(firstField);
         
         // alle anderen Felder
-        layout.addComponent(controller.getUtil().createFormTextField(binder, controller.getI18nBasePath(), Buerger.NACHNAME, controller.getMsg()));
-        layout.addComponent(controller.getUtil().createFormDateField(binder, controller.getI18nBasePath(), Buerger.GEBURTSDATUM, controller.getMsg()));
+        layout.addComponent(controller.getUtil().createFormTextField(binder,
+                controller.resolve(getEntityFieldPath(Buerger.NACHNAME, Type.label)),
+                controller.resolve(getEntityFieldPath(Buerger.NACHNAME, Type.input_prompt)),
+                Buerger.NACHNAME));
+        layout.addComponent(controller.getUtil().createFormDateField(binder,
+                controller.resolve(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.label)),
+                Buerger.GEBURTSDATUM));
 
         layout.addComponent(buttonLayout);
         // die 'speichern' Schaltfläche
-        String createLabel = controller.getMsg().readText(controller.getI18nBasePath(), I18nPaths.I18N_FORM_CREATE_BUTTON_LABEL);
+        String createLabel = controller.resolve(
+                getFormPath(Action.create,
+                        Component.button,
+                        Type.label));
         Button createButton = new Button(createLabel, (ClickEvent click) -> {
             try {
                 binder.commit();
@@ -114,7 +128,7 @@ public class BuergerCreateForm extends CustomComponent {
         buttonLayout.addComponent(createButton);
         // die 'abbrechen' Schaltfläche
         buttonLayout.addComponent(new GenericCancelButton(
-                controller.getMsg().readText(controller.getI18nBasePath(), I18nPaths.I18N_FORM_CANCEL_BUTTON_LABEL), 
+                controller.resolve(getFormPath(Action.cancel, Component.button, Type.label)),
                 new BuergerAppEvent(binder.getItemDataSource().getBean(), EventType.CANCEL).navigateTo(this.back), 
                 this.controller.getEventbus()));
         setCompositionRoot(layout);

@@ -9,6 +9,7 @@ import com.vaadin.spring.annotation.SpringComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.env.Environment;
 
@@ -22,6 +23,7 @@ import java.util.Locale;
  */
 @Primary
 @SpringComponent
+@RefreshScope
 public class I18nServiceConfigImpl implements I18nService {
 
     public static final String ISO_8859_1 = "ISO-8859-1";
