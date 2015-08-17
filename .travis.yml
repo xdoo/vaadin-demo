@@ -8,3 +8,6 @@ install: mvn clean
 
 script: mvn install -DskipTests=true
 
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+
