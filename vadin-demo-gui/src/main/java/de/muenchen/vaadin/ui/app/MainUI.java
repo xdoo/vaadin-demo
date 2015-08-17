@@ -105,9 +105,6 @@ public class MainUI extends UI {
         // check security
         if(!this.security.isLoggedIn()) {
             this.root.switchOffMenu();
-
-            LOG.debug("Not logged in: switch to LOGINView");
-            getNavigator().navigateTo(LoginView.NAME);
         }
         
         // add navigator to security Service
