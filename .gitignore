@@ -1,3 +1,5 @@
 /target/
 /vaadin-demo-micro-service/target/
 /vaadin-demo-api/target/
+/vaadin-demo/target/
+/vaadin-demo-configcloud/target/
