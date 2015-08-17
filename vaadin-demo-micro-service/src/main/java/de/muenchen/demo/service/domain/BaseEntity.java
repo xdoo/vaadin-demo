@@ -24,7 +24,7 @@ public abstract class BaseEntity implements Cloneable {
 	@Column(length = 30, unique = true, nullable = false, name = "OID")
 	private String oid;
 
-	@IndexedEmbedded(depth = 1, prefix = "mandant_")
+	@IndexedEmbedded(depth = 1, prefix = "mandant")
 	@NotAudited
 	@OneToOne
 	private Mandant mandant;

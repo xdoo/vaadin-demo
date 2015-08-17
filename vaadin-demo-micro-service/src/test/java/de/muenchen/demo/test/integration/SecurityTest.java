@@ -29,7 +29,7 @@ import de.muenchen.demo.service.domain.UserAuthorityRepository;
 import de.muenchen.demo.service.domain.UserRepository;
 import de.muenchen.demo.service.domain.WohnungRepository;
 import de.muenchen.demo.service.rest.BuergerController;
-import de.muenchen.demo.service.rest.api.SearchResultResource;
+import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
 import de.muenchen.demo.service.rest.api.UserResource;
 import de.muenchen.demo.service.util.IdService;
 import static java.lang.Boolean.TRUE;
