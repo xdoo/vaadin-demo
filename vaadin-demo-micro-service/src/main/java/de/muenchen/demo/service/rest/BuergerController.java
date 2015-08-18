@@ -296,6 +296,23 @@ public class BuergerController {
     }
 
     /**
+     * Entfernt die Beziehung zwischen einem Buerger und seinen Kinder.
+     *
+     * @param oid
+     * @return
+     */
+    @RolesAllowed({"PERM_releaseBuergerKinder"})
+    @RequestMapping(value = "/release/kinder/{oid}", method = {RequestMethod.GET})
+    public ResponseEntity releaseBuergerKinder(@PathVariable("oid") String oid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("release Buerger Kinder");
+        }
+        this.service.releaseBuergerKinder(oid);
+        return ResponseEntity.ok().build();
+
+    }
+
+    /**
      * Entfernt die Beziehung zwischen einem Buerger und seinem Elternteil.
      *
      * @param oid
@@ -409,6 +426,23 @@ public class BuergerController {
 
         BuergerResource resource = this.assembler.assembleWithAllLinks(entity);
         return ResponseEntity.ok(resource);
+    }
+
+    /**
+     * Entfernt die Beziehung zwischen einem Buerger und seinen Wohnungen.
+     *
+     * @param oid
+     * @return
+     */
+    @RolesAllowed({"PERM_releaseBuergerWohnungen"})
+    @RequestMapping(value = "/release/wohnungen/{oid}", method = {RequestMethod.GET})
+    public ResponseEntity releaseBuergerWohnungen(@PathVariable("oid") String oid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("release Buerger Wohnungen");
+        }
+        this.service.releaseBuergerWohnungen(oid);
+        return ResponseEntity.ok().build();
+
     }
 
     /**
@@ -527,4 +561,21 @@ public class BuergerController {
         List<PassResource> resources = passAssembler.toResource(pass, HateoasUtil.REL_SELF);
         return ResponseEntity.ok(resources);
     }
+    /**
+     * Entfernt die Beziehung zwischen einem Buerger und seinen Pässe.
+     *
+     * @param oid
+     * @return
+     */
+    @RolesAllowed({"PERM_releaseBuergerPaesse"})
+    @RequestMapping(value = "/release/paesse/{oid}", method = {RequestMethod.GET})
+    public ResponseEntity releaseBuergerPaesse(@PathVariable("oid") String oid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("release Buerger Paesse");
+        }
+        this.service.releasePassBuerger(oid);
+        return ResponseEntity.ok().build();
+
+    }
+
 }

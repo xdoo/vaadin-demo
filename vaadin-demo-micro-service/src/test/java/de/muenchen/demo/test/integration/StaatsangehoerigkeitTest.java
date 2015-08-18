@@ -74,6 +74,7 @@ public class StaatsangehoerigkeitTest {
     @Value("${local.server.port}")
     private int port;
     private final Buerger buerger = new Buerger();
+    private String urlBuergerSave;
 
     public StaatsangehoerigkeitTest() {
     }
@@ -160,6 +161,7 @@ public class StaatsangehoerigkeitTest {
                 aResponse().withHeader("Content-Type", "application/json")
                 .withBody(json)
         ));
+        urlBuergerSave = "http://localhost:" + port + "/buerger/save";
 
         buerger.setOid("30");
         buerger.setNachname("hans");

@@ -161,6 +161,22 @@ public class BuergerServiceImpl implements BuergerService {
     }
 
     @Override
+    public void releaseBuergerKinder(String oid) {
+
+        Buerger buerger = this.read(oid);
+
+        Set<Buerger> kinder = buerger.getKinder();
+        Collection<Buerger> removeKinder = new LinkedList<>();
+        kinder.stream().forEach((kind) -> {
+            removeKinder.add(kind);
+        });
+
+        kinder.removeAll(removeKinder);
+        this.update(buerger);
+
+    }
+
+    @Override
     public Buerger readPassBuerger(String oid) {
         List<Buerger> result = this.repo.findByPassOid(oid);
         if (result.isEmpty()) {
@@ -176,15 +192,31 @@ public class BuergerServiceImpl implements BuergerService {
     public void releasePassBuerger(String passOid) {
 
         Buerger buerger = this.readPassBuerger(passOid);
-        if (buerger != null){
-        Set<Pass> pass = buerger.getPass();
-        Collection<Pass> removePass = new LinkedList<>();
-        pass.stream().filter((element) -> (element == this.passService.read(passOid))).forEach((element) -> {
-            removePass.add(element);
-        });
-        pass.removeAll(removePass);
-        this.update(buerger);
+        if (buerger != null) {
+            Set<Pass> pass = buerger.getPass();
+            Collection<Pass> removePass = new LinkedList<>();
+            pass.stream().filter((element) -> (element == this.passService.read(passOid))).forEach((element) -> {
+                removePass.add(element);
+            });
+            pass.removeAll(removePass);
+            this.update(buerger);
         }
+    }
+
+    @Override
+    public void releaseBuergerPaesse(String oid) {
+
+        Buerger buerger = this.read(oid);
+
+        Set<Pass> paesse = buerger.getPass();
+        Collection<Pass> removePaesse = new LinkedList<>();
+        paesse.stream().forEach((pass) -> {
+            removePaesse.add(pass);
+        });
+
+        paesse.removeAll(removePaesse);
+        this.update(buerger);
+
     }
 
     @Override
@@ -206,6 +238,22 @@ public class BuergerServiceImpl implements BuergerService {
             this.update(buerger);
 
         }
+    }
+
+    @Override
+    public void releaseBuergerWohnungen(String oid) {
+
+        Buerger buerger = this.read(oid);
+
+        Set<Wohnung> wohnungen = buerger.getWohnungen();
+        Collection<Wohnung> removeWohnungnen = new LinkedList<>();
+        wohnungen.stream().forEach((wohnung) -> {
+            removeWohnungnen.add(wohnung);
+        });
+
+        wohnungen.removeAll(removeWohnungnen);
+        this.update(buerger);
+
     }
 
     @Override

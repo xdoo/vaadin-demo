@@ -476,6 +476,32 @@ public class BuergerTest {
     }
 
     @Test
+    public void releaseBuergerKinderTest() {
+
+        restTemplate.postForEntity(urlSave, buerger, BuergerResource.class);
+        restTemplate.postForEntity(urlSave, kind, BuergerResource.class);
+        restTemplate.postForEntity(urlSave, buerger2, BuergerResource.class);
+
+        /* Create 2 Kinder für Bürger "b"*/
+        String URL1 = "http://localhost:" + port + "/buerger/create/kind/b";
+        String URL2 = "http://localhost:" + port + "/buerger/add/buerger/b/kind/bk";
+        restTemplate.postForEntity(URL1, kind2, BuergerResource.class).getBody();
+        restTemplate.getForEntity(URL2, BuergerResource.class).getBody();
+        
+        String urlKinder = "http://localhost:" + port + "/buerger/kinder/b";
+        
+        SearchResultResource responseListKinder = restTemplate.getForEntity(urlKinder, SearchResultResource.class).getBody();
+        assertEquals(2, responseListKinder.getResult().size());
+       
+        /* Test releaseBuergerKinder */
+        String urlReleaseKinder = "http://localhost:" + port + "/buerger/release/kinder/b";
+        restTemplate.getForEntity(urlReleaseKinder, BuergerResource.class);
+        
+        SearchResultResource responseListKinder2 = restTemplate.getForEntity(urlKinder, SearchResultResource.class).getBody();
+        assertEquals(0, responseListKinder2.getResult().size());
+    }
+
+    @Test
     public void wohnungBuergerTest() {
 
         restTemplate.postForEntity(urlSave, buerger, BuergerResource.class);
@@ -525,11 +551,7 @@ public class BuergerTest {
         String URL1 = "http://localhost:" + port + "/buerger/wohnungen/b";
         responseList = restTemplate.getForEntity(URL1, List.class).getBody();
         assertEquals(1, responseList.size());
-        /* Test delete wohnung */
-        String urlReleaseWohnung = "http://localhost:" + port + "/wohnung/release/buerger/bw/b";
-        BuergerResource a = restTemplate.getForEntity(urlReleaseWohnung, BuergerResource.class).getBody();
-        responseList = restTemplate.getForEntity(URL1, List.class).getBody();
-        assertEquals(0, responseList.size());
+
         /* Test delete wohnung */
         String urlDelete = "http://localhost:" + port + "/wohnung/bw";
         restTemplate.delete(urlDelete, wohnung);
@@ -608,13 +630,11 @@ public class BuergerTest {
         responseList = restTemplate.getForEntity(URL1, List.class).getBody();
         assertEquals(2, responseList.size());
         /* Test delete Pass */
-        String urlDelete = "http://localhost:" + port + "/pass/bp2";
+        String urlDelete = "http://localhost:" + port + "/pass/bp";
         restTemplate.delete(urlDelete, pass);
-        /* Test release Passs */
-        String urlReleasePass = "http://localhost:" + port + "/pass/release/buerger/bp";
-        BuergerResource a = restTemplate.getForEntity(urlReleasePass, BuergerResource.class).getBody();
+        
         responseList = restTemplate.getForEntity(URL1, List.class).getBody();
-        assertEquals(0, responseList.size());
+        assertEquals(1, responseList.size());
     }
 
     @After
