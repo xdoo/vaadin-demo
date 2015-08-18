@@ -34,6 +34,7 @@ import de.muenchen.vaadin.ui.util.EventType;
 import de.muenchen.vaadin.ui.util.VaadinUtil;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 import java.util.Stack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,6 +71,7 @@ public class BuergerViewController implements Serializable {
      */
     private final EventBus eventbus;
     
+    private Optional<BuergerSearchTable> searchTable = Optional.<BuergerSearchTable>empty();
     /**
      * {@link MessageService} zur Auflösung der Platzhalter
      */
@@ -265,13 +267,18 @@ public class BuergerViewController implements Serializable {
     }
     
     public BuergerSearchTable generateSearchTable(String navigateToForEdit, String navigateToForDetail, String navigateForCreate, String navigateFrom) {
+        if(searchTable.isPresent()){
+            return searchTable.get();
+        }
+        else
+        {
         LOG.debug("creating 'search' table for buerger");
         BuergerTableButtonFactory detail = BuergerTableButtonFactory.getFactory(navigateToForDetail, BuergerTableDetailButton.class);
         BuergerTableButtonFactory edit = BuergerTableButtonFactory.getFactory(navigateToForEdit, BuergerTableEditButton.class);
         BuergerTableButtonFactory copy = BuergerTableButtonFactory.getFactory(null, BuergerTableCopyButton.class);
         BuergerTableButtonFactory delete = BuergerTableButtonFactory.getFactory(null, BuergerTableDeleteButton.class);
         
-        return new BuergerSearchTable(
+        searchTable = Optional.of(new BuergerSearchTable(
                 this, 
                 navigateToForEdit, 
                 navigateToForDetail, 
@@ -282,7 +289,9 @@ public class BuergerViewController implements Serializable {
                 edit,
                 copy,
                 delete
-        );
+        ));
+        return searchTable.get();
+        }
     }
     
     public BuergerTable generateChildTable(String navigateToForDetail, String from) {
