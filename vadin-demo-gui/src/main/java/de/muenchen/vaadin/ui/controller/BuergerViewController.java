@@ -325,8 +325,8 @@ public class BuergerViewController implements Serializable {
             this.pushFrom(event);
             
             GenericSuccessNotification succes = new GenericSuccessNotification(
-                    resolve(getSuccessNotificationPath(Action.update, Type.label)),
-                    resolve(getSuccessNotificationPath(Action.update, Type.text)));
+                    resolve(getNotificationPath(NotificationType.success, Action.update, Type.label)),
+                    resolve(getNotificationPath(NotificationType.success, Action.update, Type.text)));
             succes.show(Page.getCurrent());
             
             // Zur Seite wechseln
@@ -343,8 +343,8 @@ public class BuergerViewController implements Serializable {
             this.eventbus.post(new BuergerComponentEvent(event.getEntity(), EventType.SAVE));
             
             GenericSuccessNotification succes = new GenericSuccessNotification(
-                    resolve(getSuccessNotificationPath(Action.save, Type.label)),
-                    resolve(getSuccessNotificationPath(Action.save, Type.text)));
+                    resolve(getNotificationPath(NotificationType.success, Action.save, Type.label)),
+                    resolve(getNotificationPath(NotificationType.success, Action.save, Type.text)));
             succes.show(Page.getCurrent());
             
             // Zur Seite wechseln
@@ -358,8 +358,8 @@ public class BuergerViewController implements Serializable {
             this.saveBuergerKind(event.getEntity());
             
             GenericSuccessNotification succes = new GenericSuccessNotification(
-                    resolve(getSuccessNotificationPath(Action.save, Type.label)),
-                    resolve(getSuccessNotificationPath(Action.save, Type.text)));
+                    resolve(getNotificationPath(NotificationType.success, Action.save, Type.label)),
+                    resolve(getNotificationPath(NotificationType.success, Action.save, Type.text)));
             succes.show(Page.getCurrent());
             
             // Zur Seite wechseln
@@ -379,8 +379,8 @@ public class BuergerViewController implements Serializable {
             this.eventbus.post(buergerComponentEvent);
             
             GenericSuccessNotification succes = new GenericSuccessNotification(
-                    resolve(getSuccessNotificationPath(Action.delete, Type.label)),
-                    resolve(getSuccessNotificationPath(Action.delete, Type.text)));
+                    resolve(getNotificationPath(NotificationType.success, Action.delete, Type.label)),
+                    resolve(getNotificationPath(NotificationType.success, Action.delete, Type.text)));
             succes.show(Page.getCurrent());
         }
         
@@ -394,8 +394,8 @@ public class BuergerViewController implements Serializable {
             this.eventbus.post(new BuergerComponentEvent(copy, EventType.COPY));
             
             GenericSuccessNotification succes = new GenericSuccessNotification(
-                    resolve(getSuccessNotificationPath(Action.copy, Type.label)),
-                    resolve(getSuccessNotificationPath(Action.copy, Type.text)));
+                    resolve(getNotificationPath(NotificationType.success, Action.copy, Type.label)),
+                    resolve(getNotificationPath(NotificationType.success, Action.copy, Type.text)));
             succes.show(Page.getCurrent());
         }
         
