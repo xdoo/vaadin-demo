@@ -12,6 +12,12 @@ import java.util.Date;
  * Created by arne.schoentag on 17.08.15.
  */
 public class ValidatorFactory {
+    /**
+     * Factory method to create a vaadin validator using the given arguments.
+     * @param kind of which validator will be created.
+     * @param args the arguments needed for the constructor.
+     * @return new validator.
+     */
     public static Validator getValidator(String kind,String... args){
         if(kind == null)
             return null;

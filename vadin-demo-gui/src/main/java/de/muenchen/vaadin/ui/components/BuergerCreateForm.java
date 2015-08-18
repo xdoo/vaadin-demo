@@ -93,7 +93,7 @@ public class BuergerCreateForm extends CustomComponent {
         final BeanFieldGroup<Buerger> binder = new BeanFieldGroup<Buerger>(Buerger.class);
         binder.setItemDataSource(controller.createBuerger());
         
-        // Fokus auf das erste Feld setzen
+        // Fokus auf das erste Feld setzen und hinzufügen von Validatoren
         TextField firstField = controller.getUtil().createFormTextField(binder, controller.getI18nBasePath(), Buerger.VORNAME, controller.getMsg());
         firstField.focus();
         Validator val1 = ValidatorFactory.getValidator("StringLength",controller.getMsg().get("m1.buerger.nachname.validation"),1+"",""+Integer.MAX_VALUE, "true");
@@ -115,15 +115,18 @@ public class BuergerCreateForm extends CustomComponent {
         // die 'speichern' Schaltfläche
         String createLabel = controller.getMsg().readText(controller.getI18nBasePath(), I18nPaths.I18N_FORM_CREATE_BUTTON_LABEL);
         Button createButton = new Button(createLabel, (ClickEvent click) -> {
-            try {                
+            try {
+                //If no NullValidators are added to the Fields, they will be added.
                 if(!firstField.getValidators().contains(val)){
                     firstField.addValidator(val);
                     secField.addValidator(val);                
                     birthdayfield.addValidator(val);
                 }
+                //Validation of the Fields before continuing
                 firstField.validate();                
                 secField.validate();
                 birthdayfield.validate();
+                
                 binder.commit();
                 controller.getEventbus().post(new BuergerAppEvent(binder.getItemDataSource().getBean(), this.type).navigateTo(navigateTo));
                 //reset
