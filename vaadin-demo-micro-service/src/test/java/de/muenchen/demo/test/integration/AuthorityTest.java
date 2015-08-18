@@ -9,16 +9,23 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.demo.service.Application;
+import de.muenchen.demo.service.domain.AdresseExterneRepository;
+import de.muenchen.demo.service.domain.AdresseInterneRepository;
+import de.muenchen.demo.service.domain.AdresseReferenceRepository;
 import de.muenchen.demo.service.domain.Authority;
 import de.muenchen.demo.service.domain.AuthorityPermissionRepository;
 import de.muenchen.demo.service.domain.AuthorityRepository;
+import de.muenchen.demo.service.domain.BuergerRepository;
 import de.muenchen.demo.service.domain.MandantRepository;
+import de.muenchen.demo.service.domain.PassRepository;
 import de.muenchen.demo.service.domain.PermissionRepository;
+import de.muenchen.demo.service.domain.StaatsangehoerigkeitReferenceRepository;
 import de.muenchen.demo.service.domain.UserAuthorityRepository;
 import de.muenchen.demo.service.domain.UserRepository;
-import de.muenchen.demo.service.rest.api.AuthorityResource;
+import de.muenchen.demo.service.domain.WohnungRepository;
+import de.muenchen.vaadin.demo.api.rest.AuthorityResource;
 import de.muenchen.demo.service.rest.api.UserResource;
-import de.muenchen.demo.service.rest.api.SearchResultResource;
+import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
 import de.muenchen.demo.service.util.IdService;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
@@ -83,7 +90,20 @@ public class AuthorityTest {
     UserAuthorityRepository userAuthRepo;
     @Autowired
     AuthorityPermissionRepository authPermRepo;
-
+    @Autowired
+    StaatsangehoerigkeitReferenceRepository staatRepo;
+    @Autowired
+    BuergerRepository buergerRepo;
+    @Autowired
+    WohnungRepository wohnRepo;
+    @Autowired
+    PassRepository passRepo;
+    @Autowired
+    AdresseInterneRepository interneRepo;
+    @Autowired
+    AdresseExterneRepository externeRepo;
+    @Autowired
+    AdresseReferenceRepository referenceRepo;
     @Autowired
     MandantRepository mandantRepo;
 
@@ -95,6 +115,13 @@ public class AuthorityTest {
         usersRepo.deleteAll();
         authRepo.deleteAll();
         permRepo.deleteAll();
+        buergerRepo.deleteAll();
+        staatRepo.deleteAll();
+        wohnRepo.deleteAll();
+        passRepo.deleteAll();
+        referenceRepo.deleteAll();
+        interneRepo.deleteAll();
+        externeRepo.deleteAll();
         mandantRepo.deleteAll();
 
         InitTest initTest = new InitTest(usersRepo, authRepo, permRepo, userAuthRepo, authPermRepo, mandantRepo);
@@ -135,7 +162,6 @@ public class AuthorityTest {
     @Test
     public void saveAuthorityTest() {
 
-
         restTemplate.postForEntity(urlSave, authority, AuthorityResource.class);
         String URL4 = "http://localhost:" + port + "/authority/60";
         response = restTemplate.getForEntity(URL4, AuthorityResource.class).getBody();
@@ -162,6 +188,7 @@ public class AuthorityTest {
         assertNotNull(responseList.getLink("query"));
 
     }
+
     @Test
     public void updateAuthorityTest() {
 
@@ -181,7 +208,6 @@ public class AuthorityTest {
         assertNotNull(response.getLink("delete"));
 
     }
-
 
     @Test
     public void copyAuthorityTest() {
@@ -220,6 +246,7 @@ public class AuthorityTest {
         assertNotNull(response.getOid());
 
     }
+
     @After
     public void TearDown() {
         authPermRepo.deleteAll();
@@ -227,6 +254,13 @@ public class AuthorityTest {
         usersRepo.deleteAll();
         authRepo.deleteAll();
         permRepo.deleteAll();
+        buergerRepo.deleteAll();
+        staatRepo.deleteAll();
+        wohnRepo.deleteAll();
+        passRepo.deleteAll();
+        referenceRepo.deleteAll();
+        interneRepo.deleteAll();
+        externeRepo.deleteAll();
         mandantRepo.deleteAll();
 
     }

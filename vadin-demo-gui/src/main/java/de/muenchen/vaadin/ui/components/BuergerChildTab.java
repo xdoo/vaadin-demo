@@ -20,13 +20,13 @@ import java.util.Optional;
 public class BuergerChildTab extends CustomComponent {
 
     BuergerViewController controller;
-    
-    public BuergerChildTab(BuergerViewController controller, String navigateToForEdit, String navigateToForSelect, String navigateToForCreate, String from) {
+    private BuergerTable table;
+    public BuergerChildTab(BuergerViewController controller, String navigateToForDetail, String navigateToForCreate, String from) {
         
         this.controller = controller;
         
         BuergerCreateButton create = new BuergerCreateButton(controller, navigateToForCreate, from);
-        BuergerTable table = controller.generateChildTable(navigateToForEdit, navigateToForSelect, from);
+        table = controller.generateChildTable(navigateToForDetail, from);
         
         // Layout für die Schaltflächen über der Tabelle
         HorizontalLayout hlayout = new HorizontalLayout(create);
@@ -36,6 +36,7 @@ public class BuergerChildTab extends CustomComponent {
         vlayout.setSpacing(true);
         vlayout.setMargin(true);
         
+        setId(String.format("%s_%s_%s_CHILD_TAB", navigateToForDetail, from, controller.getI18nBasePath()));
         setCompositionRoot(vlayout);
     } 
     
@@ -51,5 +52,8 @@ public class BuergerChildTab extends CustomComponent {
                 LOG.warn("No item present.");
             }
         }
+    }
+    public BuergerTable getTable(){
+        return table;
     }
 }

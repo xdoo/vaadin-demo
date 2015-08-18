@@ -12,12 +12,16 @@ import de.muenchen.demo.service.domain.AdresseInterneRepository;
 import de.muenchen.demo.service.domain.AdresseReferenceRepository;
 import de.muenchen.demo.service.domain.AuthorityPermissionRepository;
 import de.muenchen.demo.service.domain.AuthorityRepository;
+import de.muenchen.demo.service.domain.BuergerRepository;
 import de.muenchen.demo.service.domain.Mandant;
 import de.muenchen.demo.service.domain.MandantRepository;
 import de.muenchen.demo.service.domain.MandantRepository;
+import de.muenchen.demo.service.domain.PassRepository;
 import de.muenchen.demo.service.domain.PermissionRepository;
+import de.muenchen.demo.service.domain.StaatsangehoerigkeitReferenceRepository;
 import de.muenchen.demo.service.domain.UserAuthorityRepository;
 import de.muenchen.demo.service.domain.UserRepository;
+import de.muenchen.demo.service.domain.WohnungRepository;
 import de.muenchen.demo.service.services.MandantService;
 import de.muenchen.demo.test.integration.InitTest;
 import java.security.KeyManagementException;
@@ -70,6 +74,15 @@ public class MandantServiceTest {
     AdresseExterneRepository externeRepo;
     @Autowired
     AdresseReferenceRepository referenceRepo;
+    @Autowired
+    BuergerRepository buergerRepo;
+    @Autowired
+    PassRepository passRepo;
+    @Autowired
+    WohnungRepository wohnRepo;
+    @Autowired
+    StaatsangehoerigkeitReferenceRepository staatRepo;
+
 
 
     @Autowired
@@ -84,6 +97,13 @@ public class MandantServiceTest {
         usersRepo.deleteAll();
         authRepo.deleteAll();
         permRepo.deleteAll();
+        buergerRepo.deleteAll();
+        staatRepo.deleteAll();
+        wohnRepo.deleteAll();
+        passRepo.deleteAll();
+        referenceRepo.deleteAll();
+        interneRepo.deleteAll();
+        externeRepo.deleteAll();
         mandantRepo.deleteAll();
         InitTest initTest = new InitTest(usersRepo, authRepo, permRepo, userAuthRepo, authPermRepo, mandantRepo);
         initTest.init();
@@ -159,13 +179,20 @@ public class MandantServiceTest {
         Mandant a = service.copy("123");
         assertNotEquals(a.getId(), mandant.getId());
     }
-    @After
+     @After
     public void TearDown() {
         authPermRepo.deleteAll();
         userAuthRepo.deleteAll();
         usersRepo.deleteAll();
         authRepo.deleteAll();
         permRepo.deleteAll();
+        buergerRepo.deleteAll();
+        staatRepo.deleteAll();
+        wohnRepo.deleteAll();
+        passRepo.deleteAll();
+        referenceRepo.deleteAll();
+        interneRepo.deleteAll();
+        externeRepo.deleteAll();
         mandantRepo.deleteAll();
 
     }

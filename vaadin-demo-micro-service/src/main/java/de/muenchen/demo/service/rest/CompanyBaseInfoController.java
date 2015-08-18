@@ -1,7 +1,7 @@
 package de.muenchen.demo.service.rest;
 
 import de.muenchen.demo.service.domain.CompanyBaseInfo;
-import de.muenchen.demo.service.rest.api.SearchResultResource;
+import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
 import de.muenchen.demo.service.rest.api.CompanyBaseInfoResource;
 import de.muenchen.demo.service.rest.api.CompanyBaseInfoResourceAssembler;
 import de.muenchen.demo.service.services.CompanyBaseInfoService;

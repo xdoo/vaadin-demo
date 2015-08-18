@@ -32,6 +32,10 @@ public class StaatsangehoerigkeitServiceImpl implements StaatsangehoerigkeitServ
 
     @Autowired
     MandantService madantService;
+    @Autowired
+    BuergerService buergerService;
+    @Autowired
+    PassService passService;
     UserService userService;
     @Value("${URL}")
     private String URL;
@@ -61,7 +65,7 @@ public class StaatsangehoerigkeitServiceImpl implements StaatsangehoerigkeitServ
             return result2.getBody();
         }
     }
-    
+
     @Override
     public StaatsangehoerigkeitReference readReference(String referencedOid) {
 
@@ -106,10 +110,11 @@ public class StaatsangehoerigkeitServiceImpl implements StaatsangehoerigkeitServ
 
     @Override
     public void delete(String referencedOid) {
-        List<StaatsangehoerigkeitReference> item = this.repo.findByReferencedOid(referencedOid);
-        if (!item.isEmpty()) {
-            this.repo.delete(item);
-        }
+        StaatsangehoerigkeitReference item = this.readReference(referencedOid);
+        this.buergerService.releaseStaatsangehoerigkeitAllBuerger(referencedOid);
+        this.passService.deletePassStaat(referencedOid);
+
+        this.repo.delete(item);
     }
 
     public User readUser() {

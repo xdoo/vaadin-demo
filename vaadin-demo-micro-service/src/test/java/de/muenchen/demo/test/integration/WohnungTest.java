@@ -12,14 +12,18 @@ import de.muenchen.demo.service.domain.AuthorityRepository;
 import de.muenchen.demo.service.domain.Buerger;
 import de.muenchen.demo.service.domain.BuergerRepository;
 import de.muenchen.demo.service.domain.MandantRepository;
+import de.muenchen.demo.service.domain.PassRepository;
 import de.muenchen.demo.service.domain.PermissionRepository;
+import de.muenchen.demo.service.domain.StaatsangehoerigkeitReferenceRepository;
 import de.muenchen.demo.service.domain.UserAuthorityRepository;
 import de.muenchen.demo.service.domain.UserRepository;
 import de.muenchen.demo.service.domain.Wohnung;
 import de.muenchen.demo.service.domain.WohnungRepository;
-import de.muenchen.demo.service.rest.api.AdresseResource;
-import de.muenchen.demo.service.rest.api.SearchResultResource;
-import de.muenchen.demo.service.rest.api.WohnungResource;
+import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
+import de.muenchen.vaadin.demo.api.rest.AdresseResource;
+import de.muenchen.vaadin.demo.api.rest.BuergerResource;
+import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
+import de.muenchen.vaadin.demo.api.rest.WohnungResource;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -68,6 +72,7 @@ import org.springframework.web.client.RestTemplate;
 public class WohnungTest {
 
     Wohnung wohnung = new Wohnung();
+    Wohnung wohnung2 = new Wohnung();
     Buerger buerger = new Buerger();
 
     private RestTemplate restTemplate = new TestRestTemplate();
@@ -85,19 +90,24 @@ public class WohnungTest {
     @Autowired
     AuthorityPermissionRepository authPermRepo;
     @Autowired
-    WohnungRepository wohnRepo;
+    StaatsangehoerigkeitReferenceRepository staatRepo;
     @Autowired
     BuergerRepository buergerRepo;
     @Autowired
-    AdresseExterneRepository adresseExtRepo;
+    WohnungRepository wohnRepo;
     @Autowired
-    AdresseInterneRepository adresseIntRepo;
+    PassRepository passRepo;
     @Autowired
-    AdresseReferenceRepository adresseRefRepo;
-
+    AdresseInterneRepository interneRepo;
+    @Autowired
+    AdresseExterneRepository externeRepo;
+    @Autowired
+    AdresseReferenceRepository referenceRepo;
     @Autowired
     MandantRepository mandantRepo;
+
     private String urlSave;
+    private String urlBuergerSave;
     private String urlNew;
     private WohnungResource response;
     private SearchResultResource responseQuery;
@@ -111,12 +121,14 @@ public class WohnungTest {
         usersRepo.deleteAll();
         authRepo.deleteAll();
         permRepo.deleteAll();
-        mandantRepo.deleteAll();
         buergerRepo.deleteAll();
+        staatRepo.deleteAll();
         wohnRepo.deleteAll();
-        adresseRefRepo.deleteAll();
-        adresseExtRepo.deleteAll();
-        adresseIntRepo.deleteAll();
+        passRepo.deleteAll();
+        referenceRepo.deleteAll();
+        interneRepo.deleteAll();
+        externeRepo.deleteAll();
+        mandantRepo.deleteAll();
 
         InitTest initTest = new InitTest(usersRepo, authRepo, permRepo, userAuthRepo, authPermRepo, mandantRepo);
         initTest.init();
@@ -140,15 +152,18 @@ public class WohnungTest {
         converter.setObjectMapper(objectMapper);
         restTemplate.setMessageConverters(Collections.<HttpMessageConverter<?>>singletonList(converter));
         urlSave = "http://localhost:" + port + "/wohnung/save";
+        urlBuergerSave = "http://localhost:" + port + "/buerger/save";
         urlNew = "http://localhost:" + port + "/wohnung/new";
 
         wohnung.setAusrichtung("Nord");
         wohnung.setStock("2");
         wohnung.setOid("10");
-
-        buerger.setOid("123");
+        wohnung2.setAusrichtung("Nord");
+        wohnung2.setStock("2");
+        wohnung2.setOid("11");
+        buerger.setOid("b");
         buerger.setNachname("hans");
-        buerger.setVorname("vater");
+        buerger.setVorname("max");
     }
 
     @Test
@@ -258,11 +273,89 @@ public class WohnungTest {
         String URL5 = "http://localhost:" + port + "/wohnung/add/wohnung/10/adresse/10";
         WohnungResource response4 = restTemplate.getForEntity(URL5, WohnungResource.class).getBody();
         assertNotNull(response4.getOid());
-        
+
         /*Test methode readAdresseWohnung*/
         String URL1 = "http://localhost:" + port + "/wohnung/adresse/10";
         AdresseResource responseAdresse = restTemplate.getForEntity(URL1, AdresseResource.class).getBody();
         assertEquals("Passau", responseAdresse.getStadt());
+
+        String urlDelete = "http://localhost:" + port + "/adresse/10";
+        restTemplate.delete(urlDelete, adresse);
+
+    }
+
+    @Test
+    public void readWohnungBuergerTest() {
+        Buerger b = new Buerger();
+        b.setOid("b2");
+        b.setNachname("ali");
+
+        restTemplate.postForEntity(urlBuergerSave, b, BuergerResource.class);
+        restTemplate.postForEntity(urlBuergerSave, buerger, BuergerResource.class);
+
+        String URL3 = "http://localhost:" + port + "/buerger/create/wohnung/b2";
+        restTemplate.postForEntity(URL3, wohnung, BuergerResource.class).getBody();
+
+        String URL5 = "http://localhost:" + port + "/buerger/add/buerger/b/wohnung/10";
+        restTemplate.getForEntity(URL5, BuergerResource.class).getBody();
+
+
+        /*Test methode readWohnungBuerger*/
+        String urlReadWohnungBuerger = "http://localhost:" + port + "/wohnung/buerger/10";
+        responseList = restTemplate.getForEntity(urlReadWohnungBuerger, SearchResultResource.class).getBody().getResult();
+        assertEquals(2, responseList.size());
+
+    }
+
+    @Test
+    public void releaseWohnungBuergerTest() {
+
+        Buerger b = new Buerger();
+        b.setOid("b2");
+        b.setNachname("ali");
+
+        restTemplate.postForEntity(urlBuergerSave, b, BuergerResource.class);
+        restTemplate.postForEntity(urlBuergerSave, buerger, BuergerResource.class);
+
+        String URL3 = "http://localhost:" + port + "/buerger/create/wohnung/b2";
+        restTemplate.postForEntity(URL3, wohnung, BuergerResource.class).getBody();
+
+        String URL5 = "http://localhost:" + port + "/buerger/add/buerger/b/wohnung/10";
+        restTemplate.getForEntity(URL5, BuergerResource.class).getBody();
+
+        /* Test releaaseWohnungBuerger */
+        String urlReleaseWohnung = "http://localhost:" + port + "/wohnung/release/buerger/10/b";
+        restTemplate.getForEntity(urlReleaseWohnung, BuergerResource.class);
+
+        String urlReadWohnungBuerger = "http://localhost:" + port + "/wohnung/buerger/10";
+        responseList = restTemplate.getForEntity(urlReadWohnungBuerger, SearchResultResource.class).getBody().getResult();
+        assertEquals(1, responseList.size());
+
+    }
+
+    @Test
+    public void releaseWohnungAllBuergerTest() {
+
+        Buerger b = new Buerger();
+        b.setOid("b2");
+        b.setNachname("ali");
+
+        restTemplate.postForEntity(urlBuergerSave, b, BuergerResource.class);
+        restTemplate.postForEntity(urlBuergerSave, buerger, BuergerResource.class);
+
+        String URL3 = "http://localhost:" + port + "/buerger/create/wohnung/b2";
+        restTemplate.postForEntity(URL3, wohnung, BuergerResource.class).getBody();
+
+        String URL5 = "http://localhost:" + port + "/buerger/add/buerger/b/wohnung/10";
+        restTemplate.getForEntity(URL5, BuergerResource.class).getBody();
+
+        /* Test releaaseWohnungBuerger */
+        String urlReleaseWohnung = "http://localhost:" + port + "/wohnung/release/buerger/10/";
+        restTemplate.getForEntity(urlReleaseWohnung, BuergerResource.class);
+
+        String urlReadWohnungBuerger = "http://localhost:" + port + "/wohnung/buerger/10";
+        responseList = restTemplate.getForEntity(urlReadWohnungBuerger, SearchResultResource.class).getBody().getResult();
+        assertEquals(0, responseList.size());
 
     }
 
@@ -274,10 +367,13 @@ public class WohnungTest {
         authRepo.deleteAll();
         permRepo.deleteAll();
         buergerRepo.deleteAll();
+        staatRepo.deleteAll();
         wohnRepo.deleteAll();
-        adresseRefRepo.deleteAll();
-        adresseExtRepo.deleteAll();
-        adresseIntRepo.deleteAll();
+        passRepo.deleteAll();
+        referenceRepo.deleteAll();
+        interneRepo.deleteAll();
+        externeRepo.deleteAll();
+        mandantRepo.deleteAll();
 
     }
 

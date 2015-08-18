@@ -1,7 +1,6 @@
 package de.muenchen.vaadin.demo.api.rest;
 
 import org.springframework.hateoas.ResourceSupport;
-
 /**
  *
  * @author claus.straube
@@ -9,6 +8,7 @@ import org.springframework.hateoas.ResourceSupport;
 public class BaseResource extends ResourceSupport {
     
     private String oid;
+    private MandantResource mandant;
 
     public String getOid() {
         return oid;
@@ -16,6 +16,13 @@ public class BaseResource extends ResourceSupport {
 
     public void setOid(String oid) {
         this.oid = oid;
+    }
+    public MandantResource getMandant() {
+        return mandant;
+    }
+
+    public void setMandant(MandantResource mandant) {
+        this.mandant = mandant;
     }
     
 }

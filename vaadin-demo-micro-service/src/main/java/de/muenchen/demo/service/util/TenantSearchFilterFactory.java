@@ -10,20 +10,20 @@ import org.hibernate.search.filter.impl.CachingWrapperFilter;
 
 public class TenantSearchFilterFactory {
 	
-    private String mandant_mid;
+    private String mandantoid;
 
     @Factory
     public Filter getFilter() {
-        Query query = new TermQuery( new Term( "mandant_mid", mandant_mid ) );
+        Query query = new TermQuery( new Term( "mandantoid", mandantoid ) );
         return new CachingWrapperFilter( new QueryWrapperFilter(query) );
     }
 
-	public String getMandant_mid() {
-		return mandant_mid;
+	public String getMandantoid() {
+		return mandantoid;
 	}
 
-	public void setMandant_mid(String mandant_mid) {
-		this.mandant_mid = mandant_mid;
+	public void setMandantoid(String mandantoid) {
+		this.mandantoid = mandantoid;
 	}
     
 }

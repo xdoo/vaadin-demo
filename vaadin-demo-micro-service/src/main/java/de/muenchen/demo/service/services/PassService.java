@@ -13,21 +13,25 @@ import java.util.List;
  * @author praktikant.tmar
  */
 public interface PassService {
-    
+
     public List<Pass> query();
-    
+
     public List<Pass> query(String query);
-    
+
     public Pass create();
-    
+
     public Pass save(Pass pass);
-    
+
     public Pass read(String oid);
-    
+
     public Pass update(Pass pass);
-    
+
     public void delete(String oid);
-    
+
     public Pass copy(String oid);
-    
+
+    public Pass readStaat(String oid);
+
+    public void deletePassStaat(String adresseOid);
+
 }

@@ -33,6 +33,7 @@ public class VaadinUtil {
         TextField tf = (TextField) binder.buildAndBind(label, property);
         tf.setNullRepresentation("");
         tf.setInputPrompt(prompt);
+        tf.setId(String.format("%s_%s_FIELD", basePath, property).toUpperCase());
         return tf;
     }
     
@@ -50,6 +51,7 @@ public class VaadinUtil {
     public DateField createReadOnlyDateField(BeanFieldGroup binder, String label, String property) {
         DateField df = this.createFormDateField(binder, label, property);
         df.setReadOnly(Boolean.TRUE);
+        df.setId(String.format("%s_%s_DATEFIELD", basePath, property).toUpperCase());
         return df;
     }
     

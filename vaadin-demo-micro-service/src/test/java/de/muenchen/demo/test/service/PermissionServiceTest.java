@@ -12,11 +12,15 @@ import de.muenchen.demo.service.domain.AdresseInterneRepository;
 import de.muenchen.demo.service.domain.AdresseReferenceRepository;
 import de.muenchen.demo.service.domain.AuthorityPermissionRepository;
 import de.muenchen.demo.service.domain.AuthorityRepository;
+import de.muenchen.demo.service.domain.BuergerRepository;
 import de.muenchen.demo.service.domain.Permission;
 import de.muenchen.demo.service.domain.MandantRepository;
+import de.muenchen.demo.service.domain.PassRepository;
 import de.muenchen.demo.service.domain.PermissionRepository;
+import de.muenchen.demo.service.domain.StaatsangehoerigkeitReferenceRepository;
 import de.muenchen.demo.service.domain.UserAuthorityRepository;
 import de.muenchen.demo.service.domain.UserRepository;
+import de.muenchen.demo.service.domain.WohnungRepository;
 import de.muenchen.demo.service.services.PermissionService;
 import de.muenchen.demo.test.integration.InitTest;
 import java.security.KeyManagementException;
@@ -70,7 +74,13 @@ public class PermissionServiceTest {
     @Autowired
     AdresseReferenceRepository referenceRepo;
     @Autowired
-    PermissionRepository permissionRepo;
+    BuergerRepository buergerRepo;
+    @Autowired
+    PassRepository passRepo;
+    @Autowired
+    WohnungRepository wohnRepo;
+    @Autowired
+    StaatsangehoerigkeitReferenceRepository staatRepo;
 
     @Autowired
     //@Qualifier("authenticationManager")
@@ -84,7 +94,13 @@ public class PermissionServiceTest {
         usersRepo.deleteAll();
         authRepo.deleteAll();
         permRepo.deleteAll();
-        permissionRepo.deleteAll();
+        buergerRepo.deleteAll();
+        staatRepo.deleteAll();
+        wohnRepo.deleteAll();
+        passRepo.deleteAll();
+        referenceRepo.deleteAll();
+        interneRepo.deleteAll();
+        externeRepo.deleteAll();
         mandantRepo.deleteAll();
         InitTest initTest = new InitTest(usersRepo, authRepo, permRepo, userAuthRepo, authPermRepo, mandantRepo);
         initTest.init();
@@ -109,7 +125,6 @@ public class PermissionServiceTest {
         assertNotEquals(null, a.getOid());
 
     }
-
 
     @Test
     public void readTest() throws JsonProcessingException, AuthenticationException {
@@ -154,6 +169,13 @@ public class PermissionServiceTest {
         usersRepo.deleteAll();
         authRepo.deleteAll();
         permRepo.deleteAll();
+        buergerRepo.deleteAll();
+        staatRepo.deleteAll();
+        wohnRepo.deleteAll();
+        passRepo.deleteAll();
+        referenceRepo.deleteAll();
+        interneRepo.deleteAll();
+        externeRepo.deleteAll();
         mandantRepo.deleteAll();
 
     }

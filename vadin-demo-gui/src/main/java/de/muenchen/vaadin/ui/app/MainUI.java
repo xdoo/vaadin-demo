@@ -1,14 +1,14 @@
 package de.muenchen.vaadin.ui.app;
 
 import com.google.common.eventbus.Subscribe;
+import com.vaadin.annotations.PreserveOnRefresh;
+import com.vaadin.server.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.server.Responsive;
-import com.vaadin.server.VaadinRequest;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
@@ -25,8 +25,10 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.services.MessageService;
 import de.muenchen.vaadin.demo.api.services.SecurityService;
+import de.muenchen.vaadin.ui.app.views.BuergerDetailView;
 import de.muenchen.vaadin.ui.app.views.MainView;
 import de.muenchen.vaadin.ui.app.views.BuergerTableView;
+import de.muenchen.vaadin.ui.app.views.BuergerUpdateView;
 import de.muenchen.vaadin.ui.app.views.LoginView;
 import de.muenchen.vaadin.ui.app.views.events.LoginEvent;
 import de.muenchen.vaadin.ui.util.EventBus;
@@ -37,9 +39,12 @@ import java.util.Map.Entry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.annotation.WebServlet;
+
 @SpringUI
 @Title("Vaadin Spring-Security Sample")
 @Theme("valo")
+@PreserveOnRefresh
 //@Widgetset("de.muenchen.vaadin.Widgetset")
 public class MainUI extends UI {
     
@@ -54,6 +59,7 @@ public class MainUI extends UI {
 
     @Autowired
     public MainUI(SpringViewProvider ViewProvider, SecurityService security, MessageService i18n, EventBus eventBus) {
+        LOG.info("starting UI");
         this.viewProvider = ViewProvider;
         this.security = security;
         this.i18n = i18n;
@@ -72,6 +78,7 @@ public class MainUI extends UI {
 
     @Override
     protected void init(VaadinRequest request) {
+
         // hack
         setLocale(Locale.GERMANY);
 
@@ -92,28 +99,43 @@ public class MainUI extends UI {
         root.setWidth("100%");
         root.addMenu(buildMenu());
         addStyleName(ValoTheme.UI_WITH_MENU);
-        
-        // check security
-        if(!this.security.isLoggedIn()) {
-            this.root.switchOffMenu();
-        } 
 
         // configure navigator
         this.navigator = new Navigator(this, this.viewDisplay);
         this.navigator.addProvider(viewProvider);
         setNavigator(this.navigator);
+
+        // check security
+        if(!this.security.isLoggedIn()) {
+            this.root.switchOffMenu();
+        }
         
         // add navigator to security Service
 //        this.security.setNavigator(this.navigator);
 
+
         navigator.addViewChangeListener(new ViewChangeListener() {
             @Override
             public boolean beforeViewChange(final ViewChangeEvent event) {
-                
+
                 // Check if a user has logged in
                 boolean isLoggedIn = security.isLoggedIn();
                 boolean isLoginView = event.getNewView() instanceof LoginView;
-
+                boolean fromTable = event.getOldView() instanceof BuergerTableView;
+                boolean fromUpdate = event.getOldView() instanceof BuergerUpdateView;
+                boolean fromDetail = event.getOldView() instanceof BuergerDetailView;
+                if(fromTable){
+                    BuergerTableView old = (BuergerTableView) event.getOldView();
+                    old.unRegisterTable();
+                }
+                if(fromUpdate){
+                    BuergerUpdateView old = (BuergerUpdateView) event.getOldView();
+                    old.unRegisterForm();
+                }
+                if(fromDetail){
+                    BuergerDetailView old = (BuergerDetailView) event.getOldView();
+                    old.unRegister();
+                }
                 if (!isLoggedIn && !isLoginView) {
                     // Redirect to login view always if a user has not yet
                     // logged in
@@ -127,24 +149,31 @@ public class MainUI extends UI {
                     LOG.warn("login view cannot be entered while logged in.");
                     return false;
                 }
+                
                 LOG.info("logged in");
                 return true;
             }
 
             @Override
             public void afterViewChange(final ViewChangeEvent event) {
+                
+               /* boolean toTableView = event.getNewView() instanceof BuergerTableView;
+                if(toTableView){
+                    BuergerTableView tmp = (BuergerTableView) event.getNewView();
+                    tmp.setTable(buergerTable);
+                }*/
                 for (final Iterator<Component> it = menuItemsLayout.iterator(); it
-                        .hasNext();) {
+                        .hasNext(); ) {
                     it.next().removeStyleName("selected");
                 }
                 for (final Entry<String, String> item : menuItems.entrySet()) {
                     if (event.getViewName().equals(item.getKey())) {
                         for (final Iterator<Component> it = menuItemsLayout
-                                .iterator(); it.hasNext();) {
+                                .iterator(); it.hasNext(); ) {
                             final Component c = it.next();
                             if (c.getCaption() != null
                                     && c.getCaption().startsWith(
-                                            item.getValue())) {
+                                    item.getValue())) {
                                 c.addStyleName("selected");
                                 break;
                             }
@@ -214,10 +243,12 @@ public class MainUI extends UI {
             });
             b.setHtmlContentAllowed(true);
             b.setPrimaryStyleName("valo-menu-item");
+            b.setId(String.format("MENU_ITEM_BUTTON_%s", item.getKey()).toUpperCase());
 //            b.setIcon(testIcon.get());
             menuItemsLayout.addComponent(b);
         }
 
         return menuItemsLayout;
     }
+    
 }

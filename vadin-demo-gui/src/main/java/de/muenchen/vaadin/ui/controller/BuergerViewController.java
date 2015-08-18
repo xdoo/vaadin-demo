@@ -9,15 +9,25 @@ import com.google.common.eventbus.Subscribe;
 import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
+import com.vaadin.ui.TabSheet;
 import de.muenchen.vaadin.services.BuergerService;
 import de.muenchen.vaadin.services.MessageService;
 import de.muenchen.vaadin.ui.app.MainUI;
+import de.muenchen.vaadin.ui.app.views.BuergerCreateChildView;
+import de.muenchen.vaadin.ui.app.views.BuergerDetailView;
+import static de.muenchen.vaadin.ui.app.views.BuergerDetailView.NAME;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
+import de.muenchen.vaadin.ui.components.BuergerChildTab;
 import de.muenchen.vaadin.ui.components.BuergerCreateForm;
 import de.muenchen.vaadin.ui.components.BuergerReadForm;
 import de.muenchen.vaadin.ui.components.BuergerSearchTable;
 import de.muenchen.vaadin.ui.components.BuergerTable;
+import de.muenchen.vaadin.ui.components.BuergerTableButtonFactory;
+import de.muenchen.vaadin.ui.components.BuergerTableCopyButton;
+import de.muenchen.vaadin.ui.components.BuergerTableDeleteButton;
+import de.muenchen.vaadin.ui.components.BuergerTableDetailButton;
+import de.muenchen.vaadin.ui.components.BuergerTableEditButton;
 import de.muenchen.vaadin.ui.components.GenericSuccessNotification;
 import de.muenchen.vaadin.ui.components.BuergerUpdateForm;
 import de.muenchen.vaadin.ui.util.EventBus;
@@ -30,6 +40,7 @@ import java.util.Stack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.controller;
 
 /**
  * Der Controller ist die zentrale Klasse um die Logik im Kontext Buerger abzubilden.
@@ -233,6 +244,20 @@ public class BuergerViewController implements Serializable {
         return form;
     }
     
+    /**
+     * Erzeugt eine neue Instanz eines "Child" Tabs.
+     * 
+     * @param navigateToForDetail Zielseite um sich die Details des 'Child' Objektes anzeigen zu lassen
+     * @param navigateForCreate Zielseite um ein neues 'Child' Objekt zu erstellen
+     * @param from Ausgangsseite zu der zurück navigiert werden soll
+     * @return {@link TabSheet.Tab} das Tab
+     */
+    public BuergerChildTab generateChildTab(String navigateToForDetail, String navigateForCreate, String from) {
+        BuergerChildTab tab = new BuergerChildTab(this, navigateToForDetail, navigateForCreate, from);
+        this.eventbus.register(tab);
+        return tab;
+    }
+    
     public BuergerCreateForm generateCreateChildForm() {
         return this.generateCreateChildForm(this.popFrom());
     }
@@ -257,27 +282,42 @@ public class BuergerViewController implements Serializable {
         return form;
     }
     
-    public BuergerSearchTable generateSearchTable(String navigateToForEdit, String navigateToForSelect, String navigateForCreate, String navigateFrom) {
+    public BuergerSearchTable generateSearchTable(String navigateToForEdit, String navigateToForDetail, String navigateForCreate, String navigateFrom) {
         LOG.debug("creating 'search' table for buerger");
-        return new BuergerSearchTable(this, navigateToForEdit, navigateToForSelect, navigateForCreate, navigateFrom);
+        BuergerTableButtonFactory detail = BuergerTableButtonFactory.getFactory(navigateToForDetail, BuergerTableDetailButton.class);
+        BuergerTableButtonFactory edit = BuergerTableButtonFactory.getFactory(navigateToForEdit, BuergerTableEditButton.class);
+        BuergerTableButtonFactory copy = BuergerTableButtonFactory.getFactory(null, BuergerTableCopyButton.class);
+        BuergerTableButtonFactory delete = BuergerTableButtonFactory.getFactory(null, BuergerTableDeleteButton.class);
+        
+        return new BuergerSearchTable(
+                this, 
+                navigateToForEdit, 
+                navigateToForDetail, 
+                navigateForCreate, 
+                navigateFrom,
+                // Schaltflächen
+                detail,
+                edit,
+                copy,
+                delete
+        );
     }
     
-    public BuergerTable generateChildTable(String navigateToForEdit, String navigateToForSelect, String from) {
-        BuergerTable table = this.createTable(navigateToForEdit, navigateToForSelect, from, this.queryKinder(this.current.getBean()));
-        table.setCopy(Boolean.FALSE);
+    public BuergerTable generateChildTable(String navigateToForDetail, String from) {
+        BuergerTableButtonFactory detail = BuergerTableButtonFactory.getFactory(navigateToForDetail, BuergerTableDetailButton.class);
+        
+        BuergerTable table = this.createTable(from, this.queryKinder(this.current.getBean()), detail);
         return table;
     }
 
-    public BuergerTable generateTable(String navigateToForEdit, String navigateToForSelect, String from) { 
-        return this.createTable(navigateToForEdit, navigateToForSelect, from, this.queryBuerger());
+    public BuergerTable generateTable(String navigateToForEdit, String navigateToForSelect, String from, final BuergerTableButtonFactory... buttonfactory) { 
+        return this.createTable(from, this.queryBuerger(), buttonfactory);
     }
     
-    private BuergerTable createTable(String navigateToForEdit, String navigateToForSelect, String from, List<Buerger> entities) {
+    private BuergerTable createTable(String from, List<Buerger> entities, final BuergerTableButtonFactory... buttonfactory) {
         LOG.debug("creating table for buerger");
-        BuergerTable table = new BuergerTable(this);
+        BuergerTable table = new BuergerTable(this, buttonfactory);
         
-        table.setNavigateToForEdit(navigateToForEdit);
-        table.setNavigateToForSelect(navigateToForSelect);
         table.setFrom(from);
         
         this.eventbus.register(table);
@@ -477,5 +517,7 @@ public class BuergerViewController implements Serializable {
     private String peekFrom() {
         return this.from.peek();
     }
-    
+    public EventBus getBus(){
+        return eventbus;
+    }
 }
