@@ -1,15 +1,11 @@
 package de.muenchen.vaadin.ui.components;
 
-import com.oracle.jrockit.jfr.InvalidValueException;
 import com.vaadin.data.Validator;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
-import com.vaadin.data.validator.DateRangeValidator;
-import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
-import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.CustomComponent;
@@ -25,7 +21,6 @@ import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.EventType;
 import de.muenchen.vaadin.ui.util.I18nPaths;
 import de.muenchen.vaadin.ui.util.ValidatorFactory;
-import java.util.Date;
 
 /**
  * Formular zum Erstellen eines {@link Buerger}s.
@@ -90,20 +85,35 @@ public class BuergerCreateForm extends CustomComponent {
         layout.addComponent(headline);
 
         // Now use a binder to bind the members
-        final BeanFieldGroup<Buerger> binder = new BeanFieldGroup<Buerger>(Buerger.class);
+        final BeanFieldGroup<Buerger> binder = new BeanFieldGroup<>(Buerger.class);
         binder.setItemDataSource(controller.createBuerger());
         
         // Fokus auf das erste Feld setzen und hinzufügen von Validatoren
         TextField firstField = controller.getUtil().createFormTextField(binder, controller.getI18nBasePath(), Buerger.VORNAME, controller.getMsg());
         firstField.focus();
+        String abc = "";
+        for(char c = 'a';c <= 'z'; c++)
+            abc+=c;
+        for(char c = 'A';c <= 'Z'; c++)
+            abc+=c;
+        for(int i =192;i<=382;i++)
+            abc+=Character.toString((char)i);
+        for(int i =7682;i<=7807;i++)
+            abc+=Character.toString((char)i);
+        abc+="-";
+    
+        Validator val0 = ValidatorFactory.getValidator("Regexp",controller.getMsg().get("m1.buerger.nachname.validationstring"),"true","["+abc+"]*");
+        
         Validator val1 = ValidatorFactory.getValidator("StringLength",controller.getMsg().get("m1.buerger.nachname.validation"),1+"",""+Integer.MAX_VALUE, "true");
+        firstField.addValidator(val0);
         firstField.addValidator(val1);
         layout.addComponent(firstField);
         
         // alle anderen Felder
         TextField secField = controller.getUtil().createFormTextField(binder, controller.getI18nBasePath(), Buerger.NACHNAME, controller.getMsg());
-        Validator val2 = ValidatorFactory.getValidator("StringLength",controller.getMsg().get("m1.buerger.nachname.validation"),1+"",""+Integer.MAX_VALUE, "true");
-        secField.addValidator(val2);
+        //Validator val2 = ValidatorFactory.getValidator("StringLength",controller.getMsg().get("m1.buerger.nachname.validation"),1+"",""+Integer.MAX_VALUE, "true");
+        secField.addValidator(val1);
+        secField.addValidator(val0);
         layout.addComponent(secField);
         DateField birthdayfield = controller.getUtil().createFormDateField(binder, controller.getI18nBasePath(), Buerger.GEBURTSDATUM, controller.getMsg());       
         String errorMsg = controller.getMsg().get("m1.buerger.geburtsdatum.validation");

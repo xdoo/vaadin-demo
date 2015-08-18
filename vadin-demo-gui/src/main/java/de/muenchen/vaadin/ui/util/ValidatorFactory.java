@@ -4,6 +4,7 @@ import com.vaadin.data.Validator;
 import com.vaadin.data.validator.DateRangeValidator;
 import com.vaadin.data.validator.IntegerRangeValidator;
 import com.vaadin.data.validator.NullValidator;
+import com.vaadin.data.validator.RegexpValidator;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.shared.ui.datefield.Resolution;
 import java.util.Date;
@@ -12,6 +13,8 @@ import java.util.Date;
  * Created by arne.schoentag on 17.08.15.
  */
 public class ValidatorFactory {
+    
+    
     /**
      * Factory method to create a vaadin validator using the given arguments.
      * @param kind of which validator will be created.
@@ -38,6 +41,10 @@ public class ValidatorFactory {
                 if(args.length<2)
                     return null;
                 return new NullValidator(args[0],Boolean.parseBoolean(args[1]));
+            case "Regexp":
+                if(args.length<3)
+                    return null;                
+                return new RegexpValidator(args[2],Boolean.parseBoolean(args[1]),args[0]);
             default:
                 return null;
         }
