@@ -114,7 +114,11 @@ public class MainUI extends UI {
                 // Check if a user has logged in
                 boolean isLoggedIn = security.isLoggedIn();
                 boolean isLoginView = event.getNewView() instanceof LoginView;
-
+                boolean fromTable = event.getOldView() instanceof BuergerTableView;
+                if(fromTable){
+                    BuergerTableView old = (BuergerTableView) event.getOldView();
+                    old.unRegisterTable();
+                }
                 if (!isLoggedIn && !isLoginView) {
                     // Redirect to login view always if a user has not yet
                     // logged in
@@ -128,12 +132,19 @@ public class MainUI extends UI {
                     LOG.warn("login view cannot be entered while logged in.");
                     return false;
                 }
+                
                 LOG.info("logged in");
                 return true;
             }
 
             @Override
             public void afterViewChange(final ViewChangeEvent event) {
+                
+               /* boolean toTableView = event.getNewView() instanceof BuergerTableView;
+                if(toTableView){
+                    BuergerTableView tmp = (BuergerTableView) event.getNewView();
+                    tmp.setTable(buergerTable);
+                }*/
                 for (final Iterator<Component> it = menuItemsLayout.iterator(); it
                         .hasNext();) {
                     it.next().removeStyleName("selected");
@@ -221,4 +232,5 @@ public class MainUI extends UI {
 
         return menuItemsLayout;
     }
+    
 }

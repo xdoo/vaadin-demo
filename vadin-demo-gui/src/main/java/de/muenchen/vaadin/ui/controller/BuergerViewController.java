@@ -489,5 +489,7 @@ public class BuergerViewController implements Serializable {
     private String peekFrom() {
         return this.from.peek();
     }
-    
+    public EventBus getBus(){
+        return eventbus;
+    }
 }
