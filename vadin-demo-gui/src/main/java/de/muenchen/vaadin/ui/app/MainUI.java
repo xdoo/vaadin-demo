@@ -25,8 +25,10 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.services.MessageService;
 import de.muenchen.vaadin.demo.api.services.SecurityService;
+import de.muenchen.vaadin.ui.app.views.BuergerDetailView;
 import de.muenchen.vaadin.ui.app.views.MainView;
 import de.muenchen.vaadin.ui.app.views.BuergerTableView;
+import de.muenchen.vaadin.ui.app.views.BuergerUpdateView;
 import de.muenchen.vaadin.ui.app.views.LoginView;
 import de.muenchen.vaadin.ui.app.views.events.LoginEvent;
 import de.muenchen.vaadin.ui.util.EventBus;
@@ -119,7 +121,21 @@ public class MainUI extends UI {
                 // Check if a user has logged in
                 boolean isLoggedIn = security.isLoggedIn();
                 boolean isLoginView = event.getNewView() instanceof LoginView;
-
+                boolean fromTable = event.getOldView() instanceof BuergerTableView;
+                boolean fromUpdate = event.getOldView() instanceof BuergerUpdateView;
+                boolean fromDetail = event.getOldView() instanceof BuergerDetailView;
+                if(fromTable){
+                    BuergerTableView old = (BuergerTableView) event.getOldView();
+                    old.unRegisterTable();
+                }
+                if(fromUpdate){
+                    BuergerUpdateView old = (BuergerUpdateView) event.getOldView();
+                    old.unRegisterForm();
+                }
+                if(fromDetail){
+                    BuergerDetailView old = (BuergerDetailView) event.getOldView();
+                    old.unRegister();
+                }
                 if (!isLoggedIn && !isLoginView) {
                     // Redirect to login view always if a user has not yet
                     // logged in
@@ -133,12 +149,19 @@ public class MainUI extends UI {
                     LOG.warn("login view cannot be entered while logged in.");
                     return false;
                 }
+                
                 LOG.info("logged in");
                 return true;
             }
 
             @Override
             public void afterViewChange(final ViewChangeEvent event) {
+                
+               /* boolean toTableView = event.getNewView() instanceof BuergerTableView;
+                if(toTableView){
+                    BuergerTableView tmp = (BuergerTableView) event.getNewView();
+                    tmp.setTable(buergerTable);
+                }*/
                 for (final Iterator<Component> it = menuItemsLayout.iterator(); it
                         .hasNext(); ) {
                     it.next().removeStyleName("selected");
@@ -227,4 +250,5 @@ public class MainUI extends UI {
 
         return menuItemsLayout;
     }
+    
 }

@@ -14,10 +14,10 @@ import org.slf4j.LoggerFactory;
 public class BuergerSearchTable extends CustomComponent {
 
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerSearchTable.class);
-    
+    private BuergerTable table;
     public BuergerSearchTable(final BuergerViewController controller, String navigateToForEdit, String navigateToForSelect, String navigateToForCreate, String from, final BuergerTableButtonFactory... buttonfactory) {
         BuergerCreateButton create = new BuergerCreateButton(controller, navigateToForCreate, from);
-        BuergerTable table = controller.generateTable(navigateToForEdit, navigateToForSelect, from, buttonfactory);
+        table = controller.generateTable(navigateToForEdit, navigateToForSelect, from, buttonfactory);
         BuergerSearchForm search = new BuergerSearchForm(controller);
         search.setWidth("100%"); 
         
@@ -29,6 +29,9 @@ public class BuergerSearchTable extends CustomComponent {
         vlayout.setSpacing(true);
         
         setCompositionRoot(vlayout);
+    }
+    public BuergerTable getTable(){
+        return table;
     }
     
 }
