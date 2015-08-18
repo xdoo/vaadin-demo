@@ -23,7 +23,7 @@ public class BuergerBackButton extends CustomComponent {
             controller.getEventbus().post(new BuergerAppEvent(EventType.CANCEL).navigateTo(navigateTo));
         });
         back.setClickShortcut(ShortcutAction.KeyCode.ARROW_LEFT);
-        setId(String.format("%s_%s_UPDATE_BUTTON", navigateTo, controller.getI18nBasePath()));
+        setId(String.format("%s_%s_UPDATE_BUTTON", navigateTo, BuergerViewController.I18N_BASE_PATH));
         setCompositionRoot(back);
         
     }

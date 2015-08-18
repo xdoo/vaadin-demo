@@ -77,14 +77,14 @@ public class BuergerReadForm extends CustomComponent {
         layout.addComponent(controller.getUtil().createFormTextField(binder,
                 controller.resolve(getEntityFieldPath(Buerger.VORNAME, Type.label)),
                 controller.resolve(getEntityFieldPath(Buerger.VORNAME, Type.input_prompt)),
-                Buerger.VORNAME));
+                Buerger.VORNAME, BuergerViewController.I18N_BASE_PATH));
         layout.addComponent(controller.getUtil().createFormTextField(binder,
                 controller.resolve(getEntityFieldPath(Buerger.NACHNAME, Type.label)),
                 controller.resolve(getEntityFieldPath(Buerger.NACHNAME, Type.input_prompt)),
-                Buerger.NACHNAME));
+                Buerger.NACHNAME, BuergerViewController.I18N_BASE_PATH));
         layout.addComponent(controller.getUtil().createFormDateField(
                 binder, controller.resolve(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.label)),
-                Buerger.GEBURTSDATUM));
+                Buerger.GEBURTSDATUM, BuergerViewController.I18N_BASE_PATH));
         
         // auf 'read only setzen
         this.binder.setReadOnly(true);

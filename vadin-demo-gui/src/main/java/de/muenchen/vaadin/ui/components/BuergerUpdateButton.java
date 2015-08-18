@@ -24,7 +24,7 @@ public class BuergerUpdateButton extends CustomComponent {
         update.addClickListener(e -> {
             controller.getEventbus().post(new BuergerAppEvent(EventType.SELECT2UPDATE).setEntity(entity).navigateTo(navigateTo).from(from));
         });
-        setId(String.format("%s_%s_%s_UPDATE_BUTTON", navigateTo, from, controller.getI18nBasePath()));
+        setId(String.format("%s_%s_%s_UPDATE_BUTTON", navigateTo, from, BuergerViewController.I18N_BASE_PATH));
         setCompositionRoot(update);
     }
 

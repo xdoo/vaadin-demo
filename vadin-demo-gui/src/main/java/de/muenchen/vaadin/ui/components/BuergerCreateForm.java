@@ -73,7 +73,7 @@ public class BuergerCreateForm extends CustomComponent {
      * Erzeugt das eigentliche Formular.
      */
     private void createForm() {
-        Validator val = ValidatorFactory.getValidator("Null",controller.getMsg().get("m1.buerger.nachname.validation"),"false");
+        Validator val = ValidatorFactory.getValidator("Null",controller.resolve(getEntityFieldPath(Buerger.NACHNAME, Type.validation)),"false");
         FormLayout layout = new FormLayout();
         HorizontalLayout buttonLayout = new HorizontalLayout();
         buttonLayout.setSpacing(true);
@@ -82,8 +82,8 @@ public class BuergerCreateForm extends CustomComponent {
         // headline
         Label headline = new Label(controller.resolve(
                 getFormPath(Action.create,
-                Component.headline,
-                Type.label)));
+                        Component.headline,
+                        Type.label)));
         headline.addStyleName(ValoTheme.LABEL_H3);
         layout.addComponent(headline);
 
@@ -95,7 +95,7 @@ public class BuergerCreateForm extends CustomComponent {
         TextField firstField = controller.getUtil().createFormTextField(binder,
                 controller.resolve(getEntityFieldPath(Buerger.VORNAME, Type.label)),
                 controller.resolve(getEntityFieldPath(Buerger.VORNAME, Type.input_prompt)),
-                Buerger.VORNAME);
+                Buerger.VORNAME, BuergerViewController.I18N_BASE_PATH);
         firstField.focus();
         String abc = "";
         for(char c = 'a';c <= 'z'; c++)
@@ -108,21 +108,26 @@ public class BuergerCreateForm extends CustomComponent {
             abc+=Character.toString((char)i);
         abc+="-";
     
-        Validator val0 = ValidatorFactory.getValidator("Regexp",controller.getMsg().get("m1.buerger.nachname.validationstring"),"true","["+abc+"]*");
+        Validator val0 = ValidatorFactory.getValidator("Regexp",controller.resolve(getEntityFieldPath(Buerger.NACHNAME, Type.validationstring)),"true","["+abc+"]*");
         
-        Validator val1 = ValidatorFactory.getValidator("StringLength",controller.getMsg().get("m1.buerger.nachname.validation"),1+"",""+Integer.MAX_VALUE, "true");
+        Validator val1 = ValidatorFactory.getValidator("StringLength", controller.resolve(getEntityFieldPath(Buerger.NACHNAME, Type.validation)), 1 + "", "" + Integer.MAX_VALUE, "true");
         firstField.addValidator(val0);
         firstField.addValidator(val1);
         layout.addComponent(firstField);
         
         // alle anderen Felder
-        TextField secField = controller.getUtil().createFormTextField(binder, controller.getI18nBasePath(), Buerger.NACHNAME, controller.getMsg());
+        TextField secField = controller.getUtil().createFormTextField(binder,
+                controller.resolve(getEntityFieldPath(Buerger.NACHNAME, Type.label)),
+                controller.resolve(getEntityFieldPath(Buerger.NACHNAME, Type.input_prompt)),
+                Buerger.NACHNAME, BuergerViewController.I18N_BASE_PATH);
         //Validator val2 = ValidatorFactory.getValidator("StringLength",controller.getMsg().get("m1.buerger.nachname.validation"),1+"",""+Integer.MAX_VALUE, "true");
         secField.addValidator(val1);
         secField.addValidator(val0);
         layout.addComponent(secField);
-        DateField birthdayfield = controller.getUtil().createFormDateField(binder, controller.getI18nBasePath(), Buerger.GEBURTSDATUM, controller.getMsg());       
-        String errorMsg = controller.getMsg().get("m1.buerger.geburtsdatum.validation");
+        DateField birthdayfield = controller.getUtil().createFormDateField(binder,
+                controller.resolve(getEntityFieldPath(Buerger.NACHNAME, Type.label)),
+                Buerger.GEBURTSDATUM, BuergerViewController.I18N_BASE_PATH);
+        String errorMsg = controller.resolve(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.validation));
         Validator val3 = ValidatorFactory.getValidator("DateRange",errorMsg,"0",null);
         birthdayfield.addValidator(val3);
         layout.addComponent(birthdayfield);    

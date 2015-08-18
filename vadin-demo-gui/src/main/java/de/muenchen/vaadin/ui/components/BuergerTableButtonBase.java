@@ -68,7 +68,7 @@ public abstract class BuergerTableButtonBase extends CustomComponent implements 
     @Override
     public Component getComponent() {
         Button button = this.getCustomButton();
-        button.setId(String.format("%s_%s_%s_%s_TABLE_BUTTON_%s", controller.getI18nBasePath(), this.navigateTo, this.navigateFrom, button.getClass().getName(), itemId));
+        button.setId(String.format("%s_%s_%s_%s_TABLE_BUTTON_%s", controller.I18N_BASE_PATH, this.navigateTo, this.navigateFrom, button.getClass().getName(), itemId));
         setCompositionRoot(button);
         return this;
     }

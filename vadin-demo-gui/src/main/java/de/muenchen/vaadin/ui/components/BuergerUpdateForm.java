@@ -92,17 +92,25 @@ public class BuergerUpdateForm extends CustomComponent {
         //layout.addComponent(controller.getUtil().createFormDateField(binder, controller.getI18nBasePath(), Buerger.GEBURTSDATUM, controller.getMsg()));
         
         
-        TextField firstField = controller.getUtil().createFormTextField(binder, controller.getI18nBasePath(), Buerger.VORNAME, controller.getMsg());
+        TextField firstField = controller.getUtil().createFormTextField(binder,
+                controller.resolve(getEntityFieldPath(Buerger.VORNAME, Type.label)),
+                controller.resolve(getEntityFieldPath(Buerger.VORNAME, Type.input_prompt)),
+                Buerger.VORNAME, BuergerViewController.I18N_BASE_PATH);
         firstField.focus();
-        firstField.addValidator(new StringLengthValidator(controller.getMsg().get("m1.buerger.nachname.validation"),1,Integer.MAX_VALUE, false));
+        firstField.addValidator(new StringLengthValidator(controller.resolve(getEntityFieldPath(Buerger.NACHNAME, Type.validation)),1,Integer.MAX_VALUE, false));
         layout.addComponent(firstField);
         
         // alle anderen Felder
-        TextField secField = controller.getUtil().createFormTextField(binder, controller.getI18nBasePath(), Buerger.NACHNAME, controller.getMsg());
-        secField.addValidator(new StringLengthValidator(controller.getMsg().get("m1.buerger.nachname.validation"),1,Integer.MAX_VALUE, false));
+        TextField secField = controller.getUtil().createFormTextField(binder,
+                controller.resolve(getEntityFieldPath(Buerger.NACHNAME, Type.label)),
+                controller.resolve(getEntityFieldPath(Buerger.NACHNAME, Type.input_prompt)),
+                Buerger.NACHNAME, BuergerViewController.I18N_BASE_PATH);
+        secField.addValidator(new StringLengthValidator(controller.resolve(getEntityFieldPath(Buerger.NACHNAME, Type.validation)),1,Integer.MAX_VALUE, false));
         layout.addComponent(secField);
-        DateField birthdayfield = controller.getUtil().createFormDateField(binder, controller.getI18nBasePath(), Buerger.GEBURTSDATUM, controller.getMsg());      
-        String errorMsg = controller.getMsg().get("m1.buerger.geburtsdatum.validation");
+        DateField birthdayfield = controller.getUtil().createFormDateField(binder,
+                controller.resolve(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.label)),
+                Buerger.GEBURTSDATUM, BuergerViewController.I18N_BASE_PATH);
+        String errorMsg = controller.resolve(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.validation));
         birthdayfield.addValidator(new DateRangeValidator(errorMsg,new Date(0),new Date(),DateField.RESOLUTION_YEAR));
         layout.addComponent(birthdayfield); 
         
@@ -123,7 +131,7 @@ public class BuergerUpdateForm extends CustomComponent {
         updateButton.addStyleName(ValoTheme.BUTTON_FRIENDLY);
         updateButton.setIcon(FontAwesome.PENCIL);
         updateButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
-        updateButton.setId(String.format("%s_UPDATE_BUTTON_FORM", controller.getI18nBasePath()));
+        updateButton.setId(String.format("%s_UPDATE_BUTTON_FORM", BuergerViewController.I18N_BASE_PATH));
         buttonLayout.addComponent(updateButton);
         // die Schaltfläche zum Abbrechen
         buttonLayout.addComponent(new GenericCancelButton(
