@@ -114,4 +114,30 @@ public class GenericConfirmationWindow extends Window {
         return cancel;
     }
     
+    // Default Werte überschreiben
+
+    public String getOkButton() {
+        return okButton;
+    }
+
+    public void setOkButton(String okButton) {
+        this.okButton = okButton;
+    }
+
+    public String getCancelButton() {
+        return cancelButton;
+    }
+
+    public void setCancelButton(String cancelButton) {
+        this.cancelButton = cancelButton;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+    
 }

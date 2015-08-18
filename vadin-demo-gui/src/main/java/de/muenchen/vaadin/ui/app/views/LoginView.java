@@ -74,13 +74,16 @@ public class LoginView extends VerticalLayout implements View {
         username = new TextField("Username");
         username.setIcon(FontAwesome.USER);
         username.addStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
+        username.setId("LOGIN_USERNAME_TEXTFIELD");
         password = new PasswordField("Password");
         password.setIcon(FontAwesome.LOCK);
         password.addStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
+        password.setId("LOGIN_PASSWORD_TEXTFIELD");
         final Button signin = new Button("Sign In");
         signin.addStyleName(ValoTheme.BUTTON_PRIMARY);
         signin.setClickShortcut(KeyCode.ENTER);
         signin.focus();
+        signin.setId("LOGIN_SIGNIN_BUTTON");
         fields.addComponents(username, password, signin);
         fields.setComponentAlignment(signin, Alignment.BOTTOM_LEFT);
         signin.addClickListener(new ClickListener() {
