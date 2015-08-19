@@ -1,6 +1,7 @@
 package de.muenchen.vaadin.ui.components;
 
 import com.google.common.eventbus.Subscribe;
+import com.vaadin.data.Validator;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
@@ -24,6 +25,7 @@ import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.EventType;
 import java.util.Date;
 import static de.muenchen.vaadin.ui.util.I18nPaths.*;
+import de.muenchen.vaadin.ui.util.ValidatorFactory;
 
 import java.util.Optional;
 
@@ -86,16 +88,25 @@ public class BuergerUpdateForm extends CustomComponent {
         headline.addStyleName(ValoTheme.LABEL_H3);
         layout.addComponent(headline);
 
-        //layout.addComponent(controller.getUtil().createFormTextField(binder, controller.getI18nBasePath(), Buerger.VORNAME, controller.getMsg()));
-        //layout.addComponent(controller.getUtil().createFormTextField(binder, controller.getI18nBasePath(), Buerger.NACHNAME, controller.getMsg()));
-        //layout.addComponent(controller.getUtil().createFormDateField(binder, controller.getI18nBasePath(), Buerger.GEBURTSDATUM, controller.getMsg()));
-        
+        String abc = "";
+        for(char c = 'a';c <= 'z'; c++)
+            abc+=c;
+        for(char c = 'A';c <= 'Z'; c++)
+            abc+=c;
+        for(int i =192;i<=382;i++)
+            abc+=Character.toString((char)i);
+        for(int i =7682;i<=7807;i++)
+            abc+=Character.toString((char)i);
+        abc+="-";
+    
+        Validator val0 = ValidatorFactory.getValidator("Regexp",controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.validationstring)),"true","["+abc+"]*");
         
         TextField firstField = controller.getUtil().createFormTextField(binder,
                 controller.resolveRelative(getEntityFieldPath(Buerger.VORNAME, Type.label)),
                 controller.resolveRelative(getEntityFieldPath(Buerger.VORNAME, Type.input_prompt)),
                 Buerger.VORNAME, BuergerViewController.I18N_BASE_PATH);
         firstField.focus();
+        firstField.addValidator(val0);
         firstField.addValidator(new StringLengthValidator(controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.validation)),1,Integer.MAX_VALUE, false));
         layout.addComponent(firstField);
         
@@ -104,6 +115,7 @@ public class BuergerUpdateForm extends CustomComponent {
                 controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.label)),
                 controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.input_prompt)),
                 Buerger.NACHNAME, BuergerViewController.I18N_BASE_PATH);
+        secField.addValidator(val0);
         secField.addValidator(new StringLengthValidator(controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.validation)),1,Integer.MAX_VALUE, false));
         layout.addComponent(secField);
         DateField birthdayfield = controller.getUtil().createFormDateField(binder,
@@ -111,6 +123,7 @@ public class BuergerUpdateForm extends CustomComponent {
                 Buerger.GEBURTSDATUM, BuergerViewController.I18N_BASE_PATH);
         String errorMsg = controller.resolveRelative(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.validation));
         birthdayfield.addValidator(new DateRangeValidator(errorMsg,new Date(0),new Date(),DateField.RESOLUTION_YEAR));
+        birthdayfield.addValidator(ValidatorFactory.getValidator("Null",controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.validation)),"false"));
         layout.addComponent(birthdayfield); 
         
         
