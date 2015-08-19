@@ -6,6 +6,7 @@ import de.muenchen.demo.service.domain.Buerger;
 import de.muenchen.demo.service.domain.BuergerRepository;
 import de.muenchen.demo.service.domain.Mandant;
 import de.muenchen.demo.service.domain.Pass;
+import de.muenchen.demo.service.domain.Sachbearbeiter;
 import de.muenchen.demo.service.domain.StaatsangehoerigkeitReference;
 import de.muenchen.demo.service.domain.User;
 import de.muenchen.demo.service.domain.Wohnung;
@@ -38,6 +39,8 @@ public class BuergerServiceImpl implements BuergerService {
     QueryService<Buerger> search;
     @Autowired
     private UserService userService;
+    @Autowired
+    private SachbearbeiterService sachbearbeiterService;
     @Autowired
     MandantService mandantService;
     @Autowired
@@ -97,6 +100,7 @@ public class BuergerServiceImpl implements BuergerService {
     public void delete(String oid) {
         Buerger item = this.read(oid);
         this.releaseBuergerEltern(oid);
+        this.releaseBuergerAllSachbearbeiter(oid);
         this.repo.delete(item);
     }
 
@@ -121,6 +125,34 @@ public class BuergerServiceImpl implements BuergerService {
         // in DB speichern
         this.save(out);
         return out;
+    }
+
+    @Override
+    public void releaseBuergerAllSachbearbeiter(String buergerOid) {
+        Buerger buerger = this.read(buergerOid);
+        Set<Sachbearbeiter> list = buerger.getSachbearbeiter();
+
+        if (list != null) {
+            Iterator<Sachbearbeiter> iter = list.iterator();
+            Collection<Sachbearbeiter> removeSachbearbeiter = new LinkedList<>();
+            removeSachbearbeiter.add(null);
+            while (iter.hasNext()) {
+                Sachbearbeiter sachbearbeiter = iter.next();
+                removeSachbearbeiter.add(sachbearbeiter);
+
+                Set<Buerger> buergerList = sachbearbeiter.getBuerger();
+                Collection<Buerger> removeBuerger = new LinkedList<>();
+                buergerList.stream().filter((element) -> (element == this.read(buergerOid))).forEach((element) -> {
+                    removeBuerger.add(element);
+                });
+                buergerList.removeAll(removeBuerger);
+                this.sachbearbeiterService.update(sachbearbeiter);
+
+            }
+
+            list.removeAll(removeSachbearbeiter);
+            this.update(buerger);
+        }
     }
 
     @Override
