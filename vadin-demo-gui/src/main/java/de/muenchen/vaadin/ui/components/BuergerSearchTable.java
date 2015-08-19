@@ -4,6 +4,7 @@ import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,7 +13,7 @@ import org.slf4j.LoggerFactory;
  * @author claus.straube
  */
 public class BuergerSearchTable extends CustomComponent {
-
+    public static Optional<BuergerSearchTable> searchTable = Optional.<BuergerSearchTable>empty();
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerSearchTable.class);
     private BuergerTable table;
     public BuergerSearchTable(final BuergerViewController controller, String navigateToForEdit, String navigateToForSelect, String navigateToForCreate, String from, final BuergerTableButtonFactory... buttonfactory) {

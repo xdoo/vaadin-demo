@@ -75,6 +75,10 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
     
     private Optional<BuergerSearchTable> searchTable = Optional.<BuergerSearchTable>empty();
     private Optional<BuergerChildTab> childTab = Optional.empty();
+    private Optional<BuergerCreateForm> createForm = Optional.empty();
+    private Optional<BuergerCreateForm> createChildForm = Optional.empty();
+    private Optional<BuergerUpdateForm> updateForm = Optional.empty();
+    private Optional<BuergerReadForm> readForm = Optional.empty();
     /**
      * {@link MessageService} zur Auflösung der Platzhalter
      */
@@ -250,16 +254,23 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
     //////////////////////////////////////////////
 
     public BuergerCreateForm generateCreateForm(String navigateTo) {
+        if(!createForm.isPresent()){
+            
         LOG.debug("creating 'create' buerger form");
         BuergerCreateForm form = new BuergerCreateForm(this, navigateTo);
-        return form;
+        createForm = Optional.of(form);
+        }
+        return createForm.get();
     }
     
     public BuergerCreateForm generateCreateChildForm(String navigateTo) {
+        if(!createChildForm.isPresent()){
         LOG.debug("creating 'create child' buerger form");
         BuergerCreateForm form = new BuergerCreateForm(this, navigateTo);
         form.setType(EventType.SAVE_CHILD);
-        return form;
+        createChildForm = Optional.of(form);
+        }
+        return createChildForm.get();
     }
     
     /**
@@ -289,12 +300,15 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
         return this.generateCreateChildForm(this.popFrom());
     }
 
-    public BuergerUpdateForm generateUpdateForm(String navigateTo, String from) { 
+    public BuergerUpdateForm generateUpdateForm(String navigateTo, String from) {
+        if(!updateForm.isPresent()){
         LOG.debug("creating 'update' buerger form");
         BuergerUpdateForm form = new BuergerUpdateForm(this, navigateTo, this.popFrom(), from);
         this.eventbus.register(form);
         this.eventbus.post(new BuergerComponentEvent(this.current, EventType.SELECT2UPDATE));
-        return form;
+        updateForm = Optional.of(form);
+        }
+        return updateForm.get();
     }
     
     public BuergerUpdateForm generateUpdateForm(String from) { 
@@ -302,29 +316,21 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
     }
     
     public BuergerReadForm generateReadForm(String navigateToUpdate, String from) {
+        if(!readForm.isPresent()){
         LOG.debug("creating 'read' buerger form");
         BuergerReadForm form = new BuergerReadForm(this, navigateToUpdate, this.peekFrom(), from);
         this.eventbus.register(form);
         this.eventbus.post(new BuergerComponentEvent(this.current, EventType.SELECT2READ));
-        return form;
+        readForm = Optional.of(form);
+        }
+        return readForm.get();
     }
     
     public BuergerSearchTable generateSearchTable(String navigateToForEdit, String navigateToForDetail, String navigateForCreate, String navigateFrom) {
         
        
-        if(searchTable.isPresent()){
-            LOG.debug("loading 'search' table for buerger");
-           // BuergerTable tmp =searchTable.get().getTable();
-           
-           // searchTable.get().setTable(this.generateTable(navigateToForEdit, navigateToForDetail, navigateFrom, detail, edit, copy, delete));
-            
-         //  eventbus.unregister(tmp);
-            
-            return searchTable.get();
-        }
-        else
-        {
-             BuergerTableButtonFactory detail = BuergerTableButtonFactory.getFactory(navigateToForDetail, BuergerTableDetailButton.class);
+        if(!searchTable.isPresent()){
+            BuergerTableButtonFactory detail = BuergerTableButtonFactory.getFactory(navigateToForDetail, BuergerTableDetailButton.class);
         BuergerTableButtonFactory edit = BuergerTableButtonFactory.getFactory(navigateToForEdit, BuergerTableEditButton.class);
         BuergerTableButtonFactory copy = BuergerTableButtonFactory.getFactory(null, BuergerTableCopyButton.class);
         BuergerTableButtonFactory delete = BuergerTableButtonFactory.getFactory(null, BuergerTableDeleteButton.class);
@@ -340,9 +346,9 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
                 edit,
                 copy,
                 delete
-        ));
+        ));}
         return searchTable.get();
-        }
+        
     }
     
     public BuergerTable generateChildTable(String navigateToForDetail, String from) {
