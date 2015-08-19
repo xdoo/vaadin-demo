@@ -7,7 +7,8 @@ import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.EventType;
-import de.muenchen.vaadin.ui.util.I18nPaths;
+import static de.muenchen.vaadin.ui.util.I18nPaths.*;
+
 
 /**
  *
@@ -18,12 +19,12 @@ public class BuergerUpdateButton extends CustomComponent {
     private Buerger entity;
     
     public BuergerUpdateButton(final BuergerViewController controller, final String navigateTo, final String from) {
-        String label = controller.getMsg().readText(controller.getI18nBasePath(), I18nPaths.I18N_FORM_UPDATE_BUTTON_LABEL);
+        String label = controller.resolveRelative(getFormPath(Action.update, Component.button, Type.label));
         Button update = new Button(label, FontAwesome.PENCIL);
         update.addClickListener(e -> {
             controller.getEventbus().post(new BuergerAppEvent(EventType.SELECT2UPDATE).setEntity(entity).navigateTo(navigateTo).from(from));
         });
-        setId(String.format("%s_%s_%s_UPDATE_BUTTON", navigateTo, from, controller.getI18nBasePath()));
+        setId(String.format("%s_%s_%s_UPDATE_BUTTON", navigateTo, from, BuergerViewController.I18N_BASE_PATH));
         setCompositionRoot(update);
     }
 

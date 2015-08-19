@@ -84,7 +84,7 @@ insert into MANDANT (ID,OID) values ('2','2');
 insert into MANDANT (ID,OID) values ('3','3');
 
 insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (2,'hans@test.de',TRUE,'oid1','test','hans',2);
-insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (3,'franz@test.de',TRUE,'oid2','test','franz',3);									
+insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (3,'franz@test.de',TRUE,'oid2','test','franz',3);
 
 insert into authoritys (id, mandant, oid, auth_authority) values (2, 2, 2, 'ADMIN');
 insert into authoritys (id, mandant, oid, auth_authority) values (3, 3, 3, 'ADMIN');
@@ -346,7 +346,9 @@ insert into authoritys_permissions (authority_id, permission_id) values ('2','11
 insert into users_authoritys (authority_id, user_id) values (2, 2);
 insert into users_authoritys (authority_id, user_id) values (3, 3);
 
-insert into buerger (id, oid, buer_nachname, buer_vorname, mandant) values (1,1,'test','hans',2);
+
 insert into buerger (id, oid, buer_nachname, buer_vorname, mandant) values (2,2,'test','franz',3);
 insert into buerger (id, oid, buer_nachname, buer_vorname, mandant) values (3,3,'test','hans',3);
+
+insert into buerger (id, oid, buer_nachname, buer_vorname, mandant, buer_geburtsdatum) values (1,1,'Zarwel','Rene',2, '1987-10-21');
 

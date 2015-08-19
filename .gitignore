@@ -1,5 +1,7 @@
 /target/
 /vaadin-demo-micro-service/target/
 /vaadin-demo-api/target/
-*.iml
+/vaadin-demo/target/
+/vaadin-demo-configcloud/target/*.iml
 /.idea/*
+*.iml
