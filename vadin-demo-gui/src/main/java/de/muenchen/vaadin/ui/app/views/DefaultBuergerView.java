@@ -33,11 +33,7 @@ public abstract class DefaultBuergerView extends VerticalLayout implements View{
      */
     @PostConstruct
     private void postConstruct() {
-        this.configureLayout();
-        
-        // add some components
-        this.addHeadline();
-        this.site();
+        //TODO Wirklich notwendig? Lieber enter() verwenden?
     }
     
     /**
@@ -67,7 +63,11 @@ public abstract class DefaultBuergerView extends VerticalLayout implements View{
     
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-        // not implemented
+        this.configureLayout();
+
+        // add some components
+        this.addHeadline();
+        this.site();
     }
     
 }
