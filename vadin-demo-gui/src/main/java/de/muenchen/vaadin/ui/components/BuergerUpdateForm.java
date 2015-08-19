@@ -15,7 +15,6 @@ import com.vaadin.ui.DateField;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
@@ -83,7 +82,7 @@ public class BuergerUpdateForm extends CustomComponent {
         layout.setMargin(true);
 
         // headline
-        Label headline = new Label(controller.resolve(getFormPath(Action.create, Component.headline, Type.label)));
+        Label headline = new Label(controller.resolveRelative(getFormPath(Action.create, Component.headline, Type.label)));
         headline.addStyleName(ValoTheme.LABEL_H3);
         layout.addComponent(headline);
 
@@ -93,31 +92,31 @@ public class BuergerUpdateForm extends CustomComponent {
         
         
         TextField firstField = controller.getUtil().createFormTextField(binder,
-                controller.resolve(getEntityFieldPath(Buerger.VORNAME, Type.label)),
-                controller.resolve(getEntityFieldPath(Buerger.VORNAME, Type.input_prompt)),
+                controller.resolveRelative(getEntityFieldPath(Buerger.VORNAME, Type.label)),
+                controller.resolveRelative(getEntityFieldPath(Buerger.VORNAME, Type.input_prompt)),
                 Buerger.VORNAME, BuergerViewController.I18N_BASE_PATH);
         firstField.focus();
-        firstField.addValidator(new StringLengthValidator(controller.resolve(getEntityFieldPath(Buerger.NACHNAME, Type.validation)),1,Integer.MAX_VALUE, false));
+        firstField.addValidator(new StringLengthValidator(controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.validation)),1,Integer.MAX_VALUE, false));
         layout.addComponent(firstField);
         
         // alle anderen Felder
         TextField secField = controller.getUtil().createFormTextField(binder,
-                controller.resolve(getEntityFieldPath(Buerger.NACHNAME, Type.label)),
-                controller.resolve(getEntityFieldPath(Buerger.NACHNAME, Type.input_prompt)),
+                controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.label)),
+                controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.input_prompt)),
                 Buerger.NACHNAME, BuergerViewController.I18N_BASE_PATH);
-        secField.addValidator(new StringLengthValidator(controller.resolve(getEntityFieldPath(Buerger.NACHNAME, Type.validation)),1,Integer.MAX_VALUE, false));
+        secField.addValidator(new StringLengthValidator(controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.validation)),1,Integer.MAX_VALUE, false));
         layout.addComponent(secField);
         DateField birthdayfield = controller.getUtil().createFormDateField(binder,
-                controller.resolve(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.label)),
+                controller.resolveRelative(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.label)),
                 Buerger.GEBURTSDATUM, BuergerViewController.I18N_BASE_PATH);
-        String errorMsg = controller.resolve(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.validation));
+        String errorMsg = controller.resolveRelative(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.validation));
         birthdayfield.addValidator(new DateRangeValidator(errorMsg,new Date(0),new Date(),DateField.RESOLUTION_YEAR));
         layout.addComponent(birthdayfield); 
         
         
         layout.addComponent(buttonLayout);
         // die Schaltfläche zum Aktualisieren
-        String update = controller.resolve(getFormPath(Action.update, Component.button, Type.label));
+        String update = controller.resolveRelative(getFormPath(Action.update, Component.button, Type.label));
         Button updateButton = new Button(update, (Button.ClickEvent click) -> {
             try {
                 binder.commit();
@@ -135,7 +134,7 @@ public class BuergerUpdateForm extends CustomComponent {
         buttonLayout.addComponent(updateButton);
         // die Schaltfläche zum Abbrechen
         buttonLayout.addComponent(new GenericCancelButton(
-                controller.resolve(getFormPath(Action.cancel, Component.button, Type.label)),
+                controller.resolveRelative(getFormPath(Action.cancel, Component.button, Type.label)),
                 new BuergerAppEvent(null, EventType.CANCEL).navigateTo(this.back), // hier kann eine 'null' gesetzt werden, weil nichts mehr mit dem Objekt passiert
                 this.controller.getEventbus()));
         setCompositionRoot(layout);

@@ -17,7 +17,7 @@ public class BuergerBackButton extends CustomComponent {
 
     public BuergerBackButton(final BuergerViewController controller, final String navigateTo) {
         
-        String label = controller.resolve(getFormPath(Action.back,Component.button,Type.label));
+        String label = controller.resolveRelative(getFormPath(Action.back, Component.button, Type.label));
         Button back = new Button(label, FontAwesome.ANGLE_LEFT);
         back.addClickListener(e -> {
             controller.getEventbus().post(new BuergerAppEvent(EventType.CANCEL).navigateTo(navigateTo));

@@ -13,9 +13,8 @@ import com.vaadin.ui.TabSheet;
 import de.muenchen.vaadin.services.BuergerService;
 import de.muenchen.vaadin.services.MessageService;
 import de.muenchen.vaadin.ui.app.MainUI;
-import de.muenchen.vaadin.ui.app.views.BuergerCreateChildView;
-import de.muenchen.vaadin.ui.app.views.BuergerDetailView;
-import static de.muenchen.vaadin.ui.app.views.BuergerDetailView.NAME;
+
+import de.muenchen.vaadin.ui.app.views.events.AppEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.components.BuergerChildTab;
@@ -40,7 +39,6 @@ import java.util.Stack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.controller;
 
 /**
  * Der Controller ist die zentrale Klasse um die Logik im Kontext Buerger abzubilden.
@@ -48,7 +46,7 @@ import static org.springframework.web.servlet.mvc.method.annotation.MvcUriCompon
  * @author claus.straube
  */
 @SpringComponent @UIScope
-public class BuergerViewController implements Serializable {
+public class BuergerViewController implements Serializable, ControllerContext<Buerger> {
     
     // TODO entweder hier oder im I18nServiceConfigImpl angeben
     public static final String I18N_BASE_PATH = "buerger";
@@ -127,16 +125,32 @@ public class BuergerViewController implements Serializable {
         return current;
     }
 
+    /**
+     * Resolve the path (e.g. "asdf.label").
+     *
+     * @param path the path.
+     * @return the resolved String.
+     */
+    @Override
+    public String resolve(String path) {
+        return msg.get(path);
+    }
 
     /**
-     * Resolve the relative path (e.g. ".asdf.label").
+     * Resolve the relative path (e.g. "asdf.label").
      *
      * The base path will be appended at start and then read from the properties.
      * @param relativePath the path to add to the base path.
      * @return the resolved String.
      */
-    public String resolve(String relativePath) {
-        return msg.get(I18N_BASE_PATH + relativePath);
+    @Override
+    public String resolveRelative(String relativePath) {
+        return resolve(I18N_BASE_PATH + "." + relativePath);
+    }
+
+    @Override
+    public void postToEventBus(AppEvent<?> appEvent) {
+        eventbus.post(appEvent);
     }
 
     /**
@@ -147,7 +161,7 @@ public class BuergerViewController implements Serializable {
      * @return the resolved String.
      */
     public FontAwesome resolveIcon(String relativePath) {
-        return msg.getFontAwesome(I18N_BASE_PATH + relativePath + ".icon");
+        return msg.getFontAwesome(I18N_BASE_PATH + "." + relativePath + ".icon");
     }
     
     ////////////////////////
@@ -365,8 +379,8 @@ public class BuergerViewController implements Serializable {
             this.pushFrom(event);
             
             GenericSuccessNotification succes = new GenericSuccessNotification(
-                    resolve(getNotificationPath(NotificationType.success, Action.update, Type.label)),
-                    resolve(getNotificationPath(NotificationType.success, Action.update, Type.text)));
+                    resolveRelative(getNotificationPath(NotificationType.success, Action.update, Type.label)),
+                    resolveRelative(getNotificationPath(NotificationType.success, Action.update, Type.text)));
             succes.show(Page.getCurrent());
             
             // Zur Seite wechseln
@@ -383,8 +397,8 @@ public class BuergerViewController implements Serializable {
             this.eventbus.post(new BuergerComponentEvent(event.getEntity(), EventType.SAVE));
             
             GenericSuccessNotification succes = new GenericSuccessNotification(
-                    resolve(getNotificationPath(NotificationType.success, Action.save, Type.label)),
-                    resolve(getNotificationPath(NotificationType.success, Action.save, Type.text)));
+                    resolveRelative(getNotificationPath(NotificationType.success, Action.save, Type.label)),
+                    resolveRelative(getNotificationPath(NotificationType.success, Action.save, Type.text)));
             succes.show(Page.getCurrent());
             
             // Zur Seite wechseln
@@ -398,8 +412,8 @@ public class BuergerViewController implements Serializable {
             this.saveBuergerKind(event.getEntity());
             
             GenericSuccessNotification succes = new GenericSuccessNotification(
-                    resolve(getNotificationPath(NotificationType.success, Action.save, Type.label)),
-                    resolve(getNotificationPath(NotificationType.success, Action.save, Type.text)));
+                    resolveRelative(getNotificationPath(NotificationType.success, Action.save, Type.label)),
+                    resolveRelative(getNotificationPath(NotificationType.success, Action.save, Type.text)));
             succes.show(Page.getCurrent());
             
             // Zur Seite wechseln
@@ -419,8 +433,8 @@ public class BuergerViewController implements Serializable {
             this.eventbus.post(buergerComponentEvent);
             
             GenericSuccessNotification succes = new GenericSuccessNotification(
-                    resolve(getNotificationPath(NotificationType.success, Action.delete, Type.label)),
-                    resolve(getNotificationPath(NotificationType.success, Action.delete, Type.text)));
+                    resolveRelative(getNotificationPath(NotificationType.success, Action.delete, Type.label)),
+                    resolveRelative(getNotificationPath(NotificationType.success, Action.delete, Type.text)));
             succes.show(Page.getCurrent());
         }
         
@@ -434,8 +448,8 @@ public class BuergerViewController implements Serializable {
             this.eventbus.post(new BuergerComponentEvent(copy, EventType.COPY));
             
             GenericSuccessNotification succes = new GenericSuccessNotification(
-                    resolve(getNotificationPath(NotificationType.success, Action.copy, Type.label)),
-                    resolve(getNotificationPath(NotificationType.success, Action.copy, Type.text)));
+                    resolveRelative(getNotificationPath(NotificationType.success, Action.copy, Type.label)),
+                    resolveRelative(getNotificationPath(NotificationType.success, Action.copy, Type.text)));
             succes.show(Page.getCurrent());
         }
         

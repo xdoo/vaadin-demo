@@ -27,14 +27,14 @@ public class I18nPaths {
      * What the GUI-Component is used for.
      */
     public enum Action implements I18nPath {
-        create, read, update, back, save, delete, cancel, copy
+        create, read, update, back, save, delete, cancel, copy, logout
     }
 
     /**
      * Texttype.
      */
     public enum Type implements I18nPath {
-        label,text,title, column_header, validation, validationstring, input_prompt
+        label,text,title, column_header, validation, validationstring, input_prompt, confirm, cancel
     }
 
     /**
@@ -63,7 +63,7 @@ public class I18nPaths {
      * @return path
      */
     public static String getFormPath(Action a, Component c, Type t) {
-        return ".form" + get(a, c, t);
+        return "form" + get(a, c, t);
     }
 
     /**
@@ -73,7 +73,7 @@ public class I18nPaths {
      * @return path
      */
     public static String getPagePath(Type t) {
-        return ".page" + get(t);
+        return "page" + get(t);
     }
 
     /**
@@ -84,7 +84,7 @@ public class I18nPaths {
      * @return path
      */
     public static String getNavigationPath(Component c, Type t) {
-        return ".navigation" + get(c,t);
+        return "navigation" + get(c,t);
     }
 
     /**
@@ -96,7 +96,18 @@ public class I18nPaths {
      * @return path
      */
     public static String getNotificationPath(NotificationType nt, Action a, Type t) {
-        return ".notification" + get(nt,a,t);
+        return "notification" + get(nt,a,t);
+    }
+
+    /**
+     * Returns the path ending for a confirmation with the given arguments.
+     * Params may not be null.
+     * @param a Action the GUI is used for.
+     * @param t Type of this text.
+     * @return path
+     */
+    public static String getConfirmationPath(Action a, Type t) {
+        return "confirmation" + get(a,t);
     }
 
     /**
@@ -107,7 +118,7 @@ public class I18nPaths {
      * @return path
      */
     public static String getEntityFieldPath(String field, Type t){
-        return "." + field + get(t);
+        return field + get(t);
     }
     
 }

@@ -3,6 +3,11 @@ package de.muenchen.vaadin.ui.app;
 import com.google.common.eventbus.Subscribe;
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.server.*;
+import de.muenchen.vaadin.ui.app.views.events.AppEvent;
+import de.muenchen.vaadin.ui.app.views.events.LogoutEvent;
+import de.muenchen.vaadin.ui.components.GenericConfirmationWindow;
+import de.muenchen.vaadin.ui.controller.ControllerContext;
+import de.muenchen.vaadin.ui.util.I18nPaths;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
@@ -38,6 +43,7 @@ import java.util.Locale;
 import java.util.Map.Entry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import static de.muenchen.vaadin.ui.util.I18nPaths.*;
 
 import javax.servlet.annotation.WebServlet;
 
@@ -46,7 +52,7 @@ import javax.servlet.annotation.WebServlet;
 @Theme("valo")
 @PreserveOnRefresh
 //@Widgetset("de.muenchen.vaadin.Widgetset")
-public class MainUI extends UI {
+public class MainUI extends UI implements ControllerContext{
     
      private static final Logger LOG = LoggerFactory.getLogger(MainUI.class);
 
@@ -191,9 +197,12 @@ public class MainUI extends UI {
         this.root.switchOnMenu();
         getNavigator().navigateTo(MainView.NAME);
     }
-    
-    public void logout() {
-        
+
+    @Subscribe
+    public void logout(LogoutEvent event) {
+        this.root.switchOffMenu();
+        security.logout();
+        getNavigator().navigateTo(LoginView.NAME);
     }
 
     private CssLayout buildMenu() {
@@ -248,7 +257,36 @@ public class MainUI extends UI {
             menuItemsLayout.addComponent(b);
         }
 
+        // creates and displays the logout button
+        final Button logoutButton = new Button("Logout", new ClickListener() {
+            @Override
+            public void buttonClick(final ClickEvent event) {
+                GenericConfirmationWindow confirmationWindow = new GenericConfirmationWindow(new LogoutEvent(), MainUI.this, Action.logout);
+                getUI().addWindow(confirmationWindow);
+                confirmationWindow.center();
+                confirmationWindow.focus();
+            }
+        });
+        logoutButton.setHtmlContentAllowed(true);
+        logoutButton.setPrimaryStyleName("valo-menu-item");
+        logoutButton.setId("MENU_ITEM_BUTTON_LOGOUT");
+        menuItemsLayout.addComponent(logoutButton);
+
         return menuItemsLayout;
     }
-    
+
+    @Override
+    public String resolveRelative(String relativePath) {
+        return i18n.get(relativePath);
+    }
+
+    @Override
+    public String resolve(String path) {
+        return i18n.get(path);
+    }
+
+    @Override
+    public void postToEventBus(AppEvent appEvent) {
+        eventBus.post(appEvent);
+    }
 }

@@ -64,14 +64,14 @@ public class BuergerTable extends CustomComponent {
         table.setVisibleColumns(Buerger.VORNAME, Buerger.NACHNAME, Buerger.GEBURTSDATUM, "button");
         
         // set headers
-        table.setColumnHeader(Buerger.VORNAME, controller.resolve(getEntityFieldPath(Buerger.VORNAME, Type.column_header)));
+        table.setColumnHeader(Buerger.VORNAME, controller.resolveRelative(getEntityFieldPath(Buerger.VORNAME, Type.column_header)));
 
         table.setColumnIcon(Buerger.VORNAME, controller.resolveIcon(getEntityFieldPath(Buerger.VORNAME, Type.column_header)));
 
 
-        table.setColumnHeader(Buerger.GEBURTSDATUM, controller.resolve(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.column_header)));
+        table.setColumnHeader(Buerger.GEBURTSDATUM, controller.resolveRelative(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.column_header)));
         table.setColumnIcon(Buerger.GEBURTSDATUM, controller.resolveIcon(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.column_header)));
-        table.setColumnHeader(Buerger.NACHNAME, controller.resolve(getEntityFieldPath(Buerger.NACHNAME, Type.column_header)));
+        table.setColumnHeader(Buerger.NACHNAME, controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.column_header)));
         table.setColumnIcon(Buerger.NACHNAME, controller.resolveIcon(getEntityFieldPath(Buerger.NACHNAME, Type.column_header)));
         table.setColumnHeader("button", "");
         

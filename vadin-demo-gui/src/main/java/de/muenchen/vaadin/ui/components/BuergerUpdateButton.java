@@ -19,7 +19,7 @@ public class BuergerUpdateButton extends CustomComponent {
     private Buerger entity;
     
     public BuergerUpdateButton(final BuergerViewController controller, final String navigateTo, final String from) {
-        String label = controller.resolve(getFormPath(Action.update,Component.button,Type.label));
+        String label = controller.resolveRelative(getFormPath(Action.update, Component.button, Type.label));
         Button update = new Button(label, FontAwesome.PENCIL);
         update.addClickListener(e -> {
             controller.getEventbus().post(new BuergerAppEvent(EventType.SELECT2UPDATE).setEntity(entity).navigateTo(navigateTo).from(from));

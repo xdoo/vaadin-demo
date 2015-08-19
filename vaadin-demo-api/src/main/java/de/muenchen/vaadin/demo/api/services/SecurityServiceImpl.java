@@ -96,7 +96,7 @@ public class SecurityServiceImpl implements SecurityService, Serializable {
     @Override
     public void logout() {
         this.login = Boolean.FALSE;
-        this.navigator.navigateTo("foo"); // TODO -> fix this
+        //this.navigator.navigateTo("foo"); // TODO -> fix this
     }
 
     @Override

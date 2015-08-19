@@ -70,20 +70,20 @@ public class BuergerReadForm extends CustomComponent {
         layout.setMargin(true);
         
         // headline
-        Label headline = new Label(controller.resolve(getFormPath(Action.read, Component.headline, Type.label)));
+        Label headline = new Label(controller.resolveRelative(getFormPath(Action.read, Component.headline, Type.label)));
         headline.addStyleName(ValoTheme.LABEL_H3);
         layout.addComponent(headline);
 
         layout.addComponent(controller.getUtil().createFormTextField(binder,
-                controller.resolve(getEntityFieldPath(Buerger.VORNAME, Type.label)),
-                controller.resolve(getEntityFieldPath(Buerger.VORNAME, Type.input_prompt)),
+                controller.resolveRelative(getEntityFieldPath(Buerger.VORNAME, Type.label)),
+                controller.resolveRelative(getEntityFieldPath(Buerger.VORNAME, Type.input_prompt)),
                 Buerger.VORNAME, BuergerViewController.I18N_BASE_PATH));
         layout.addComponent(controller.getUtil().createFormTextField(binder,
-                controller.resolve(getEntityFieldPath(Buerger.NACHNAME, Type.label)),
-                controller.resolve(getEntityFieldPath(Buerger.NACHNAME, Type.input_prompt)),
+                controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.label)),
+                controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.input_prompt)),
                 Buerger.NACHNAME, BuergerViewController.I18N_BASE_PATH));
         layout.addComponent(controller.getUtil().createFormDateField(
-                binder, controller.resolve(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.label)),
+                binder, controller.resolveRelative(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.label)),
                 Buerger.GEBURTSDATUM, BuergerViewController.I18N_BASE_PATH));
         
         // auf 'read only setzen

@@ -6,12 +6,10 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.vaadin.services.MessageService;
 import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import static de.muenchen.vaadin.ui.util.I18nPaths.*;
 import javax.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Autowired;
 
 
 /**
@@ -50,7 +48,7 @@ public abstract class DefaultBuergerView extends VerticalLayout implements View{
     protected void addHeadline() {
         
         // headline
-        Label pageTitle = new Label(controller.resolve(getPagePath(Type.title)));
+        Label pageTitle = new Label(controller.resolveRelative(getPagePath(Type.title)));
         pageTitle.addStyleName(ValoTheme.LABEL_H1);
         pageTitle.addStyleName(ValoTheme.LABEL_COLORED);
         
