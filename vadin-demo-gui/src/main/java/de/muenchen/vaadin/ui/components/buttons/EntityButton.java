@@ -49,67 +49,22 @@ public class EntityButton<E extends BaseEntity> extends CustomComponent {
         action.getStyleName().ifPresent(button::setStyleName);
 
         button.addClickListener(
-                e -> {
-                    action.getAppEvent(context,getEntity(), navigateTo, from).ifPresent(context::postToEventBus);
-                }
+                e -> action.getAppEvent(context, getEntity(), navigateTo, from).ifPresent(context::postToEventBus)
         );
 
         //setId(String.format("%s_%s_UPDATE_BUTTON", navigateTo, BuergerViewController.I18N_BASE_PATH));
 
         setCompositionRoot(button);
     }
-/**
-    private Optional<String> toStyleName(Action action) {
-        String styleName = null;
-        if (action == Action.create)
-            styleName = ValoTheme.BUTTON_FRIENDLY;
 
-        return Optional.ofNullable(styleName);
-    }
-
-    private Optional<AppEvent<E>> toAppEvent(final ControllerContext<E> context, final Action action, final String navigateTo, final String from) {
-
-        AppEvent<E> appEvent = null;
-        if (action == Action.back)
-            appEvent = context.buildEvent(EventType.CANCEL);
-        if (action == Action.update)
-            appEvent = context.buildEvent(EventType.SELECT2UPDATE).setEntity(entity);
-        if (action == Action.create)
-            appEvent = context.buildEvent(EventType.CREATE);
-
-        if (appEvent != null) {
-            appEvent.navigateTo(navigateTo);
-            appEvent.from(from);
-        }
-        return Optional.ofNullable(appEvent);
-    }
-
-
-    private Optional<Integer> toClickShortCut(Action action) {
-        Integer shortcutAction = null;
-        if (action == Action.back)
-            shortcutAction = ShortcutAction.KeyCode.ARROW_LEFT;
-
-        return Optional.ofNullable(shortcutAction);
-
-    }
-
-    private Optional<Resource> toIcon(Action action) {
-        Resource resource = null;
-        if (action == Action.back)
-            resource = FontAwesome.ANGLE_LEFT;
-        if (action == Action.update)
-            resource = FontAwesome.PENCIL;
-        if (action == Action.create)
-            resource = FontAwesome.MAGIC;
-
-        return Optional.ofNullable(resource);
-    }
-*/
     public E getEntity() {
         return entity;
     }
 
+    /**
+     * Builder for a BaseEntity use the make() method.
+     * @param <E> the entity the button is for.
+     */
     public static class Builder<E extends BaseEntity> {
         private final ControllerContext<E> controllerContext;
         private final Action action;
@@ -139,6 +94,17 @@ public class EntityButton<E extends BaseEntity> extends CustomComponent {
 
     }
 
+    /**
+     * Make a new EntityButton for the specified action.
+     *
+     * It is possible, but not required to set the navigateTo or from values.
+     * The controllerContext will be used to resolve the label and post the on-click Events.
+     *
+     * @param controllerContext the context providing all the needed information / interfaces
+     * @param action the action the button will do. (Also influences Text and Style)
+     * @param <T> The type of Entity
+     * @return an unfinished builder to build() or set additional properties.
+     */
     public static <T extends BaseEntity> Builder<T> make(ControllerContext<T> controllerContext, Action action) {
         return new Builder<T>(controllerContext, action);
     }
