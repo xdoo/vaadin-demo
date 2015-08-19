@@ -9,7 +9,9 @@
         <module>vaadin-demo-micro-service</module>
         <module>vaadin-demo-api</module>
     <module>vadin-demo-gui</module>
-  </modules>
+        <module>vaadin-demo</module>
+        <module>vaadin-demo-configcloud</module>
+    </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -22,8 +24,28 @@
             <artifactId>guava</artifactId>
             <version>18.0</version>
         </dependency>
-    
-        
-</dependencies>
-
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.5.8.201207111220</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

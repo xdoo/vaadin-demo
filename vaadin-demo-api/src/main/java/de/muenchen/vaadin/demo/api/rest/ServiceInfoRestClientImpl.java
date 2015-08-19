@@ -1,11 +1,13 @@
 package de.muenchen.vaadin.demo.api.rest;
 
+import com.netflix.discovery.DiscoveryClient;
 import de.muenchen.vaadin.demo.api.domain.ServiceInfo;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestFactory;
@@ -24,6 +26,12 @@ public class ServiceInfoRestClientImpl implements ServiceInfoRestClient {
 
     @Value(value = "${service.info.url}")
     private String url;
+
+    @Value(value = "${service.info.id.eureka}")
+    private String eurekaId;
+
+    @Autowired
+    DiscoveryClient discoveryClient;
 
     @Override
     public ServiceInfo getServiceInfo() {
@@ -46,6 +54,13 @@ public class ServiceInfoRestClientImpl implements ServiceInfoRestClient {
 
         ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
         restTemplate = new RestTemplate(requestFactory);
+
+        try{
+            url = discoveryClient.getNextServerFromEureka(eurekaId, false).getHomePageUrl();
+        } catch (RuntimeException e){
+            // Exception occurs if no eureka server was found.
+            // service.info.url will be used
+        }
 
         ResponseEntity<ServiceInfoResource> resource = this.restTemplate.getForEntity(this.url, ServiceInfoResource.class);
         return ServiceInfoAssembler.fromResource(resource.getBody());

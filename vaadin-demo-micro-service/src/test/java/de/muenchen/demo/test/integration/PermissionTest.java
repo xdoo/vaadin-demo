@@ -9,13 +9,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.demo.service.Application;
+import de.muenchen.demo.service.domain.AdresseExterneRepository;
+import de.muenchen.demo.service.domain.AdresseInterneRepository;
+import de.muenchen.demo.service.domain.AdresseReferenceRepository;
 import de.muenchen.demo.service.domain.AuthorityPermissionRepository;
 import de.muenchen.demo.service.domain.AuthorityRepository;
+import de.muenchen.demo.service.domain.BuergerRepository;
 import de.muenchen.demo.service.domain.MandantRepository;
+import de.muenchen.demo.service.domain.PassRepository;
 import de.muenchen.demo.service.domain.Permission;
 import de.muenchen.demo.service.domain.PermissionRepository;
+import de.muenchen.demo.service.domain.StaatsangehoerigkeitReferenceRepository;
 import de.muenchen.demo.service.domain.UserAuthorityRepository;
 import de.muenchen.demo.service.domain.UserRepository;
+import de.muenchen.demo.service.domain.WohnungRepository;
 import de.muenchen.vaadin.demo.api.rest.PermissionResource;
 import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
 import java.security.KeyManagementException;
@@ -70,7 +77,7 @@ public class PermissionTest {
     private SearchResultResource<PermissionResource> responseQuery;
 
     @Autowired
-    UserRepository userRepo;
+    UserRepository usersRepo;
     @Autowired
     AuthorityRepository authRepo;
     @Autowired
@@ -79,9 +86,24 @@ public class PermissionTest {
     UserAuthorityRepository userAuthRepo;
     @Autowired
     AuthorityPermissionRepository authPermRepo;
-
+    @Autowired
+    StaatsangehoerigkeitReferenceRepository staatRepo;
+    @Autowired
+    BuergerRepository buergerRepo;
+    @Autowired
+    WohnungRepository wohnRepo;
+    @Autowired
+    PassRepository passRepo;
+    @Autowired
+    AdresseInterneRepository interneRepo;
+    @Autowired
+    AdresseExterneRepository externeRepo;
+    @Autowired
+    AdresseReferenceRepository referenceRepo;
     @Autowired
     MandantRepository mandantRepo;
+
+   
     private String urlSave;
     private String urlNew;
     private PermissionResource response;
@@ -91,12 +113,19 @@ public class PermissionTest {
 
         authPermRepo.deleteAll();
         userAuthRepo.deleteAll();
-        userRepo.deleteAll();
+        usersRepo.deleteAll();
         authRepo.deleteAll();
         permRepo.deleteAll();
+        buergerRepo.deleteAll();
+        staatRepo.deleteAll();
+        wohnRepo.deleteAll();
+        passRepo.deleteAll();
+        referenceRepo.deleteAll();
+        interneRepo.deleteAll();
+        externeRepo.deleteAll();
         mandantRepo.deleteAll();
 
-        InitTest initTest = new InitTest(userRepo, authRepo, permRepo, userAuthRepo, authPermRepo, mandantRepo);
+        InitTest initTest = new InitTest(usersRepo, authRepo, permRepo, userAuthRepo, authPermRepo, mandantRepo);
         initTest.init();
         SSLContext sslContext = SSLContexts.custom().loadTrustMaterial(null, new TrustSelfSignedStrategy()).useTLS().build();
         SSLConnectionSocketFactory connectionFactory = new SSLConnectionSocketFactory(sslContext, new AllowAllHostnameVerifier());
@@ -170,9 +199,16 @@ public class PermissionTest {
     public void TearDown() {
         authPermRepo.deleteAll();
         userAuthRepo.deleteAll();
-        userRepo.deleteAll();
+        usersRepo.deleteAll();
         authRepo.deleteAll();
         permRepo.deleteAll();
+        buergerRepo.deleteAll();
+        staatRepo.deleteAll();
+        wohnRepo.deleteAll();
+        passRepo.deleteAll();
+        referenceRepo.deleteAll();
+        interneRepo.deleteAll();
+        externeRepo.deleteAll();
         mandantRepo.deleteAll();
 
     }

@@ -127,7 +127,7 @@ public class PassServiceImpl implements PassService {
     @Override
     public void delete(String oid) {
         Pass item = this.read(oid);
-        this.buergerService.releasePassAllBuerger(oid);
+        this.buergerService.releasePassBuerger(oid);
         this.repo.delete(item);
     }
 }

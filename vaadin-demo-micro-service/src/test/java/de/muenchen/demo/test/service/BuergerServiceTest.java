@@ -15,9 +15,12 @@ import de.muenchen.demo.service.domain.AuthorityRepository;
 import de.muenchen.demo.service.domain.Buerger;
 import de.muenchen.demo.service.domain.BuergerRepository;
 import de.muenchen.demo.service.domain.MandantRepository;
+import de.muenchen.demo.service.domain.PassRepository;
 import de.muenchen.demo.service.domain.PermissionRepository;
+import de.muenchen.demo.service.domain.StaatsangehoerigkeitReferenceRepository;
 import de.muenchen.demo.service.domain.UserAuthorityRepository;
 import de.muenchen.demo.service.domain.UserRepository;
+import de.muenchen.demo.service.domain.WohnungRepository;
 import de.muenchen.demo.service.services.BuergerService;
 import de.muenchen.demo.test.integration.InitTest;
 import java.security.KeyManagementException;
@@ -72,6 +75,12 @@ public class BuergerServiceTest {
     AdresseReferenceRepository referenceRepo;
     @Autowired
     BuergerRepository buergerRepo;
+    @Autowired
+    PassRepository passRepo;
+    @Autowired
+    WohnungRepository wohnRepo;
+    @Autowired
+    StaatsangehoerigkeitReferenceRepository staatRepo;
 
     @Autowired
     //@Qualifier("authenticationManager")
@@ -186,10 +195,13 @@ public class BuergerServiceTest {
         usersRepo.deleteAll();
         authRepo.deleteAll();
         permRepo.deleteAll();
+        buergerRepo.deleteAll();
+        staatRepo.deleteAll();
+        wohnRepo.deleteAll();
+        passRepo.deleteAll();
         referenceRepo.deleteAll();
         interneRepo.deleteAll();
         externeRepo.deleteAll();
-        buergerRepo.deleteAll();
         mandantRepo.deleteAll();
 
     }

@@ -7,7 +7,7 @@ import com.vaadin.ui.CustomComponent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.EventType;
-import de.muenchen.vaadin.ui.util.I18nPaths;
+import static de.muenchen.vaadin.ui.util.I18nPaths.*;
 
 /**
  *
@@ -17,12 +17,13 @@ public class BuergerBackButton extends CustomComponent {
 
     public BuergerBackButton(final BuergerViewController controller, final String navigateTo) {
         
-        String label = controller.getMsg().readText(controller.getI18nBasePath(), I18nPaths.I18N_FORM_BACK_BUTTON_LABEL);
+        String label = controller.resolveRelative(getFormPath(Action.back, Component.button, Type.label));
         Button back = new Button(label, FontAwesome.ANGLE_LEFT);
         back.addClickListener(e -> {
             controller.getEventbus().post(new BuergerAppEvent(EventType.CANCEL).navigateTo(navigateTo));
         });
         back.setClickShortcut(ShortcutAction.KeyCode.ARROW_LEFT);
+        setId(String.format("%s_%s_UPDATE_BUTTON", navigateTo, BuergerViewController.I18N_BASE_PATH));
         setCompositionRoot(back);
         
     }

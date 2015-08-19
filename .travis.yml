@@ -6,5 +6,9 @@ jdk: oraclejdk8
 
 install: mvn clean
 
-script: mvn install -DskipTests=true
+##script: mvn install -DskipTests=true
+script: mvn install
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
 

@@ -28,7 +28,6 @@ import javax.annotation.security.RolesAllowed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.http.ResponseEntity;
@@ -297,6 +296,23 @@ public class BuergerController {
     }
 
     /**
+     * Entfernt die Beziehung zwischen einem Buerger und seinen Kinder.
+     *
+     * @param oid
+     * @return
+     */
+    @RolesAllowed({"PERM_releaseBuergerKinder"})
+    @RequestMapping(value = "/release/kinder/{oid}", method = {RequestMethod.GET})
+    public ResponseEntity releaseBuergerKinder(@PathVariable("oid") String oid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("release Buerger Kinder");
+        }
+        this.service.releaseBuergerKinder(oid);
+        return ResponseEntity.ok().build();
+
+    }
+
+    /**
      * Entfernt die Beziehung zwischen einem Buerger und seinem Elternteil.
      *
      * @param oid
@@ -384,6 +400,7 @@ public class BuergerController {
         this.service.update(entity);
 
         BuergerResource resource = this.assembler.assembleWithAllLinks(entity);
+        resource.add(linkTo(methodOn(BuergerController.class).addWohnungBuerger(buergerOid, wohnungOid)).withSelfRel()); // add self link with params
         return ResponseEntity.ok(resource);
     }
 
@@ -409,6 +426,23 @@ public class BuergerController {
 
         BuergerResource resource = this.assembler.assembleWithAllLinks(entity);
         return ResponseEntity.ok(resource);
+    }
+
+    /**
+     * Entfernt die Beziehung zwischen einem Buerger und seinen Wohnungen.
+     *
+     * @param oid
+     * @return
+     */
+    @RolesAllowed({"PERM_releaseBuergerWohnungen"})
+    @RequestMapping(value = "/release/wohnungen/{oid}", method = {RequestMethod.GET})
+    public ResponseEntity releaseBuergerWohnungen(@PathVariable("oid") String oid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("release Buerger Wohnungen");
+        }
+        this.service.releaseBuergerWohnungen(oid);
+        return ResponseEntity.ok().build();
+
     }
 
     /**
@@ -457,6 +491,7 @@ public class BuergerController {
         this.service.update(entity);
 
         BuergerResource resource = this.assembler.assembleWithAllLinks(entity);
+        resource.add(linkTo(methodOn(BuergerController.class).addStaatangehoerigkeitBuerger(buergerOid, staatsOid)).withSelfRel()); // add self link with params
         return ResponseEntity.ok(resource);
     }
 
@@ -481,6 +516,7 @@ public class BuergerController {
         this.service.update(entity);
 
         BuergerResource resource = this.assembler.assembleWithAllLinks(entity);
+        resource.add(linkTo(methodOn(BuergerController.class).addPassBuerger(buergerOid, passOid)).withSelfRel()); // add self link with params
         return ResponseEntity.ok(resource);
     }
 
@@ -525,4 +561,21 @@ public class BuergerController {
         List<PassResource> resources = passAssembler.toResource(pass, HateoasUtil.REL_SELF);
         return ResponseEntity.ok(resources);
     }
+    /**
+     * Entfernt die Beziehung zwischen einem Buerger und seinen Pässe.
+     *
+     * @param oid
+     * @return
+     */
+    @RolesAllowed({"PERM_releaseBuergerPaesse"})
+    @RequestMapping(value = "/release/paesse/{oid}", method = {RequestMethod.GET})
+    public ResponseEntity releaseBuergerPaesse(@PathVariable("oid") String oid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("release Buerger Paesse");
+        }
+        this.service.releasePassBuerger(oid);
+        return ResponseEntity.ok().build();
+
+    }
+
 }

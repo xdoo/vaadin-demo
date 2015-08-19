@@ -14,6 +14,9 @@ import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import de.muenchen.demo.service.Application;
+import de.muenchen.demo.service.domain.AdresseExterneRepository;
+import de.muenchen.demo.service.domain.AdresseInterneRepository;
+import de.muenchen.demo.service.domain.AdresseReferenceRepository;
 import de.muenchen.demo.service.domain.AuthorityPermissionRepository;
 import de.muenchen.demo.service.domain.AuthorityRepository;
 import de.muenchen.demo.service.domain.Buerger;
@@ -26,6 +29,8 @@ import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
 import de.muenchen.demo.service.domain.StaatsangehoerigkeitReferenceRepository;
 import de.muenchen.demo.service.domain.UserAuthorityRepository;
 import de.muenchen.demo.service.domain.UserRepository;
+import de.muenchen.demo.service.domain.WohnungRepository;
+import de.muenchen.vaadin.demo.api.rest.BuergerResource;
 import de.muenchen.demo.service.rest.api.PassResource;
 import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
 import de.muenchen.vaadin.demo.api.rest.StaatsangehoerigkeitResource;
@@ -34,6 +39,7 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import javax.net.ssl.SSLContext;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -99,11 +105,19 @@ public class PassTest {
     @Autowired
     BuergerRepository buergerRepo;
     @Autowired
+    WohnungRepository wohnRepo;
+    @Autowired
     PassRepository passRepo;
-
+    @Autowired
+    AdresseInterneRepository interneRepo;
+    @Autowired
+    AdresseExterneRepository externeRepo;
+    @Autowired
+    AdresseReferenceRepository referenceRepo;
     @Autowired
     MandantRepository mandantRepo;
-    private String urlNew;
+    SearchResultResource responseListBuerger;
+    private String urlSaveBuerger;
     private String urlSave;
     private PassResource response;
     private SearchResultResource responseQuery;
@@ -118,7 +132,11 @@ public class PassTest {
         permRepo.deleteAll();
         buergerRepo.deleteAll();
         staatRepo.deleteAll();
+        wohnRepo.deleteAll();
         passRepo.deleteAll();
+        referenceRepo.deleteAll();
+        interneRepo.deleteAll();
+        externeRepo.deleteAll();
         mandantRepo.deleteAll();
 
         InitTest initTest = new InitTest(usersRepo, authRepo, permRepo, userAuthRepo, authPermRepo, mandantRepo);
@@ -179,7 +197,7 @@ public class PassTest {
         pass2.setTyp("D");
 
         urlSave = "http://localhost:" + port + "/pass/save";
-        urlNew = "http://localhost:" + port + "/pass/new";
+        urlSaveBuerger = "http://localhost:" + port + "/buerger/save";
 
     }
 
@@ -298,6 +316,48 @@ public class PassTest {
         restTemplate.delete(urlDelete);
     }
 
+    @Test
+    public void readPassBuergerTest() throws JsonProcessingException {
+
+        restTemplate.postForEntity(urlSaveBuerger, buerger, BuergerResource.class);
+
+        String URL13 = "http://localhost:" + port + "/pass/save";
+        restTemplate.postForEntity(URL13, pass, PassResource.class).getBody();
+        restTemplate.postForEntity(URL13, pass2, PassResource.class).getBody();
+
+        /* Test methode addPassBuerger*/
+        String URL12 = "http://localhost:" + port + "/buerger/add/buerger/90/pass/90";
+        restTemplate.getForEntity(URL12, BuergerResource.class).getBody();
+        
+        /* Test methode readPassBuerger */
+        String URL1 = "http://localhost:" + port + "/pass/buerger/90";
+        BuergerResource responseBuerger = restTemplate.getForEntity(URL1, BuergerResource.class).getBody();
+        assertEquals("hans", responseBuerger.getNachname());
+
+    }
+
+    @Test
+    public void releasePassBuergerTest() throws JsonProcessingException {
+
+         restTemplate.postForEntity(urlSaveBuerger, buerger, BuergerResource.class);
+
+        String URL13 = "http://localhost:" + port + "/pass/save";
+        restTemplate.postForEntity(URL13, pass, PassResource.class).getBody();
+        restTemplate.postForEntity(URL13, pass2, PassResource.class).getBody();
+
+        /*  add Pass Buerger*/
+        String URL12 = "http://localhost:" + port + "/buerger/add/buerger/90/pass/90";
+        restTemplate.getForEntity(URL12, BuergerResource.class).getBody();
+        
+
+        /* Test release Passs */
+        String urlReleasePass = "http://localhost:" + port + "pass/release/buerger/90";
+        restTemplate.getForEntity(urlReleasePass, BuergerResource.class).getBody();
+        String urlBuerger = "http://localhost:" + port + "/buerger/pass/90";
+        List responseBuerger2 = restTemplate.getForEntity(urlBuerger, List.class).getBody();
+        assertEquals(0, responseBuerger2.size());
+    }
+
     @After
     public void TearDown() {
         authPermRepo.deleteAll();
@@ -306,8 +366,12 @@ public class PassTest {
         authRepo.deleteAll();
         permRepo.deleteAll();
         buergerRepo.deleteAll();
-        passRepo.deleteAll();
         staatRepo.deleteAll();
+        wohnRepo.deleteAll();
+        passRepo.deleteAll();
+        referenceRepo.deleteAll();
+        interneRepo.deleteAll();
+        externeRepo.deleteAll();
         mandantRepo.deleteAll();
 
     }

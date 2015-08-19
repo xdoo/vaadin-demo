@@ -1,6 +1,7 @@
 package de.muenchen.vaadin.ui.components;
 
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
@@ -66,7 +67,9 @@ public abstract class BuergerTableButtonBase extends CustomComponent implements 
     
     @Override
     public Component getComponent() {
-        setCompositionRoot(this.getCustomButton());
+        Button button = this.getCustomButton();
+        button.setId(String.format("%s_%s_%s_%s_TABLE_BUTTON_%s", BuergerViewController.I18N_BASE_PATH, this.navigateTo, this.navigateFrom, button.getClass().getName(), itemId));
+        setCompositionRoot(button);
         return this;
     }
 

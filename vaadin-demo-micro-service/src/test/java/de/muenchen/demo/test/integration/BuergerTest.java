@@ -13,6 +13,9 @@ import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import de.muenchen.demo.service.Application;
+import de.muenchen.demo.service.domain.AdresseExterneRepository;
+import de.muenchen.demo.service.domain.AdresseInterneRepository;
+import de.muenchen.demo.service.domain.AdresseReferenceRepository;
 import de.muenchen.demo.service.domain.AuthorityPermissionRepository;
 import de.muenchen.demo.service.domain.AuthorityRepository;
 import de.muenchen.demo.service.domain.Buerger;
@@ -31,7 +34,6 @@ import de.muenchen.vaadin.demo.api.rest.BuergerResource;
 import de.muenchen.demo.service.rest.api.PassResource;
 import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
 import de.muenchen.vaadin.demo.api.rest.StaatsangehoerigkeitResource;
-import de.muenchen.demo.service.services.BuergerService;
 import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
@@ -110,7 +112,12 @@ public class BuergerTest {
     WohnungRepository wohnRepo;
     @Autowired
     PassRepository passRepo;
-
+    @Autowired
+    AdresseInterneRepository interneRepo;
+    @Autowired
+    AdresseExterneRepository externeRepo;
+    @Autowired
+    AdresseReferenceRepository referenceRepo;
     @Autowired
     MandantRepository mandantRepo;
     @Rule
@@ -128,6 +135,9 @@ public class BuergerTest {
         staatRepo.deleteAll();
         wohnRepo.deleteAll();
         passRepo.deleteAll();
+        referenceRepo.deleteAll();
+        interneRepo.deleteAll();
+        externeRepo.deleteAll();
         mandantRepo.deleteAll();
 
         InitTest initTest = new InitTest(usersRepo, authRepo, permRepo, userAuthRepo, authPermRepo, mandantRepo);
@@ -466,6 +476,32 @@ public class BuergerTest {
     }
 
     @Test
+    public void releaseBuergerKinderTest() {
+
+        restTemplate.postForEntity(urlSave, buerger, BuergerResource.class);
+        restTemplate.postForEntity(urlSave, kind, BuergerResource.class);
+        restTemplate.postForEntity(urlSave, buerger2, BuergerResource.class);
+
+        /* Create 2 Kinder für Bürger "b"*/
+        String URL1 = "http://localhost:" + port + "/buerger/create/kind/b";
+        String URL2 = "http://localhost:" + port + "/buerger/add/buerger/b/kind/bk";
+        restTemplate.postForEntity(URL1, kind2, BuergerResource.class).getBody();
+        restTemplate.getForEntity(URL2, BuergerResource.class).getBody();
+        
+        String urlKinder = "http://localhost:" + port + "/buerger/kinder/b";
+        
+        SearchResultResource responseListKinder = restTemplate.getForEntity(urlKinder, SearchResultResource.class).getBody();
+        assertEquals(2, responseListKinder.getResult().size());
+       
+        /* Test releaseBuergerKinder */
+        String urlReleaseKinder = "http://localhost:" + port + "/buerger/release/kinder/b";
+        restTemplate.getForEntity(urlReleaseKinder, BuergerResource.class);
+        
+        SearchResultResource responseListKinder2 = restTemplate.getForEntity(urlKinder, SearchResultResource.class).getBody();
+        assertEquals(0, responseListKinder2.getResult().size());
+    }
+
+    @Test
     public void wohnungBuergerTest() {
 
         restTemplate.postForEntity(urlSave, buerger, BuergerResource.class);
@@ -515,11 +551,7 @@ public class BuergerTest {
         String URL1 = "http://localhost:" + port + "/buerger/wohnungen/b";
         responseList = restTemplate.getForEntity(URL1, List.class).getBody();
         assertEquals(1, responseList.size());
-        /* Test delete wohnung */
-        String urlReleaseWohnung = "http://localhost:" + port + "/wohnung/release/buerger/bw/b";
-        BuergerResource a = restTemplate.getForEntity(urlReleaseWohnung, BuergerResource.class).getBody();
-        responseList = restTemplate.getForEntity(URL1, List.class).getBody();
-        assertEquals(0, responseList.size());
+
         /* Test delete wohnung */
         String urlDelete = "http://localhost:" + port + "/wohnung/bw";
         restTemplate.delete(urlDelete, wohnung);
@@ -598,13 +630,11 @@ public class BuergerTest {
         responseList = restTemplate.getForEntity(URL1, List.class).getBody();
         assertEquals(2, responseList.size());
         /* Test delete Pass */
-        String urlDelete = "http://localhost:" + port + "/pass/bp2";
+        String urlDelete = "http://localhost:" + port + "/pass/bp";
         restTemplate.delete(urlDelete, pass);
-        /* Test release Passs */
-        String urlReleasePass = "http://localhost:" + port + "/pass/release/buerger/bp";
-        BuergerResource a = restTemplate.getForEntity(urlReleasePass, BuergerResource.class).getBody();
+        
         responseList = restTemplate.getForEntity(URL1, List.class).getBody();
-        assertEquals(0, responseList.size());
+        assertEquals(1, responseList.size());
     }
 
     @After
@@ -616,8 +646,11 @@ public class BuergerTest {
         permRepo.deleteAll();
         buergerRepo.deleteAll();
         staatRepo.deleteAll();
-        passRepo.deleteAll();
         wohnRepo.deleteAll();
+        passRepo.deleteAll();
+        referenceRepo.deleteAll();
+        interneRepo.deleteAll();
+        externeRepo.deleteAll();
         mandantRepo.deleteAll();
 
     }
