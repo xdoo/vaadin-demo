@@ -1,5 +1,7 @@
 package de.muenchen.vaadin.ui.util;
 
+import de.muenchen.vaadin.ui.components.buttons.Action;
+
 import java.util.stream.Stream;
 
 
@@ -23,12 +25,6 @@ public class I18nPaths {
         button, headline
     }
 
-    /**
-     * What the GUI-Component is used for.
-     */
-    public enum Action implements I18nPath {
-        create, read, update, back, save, delete, cancel, copy
-    }
 
     /**
      * Texttype.

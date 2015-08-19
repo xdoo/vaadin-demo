@@ -7,6 +7,7 @@ import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Resource;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.BaseEntity;
 import de.muenchen.vaadin.ui.app.views.events.AppEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
@@ -26,6 +27,8 @@ import static de.muenchen.vaadin.ui.util.I18nPaths.*;
  */
 public class EntityButton<E extends BaseEntity> extends CustomComponent {
 
+    private E entity;
+
     /**
      * Create a new EntityButton with the specified context and the Action.
      *
@@ -41,20 +44,27 @@ public class EntityButton<E extends BaseEntity> extends CustomComponent {
 
         Button button = new Button(label);
 
-        toIcon(action).ifPresent(button::setIcon);
-        toClickShortCut(action).ifPresent(button::setClickShortcut);
+        action.getIcon().ifPresent(button::setIcon);
+        action.getClickShortCut().ifPresent(button::setClickShortcut);
+        action.getStyleName().ifPresent(button::setStyleName);
 
         button.addClickListener(
                 e -> {
-                    toAppEvent(context, action, navigateTo, from).ifPresent(context::postToEventBus);
-                    throw new AssertionError("Clicked EntityButton");
+                    action.getAppEvent(context,getEntity(), navigateTo, from).ifPresent(context::postToEventBus);
                 }
         );
 
-
-        setId(String.format("%s_%s_UPDATE_BUTTON", navigateTo, BuergerViewController.I18N_BASE_PATH));
+        //setId(String.format("%s_%s_UPDATE_BUTTON", navigateTo, BuergerViewController.I18N_BASE_PATH));
 
         setCompositionRoot(button);
+    }
+/**
+    private Optional<String> toStyleName(Action action) {
+        String styleName = null;
+        if (action == Action.create)
+            styleName = ValoTheme.BUTTON_FRIENDLY;
+
+        return Optional.ofNullable(styleName);
     }
 
     private Optional<AppEvent<E>> toAppEvent(final ControllerContext<E> context, final Action action, final String navigateTo, final String from) {
@@ -62,6 +72,10 @@ public class EntityButton<E extends BaseEntity> extends CustomComponent {
         AppEvent<E> appEvent = null;
         if (action == Action.back)
             appEvent = context.buildEvent(EventType.CANCEL);
+        if (action == Action.update)
+            appEvent = context.buildEvent(EventType.SELECT2UPDATE).setEntity(entity);
+        if (action == Action.create)
+            appEvent = context.buildEvent(EventType.CREATE);
 
         if (appEvent != null) {
             appEvent.navigateTo(navigateTo);
@@ -84,8 +98,16 @@ public class EntityButton<E extends BaseEntity> extends CustomComponent {
         Resource resource = null;
         if (action == Action.back)
             resource = FontAwesome.ANGLE_LEFT;
+        if (action == Action.update)
+            resource = FontAwesome.PENCIL;
+        if (action == Action.create)
+            resource = FontAwesome.MAGIC;
 
         return Optional.ofNullable(resource);
+    }
+*/
+    public E getEntity() {
+        return entity;
     }
 
     public static class Builder<E extends BaseEntity> {
@@ -119,5 +141,9 @@ public class EntityButton<E extends BaseEntity> extends CustomComponent {
 
     public static <T extends BaseEntity> Builder<T> make(ControllerContext<T> controllerContext, Action action) {
         return new Builder<T>(controllerContext, action);
+    }
+
+    public void setEntity(E entity) {
+        this.entity = entity;
     }
 }
