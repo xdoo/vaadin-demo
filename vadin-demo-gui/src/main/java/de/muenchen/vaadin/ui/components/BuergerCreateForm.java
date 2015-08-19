@@ -153,6 +153,7 @@ public class BuergerCreateForm extends CustomComponent {
                 
                 binder.commit();
                 controller.getEventbus().post(new BuergerAppEvent(binder.getItemDataSource().getBean(), this.type).navigateTo(navigateTo));
+                controller.getEventbus().post(new BuergerAppEvent(binder.getItemDataSource().getBean(), EventType.UPDATE).navigateTo(navigateTo));
                 //reset
                 binder.setItemDataSource(controller.createBuerger());
             } catch (CommitException | Validator.InvalidValueException e) {

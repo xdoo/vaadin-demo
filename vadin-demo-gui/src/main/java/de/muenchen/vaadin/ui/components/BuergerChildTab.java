@@ -56,4 +56,7 @@ public class BuergerChildTab extends CustomComponent {
     public BuergerTable getTable(){
         return table;
     }
+    public void setTable(BuergerTable table){
+        this.table=table;
+    }
 }
