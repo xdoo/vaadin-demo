@@ -202,7 +202,15 @@ public class MainUI extends UI implements ControllerContext{
     public void logout(LogoutEvent event) {
         this.root.switchOffMenu();
         security.logout();
-        getNavigator().navigateTo(LoginView.NAME);
+
+        // Close the VaadinServiceSession
+        getUI().getSession().close();
+        // Invalidate underlying session instead if login info is stored there
+        VaadinService.getCurrentRequest().getWrappedSession().invalidate();
+        LOG.info("logged out");
+
+        // Redirect to avoid keeping the removed UI open in the browser
+        getUI().getPage().setLocation("/");
     }
 
     private CssLayout buildMenu() {
