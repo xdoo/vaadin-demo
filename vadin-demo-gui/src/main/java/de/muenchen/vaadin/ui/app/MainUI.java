@@ -37,12 +37,15 @@ import de.muenchen.vaadin.ui.app.views.BuergerUpdateView;
 import de.muenchen.vaadin.ui.app.views.LoginView;
 import de.muenchen.vaadin.ui.app.views.events.LoginEvent;
 import de.muenchen.vaadin.ui.util.EventBus;
+
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map.Entry;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import static de.muenchen.vaadin.ui.util.I18nPaths.*;
 
 import javax.servlet.annotation.WebServlet;
@@ -52,9 +55,9 @@ import javax.servlet.annotation.WebServlet;
 @Theme("valo")
 @PreserveOnRefresh
 //@Widgetset("de.muenchen.vaadin.Widgetset")
-public class MainUI extends UI implements ControllerContext{
-    
-     private static final Logger LOG = LoggerFactory.getLogger(MainUI.class);
+public class MainUI extends UI implements ControllerContext {
+
+    private static final Logger LOG = LoggerFactory.getLogger(MainUI.class);
 
     private static final long serialVersionUID = 5310014981075920878L;
 
@@ -112,10 +115,10 @@ public class MainUI extends UI implements ControllerContext{
         setNavigator(this.navigator);
 
         // check security
-        if(!this.security.isLoggedIn()) {
+        if (!this.security.isLoggedIn()) {
             this.root.switchOffMenu();
         }
-        
+
         // add navigator to security Service
 //        this.security.setNavigator(this.navigator);
 
@@ -124,21 +127,23 @@ public class MainUI extends UI implements ControllerContext{
             @Override
             public boolean beforeViewChange(final ViewChangeEvent event) {
 
+                LOG.debug("View change to: " + ((event.getViewName().equals(""))?"MainView":event.getViewName()));
+
                 // Check if a user has logged in
                 boolean isLoggedIn = security.isLoggedIn();
                 boolean isLoginView = event.getNewView() instanceof LoginView;
                 boolean fromTable = event.getOldView() instanceof BuergerTableView;
                 boolean fromUpdate = event.getOldView() instanceof BuergerUpdateView;
                 boolean fromDetail = event.getOldView() instanceof BuergerDetailView;
-                if(fromTable){
+                if (fromTable) {
                     BuergerTableView old = (BuergerTableView) event.getOldView();
                     old.unRegisterTable();
                 }
-                if(fromUpdate){
+                if (fromUpdate) {
                     BuergerUpdateView old = (BuergerUpdateView) event.getOldView();
                     old.unRegisterForm();
                 }
-                if(fromDetail){
+                if (fromDetail) {
                     BuergerDetailView old = (BuergerDetailView) event.getOldView();
                     old.unRegister();
                 }
@@ -155,8 +160,7 @@ public class MainUI extends UI implements ControllerContext{
                     LOG.warn("login view cannot be entered while logged in.");
                     return false;
                 }
-                
-                LOG.info("logged in");
+
                 return true;
             }
 
@@ -191,11 +195,12 @@ public class MainUI extends UI implements ControllerContext{
             }
         });
     }
-    
+
     @Subscribe
     public void login(LoginEvent event) {
         this.root.switchOnMenu();
         getNavigator().navigateTo(MainView.NAME);
+
     }
 
     @Subscribe
@@ -243,7 +248,7 @@ public class MainUI extends UI implements ControllerContext{
     }
 
     private Component createNavigationMenu() {
-        
+
         // Start Menüeinträge
         this.menuItems.put(MainView.NAME, "Haupseite");
         this.menuItems.put(BuergerTableView.NAME, "Bürger Pflege");
