@@ -1,7 +1,6 @@
 package de.muenchen.vaadin.ui.components.buttons;
 
 import com.fasterxml.jackson.databind.deser.Deserializers;
-import com.sun.istack.internal.Nullable;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Resource;
@@ -38,7 +37,7 @@ public class EntityButton<E extends BaseEntity> extends CustomComponent {
      * @param navigateTo
      * @param from
      */
-    private EntityButton(final ControllerContext<E> context, final Action action, @Nullable final String navigateTo, @Nullable final String from) {
+    private EntityButton(final ControllerContext<E> context, final Action action,  final String navigateTo,  final String from) {
         final String labelPath = getFormPath(action, Component.button, Type.label);
         final String label = context.resolveRelative(labelPath);
 

@@ -1,6 +1,5 @@
 package de.muenchen.vaadin.ui.components.buttons;
 
-import com.sun.istack.internal.Nullable;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Resource;
@@ -48,7 +47,7 @@ public enum Action implements I18nPaths.I18nPath {
      * @param <E> the type of the entity for the AppEvent.
      * @return
      */
-    public <E extends BaseEntity> Optional<AppEvent<E>> getAppEvent(final ControllerContext<E> context,@Nullable final E entity,@Nullable final String navigateTo,@Nullable final String from) {
+    public <E extends BaseEntity> Optional<AppEvent<E>> getAppEvent(final ControllerContext<E> context,final E entity, final String navigateTo, final String from) {
 
         AppEvent<E> appEvent = null;
 
