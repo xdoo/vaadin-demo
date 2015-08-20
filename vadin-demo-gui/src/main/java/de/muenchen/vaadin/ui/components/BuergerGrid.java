@@ -8,6 +8,7 @@ import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Grid;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
+import static de.muenchen.vaadin.ui.util.I18nPaths.*;
 import de.muenchen.vaadin.ui.util.VaadinUtil;
 
 /**
@@ -55,9 +56,9 @@ public class BuergerGrid extends CustomComponent {
         this.grid.setColumnOrder(Buerger.VORNAME, Buerger.NACHNAME, Buerger.GEBURTSDATUM, VaadinUtil.TABLE_COLUMN_ACTIONS);
         
         // set headers
-        this.grid.getColumn(Buerger.VORNAME).setHeaderCaption(controller.getMsg().readColumnHeader(controller.getI18nBasePath(), Buerger.VORNAME));
-        this.grid.getColumn(Buerger.GEBURTSDATUM).setHeaderCaption(controller.getMsg().readColumnHeader(controller.getI18nBasePath(), Buerger.GEBURTSDATUM));
-        this.grid.getColumn(Buerger.NACHNAME).setHeaderCaption(controller.getMsg().readColumnHeader(controller.getI18nBasePath(), Buerger.NACHNAME));
+        this.grid.getColumn(Buerger.VORNAME).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.VORNAME, Type.column_header)));
+        this.grid.getColumn(Buerger.GEBURTSDATUM).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.column_header)));
+        this.grid.getColumn(Buerger.NACHNAME).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.column_header)));
         this.grid.getColumn(VaadinUtil.TABLE_COLUMN_ACTIONS).setHeaderCaption("");
         
         setCompositionRoot(this.grid);
