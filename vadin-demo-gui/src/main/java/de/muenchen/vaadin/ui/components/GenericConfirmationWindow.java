@@ -1,6 +1,5 @@
 package de.muenchen.vaadin.ui.components;
 
-import com.google.common.eventbus.EventBus;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
@@ -11,6 +10,11 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.ui.app.views.events.AppEvent;
+import de.muenchen.vaadin.ui.components.buttons.Action;
+import de.muenchen.vaadin.ui.controller.ControllerContext;
+import de.muenchen.vaadin.ui.util.I18nPaths;
+
+import static de.muenchen.vaadin.ui.util.I18nPaths.getConfirmationPath;
 
 /**
  * Generisches Bestätigungsfenster mit einer "ok" und 
@@ -36,32 +40,37 @@ public class GenericConfirmationWindow extends Window {
      * Fenster Nachricht
      */
     private String message;
-    
+
+
+
     /**
-     * Konfiguriert ein Bestätigungsfenster mit einer "ok" und 
+     * Konfiguriert ein Bestätigungsfenster mit einer "ok" und
      * einer "abbrechen" Schaltfläche.
-     * 
+     *
      * @param event Ereignis für Klick auf "ok" Schaltfläche
-     * @param eventbus der aktuelle Event Bus
+     * @param controller der Controller
+     * @param action Art des Fensters
      */
-    public GenericConfirmationWindow(AppEvent event, EventBus eventbus) {
-        this.addDefaultLabels();
-    
+    public GenericConfirmationWindow(AppEvent event, ControllerContext<?> controller, Action action){
+        this.okButton = controller.resolve(getConfirmationPath(action, I18nPaths.Type.confirm));
+        this.cancelButton = controller.resolve(getConfirmationPath(action, I18nPaths.Type.cancel));
+        this.message = controller.resolve(getConfirmationPath(action, I18nPaths.Type.text));
+
         Panel content = new Panel();
         VerticalLayout l = new VerticalLayout(new Label(this.message));
         l.setMargin(true);
         content.setSizeFull();
         content.addStyleName(ValoTheme.PANEL_BORDERLESS);
         content.setContent(l);
-        
-        HorizontalLayout footer = new HorizontalLayout(this.addOkButton(event, eventbus), this.addCancelButton());
+
+        HorizontalLayout footer = new HorizontalLayout(this.addOkButton(event, controller, getIconFor(action)), this.addCancelButton());
         footer.setWidth("100%");
         footer.setSpacing(true);
         footer.addStyleName(ValoTheme.WINDOW_BOTTOM_TOOLBAR);
-        
-        
+
+
         VerticalLayout root = new VerticalLayout(content, footer);
-        
+
         this.setWidth("380px");
         String prevHeight = this.getHeight() + this.getHeightUnits().toString();
         this.setHeight(prevHeight);
@@ -70,28 +79,34 @@ public class GenericConfirmationWindow extends Window {
         this.setContent(root);
         this.setCloseShortcut(KeyCode.ESCAPE, null);
     }
-    
-    public void addDefaultLabels() {
-        this.message = "Wollen Sie den Datensatz wirklich löschen?";
-        this.cancelButton = "abbrechen";
-        this.okButton = "löschen";
+
+    private FontAwesome getIconFor(Action action) {
+        switch(action){
+            case delete:
+                return FontAwesome.TRASH_O;
+            case logout:
+                return FontAwesome.SIGN_OUT;
+            default:
+                return FontAwesome.REORDER;
+        }
     }
-    
+
+
     /**
      * Erstellt eine Schaltfläche, die das übergebene Event an 
      * den Eventbus schickt. Danach wird das Fenster geschlossen.
      * 
      * @param event
-     * @param eventbus
+     * @param controller
      * @return "ok" Schaltfläche
      */
-    private Button addOkButton(AppEvent event, EventBus eventbus) {
+    private Button addOkButton(AppEvent event, ControllerContext<?> controller, FontAwesome icon) {
         Button ok = new Button();
-        ok.setIcon(FontAwesome.TRASH_O);
+        ok.setIcon(icon);
         ok.setCaption(this.okButton);
         ok.addStyleName(ValoTheme.BUTTON_DANGER);
         ok.addClickListener(e -> {
-            eventbus.post(event);
+            controller.postToEventBus(event);
             this.close();
         });
         

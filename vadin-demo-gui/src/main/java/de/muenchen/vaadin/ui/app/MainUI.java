@@ -1,14 +1,22 @@
 package de.muenchen.vaadin.ui.app;
 
 import com.google.common.eventbus.Subscribe;
+import com.vaadin.annotations.PreserveOnRefresh;
+import com.vaadin.server.*;
+import de.muenchen.vaadin.demo.api.domain.BaseEntity;
+import de.muenchen.vaadin.ui.app.views.events.AppEvent;
+import de.muenchen.vaadin.ui.app.views.events.LogoutEvent;
+import de.muenchen.vaadin.ui.components.GenericConfirmationWindow;
+import de.muenchen.vaadin.ui.components.buttons.Action;
+import de.muenchen.vaadin.ui.controller.ControllerContext;
+import de.muenchen.vaadin.ui.util.EventType;
+import de.muenchen.vaadin.ui.util.I18nPaths;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.server.Responsive;
-import com.vaadin.server.VaadinRequest;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
@@ -25,25 +33,34 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.services.MessageService;
 import de.muenchen.vaadin.demo.api.services.SecurityService;
+import de.muenchen.vaadin.ui.app.views.BuergerDetailView;
 import de.muenchen.vaadin.ui.app.views.MainView;
 import de.muenchen.vaadin.ui.app.views.BuergerTableView;
+import de.muenchen.vaadin.ui.app.views.BuergerUpdateView;
 import de.muenchen.vaadin.ui.app.views.LoginView;
 import de.muenchen.vaadin.ui.app.views.events.LoginEvent;
 import de.muenchen.vaadin.ui.util.EventBus;
+
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map.Entry;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static de.muenchen.vaadin.ui.util.I18nPaths.*;
+
+import javax.servlet.annotation.WebServlet;
 
 @SpringUI
 @Title("Vaadin Spring-Security Sample")
 @Theme("valo")
+@PreserveOnRefresh
 //@Widgetset("de.muenchen.vaadin.Widgetset")
-public class MainUI extends UI {
-    
-     private static final Logger LOG = LoggerFactory.getLogger(MainUI.class);
+public class MainUI extends UI implements ControllerContext {
+
+    private static final Logger LOG = LoggerFactory.getLogger(MainUI.class);
 
     private static final long serialVersionUID = 5310014981075920878L;
 
@@ -73,6 +90,7 @@ public class MainUI extends UI {
 
     @Override
     protected void init(VaadinRequest request) {
+
         // hack
         setLocale(Locale.GERMANY);
 
@@ -93,28 +111,45 @@ public class MainUI extends UI {
         root.setWidth("100%");
         root.addMenu(buildMenu());
         addStyleName(ValoTheme.UI_WITH_MENU);
-        
-        // check security
-        if(!this.security.isLoggedIn()) {
-            this.root.switchOffMenu();
-        } 
 
         // configure navigator
         this.navigator = new Navigator(this, this.viewDisplay);
         this.navigator.addProvider(viewProvider);
         setNavigator(this.navigator);
-        
+
+        // check security
+        if (!this.security.isLoggedIn()) {
+            this.root.switchOffMenu();
+        }
+
         // add navigator to security Service
 //        this.security.setNavigator(this.navigator);
+
 
         navigator.addViewChangeListener(new ViewChangeListener() {
             @Override
             public boolean beforeViewChange(final ViewChangeEvent event) {
-                
+
+                LOG.debug("View change to: " + ((event.getViewName().equals(""))?"MainView":event.getViewName()));
+
                 // Check if a user has logged in
                 boolean isLoggedIn = security.isLoggedIn();
                 boolean isLoginView = event.getNewView() instanceof LoginView;
-
+            /*    boolean fromTable = event.getOldView() instanceof BuergerTableView;
+                boolean fromUpdate = event.getOldView() instanceof BuergerUpdateView;
+                boolean fromDetail = event.getOldView() instanceof BuergerDetailView;
+                if (fromTable) {
+                    BuergerTableView old = (BuergerTableView) event.getOldView();
+                    old.unRegisterTable();
+                }
+                if (fromUpdate) {
+                    BuergerUpdateView old = (BuergerUpdateView) event.getOldView();
+                    old.unRegisterForm();
+                }
+                if (fromDetail) {
+                    BuergerDetailView old = (BuergerDetailView) event.getOldView();
+                    old.unRegister();
+                }*/
                 if (!isLoggedIn && !isLoginView) {
                     // Redirect to login view always if a user has not yet
                     // logged in
@@ -128,24 +163,30 @@ public class MainUI extends UI {
                     LOG.warn("login view cannot be entered while logged in.");
                     return false;
                 }
-                LOG.info("logged in");
+
                 return true;
             }
 
             @Override
             public void afterViewChange(final ViewChangeEvent event) {
+                
+               /* boolean toTableView = event.getNewView() instanceof BuergerTableView;
+                if(toTableView){
+                    BuergerTableView tmp = (BuergerTableView) event.getNewView();
+                    tmp.setTable(buergerTable);
+                }*/
                 for (final Iterator<Component> it = menuItemsLayout.iterator(); it
-                        .hasNext();) {
+                        .hasNext(); ) {
                     it.next().removeStyleName("selected");
                 }
                 for (final Entry<String, String> item : menuItems.entrySet()) {
                     if (event.getViewName().equals(item.getKey())) {
                         for (final Iterator<Component> it = menuItemsLayout
-                                .iterator(); it.hasNext();) {
+                                .iterator(); it.hasNext(); ) {
                             final Component c = it.next();
                             if (c.getCaption() != null
                                     && c.getCaption().startsWith(
-                                            item.getValue())) {
+                                    item.getValue())) {
                                 c.addStyleName("selected");
                                 break;
                             }
@@ -157,15 +198,27 @@ public class MainUI extends UI {
             }
         });
     }
-    
+
     @Subscribe
     public void login(LoginEvent event) {
         this.root.switchOnMenu();
         getNavigator().navigateTo(MainView.NAME);
+
     }
-    
-    public void logout() {
-        
+
+    @Subscribe
+    public void logout(LogoutEvent event) {
+        this.root.switchOffMenu();
+        security.logout();
+
+        // Close the VaadinServiceSession
+        getUI().getSession().close();
+        // Invalidate underlying session instead if login info is stored there
+        VaadinService.getCurrentRequest().getWrappedSession().invalidate();
+        LOG.info("logged out");
+
+        // Redirect to avoid keeping the removed UI open in the browser
+        getUI().getPage().setLocation("/");
     }
 
     private CssLayout buildMenu() {
@@ -198,7 +251,7 @@ public class MainUI extends UI {
     }
 
     private Component createNavigationMenu() {
-        
+
         // Start Menüeinträge
         this.menuItems.put(MainView.NAME, "Haupseite");
         this.menuItems.put(BuergerTableView.NAME, "Bürger Pflege");
@@ -220,6 +273,46 @@ public class MainUI extends UI {
             menuItemsLayout.addComponent(b);
         }
 
+        // creates and displays the logout button
+        final Button logoutButton = new Button("Logout", new ClickListener() {
+            @Override
+            public void buttonClick(final ClickEvent event) {
+                GenericConfirmationWindow confirmationWindow = new GenericConfirmationWindow(new LogoutEvent(), MainUI.this, Action.logout);
+                getUI().addWindow(confirmationWindow);
+                confirmationWindow.center();
+                confirmationWindow.focus();
+            }
+        });
+        logoutButton.setHtmlContentAllowed(true);
+        logoutButton.setPrimaryStyleName("valo-menu-item");
+        logoutButton.setId("MENU_ITEM_BUTTON_LOGOUT");
+        menuItemsLayout.addComponent(logoutButton);
+
         return menuItemsLayout;
+    }
+
+    @Override
+    public String resolveRelative(String relativePath) {
+        return i18n.get(relativePath);
+    }
+
+    @Override
+    public AppEvent<? extends BaseEntity> buildEvent(EventType eventType) {
+        return null;
+    }
+
+    @Override
+    public String getBasePath() {
+        return null;
+    }
+
+    @Override
+    public String resolve(String path) {
+        return i18n.get(path);
+    }
+
+    @Override
+    public void postToEventBus(AppEvent appEvent) {
+        eventBus.post(appEvent);
     }
 }

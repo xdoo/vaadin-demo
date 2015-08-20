@@ -9,8 +9,13 @@ import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
 import static de.muenchen.vaadin.ui.components.BuergerReadForm.LOG;
+
+import de.muenchen.vaadin.ui.components.buttons.Action;
+import de.muenchen.vaadin.ui.components.buttons.EntityButton;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.EventType;
+import de.muenchen.vaadin.ui.util.I18nPaths;
+
 import java.util.Optional;
 
 /**
@@ -20,13 +25,13 @@ import java.util.Optional;
 public class BuergerChildTab extends CustomComponent {
 
     BuergerViewController controller;
-    
+    private BuergerTable table;
     public BuergerChildTab(BuergerViewController controller, String navigateToForDetail, String navigateToForCreate, String from) {
         
         this.controller = controller;
         
-        BuergerCreateButton create = new BuergerCreateButton(controller, navigateToForCreate, from);
-        BuergerTable table = controller.generateChildTable(navigateToForDetail, from);
+        EntityButton<Buerger> create = EntityButton.make(controller, Action.create).navigateTo(navigateToForCreate).from(from).build();
+        table = controller.generateChildTable(navigateToForDetail, from);
         
         // Layout für die Schaltflächen über der Tabelle
         HorizontalLayout hlayout = new HorizontalLayout(create);
@@ -36,7 +41,7 @@ public class BuergerChildTab extends CustomComponent {
         vlayout.setSpacing(true);
         vlayout.setMargin(true);
         
-        setId(String.format("%s_%s_%s_CHILD_TAB", navigateToForDetail, from, controller.getI18nBasePath()));
+        setId(String.format("%s_%s_%s_CHILD_TAB", navigateToForDetail, from, BuergerViewController.I18N_BASE_PATH));
         setCompositionRoot(vlayout);
     } 
     
@@ -52,5 +57,11 @@ public class BuergerChildTab extends CustomComponent {
                 LOG.warn("No item present.");
             }
         }
+    }
+    public BuergerTable getTable(){
+        return table;
+    }
+    public void setTable(BuergerTable table){
+        this.table=table;
     }
 }

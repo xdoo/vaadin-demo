@@ -8,7 +8,9 @@
     <modules>
         <module>vaadin-demo-micro-service</module>
         <module>vaadin-demo-api</module>
-        <module>vadin-demo-gui</module>
+    <module>vadin-demo-gui</module>
+        <module>vaadin-demo</module>
+        <module>vaadin-demo-configcloud</module>
     </modules>
     <properties>
         <main.basedir>${basedir}/../..</main.basedir>

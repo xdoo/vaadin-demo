@@ -5,10 +5,6 @@ import de.muenchen.demo.service.domain.Buerger;
 import de.muenchen.demo.service.rest.api.StaatsangehoerigkeitResourceAssembler;
 import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
 
-import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
-import de.muenchen.vaadin.demo.api.rest.StaatsangehoerigkeitResource;
-
-import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
 import de.muenchen.vaadin.demo.api.rest.BuergerResource;
 import de.muenchen.demo.service.rest.api.BuergerResourceAssembler;
 
