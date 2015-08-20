@@ -46,7 +46,7 @@ public class BuergerTable extends CustomComponent {
         // create table
         this.table = new Table();
         table.setContainerDataSource(this.container);
-       
+
         //set action column
         table.addGeneratedColumn("button", new ColumnGenerator() {
             @Override
@@ -56,7 +56,7 @@ public class BuergerTable extends CustomComponent {
                 return addButtons(itemId);
             }
         });
-        
+       
         //configure
         table.setWidth("100%");
         table.setPageLength(10);
