@@ -23,12 +23,6 @@ public class I18nPaths {
         button, headline
     }
 
-    /**
-     * What the GUI-Component is used for.
-     */
-    public enum Action implements I18nPath {
-        create, read, update, back, save, delete, cancel, copy, logout
-    }
 
     /**
      * Texttype.

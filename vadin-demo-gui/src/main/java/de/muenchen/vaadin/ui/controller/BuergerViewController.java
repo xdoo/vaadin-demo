@@ -13,8 +13,9 @@ import com.vaadin.ui.TabSheet;
 import de.muenchen.vaadin.services.BuergerService;
 import de.muenchen.vaadin.services.MessageService;
 import de.muenchen.vaadin.ui.app.MainUI;
-
-import de.muenchen.vaadin.ui.app.views.events.AppEvent;
+import de.muenchen.vaadin.ui.app.views.BuergerCreateChildView;
+import de.muenchen.vaadin.ui.app.views.BuergerDetailView;
+import static de.muenchen.vaadin.ui.app.views.BuergerDetailView.NAME;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.components.BuergerChildTab;
@@ -39,6 +40,7 @@ import java.util.Stack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.controller;
 
 /**
  * Der Controller ist die zentrale Klasse um die Logik im Kontext Buerger abzubilden.
@@ -46,7 +48,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author claus.straube
  */
 @SpringComponent @UIScope
-public class BuergerViewController implements Serializable, ControllerContext<Buerger> {
+public class BuergerViewController implements Serializable {
     
     // TODO entweder hier oder im I18nServiceConfigImpl angeben
     public static final String I18N_BASE_PATH = "buerger";
@@ -145,12 +147,17 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
      */
     @Override
     public String resolveRelative(String relativePath) {
-        return resolve(I18N_BASE_PATH + "." + relativePath);
+        return msg.get(I18N_BASE_PATH + "." relativePath);
     }
 
     @Override
     public void postToEventBus(AppEvent<?> appEvent) {
-        eventbus.post(appEvent);
+        getEventbus().post(appEvent);
+    }
+
+    @Override
+    public AppEvent<Buerger> buildEvent(EventType eventType) {
+        return new BuergerAppEvent(eventType);
     }
 
     /**
