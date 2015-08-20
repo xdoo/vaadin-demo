@@ -1,5 +1,6 @@
 package de.muenchen.vaadin.ui.components.buttons;
 
+import com.sun.istack.internal.Nullable;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Resource;
@@ -17,6 +18,7 @@ import java.util.Optional;
  */
 public enum Action implements I18nPaths.I18nPath {
 
+    //TODO check for duplicate/unused actions
     create, read, update, back, save, delete, cancel, copy;
 
 
@@ -33,7 +35,19 @@ public enum Action implements I18nPaths.I18nPath {
         return Optional.ofNullable(styleName);
     }
 
-    public <E extends BaseEntity> Optional<AppEvent<E>> getAppEvent(final ControllerContext<E> context, final E entity, final String navigateTo, final String from) {
+    /**
+     * Get the configured {@link AppEvent} for the action.
+     *
+     * The right AppEvent class will be obtained from the ControllerContext (to ensure the EventBus can handle it).
+     *
+     * @param context used to create the correct 'Entity'AppEvent for the EventBus.
+     * @param entity the entity to include into the AppEvent {@see AppEvent}.
+     * @param navigateTo optional String to navigate on-click.
+     * @param from optional String from.
+     * @param <E> the type of the entity for the AppEvent.
+     * @return
+     */
+    public <E extends BaseEntity> Optional<AppEvent<E>> getAppEvent(final ControllerContext<E> context,@Nullable final E entity,@Nullable final String navigateTo,@Nullable final String from) {
 
         AppEvent<E> appEvent = null;
 
@@ -50,7 +64,11 @@ public enum Action implements I18nPaths.I18nPath {
         return Optional.ofNullable(appEvent);
     }
 
-
+    /**
+     * Get the {@link com.vaadin.event.ShortcutAction.KeyCode} for this action.
+     *
+     * @return the keycode as int.
+     */
     public Optional<Integer> getClickShortCut() {
         Integer shortcutAction = null;
 
@@ -62,6 +80,10 @@ public enum Action implements I18nPaths.I18nPath {
 
     }
 
+    /**
+     * Get the {@link FontAwesome} icon for this action.
+     * @return the icon.
+     */
     public Optional<Resource> getIcon() {
         Resource resource = null;
 

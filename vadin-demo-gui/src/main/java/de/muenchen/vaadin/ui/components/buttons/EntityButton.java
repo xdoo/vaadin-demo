@@ -52,6 +52,7 @@ public class EntityButton<E extends BaseEntity> extends CustomComponent {
                 e -> action.getAppEvent(context, getEntity(), navigateTo, from).ifPresent(context::postToEventBus)
         );
 
+        //TODO add IDs
         //setId(String.format("%s_%s_UPDATE_BUTTON", navigateTo, BuergerViewController.I18N_BASE_PATH));
 
         setCompositionRoot(button);
