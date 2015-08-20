@@ -40,7 +40,7 @@ public class EntityButton<E extends BaseEntity> extends CustomComponent {
      */
     private EntityButton(final ControllerContext<E> context, final Action action, @Nullable final String navigateTo, @Nullable final String from) {
         final String labelPath = getFormPath(action, Component.button, Type.label);
-        final String label = context.resolve(labelPath);
+        final String label = context.resolveRelative(labelPath);
 
         Button button = new Button(label);
 
@@ -52,8 +52,7 @@ public class EntityButton<E extends BaseEntity> extends CustomComponent {
                 e -> action.getAppEvent(context, getEntity(), navigateTo, from).ifPresent(context::postToEventBus)
         );
 
-        //TODO add IDs
-        //setId(String.format("%s_%s_UPDATE_BUTTON", navigateTo, BuergerViewController.I18N_BASE_PATH));
+        button.setId(action.getID(navigateTo,context));
 
         setCompositionRoot(button);
     }

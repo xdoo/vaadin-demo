@@ -16,6 +16,8 @@ import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.app.views.BuergerCreateChildView;
 import de.muenchen.vaadin.ui.app.views.BuergerDetailView;
 import static de.muenchen.vaadin.ui.app.views.BuergerDetailView.NAME;
+
+import de.muenchen.vaadin.ui.app.views.events.AppEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.components.BuergerChildTab;
@@ -30,6 +32,7 @@ import de.muenchen.vaadin.ui.components.BuergerTableDetailButton;
 import de.muenchen.vaadin.ui.components.BuergerTableEditButton;
 import de.muenchen.vaadin.ui.components.GenericSuccessNotification;
 import de.muenchen.vaadin.ui.components.BuergerUpdateForm;
+import de.muenchen.vaadin.ui.components.buttons.Action;
 import de.muenchen.vaadin.ui.util.EventBus;
 import de.muenchen.vaadin.ui.util.EventType;
 import static de.muenchen.vaadin.ui.util.I18nPaths.*;
@@ -48,7 +51,7 @@ import static org.springframework.web.servlet.mvc.method.annotation.MvcUriCompon
  * @author claus.straube
  */
 @SpringComponent @UIScope
-public class BuergerViewController implements Serializable {
+public class BuergerViewController implements Serializable,ControllerContext<Buerger> {
     
     // TODO entweder hier oder im I18nServiceConfigImpl angeben
     public static final String I18N_BASE_PATH = "buerger";
@@ -147,7 +150,7 @@ public class BuergerViewController implements Serializable {
      */
     @Override
     public String resolveRelative(String relativePath) {
-        return msg.get(I18N_BASE_PATH + "." relativePath);
+        return msg.get(I18N_BASE_PATH + "." + relativePath);
     }
 
     @Override
@@ -158,6 +161,11 @@ public class BuergerViewController implements Serializable {
     @Override
     public AppEvent<Buerger> buildEvent(EventType eventType) {
         return new BuergerAppEvent(eventType);
+    }
+
+    @Override
+    public String getBasePath() {
+        return I18N_BASE_PATH;
     }
 
     /**

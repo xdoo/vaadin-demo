@@ -7,6 +7,7 @@ import com.vaadin.server.Resource;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.BaseEntity;
 import de.muenchen.vaadin.ui.app.views.events.AppEvent;
+import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.controller.ControllerContext;
 import de.muenchen.vaadin.ui.util.EventType;
 import de.muenchen.vaadin.ui.util.I18nPaths;
@@ -19,7 +20,7 @@ import java.util.Optional;
 public enum Action implements I18nPaths.I18nPath {
 
     //TODO check for duplicate/unused actions
-    create, read, update, back, save, delete, cancel, copy;
+    create, read, update, back, save, delete, cancel, copy, logout;
 
 
     /**
@@ -52,9 +53,9 @@ public enum Action implements I18nPaths.I18nPath {
         AppEvent<E> appEvent = null;
 
         switch (this) {
-            case back:      appEvent = context.buildEvent(EventType.CANCEL);
-            case update:    appEvent = context.buildEvent(EventType.SELECT2UPDATE).setEntity(entity);
-            case create:    appEvent = context.buildEvent(EventType.CREATE);
+            case back:      appEvent = context.buildEvent(EventType.CANCEL);    break;
+            case update:    appEvent = context.buildEvent(EventType.SELECT2UPDATE).setEntity(entity);   break;
+            case create:    appEvent = context.buildEvent(EventType.CREATE); break;
         }
 
         if (appEvent != null) {
@@ -73,7 +74,7 @@ public enum Action implements I18nPaths.I18nPath {
         Integer shortcutAction = null;
 
         switch (this) {
-            case back:  shortcutAction = ShortcutAction.KeyCode.ARROW_LEFT;
+            case back:  shortcutAction = ShortcutAction.KeyCode.ARROW_LEFT; break;
         }
 
         return Optional.ofNullable(shortcutAction);
@@ -88,11 +89,15 @@ public enum Action implements I18nPaths.I18nPath {
         Resource resource = null;
 
         switch (this) {
-            case back:      resource = FontAwesome.ANGLE_LEFT;
-            case update:    resource = FontAwesome.PENCIL;
-            case create:    resource = FontAwesome.MAGIC;
+            case back:      resource = FontAwesome.ANGLE_LEFT; break;
+            case update:    resource = FontAwesome.PENCIL; break;
+            case create:    resource = FontAwesome.MAGIC; break;
         }
 
         return Optional.ofNullable(resource);
+    }
+
+    public <E extends BaseEntity> String getID(String navigateTo, ControllerContext<E> context) {
+        return String.format("%s_%s_%s_BUTTON", navigateTo,this.name().toUpperCase(), context.getBasePath());
     }
 }
