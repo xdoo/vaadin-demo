@@ -17,7 +17,7 @@ public interface BuergerRepository extends BaseRepository<Buerger> {
     public List<Buerger> findByOidAndMandantOid(String oid, String mid);
 
     @Override
-    @CachePut(value = BUERGER_CACHE, key = "#p0.oid + #p0.mandant")
+    @CachePut(value = BUERGER_CACHE, key = "#p0.oid + #p0.mandant.oid")
     public Buerger save(Buerger entity);
     
     List<Buerger> findByOid(String oid);

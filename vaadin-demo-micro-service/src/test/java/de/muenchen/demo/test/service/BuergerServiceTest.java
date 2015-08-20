@@ -12,6 +12,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -26,7 +28,26 @@ public class BuergerServiceTest {
 
     @Autowired BuergerService service;
     @Autowired BuergerRepository repo;
-
+    @Autowired CacheManager cacheManager;
+    
+    @Test @WithMockUser(username = "hans")
+    public void testCacheOnSave() {
+        System.out.println("========== save cache Test ==========");
+        Cache cache = cacheManager.getCache(BuergerRepository.BUERGER_CACHE);
+        Buerger b1 = this.createBuerger("OIDC00");
+        Buerger b2 = cache.get(b1.getOid() + b1.getMandant().getOid(), Buerger.class);
+        assertNotNull(b2);
+    }
+    
+    @Test @WithMockUser(username = "hans")
+    public void testCacheOnRead() {
+        System.out.println("========== read cache Test ==========");
+        Cache cache = cacheManager.getCache(BuergerRepository.BUERGER_CACHE);
+        Buerger b1 = service.read("OID2");
+        Buerger b2 = cache.get(b1.getOid() + b1.getMandant().getOid(), Buerger.class);
+        assertNotNull(b2);
+    }
+    
     @Test @WithMockUser(username = "hans")
     public void createTest() throws JsonProcessingException {
         System.out.println("========== create Bürger Test ==========");
@@ -37,13 +58,17 @@ public class BuergerServiceTest {
     @Test @WithMockUser(username = "hans")
     public void saveTest() {
         System.out.println("========== save Bürger Test ==========");
-        Buerger buerger = new Buerger();
-        buerger.setOid("OID0");
-        buerger.setNachname("hans");
-        buerger.setVorname("peter");
-        Buerger a = service.save(buerger);
+        Buerger a = service.save(this.createBuerger("OID0"));
         assertEquals("OID0", a.getOid());
         assertEquals("2", a.getMandant().getOid());
+    }
+    
+    private Buerger createBuerger(String oid) {
+        Buerger buerger = new Buerger();
+        buerger.setOid(oid);
+        buerger.setNachname("hans");
+        buerger.setVorname("peter");
+        return buerger;
     }
 
     @Test @WithMockUser(username = "hans")
