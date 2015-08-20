@@ -8,14 +8,13 @@ import java.util.List;
  */
 public interface BuergerRepository extends BaseRepository<Buerger> {
 
-    List<Buerger> findByOid(String oid);
 
-    List<Buerger> findByKinderOid(String oid);
+    List<Buerger> findByKinderOidAndMandantOid(String oid, String mid);
 
-    List<Buerger> findByWohnungenOid(String oid);
+    List<Buerger> findByWohnungenOidAndMandantOid(String oid, String mid);
 
-    List<Buerger> findByPassOid(String oid);
+    List<Buerger> findByPassOidAndMandantOid(String oid, String mid);
 
-    List<Buerger> findByStaatsangehoerigkeitReferencesReferencedOid(String oid);
+    List<Buerger> findByStaatsangehoerigkeitReferencesReferencedOidAndMandantOid(String oid, String mid);
 
 }

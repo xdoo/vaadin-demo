@@ -14,6 +14,5 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface AccountRepository extends BaseRepository<Account> {
 
-    public List<Account> findByOid(String oid);
 }
 

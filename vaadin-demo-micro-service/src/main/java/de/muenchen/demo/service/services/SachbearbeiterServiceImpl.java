@@ -164,7 +164,7 @@ public class SachbearbeiterServiceImpl implements SachbearbeiterService {
 
     @Override
     public Sachbearbeiter readUserSachbearbeiter(String oid) {
-        Sachbearbeiter result = this.repo.findByUserOid(oid);
+        Sachbearbeiter result = this.repo.findByUserOidAndMandantOid(oid, readUser().getMandant().getOid());
         if (result == null) {
 // TODO
             LOG.warn(String.format("found no Sachbearbeiter with UserOid '%s'", oid));

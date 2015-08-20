@@ -8,10 +8,7 @@ import java.util.List;
  */
 public interface SachbearbeiterRepository extends BaseRepository<Sachbearbeiter> {
 
-    List<Sachbearbeiter> findByOid(String oid);
+    List<Sachbearbeiter> findByBuergerOidAndMandantOid(String oid, String mid);
 
-    List<Sachbearbeiter> findByBuergerOid(String oid);
-
-    Sachbearbeiter findByUserOid(String Oid);
-
+    Sachbearbeiter findByUserOidAndMandantOid(String oid, String mid);
 }

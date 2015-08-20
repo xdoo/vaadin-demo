@@ -13,6 +13,5 @@ import java.util.List;
  */
 public interface PermissionRepository  extends BaseRepository<Permission> {
 
-    public List<Permission> findByOid(String oid);
 }
 

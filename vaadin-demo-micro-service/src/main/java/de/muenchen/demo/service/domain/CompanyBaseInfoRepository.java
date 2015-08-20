@@ -13,5 +13,4 @@ import java.util.List;
  */
 public interface CompanyBaseInfoRepository  extends BaseRepository<CompanyBaseInfo> {
 
-    public List<CompanyBaseInfo> findByOid(String oid);
 }
