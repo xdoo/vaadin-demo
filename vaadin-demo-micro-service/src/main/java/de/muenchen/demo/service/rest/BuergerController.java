@@ -25,6 +25,7 @@ import de.muenchen.demo.service.services.StaatsangehoerigkeitService;
 import de.muenchen.demo.service.services.UserService;
 import de.muenchen.demo.service.services.WohnungService;
 import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -147,6 +148,39 @@ public class BuergerController {
         Buerger entity = this.service.copy(oid);
         BuergerResource resource = this.assembler.assembleWithAllLinks(entity);
         return ResponseEntity.ok(resource);
+    }
+
+    /**
+     * Löscht mehrere Bürger.
+     *
+     * @param oids
+     * @return
+     */
+    @RolesAllowed({"PERM_deleteListBuerger"})
+    @RequestMapping(value = "/delete", method = {RequestMethod.POST})
+    public ResponseEntity deleteListBuerger(@RequestBody ArrayList<String> oids) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("delete buerger");
+        }
+        this.service.delete(oids);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * Macht eine Kopie mehreres Büergers. Diese Kopie wird bei Erstellung in
+     * der DB gespeichert.
+     *
+     * @param oids
+     * @return
+     */
+    @RolesAllowed({"PERM_copyListBuerger"})
+    @RequestMapping(value = "/copy", method = {RequestMethod.POST})
+    public ResponseEntity copyListBuerger(@RequestBody ArrayList<String> oids) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("copy buerger");
+        }
+        this.service.copy(oids);
+        return ResponseEntity.ok().build();
     }
 
     /**
@@ -569,6 +603,7 @@ public class BuergerController {
         List<PassResource> resources = passAssembler.toResource(pass, HateoasUtil.REL_SELF);
         return ResponseEntity.ok(resources);
     }
+
     /**
      * Entfernt die Beziehung zwischen einem Buerger und seinen Pässe.
      *

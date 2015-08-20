@@ -19,6 +19,8 @@ public class HateoasUtil {
     public static final String REL_QUERY = "query";
     public static final String REL_COPY = "copy";
     public final static String REL_SELF = "self";
+    public final static String REL_COPY_LIST = "copy_list";
+    public final static String REL_DELETE_LIST = "delete_list";
     
     /**
      * Gibt den {@link Link} für eine Relation zurück.
