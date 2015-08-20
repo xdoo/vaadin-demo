@@ -7,7 +7,11 @@ import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.ui.components.buttons.Action;
 import de.muenchen.vaadin.ui.components.buttons.EntityButton;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
+
 import de.muenchen.vaadin.ui.util.I18nPaths;
+
+
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +20,6 @@ import org.slf4j.LoggerFactory;
  * @author claus.straube
  */
 public class BuergerSearchTable extends CustomComponent {
-
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerSearchTable.class);
     private BuergerTable table;
     public BuergerSearchTable(final BuergerViewController controller, String navigateToForEdit, String navigateToForSelect, String navigateToForCreate, String from, final BuergerTableButtonFactory... buttonfactory) {
@@ -37,5 +40,7 @@ public class BuergerSearchTable extends CustomComponent {
     public BuergerTable getTable(){
         return table;
     }
-    
+    public void setTable(BuergerTable table){
+        this.table = table;
+    }
 }

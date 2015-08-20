@@ -135,7 +135,7 @@ public class MainUI extends UI implements ControllerContext {
                 // Check if a user has logged in
                 boolean isLoggedIn = security.isLoggedIn();
                 boolean isLoginView = event.getNewView() instanceof LoginView;
-                boolean fromTable = event.getOldView() instanceof BuergerTableView;
+            /*    boolean fromTable = event.getOldView() instanceof BuergerTableView;
                 boolean fromUpdate = event.getOldView() instanceof BuergerUpdateView;
                 boolean fromDetail = event.getOldView() instanceof BuergerDetailView;
                 if (fromTable) {
@@ -149,7 +149,7 @@ public class MainUI extends UI implements ControllerContext {
                 if (fromDetail) {
                     BuergerDetailView old = (BuergerDetailView) event.getOldView();
                     old.unRegister();
-                }
+                }*/
                 if (!isLoggedIn && !isLoginView) {
                     // Redirect to login view always if a user has not yet
                     // logged in
