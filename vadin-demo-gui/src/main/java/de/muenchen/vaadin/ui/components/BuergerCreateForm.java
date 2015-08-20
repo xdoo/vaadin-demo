@@ -17,6 +17,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
+import de.muenchen.vaadin.ui.components.buttons.Action;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.EventType;
 import de.muenchen.vaadin.ui.util.ValidatorFactory;
@@ -153,6 +154,7 @@ public class BuergerCreateForm extends CustomComponent {
                 
                 binder.commit();
                 controller.getEventbus().post(new BuergerAppEvent(binder.getItemDataSource().getBean(), this.type).navigateTo(navigateTo));
+                controller.getEventbus().post(new BuergerAppEvent(binder.getItemDataSource().getBean(), EventType.UPDATE).navigateTo(navigateTo));
                 //reset
                 binder.setItemDataSource(controller.createBuerger());
             } catch (CommitException | Validator.InvalidValueException e) {
