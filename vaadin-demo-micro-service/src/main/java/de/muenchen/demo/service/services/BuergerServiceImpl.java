@@ -128,6 +128,20 @@ public class BuergerServiceImpl implements BuergerService {
     }
 
     @Override
+    public void copy(List<String> oids) {
+        oids.stream().forEach((oid) -> {
+            this.copy(oid);
+        });
+    }
+
+    @Override
+    public void delete(List<String> oids) {
+        oids.stream().forEach((oid) -> {
+            this.delete(oid);
+        });
+    }
+
+    @Override
     public void releaseBuergerAllSachbearbeiter(String buergerOid) {
         Buerger buerger = this.read(buergerOid);
         Set<Sachbearbeiter> list = buerger.getSachbearbeiter();
