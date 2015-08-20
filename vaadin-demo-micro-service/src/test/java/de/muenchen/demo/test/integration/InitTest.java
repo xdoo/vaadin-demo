@@ -89,7 +89,6 @@ public class InitTest {
         Authority auth = new Authority();
         auth.setAuthority("ADMIN");
         auth.setOid(IdService.next());
-        auth.setMandant(mandant);
         authRepo.save(auth);
 
         List<String> Permissions = new ArrayList();
@@ -162,7 +161,6 @@ public class InitTest {
             permission.setOid(IdService.next());
             return permission;
         }).map((permission) -> {
-            permission.setMandant(mandant);
             return permission;
         }).map((permission) -> {
             permRepo.save(permission);

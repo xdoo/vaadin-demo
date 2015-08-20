@@ -135,7 +135,6 @@ public class UserAuthorityServiceTest {
         Authority auth = new Authority();
         auth.setAuthority("ADMIN");
         auth.setOid(IdService.next());
-        auth.setMandant(mandant);
         authRepo.save(auth);
         UserAuthority userAuth = new UserAuthority();
         UserAuthId id = new UserAuthId(user, auth);
@@ -163,7 +162,6 @@ public class UserAuthorityServiceTest {
         Authority auth = new Authority();
         auth.setAuthority("ADMIN");
         auth.setOid(IdService.next());
-        auth.setMandant(mandant);
         authRepo.save(auth);
         UserAuthority userAuth = new UserAuthority();
         UserAuthId id = new UserAuthId(user, auth);
@@ -190,7 +188,6 @@ public class UserAuthorityServiceTest {
         Authority auth = new Authority();
         auth.setAuthority("ADMIN");
         auth.setOid(IdService.next());
-        auth.setMandant(mandant);
         authRepo.save(auth);
         UserAuthority userAuth = new UserAuthority();
         UserAuthId id = new UserAuthId(user, auth);

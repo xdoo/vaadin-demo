@@ -29,7 +29,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import org.apache.http.auth.AuthenticationException;
 import org.junit.After;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertNotEquals;
 import org.junit.Before;
 import org.junit.Test;
@@ -110,6 +110,7 @@ public class BuergerServiceTest {
     public void createTest() throws JsonProcessingException {
 
         Buerger a = service.create();
+        assertNotNull(a);
         assertNotEquals(null, a.getOid());
     }
 
@@ -133,7 +134,8 @@ public class BuergerServiceTest {
         Buerger response = service.save(buerger);
         response.setOid("12");
         Buerger a = service.update(response);
-        assertEquals(response.getId(), a.getId());
+        assertNotEquals(response.getOid(), a.getOid());
+        
 
     }
 
@@ -185,7 +187,9 @@ public class BuergerServiceTest {
         buerger.setVorname("peter");
         service.save(buerger);
         Buerger a = service.copy("123");
-        assertNotEquals(a.getId(), buerger.getId());
+        assertNotNull(a);
+        Buerger b2 = service.read(a.getOid());
+        assertNotNull(b2);
     }
 
     @After

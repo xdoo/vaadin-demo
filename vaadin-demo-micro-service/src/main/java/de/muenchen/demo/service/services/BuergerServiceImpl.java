@@ -177,20 +177,16 @@ public class BuergerServiceImpl implements BuergerService {
     
     @Override
     public void releaseBuergerEltern(String kindOid) {
-        Iterator<Buerger> iter = this.readEltern(kindOid).iterator();
-        for (Iterator iterator = iter; iterator.hasNext();) {
         
-            Buerger buerger = iter.next();
-
+        StreamSupport.stream(this.readEltern(kindOid).spliterator(), false)
+                .forEach(buerger -> {
             Set<Buerger> kinder = buerger.getKinder();
-            Collection<Buerger> removeKinder = new LinkedList<>();
-            kinder.stream().filter((element) -> (element == this.read(kindOid))).forEach((element) -> {
-                removeKinder.add(element);
-            });
-            kinder.removeAll(removeKinder);
+            kinder.remove(this.read(kindOid));         
             this.update(buerger);
             
-    }
+        });
+        
+        
     }
     
     @Override
@@ -240,12 +236,7 @@ public class BuergerServiceImpl implements BuergerService {
         
         Buerger buerger = this.readPassBuerger(passOid);
         if (buerger != null) {
-            Set<Pass> pass = buerger.getPass();
-            Collection<Pass> removePass = new LinkedList<>();
-            pass.stream().filter((element) -> (element == this.passService.read(passOid))).forEach((element) -> {
-                removePass.add(element);
-            });
-            pass.removeAll(removePass);
+            buerger.getPass().remove(this.passService.read(passOid));
             this.update(buerger);
         }
     }
@@ -277,14 +268,12 @@ public class BuergerServiceImpl implements BuergerService {
         while (iter.hasNext()) {
             Buerger buerger = iter.next();
             Set<Wohnung> wohnung = buerger.getWohnungen();
-            Collection<Wohnung> removeWohnung = new LinkedList<>();
-            wohnung.stream().filter((element) -> (element == this.wohnungService.read(wohnungOid))).forEach((element) -> {
-                removeWohnung.add(element);
-            });
-            wohnung.removeAll(removeWohnung);
+            wohnung.remove(this.wohnungService.read(wohnungOid));
             this.update(buerger);
             
         }
+        
+        
     }
     
     @Override
@@ -308,12 +297,7 @@ public class BuergerServiceImpl implements BuergerService {
         
         Buerger buerger = this.read(buergerOid);
         Set<Wohnung> wohnung = buerger.getWohnungen();
-        Collection<Wohnung> remove = new LinkedList<>();
-        
-        wohnung.stream().filter((element) -> (element == this.wohnungService.read(wohnungOid))).forEach((element) -> {
-            remove.add(element);
-        });
-        wohnung.removeAll(remove);
+        wohnung.remove(this.wohnungService.read(wohnungOid));
         this.update(buerger);
         
     }

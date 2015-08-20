@@ -123,12 +123,10 @@ public class AuthorityPermissionServiceTest {
         Authority auth = new Authority();
         auth.setAuthority("ADMIN");
         auth.setOid(IdService.next());
-        auth.setMandant(mandant);
         authRepo.save(auth);
         Permission permission = new Permission();
         permission.setPermision("New_Buerger");
         permission.setOid(IdService.next());
-        permission.setMandant(mandant);
         permRepo.save(permission);
         AuthorityPermission authPerm = new AuthorityPermission();
         AuthPermId idA = new AuthPermId(permission, auth);
@@ -148,12 +146,10 @@ public class AuthorityPermissionServiceTest {
         Authority auth = new Authority();
         auth.setAuthority("SACHBEARBEITER");
         auth.setOid(IdService.next());
-        auth.setMandant(mandant);
         authRepo.save(auth);
         Permission permission = new Permission();
         permission.setPermision("New_Buerger");
         permission.setOid(IdService.next());
-        permission.setMandant(mandant);
         permRepo.save(permission);
         AuthorityPermission authPerm = new AuthorityPermission();
         AuthPermId idA = new AuthPermId(permission, auth);
@@ -172,12 +168,10 @@ public class AuthorityPermissionServiceTest {
         Authority auth = new Authority();
         auth.setAuthority("ADMIN");
         auth.setOid(IdService.next());
-        auth.setMandant(mandant);
         authRepo.save(auth);
         Permission permission = new Permission();
         permission.setPermision("New_Buerger");
         permission.setOid(IdService.next());
-        permission.setMandant(mandant);
         permRepo.save(permission);
         AuthorityPermission authPerm = new AuthorityPermission();
         AuthPermId idA = new AuthPermId(permission, auth);
