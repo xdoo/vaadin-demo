@@ -91,7 +91,11 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>18.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast-all</artifactId>
+            <version>3.5.1</version>
         </dependency>
         <dependency>
             <groupId>net.sf.dozer</groupId>
