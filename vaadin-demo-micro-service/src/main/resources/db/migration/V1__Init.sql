@@ -76,8 +76,8 @@ alter table wohnungen add constraint FK_wohnungen_TO_mandant foreign key (mandan
 alter table wohnungen add constraint FK_wohnungen_TO_adresse_reference foreign key (adresse_id) references adresse_reference;
 alter table wohnungen_aud add constraint FK_wohnungen_TO_revinfo foreign key (rev) references revinfo;
 
-insert into MANDANT (ID,OID) values ('2','2');
-insert into MANDANT (ID,OID) values ('3','3');
+insert into MANDANT (ID,OID) values (2,'2');
+insert into MANDANT (ID,OID) values (3,'3');
 
 insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (2,'hans@test.de',TRUE,'oid1','test','hans',2);
 insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (3,'franz@test.de',TRUE,'oid2','test','franz',3);
@@ -341,8 +341,14 @@ insert into users_authoritys (authority_id, user_id) values (2, 2);
 insert into users_authoritys (authority_id, user_id) values (3, 3);
 
 
-insert into buerger (id, oid, buer_nachname, buer_vorname, mandant) values (2,2,'test','franz',3);
-insert into buerger (id, oid, buer_nachname, buer_vorname, mandant) values (3,3,'test','hans',3);
+insert into buerger (id, oid, buer_nachname, buer_vorname, mandant) values (2, '2','test','franz',3);
+insert into buerger (id, oid, buer_nachname, buer_vorname, mandant) values (3, '3','test','hans',3);
+insert into buerger (id, oid, buer_nachname, buer_vorname, mandant, buer_geburtsdatum) values (4, 'OID1','hans','peter',2, '1966-12-24');
+insert into buerger (id, oid, buer_nachname, buer_vorname, mandant, buer_geburtsdatum) values (5, 'OID2','hans','peter',2, '1966-12-24');
+insert into buerger (id, oid, buer_nachname, buer_vorname, mandant, buer_geburtsdatum) values (6, 'OID3','hans','peter',2, '1966-12-24');
+insert into buerger (id, oid, buer_nachname, buer_vorname, mandant, buer_geburtsdatum) values (7, 'OID4','hans','peter',2, '1966-12-24');
+insert into buerger (id, oid, buer_nachname, buer_vorname, mandant, buer_geburtsdatum) values (8, 'OID5','hans','peter',2, '1966-12-24');
+insert into buerger (id, oid, buer_nachname, buer_vorname, mandant, buer_geburtsdatum) values (9, 'OID6','hans','peter',2, '1966-12-24');
 
-insert into buerger (id, oid, buer_nachname, buer_vorname, mandant, buer_geburtsdatum) values (1,1,'Zarwel','Rene',2, '1987-10-21');
+insert into buerger (id, oid, buer_nachname, buer_vorname, mandant, buer_geburtsdatum) values (1, '1','Zarwel','Rene',2, '1987-10-21');
 

@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.StreamSupport;
 import javax.persistence.EntityManager;
@@ -82,13 +83,12 @@ public class BuergerServiceImpl implements BuergerService {
     
     @Override
     public Buerger read(String oid) {
-        List<Buerger> result = this.repo.findByOidAndMandantOid(oid, readUser().getMandant().getOid());
-        if (result.isEmpty()) {
-// TODO
+        Buerger result = this.repo.findFirstByOidAndMandantOid(oid, readUser().getMandant().getOid());
+        if (Objects.isNull(result)) {
             LOG.warn(String.format("found no buerger with oid '%s'", oid));
             return null;
         } else {
-            return result.get(0);
+            return result;
         }
     }
     
