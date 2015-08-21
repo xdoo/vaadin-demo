@@ -1,5 +1,6 @@
 package de.muenchen.demo.service.domain;
 
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -14,7 +15,7 @@ import org.hibernate.search.annotations.IndexedEmbedded;
  * @author claus.straube
  */
 @MappedSuperclass
-public abstract class BaseEntity implements Cloneable {
+public abstract class BaseEntity implements Cloneable, Serializable {
 
 	@Id
 	@GeneratedValue

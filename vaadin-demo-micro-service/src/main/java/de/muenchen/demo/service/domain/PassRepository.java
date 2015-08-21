@@ -15,6 +15,6 @@ public interface PassRepository extends BaseRepository<Pass> {
 
     List<Pass> findByOid(String oid);
 
-    public Pass findByStaatsangehoerigkeitReferenceReferencedOid(String oid);
+    public Pass findByStaatsangehoerigkeitReferenceReferencedOidAndMandantOid(String oid, String mid);
 
 }

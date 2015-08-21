@@ -12,8 +12,8 @@ import org.springframework.data.repository.CrudRepository;
  *
  * @author praktikant.tmar
  */
-public interface AccountRepository extends BaseRepository<Account> {
+public interface AccountRepository  extends CrudRepository<Account, Long>  {
+    public List<Authority> findByOid(String oid);
 
-    public List<Account> findByOid(String oid);
 }
 

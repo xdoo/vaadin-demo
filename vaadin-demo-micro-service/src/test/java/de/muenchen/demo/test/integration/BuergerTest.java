@@ -79,7 +79,7 @@ import org.springframework.web.client.RestTemplate;
 @SpringApplicationConfiguration(classes = Application.class)
 @WebIntegrationTest({"server.port=0", "management.port=0"})
 public class BuergerTest {
-    
+
     private RestTemplate restTemplate;
     @Value("${local.server.port}")
     private int port;
@@ -90,7 +90,7 @@ public class BuergerTest {
     private final Buerger kind2 = new Buerger();
     private final Pass pass = new Pass();
     private final Pass pass2 = new Pass();
-    
+
     private final Wohnung wohnung = new Wohnung();
     private final Sachbearbeiter sachbearbeiter = new Sachbearbeiter();
     private final Sachbearbeiter sachbearbeiter2 = new Sachbearbeiter();
@@ -98,7 +98,7 @@ public class BuergerTest {
     private List responseList;
     private String urlSave;
     private String urlNew;
-    
+
     @Autowired
     UserRepository usersRepo;
     @Autowired
@@ -127,10 +127,10 @@ public class BuergerTest {
     MandantRepository mandantRepo;
     @Rule
     public WireMockRule wireMockRule = new WireMockRule(8089);
-    
+
     @Before
     public void setUp() throws JsonProcessingException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
-        
+
         authPermRepo.deleteAll();
         userAuthRepo.deleteAll();
         usersRepo.deleteAll();
@@ -144,24 +144,24 @@ public class BuergerTest {
         interneRepo.deleteAll();
         externeRepo.deleteAll();
         mandantRepo.deleteAll();
-        
+
         InitTest initTest = new InitTest(usersRepo, authRepo, permRepo, userAuthRepo, authPermRepo, mandantRepo);
         initTest.init();
         SSLContext sslContext = SSLContexts.custom().loadTrustMaterial(null, new TrustSelfSignedStrategy()).useTLS().build();
         SSLConnectionSocketFactory connectionFactory = new SSLConnectionSocketFactory(sslContext, new AllowAllHostnameVerifier());
         BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
         credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials("hans", "test"));
-        
+
         HttpClient httpClient = HttpClientBuilder.create()
                 .setSSLSocketFactory(connectionFactory)
                 .setDefaultCredentialsProvider(credentialsProvider)
                 .build();
-        
+
         ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
         restTemplate = new RestTemplate(requestFactory);
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new Jackson2HalModule());
-        
+
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
         converter.setObjectMapper(objectMapper);
         restTemplate.setMessageConverters(Collections.<HttpMessageConverter<?>>singletonList(converter));
@@ -172,74 +172,74 @@ public class BuergerTest {
         staat.setLand("Deutschland");
         staat.setSprache("Deutsch");
         staat.setReference("123");
-        
+
         String json = mapper.writeValueAsString(staat);
-        
+
         stubFor(get(urlEqualTo("/staat/123")).willReturn(
                 aResponse().withHeader("Content-Type", "application/json")
                 .withBody(json)
         ));
-        
+
         urlSave = "http://localhost:" + port + "/buerger/save";
         urlNew = "http://localhost:" + port + "/buerger/new";
-        
+
         buerger.setOid("b");
         buerger.setNachname("hans");
         buerger.setVorname("hans");
-        
+
         buerger2.setOid("b2");
         buerger2.setNachname("hans");
         buerger2.setVorname("hans");
-        
+
         buergerUpdate.setOid("b");
         buergerUpdate.setNachname("max");
         buergerUpdate.setVorname("hans");
-        
+
         kind.setOid("bk");
         kind.setVorname("son");
         kind.setNachname("hans");
-        
+
         kind2.setOid("bk2");
         kind2.setVorname("son");
         kind2.setNachname("hans");
-        
+
         wohnung.setOid("bw");
         wohnung.setAusrichtung("West");
         wohnung.setStock("2");
-        
+
         pass.setOid("bp");
         pass.setPassNummer("208040");
         pass.setKode("D");
-        
+
         pass2.setOid("bp2");
         pass2.setPassNummer("2080402");
         pass2.setKode("E");
         sachbearbeiter2.setOid("bs2");
         sachbearbeiter2.setTelephone("08985919859");
         sachbearbeiter2.setFunktion("director");
-        
+
         sachbearbeiter.setOid("bs");
         sachbearbeiter.setFax("1254");
         sachbearbeiter.setFunktion("Praktikant");
     }
-    
+
     @Test
     public void newBuergerTest() throws JsonProcessingException {
-        
+
         response = restTemplate.getForEntity(urlNew, BuergerResource.class).getBody();
         assertNotNull(response.getLink("new"));
         assertNotNull(response.getLink("save"));
         assertNotNull(response.getOid());
-        
+
     }
-    
+
     @Test
     public void updateBuergerTest() {
-        
+
         restTemplate.postForEntity(urlSave, buerger, BuergerResource.class).getBody();
         String URL2 = "http://localhost:" + port + "/buerger/b";
         response = restTemplate.postForEntity(URL2, buergerUpdate, BuergerResource.class).getBody();
-        
+
         assertEquals("max", response.getNachname());
         assertNotNull(response.getLink(HateoasUtil.REL_NEW));
         assertNotNull(response.getLink(HateoasUtil.REL_UPDATE));
@@ -256,10 +256,10 @@ public class BuergerTest {
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_KIND));
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_PASS));
     }
-    
+
     @Test
     public void saveBuergerTest() throws JsonProcessingException {
-        
+
         response = restTemplate.postForEntity(urlSave, buerger, BuergerResource.class).getBody();
         assertEquals(response.getNachname(), "hans");
         assertNotNull(response.getLink(HateoasUtil.REL_NEW));
@@ -277,10 +277,10 @@ public class BuergerTest {
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_KIND));
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_PASS));
     }
-    
+
     @Test
     public void readBuergerTest() throws JsonProcessingException {
-        
+
         response = restTemplate.postForEntity(urlSave, buerger, BuergerResource.class).getBody();
         String URL11 = "http://localhost:" + port + "/buerger/b";
         response = restTemplate.getForEntity(URL11, BuergerResource.class).getBody();
@@ -299,29 +299,29 @@ public class BuergerTest {
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.STAATSANGEHOERIGKEITEN));
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_KIND));
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_PASS));
-        
+
     }
-    
+
     @Test
     public void queryBuergerTest() throws JsonProcessingException {
-        
+
         restTemplate.postForEntity(urlSave, buerger, BuergerResource.class).getBody();
-        
+
         String URL11 = "http://localhost:" + port + "/buerger/query";
         SearchResultResource queryResponse = restTemplate.getForEntity(URL11, SearchResultResource.class).getBody();
         assertEquals(1, queryResponse.getResult().size());
         assertNotNull(null, queryResponse.getLink("self"));
         assertNotNull(null, queryResponse.getLink("query"));
-        
+
     }
-    
+
     @Test
     public void copyBuergerTest() {
-        
+
         restTemplate.postForEntity(urlSave, buerger, BuergerResource.class).getBody();
         String URL2 = "http://localhost:" + port + "/buerger/copy/b";
         response = restTemplate.getForEntity(URL2, BuergerResource.class).getBody();
-        
+
         assertNotEquals("b", response.getOid());
         assertEquals(buerger.getNachname(), response.getNachname());
         assertNotNull(response.getLink(HateoasUtil.REL_NEW));
@@ -338,25 +338,59 @@ public class BuergerTest {
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.STAATSANGEHOERIGKEITEN));
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_KIND));
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_PASS));
-        
+
     }
-    
+
+    @Test
+    public void copyListBuergerTest() {
+
+        restTemplate.postForEntity(urlSave, buerger, BuergerResource.class).getBody();
+        restTemplate.postForEntity(urlSave, buerger2, BuergerResource.class).getBody();
+        String URL2 = "http://localhost:" + port + "/buerger/copy";
+        ArrayList<String> oids = new ArrayList();
+        oids.add("b");
+        oids.add("b2");
+        restTemplate.postForEntity(URL2, oids, BuergerResource.class);
+        String URL3 = "http://localhost:" + port + "/buerger/query";
+        SearchResultResource responseQuery = restTemplate.getForEntity(URL3, SearchResultResource.class).getBody();
+
+        assertEquals(4, responseQuery.getResult().size());
+
+    }
+
     @Test
     public void buergerDeleteTest() {
-        
+
         restTemplate.postForEntity(urlSave, buerger, BuergerResource.class).getBody();
         String URL2 = "http://localhost:" + port + "/buerger/b";
         restTemplate.delete(URL2, buerger);
         String URL3 = "http://localhost:" + port + "/buerger/query";
         SearchResultResource responseQuery = restTemplate.getForEntity(URL3, SearchResultResource.class).getBody();
-        
+
         assertEquals(true, responseQuery.getResult().isEmpty());
-        
+
+    }
+
+    @Test
+    public void buergerDeleteListTest() {
+
+        restTemplate.postForEntity(urlSave, buerger, BuergerResource.class).getBody();
+        restTemplate.postForEntity(urlSave, buerger2, BuergerResource.class).getBody();
+        String URL2 = "http://localhost:" + port + "/buerger/delete";
+        ArrayList<String> oids = new ArrayList();
+        oids.add("b");
+        oids.add("b2");
+        restTemplate.postForEntity(URL2, oids, BuergerResource.class);
+        String URL3 = "http://localhost:" + port + "/buerger/query";
+        SearchResultResource responseQuery = restTemplate.getForEntity(URL3, SearchResultResource.class).getBody();
+
+        assertEquals(true, responseQuery.getResult().isEmpty());
+
     }
 
     @Test
     public void buergerKindTest() {
-        
+
         restTemplate.postForEntity(urlSave, buerger, BuergerResource.class);
         restTemplate.postForEntity(urlSave, kind, BuergerResource.class);
         restTemplate.postForEntity(urlSave, buerger2, BuergerResource.class);
@@ -385,7 +419,7 @@ public class BuergerTest {
         String URL5 = "http://localhost:" + port + "/buerger/add/buerger/b/kind/bk";
         String URL52 = "http://localhost:" + port + "/buerger/add/buerger/b2/kind/bk";
         response = restTemplate.getForEntity(URL52, BuergerResource.class).getBody();
-        
+
         response = restTemplate.getForEntity(URL5, BuergerResource.class).getBody();
         assertNotNull(response.getOid());
         assertNotNull(response.getLink(HateoasUtil.REL_NEW));
@@ -413,10 +447,10 @@ public class BuergerTest {
         String urlDelete = "http://localhost:" + port + "/buerger/bk";
         restTemplate.delete(urlDelete, buerger);
     }
-    
+
     @Test
     public void releaseBuergerElternteilTest() {
-        
+
         restTemplate.postForEntity(urlSave, buerger, BuergerResource.class);
         restTemplate.postForEntity(urlSave, kind, BuergerResource.class);
         restTemplate.postForEntity(urlSave, buerger2, BuergerResource.class);
@@ -436,12 +470,12 @@ public class BuergerTest {
         restTemplate.getForEntity(urlReleaseEltern, BuergerResource.class);
         SearchResultResource responseListBuerger = restTemplate.getForEntity(urlEltern, SearchResultResource.class).getBody();
         assertEquals(0, responseListBuerger.getResult().size());
-        
+
     }
-    
+
     @Test
     public void readElternTest() {
-        
+
         restTemplate.postForEntity(urlSave, buerger, BuergerResource.class);
         restTemplate.postForEntity(urlSave, kind, BuergerResource.class);
         restTemplate.postForEntity(urlSave, buerger2, BuergerResource.class);
@@ -462,10 +496,10 @@ public class BuergerTest {
         SearchResultResource responseEltern2 = restTemplate.getForEntity(urleltern2, SearchResultResource.class).getBody();
         assertEquals(0, responseEltern2.getResult().size());
     }
-    
+
     @Test
     public void releaseBuergerElternTest() {
-        
+
         restTemplate.postForEntity(urlSave, buerger, BuergerResource.class);
         restTemplate.postForEntity(urlSave, kind, BuergerResource.class);
         restTemplate.postForEntity(urlSave, buerger2, BuergerResource.class);
@@ -486,10 +520,10 @@ public class BuergerTest {
         SearchResultResource responseListKinder = restTemplate.getForEntity(urlEltern, SearchResultResource.class).getBody();
         assertEquals(1, responseListKinder.getResult().size());
     }
-    
+
     @Test
     public void releaseBuergerKinderTest() {
-        
+
         restTemplate.postForEntity(urlSave, buerger, BuergerResource.class);
         restTemplate.postForEntity(urlSave, kind, BuergerResource.class);
         restTemplate.postForEntity(urlSave, buerger2, BuergerResource.class);
@@ -499,25 +533,25 @@ public class BuergerTest {
         String URL2 = "http://localhost:" + port + "/buerger/add/buerger/b/kind/bk";
         restTemplate.postForEntity(URL1, kind2, BuergerResource.class).getBody();
         restTemplate.getForEntity(URL2, BuergerResource.class).getBody();
-        
+
         String urlKinder = "http://localhost:" + port + "/buerger/kinder/b";
-        
+
         SearchResultResource responseListKinder = restTemplate.getForEntity(urlKinder, SearchResultResource.class).getBody();
         assertEquals(2, responseListKinder.getResult().size());
 
         /* Test releaseBuergerKinder */
         String urlReleaseKinder = "http://localhost:" + port + "/buerger/release/kinder/b";
         restTemplate.getForEntity(urlReleaseKinder, BuergerResource.class);
-        
+
         SearchResultResource responseListKinder2 = restTemplate.getForEntity(urlKinder, SearchResultResource.class).getBody();
         assertEquals(0, responseListKinder2.getResult().size());
     }
-    
+
     @Test
     public void wohnungBuergerTest() {
-        
+
         restTemplate.postForEntity(urlSave, buerger, BuergerResource.class);
-        
+
         String URL2 = "http://localhost:" + port + "/buerger/b";
 
         /* Test methode createWohnungBuerger*/
@@ -567,16 +601,16 @@ public class BuergerTest {
         /* Test delete wohnung */
         String urlDelete = "http://localhost:" + port + "/wohnung/bw";
         restTemplate.delete(urlDelete, wohnung);
-        
+
     }
-    
+
     @Test
     public void createStaatsangehoerigkeitBuergerTest() throws JsonProcessingException {
-        
+
         String URL2 = "http://localhost:" + port + "/staat/create/123";
         StaatsangehoerigkeitResource staat = restTemplate.getForEntity(URL2, StaatsangehoerigkeitResource.class).getBody();
         assertEquals("de", staat.getCode());
-        
+
         restTemplate.postForEntity(urlSave, buerger, BuergerResource.class);
 
         /* Test methode addStaatsangehoerigkeitBuerger*/
@@ -606,12 +640,12 @@ public class BuergerTest {
         String URL = "http://localhost:" + port + "/staat/123";
         restTemplate.delete(URL);
     }
-    
+
     @Test
     public void buergerPassTest() throws JsonProcessingException {
-        
+
         restTemplate.postForEntity(urlSave, buerger, BuergerResource.class);
-        
+
         String URL13 = "http://localhost:" + port + "/pass/save";
         restTemplate.postForEntity(URL13, pass, PassResource.class).getBody();
         restTemplate.postForEntity(URL13, pass2, PassResource.class).getBody();
@@ -644,19 +678,19 @@ public class BuergerTest {
         /* Test delete Pass */
         String urlDelete = "http://localhost:" + port + "/pass/bp";
         restTemplate.delete(urlDelete, pass);
-        
+
         responseList = restTemplate.getForEntity(URL1, List.class).getBody();
         assertEquals(1, responseList.size());
     }
-    
+
     @Test
     public void sachbearbeiterBuergerTest() {
-        
+
         restTemplate.postForEntity(urlSave, buerger, BuergerResource.class);
-        
+
         String URL2 = "http://localhost:" + port + "/buerger/b";
         String urlSachbearbeiterSave = "http://localhost:" + port + "/sachbearbeiter/save";
-        restTemplate.postForEntity(urlSachbearbeiterSave, sachbearbeiter2,SachbearbeiterResource.class);
+        restTemplate.postForEntity(urlSachbearbeiterSave, sachbearbeiter2, SachbearbeiterResource.class);
 
         /* Test methode createsachbearbeiterBuerger*/
         String URL3 = "http://localhost:" + port + "/buerger/create/sachbearbeiter/b";
@@ -696,28 +730,26 @@ public class BuergerTest {
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.STAATSANGEHOERIGKEITEN));
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_KIND));
         assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_PASS));
-        
+
         /*Test methode readBuergerSachbearbeiteren*/
         String URL1 = "http://localhost:" + port + "/buerger/sachbearbeiter/b";
         responseList = restTemplate.getForEntity(URL1, List.class).getBody();
         assertEquals(2, responseList.size());
-        
-       /*Test methode readBuergerSachbearbeiteren*/
+
+        /*Test methode readBuergerSachbearbeiteren*/
         String urlRelease = "http://localhost:" + port + "/buerger/release/sachbearbeiter/b";
         restTemplate.getForEntity(urlRelease, BuergerResource.class);
         responseList = restTemplate.getForEntity(URL1, List.class).getBody();
         assertEquals(0, responseList.size());
-        
+
         /* Test delete sachbearbeiter */
         String urlDelete = "http://localhost:" + port + "/sachbearbeiter/bs";
         restTemplate.delete(urlDelete, sachbearbeiter);
         String urlDelete2 = "http://localhost:" + port + "/sachbearbeiter/bs2";
         restTemplate.delete(urlDelete2, sachbearbeiter);
-        
-        
+
     }
 
-    
     @After
     public void TearDown() {
         authPermRepo.deleteAll();
@@ -733,7 +765,7 @@ public class BuergerTest {
         interneRepo.deleteAll();
         externeRepo.deleteAll();
         mandantRepo.deleteAll();
-        
+
     }
-    
+
 }

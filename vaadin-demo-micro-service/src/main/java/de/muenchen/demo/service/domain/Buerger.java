@@ -26,7 +26,7 @@ import org.hibernate.search.annotations.Indexed;
 @Entity
 @Indexed
 @Table(name = "BUERGER")
-public class Buerger extends BaseEntity implements Serializable {
+public class Buerger extends BaseEntity {
 
     @Field
     @Column(length = 70, nullable = true, name = "BUER_VORNAME")

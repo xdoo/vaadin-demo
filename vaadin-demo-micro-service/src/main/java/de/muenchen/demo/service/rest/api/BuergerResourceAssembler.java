@@ -88,6 +88,12 @@ public class BuergerResourceAssembler {
         if (relations.contains(HateoasUtil.REL_COPY)) {
             resource.add(linkTo(methodOn(BuergerController.class).copyBuerger(buerger.getOid())).withRel(HateoasUtil.REL_COPY));
         }
+        if (relations.contains(HateoasUtil.REL_COPY_LIST)) {
+            resource.add(linkTo(methodOn(BuergerController.class).copyListBuerger(null)).withRel(HateoasUtil.REL_COPY_LIST));
+        }
+        if (relations.contains(HateoasUtil.REL_DELETE_LIST)) {
+            resource.add(linkTo(methodOn(BuergerController.class).deleteListBuerger(null)).withRel(HateoasUtil.REL_DELETE_LIST));
+        }
 
         if (relations.contains(de.muenchen.vaadin.demo.api.rest.BuergerResource.WOHNUNGEN)) {
             resource.add(linkTo(methodOn(BuergerController.class).readBuergerWohnungen(buerger.getOid())).withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.WOHNUNGEN));
@@ -96,7 +102,7 @@ public class BuergerResourceAssembler {
         if (relations.contains(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_WOHNUNG)) {
             resource.add(linkTo(methodOn(BuergerController.class).createWohnungBuerger(buerger.getOid(), null)).withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_WOHNUNG));
         }
-        
+
         if (relations.contains(de.muenchen.vaadin.demo.api.rest.BuergerResource.SACHBEARBEITER)) {
             resource.add(linkTo(methodOn(BuergerController.class).readBuergerSachbearbeiter(buerger.getOid())).withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.SACHBEARBEITER));
         }
@@ -136,7 +142,7 @@ public class BuergerResourceAssembler {
         }
         if (relations.contains(de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_WOHNUNGEN)) {
             resource.add(linkTo(methodOn(BuergerController.class).releaseBuergerWohnungen(buerger.getOid())).withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_WOHNUNGEN));
-        } 
+        }
         if (relations.contains(de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_PAESSE)) {
             resource.add(linkTo(methodOn(BuergerController.class).releaseBuergerPaesse(buerger.getOid())).withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_PAESSE));
         }
@@ -187,6 +193,8 @@ public class BuergerResourceAssembler {
                 HateoasUtil.REL_DELETE,
                 HateoasUtil.REL_UPDATE,
                 HateoasUtil.REL_COPY,
+                HateoasUtil.REL_COPY_LIST,
+                HateoasUtil.REL_DELETE_LIST,
                 // Relationen
                 de.muenchen.vaadin.demo.api.rest.BuergerResource.WOHNUNGEN,
                 de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_WOHNUNG,

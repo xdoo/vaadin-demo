@@ -12,7 +12,6 @@ import java.util.List;
  */
 public interface AdresseReferenceRepository extends BaseRepository<AdresseReference>{
         
-    public List<AdresseReference> findByOid(String oid);
 
     
 }

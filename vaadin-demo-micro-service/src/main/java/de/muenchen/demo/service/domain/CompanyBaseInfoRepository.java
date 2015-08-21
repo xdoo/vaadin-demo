@@ -6,12 +6,14 @@
 package de.muenchen.demo.service.domain;
 
 import java.util.List;
+import org.springframework.data.repository.CrudRepository;
 
 /**
  *
  * @author praktikant.tmar
  */
-public interface CompanyBaseInfoRepository  extends BaseRepository<CompanyBaseInfo> {
+public interface CompanyBaseInfoRepository  extends CrudRepository<CompanyBaseInfo, Long> {
+        public List<CompanyBaseInfo> findByOid(String mid);
 
-    public List<CompanyBaseInfo> findByOid(String oid);
+
 }

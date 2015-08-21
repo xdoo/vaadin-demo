@@ -15,7 +15,6 @@ import de.muenchen.demo.service.domain.SachbearbeiterRepository;
 import de.muenchen.demo.service.util.IdService;
 import de.muenchen.demo.service.util.QueryService;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -130,16 +129,8 @@ public class SachbearbeiterServiceImpl implements SachbearbeiterService {
         Buerger buerger = this.buergerService.read(buergerOid);
         Set<Buerger> buergerList = sachbearbeiter.getBuerger();
         Set<Sachbearbeiter> sachbearbeiterList = buerger.getSachbearbeiter();
-        Collection<Buerger> removeBuerger = new LinkedList<>();
-        Collection<Sachbearbeiter> removeSachbearbeiter = new LinkedList<>();
-        buergerList.stream().filter((element) -> (element == buerger)).forEach((element) -> {
-            removeBuerger.add(element);
-        });
-        sachbearbeiterList.stream().filter((element) -> (element == sachbearbeiter)).forEach((element) -> {
-            removeSachbearbeiter.add(element);
-        });
-        sachbearbeiterList.removeAll(removeSachbearbeiter);
-        buergerList.removeAll(removeBuerger);
+        sachbearbeiterList.remove(sachbearbeiter);
+        buergerList.remove(buerger);
         this.update(sachbearbeiter);
         this.buergerService.update(buerger);
     }
@@ -148,9 +139,7 @@ public class SachbearbeiterServiceImpl implements SachbearbeiterService {
     public void releaseSachbearbeiterAllBuerger(String oid) {
 
         Sachbearbeiter sachbearbeiter = this.read(oid);
-
         Set<Buerger> buergerList = sachbearbeiter.getBuerger();
-        
         Collection<Buerger> removeBuerger = new LinkedList<>();
         buergerList.stream().forEach((buerger) -> {
             buerger.getSachbearbeiter().remove(sachbearbeiter);
@@ -164,7 +153,7 @@ public class SachbearbeiterServiceImpl implements SachbearbeiterService {
 
     @Override
     public Sachbearbeiter readUserSachbearbeiter(String oid) {
-        Sachbearbeiter result = this.repo.findByUserOid(oid);
+        Sachbearbeiter result = this.repo.findByUserOidAndMandantOid(oid, readUser().getMandant().getOid());
         if (result == null) {
 // TODO
             LOG.warn(String.format("found no Sachbearbeiter with UserOid '%s'", oid));

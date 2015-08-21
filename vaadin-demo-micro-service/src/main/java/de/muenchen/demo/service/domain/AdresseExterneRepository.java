@@ -8,7 +8,7 @@ import java.util.List;
  */
 public interface AdresseExterneRepository extends BaseRepository<AdresseExterne> {
 
-    public List<AdresseExterne> findByOid(String oid);
+    //public List<AdresseExterne> findByOid(String oid);
 
 
 }

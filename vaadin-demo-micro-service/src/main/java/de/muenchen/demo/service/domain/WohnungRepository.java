@@ -11,6 +11,6 @@ public interface WohnungRepository extends BaseRepository<Wohnung> {
 
     public List<Wohnung> findByOid(String oid);
 
-    public Wohnung findByAdresseOid(String oid);
+    public Wohnung findByAdresseOidAndMandantOid(String oid, String mid);
 
 }

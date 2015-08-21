@@ -55,4 +55,8 @@ public interface BuergerService {
 
     public Buerger copy(String oid);
 
+    public void copy(List<String> oids);
+
+    public void delete(List<String> oids);
+
 }

@@ -415,6 +415,7 @@ public class BuergerViewController implements Serializable,ControllerContext<Bue
      * Ausgehend von den Ereignissen werden innerhalb der UI Komponenten Operationen
      * ausgeführt. So ist es möglich eine Kommunnikation zwischen den Komponenten zu
      * schaffen, ohne dass diese sich untereinander kennen müssen. 
+     * @param event
      */
     @Subscribe
     public void onEvent(BuergerAppEvent event) {

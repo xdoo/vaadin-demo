@@ -112,7 +112,7 @@ public class PassServiceImpl implements PassService {
 
     @Override
     public Pass readStaat(String oid) {
-        return repo.findByStaatsangehoerigkeitReferenceReferencedOid(oid);
+        return repo.findByStaatsangehoerigkeitReferenceReferencedOidAndMandantOid(oid, readUser().getMandant().getOid());
     }
 
     @Override

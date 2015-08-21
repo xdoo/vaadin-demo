@@ -183,7 +183,7 @@ public class AuthorityTest {
         String URL3 = "http://localhost:" + port + "/authority/query";
         responseList = restTemplate.getForEntity(URL3, SearchResultResource.class).getBody();
 
-        assertEquals(3, responseList.getResult().size());
+        assertEquals(4, responseList.getResult().size());
         assertNotNull(responseList.getLink("self"));
         assertNotNull(responseList.getLink("query"));
 
@@ -233,7 +233,7 @@ public class AuthorityTest {
         String URL3 = "http://localhost:" + port + "/authority/query";
         responseList = restTemplate.getForEntity(URL3, SearchResultResource.class).getBody();
 
-        assertEquals(1, responseList.getResult().size());
+        assertEquals(2, responseList.getResult().size());
 
     }
 
