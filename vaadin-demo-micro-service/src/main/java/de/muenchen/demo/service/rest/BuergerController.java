@@ -1,6 +1,6 @@
 package de.muenchen.demo.service.rest;
 
-import com.google.gwt.thirdparty.guava.common.collect.Lists;
+import com.google.common.collect.Lists;
 import de.muenchen.demo.service.domain.Buerger;
 import de.muenchen.demo.service.domain.Pass;
 import de.muenchen.demo.service.domain.Staatsangehoerigkeit;

@@ -4,12 +4,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.vaadin.demo.api.domain.Principal;
 import de.muenchen.vaadin.demo.api.rest.SecurityRestClient;
-import com.vaadin.navigator.Navigator;
-import com.vaadin.spring.annotation.SpringComponent;
-import com.vaadin.spring.annotation.UIScope;
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.Optional;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;
@@ -24,7 +18,12 @@ import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.Optional;
 
 /**
  * VORSICHT HACK! DAS MUSS ALLES NOCHMAL HINTERFRAGT UND GETESTET WERDEN!
@@ -32,13 +31,12 @@ import org.springframework.web.client.RestTemplate;
  * 
  * @author claus.straube
  */
-@SpringComponent @UIScope
+@Component
 public class SecurityServiceImpl implements SecurityService, Serializable {
     
     private static final Logger LOG = LoggerFactory.getLogger(SecurityService.class);
     
     private boolean login;
-    private Navigator navigator;
     private Principal principal;
     private RestTemplate restTemplate;
     
@@ -82,17 +80,13 @@ public class SecurityServiceImpl implements SecurityService, Serializable {
             this.login = Boolean.TRUE;
             this.restTemplate = template;
             this.principal = p.get();
-            LOG.info("Successfully logged in!!");
+            LOG.info("Successfully logged in!");
             return Boolean.TRUE;
         } else {
             return Boolean.FALSE;
         }
     }
     
-    @Override
-    public void setNavigator(Navigator navigator) {
-        this.navigator = navigator;
-    }  
 
     @Override
     public void logout() {
