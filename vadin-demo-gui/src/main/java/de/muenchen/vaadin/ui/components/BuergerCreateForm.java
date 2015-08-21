@@ -121,7 +121,6 @@ public class BuergerCreateForm extends CustomComponent {
                 controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.label)),
                 controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.input_prompt)),
                 Buerger.NACHNAME, BuergerViewController.I18N_BASE_PATH);
-        //Validator val2 = ValidatorFactory.getValidator("StringLength",controller.getMsg().get("m1.buerger.nachname.validation"),1+"",""+Integer.MAX_VALUE, "true");
         secField.addValidator(val1);
         secField.addValidator(val0);
         layout.addComponent(secField);
@@ -158,8 +157,9 @@ public class BuergerCreateForm extends CustomComponent {
                 //reset
                 binder.setItemDataSource(controller.createBuerger());
             } catch (CommitException | Validator.InvalidValueException e) {
-                GenericErrorNotification error = new GenericErrorNotification("Fehler","Beim erstellen der Person ist ein Fehler aufgetreten. Bitte füllen Sie alle Felder mit gültigen Werten aus.");
-                error.show(Page.getCurrent());
+                GenericErrorNotification error = new GenericErrorNotification(controller.resolveRelative(getNotificationPath(NotificationType.failure,Action.save, Type.label)),
+                        controller.resolveRelative(getNotificationPath(NotificationType.failure,Action.save,Type.text)));
+                        error.show(Page.getCurrent());
             }
         });
         createButton.addStyleName(ValoTheme.BUTTON_FRIENDLY);
