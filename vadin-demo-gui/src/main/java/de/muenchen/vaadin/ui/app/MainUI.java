@@ -7,14 +7,12 @@ import de.muenchen.vaadin.demo.api.domain.BaseEntity;
 import de.muenchen.vaadin.ui.app.views.events.AppEvent;
 import de.muenchen.vaadin.ui.app.views.events.LogoutEvent;
 import de.muenchen.vaadin.ui.components.GenericConfirmationWindow;
-import de.muenchen.vaadin.ui.components.buttons.Action;
+import de.muenchen.vaadin.ui.components.buttons.EntityAction;
 import de.muenchen.vaadin.ui.controller.ControllerContext;
 import de.muenchen.vaadin.ui.util.EventType;
-import de.muenchen.vaadin.ui.util.I18nPaths;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
-import com.vaadin.annotations.Widgetset;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.shared.ui.label.ContentMode;
@@ -48,10 +46,6 @@ import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static de.muenchen.vaadin.ui.util.I18nPaths.*;
-
-import javax.servlet.annotation.WebServlet;
 
 @SpringUI
 @Title("Vaadin Spring-Security Sample")
@@ -274,14 +268,11 @@ public class MainUI extends UI implements ControllerContext {
         }
 
         // creates and displays the logout button
-        final Button logoutButton = new Button("Logout", new ClickListener() {
-            @Override
-            public void buttonClick(final ClickEvent event) {
-                GenericConfirmationWindow confirmationWindow = new GenericConfirmationWindow(new LogoutEvent(), MainUI.this, Action.logout);
-                getUI().addWindow(confirmationWindow);
-                confirmationWindow.center();
-                confirmationWindow.focus();
-            }
+        final Button logoutButton = new Button("Logout", event -> {
+            GenericConfirmationWindow confirmationWindow = new GenericConfirmationWindow(new LogoutEvent(), MainUI.this, EntityAction.logout);
+            getUI().addWindow(confirmationWindow);
+            confirmationWindow.center();
+            confirmationWindow.focus();
         });
         logoutButton.setHtmlContentAllowed(true);
         logoutButton.setPrimaryStyleName("valo-menu-item");

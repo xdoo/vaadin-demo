@@ -2,6 +2,7 @@ package de.muenchen.vaadin.ui.components;
 
 import com.google.common.eventbus.Subscribe;
 import com.vaadin.data.util.BeanItem;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
@@ -10,11 +11,10 @@ import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
 import static de.muenchen.vaadin.ui.components.BuergerReadForm.LOG;
 
-import de.muenchen.vaadin.ui.components.buttons.Action;
-import de.muenchen.vaadin.ui.components.buttons.EntityButton;
+import de.muenchen.vaadin.ui.components.buttons.ActionButton;
+import de.muenchen.vaadin.ui.components.buttons.EntityAction;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.EventType;
-import de.muenchen.vaadin.ui.util.I18nPaths;
 
 import java.util.Optional;
 
@@ -29,8 +29,13 @@ public class BuergerChildTab extends CustomComponent {
     public BuergerChildTab(BuergerViewController controller, String navigateToForDetail, String navigateToForCreate, String from) {
         
         this.controller = controller;
-        
-        EntityButton<Buerger> create = EntityButton.make(controller, Action.create).navigateTo(navigateToForCreate).from(from).build();
+
+
+        ActionButton create = new ActionButton(controller, EntityAction.create,navigateToForCreate);
+        create.addClickListener(clickEvent -> {
+            controller.postToEventBus(new BuergerAppEvent(EventType.CREATE).navigateTo(navigateToForCreate).from(from));
+        });
+
         table = controller.generateChildTable(navigateToForDetail, from);
         
         // Layout für die Schaltflächen über der Tabelle

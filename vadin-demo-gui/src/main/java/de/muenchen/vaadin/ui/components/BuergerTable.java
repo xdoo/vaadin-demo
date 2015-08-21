@@ -3,12 +3,18 @@ package de.muenchen.vaadin.ui.components;
 import com.google.common.collect.Lists;
 import com.google.common.eventbus.Subscribe;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.Table.ColumnGenerator;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
+import de.muenchen.vaadin.ui.app.views.BuergerDetailView;
+import de.muenchen.vaadin.ui.app.views.BuergerUpdateView;
+import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
+import de.muenchen.vaadin.ui.components.buttons.ActionButton;
+import de.muenchen.vaadin.ui.components.buttons.EntityTableAction;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.EventType;
 import static de.muenchen.vaadin.ui.util.I18nPaths.*;
@@ -16,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sun.java2d.pipe.hw.AccelDeviceEventListener;
 
 /**
  *
@@ -87,7 +94,7 @@ public class BuergerTable extends CustomComponent {
         if(event.getEventType().equals(EventType.COPY)) {
             this.add(event.getEntity());
         }
-        
+
         if(event.getEventType().equals(EventType.DELETE)) {
             this.delete(event.getItemID());
         }
@@ -120,8 +127,8 @@ public class BuergerTable extends CustomComponent {
     }
     
     /**
-     * "Action" Buttons für jede Tabellenzeile. In jeder Tabellenzeile
-     * gibt "Action" Buttons.
+     * "EntityAction" Buttons für jede Tabellenzeile. In jeder Tabellenzeile
+     * gibt "EntityAction" Buttons.
      * 
      * @param id
      * @return 
@@ -130,12 +137,35 @@ public class BuergerTable extends CustomComponent {
         HorizontalLayout layout = new HorizontalLayout();
         
         this.buttonFactories.stream().forEachOrdered(f -> {
-            BuergerTableButton b = f.createButton();
-            b.setItemId(id);
-            b.setContainer(container);
-            b.setController(controller);
-            b.setNavigateFrom(from);
-            layout.addComponent(b.getComponent());
+            ActionButton copy = new ActionButton(controller, EntityTableAction.tablecopy,null);
+            copy.addClickListener(clickEvent -> {
+                controller.postToEventBus(new BuergerAppEvent(container.getItem(id), id, EventType.COPY));
+            });
+
+            ActionButton delete = new ActionButton(controller, EntityTableAction.tabledelete,null);
+            delete.addClickListener(clickEvent -> {
+                GenericConfirmationWindow win = new GenericConfirmationWindow(new BuergerAppEvent(container.getItem(id), id, EventType.DELETE), controller, EntityTableAction.tabledelete);
+                getUI().addWindow(win);
+                win.center();
+                win.focus();
+            });
+
+
+            ActionButton detail = new ActionButton(controller, EntityTableAction.tabledetail,BuergerDetailView.NAME);
+            detail.addClickListener(clickEvent -> {
+                controller.postToEventBus(new BuergerAppEvent(container.getItem(id), id, EventType.SELECT2READ).navigateTo(BuergerDetailView.NAME).from(from));
+            });
+
+            ActionButton edit = new ActionButton(controller, EntityTableAction.tableedit,BuergerUpdateView.NAME);
+            edit.addClickListener(clickEvent -> {
+                controller.postToEventBus(new BuergerAppEvent(container.getItem(id), id, EventType.SELECT2UPDATE).navigateTo(BuergerUpdateView.NAME).from(from));
+            });
+
+
+            layout.addComponent(copy);
+            layout.addComponent(delete);
+            layout.addComponent(detail);
+            layout.addComponent(edit);
         });
 
         layout.setSpacing(true);
