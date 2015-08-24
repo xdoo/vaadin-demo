@@ -53,7 +53,7 @@ public class I18nPaths {
     /**
      * Returns the formpath-ending for a form with the given arguments.
      * Params may not be null.
-     * @param a Action the GUI is used for.
+     * @param a SimpleAction the GUI is used for.
      * @param c Component this text is for.
      * @param t Type of this text.
      * @return path
@@ -87,7 +87,7 @@ public class I18nPaths {
      * Returns the path ending for a notification with the given arguments.
      * Params may not be null.
      * @param nt Type of this notification.
-     * @param a Action the GUI is used for.
+     * @param a SimpleAction the GUI is used for.
      * @param t Type of this text.
      * @return path
      */
@@ -98,7 +98,7 @@ public class I18nPaths {
     /**
      * Returns the path ending for a confirmation with the given arguments.
      * Params may not be null.
-     * @param a Action the GUI is used for.
+     * @param a SimpleAction the GUI is used for.
      * @param t Type of this text.
      * @return path
      */

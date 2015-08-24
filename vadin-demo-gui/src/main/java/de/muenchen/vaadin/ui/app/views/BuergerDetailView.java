@@ -37,7 +37,7 @@ public class BuergerDetailView extends DefaultBuergerView {
         layout.setSpacing(true);
         
         // read form
-        readForm = this.controller.generateReadForm(BuergerUpdateView.NAME, this.NAME);
+        readForm = this.controller.generateReadForm(BuergerUpdateView.NAME, NAME);
         layout.addComponent(readForm);
         
         // tab sheet

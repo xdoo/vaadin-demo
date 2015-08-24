@@ -2,12 +2,18 @@ package de.muenchen.vaadin.ui.components;
 
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
+import de.muenchen.vaadin.services.MessageService;
+import de.muenchen.vaadin.services.MessageServiceImpl;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.components.buttons.Action;
-import de.muenchen.vaadin.demo.api.util.EventType;
+import de.muenchen.vaadin.ui.util.EventType;
+import org.springframework.beans.factory.annotation.Autowired;
+import static de.muenchen.vaadin.ui.util.I18nPaths.*;
 
 
 /**

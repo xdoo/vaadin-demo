@@ -88,7 +88,6 @@ public class AppEvent<T> {
 
     public AppEvent<T> setEntity(T entity) {
         this.entity = entity;
-        this.item = new BeanItem<>(entity);
         return this;
     }
     

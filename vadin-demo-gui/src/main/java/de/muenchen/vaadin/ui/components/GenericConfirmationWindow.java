@@ -81,14 +81,7 @@ public class GenericConfirmationWindow extends Window {
     }
 
     private FontAwesome getIconFor(Action action) {
-        switch(action){
-            case delete:
-                return FontAwesome.TRASH_O;
-            case logout:
-                return FontAwesome.SIGN_OUT;
-            default:
-                return FontAwesome.REORDER;
-        }
+        return action.getIcon().orElse(FontAwesome.AMBULANCE);
     }
 
 

@@ -21,7 +21,7 @@ import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
-import de.muenchen.vaadin.ui.components.buttons.Action;
+import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.demo.api.util.EventType;
 import java.util.Date;
@@ -85,7 +85,7 @@ public class BuergerUpdateForm extends CustomComponent {
         layout.setMargin(true);
 
         // headline
-        Label headline = new Label(controller.resolveRelative(getFormPath(Action.create, Component.headline, Type.label)));
+        Label headline = new Label(controller.resolveRelative(getFormPath(SimpleAction.create, Component.headline, Type.label)));
         headline.addStyleName(ValoTheme.LABEL_H3);
         layout.addComponent(headline);
 
@@ -130,7 +130,7 @@ public class BuergerUpdateForm extends CustomComponent {
         
         layout.addComponent(buttonLayout);
         // die Schaltfläche zum Aktualisieren
-        String update = controller.resolveRelative(getFormPath(Action.update, Component.button, Type.label));
+        String update = controller.resolveRelative(getFormPath(SimpleAction.update, Component.button, Type.label));
         Button updateButton = new Button(update, (Button.ClickEvent click) -> {
             try {
                 binder.commit();
@@ -148,7 +148,7 @@ public class BuergerUpdateForm extends CustomComponent {
         buttonLayout.addComponent(updateButton);
         // die Schaltfläche zum Abbrechen
         buttonLayout.addComponent(new GenericCancelButton(
-                controller.resolveRelative(getFormPath(Action.cancel, Component.button, Type.label)),
+                controller.resolveRelative(getFormPath(SimpleAction.cancel, Component.button, Type.label)),
                 new BuergerAppEvent(null, EventType.CANCEL).navigateTo(this.back), // hier kann eine 'null' gesetzt werden, weil nichts mehr mit dem Objekt passiert
                 this.controller.getEventbus()));
         setCompositionRoot(layout);
