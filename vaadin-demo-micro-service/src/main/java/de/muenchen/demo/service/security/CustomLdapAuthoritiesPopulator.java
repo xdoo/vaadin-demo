@@ -1,7 +1,9 @@
 package de.muenchen.demo.service.security;
 
-import de.muenchen.demo.service.domain.User;
-import de.muenchen.demo.service.services.UserService;
+import de.muenchen.demo.service.domain.AuthorityPermission;
+import de.muenchen.demo.service.domain.UserAuthority;
+import de.muenchen.demo.service.services.AuthorityPermissionService;
+import de.muenchen.demo.service.services.UserAuthorityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -10,14 +12,16 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.ldap.userdetails.LdapAuthoritiesPopulator;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 /**
- * Anbindung an die Rollenzuordnung, die in der DB steht.
+ * Anbindung an die Permissions, die in der DB stehen.
  *
- * @author m.kurz
+ * @author rene.zarwel
  */
 @Configuration
 @ComponentScan
@@ -25,17 +29,42 @@ import java.util.HashSet;
 public class CustomLdapAuthoritiesPopulator implements LdapAuthoritiesPopulator {
 
     @Autowired
-    private UserService userService;
-    
+    private UserAuthorityService userAuthService;
+
+    @Autowired
+    private AuthorityPermissionService authorityPermissionService;
+
     @Override
+    @Transactional(readOnly = true)
     public Collection<? extends GrantedAuthority> getGrantedAuthorities(
             DirContextOperations userData, String username) {
         Collection<GrantedAuthority> gas = new HashSet<GrantedAuthority>();
-        // hier gehts weiter
-        User benutzer = userService.readByUsername(username);
 
-        //gas.add(new SimpleGrantedAuthority(benutzer.getRole()));
-        gas.add(new SimpleGrantedAuthority("PERM_queryBuerger"));
+        /*
+        Gets a list of all authorities of this user
+        and with this authorities all permissions of this user.
+
+        Afterwards returns a list of all permissions of this user.
+         */
+        List<UserAuthority> authorities = userAuthService.readByUsername(username);
+
+        authorities.stream().forEach(userAuthority -> {
+
+            String authorityName = userAuthority.getId().getAuthority().getAuthority();
+
+            List<AuthorityPermission> authorityPermissionsList = authorityPermissionService.readByAuthority(authorityName);
+
+            authorityPermissionsList.stream().forEach(authorityPermission -> {
+
+                String authName = authorityPermission.getId().getPermission().getPermision();
+
+                gas.add(new SimpleGrantedAuthority(authName));
+
+            });
+
+
+        });
+
         return gas;
     }
 }
