@@ -5,15 +5,15 @@ package de.muenchen.demo.test.service;
  * @author claus.straube
  */
 public interface DomainConstants {
-    
+
     // User
     public final static String M2_U001_NAME = "hans";
     public final static String M3_U002_NAME = "franz";
-    
+
     // Mandanten
     public final static String M2 = "2";
     public final static String M3 = "3";
-    
+
     // Bürger
     public final static String M2_B001 = "OIDM2_BUERGER001";
     public final static String M2_B002 = "OIDM2_BUERGER002";
@@ -108,5 +108,71 @@ public interface DomainConstants {
     public final static String M3_P008 = "OIDM3_PASS016";
     public final static String M3_P009 = "OIDM3_PASS017";
     public final static String M3_P010 = "M2_PASS018";
+
+    //Wohnungen
+    public final static String M2_W001 = "OIDM2_WOHNUNG001";
+    public final static String M2_W002 = "OIDM2_WOHNUNG002";
+    public final static String M2_W003 = "OIDM2_WOHNUNG003";
+    public final static String M2_W004 = "OIDM2_WOHNUNG004";
+    public final static String M2_W005 = "OIDM2_WOHNUNG005";
+    public final static String M2_W006 = "OIDM2_WOHNUNG006";
+    public final static String M2_W007 = "OIDM2_WOHNUNG007";
+    public final static String M2_W008 = "OIDM2_WOHNUNG008";
+    public final static String M2_W009 = "OIDM2_WOHNUNG009";
+    public final static String M2_W010 = "OIDM2_WOHNUNG010";
+    public final static String M2_W011 = "OIDM2_WOHNUNG011";
+    public final static String M2_W012 = "OIDM2_WOHNUNG012";
+    public final static String M2_W013 = "OIDM2_WOHNUNG013";
+    public final static String M2_W014 = "OIDM2_WOHNUNG014";
+    public final static String M2_W015 = "OIDM2_WOHNUNG015";
+    public final static String M2_W016 = "OIDM2_WOHNUNG016";
+    public final static String M2_W017 = "OIDM2_WOHNUNG017";
+    public final static String M2_W018 = "OIDM2_WOHNUNG018";
+    public final static String M2_W019 = "OIDM2_WOHNUNG019";
+    public final static String M2_W020 = "OIDM2_WOHNUNG020";
+    public final static String M3_W001 = "OIDM3_WOHNUNG001";
+    public final static String M3_W002 = "OIDM3_WOHNUNG002";
+    public final static String M3_W003 = "OIDM3_WOHNUNG003";
+    public final static String M3_W004 = "OIDM3_WOHNUNG004";
+    public final static String M3_W005 = "OIDM3_WOHNUNG005";
+    public final static String M3_W006 = "OIDM3_WOHNUNG006";
+    public final static String M3_W007 = "OIDM3_WOHNUNG007";
+    public final static String M3_W008 = "OIDM3_WOHNUNG008";
+    public final static String M3_W009 = "OIDM3_WOHNUNG009";
+    public final static String M3_W010 = "OIDM3_WOHNUNG010";
+
+    //Staatsangehoerigkeiten
+    public final static String M2_S001 = "OIDM2_STAATS001";
+    public final static String M2_S002 = "OIDM2_STAATS002";
+    public final static String M2_S003 = "OIDM2_STAATS003";
+    public final static String M2_S004 = "OIDM2_STAATS004";
+    public final static String M2_S005 = "OIDM2_STAATS005";
+    public final static String M2_S006 = "OIDM2_STAATS006";
+    public final static String M2_S007 = "OIDM2_STAATS007";
+    public final static String M2_S008 = "OIDM2_STAATS008";
+    public final static String M2_S009 = "OIDM2_STAATS009";
+    public final static String M2_S010 = "OIDM2_STAATS010";
+    public final static String M2_S011 = "OIDM2_STAATS011";
+    public final static String M2_S012 = "OIDM2_STAATS012";
+    public final static String M2_S013 = "OIDM2_STAATS013";
+    public final static String M2_S014 = "OIDM2_STAATS014";
+    public final static String M2_S015 = "OIDM2_STAATS015";
+    public final static String M2_S016 = "OIDM2_STAATS016";
+    public final static String M2_S017 = "OIDM2_STAATS017";
+    public final static String M2_S018 = "OIDM2_STAATS018";
+    public final static String M2_S019 = "OIDM2_STAATS019";
+    public final static String M2_S020 = "OIDM2_STAATS020";
+    public final static String M3_S001 = "OIDM3_STAATS001";
+    public final static String M3_S002 = "OIDM3_STAATS002";
+    public final static String M3_S003 = "OIDM3_STAATS003";
+    public final static String M3_S004 = "OIDM3_STAATS004";
+    public final static String M3_S005 = "OIDM3_STAATS005";
+    public final static String M3_S006 = "OIDM3_STAATS006";
+    public final static String M3_S007 = "OIDM3_STAATS007";
+    public final static String M3_S008 = "OIDM3_STAATS008";
+    public final static String M3_S009 = "OIDM3_STAATS009";
+    public final static String M3_S010 = "OIDM3_STAATS010";
+    public final static String M3_S011 = "OIDM3_STAATS011";
+    public final static String M3_S012 = "OIDM3_STAATS012";
 
 }

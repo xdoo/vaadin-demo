@@ -14,6 +14,7 @@ import de.muenchen.demo.service.domain.WohnungRepository;
 import de.muenchen.demo.service.util.IdService;
 import de.muenchen.demo.service.util.QueryService;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,13 +76,13 @@ public class WohnungServiceImpl implements WohnungService {
 
     @Override
     public Wohnung read(String oid) {
-        List<Wohnung> result = this.repo.findByOidAndMandantOid(oid, readUser().getMandant().getOid());
-        if (result.isEmpty()) {
-// TODO
-            LOG.warn(String.format("found no wohnung with oid '%s'", oid));
+        Wohnung result = this.repo.findFirstByOidAndMandantOid(oid, readUser().getMandant().getOid());
+
+        if (Objects.isNull(result)) {
+            LOG.warn(String.format("found no pass with oid '%s'", oid));
             return null;
         } else {
-            return result.get(0);
+            return result;
         }
     }
 

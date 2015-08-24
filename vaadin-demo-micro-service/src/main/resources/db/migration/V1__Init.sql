@@ -531,3 +531,157 @@ insert into BUERGER_PASS (BUERGER, PASS) values ('2037','3048');
 insert into BUERGER_PASS (BUERGER, PASS) values ('2038','3049');
 insert into BUERGER_PASS (BUERGER, PASS) values ('2039','3050');
 
+
+
+--Wohnungen
+
+insert into wohnungen (ID, OID, wohn_ausrichtung, wohn_stock, MANDANT) values ('4000','OIDM2_WOHNUNG001','West','erste','2');
+insert into wohnungen (ID, OID, wohn_ausrichtung, wohn_stock, MANDANT) values ('4001','OIDM2_WOHNUNG002','West','erste','2');
+insert into wohnungen (ID, OID, wohn_ausrichtung, wohn_stock, MANDANT) values ('4002','OIDM2_WOHNUNG003','West','erste','2');
+insert into wohnungen (ID, OID, wohn_ausrichtung, wohn_stock, MANDANT) values ('4003','OIDM2_WOHNUNG004','West','erste','2');
+insert into wohnungen (ID, OID, wohn_ausrichtung, wohn_stock, MANDANT) values ('4004','OIDM2_WOHNUNG005','West','erste','2');
+insert into wohnungen (ID, OID, wohn_ausrichtung, wohn_stock, MANDANT) values ('4005','OIDM2_WOHNUNG006','West','erste','2');
+insert into wohnungen (ID, OID, wohn_ausrichtung, wohn_stock, MANDANT) values ('4006','OIDM2_WOHNUNG007','West','erste','2');
+insert into wohnungen (ID, OID, wohn_ausrichtung, wohn_stock, MANDANT) values ('4007','OIDM2_WOHNUNG008','West','erste','2');
+insert into wohnungen (ID, OID, wohn_ausrichtung, wohn_stock, MANDANT) values ('4008','OIDM2_WOHNUNG009','West','erste','2');
+insert into wohnungen (ID, OID, wohn_ausrichtung, wohn_stock, MANDANT) values ('4009','OIDM2_WOHNUNG010','West','erste','2');
+insert into wohnungen (ID, OID, wohn_ausrichtung, wohn_stock, MANDANT) values ('4010','OIDM2_WOHNUNG011','West','erste','2');
+insert into wohnungen (ID, OID, wohn_ausrichtung, wohn_stock, MANDANT) values ('4011','OIDM2_WOHNUNG012','West','erste','2');
+insert into wohnungen (ID, OID, wohn_ausrichtung, wohn_stock, MANDANT) values ('4012','OIDM2_WOHNUNG013','West','erste','2');
+insert into wohnungen (ID, OID, wohn_ausrichtung, wohn_stock, MANDANT) values ('4013','OIDM2_WOHNUNG014','West','erste','2');
+insert into wohnungen (ID, OID, wohn_ausrichtung, wohn_stock, MANDANT) values ('4014','OIDM2_WOHNUNG015','West','erste','2');
+insert into wohnungen (ID, OID, wohn_ausrichtung, wohn_stock, MANDANT) values ('4015','OIDM2_WOHNUNG016','West','erste','2');
+insert into wohnungen (ID, OID, wohn_ausrichtung, wohn_stock, MANDANT) values ('4016','OIDM2_WOHNUNG017','West','erste','2');
+insert into wohnungen (ID, OID, wohn_ausrichtung, wohn_stock, MANDANT) values ('4017','OIDM2_WOHNUNG018','West','erste','2');
+insert into wohnungen (ID, OID, wohn_ausrichtung, wohn_stock, MANDANT) values ('4018','OIDM2_WOHNUNG019','West','erste','2');
+insert into wohnungen (ID, OID, wohn_ausrichtung, wohn_stock, MANDANT) values ('4019','OIDM2_WOHNUNG020','West','erste','2');
+insert into wohnungen (ID, OID, wohn_ausrichtung, wohn_stock, MANDANT) values ('4020','OIDM3_WOHNUNG001','West','erste','3');
+insert into wohnungen (ID, OID, wohn_ausrichtung, wohn_stock, MANDANT) values ('4021','OIDM3_WOHNUNG002','West','erste','3');
+insert into wohnungen (ID, OID, wohn_ausrichtung, wohn_stock, MANDANT) values ('4022','OIDM3_WOHNUNG003','West','erste','3');
+insert into wohnungen (ID, OID, wohn_ausrichtung, wohn_stock, MANDANT) values ('4023','OIDM3_WOHNUNG004','West','erste','3');
+insert into wohnungen (ID, OID, wohn_ausrichtung, wohn_stock, MANDANT) values ('4024','OIDM3_WOHNUNG005','West','erste','3');
+insert into wohnungen (ID, OID, wohn_ausrichtung, wohn_stock, MANDANT) values ('4025','OIDM3_WOHNUNG006','West','erste','3');
+insert into wohnungen (ID, OID, wohn_ausrichtung, wohn_stock, MANDANT) values ('4026','OIDM3_WOHNUNG007','West','erste','3');
+insert into wohnungen (ID, OID, wohn_ausrichtung, wohn_stock, MANDANT) values ('4027','OIDM3_WOHNUNG008','West','erste','3');
+insert into wohnungen (ID, OID, wohn_ausrichtung, wohn_stock, MANDANT) values ('4028','OIDM3_WOHNUNG009','West','erste','3');
+insert into wohnungen (ID, OID, wohn_ausrichtung, wohn_stock, MANDANT) values ('4029','OIDM3_WOHNUNG010','West','erste','3');
+
+--Bürger zu Wohnung
+
+insert into buerger_wohnungen (BUERGER, WOHNUNGEN) values ('2000','4000');
+insert into buerger_wohnungen (BUERGER, WOHNUNGEN) values ('2001','4001');
+insert into buerger_wohnungen (BUERGER, WOHNUNGEN) values ('2002','4002');
+insert into buerger_wohnungen (BUERGER, WOHNUNGEN) values ('2003','4003');
+insert into buerger_wohnungen (BUERGER, WOHNUNGEN) values ('2004','4004');
+insert into buerger_wohnungen (BUERGER, WOHNUNGEN) values ('2005','4005');
+insert into buerger_wohnungen (BUERGER, WOHNUNGEN) values ('2006','4006');
+insert into buerger_wohnungen (BUERGER, WOHNUNGEN) values ('2007','4007');
+insert into buerger_wohnungen (BUERGER, WOHNUNGEN) values ('2008','4008');
+insert into buerger_wohnungen (BUERGER, WOHNUNGEN) values ('2009','4009');
+insert into buerger_wohnungen (BUERGER, WOHNUNGEN) values ('2010','4010');
+insert into buerger_wohnungen (BUERGER, WOHNUNGEN) values ('2011','4011');
+insert into buerger_wohnungen (BUERGER, WOHNUNGEN) values ('2012','4012');
+insert into buerger_wohnungen (BUERGER, WOHNUNGEN) values ('2013','4013');
+insert into buerger_wohnungen (BUERGER, WOHNUNGEN) values ('2014','4014');
+insert into buerger_wohnungen (BUERGER, WOHNUNGEN) values ('2015','4015');
+insert into buerger_wohnungen (BUERGER, WOHNUNGEN) values ('2016','4016');
+insert into buerger_wohnungen (BUERGER, WOHNUNGEN) values ('2017','4017');
+insert into buerger_wohnungen (BUERGER, WOHNUNGEN) values ('2018','4018');
+insert into buerger_wohnungen (BUERGER, WOHNUNGEN) values ('2000','4010');
+insert into buerger_wohnungen (BUERGER, WOHNUNGEN) values ('2001','4011');
+insert into buerger_wohnungen (BUERGER, WOHNUNGEN) values ('2002','4012');
+insert into buerger_wohnungen (BUERGER, WOHNUNGEN) values ('2003','4013');
+insert into buerger_wohnungen (BUERGER, WOHNUNGEN) values ('2004','4014');
+insert into buerger_wohnungen (BUERGER, WOHNUNGEN) values ('2005','4015');
+insert into buerger_wohnungen (BUERGER, WOHNUNGEN) values ('2006','4016');
+insert into buerger_wohnungen (BUERGER, WOHNUNGEN) values ('2007','4017');
+insert into buerger_wohnungen (BUERGER, WOHNUNGEN) values ('2008','4018');
+insert into buerger_wohnungen (BUERGER, WOHNUNGEN) values ('2009','4019');
+insert into buerger_wohnungen (BUERGER, WOHNUNGEN) values ('2010','4020');
+insert into buerger_wohnungen (BUERGER, WOHNUNGEN) values ('2011','4021');
+insert into buerger_wohnungen (BUERGER, WOHNUNGEN) values ('2012','4022');
+insert into buerger_wohnungen (BUERGER, WOHNUNGEN) values ('2013','4023');
+insert into buerger_wohnungen (BUERGER, WOHNUNGEN) values ('2014','4024');
+insert into buerger_wohnungen (BUERGER, WOHNUNGEN) values ('2015','4025');
+insert into buerger_wohnungen (BUERGER, WOHNUNGEN) values ('2016','4026');
+insert into buerger_wohnungen (BUERGER, WOHNUNGEN) values ('2017','4027');
+insert into buerger_wohnungen (BUERGER, WOHNUNGEN) values ('2018','4028');
+
+
+
+--Staatsangehoerigkeit
+
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5000','OIDM2_STAATS001','2');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5001','OIDM2_STAATS002','2');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5002','OIDM2_STAATS003','2');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5003','OIDM2_STAATS004','2');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5004','OIDM2_STAATS005','2');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5005','OIDM2_STAATS006','2');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5006','OIDM2_STAATS007','2');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5007','OIDM2_STAATS008','2');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5008','OIDM2_STAATS009','2');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5009','OIDM2_STAATS010','2');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5010','OIDM2_STAATS011','2');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5011','OIDM2_STAATS012','2');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5012','OIDM2_STAATS013','2');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5013','OIDM2_STAATS014','2');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5014','OIDM2_STAATS015','2');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5015','OIDM2_STAATS016','2');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5016','OIDM2_STAATS017','2');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5017','OIDM2_STAATS018','2');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5018','OIDM2_STAATS019','2');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5019','OIDM2_STAATS020','2');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5020','OIDM3_STAATS001','3');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5021','OIDM3_STAATS002','3');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5022','OIDM3_STAATS003','3');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5023','OIDM3_STAATS004','3');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5024','OIDM3_STAATS005','3');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5025','OIDM3_STAATS006','3');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5026','OIDM3_STAATS007','3');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5027','OIDM3_STAATS008','3');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5028','OIDM3_STAATS009','3');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5029','OIDM3_STAATS010','3');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5030','OIDM3_STAATS011','3');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5031','OIDM3_STAATS012','3');	
+
+--Staatsangehoerigkeiten zu bürger
+
+insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2000','5000');
+insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2001','5001');
+insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2002','5002');
+insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2003','5003');
+insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2004','5004');
+insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2005','5005');
+insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2006','5006');
+insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2007','5007');
+insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2008','5008');
+insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2009','5009');
+insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2010','5010');
+insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2011','5011');
+insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2012','5012');
+insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2013','5013');
+insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2014','5014');
+insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2015','5015');
+insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2016','5016');
+insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2017','5017');
+insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2000','5010');
+insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2001','5011');
+insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2002','5012');
+insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2003','5013');
+insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2004','5014');
+insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2005','5015');
+insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2006','5016');
+insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2007','5017');
+insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2008','5018');
+insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2009','5019');
+insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2010','5020');
+insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2011','5021');
+insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2012','5022');
+insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2013','5023');
+insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2014','5024');
+insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2015','5025');
+insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2016','5026');
+insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2017','5027');
+insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2018','5028');
+insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2019','5029');
+

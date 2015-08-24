@@ -13,6 +13,7 @@ import de.muenchen.demo.service.domain.User;
 import de.muenchen.demo.service.util.QueryService;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.EntityManager;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,13 +55,13 @@ public class StaatsangehoerigkeitServiceImpl implements StaatsangehoerigkeitServ
     @Override
     public Staatsangehoerigkeit read(String referencedOid) {
 
-        List<StaatsangehoerigkeitReference> result = this.repo.findByReferencedOidAndMandantOid(referencedOid, readUser().getMandant().getOid());
-        if (result.isEmpty()) {
+        StaatsangehoerigkeitReference result = this.repo.findFirstByReferencedOidAndMandantOid(referencedOid, readUser().getMandant().getOid());
+        if (Objects.isNull(result)) {
 
             return null;
         } else {
 
-            String URL2 = URL + "staat/" + result.get(0).getReferencedOid();
+            String URL2 = URL + "staat/" + result.getReferencedOid();
             ResponseEntity<Staatsangehoerigkeit> result2 = this.restTemplate.getForEntity(URL2, Staatsangehoerigkeit.class);
             return result2.getBody();
         }
@@ -69,13 +70,13 @@ public class StaatsangehoerigkeitServiceImpl implements StaatsangehoerigkeitServ
     @Override
     public StaatsangehoerigkeitReference readReference(String referencedOid) {
 
-        List<StaatsangehoerigkeitReference> result = this.repo.findByReferencedOidAndMandantOid(referencedOid, readUser().getMandant().getOid());
-        if (result.isEmpty()) {
+        StaatsangehoerigkeitReference result = this.repo.findFirstByReferencedOidAndMandantOid(referencedOid, readUser().getMandant().getOid());
+        if (Objects.isNull(result)) {
 
             return null;
         } else {
 
-            return result.get(0);
+            return result;
         }
     }
 
