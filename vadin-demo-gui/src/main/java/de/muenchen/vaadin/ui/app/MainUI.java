@@ -9,7 +9,7 @@ import de.muenchen.vaadin.ui.app.views.events.LogoutEvent;
 import de.muenchen.vaadin.ui.components.GenericConfirmationWindow;
 import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.controller.ControllerContext;
-import de.muenchen.vaadin.ui.util.EventType;
+import de.muenchen.vaadin.demo.api.util.EventType;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;

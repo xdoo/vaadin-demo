@@ -8,7 +8,7 @@ import de.muenchen.vaadin.ui.components.buttons.ActionButton;
 import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.components.buttons.TableActionButton;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
-import de.muenchen.vaadin.ui.util.EventType;
+import de.muenchen.vaadin.demo.api.util.EventType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
