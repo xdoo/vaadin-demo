@@ -37,12 +37,6 @@ public class BuergerTableView extends DefaultBuergerView {
         addComponent(table);
     }
     
-    /**
-     * removes the table from the EventBus for garbageCollection
-     */
-    public void unRegisterTable(){
-        controller.getBus().unregister(table.getTable());
-    }
-    
+
     
 }

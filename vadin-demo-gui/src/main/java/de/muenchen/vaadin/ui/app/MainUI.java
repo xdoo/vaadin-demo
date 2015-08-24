@@ -7,14 +7,12 @@ import de.muenchen.vaadin.demo.api.domain.BaseEntity;
 import de.muenchen.vaadin.ui.app.views.events.AppEvent;
 import de.muenchen.vaadin.ui.app.views.events.LogoutEvent;
 import de.muenchen.vaadin.ui.components.GenericConfirmationWindow;
-import de.muenchen.vaadin.ui.components.buttons.Action;
+import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.controller.ControllerContext;
-import de.muenchen.vaadin.ui.util.EventType;
-import de.muenchen.vaadin.ui.util.I18nPaths;
+import de.muenchen.vaadin.demo.api.util.EventType;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
-import com.vaadin.annotations.Widgetset;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.shared.ui.label.ContentMode;
@@ -33,10 +31,8 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.services.MessageService;
 import de.muenchen.vaadin.demo.api.services.SecurityService;
-import de.muenchen.vaadin.ui.app.views.BuergerDetailView;
 import de.muenchen.vaadin.ui.app.views.MainView;
 import de.muenchen.vaadin.ui.app.views.BuergerTableView;
-import de.muenchen.vaadin.ui.app.views.BuergerUpdateView;
 import de.muenchen.vaadin.ui.app.views.LoginView;
 import de.muenchen.vaadin.ui.app.views.events.LoginEvent;
 import de.muenchen.vaadin.ui.util.EventBus;
@@ -48,10 +44,6 @@ import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static de.muenchen.vaadin.ui.util.I18nPaths.*;
-
-import javax.servlet.annotation.WebServlet;
 
 @SpringUI
 @Title("Vaadin Spring-Security Sample")
@@ -135,21 +127,7 @@ public class MainUI extends UI implements ControllerContext {
                 // Check if a user has logged in
                 boolean isLoggedIn = security.isLoggedIn();
                 boolean isLoginView = event.getNewView() instanceof LoginView;
-            /*    boolean fromTable = event.getOldView() instanceof BuergerTableView;
-                boolean fromUpdate = event.getOldView() instanceof BuergerUpdateView;
-                boolean fromDetail = event.getOldView() instanceof BuergerDetailView;
-                if (fromTable) {
-                    BuergerTableView old = (BuergerTableView) event.getOldView();
-                    old.unRegisterTable();
-                }
-                if (fromUpdate) {
-                    BuergerUpdateView old = (BuergerUpdateView) event.getOldView();
-                    old.unRegisterForm();
-                }
-                if (fromDetail) {
-                    BuergerDetailView old = (BuergerDetailView) event.getOldView();
-                    old.unRegister();
-                }*/
+
                 if (!isLoggedIn && !isLoginView) {
                     // Redirect to login view always if a user has not yet
                     // logged in
@@ -163,18 +141,17 @@ public class MainUI extends UI implements ControllerContext {
                     LOG.warn("login view cannot be entered while logged in.");
                     return false;
                 }
+                if(event.getNewView().equals(event.getOldView())) {
+                    LOG.warn("You are already on: "+ event.getViewName());
+                    return false;
+                }
 
                 return true;
             }
 
             @Override
             public void afterViewChange(final ViewChangeEvent event) {
-                
-               /* boolean toTableView = event.getNewView() instanceof BuergerTableView;
-                if(toTableView){
-                    BuergerTableView tmp = (BuergerTableView) event.getNewView();
-                    tmp.setTable(buergerTable);
-                }*/
+
                 for (final Iterator<Component> it = menuItemsLayout.iterator(); it
                         .hasNext(); ) {
                     it.next().removeStyleName("selected");
@@ -274,14 +251,11 @@ public class MainUI extends UI implements ControllerContext {
         }
 
         // creates and displays the logout button
-        final Button logoutButton = new Button("Logout", new ClickListener() {
-            @Override
-            public void buttonClick(final ClickEvent event) {
-                GenericConfirmationWindow confirmationWindow = new GenericConfirmationWindow(new LogoutEvent(), MainUI.this, Action.logout);
-                getUI().addWindow(confirmationWindow);
-                confirmationWindow.center();
-                confirmationWindow.focus();
-            }
+        final Button logoutButton = new Button("Logout", event -> {
+            GenericConfirmationWindow confirmationWindow = new GenericConfirmationWindow(new LogoutEvent(), MainUI.this, SimpleAction.logout);
+            getUI().addWindow(confirmationWindow);
+            confirmationWindow.center();
+            confirmationWindow.focus();
         });
         logoutButton.setHtmlContentAllowed(true);
         logoutButton.setPrimaryStyleName("valo-menu-item");

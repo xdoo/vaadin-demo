@@ -37,7 +37,7 @@ public class BuergerDetailView extends DefaultBuergerView {
         layout.setSpacing(true);
         
         // read form
-        readForm = this.controller.generateReadForm(BuergerUpdateView.NAME, this.NAME);
+        readForm = this.controller.generateReadForm(BuergerUpdateView.NAME, NAME);
         layout.addComponent(readForm);
         
         // tab sheet
@@ -53,9 +53,5 @@ public class BuergerDetailView extends DefaultBuergerView {
         
         addComponent(layout);
     }
-    public void unRegister(){
-        controller.getEventbus().unregister(childTab.getTable());
-        controller.getEventbus().unregister(childTab);
-        controller.getEventbus().unregister(readForm);
-    }
+
 }

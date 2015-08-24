@@ -1,7 +1,7 @@
 package de.muenchen.vaadin.ui.app.views.events;
 
 import com.vaadin.data.util.BeanItem;
-import de.muenchen.vaadin.ui.util.EventType;
+import de.muenchen.vaadin.demo.api.util.EventType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
