@@ -15,6 +15,7 @@ import org.springframework.hateoas.ExposesResourceFor;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,7 +45,7 @@ public class AdresseController {
      *
      * @return
      */
-    @RolesAllowed({"PERM_queryAdresse"})
+    @Secured({"PERM_queryAdresse"})
     @RequestMapping(value = "/query", method = {RequestMethod.GET})
     public ResponseEntity queryAdresse() {
         if (LOG.isDebugEnabled()) {
@@ -62,7 +63,7 @@ public class AdresseController {
      *
      * @return
      */
-    @RolesAllowed({"PERM_newAdresse"})
+    @Secured({"PERM_newAdresse"})
     @RequestMapping(value = "/new", method = {RequestMethod.GET})
     public ResponseEntity newAdresse() {
         if (LOG.isDebugEnabled()) {
@@ -80,7 +81,7 @@ public class AdresseController {
      * @param oid
      * @return
      */
-    @RolesAllowed({"PERM_copyAdresse"})
+    @Secured({"PERM_copyAdresse"})
     @RequestMapping(value = "/copy/{oid}", method = {RequestMethod.GET})
     public ResponseEntity copyAdresse(@PathVariable String oid) {
         if (LOG.isDebugEnabled()) {
@@ -97,7 +98,7 @@ public class AdresseController {
      * @param oid
      * @return
      */
-    @RolesAllowed({"PERM_readAdresse"})
+    @Secured({"PERM_readAdresse"})
     @RequestMapping(value = "/{oid}", method = {RequestMethod.GET})
     public ResponseEntity readAdresse(@PathVariable("oid") String oid) {
         if (LOG.isDebugEnabled()) {
@@ -115,7 +116,7 @@ public class AdresseController {
      * @param request
      * @return
      */
-    @RolesAllowed({"PERM_updateAdresse"})
+    @Secured({"PERM_updateAdresse"})
     @RequestMapping(value = "/{oid}", method = {RequestMethod.POST})
     public ResponseEntity updateAdresse(@PathVariable("oid") String oid, @RequestBody AdresseResource request) {
         if (LOG.isDebugEnabled()) {
@@ -136,7 +137,7 @@ public class AdresseController {
      * @param request
      * @return
      */
-    @RolesAllowed({"PERM_saveAdresse"})
+    @Secured({"PERM_saveAdresse"})
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
     public ResponseEntity saveAdresse(@RequestBody AdresseResource request) {
         if (LOG.isDebugEnabled()) {
@@ -157,7 +158,7 @@ public class AdresseController {
      * @param oid
      * @return
      */
-    @RolesAllowed({"PERM_deleteAdresse"})
+    @Secured({"PERM_deleteAdresse"})
     @RequestMapping(value = "/{oid}", method = {RequestMethod.DELETE})
     public ResponseEntity deleteAdresse(@PathVariable("oid") String oid) {
         if (LOG.isDebugEnabled()) {

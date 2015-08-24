@@ -15,6 +15,7 @@ import org.springframework.hateoas.ExposesResourceFor;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,7 +47,7 @@ public class AuthorityController {
      *
      * @return
      */
-    @RolesAllowed({"PERM_queryAuthority"})
+    @Secured({"PERM_queryAuthority"})
     @RequestMapping(value = "/query", method = {RequestMethod.GET})
     public ResponseEntity queryAuthority() {
         if (LOG.isDebugEnabled()) {
@@ -64,7 +65,7 @@ public class AuthorityController {
      *
      * @return
      */
-    @RolesAllowed({"PERM_newAuthority"})
+    @Secured({"PERM_newAuthority"})
     @RequestMapping(value = "/new", method = {RequestMethod.GET})
     public ResponseEntity newAuthority() {
         if (LOG.isDebugEnabled()) {
@@ -82,7 +83,7 @@ public class AuthorityController {
      * @param oid
      * @return
      */
-    @RolesAllowed({"PERM_readAuthority"})
+    @Secured({"PERM_readAuthority"})
     @RequestMapping(value = "/{oid}", method = {RequestMethod.GET})
     public ResponseEntity readAuthority(@PathVariable("oid") String oid) {
         if (LOG.isDebugEnabled()) {
@@ -100,7 +101,7 @@ public class AuthorityController {
      * @param request
      * @return
      */
-        @RolesAllowed({"PERM_updateAuthority"})
+        @Secured({"PERM_updateAuthority"})
     @RequestMapping(value = "/{oid}", method = {RequestMethod.POST})
     public ResponseEntity updateAuthority(@PathVariable("oid") String oid, @RequestBody AuthorityResource request) {
         if (LOG.isDebugEnabled()) {
@@ -121,7 +122,7 @@ public class AuthorityController {
      * @param request
      * @return
      */
-        @RolesAllowed({"PERM_saveAuthority"})
+        @Secured({"PERM_saveAuthority"})
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
     public ResponseEntity saveAuthority(@RequestBody AuthorityResource request) {
         if (LOG.isDebugEnabled()) {
@@ -140,7 +141,7 @@ public class AuthorityController {
      * @param oid
      * @return
      */
-    @RolesAllowed({"PERM_deleteAuthority"})
+    @Secured({"PERM_deleteAuthority"})
     @RequestMapping(value = "/{oid}", method = {RequestMethod.DELETE})
     public ResponseEntity deleteAuthority(@PathVariable("oid") String oid) {
         if (LOG.isDebugEnabled()) {
@@ -156,7 +157,7 @@ public class AuthorityController {
      * @param oid
      * @return
      */
-    @RolesAllowed({"PERM_copyAuthority"})
+    @Secured({"PERM_copyAuthority"})
     @RequestMapping(value = "/copy/{oid}", method = {RequestMethod.GET})
     public ResponseEntity copyAuthority(@PathVariable String oid) {
         if (LOG.isDebugEnabled()) {

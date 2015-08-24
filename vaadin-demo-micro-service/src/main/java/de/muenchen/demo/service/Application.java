@@ -8,7 +8,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import de.muenchen.vaadin.demo.api.security.AuthenticationConfiguratorAdapter;
+import de.muenchen.demo.service.security.AuthenticationConfiguratorAdapter;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 import org.slf4j.Logger;
@@ -63,7 +63,8 @@ public class Application {
 
     @Bean
     public AuthenticationConfiguratorAdapter authenticationSecurity() {
-        return AuthenticationConfiguratorAdapter.findAdapter("JDBC_Authentication");
+        return AuthenticationConfiguratorAdapter.findAdapter("LDAP_Authentication");
+        //return AuthenticationConfiguratorAdapter.findAdapter("JDBC_Authentication");
     }
 
     @Order(ManagementServerProperties.ACCESS_OVERRIDE_ORDER)

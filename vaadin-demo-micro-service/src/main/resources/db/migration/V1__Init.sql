@@ -79,7 +79,7 @@ alter table wohnungen_aud add constraint FK_wohnungen_TO_revinfo foreign key (re
 insert into MANDANT (ID,OID) values (2,'2');
 insert into MANDANT (ID,OID) values (3,'3');
 
-insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (2,'hans@test.de',TRUE,'oid1','test','hans',2);
+insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (2,'hans@test.de',TRUE,'oid1','test','rene.zarwel',2);
 insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (3,'franz@test.de',TRUE,'oid2','test','franz',3);
 
 insert  into authoritys (id, oid, auth_authority) values ('2','2','ADMIN');					

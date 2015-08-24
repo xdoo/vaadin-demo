@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,7 +58,7 @@ public class MandantController {
      *
      * @return
      */
-    @RolesAllowed({"PERM_queryMandant"})
+    @Secured({"PERM_queryMandant"})
     @RequestMapping(value = "/query", method = {RequestMethod.GET})
     public ResponseEntity queryMandant() {
         if (LOG.isDebugEnabled()) {
@@ -74,7 +75,7 @@ public class MandantController {
      * @param filter
      * @return
      */
-    @RolesAllowed({"PERM_queryMandant"})
+    @Secured({"PERM_queryMandant"})
     @RequestMapping(value = "/query", params = {"filter"})
     public ResponseEntity queryMandant(@RequestParam(value = "filter") String filter) {
         if (LOG.isDebugEnabled()) {
@@ -91,7 +92,7 @@ public class MandantController {
      *
      * @return
      */
-    @RolesAllowed({"PERM_newMandant"})
+    @Secured({"PERM_newMandant"})
     @RequestMapping(value = "/new", method = {RequestMethod.GET})
     public ResponseEntity newMandant() {
         if (LOG.isDebugEnabled()) {
@@ -110,7 +111,7 @@ public class MandantController {
      * @param oid
      * @return
      */
-    @RolesAllowed({"PERM_copyMandant"})
+    @Secured({"PERM_copyMandant"})
     @RequestMapping(value = "/copy/{oid}", method = {RequestMethod.GET})
     public ResponseEntity copyMandant(@PathVariable String oid) {
         if (LOG.isDebugEnabled()) {
@@ -127,7 +128,7 @@ public class MandantController {
      * @param oid
      * @return
      */
-    @RolesAllowed({"PERM_readMandant"})
+    @Secured({"PERM_readMandant"})
     @RequestMapping(value = "/{oid}", method = {RequestMethod.GET})
     public ResponseEntity readMandant(@PathVariable("oid") String oid) {
         if (LOG.isDebugEnabled()) {
@@ -145,7 +146,7 @@ public class MandantController {
      * @param request
      * @return
      */
-    @RolesAllowed({"PERM_updateMandant"})
+    @Secured({"PERM_updateMandant"})
     @RequestMapping(value = "/{oid}", method = {RequestMethod.POST})
     public ResponseEntity updateMandant(@PathVariable("oid") String oid, @RequestBody MandantResource request) {
         if (LOG.isDebugEnabled()) {
@@ -166,7 +167,7 @@ public class MandantController {
      * @param request
      * @return
      */
-    @RolesAllowed({"PERM_saveMandant"})
+    @Secured({"PERM_saveMandant"})
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
     public ResponseEntity saveMandant(@RequestBody MandantResource request) {
         if (LOG.isDebugEnabled()) {
@@ -185,7 +186,7 @@ public class MandantController {
      * @param oid
      * @return
      */
-    @RolesAllowed({"PERM_deleteMandant"})
+    @Secured({"PERM_deleteMandant"})
     @RequestMapping(value = "/{oid}", method = {RequestMethod.DELETE})
     public ResponseEntity deleteMandant(@PathVariable("oid") String oid) {
         if (LOG.isDebugEnabled()) {
