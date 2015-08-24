@@ -23,8 +23,9 @@ public interface BuergerRepository extends BaseRepository<Buerger> {
     @Override
     @CacheEvict(value = BUERGER_CACHE, key = "#p0.oid + #p0.mandant.oid")
     public void delete(Buerger entity);
-    
-    List<Buerger> findByOid(String oid);
+  
+    // Unterläuft das Mandanten Konzept. Sollte deshalb erst einmal nicht verwendet werden.
+//    List<Buerger> findByOid(String oid);
 
     List<Buerger> findByKinderOidAndMandantOid(String oid, String mid);
 
