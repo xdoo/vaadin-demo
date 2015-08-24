@@ -127,21 +127,6 @@ public class MainUI extends UI implements ControllerContext {
                 // Check if a user has logged in
                 boolean isLoggedIn = security.isLoggedIn();
                 boolean isLoginView = event.getNewView() instanceof LoginView;
-            /*    boolean fromTable = event.getOldView() instanceof BuergerTableView;
-                boolean fromUpdate = event.getOldView() instanceof BuergerUpdateView;
-                boolean fromDetail = event.getOldView() instanceof BuergerDetailView;
-                if (fromTable) {
-                    BuergerTableView old = (BuergerTableView) event.getOldView();
-                    old.unRegisterTable();
-                }
-                if (fromUpdate) {
-                    BuergerUpdateView old = (BuergerUpdateView) event.getOldView();
-                    old.unRegisterForm();
-                }
-                if (fromDetail) {
-                    BuergerDetailView old = (BuergerDetailView) event.getOldView();
-                    old.unRegister();
-                }*/
 
                 if (!isLoggedIn && !isLoginView) {
                     // Redirect to login view always if a user has not yet
@@ -166,12 +151,7 @@ public class MainUI extends UI implements ControllerContext {
 
             @Override
             public void afterViewChange(final ViewChangeEvent event) {
-                
-               /* boolean toTableView = event.getNewView() instanceof BuergerTableView;
-                if(toTableView){
-                    BuergerTableView tmp = (BuergerTableView) event.getNewView();
-                    tmp.setTable(buergerTable);
-                }*/
+
                 for (final Iterator<Component> it = menuItemsLayout.iterator(); it
                         .hasNext(); ) {
                     it.next().removeStyleName("selected");

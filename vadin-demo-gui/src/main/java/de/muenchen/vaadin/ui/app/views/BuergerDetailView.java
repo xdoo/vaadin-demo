@@ -53,9 +53,5 @@ public class BuergerDetailView extends DefaultBuergerView {
         
         addComponent(layout);
     }
-    public void unRegister(){
-        controller.getEventbus().unregister(childTab.getTable());
-        controller.getEventbus().unregister(childTab);
-        controller.getEventbus().unregister(readForm);
-    }
+
 }
