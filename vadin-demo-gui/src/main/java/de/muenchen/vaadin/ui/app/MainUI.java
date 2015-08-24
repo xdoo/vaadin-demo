@@ -51,7 +51,7 @@ import static de.muenchen.vaadin.ui.util.I18nPaths.*;
 import javax.servlet.annotation.WebServlet;
 
 @SpringUI
-@Title("Vaadin Spring-Security Sample")
+@Title("Vaadin Spring-security Sample")
 @Theme("valo")
 @PreserveOnRefresh
 //@Widgetset("de.muenchen.vaadin.Widgetset")

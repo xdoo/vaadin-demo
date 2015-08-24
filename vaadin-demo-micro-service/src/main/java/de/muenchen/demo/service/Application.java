@@ -8,7 +8,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import de.muenchen.vaadin.demo.api.Security.AuthenticationConfiguratorAdapter;
+import de.muenchen.vaadin.demo.api.security.AuthenticationConfiguratorAdapter;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 import org.slf4j.Logger;
@@ -20,7 +20,6 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.annotation.Order;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.boot.actuate.autoconfigure.ManagementServerProperties;
@@ -55,7 +54,7 @@ public class Application {
         return new DozerBeanMapper();
     }
 
-//    Security
+//    security
     @Bean
     public ApplicationSecurity applicationSecurity() {
         LOG.info("creating application security...");

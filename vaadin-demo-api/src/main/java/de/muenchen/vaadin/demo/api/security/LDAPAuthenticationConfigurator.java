@@ -1,12 +1,9 @@
-package de.muenchen.vaadin.demo.api.Security;
+package de.muenchen.vaadin.demo.api.security;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.ldap.core.DirContextOperations;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.ldap.DefaultSpringSecurityContextSource;
-import org.springframework.security.ldap.authentication.LdapAuthenticationProvider;
-import org.springframework.security.ldap.search.FilterBasedLdapUserSearch;
 import org.springframework.security.ldap.userdetails.DefaultLdapAuthoritiesPopulator;
 
 import java.util.Set;
@@ -41,6 +38,7 @@ public class LDAPAuthenticationConfigurator extends
         auth
                 .ldapAuthentication()
                 .contextSource(contextSource)
+                .ldapAuthoritiesPopulator(authoritiesPopulator)
                 ;
 
 

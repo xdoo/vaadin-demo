@@ -127,7 +127,7 @@ public class LoginView extends VerticalLayout implements View {
         welcome.addStyleName(ValoTheme.LABEL_H4);
         welcome.addStyleName(ValoTheme.LABEL_COLORED);
         labels.addComponent(welcome);
-        Label title = new Label("Security-Sample");
+        Label title = new Label("security-Sample");
         title.setSizeUndefined();
         title.addStyleName(ValoTheme.LABEL_H3);
         title.addStyleName(ValoTheme.LABEL_LIGHT);

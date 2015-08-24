@@ -1,4 +1,4 @@
-package de.muenchen.vaadin.demo.api.Security;
+package de.muenchen.vaadin.demo.api.security;
 
 import org.springframework.security.config.annotation.authentication.configurers.GlobalAuthenticationConfigurerAdapter;
 
