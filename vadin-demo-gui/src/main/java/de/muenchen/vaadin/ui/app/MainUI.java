@@ -7,7 +7,7 @@ import de.muenchen.vaadin.demo.api.domain.BaseEntity;
 import de.muenchen.vaadin.ui.app.views.events.AppEvent;
 import de.muenchen.vaadin.ui.app.views.events.LogoutEvent;
 import de.muenchen.vaadin.ui.components.GenericConfirmationWindow;
-import de.muenchen.vaadin.ui.components.buttons.EntityAction;
+import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.controller.ControllerContext;
 import de.muenchen.vaadin.ui.util.EventType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +31,8 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.services.MessageService;
 import de.muenchen.vaadin.demo.api.services.SecurityService;
-import de.muenchen.vaadin.ui.app.views.BuergerDetailView;
 import de.muenchen.vaadin.ui.app.views.MainView;
 import de.muenchen.vaadin.ui.app.views.BuergerTableView;
-import de.muenchen.vaadin.ui.app.views.BuergerUpdateView;
 import de.muenchen.vaadin.ui.app.views.LoginView;
 import de.muenchen.vaadin.ui.app.views.events.LoginEvent;
 import de.muenchen.vaadin.ui.util.EventBus;
@@ -269,7 +267,7 @@ public class MainUI extends UI implements ControllerContext {
 
         // creates and displays the logout button
         final Button logoutButton = new Button("Logout", event -> {
-            GenericConfirmationWindow confirmationWindow = new GenericConfirmationWindow(new LogoutEvent(), MainUI.this, EntityAction.logout);
+            GenericConfirmationWindow confirmationWindow = new GenericConfirmationWindow(new LogoutEvent(), MainUI.this, SimpleAction.logout);
             getUI().addWindow(confirmationWindow);
             confirmationWindow.center();
             confirmationWindow.focus();

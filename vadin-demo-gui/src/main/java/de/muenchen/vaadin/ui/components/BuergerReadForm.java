@@ -6,11 +6,10 @@ import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
-import de.muenchen.vaadin.ui.app.views.events.AppEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
 import de.muenchen.vaadin.ui.components.buttons.ActionButton;
-import de.muenchen.vaadin.ui.components.buttons.EntityAction;
+import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.EventType;
 import static de.muenchen.vaadin.ui.util.I18nPaths.*;
@@ -72,7 +71,7 @@ public class BuergerReadForm extends CustomComponent {
         layout.setMargin(true);
         
         // headline
-        Label headline = new Label(controller.resolveRelative(getFormPath(EntityAction.read, I18nPaths.Component.headline, Type.label)));
+        Label headline = new Label(controller.resolveRelative(getFormPath(SimpleAction.read, I18nPaths.Component.headline, Type.label)));
         headline.addStyleName(ValoTheme.LABEL_H3);
         layout.addComponent(headline);
 
@@ -92,14 +91,14 @@ public class BuergerReadForm extends CustomComponent {
         this.binder.setReadOnly(true);
         layout.addComponent(buttonLayout);
         // die Schaltfläche zum Aktualisieren
-        ActionButton backButton = new ActionButton(controller,EntityAction.back,this.back);
+        ActionButton backButton = new ActionButton(controller, SimpleAction.back,this.back);
         backButton.addClickListener((clickEvent -> {
             controller.postToEventBus(new BuergerAppEvent(EventType.CANCEL).navigateTo(this.back));
         }));
         buttonLayout.addComponent(backButton);
 
         // die Schaltfläche zum Bearbeiten
-        ActionButton updateButton = new ActionButton(controller,EntityAction.update,this.navigateToUpdate);
+        ActionButton updateButton = new ActionButton(controller, SimpleAction.update,this.navigateToUpdate);
         updateButton.addClickListener(clickEvent -> {
             controller.postToEventBus(new BuergerAppEvent(EventType.SELECT2UPDATE).setEntity(this.binder.getItemDataSource().getBean()).setItem(binder.getItemDataSource()).navigateTo(this.navigateToUpdate).from(this.from));
         });

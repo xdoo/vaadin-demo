@@ -12,7 +12,7 @@ import java.util.Optional;
 /**
  * Created by p.mueller on 20.08.15.
  */
-public enum EntityTableAction implements Action{
+public enum TableAction implements Action{
     tablecopy,tabledelete,tabledetail,tableedit;
 
     @Override

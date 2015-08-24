@@ -24,8 +24,8 @@ import de.muenchen.vaadin.ui.components.BuergerSearchTable;
 import de.muenchen.vaadin.ui.components.BuergerTable;
 import de.muenchen.vaadin.ui.components.GenericSuccessNotification;
 import de.muenchen.vaadin.ui.components.BuergerUpdateForm;
-import de.muenchen.vaadin.ui.components.buttons.EntityAction;
-import de.muenchen.vaadin.ui.components.buttons.EntityTableAction;
+import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
+import de.muenchen.vaadin.ui.components.buttons.TableAction;
 import de.muenchen.vaadin.ui.components.buttons.TableActionButton;
 import de.muenchen.vaadin.ui.util.EventBus;
 import de.muenchen.vaadin.ui.util.EventType;
@@ -307,16 +307,16 @@ public class BuergerViewController implements Serializable,ControllerContext<Bue
     public BuergerSearchTable generateSearchTable(String navigateToForEdit, String navigateToForDetail, String navigateForCreate, String navigateFrom) {
         LOG.debug("creating 'search' table for buerger");
 
-        TableActionButton.Builder detail = TableActionButton.Builder.make(this, EntityTableAction.tabledetail,navigateToForDetail,(container,id) -> {
+        TableActionButton.Builder detail = TableActionButton.Builder.make(this, TableAction.tabledetail,navigateToForDetail,(container,id) -> {
             getEventbus().post(new BuergerAppEvent(container.getItem(id), id, EventType.SELECT2READ).navigateTo(navigateToForDetail).from(navigateFrom));
         });
-        TableActionButton.Builder edit = TableActionButton.Builder.make(this, EntityTableAction.tableedit, navigateToForEdit, (container, id) -> {
+        TableActionButton.Builder edit = TableActionButton.Builder.make(this, TableAction.tableedit, navigateToForEdit, (container, id) -> {
            getEventbus().post(new BuergerAppEvent(container.getItem(id), id, EventType.SELECT2UPDATE).navigateTo(navigateToForEdit).from(navigateFrom));
         });
-        TableActionButton.Builder copy = TableActionButton.Builder.make(this,EntityTableAction.tablecopy,null, (container, id) -> {
+        TableActionButton.Builder copy = TableActionButton.Builder.make(this, TableAction.tablecopy,null, (container, id) -> {
             getEventbus().post(new BuergerAppEvent(container.getItem(id),id,EventType.COPY));
         });
-        TableActionButton.Builder delete = TableActionButton.Builder.make(this,EntityTableAction.tabledelete,navigateToForEdit, (container, id) -> {
+        TableActionButton.Builder delete = TableActionButton.Builder.make(this, TableAction.tabledelete,navigateToForEdit, (container, id) -> {
             getEventbus().post(new BuergerAppEvent(container.getItem(id),id,EventType.DELETE).navigateTo(navigateToForEdit).from(navigateFrom));
         });
 
@@ -335,7 +335,7 @@ public class BuergerViewController implements Serializable,ControllerContext<Bue
     }
     
     public BuergerTable generateChildTable(String navigateToForDetail, String from) {
-        TableActionButton.Builder detail = TableActionButton.Builder.make(this, EntityTableAction.tabledetail, navigateToForDetail, (container, id) -> {
+        TableActionButton.Builder detail = TableActionButton.Builder.make(this, TableAction.tabledetail, navigateToForDetail, (container, id) -> {
             getEventbus().post(new BuergerAppEvent(container.getItem(id), id, EventType.SELECT2READ).navigateTo(navigateToForDetail).from(from));
         });
         
@@ -398,8 +398,8 @@ public class BuergerViewController implements Serializable,ControllerContext<Bue
             this.pushFrom(event);
             
             GenericSuccessNotification succes = new GenericSuccessNotification(
-                    resolveRelative(getNotificationPath(NotificationType.success, EntityAction.update, Type.label)),
-                    resolveRelative(getNotificationPath(NotificationType.success, EntityAction.update, Type.text)));
+                    resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.update, Type.label)),
+                    resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.update, Type.text)));
             succes.show(Page.getCurrent());
             
             // Zur Seite wechseln
@@ -416,8 +416,8 @@ public class BuergerViewController implements Serializable,ControllerContext<Bue
             this.eventbus.post(new BuergerComponentEvent(event.getEntity(), EventType.SAVE));
             
             GenericSuccessNotification succes = new GenericSuccessNotification(
-                    resolveRelative(getNotificationPath(NotificationType.success, EntityAction.save, Type.label)),
-                    resolveRelative(getNotificationPath(NotificationType.success, EntityAction.save, Type.text)));
+                    resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.save, Type.label)),
+                    resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.save, Type.text)));
             succes.show(Page.getCurrent());
             
             // Zur Seite wechseln
@@ -431,8 +431,8 @@ public class BuergerViewController implements Serializable,ControllerContext<Bue
             this.saveBuergerKind(event.getEntity());
             
             GenericSuccessNotification succes = new GenericSuccessNotification(
-                    resolveRelative(getNotificationPath(NotificationType.success, EntityAction.save, Type.label)),
-                    resolveRelative(getNotificationPath(NotificationType.success, EntityAction.save, Type.text)));
+                    resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.save, Type.label)),
+                    resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.save, Type.text)));
             succes.show(Page.getCurrent());
             
             // Zur Seite wechseln
@@ -452,8 +452,8 @@ public class BuergerViewController implements Serializable,ControllerContext<Bue
             this.eventbus.post(buergerComponentEvent);
             
             GenericSuccessNotification succes = new GenericSuccessNotification(
-                    resolveRelative(getNotificationPath(NotificationType.success, EntityAction.delete, Type.label)),
-                    resolveRelative(getNotificationPath(NotificationType.success, EntityAction.delete, Type.text)));
+                    resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.delete, Type.label)),
+                    resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.delete, Type.text)));
             succes.show(Page.getCurrent());
         }
         
@@ -467,8 +467,8 @@ public class BuergerViewController implements Serializable,ControllerContext<Bue
             this.eventbus.post(new BuergerComponentEvent(copy, EventType.COPY));
             
             GenericSuccessNotification succes = new GenericSuccessNotification(
-                    resolveRelative(getNotificationPath(NotificationType.success, EntityAction.copy, Type.label)),
-                    resolveRelative(getNotificationPath(NotificationType.success, EntityAction.copy, Type.text)));
+                    resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.copy, Type.label)),
+                    resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.copy, Type.text)));
             succes.show(Page.getCurrent());
         }
         

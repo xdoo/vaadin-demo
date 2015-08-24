@@ -124,8 +124,8 @@ public class BuergerTable extends CustomComponent {
     }
     
     /**
-     * "EntityAction" Buttons für jede Tabellenzeile. In jeder Tabellenzeile
-     * gibt "EntityAction" Buttons.
+     * "SimpleAction" Buttons für jede Tabellenzeile. In jeder Tabellenzeile
+     * gibt "SimpleAction" Buttons.
      * 
      * @param id
      * @return 
@@ -134,10 +134,7 @@ public class BuergerTable extends CustomComponent {
         HorizontalLayout layout = new HorizontalLayout();
         
         this.buttonBuilders.stream()
-                .peek((builder) -> {
-                            builder.setContainer(container);
-                            builder.setId(id);})
-                .map(TableActionButton.Builder::build)
+                .map((builder) -> builder.build(container,id))
                 .forEachOrdered(layout::addComponent);
 
         layout.setSpacing(true);

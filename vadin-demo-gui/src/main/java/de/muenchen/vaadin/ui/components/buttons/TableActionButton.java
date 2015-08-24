@@ -1,10 +1,12 @@
 package de.muenchen.vaadin.ui.components.buttons;
 
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.ui.Button;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.ui.controller.ControllerContext;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiConsumer;
 
@@ -27,13 +29,13 @@ public class TableActionButton extends ActionButton {
      * @param navigateTo
      * @param container
      */
-    TableActionButton(ControllerContext context, Action action, String navigateTo, Object id, BeanItemContainer<Buerger> container) {
+    private TableActionButton(ControllerContext context, Action action, String navigateTo, Object id, BeanItemContainer<Buerger> container) {
         super("",context, action, navigateTo);
         this.id = id;
         this.container = container;
     }
 
-    public void addItemClickListener(BiConsumer<BeanItemContainer<Buerger>, Object> itemClickListener) {
+    public void addItemClickListener(java.util.function.BiConsumer<BeanItemContainer<Buerger>, Object> itemClickListener) {
         addClickListener(clickEvent -> itemClickListener.accept(container,id));
     }
 
@@ -42,8 +44,6 @@ public class TableActionButton extends ActionButton {
         private final Action action;
         private final String navigateTo;
         private final List<BiConsumer<BeanItemContainer<Buerger>, Object>> itemClickListeners = new ArrayList<>();
-        private Object id;
-        private BeanItemContainer<Buerger> container;
 
 
         private Builder(ControllerContext context, Action action, String navigateTo, BiConsumer<BeanItemContainer<Buerger>, Object>  itemClickListener) {
@@ -53,22 +53,13 @@ public class TableActionButton extends ActionButton {
             itemClickListeners.add(itemClickListener);
         }
 
-        public Builder setId(Object id) {
-            this.id = id;
-            return this;
-        }
-
-        public Builder setContainer(BeanItemContainer<Buerger> container) {
-            this.container = container;
-            return this;
-        }
 
         public static Builder make(ControllerContext context, Action action, String navigateTo, BiConsumer<BeanItemContainer<Buerger>, Object>  itemClickListener) {
             Builder builder = new Builder(context,action,navigateTo, itemClickListener);
             return builder;
         }
 
-        public TableActionButton build() {
+        public TableActionButton build( BeanItemContainer<Buerger> container, Object id) {
             TableActionButton button =  new TableActionButton(context,action,navigateTo,id,container);
             itemClickListeners.forEach(button::addItemClickListener);
             return button;
@@ -82,18 +73,10 @@ public class TableActionButton extends ActionButton {
             return action;
         }
 
-
         public String getNavigateTo() {
             return navigateTo;
         }
 
 
-        public Object getId() {
-            return id;
-        }
-
-        public BeanItemContainer<Buerger> getContainer() {
-            return container;
-        }
     }
 }

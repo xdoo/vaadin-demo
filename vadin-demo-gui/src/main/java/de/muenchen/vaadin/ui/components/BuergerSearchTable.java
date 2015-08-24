@@ -5,7 +5,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.components.buttons.ActionButton;
-import de.muenchen.vaadin.ui.components.buttons.EntityAction;
+import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.components.buttons.TableActionButton;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.EventType;
@@ -21,7 +21,7 @@ public class BuergerSearchTable extends CustomComponent {
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerSearchTable.class);
     private BuergerTable table;
     public BuergerSearchTable(final BuergerViewController controller, String navigateToForEdit, String navigateToForSelect, String navigateToForCreate, String from, final TableActionButton.Builder... buttonBuilders) {
-        ActionButton create = new ActionButton(controller, EntityAction.create,navigateToForCreate);
+        ActionButton create = new ActionButton(controller, SimpleAction.create,navigateToForCreate);
         create.addClickListener(clickEvent -> {
             controller.postToEventBus(new BuergerAppEvent(EventType.CREATE).navigateTo(navigateToForCreate).from(from));
         });

@@ -17,7 +17,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
-import de.muenchen.vaadin.ui.components.buttons.EntityAction;
+import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.EventType;
 import de.muenchen.vaadin.ui.util.ValidatorFactory;
@@ -82,7 +82,7 @@ public class BuergerCreateForm extends CustomComponent {
         
         // headline
         Label headline = new Label(controller.resolveRelative(
-                getFormPath(EntityAction.create,
+                getFormPath(SimpleAction.create,
                         Component.headline,
                         Type.label)));
         headline.addStyleName(ValoTheme.LABEL_H3);
@@ -136,7 +136,7 @@ public class BuergerCreateForm extends CustomComponent {
         layout.addComponent(buttonLayout);
         // die 'speichern' Schaltfläche
         String createLabel = controller.resolveRelative(
-                getFormPath(EntityAction.create,
+                getFormPath(SimpleAction.create,
                         Component.button,
                         Type.label));
         Button createButton = new Button(createLabel, (ClickEvent click) -> {
@@ -168,7 +168,7 @@ public class BuergerCreateForm extends CustomComponent {
         buttonLayout.addComponent(createButton);
         // die 'abbrechen' Schaltfläche
         buttonLayout.addComponent(new GenericCancelButton(
-                controller.resolveRelative(getFormPath(EntityAction.cancel, Component.button, Type.label)),
+                controller.resolveRelative(getFormPath(SimpleAction.cancel, Component.button, Type.label)),
                 new BuergerAppEvent(binder.getItemDataSource().getBean(), EventType.CANCEL).navigateTo(this.back), 
                 this.controller.getEventbus()));
         setCompositionRoot(layout);

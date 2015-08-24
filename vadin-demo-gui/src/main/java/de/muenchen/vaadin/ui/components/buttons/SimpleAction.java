@@ -13,7 +13,7 @@ import java.util.Optional;
 /**
  * A simple enum declaring all actions and providing Values/Settings that depend on a action.
  */
-public enum EntityAction implements Action {
+public enum SimpleAction implements Action {
 
     //TODO check for duplicate/unused actions
     create, read, update, back, save, delete, cancel, copy, logout;
