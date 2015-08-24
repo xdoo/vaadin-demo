@@ -10,7 +10,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Created by p.mueller on 20.08.15.
+ * Provides a Simple enum for styled actions in a table.
+ *
+ * @author p.mueller
+ * @version 1.0
  */
 public enum TableAction implements Action{
 
@@ -19,14 +22,24 @@ public enum TableAction implements Action{
     tabledetail(FontAwesome.FILE_O),
     tableedit(FontAwesome.PENCIL);
 
+    /** The potential empy set of {@link com.vaadin.ui.themes.ValoTheme} style Strings. */
     private final Set<String> styleNames;
-    private final Optional<FontAwesome> icon;
+    /** The icon for this action. */
+    private final FontAwesome icon;
 
+    /**
+     * Create a new TableAction with the specified icon and poosible {@link com.vaadin.ui.themes.ValoTheme} styles.
+     *
+     * @param icon The icon for the action.
+     * @param styleNames The style Strings for this action.
+     */
     TableAction(FontAwesome icon, String... styleNames) {
         this.styleNames = Stream.of(styleNames).collect(Collectors.toSet());
+
+        // Default icon only skin for all
         this.styleNames.add(ValoTheme.BUTTON_ICON_ONLY);
 
-        this.icon = Optional.ofNullable(icon);
+        this.icon = icon;
     }
 
     @Override
@@ -36,7 +49,7 @@ public enum TableAction implements Action{
 
     @Override
     public Optional<FontAwesome> getIcon() {
-        return icon;
+        return Optional.ofNullable(icon);
     }
 
     @Override
