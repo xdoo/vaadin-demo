@@ -73,7 +73,14 @@ public class Application {
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
-            http.authorizeRequests().anyRequest().authenticated().and().httpBasic().and().csrf().disable();
+            http
+                    .authorizeRequests()
+                    .antMatchers("/service_info").permitAll()
+                    .anyRequest().authenticated()
+                    .and()
+                    .httpBasic()
+                    .and()
+                    .csrf().disable();
 //                .csrf().csrfTokenRepository(csrfTokenRepository()).and()
 //                .addFilterAfter(csrfHeaderFilter(), CsrfFilter.class);
 
@@ -109,5 +116,6 @@ public class Application {
             return repository;
         }
     }
+
 
 }
