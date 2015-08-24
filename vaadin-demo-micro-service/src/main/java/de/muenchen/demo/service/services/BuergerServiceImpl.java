@@ -2,30 +2,24 @@ package de.muenchen.demo.service.services;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import de.muenchen.demo.service.domain.Buerger;
-import de.muenchen.demo.service.domain.BuergerRepository;
-import de.muenchen.demo.service.domain.Mandant;
-import de.muenchen.demo.service.domain.Pass;
-import de.muenchen.demo.service.domain.Sachbearbeiter;
-import de.muenchen.demo.service.domain.StaatsangehoerigkeitReference;
-import de.muenchen.demo.service.domain.User;
-import de.muenchen.demo.service.domain.Wohnung;
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
+import de.muenchen.demo.service.domain.*;
 import de.muenchen.demo.service.util.IdService;
 import de.muenchen.demo.service.util.QueryService;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.StreamSupport;
-import javax.persistence.EntityManager;
+import de.muenchen.demo.service.util.events.BuergerEvent;
+import de.muenchen.demo.service.util.events.SachbearbeiterEvent;
+import de.muenchen.vaadin.demo.api.util.EventType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import javax.persistence.EntityManager;
+import java.util.*;
+import java.util.stream.StreamSupport;
 
 /**
  *
@@ -42,21 +36,20 @@ public class BuergerServiceImpl implements BuergerService {
     @Autowired
     private UserService userService;
     @Autowired
-    private SachbearbeiterService sachbearbeiterService;
-    @Autowired
     MandantService mandantService;
     @Autowired
     private WohnungService wohnungService;
     @Autowired
     private StaatsangehoerigkeitService staatService;
-    
-    public BuergerServiceImpl() {
-    }
-    
+
+    EventBus eventbus;
+
     @Autowired
-    public BuergerServiceImpl(BuergerRepository repo, EntityManager em, UserService userService) {
+    public BuergerServiceImpl(BuergerRepository repo, EntityManager em, UserService userService, EventBus eventBus) {
         this.repo = repo;
         this.search = new QueryService<>(userService, em, Buerger.class, "vorname", "nachname");
+        this.eventbus = eventBus;
+        eventBus.register(this);
     }
     
     @Override
@@ -130,16 +123,12 @@ public class BuergerServiceImpl implements BuergerService {
     
     @Override
     public void copy(List<String> oids) {
-        oids.stream().forEach((oid) -> {
-            this.copy(oid);
-        });
+        oids.stream().forEach(this::copy);
     }
     
     @Override
     public void delete(List<String> oids) {
-        oids.stream().forEach((oid) -> {
-            this.delete(oid);
-        });
+        oids.stream().forEach(this::delete);
     }
     
     @Override
@@ -157,11 +146,11 @@ public class BuergerServiceImpl implements BuergerService {
                 
                 Set<Buerger> buergerList = sachbearbeiter.getBuerger();
                 Collection<Buerger> removeBuerger = new LinkedList<>();
-                buergerList.stream().filter((element) -> (element == this.read(buergerOid))).forEach((element) -> {
-                    removeBuerger.add(element);
-                });
+                buergerList.stream().filter((element) -> (element == this.read(buergerOid))).forEach(removeBuerger::add);
                 buergerList.removeAll(removeBuerger);
-                this.sachbearbeiterService.update(sachbearbeiter);
+
+                //this.sachbearbeiterService.update(sachbearbeiter);
+                eventbus.post(new SachbearbeiterEvent(EventType.UPDATE, sachbearbeiter));
                 
             }
             
@@ -195,9 +184,7 @@ public class BuergerServiceImpl implements BuergerService {
         Buerger buerger = this.read(buergerOid);
         Set<Buerger> kinder = buerger.getKinder();
         Collection<Buerger> removeKinder = new LinkedList<>();
-        kinder.stream().filter((element) -> (element == this.read(kindOid))).forEach((element) -> {
-            removeKinder.add(element);
-        });
+        kinder.stream().filter((element) -> (element == this.read(kindOid))).forEach(removeKinder::add);
         kinder.removeAll(removeKinder);
         this.update(buerger);
         
@@ -210,9 +197,7 @@ public class BuergerServiceImpl implements BuergerService {
         
         Set<Buerger> kinder = buerger.getKinder();
         Collection<Buerger> removeKinder = new LinkedList<>();
-        kinder.stream().forEach((kind) -> {
-            removeKinder.add(kind);
-        });
+        kinder.stream().forEach(removeKinder::add);
         
         kinder.removeAll(removeKinder);
         this.update(buerger);
@@ -248,9 +233,7 @@ public class BuergerServiceImpl implements BuergerService {
         
         Set<Pass> paesse = buerger.getPass();
         Collection<Pass> removePaesse = new LinkedList<>();
-        paesse.stream().forEach((pass) -> {
-            removePaesse.add(pass);
-        });
+        paesse.stream().forEach(removePaesse::add);
         
         paesse.removeAll(removePaesse);
         this.update(buerger);
@@ -264,14 +247,12 @@ public class BuergerServiceImpl implements BuergerService {
     
     @Override
     public void releaseWohnungAllBuerger(String wohnungOid) {
-        Iterator<Buerger> iter = this.readWohnungBuerger(wohnungOid).iterator();
-        while (iter.hasNext()) {
-            Buerger buerger = iter.next();
+
+        this.readWohnungBuerger(wohnungOid).forEach(buerger -> {
             Set<Wohnung> wohnung = buerger.getWohnungen();
             wohnung.remove(this.wohnungService.read(wohnungOid));
             this.update(buerger);
-            
-        }
+        });
         
         
     }
@@ -283,9 +264,7 @@ public class BuergerServiceImpl implements BuergerService {
         
         Set<Wohnung> wohnungen = buerger.getWohnungen();
         Collection<Wohnung> removeWohnungnen = new LinkedList<>();
-        wohnungen.stream().forEach((wohnung) -> {
-            removeWohnungnen.add(wohnung);
-        });
+        wohnungen.stream().forEach(removeWohnungnen::add);
         
         wohnungen.removeAll(removeWohnungnen);
         this.update(buerger);
@@ -309,20 +288,20 @@ public class BuergerServiceImpl implements BuergerService {
     
     @Override
     public void releaseStaatsangehoerigkeitAllBuerger(String staatOid) {
-        Iterator<Buerger> iter = this.readStaatsangehoerigkeitBuerger(staatOid).iterator();
-        while (iter.hasNext()) {
-            Buerger buerger = iter.next();
+
+        this.readStaatsangehoerigkeitBuerger(staatOid).forEach(buerger -> {
             Iterator<StaatsangehoerigkeitReference> staatRefIter = buerger.getStaatsangehoerigkeitReferences().iterator();
-            
+
             while (staatRefIter.hasNext()) {
                 StaatsangehoerigkeitReference staatRef = staatRefIter.next();
-                
+
                 if (staatRef == this.staatService.readReference(staatOid)) {
                     staatRefIter.remove();
                     this.update(buerger);
                 }
             }
-        }
+        });
+
     }
     
     @Override
@@ -336,6 +315,14 @@ public class BuergerServiceImpl implements BuergerService {
                 staatRefIter.remove();
                 this.update(buerger);
             }
+        }
+    }
+
+    @Subscribe
+    public void evnetHandler(BuergerEvent event){
+        switch (event.getEventType()) {
+            case UPDATE: update(event.getEntity());
+                break;
         }
     }
 }

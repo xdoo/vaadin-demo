@@ -2,7 +2,7 @@ package de.muenchen.vaadin.ui.controller;
 
 import de.muenchen.vaadin.demo.api.domain.BaseEntity;
 import de.muenchen.vaadin.ui.app.views.events.AppEvent;
-import de.muenchen.vaadin.ui.util.EventType;
+import de.muenchen.vaadin.demo.api.util.EventType;
 
 /**
  * Interface to open up most important functionality of a Controller.

@@ -9,10 +9,14 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import de.muenchen.demo.service.domain.User;
 import de.muenchen.demo.service.domain.UserRepository;
+import de.muenchen.demo.service.util.Eventbus;
 import de.muenchen.demo.service.util.IdService;
 import de.muenchen.demo.service.util.QueryService;
 import java.util.List;
 import javax.persistence.EntityManager;
+
+import de.muenchen.demo.service.util.events.UserEvent;
+import de.muenchen.vaadin.demo.api.util.EventType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,16 +33,15 @@ public class UserServiceImpl implements UserService {
     
     UserRepository repo;
     QueryService<User> search;
-    @Autowired
-    private SachbearbeiterService sachbearbeiterService;
 
-    public UserServiceImpl() {
-    }
+    Eventbus eventbus;
 
     @Autowired
-    public UserServiceImpl(UserRepository repo, EntityManager em) {
+    public UserServiceImpl(UserRepository repo, EntityManager em, Eventbus eventBus) {
         this.repo = repo;
         this.search = new QueryService<>(this, em, User.class,"userName", "email");
+        this.eventbus = eventBus;
+        eventBus.register(this);
     }
     
     @Override
@@ -75,7 +78,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(String oid) {
         User item = this.read(oid);
-        this.sachbearbeiterService.releaseUserSachbearbeiter(oid);
+
+        //this.sachbearbeiterService.releaseUserSachbearbeiter(oid);
+        eventbus.post(new UserEvent(EventType.RELEASE, item));
+
         this.repo.delete(item);
     }
 

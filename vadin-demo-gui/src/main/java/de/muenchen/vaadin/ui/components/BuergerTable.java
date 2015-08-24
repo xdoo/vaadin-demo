@@ -10,7 +10,7 @@ import com.vaadin.ui.Table.ColumnGenerator;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
-import de.muenchen.vaadin.ui.util.EventType;
+import de.muenchen.vaadin.demo.api.util.EventType;
 import static de.muenchen.vaadin.ui.util.I18nPaths.*;
 import java.util.List;
 import java.util.Optional;

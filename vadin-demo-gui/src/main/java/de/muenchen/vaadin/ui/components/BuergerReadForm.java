@@ -13,7 +13,7 @@ import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
 import de.muenchen.vaadin.ui.components.buttons.Action;
 import de.muenchen.vaadin.ui.components.buttons.EntityButton;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
-import de.muenchen.vaadin.ui.util.EventType;
+import de.muenchen.vaadin.demo.api.util.EventType;
 import static de.muenchen.vaadin.ui.util.I18nPaths.*;
 import java.util.Optional;
 import org.slf4j.Logger;
