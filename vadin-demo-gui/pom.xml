@@ -101,6 +101,11 @@
             <artifactId>vaadin-server</artifactId>
             <version>7.4.4</version>
         </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-spring</artifactId>
+            <version>1.0.0.beta3</version>
+        </dependency>
     </dependencies>
     
     <build>
