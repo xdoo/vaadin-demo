@@ -20,13 +20,13 @@ public class BuergerSearchTable extends CustomComponent {
 
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerSearchTable.class);
     private BuergerTable table;
-    public BuergerSearchTable(final BuergerViewController controller, String navigateToForEdit, String navigateToForSelect, String navigateToForCreate, String from, final TableActionButton.Builder... buttonBuilders) {
+    public BuergerSearchTable(final BuergerViewController controller, String navigateToForCreate, String from, final TableActionButton.Builder... buttonBuilders) {
         ActionButton create = new ActionButton(controller, SimpleAction.create,navigateToForCreate);
         create.addClickListener(clickEvent -> {
             controller.postToEventBus(new BuergerAppEvent(EventType.CREATE).navigateTo(navigateToForCreate).from(from));
         });
 
-        table = controller.generateTable(navigateToForEdit, navigateToForSelect, from, buttonBuilders);
+        table = controller.generateTable(from, buttonBuilders);
         BuergerSearchForm search = new BuergerSearchForm(controller);
         search.setWidth("100%"); 
         

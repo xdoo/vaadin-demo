@@ -321,10 +321,8 @@ public class BuergerViewController implements Serializable,ControllerContext<Bue
         });
 
         return new BuergerSearchTable(
-                this, 
-                navigateToForEdit, 
-                navigateToForDetail, 
-                navigateForCreate, 
+                this,
+                navigateForCreate,
                 navigateFrom,
                 // Schaltflächen
                 detail,
@@ -343,7 +341,7 @@ public class BuergerViewController implements Serializable,ControllerContext<Bue
         return table;
     }
 
-    public BuergerTable generateTable(String navigateToForEdit, String navigateToForSelect, String from, final TableActionButton.Builder... buttonBuilders) {
+    public BuergerTable generateTable(String from, final TableActionButton.Builder... buttonBuilders) {
         return this.createTable(from, this.queryBuerger(), buttonBuilders);
     }
     

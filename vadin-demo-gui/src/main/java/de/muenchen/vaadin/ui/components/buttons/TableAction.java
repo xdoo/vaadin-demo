@@ -5,39 +5,37 @@ import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.BaseEntity;
 import de.muenchen.vaadin.ui.controller.ControllerContext;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by p.mueller on 20.08.15.
  */
 public enum TableAction implements Action{
-    tablecopy,tabledelete,tabledetail,tableedit;
+    tablecopy(FontAwesome.COPY),
+    tabledelete(FontAwesome.TRASH_O, ValoTheme.BUTTON_DANGER),
+    tabledetail(FontAwesome.FILE_O),
+    tableedit(FontAwesome.PENCIL);
+
+    private final Set<String> styleNames;
+    private final Optional<FontAwesome> icon;
+
+    TableAction(FontAwesome icon, String... styleNames) {
+        this.styleNames = Stream.of(styleNames).collect(Collectors.toSet());
+        this.styleNames.add(ValoTheme.BUTTON_ICON_ONLY);
+
+        this.icon = Optional.ofNullable(icon);
+    }
 
     @Override
-    public List<String> getStyleNames() {
-        List<String> names = new LinkedList<>();
-        names.add(ValoTheme.BUTTON_ICON_ONLY);
-
-        switch (this) {
-            case tabledelete:  names.add(ValoTheme.BUTTON_DANGER); break;
-        }
-        return names;
+    public Set<String> getStyleNames() {
+        return styleNames;
     }
 
     @Override
     public Optional<FontAwesome> getIcon() {
-        FontAwesome resource = null;
-
-        switch (this) {
-            case tablecopy: resource = FontAwesome.COPY; break;
-            case tabledelete: resource = FontAwesome.TRASH_O; break;
-            case tableedit: resource = FontAwesome.PENCIL; break;
-            case tabledetail: resource = FontAwesome.FILE_O; break;
-        }
-
-        return Optional.ofNullable(resource);
+        return icon;
     }
 
     @Override

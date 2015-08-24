@@ -158,7 +158,7 @@ public class BuergerTable extends CustomComponent {
      * 
      * @return Liste der {@link de.muenchen.vaadin.ui.components.buttons.TableActionButton.Builder}
      */
-    public List<TableActionButton.Builder> getButtonFactories() {
+    public List<TableActionButton.Builder> getButtonBuilders() {
         return buttonBuilders;
     }
     
