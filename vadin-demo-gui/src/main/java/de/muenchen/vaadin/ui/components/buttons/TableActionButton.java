@@ -1,12 +1,10 @@
 package de.muenchen.vaadin.ui.components.buttons;
 
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.ui.Button;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.ui.controller.ControllerContext;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiConsumer;
 
@@ -30,12 +28,12 @@ public class TableActionButton extends ActionButton {
      * @param container
      */
     TableActionButton(ControllerContext context, Action action, String navigateTo, Object id, BeanItemContainer<Buerger> container) {
-        super(context, action, navigateTo);
+        super("",context, action, navigateTo);
         this.id = id;
         this.container = container;
     }
 
-    public void addItemClickListener(java.util.function.BiConsumer<BeanItemContainer<Buerger>, Object> itemClickListener) {
+    public void addItemClickListener(BiConsumer<BeanItemContainer<Buerger>, Object> itemClickListener) {
         addClickListener(clickEvent -> itemClickListener.accept(container,id));
     }
 
@@ -46,7 +44,6 @@ public class TableActionButton extends ActionButton {
         private final List<BiConsumer<BeanItemContainer<Buerger>, Object>> itemClickListeners = new ArrayList<>();
         private Object id;
         private BeanItemContainer<Buerger> container;
-        private String from;
 
 
         private Builder(ControllerContext context, Action action, String navigateTo, BiConsumer<BeanItemContainer<Buerger>, Object>  itemClickListener) {
@@ -97,14 +94,6 @@ public class TableActionButton extends ActionButton {
 
         public BeanItemContainer<Buerger> getContainer() {
             return container;
-        }
-
-        public String getFrom() {
-            return from;
-        }
-
-        public void setFrom(String from) {
-            this.from = from;
         }
     }
 }

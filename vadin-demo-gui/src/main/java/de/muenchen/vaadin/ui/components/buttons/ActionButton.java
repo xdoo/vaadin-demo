@@ -50,7 +50,6 @@ public class ActionButton extends CustomComponent {
         return this.button;
     }
 
-
     public void addClickListener(Button.ClickListener clickListener) {
         button.addClickListener(clickListener);
     }

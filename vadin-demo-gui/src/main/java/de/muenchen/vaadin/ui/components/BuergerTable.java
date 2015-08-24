@@ -166,7 +166,7 @@ public class BuergerTable extends CustomComponent {
      * bzw. die vorhandenen Schaltflächen in eine neue reihenfolge gebracht
      * werden.
      * 
-     * @return Liste der {@link BuergerTableButtonFactory}
+     * @return Liste der {@link de.muenchen.vaadin.ui.components.buttons.TableActionButton.Builder}
      */
     public List<TableActionButton.Builder> getButtonFactories() {
         return buttonBuilders;
