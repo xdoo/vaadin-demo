@@ -13,6 +13,10 @@ import java.util.stream.Stream;
 
 /**
  * A simple enum declaring all actions and providing Values/Settings that depend on a action.
+ *
+ * @author p.mueller
+ * @version 1.0
+ * @
  */
 public enum SimpleAction implements Action {
 
@@ -27,20 +31,41 @@ public enum SimpleAction implements Action {
     copy,
     logout(FontAwesome.SIGN_OUT);
 
+    /** The potential empy set of {@link com.vaadin.ui.themes.ValoTheme} style Strings. */
     private final Set<String> styleNames;
+    /** The icon for this action. */
     private final FontAwesome icon;
+    /** The {@link com.vaadin.event.ShortcutAction.KeyCode} for the action. */
     private final Integer shortcutAction;
 
+    /**
+     * Create a new SimpleAction with icon, shortcut action and multiple strings for styles.
+     *
+     * No styleName means the default style.
+     *
+     * @param icon The icon to use.
+     * @param shortcutAction The shortcut for this action.
+     * @param styleNames The styles for this action.
+     */
     SimpleAction(FontAwesome icon, Integer shortcutAction, String... styleNames) {
         this.shortcutAction = shortcutAction;
         this.styleNames = Stream.of(styleNames).collect(Collectors.toSet());
         this.icon = icon;
     }
 
+    /**
+     * Create a new SimpleAction with the icon and possible style strings.
+     *
+     * @param icon The icon to use.
+     * @param styleNames The styles for this action.
+     */
     SimpleAction(FontAwesome icon, String... styleNames) {
         this(icon, null, styleNames);
     }
 
+    /**
+     * Create a new SimpleAction with now styling at all.
+     */
     SimpleAction() {
         this(null);
     }
@@ -63,7 +88,7 @@ public enum SimpleAction implements Action {
 
 
     @Override
-    public <E extends BaseEntity> String getID(String navigateTo, ControllerContext<E> context) {
+    public String getID(String navigateTo, ControllerContext context) {
         return String.format("%s_%s_%s_BUTTON", navigateTo, this.name().toUpperCase(), context.getBasePath());
     }
 }

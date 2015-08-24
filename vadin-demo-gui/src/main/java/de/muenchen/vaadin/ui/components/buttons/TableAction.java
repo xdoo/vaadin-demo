@@ -13,6 +13,7 @@ import java.util.stream.Stream;
  * Created by p.mueller on 20.08.15.
  */
 public enum TableAction implements Action{
+
     tablecopy(FontAwesome.COPY),
     tabledelete(FontAwesome.TRASH_O, ValoTheme.BUTTON_DANGER),
     tabledetail(FontAwesome.FILE_O),
@@ -39,7 +40,7 @@ public enum TableAction implements Action{
     }
 
     @Override
-    public <E extends BaseEntity> String getID(String navigateTo, ControllerContext<E> context) {
+    public String getID(String navigateTo, ControllerContext context) {
         return String.format("%s_%s_%s_TABLE_BUTTON", navigateTo,this.name().toUpperCase(), context.getBasePath());
     }
 }

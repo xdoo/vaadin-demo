@@ -8,22 +8,70 @@ import de.muenchen.vaadin.ui.util.I18nPaths;
 import java.util.*;
 
 /**
- * A simple enum declaring all actions and providing Values/Settings that depend on a action.
+ * A simple enum declaring all actions and providing all required values/settings that depend on a action.
+ *
+ * @author p.mueller
+ * @version 1.0
  */
 public interface Action extends I18nPaths.I18nPath {
 
+    /**
+     * Get all the the {@link com.vaadin.ui.themes.ValoTheme} style strings for this action.
+     * @return zero, one or multiple Strings for the styles.
+     */
     default Set<String> getStyleNames() {
         return new HashSet<>();
     }
 
+    /**
+     * Get the integer representation of the {@link com.vaadin.event.ShortcutAction.KeyCode} for this action.
+     * @return an optional int value.
+     */
     default Optional<Integer> getClickShortCut() {
         return Optional.empty();
     }
 
+    /**
+     * Get the {@link FontAwesome} icon for this action.
+     * @return an optional FontAwesome icon.
+     */
     default Optional<FontAwesome> getIcon() {
         return Optional.empty();
     }
 
-    <E extends BaseEntity> String getID(String navigateTo, ControllerContext<E> context);
+    /**
+     * Get the ID representation for this action.
+     *
+     * //TODO its questionable that the id is provided this way. This means that only one id exists per action.
+     *
+     * @param navigateTo
+     * @param context
+     * @return the String identifier.
+     */
+    String getID(String navigateTo, ControllerContext context);
 
 }
+
+/*
+                                              .,-:;//;:=,
+                                          . :H@@@MM@M#H/.,+%;,
+                                       ,/X+ +M@@M@MM%=,-%HMMM@X/,
+                                     -+@MM; $M@@MH+-,;XMMMM@MMMM@+-
+                                    ;@M@@M- XM@X;. -+XXXXXHHH@M@M#@/.
+                                  ,%MM@@MH ,@%=             .---=-=:=,.
+                                  =@#@@@MX.,                -%HX$$%%%:;
+                                 =-./@M@M$                   .;@MMMM@MM:
+                                 X@/ -$MM/                    . +MM@@@M$
+                                ,@M@H: :@:                    . =X#@@@@-
+                                ,@@@MMX, .                    /H- ;@M@M=
+                                .H@@@@M@+,                    %MM+..%#$.
+                                 /MMMM@MMH/.                  XM@MH; =;
+                                  /%+%$XHH@$=              , .H@@@@MX,
+                                   .=--------.           -%H.,@@@@@MX,
+                                   .%MM@@@HHHXX$$$%+- .:$MMX =M@@MM%.
+                                     =XMMM@MM@MM#H;,-+HMM@M+ /MMMX=
+                                       =%@M@M#@$-.=$@MM@@@M; %M%=
+                                         ,:+$+-,/H#MMMMMMM@= =,
+                                               =++%%%%+/:-.
+
+ */
