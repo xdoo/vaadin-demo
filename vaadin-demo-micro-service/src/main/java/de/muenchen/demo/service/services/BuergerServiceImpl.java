@@ -183,9 +183,8 @@ public class BuergerServiceImpl implements BuergerService {
         
         Buerger buerger = this.read(buergerOid);
         Set<Buerger> kinder = buerger.getKinder();
-        Collection<Buerger> removeKinder = new LinkedList<>();
-        kinder.stream().filter((element) -> (element == this.read(kindOid))).forEach(removeKinder::add);
-        kinder.removeAll(removeKinder);
+
+        kinder.remove(this.read(kindOid));
         this.update(buerger);
         
     }
@@ -195,11 +194,8 @@ public class BuergerServiceImpl implements BuergerService {
         
         Buerger buerger = this.read(oid);
         
-        Set<Buerger> kinder = buerger.getKinder();
-        Collection<Buerger> removeKinder = new LinkedList<>();
-        kinder.stream().forEach(removeKinder::add);
-        
-        kinder.removeAll(removeKinder);
+        buerger.getKinder().clear();
+
         this.update(buerger);
         
     }
