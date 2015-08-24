@@ -1,5 +1,4 @@
 package de.muenchen.vaadin.ui.app.views;
-
 import com.vaadin.server.Page;
 import com.vaadin.shared.Position;
 import com.vaadin.ui.*;
@@ -17,38 +16,30 @@ import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.services.SecurityService;
 import de.muenchen.vaadin.ui.app.views.events.LoginEvent;
 import de.muenchen.vaadin.ui.util.EventBus;
-
 @SpringView(name = LoginView.NAME)
 @UIScope
 public class LoginView extends VerticalLayout implements View {
-
     private static final long serialVersionUID = -4430276235082912377L;
     public static final String NAME = SecurityService.LOGIN_VIEW_NAME;
-    
     // Services
     private SecurityService security;
     private EventBus eventBus;
-    
     // Vaadin Komponenten
     private TextField username;
     private PasswordField password;
-
     @Autowired
     public LoginView(SecurityService security, EventBus eventBus) {
         this.security = security;
         this.eventBus = eventBus;
-        
         setSizeFull();
         Component loginForm = buildLoginForm();
         addComponent(loginForm);
         setComponentAlignment(loginForm, Alignment.MIDDLE_CENTER);
     }
-
     @Override
     public void enter(ViewChangeEvent event) {
         username.focus();
     }
-
     private Component buildLoginForm() {
         final VerticalLayout loginPanel = new VerticalLayout();
         loginPanel.setSizeUndefined();
@@ -59,7 +50,6 @@ public class LoginView extends VerticalLayout implements View {
         loginPanel.addComponent(buildFields());
         return loginPanel;
     }
-
     private Component buildFields() {
         HorizontalLayout fields = new HorizontalLayout();
         fields.setSpacing(true);
@@ -81,44 +71,40 @@ public class LoginView extends VerticalLayout implements View {
         fields.setComponentAlignment(signin, Alignment.BOTTOM_LEFT);
         signin.addClickListener(new ClickListener() {
             private static final long serialVersionUID = 1L;
-
             @Override
             public void buttonClick(final ClickEvent event) {
                 if(security.login(username.getValue(), password.getValue())) {
                     eventBus.post(new LoginEvent());
                 } else {
-                    // Anmeldung fehlgeschlagen
+// Anmeldung fehlgeschlagen
                     Notification notif = new Notification(
                             "Anmeldung fehlgeschlagen",
                             "Bei der Eingabe Ihrer Usernamens/Ihres Kennworts ist ein Fehler aufgetreten. Versuchen Sie es erneut.",
                             Notification.Type.WARNING_MESSAGE);
-
                     notif.setDelayMsec(5000);
                     notif.setPosition(Position.BOTTOM_RIGHT);
-
                     notif.show(Page.getCurrent());
                 }
-//                try {
-//                    security.login(username.getValue(), password.getValue());
-//                } catch (AuthenticationException e) {
-//                    e.printStackTrace();
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
+// try {
+// security.login(username.getValue(), password.getValue());
+// } catch (AuthenticationException e) {
+// e.printStackTrace();
+// } catch (Exception e) {
+// e.printStackTrace();
+// }
 // TODO Register Remember me Token
 /*
-                 * Redirect is handled by the VaadinRedirectStrategy
-                 * User is redirected to either always the default
-                 * or the URL the user request before authentication
-                 *
-                 * Strategy is configured within SecurityConfiguration
-                 * Defaults to User request URL.
-                 */
+* Redirect is handled by the VaadinRedirectStrategy
+* User is redirected to either always the default
+* or the URL the user request before authentication
+*
+* Strategy is configured within SecurityConfiguration
+* Defaults to User request URL.
+*/
             }
         });
         return fields;
     }
-
     private Component buildLabels() {
         CssLayout labels = new CssLayout();
         labels.addStyleName("labels");
@@ -127,7 +113,7 @@ public class LoginView extends VerticalLayout implements View {
         welcome.addStyleName(ValoTheme.LABEL_H4);
         welcome.addStyleName(ValoTheme.LABEL_COLORED);
         labels.addComponent(welcome);
-        Label title = new Label("security-Sample");
+        Label title = new Label("Security-Sample");
         title.setSizeUndefined();
         title.addStyleName(ValoTheme.LABEL_H3);
         title.addStyleName(ValoTheme.LABEL_LIGHT);
