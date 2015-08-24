@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import java.util.*;
-import java.util.stream.StreamSupport;
+import java.util.stream.Collectors;
 
 /**
  *
