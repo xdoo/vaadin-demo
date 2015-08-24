@@ -1,31 +1,25 @@
 package de.muenchen.vaadin.ui.components;
 
-import com.google.common.collect.Lists;
 import com.google.common.eventbus.Subscribe;
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.Table.ColumnGenerator;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
-import de.muenchen.vaadin.ui.app.views.BuergerDetailView;
-import de.muenchen.vaadin.ui.app.views.BuergerUpdateView;
-import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
-import de.muenchen.vaadin.ui.components.buttons.ActionButton;
-import de.muenchen.vaadin.ui.components.buttons.EntityTableAction;
 import de.muenchen.vaadin.ui.components.buttons.TableActionButton;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.EventType;
-import static de.muenchen.vaadin.ui.util.I18nPaths.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import sun.java2d.pipe.hw.AccelDeviceEventListener;
+
+import static de.muenchen.vaadin.ui.util.I18nPaths.Type;
+import static de.muenchen.vaadin.ui.util.I18nPaths.getEntityFieldPath;
 
 /**
  *
@@ -147,7 +141,6 @@ public class BuergerTable extends CustomComponent {
                 .forEachOrdered(layout::addComponent);
 
         layout.setSpacing(true);
-        
         return layout;
     }
     
