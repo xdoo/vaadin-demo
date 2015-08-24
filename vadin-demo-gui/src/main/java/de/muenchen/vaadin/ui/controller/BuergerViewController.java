@@ -30,6 +30,8 @@ import de.muenchen.vaadin.ui.components.BuergerTableEditButton;
 import de.muenchen.vaadin.ui.components.GenericSuccessNotification;
 import de.muenchen.vaadin.ui.components.BuergerUpdateForm;
 import de.muenchen.vaadin.ui.components.buttons.EntityAction;
+import de.muenchen.vaadin.ui.components.buttons.EntityTableAction;
+import de.muenchen.vaadin.ui.components.buttons.TableActionButton;
 import de.muenchen.vaadin.ui.util.EventBus;
 import de.muenchen.vaadin.ui.util.EventType;
 import static de.muenchen.vaadin.ui.util.I18nPaths.*;
@@ -309,11 +311,20 @@ public class BuergerViewController implements Serializable,ControllerContext<Bue
     
     public BuergerSearchTable generateSearchTable(String navigateToForEdit, String navigateToForDetail, String navigateForCreate, String navigateFrom) {
         LOG.debug("creating 'search' table for buerger");
-        BuergerTableButtonFactory detail = BuergerTableButtonFactory.getFactory(navigateToForDetail, BuergerTableDetailButton.class);
-        BuergerTableButtonFactory edit = BuergerTableButtonFactory.getFactory(navigateToForEdit, BuergerTableEditButton.class);
-        BuergerTableButtonFactory copy = BuergerTableButtonFactory.getFactory(null, BuergerTableCopyButton.class);
-        BuergerTableButtonFactory delete = BuergerTableButtonFactory.getFactory(null, BuergerTableDeleteButton.class);
-        
+
+        TableActionButton.Builder detail = TableActionButton.Builder.make(this, EntityTableAction.tabledetail,navigateToForDetail,(container,id) -> {
+            getEventbus().post(new BuergerAppEvent(container.getItem(id), id, EventType.SELECT2READ).navigateTo(navigateToForDetail).from(navigateFrom));
+        });
+        TableActionButton.Builder edit = TableActionButton.Builder.make(this, EntityTableAction.tableedit, navigateToForEdit, (container, id) -> {
+           getEventbus().post(new BuergerAppEvent(container.getItem(id), id, EventType.SELECT2UPDATE).navigateTo(navigateToForEdit).from(navigateFrom));
+        });
+        TableActionButton.Builder copy = TableActionButton.Builder.make(this,EntityTableAction.tablecopy,null, (container, id) -> {
+            getEventbus().post(new BuergerAppEvent(container.getItem(id),id,EventType.COPY));
+        });
+        TableActionButton.Builder delete = TableActionButton.Builder.make(this,EntityTableAction.tabledelete,navigateToForEdit, (container, id) -> {
+            getEventbus().post(new BuergerAppEvent(container.getItem(id),id,EventType.DELETE).navigateTo(navigateToForEdit).from(navigateFrom));
+        });
+
         return new BuergerSearchTable(
                 this, 
                 navigateToForEdit, 
@@ -329,19 +340,21 @@ public class BuergerViewController implements Serializable,ControllerContext<Bue
     }
     
     public BuergerTable generateChildTable(String navigateToForDetail, String from) {
-        BuergerTableButtonFactory detail = BuergerTableButtonFactory.getFactory(navigateToForDetail, BuergerTableDetailButton.class);
+        TableActionButton.Builder detail = TableActionButton.Builder.make(this, EntityTableAction.tabledetail, navigateToForDetail, (container, id) -> {
+            getEventbus().post(new BuergerAppEvent(container.getItem(id), id, EventType.SELECT2READ).navigateTo(navigateToForDetail).from(from));
+        });
         
         BuergerTable table = this.createTable(from, this.queryKinder(this.current.getBean()), detail);
         return table;
     }
 
-    public BuergerTable generateTable(String navigateToForEdit, String navigateToForSelect, String from, final BuergerTableButtonFactory... buttonfactory) { 
-        return this.createTable(from, this.queryBuerger(), buttonfactory);
+    public BuergerTable generateTable(String navigateToForEdit, String navigateToForSelect, String from, final TableActionButton.Builder... buttonBuilders) {
+        return this.createTable(from, this.queryBuerger(), buttonBuilders);
     }
     
-    private BuergerTable createTable(String from, List<Buerger> entities, final BuergerTableButtonFactory... buttonfactory) {
+    private BuergerTable createTable(String from, List<Buerger> entities, final TableActionButton.Builder... buttonBuilders) {
         LOG.debug("creating table for buerger");
-        BuergerTable table = new BuergerTable(this, buttonfactory);
+        BuergerTable table = new BuergerTable(this, buttonBuilders);
         
         table.setFrom(from);
         

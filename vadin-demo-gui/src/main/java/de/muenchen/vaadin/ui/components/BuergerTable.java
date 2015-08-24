@@ -15,9 +15,12 @@ import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
 import de.muenchen.vaadin.ui.components.buttons.ActionButton;
 import de.muenchen.vaadin.ui.components.buttons.EntityTableAction;
+import de.muenchen.vaadin.ui.components.buttons.TableActionButton;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.EventType;
 import static de.muenchen.vaadin.ui.util.I18nPaths.*;
+
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -38,14 +41,14 @@ public class BuergerTable extends CustomComponent {
     private String from;
     
     // Buttons
-    List<BuergerTableButtonFactory> buttonFactories;
+    List<TableActionButton.Builder> buttonBuilders;
     
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerTable.class);
     
-    public BuergerTable(final BuergerViewController controller, final BuergerTableButtonFactory... buttonfactory) {
+    public BuergerTable(final BuergerViewController controller, final TableActionButton.Builder... buttonBuilders) {
         
         this.controller = controller;
-        this.buttonFactories = Lists.newArrayList(buttonfactory);
+        this.buttonBuilders = Arrays.asList(buttonBuilders);
         
         // Have a container of some type to contain the data
         this.container = new BeanItemContainer<>(Buerger.class);
@@ -136,37 +139,12 @@ public class BuergerTable extends CustomComponent {
     public HorizontalLayout addButtons(final Object id) {
         HorizontalLayout layout = new HorizontalLayout();
         
-        this.buttonFactories.stream().forEachOrdered(f -> {
-            ActionButton copy = new ActionButton(controller, EntityTableAction.tablecopy,null);
-            copy.addClickListener(clickEvent -> {
-                controller.postToEventBus(new BuergerAppEvent(container.getItem(id), id, EventType.COPY));
-            });
-
-            ActionButton delete = new ActionButton(controller, EntityTableAction.tabledelete,null);
-            delete.addClickListener(clickEvent -> {
-                GenericConfirmationWindow win = new GenericConfirmationWindow(new BuergerAppEvent(container.getItem(id), id, EventType.DELETE), controller, EntityTableAction.tabledelete);
-                getUI().addWindow(win);
-                win.center();
-                win.focus();
-            });
-
-
-            ActionButton detail = new ActionButton(controller, EntityTableAction.tabledetail,BuergerDetailView.NAME);
-            detail.addClickListener(clickEvent -> {
-                controller.postToEventBus(new BuergerAppEvent(container.getItem(id), id, EventType.SELECT2READ).navigateTo(BuergerDetailView.NAME).from(from));
-            });
-
-            ActionButton edit = new ActionButton(controller, EntityTableAction.tableedit,BuergerUpdateView.NAME);
-            edit.addClickListener(clickEvent -> {
-                controller.postToEventBus(new BuergerAppEvent(container.getItem(id), id, EventType.SELECT2UPDATE).navigateTo(BuergerUpdateView.NAME).from(from));
-            });
-
-
-            layout.addComponent(copy);
-            layout.addComponent(delete);
-            layout.addComponent(detail);
-            layout.addComponent(edit);
-        });
+        this.buttonBuilders.stream()
+                .peek((builder) -> {
+                            builder.setContainer(container);
+                            builder.setId(id);})
+                .map(TableActionButton.Builder::build)
+                .forEachOrdered(layout::addComponent);
 
         layout.setSpacing(true);
         
@@ -190,8 +168,8 @@ public class BuergerTable extends CustomComponent {
      * 
      * @return Liste der {@link BuergerTableButtonFactory}
      */
-    public List<BuergerTableButtonFactory> getButtonFactories() {
-        return buttonFactories;
+    public List<TableActionButton.Builder> getButtonFactories() {
+        return buttonBuilders;
     }
     
 }

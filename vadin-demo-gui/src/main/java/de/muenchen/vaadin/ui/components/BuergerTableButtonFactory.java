@@ -1,5 +1,6 @@
 package de.muenchen.vaadin.ui.components;
 
+import de.muenchen.vaadin.ui.components.buttons.TableActionButton;
 import org.slf4j.LoggerFactory;
 
 /**

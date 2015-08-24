@@ -14,6 +14,8 @@ import static de.muenchen.vaadin.ui.util.I18nPaths.*;
 public class ActionButton extends CustomComponent {
 
     private final Button button;
+    private String from;
+    private String navigateTo;
 
     /**
      * Create a new EntityButton with the specified context and the Action.
@@ -25,18 +27,23 @@ public class ActionButton extends CustomComponent {
      * @param action
      * @param navigateTo
      */
-    public ActionButton(final ControllerContext context, final Action action,final String navigateTo) {
-        final String labelPath = getFormPath(action, Component.button, Type.label);
-        final String label = context.resolveRelative(labelPath);
-
+    public ActionButton(final String label, final ControllerContext context, final Action action,final String navigateTo) {
         Button button = new Button(label);
-
         action.getIcon().ifPresent(button::setIcon);
         action.getClickShortCut().ifPresent(button::setClickShortcut);
         action.getStyleNames().forEach(style -> button.setStyleName(style, true));
         button.setId(action.getID(navigateTo, context));
         setCompositionRoot(button);
         this.button = button;
+    }
+
+    public ActionButton(final ControllerContext context, final Action action, final String navigateTo) {
+        this(resolveLabel(action,context),context,action,navigateTo);
+    }
+
+    private static String resolveLabel(Action action, ControllerContext context) {
+        final String labelPath = getFormPath(action, Component.button, Type.label);
+        return context.resolveRelative(labelPath);
     }
 
     public Button getButton() {
@@ -46,5 +53,21 @@ public class ActionButton extends CustomComponent {
 
     public void addClickListener(Button.ClickListener clickListener) {
         button.addClickListener(clickListener);
+    }
+
+    public String getFrom() {
+        return from;
+    }
+
+    public void setFrom(String from) {
+        this.from = from;
+    }
+
+    public String getNavigateTo() {
+        return navigateTo;
+    }
+
+    public void setNavigateTo(String navigateTo) {
+        this.navigateTo = navigateTo;
     }
 }
