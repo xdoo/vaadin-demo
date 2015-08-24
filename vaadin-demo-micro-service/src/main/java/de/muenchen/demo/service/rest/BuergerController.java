@@ -36,6 +36,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -86,7 +87,7 @@ public class BuergerController {
      *
      * @return
      */
-    @RolesAllowed({"PERM_queryBuerger"})
+    @Secured({"PERM_queryBuerger"})
     @RequestMapping(value = "/query", method = {RequestMethod.GET})
     public ResponseEntity queryBuerger() {
         if (LOG.isDebugEnabled()) {
@@ -103,7 +104,7 @@ public class BuergerController {
      * @param query
      * @return
      */
-    @RolesAllowed({"PERM_queryBuerger"})
+    @Secured({"PERM_queryBuerger"})
     @RequestMapping(value = "/query", method = {RequestMethod.POST})
     public ResponseEntity queryBuerger(@RequestBody String query) {
         if (LOG.isDebugEnabled()) {
@@ -121,7 +122,7 @@ public class BuergerController {
      *
      * @return
      */
-    @RolesAllowed({"PERM_newBuerger"})
+    @Secured({"PERM_newBuerger"})
     @RequestMapping(value = "/new", method = {RequestMethod.GET})
     public ResponseEntity newBuerger() {
         if (LOG.isDebugEnabled()) {
@@ -139,7 +140,7 @@ public class BuergerController {
      * @param oid
      * @return
      */
-    @RolesAllowed({"PERM_copyBuerger"})
+    @Secured({"PERM_copyBuerger"})
     @RequestMapping(value = "/copy/{oid}", method = {RequestMethod.GET})
     public ResponseEntity copyBuerger(@PathVariable String oid) {
         if (LOG.isDebugEnabled()) {
@@ -156,7 +157,7 @@ public class BuergerController {
      * @param oids
      * @return
      */
-    @RolesAllowed({"PERM_deleteListBuerger"})
+    @Secured({"PERM_deleteListBuerger"})
     @RequestMapping(value = "/delete", method = {RequestMethod.POST})
     public ResponseEntity deleteListBuerger(@RequestBody ArrayList<String> oids) {
         if (LOG.isDebugEnabled()) {
@@ -173,7 +174,7 @@ public class BuergerController {
      * @param oids
      * @return
      */
-    @RolesAllowed({"PERM_copyListBuerger"})
+    @Secured({"PERM_copyListBuerger"})
     @RequestMapping(value = "/copy", method = {RequestMethod.POST})
     public ResponseEntity copyListBuerger(@RequestBody ArrayList<String> oids) {
         if (LOG.isDebugEnabled()) {
@@ -189,7 +190,7 @@ public class BuergerController {
      * @param oid
      * @return
      */
-    @RolesAllowed({"PERM_readBuerger"})
+    @Secured({"PERM_readBuerger"})
     @RequestMapping(value = "/{oid}", method = {RequestMethod.GET})
     public ResponseEntity readBuerger(@PathVariable("oid") String oid) {
         if (LOG.isDebugEnabled()) {
@@ -207,7 +208,7 @@ public class BuergerController {
      * @param request
      * @return
      */
-    @RolesAllowed({"PERM_updateBuerger"})
+    @Secured({"PERM_updateBuerger"})
     @RequestMapping(value = "/{oid}", method = {RequestMethod.POST})
     public ResponseEntity updateBuerger(@PathVariable("oid") String oid, @RequestBody BuergerResource request) {
         if (LOG.isDebugEnabled()) {
@@ -237,7 +238,7 @@ public class BuergerController {
      * @param request
      * @return
      */
-    @RolesAllowed({"PERM_saveBuerger"})
+    @Secured({"PERM_saveBuerger"})
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
     public ResponseEntity saveBuerger(@RequestBody BuergerResource request) {
         if (LOG.isDebugEnabled()) {
@@ -256,7 +257,7 @@ public class BuergerController {
      * @param oid
      * @return
      */
-    @RolesAllowed({"PERM_deleteBuerger"})
+    @Secured({"PERM_deleteBuerger"})
     @RequestMapping(value = "/{oid}", method = {RequestMethod.DELETE})
     public ResponseEntity deleteBuerger(@PathVariable("oid") String oid) {
         if (LOG.isDebugEnabled()) {
@@ -272,7 +273,7 @@ public class BuergerController {
      * @param oid
      * @return
      */
-    @RolesAllowed({"PERM_readBuergerWohnungen"})
+    @Secured({"PERM_readBuergerWohnungen"})
     @RequestMapping(value = "/wohnungen/{oid}", method = {RequestMethod.GET})
     public ResponseEntity readBuergerWohnungen(@PathVariable("oid") String oid) {
         if (LOG.isDebugEnabled()) {
@@ -290,7 +291,7 @@ public class BuergerController {
      * @param oid
      * @return
      */
-    @RolesAllowed({"PERM_readBuergerKinder"})
+    @Secured({"PERM_readBuergerKinder"})
     @RequestMapping(value = "/kinder/{oid}", method = {RequestMethod.GET})
     public ResponseEntity readBuergerKinder(@PathVariable("oid") String oid) {
         if (LOG.isDebugEnabled()) {
@@ -308,7 +309,7 @@ public class BuergerController {
      * @param oid
      * @return
      */
-    @RolesAllowed({"PERM_readEltern"})
+    @Secured({"PERM_readEltern"})
     @RequestMapping(value = "/eltern/{oid}", method = {RequestMethod.GET})
     public ResponseEntity readEltern(@PathVariable("oid") String oid) {
         if (LOG.isDebugEnabled()) {
@@ -326,7 +327,7 @@ public class BuergerController {
      * @param oid
      * @return
      */
-    @RolesAllowed({"PERM_releaseBuergerEltern"})
+    @Secured({"PERM_releaseBuergerEltern"})
     @RequestMapping(value = "/release/eltern/{oid}", method = {RequestMethod.GET})
     public ResponseEntity releaseBuergerEltern(@PathVariable("oid") String oid) {
         if (LOG.isDebugEnabled()) {
@@ -343,7 +344,7 @@ public class BuergerController {
      * @param oid
      * @return
      */
-    @RolesAllowed({"PERM_releaseBuergerKinder"})
+    @Secured({"PERM_releaseBuergerKinder"})
     @RequestMapping(value = "/release/kinder/{oid}", method = {RequestMethod.GET})
     public ResponseEntity releaseBuergerKinder(@PathVariable("oid") String oid) {
         if (LOG.isDebugEnabled()) {
@@ -361,7 +362,7 @@ public class BuergerController {
      * @param elternteilOid
      * @return
      */
-    @RolesAllowed({"PERM_releaseBuergerElternteil"})
+    @Secured({"PERM_releaseBuergerElternteil"})
     @RequestMapping(value = "/release/elternteil/{oid}/{elternteilOid}", method = {RequestMethod.GET})
     public ResponseEntity releaseBuergerElternteil(@PathVariable("oid") String oid, @PathVariable("elternteilOid") String elternteilOid) {
         if (LOG.isDebugEnabled()) {
@@ -379,7 +380,7 @@ public class BuergerController {
      * @param request
      * @return
      */
-    @RolesAllowed({"PERM_createKindBuerger"})
+    @Secured({"PERM_createKindBuerger"})
     @RequestMapping(value = "/create/kind/{oid}", method = {RequestMethod.POST})
     public ResponseEntity createKindBuerger(@PathVariable("oid") String oid, @RequestBody BuergerResource request) {
         if (LOG.isDebugEnabled()) {
@@ -403,7 +404,7 @@ public class BuergerController {
      * @param kindOid
      * @return
      */
-    @RolesAllowed({"PERM_addKindBuerger"})
+    @Secured({"PERM_addKindBuerger"})
     @RequestMapping(value = "/add/buerger/{bOid}/kind/{kOid}", method = {RequestMethod.GET})
     public ResponseEntity addKindBuerger(@PathVariable("bOid") String buergerOid, @PathVariable("kOid") String kindOid) {
         if (LOG.isDebugEnabled()) {
@@ -428,7 +429,7 @@ public class BuergerController {
      * @param wohnungOid
      * @return
      */
-    @RolesAllowed({"PERM_addWohnungBuerger"})
+    @Secured({"PERM_addWohnungBuerger"})
     @RequestMapping(value = "/add/buerger/{bOid}/wohnung/{wOid}", method = {RequestMethod.GET})
     public ResponseEntity addWohnungBuerger(@PathVariable("bOid") String buergerOid, @PathVariable("wOid") String wohnungOid) {
         if (LOG.isDebugEnabled()) {
@@ -453,7 +454,7 @@ public class BuergerController {
      * @param request
      * @return
      */
-    @RolesAllowed({"PERM_createWohnungBuerger"})
+    @Secured({"PERM_createWohnungBuerger"})
     @RequestMapping(value = "/create/wohnung/{oid}", method = {RequestMethod.POST})
     public ResponseEntity createWohnungBuerger(@PathVariable("oid") String oid, @RequestBody WohnungResource request) {
         if (LOG.isDebugEnabled()) {
@@ -476,7 +477,7 @@ public class BuergerController {
      * @param oid
      * @return
      */
-    @RolesAllowed({"PERM_releaseBuergerWohnungen"})
+    @Secured({"PERM_releaseBuergerWohnungen"})
     @RequestMapping(value = "/release/wohnungen/{oid}", method = {RequestMethod.GET})
     public ResponseEntity releaseBuergerWohnungen(@PathVariable("oid") String oid) {
         if (LOG.isDebugEnabled()) {
@@ -493,7 +494,7 @@ public class BuergerController {
      * @param oid
      * @return
      */
-    @RolesAllowed({"PERM_readBuergerStaatsangehoerigkeiten"})
+    @Secured({"PERM_readBuergerStaatsangehoerigkeiten"})
     @RequestMapping(value = "/staats/{oid}", method = {RequestMethod.GET})
     @SuppressWarnings("empty-statement")
     public ResponseEntity readBuergerStaatsangehoerigkeiten(@PathVariable("oid") String oid) {
@@ -517,7 +518,7 @@ public class BuergerController {
      * @param staatsOid
      * @return
      */
-    @RolesAllowed({"PERM_addStaatangehoerigkeitBuerger"})
+    @Secured({"PERM_addStaatangehoerigkeitBuerger"})
     @RequestMapping(value = "/add/buerger/{bOid}/staats/{sOid}", method = {RequestMethod.GET})
     public ResponseEntity addStaatangehoerigkeitBuerger(@PathVariable("bOid") String buergerOid, @PathVariable("sOid") String staatsOid) {
         if (LOG.isDebugEnabled()) {
@@ -544,7 +545,7 @@ public class BuergerController {
      * @param passOid
      * @return
      */
-    @RolesAllowed({"PERM_addPassBuerger"})
+    @Secured({"PERM_addPassBuerger"})
     @RequestMapping(value = "/add/buerger/{bOid}/pass/{pOid}", method = {RequestMethod.GET})
     public ResponseEntity addPassBuerger(@PathVariable("bOid") String buergerOid, @PathVariable("pOid") String passOid) {
         if (LOG.isDebugEnabled()) {
@@ -569,7 +570,7 @@ public class BuergerController {
      * @param request
      * @return
      */
-    @RolesAllowed({"PERM_createPassBuerger"})
+    @Secured({"PERM_createPassBuerger"})
     @RequestMapping(value = "/create/pass/{oid}", method = {RequestMethod.POST})
     public ResponseEntity createPassBuerger(@PathVariable("oid") String oid, @RequestBody PassResource request) {
         if (LOG.isDebugEnabled()) {
@@ -592,7 +593,7 @@ public class BuergerController {
      * @param oid
      * @return
      */
-    @RolesAllowed({"PERM_readBuergerPass"})
+    @Secured({"PERM_readBuergerPass"})
     @RequestMapping(value = "/pass/{oid}", method = {RequestMethod.GET})
     public ResponseEntity readBuergerPass(@PathVariable("oid") String oid) {
         if (LOG.isDebugEnabled()) {
@@ -610,7 +611,7 @@ public class BuergerController {
      * @param oid
      * @return
      */
-    @RolesAllowed({"PERM_releaseBuergerPaesse"})
+    @Secured({"PERM_releaseBuergerPaesse"})
     @RequestMapping(value = "/release/paesse/{oid}", method = {RequestMethod.GET})
     public ResponseEntity releaseBuergerPaesse(@PathVariable("oid") String oid) {
         if (LOG.isDebugEnabled()) {
@@ -627,7 +628,7 @@ public class BuergerController {
      * @param oid
      * @return
      */
-    @RolesAllowed({"PERM_readBuergerSachbearbeiter"})
+    @Secured({"PERM_readBuergerSachbearbeiter"})
     @RequestMapping(value = "/sachbearbeiter/{oid}", method = {RequestMethod.GET})
     public ResponseEntity readBuergerSachbearbeiter(@PathVariable("oid") String oid) {
         if (LOG.isDebugEnabled()) {
@@ -646,7 +647,7 @@ public class BuergerController {
      * @param sachbearbeiterOid
      * @return
      */
-    @RolesAllowed({"PERM_addSachbearbeiterBuerger"})
+    @Secured({"PERM_addSachbearbeiterBuerger"})
     @RequestMapping(value = "/add/buerger/{bOid}/Sachbearbeiter/{sOid}", method = {RequestMethod.GET})
     public ResponseEntity addSachbearbeiterBuerger(@PathVariable("bOid") String buergerOid, @PathVariable("sOid") String sachbearbeiterOid) {
         if (LOG.isDebugEnabled()) {
@@ -673,7 +674,7 @@ public class BuergerController {
      * @param request
      * @return
      */
-    @RolesAllowed({"PERM_createSachbearbeiterBuerger"})
+    @Secured({"PERM_createSachbearbeiterBuerger"})
     @RequestMapping(value = "/create/sachbearbeiter/{oid}", method = {RequestMethod.POST})
     public ResponseEntity createSachbearbeiterBuerger(@PathVariable("oid") String oid, @RequestBody SachbearbeiterResource request) {
         if (LOG.isDebugEnabled()) {
@@ -698,7 +699,7 @@ public class BuergerController {
      * @param oid
      * @return
      */
-    @RolesAllowed({"PERM_releaseBuergerAllSachbearbeiter"})
+    @Secured({"PERM_releaseBuergerAllSachbearbeiter"})
     @RequestMapping(value = "/release/sachbearbeiter/{oid}", method = {RequestMethod.GET})
     public ResponseEntity releaseBuergerAllSachbearbeiter(@PathVariable("oid") String oid) {
         if (LOG.isDebugEnabled()) {

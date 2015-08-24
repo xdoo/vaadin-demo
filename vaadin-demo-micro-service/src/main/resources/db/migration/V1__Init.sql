@@ -81,9 +81,19 @@ insert into MANDANT (ID,OID) values (3,'3');
 
 insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (2,'hans@test.de',TRUE,'oid1','test','hans',2);
 insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (3,'franz@test.de',TRUE,'oid2','test','franz',3);
+insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (4,'rene.zarwel@muenchen.de',TRUE,'oid3','test','rene.zarwel',3);
+insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (5,'p.mueller@muenchen.de',TRUE,'oid4','test','p.mueller',3);
+insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (6,'maximilian.schug@muenchen.de',TRUE,'oid5','test','maximilian.schug',3);
+insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (7,'arne.schoentag@muenchen.de',TRUE,'oid6','test','arne.schoentag',3);
+insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (8,'maximilian.zollbrecht@muenchen.de',TRUE,'oid7','test','maximilian.zollbrecht',3);
+insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (9,'praktikant.tmar@muenchen.de',TRUE,'oid8','test','praktikant.tmar',3);
+insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (10,'claus.straube@muenchen.de',TRUE,'oid9','test','claus.straube',3);
+insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (11,'m.kurz@muenchen.de',TRUE,'oid10','test','m.kurz',3);
+insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (12,'sebastian.schoebel@muenchen.de',TRUE,'oid11','test','sebastian.schoebel',3);
+
 
 insert  into authoritys (id, oid, auth_authority) values ('2','2','ADMIN');					
-insert into authoritys (id, oid, auth_authority) values (3, 3, 'ADMIN');
+insert into authoritys (id, oid, auth_authority) values ('3', '3', 'ADMIN');
 
 insert  into permissions (id,perm_permission,oid) values ('1000','PERM_newAdresse','1000');									
 insert  into permissions (id,perm_permission,oid) values ('1001','PERM_queryAdresse','1001');									
@@ -338,7 +348,17 @@ insert into authoritys_permissions (authority_id, permission_id) values ('2','11
 				
 				
 insert into users_authoritys (authority_id, user_id) values (2, 2);
-insert into users_authoritys (authority_id, user_id) values (3, 3);
+insert into users_authoritys (authority_id, user_id) values (2, 3);
+insert into users_authoritys (authority_id, user_id) values (2, 4);
+insert into users_authoritys (authority_id, user_id) values (2, 5);
+insert into users_authoritys (authority_id, user_id) values (2, 6);
+insert into users_authoritys (authority_id, user_id) values (2, 7);
+insert into users_authoritys (authority_id, user_id) values (2, 8);
+insert into users_authoritys (authority_id, user_id) values (2, 9);
+insert into users_authoritys (authority_id, user_id) values (2, 10);
+insert into users_authoritys (authority_id, user_id) values (2, 11);
+insert into users_authoritys (authority_id, user_id) values (2, 12);
+
 
 
 insert into buerger (id, oid, buer_nachname, buer_vorname, mandant) values (2, '2','test','franz',3);
