@@ -3,6 +3,7 @@ package de.muenchen.demo.service.rest;
 import com.google.common.collect.Lists;
 import de.muenchen.demo.service.domain.Buerger;
 import de.muenchen.demo.service.domain.Pass;
+import de.muenchen.demo.service.domain.Sachbearbeiter;
 import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
 import de.muenchen.demo.service.domain.StaatsangehoerigkeitReference;
 import de.muenchen.demo.service.domain.Wohnung;
@@ -10,6 +11,8 @@ import de.muenchen.vaadin.demo.api.rest.BuergerResource;
 import de.muenchen.demo.service.rest.api.BuergerResourceAssembler;
 import de.muenchen.demo.service.rest.api.PassResource;
 import de.muenchen.demo.service.rest.api.PassResourceAssembler;
+import de.muenchen.demo.service.rest.api.SachbearbeiterResource;
+import de.muenchen.demo.service.rest.api.SachbearbeiterResourceAssembler;
 import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
 import de.muenchen.vaadin.demo.api.rest.StaatsangehoerigkeitResource;
 import de.muenchen.demo.service.rest.api.StaatsangehoerigkeitResourceAssembler;
@@ -17,10 +20,12 @@ import de.muenchen.vaadin.demo.api.rest.WohnungResource;
 import de.muenchen.demo.service.rest.api.WohnungResourceAssembler;
 import de.muenchen.demo.service.services.BuergerService;
 import de.muenchen.demo.service.services.PassService;
+import de.muenchen.demo.service.services.SachbearbeiterService;
 import de.muenchen.demo.service.services.StaatsangehoerigkeitService;
 import de.muenchen.demo.service.services.UserService;
 import de.muenchen.demo.service.services.WohnungService;
 import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -58,6 +63,8 @@ public class BuergerController {
     @Autowired
     WohnungService wohnungService;
     @Autowired
+    SachbearbeiterService sachbearbeiterService;
+    @Autowired
     PassService passService;
     @Autowired
     StaatsangehoerigkeitService staatsService;
@@ -65,6 +72,8 @@ public class BuergerController {
     BuergerResourceAssembler assembler;
     @Autowired
     WohnungResourceAssembler wohnungAssembler;
+    @Autowired
+    SachbearbeiterResourceAssembler sachbearbeiterAssembler;
     @Autowired
     PassResourceAssembler passAssembler;
     @Autowired
@@ -139,6 +148,39 @@ public class BuergerController {
         Buerger entity = this.service.copy(oid);
         BuergerResource resource = this.assembler.assembleWithAllLinks(entity);
         return ResponseEntity.ok(resource);
+    }
+
+    /**
+     * Löscht mehrere Bürger.
+     *
+     * @param oids
+     * @return
+     */
+    @RolesAllowed({"PERM_deleteListBuerger"})
+    @RequestMapping(value = "/delete", method = {RequestMethod.POST})
+    public ResponseEntity deleteListBuerger(@RequestBody ArrayList<String> oids) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("delete buerger");
+        }
+        this.service.delete(oids);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * Macht eine Kopie mehreres Büergers. Diese Kopie wird bei Erstellung in
+     * der DB gespeichert.
+     *
+     * @param oids
+     * @return
+     */
+    @RolesAllowed({"PERM_copyListBuerger"})
+    @RequestMapping(value = "/copy", method = {RequestMethod.POST})
+    public ResponseEntity copyListBuerger(@RequestBody ArrayList<String> oids) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("copy buerger");
+        }
+        this.service.copy(oids);
+        return ResponseEntity.ok().build();
     }
 
     /**
@@ -561,6 +603,7 @@ public class BuergerController {
         List<PassResource> resources = passAssembler.toResource(pass, HateoasUtil.REL_SELF);
         return ResponseEntity.ok(resources);
     }
+
     /**
      * Entfernt die Beziehung zwischen einem Buerger und seinen Pässe.
      *
@@ -578,4 +621,91 @@ public class BuergerController {
 
     }
 
+    /**
+     * Liest die Wohnunugen einer Bürger.
+     *
+     * @param oid
+     * @return
+     */
+    @RolesAllowed({"PERM_readBuergerSachbearbeiter"})
+    @RequestMapping(value = "/sachbearbeiter/{oid}", method = {RequestMethod.GET})
+    public ResponseEntity readBuergerSachbearbeiter(@PathVariable("oid") String oid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("read buerger Sachbearbeiter");
+        }
+        Set<Sachbearbeiter> Sachbearbeiter = this.service.read(oid).getSachbearbeiter();
+
+        List<SachbearbeiterResource> resources = sachbearbeiterAssembler.toResource(Sachbearbeiter, HateoasUtil.REL_SELF);
+        return ResponseEntity.ok(resources);
+    }
+
+    /**
+     * Assoziiert eine Sachbearbeiter mit einem Buerger .
+     *
+     * @param buergerOid
+     * @param sachbearbeiterOid
+     * @return
+     */
+    @RolesAllowed({"PERM_addSachbearbeiterBuerger"})
+    @RequestMapping(value = "/add/buerger/{bOid}/Sachbearbeiter/{sOid}", method = {RequestMethod.GET})
+    public ResponseEntity addSachbearbeiterBuerger(@PathVariable("bOid") String buergerOid, @PathVariable("sOid") String sachbearbeiterOid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Add Sachbearbeiter buerger");
+        }
+
+        Sachbearbeiter sachbearbeiter = sachbearbeiterService.read(sachbearbeiterOid);
+        Buerger buerger = service.read(buergerOid);
+
+        buerger.getSachbearbeiter().add(sachbearbeiter);
+        sachbearbeiter.getBuerger().add(buerger);
+        this.sachbearbeiterService.update(sachbearbeiter);
+        this.service.update(buerger);
+
+        BuergerResource resource = this.assembler.assembleWithAllLinks(buerger);
+        resource.add(linkTo(methodOn(BuergerController.class).addSachbearbeiterBuerger(buergerOid, sachbearbeiterOid)).withSelfRel()); // add self link with params
+        return ResponseEntity.ok(resource);
+    }
+
+    /**
+     * Erzeugt eine Sachbearbeiter und assoziiert ihm mit einem Buerger .
+     *
+     * @param oid
+     * @param request
+     * @return
+     */
+    @RolesAllowed({"PERM_createSachbearbeiterBuerger"})
+    @RequestMapping(value = "/create/sachbearbeiter/{oid}", method = {RequestMethod.POST})
+    public ResponseEntity createSachbearbeiterBuerger(@PathVariable("oid") String oid, @RequestBody SachbearbeiterResource request) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Create Sachbearbeiter buerger");
+        }
+        Buerger buerger = service.read(oid);
+        Sachbearbeiter sachbearbeiter = new Sachbearbeiter();
+        this.sachbearbeiterAssembler.fromResource(request, sachbearbeiter);
+        sachbearbeiter.getBuerger().add(buerger);
+        this.sachbearbeiterService.save(sachbearbeiter);
+        buerger.getSachbearbeiter().add(sachbearbeiter);
+        this.service.update(buerger);
+
+        BuergerResource resource = this.assembler.assembleWithAllLinks(buerger);
+        return ResponseEntity.ok(resource);
+    }
+
+    /**
+     * Entfernt die Beziehung zwischen einem Buerger und seinen
+     * Sachbearbeiteren.
+     *
+     * @param oid
+     * @return
+     */
+    @RolesAllowed({"PERM_releaseBuergerAllSachbearbeiter"})
+    @RequestMapping(value = "/release/sachbearbeiter/{oid}", method = {RequestMethod.GET})
+    public ResponseEntity releaseBuergerAllSachbearbeiter(@PathVariable("oid") String oid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("release Buerger Sachbearbeiter");
+        }
+        this.service.releaseBuergerAllSachbearbeiter(oid);
+        return ResponseEntity.ok().build();
+
+    }
 }

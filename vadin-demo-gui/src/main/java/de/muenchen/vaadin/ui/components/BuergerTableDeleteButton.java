@@ -10,6 +10,7 @@ import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.services.MessageService;
 import de.muenchen.vaadin.services.MessageServiceImpl;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
+import de.muenchen.vaadin.ui.components.buttons.Action;
 import de.muenchen.vaadin.ui.util.EventType;
 import org.springframework.beans.factory.annotation.Autowired;
 import static de.muenchen.vaadin.ui.util.I18nPaths.*;

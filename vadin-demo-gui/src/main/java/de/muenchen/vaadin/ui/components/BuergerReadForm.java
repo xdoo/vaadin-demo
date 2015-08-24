@@ -10,6 +10,8 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
+import de.muenchen.vaadin.ui.components.buttons.Action;
+import de.muenchen.vaadin.ui.components.buttons.EntityButton;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.EventType;
 import static de.muenchen.vaadin.ui.util.I18nPaths.*;
@@ -29,7 +31,7 @@ public class BuergerReadForm extends CustomComponent {
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerReadForm.class);
     
     final BeanFieldGroup<Buerger> binder = new BeanFieldGroup<Buerger>(Buerger.class);
-    private BuergerUpdateButton updateButton;
+    private EntityButton<Buerger> updateButton;
     final BuergerViewController controller;
     
     private final String navigateToUpdate;
@@ -90,9 +92,9 @@ public class BuergerReadForm extends CustomComponent {
         this.binder.setReadOnly(true);
         layout.addComponent(buttonLayout);
         // die Schaltfläche zum Aktualisieren        
-        buttonLayout.addComponent(new BuergerBackButton(this.controller, this.back));
+        buttonLayout.addComponent(EntityButton.make(controller,Action.back).navigateTo(this.back).build());
         // die Schaltfläche zum Bearbeiten
-        this.updateButton = new BuergerUpdateButton(this.controller, this.navigateToUpdate, this.from);
+        this.updateButton = EntityButton.make(controller,Action.update).navigateTo(this.navigateToUpdate).from(this.from).build();
         buttonLayout.addComponent(this.updateButton);
         setCompositionRoot(layout);
     }

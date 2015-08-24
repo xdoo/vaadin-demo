@@ -24,6 +24,7 @@ import de.muenchen.demo.service.domain.MandantRepository;
 import de.muenchen.demo.service.domain.Pass;
 import de.muenchen.demo.service.domain.PassRepository;
 import de.muenchen.demo.service.domain.PermissionRepository;
+import de.muenchen.demo.service.domain.Sachbearbeiter;
 import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
 import de.muenchen.demo.service.domain.StaatsangehoerigkeitReferenceRepository;
 import de.muenchen.demo.service.domain.UserAuthorityRepository;
@@ -32,12 +33,14 @@ import de.muenchen.demo.service.domain.Wohnung;
 import de.muenchen.demo.service.domain.WohnungRepository;
 import de.muenchen.vaadin.demo.api.rest.BuergerResource;
 import de.muenchen.demo.service.rest.api.PassResource;
+import de.muenchen.demo.service.rest.api.SachbearbeiterResource;
 import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
 import de.muenchen.vaadin.demo.api.rest.StaatsangehoerigkeitResource;
 import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.net.ssl.SSLContext;
@@ -89,6 +92,8 @@ public class BuergerTest {
     private final Pass pass2 = new Pass();
 
     private final Wohnung wohnung = new Wohnung();
+    private final Sachbearbeiter sachbearbeiter = new Sachbearbeiter();
+    private final Sachbearbeiter sachbearbeiter2 = new Sachbearbeiter();
     private BuergerResource response;
     private List responseList;
     private String urlSave;
@@ -209,6 +214,13 @@ public class BuergerTest {
         pass2.setOid("bp2");
         pass2.setPassNummer("2080402");
         pass2.setKode("E");
+        sachbearbeiter2.setOid("bs2");
+        sachbearbeiter2.setTelephone("08985919859");
+        sachbearbeiter2.setFunktion("director");
+
+        sachbearbeiter.setOid("bs");
+        sachbearbeiter.setFax("1254");
+        sachbearbeiter.setFunktion("Praktikant");
     }
 
     @Test
@@ -330,11 +342,45 @@ public class BuergerTest {
     }
 
     @Test
+    public void copyListBuergerTest() {
+
+        restTemplate.postForEntity(urlSave, buerger, BuergerResource.class).getBody();
+        restTemplate.postForEntity(urlSave, buerger2, BuergerResource.class).getBody();
+        String URL2 = "http://localhost:" + port + "/buerger/copy";
+        ArrayList<String> oids = new ArrayList();
+        oids.add("b");
+        oids.add("b2");
+        restTemplate.postForEntity(URL2, oids, BuergerResource.class);
+        String URL3 = "http://localhost:" + port + "/buerger/query";
+        SearchResultResource responseQuery = restTemplate.getForEntity(URL3, SearchResultResource.class).getBody();
+
+        assertEquals(4, responseQuery.getResult().size());
+
+    }
+
+    @Test
     public void buergerDeleteTest() {
 
         restTemplate.postForEntity(urlSave, buerger, BuergerResource.class).getBody();
         String URL2 = "http://localhost:" + port + "/buerger/b";
         restTemplate.delete(URL2, buerger);
+        String URL3 = "http://localhost:" + port + "/buerger/query";
+        SearchResultResource responseQuery = restTemplate.getForEntity(URL3, SearchResultResource.class).getBody();
+
+        assertEquals(true, responseQuery.getResult().isEmpty());
+
+    }
+
+    @Test
+    public void buergerDeleteListTest() {
+
+        restTemplate.postForEntity(urlSave, buerger, BuergerResource.class).getBody();
+        restTemplate.postForEntity(urlSave, buerger2, BuergerResource.class).getBody();
+        String URL2 = "http://localhost:" + port + "/buerger/delete";
+        ArrayList<String> oids = new ArrayList();
+        oids.add("b");
+        oids.add("b2");
+        restTemplate.postForEntity(URL2, oids, BuergerResource.class);
         String URL3 = "http://localhost:" + port + "/buerger/query";
         SearchResultResource responseQuery = restTemplate.getForEntity(URL3, SearchResultResource.class).getBody();
 
@@ -487,16 +533,16 @@ public class BuergerTest {
         String URL2 = "http://localhost:" + port + "/buerger/add/buerger/b/kind/bk";
         restTemplate.postForEntity(URL1, kind2, BuergerResource.class).getBody();
         restTemplate.getForEntity(URL2, BuergerResource.class).getBody();
-        
+
         String urlKinder = "http://localhost:" + port + "/buerger/kinder/b";
-        
+
         SearchResultResource responseListKinder = restTemplate.getForEntity(urlKinder, SearchResultResource.class).getBody();
         assertEquals(2, responseListKinder.getResult().size());
-       
+
         /* Test releaseBuergerKinder */
         String urlReleaseKinder = "http://localhost:" + port + "/buerger/release/kinder/b";
         restTemplate.getForEntity(urlReleaseKinder, BuergerResource.class);
-        
+
         SearchResultResource responseListKinder2 = restTemplate.getForEntity(urlKinder, SearchResultResource.class).getBody();
         assertEquals(0, responseListKinder2.getResult().size());
     }
@@ -632,9 +678,76 @@ public class BuergerTest {
         /* Test delete Pass */
         String urlDelete = "http://localhost:" + port + "/pass/bp";
         restTemplate.delete(urlDelete, pass);
-        
+
         responseList = restTemplate.getForEntity(URL1, List.class).getBody();
         assertEquals(1, responseList.size());
+    }
+
+    @Test
+    public void sachbearbeiterBuergerTest() {
+
+        restTemplate.postForEntity(urlSave, buerger, BuergerResource.class);
+
+        String URL2 = "http://localhost:" + port + "/buerger/b";
+        String urlSachbearbeiterSave = "http://localhost:" + port + "/sachbearbeiter/save";
+        restTemplate.postForEntity(urlSachbearbeiterSave, sachbearbeiter2, SachbearbeiterResource.class);
+
+        /* Test methode createsachbearbeiterBuerger*/
+        String URL3 = "http://localhost:" + port + "/buerger/create/sachbearbeiter/b";
+        response = restTemplate.postForEntity(URL3, sachbearbeiter, BuergerResource.class).getBody();
+        restTemplate.getForEntity(URL2, BuergerResource.class).getBody();
+        assertNotNull(response.getOid());
+        assertNotNull(response.getLink(HateoasUtil.REL_NEW));
+        assertNotNull(response.getLink(HateoasUtil.REL_UPDATE));
+        assertNotNull(response.getLink(HateoasUtil.REL_COPY));
+        assertNotNull(response.getLink(HateoasUtil.REL_SELF));
+        assertNotNull(response.getLink(HateoasUtil.REL_DELETE));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.PAESSE));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.WOHNUNGEN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.KINDER));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_WOHNUNG));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.ELTERN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_ELTERN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.STAATSANGEHOERIGKEITEN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_KIND));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_PASS));
+
+        /* Test methode addSachbearbeiterBuerger*/
+        String URL5 = "http://localhost:" + port + "/buerger/add/buerger/b/Sachbearbeiter/bs2";
+        response = restTemplate.getForEntity(URL5, BuergerResource.class).getBody();
+        assertNotNull(response.getOid());
+        assertNotNull(response.getLink(HateoasUtil.REL_NEW));
+        assertNotNull(response.getLink(HateoasUtil.REL_UPDATE));
+        assertNotNull(response.getLink(HateoasUtil.REL_COPY));
+        assertNotNull(response.getLink(HateoasUtil.REL_SELF));
+        assertNotNull(response.getLink(HateoasUtil.REL_DELETE));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.PAESSE));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.WOHNUNGEN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.KINDER));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_WOHNUNG));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.ELTERN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_ELTERN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.STAATSANGEHOERIGKEITEN));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_KIND));
+        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_PASS));
+
+        /*Test methode readBuergerSachbearbeiteren*/
+        String URL1 = "http://localhost:" + port + "/buerger/sachbearbeiter/b";
+        responseList = restTemplate.getForEntity(URL1, List.class).getBody();
+        assertEquals(2, responseList.size());
+
+        /*Test methode readBuergerSachbearbeiteren*/
+        String urlRelease = "http://localhost:" + port + "/buerger/release/sachbearbeiter/b";
+        restTemplate.getForEntity(urlRelease, BuergerResource.class);
+        responseList = restTemplate.getForEntity(URL1, List.class).getBody();
+        assertEquals(0, responseList.size());
+
+        /* Test delete sachbearbeiter */
+        String urlDelete = "http://localhost:" + port + "/sachbearbeiter/bs";
+        restTemplate.delete(urlDelete, sachbearbeiter);
+        String urlDelete2 = "http://localhost:" + port + "/sachbearbeiter/bs2";
+        restTemplate.delete(urlDelete2, sachbearbeiter);
+
     }
 
     @After

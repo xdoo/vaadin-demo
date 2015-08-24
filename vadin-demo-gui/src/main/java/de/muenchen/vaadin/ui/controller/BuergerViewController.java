@@ -13,6 +13,9 @@ import com.vaadin.ui.TabSheet;
 import de.muenchen.vaadin.services.BuergerService;
 import de.muenchen.vaadin.services.MessageService;
 import de.muenchen.vaadin.ui.app.MainUI;
+import de.muenchen.vaadin.ui.app.views.BuergerCreateChildView;
+import de.muenchen.vaadin.ui.app.views.BuergerDetailView;
+import static de.muenchen.vaadin.ui.app.views.BuergerDetailView.NAME;
 
 import de.muenchen.vaadin.ui.app.views.events.AppEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
@@ -29,16 +32,20 @@ import de.muenchen.vaadin.ui.components.BuergerTableDetailButton;
 import de.muenchen.vaadin.ui.components.BuergerTableEditButton;
 import de.muenchen.vaadin.ui.components.GenericSuccessNotification;
 import de.muenchen.vaadin.ui.components.BuergerUpdateForm;
+import de.muenchen.vaadin.ui.components.buttons.Action;
+import de.muenchen.vaadin.ui.components.ChildTable;
 import de.muenchen.vaadin.ui.util.EventBus;
 import de.muenchen.vaadin.ui.util.EventType;
 import static de.muenchen.vaadin.ui.util.I18nPaths.*;
 import de.muenchen.vaadin.ui.util.VaadinUtil;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 import java.util.Stack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.controller;
 
 /**
  * Der Controller ist die zentrale Klasse um die Logik im Kontext Buerger abzubilden.
@@ -46,7 +53,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author claus.straube
  */
 @SpringComponent @UIScope
-public class BuergerViewController implements Serializable, ControllerContext<Buerger> {
+public class BuergerViewController implements Serializable,ControllerContext<Buerger> {
     
     // TODO entweder hier oder im I18nServiceConfigImpl angeben
     public static final String I18N_BASE_PATH = "buerger";
@@ -71,6 +78,12 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
      */
     private final EventBus eventbus;
     
+    private Optional<BuergerSearchTable> searchTable = Optional.<BuergerSearchTable>empty();
+    private Optional<BuergerChildTab> childTab = Optional.empty();
+    private Optional<BuergerCreateForm> createForm = Optional.empty();
+    private Optional<BuergerCreateForm> createChildForm = Optional.empty();
+    private Optional<BuergerUpdateForm> updateForm = Optional.empty();
+    private Optional<BuergerReadForm> readForm = Optional.empty();
     /**
      * {@link MessageService} zur Auflösung der Platzhalter
      */
@@ -145,12 +158,22 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
      */
     @Override
     public String resolveRelative(String relativePath) {
-        return resolve(I18N_BASE_PATH + "." + relativePath);
+        return msg.get(I18N_BASE_PATH + "." + relativePath);
     }
 
     @Override
     public void postToEventBus(AppEvent<?> appEvent) {
-        eventbus.post(appEvent);
+        getEventbus().post(appEvent);
+    }
+
+    @Override
+    public AppEvent<Buerger> buildEvent(EventType eventType) {
+        return new BuergerAppEvent(eventType);
+    }
+
+    @Override
+    public String getBasePath() {
+        return I18N_BASE_PATH;
     }
 
     /**
@@ -246,16 +269,23 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
     //////////////////////////////////////////////
 
     public BuergerCreateForm generateCreateForm(String navigateTo) {
+        if(!createForm.isPresent()){
+            
         LOG.debug("creating 'create' buerger form");
         BuergerCreateForm form = new BuergerCreateForm(this, navigateTo);
-        return form;
+        createForm = Optional.of(form);
+        }
+        return createForm.get();
     }
     
     public BuergerCreateForm generateCreateChildForm(String navigateTo) {
+        if(!createChildForm.isPresent()){
         LOG.debug("creating 'create child' buerger form");
         BuergerCreateForm form = new BuergerCreateForm(this, navigateTo);
         form.setType(EventType.SAVE_CHILD);
-        return form;
+        createChildForm = Optional.of(form);
+        }
+        return createChildForm.get();
     }
     
     /**
@@ -267,21 +297,33 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
      * @return {@link TabSheet.Tab} das Tab
      */
     public BuergerChildTab generateChildTab(String navigateToForDetail, String navigateForCreate, String from) {
+        if(childTab.isPresent()){
+            BuergerTable tmp = childTab.get().getTable();
+           // childTab.get().setTable(this.generateChildTable(navigateToForDetail, from));
+           // eventbus.unregister(tmp);
+        }
+        else
+        {
         BuergerChildTab tab = new BuergerChildTab(this, navigateToForDetail, navigateForCreate, from);
         this.eventbus.register(tab);
-        return tab;
+        childTab=Optional.of(tab);
+        }
+        return childTab.get();
     }
     
     public BuergerCreateForm generateCreateChildForm() {
         return this.generateCreateChildForm(this.popFrom());
     }
 
-    public BuergerUpdateForm generateUpdateForm(String navigateTo, String from) { 
+    public BuergerUpdateForm generateUpdateForm(String navigateTo, String from) {
+        if(!updateForm.isPresent()){
         LOG.debug("creating 'update' buerger form");
         BuergerUpdateForm form = new BuergerUpdateForm(this, navigateTo, this.popFrom(), from);
         this.eventbus.register(form);
         this.eventbus.post(new BuergerComponentEvent(this.current, EventType.SELECT2UPDATE));
-        return form;
+        updateForm = Optional.of(form);
+        }
+        return updateForm.get();
     }
     
     public BuergerUpdateForm generateUpdateForm(String from) { 
@@ -289,21 +331,26 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
     }
     
     public BuergerReadForm generateReadForm(String navigateToUpdate, String from) {
+        if(!readForm.isPresent()){
         LOG.debug("creating 'read' buerger form");
         BuergerReadForm form = new BuergerReadForm(this, navigateToUpdate, this.peekFrom(), from);
         this.eventbus.register(form);
         this.eventbus.post(new BuergerComponentEvent(this.current, EventType.SELECT2READ));
-        return form;
+        readForm = Optional.of(form);
+        }
+        return readForm.get();
     }
     
     public BuergerSearchTable generateSearchTable(String navigateToForEdit, String navigateToForDetail, String navigateForCreate, String navigateFrom) {
-        LOG.debug("creating 'search' table for buerger");
-        BuergerTableButtonFactory detail = BuergerTableButtonFactory.getFactory(navigateToForDetail, BuergerTableDetailButton.class);
+        
+       
+        if(!searchTable.isPresent()){
+            BuergerTableButtonFactory detail = BuergerTableButtonFactory.getFactory(navigateToForDetail, BuergerTableDetailButton.class);
         BuergerTableButtonFactory edit = BuergerTableButtonFactory.getFactory(navigateToForEdit, BuergerTableEditButton.class);
         BuergerTableButtonFactory copy = BuergerTableButtonFactory.getFactory(null, BuergerTableCopyButton.class);
         BuergerTableButtonFactory delete = BuergerTableButtonFactory.getFactory(null, BuergerTableDeleteButton.class);
-        
-        return new BuergerSearchTable(
+            LOG.debug("creating 'search' table for buerger");
+        searchTable = Optional.of(new BuergerSearchTable(
                 this, 
                 navigateToForEdit, 
                 navigateToForDetail, 
@@ -314,13 +361,15 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
                 edit,
                 copy,
                 delete
-        );
+        ));}
+        return searchTable.get();
+        
     }
     
     public BuergerTable generateChildTable(String navigateToForDetail, String from) {
         BuergerTableButtonFactory detail = BuergerTableButtonFactory.getFactory(navigateToForDetail, BuergerTableDetailButton.class);
         
-        BuergerTable table = this.createTable(from, this.queryKinder(this.current.getBean()), detail);
+        BuergerTable table = this.createChildTable(from, this.queryKinder(this.current.getBean()), detail);
         return table;
     }
 
@@ -342,6 +391,21 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
         return table;
     }
     
+    
+    private BuergerTable createChildTable(String from, List<Buerger> entities, final BuergerTableButtonFactory... buttonfactory) {
+        LOG.debug("creating table for buerger");
+        BuergerTable table = new ChildTable(this, buttonfactory);
+        
+        table.setFrom(from);
+        
+        this.eventbus.register(table);
+        BuergerComponentEvent event = new BuergerComponentEvent(EventType.CHILDQUERY);
+        event.addEntities(entities);
+        this.eventbus.post(event);
+        
+        return table;
+    }
+    
     /////////////////////
     // Event Steuerung //
     /////////////////////
@@ -351,6 +415,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
      * Ausgehend von den Ereignissen werden innerhalb der UI Komponenten Operationen
      * ausgeführt. So ist es möglich eine Kommunnikation zwischen den Komponenten zu
      * schaffen, ohne dass diese sich untereinander kennen müssen. 
+     * @param event
      */
     @Subscribe
     public void onEvent(BuergerAppEvent event) {
@@ -476,7 +541,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
         // update um den Bürger anzusehen
         if(event.getType().equals(EventType.SELECT2READ)) {
             LOG.debug("select to read event");
-            
+            //eventbus.unregister(searchTable.get().getTable());
             this.current = event.getItem();
             
             // UI Komponente aktualisieren
@@ -502,18 +567,30 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
             this.eventbus.post(new BuergerComponentEvent(EventType.QUERY).addEntities(this.currentEntities));
         }
         
+        if(event.getType().equals(EventType.CHILDQUERY)) {
+            LOG.debug("query event");
+            if(event.getQuery().isPresent()) {
+                this.currentEntities = this.queryBuerger(event.getQuery().get());
+            } else {
+                this.currentEntities = this.queryBuerger();
+            }
+            
+            // UI Komponenten aktualisieren
+            this.eventbus.post(new BuergerComponentEvent(EventType.CHILDQUERY).addEntities(this.currentEntities));
+        }
+        
         if(event.getType().equals(EventType.QUERY_CHILD)) {
             LOG.debug("query child event");
             
             // UI Komponenten aktualisieren
-            this.eventbus.post(new BuergerComponentEvent(EventType.QUERY).addEntities(this.queryKinder(event.getEntity())));
+            this.eventbus.post(new BuergerComponentEvent(EventType.CHILDQUERY).addEntities(this.queryKinder(event.getEntity())));
         }
         
         // cancel
         if(event.getType().equals(EventType.CANCEL)) {
             LOG.debug("cancel event");
-            
             // Zur Seite wechseln
+            //eventbus.register(searchTable.get().getTable());
             this.navigator.navigateTo(event.getNavigateTo()); 
         }
     }

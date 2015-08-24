@@ -29,6 +29,8 @@ public class UserServiceImpl implements UserService {
     
     UserRepository repo;
     QueryService<User> search;
+    @Autowired
+    private SachbearbeiterService sachbearbeiterService;
 
     public UserServiceImpl() {
     }
@@ -73,6 +75,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(String oid) {
         User item = this.read(oid);
+        this.sachbearbeiterService.releaseUserSachbearbeiter(oid);
         this.repo.delete(item);
     }
 

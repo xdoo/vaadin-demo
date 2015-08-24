@@ -38,6 +38,8 @@ public interface BuergerService {
     public void releaseStaatsangehoerigkeitAllBuerger(String staatOid);
 
     public void releaseStaatsangehoerigkeitBuerger(String staatOid, String buergerOid);
+    
+    public void releaseBuergerAllSachbearbeiter(String buergerOid);
 
     public List<Buerger> query(String query);
 
@@ -52,5 +54,9 @@ public interface BuergerService {
     public void delete(String oid);
 
     public Buerger copy(String oid);
+
+    public void copy(List<String> oids);
+
+    public void delete(List<String> oids);
 
 }

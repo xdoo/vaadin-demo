@@ -121,7 +121,7 @@ public class WohnungServiceImpl implements WohnungService {
 
     @Override
     public Wohnung readAdresse(String oid) {
-        return repo.findByAdresseOid(oid);
+        return repo.findByAdresseOidAndMandantOid(oid, readUser().getMandant().getOid());
     }
 
     @Override

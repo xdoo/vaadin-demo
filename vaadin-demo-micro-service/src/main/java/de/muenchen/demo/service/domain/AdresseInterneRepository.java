@@ -8,6 +8,5 @@ import java.util.List;
  */
 public interface AdresseInterneRepository extends BaseRepository<AdresseInterne> {
 
-    public List<AdresseInterne> findByOid(String oid);
 
 }

@@ -1,14 +1,14 @@
 package de.muenchen.demo.service.domain;
 
 import java.util.List;
-import org.springframework.data.repository.CrudRepository;
 
 /**
  *
  * @author claus.straube
  */
-public interface SachbearbeiterRepository  extends BaseRepository<Sachbearbeiter> {
-    
-    List<Buerger> findByOid(String oid);
-    
+public interface SachbearbeiterRepository extends BaseRepository<Sachbearbeiter> {
+
+    List<Sachbearbeiter> findByBuergerOidAndMandantOid(String oid, String mid);
+
+    Sachbearbeiter findByUserOidAndMandantOid(String oid, String mid);
 }

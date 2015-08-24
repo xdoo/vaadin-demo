@@ -10,24 +10,18 @@ import de.muenchen.demo.service.Application;
 import de.muenchen.demo.service.domain.AdresseExterneRepository;
 import de.muenchen.demo.service.domain.AdresseInterneRepository;
 import de.muenchen.demo.service.domain.AdresseReferenceRepository;
-import de.muenchen.demo.service.domain.AuthPermId;
-import de.muenchen.demo.service.domain.Authority;
 import de.muenchen.demo.service.domain.AuthorityPermissionRepository;
 import de.muenchen.demo.service.domain.AuthorityRepository;
-import de.muenchen.demo.service.domain.AuthorityPermission;
-import de.muenchen.demo.service.domain.AuthorityPermissionRepository;
 import de.muenchen.demo.service.domain.BuergerRepository;
-import de.muenchen.demo.service.domain.Mandant;
+import de.muenchen.demo.service.domain.Sachbearbeiter;
+import de.muenchen.demo.service.domain.SachbearbeiterRepository;
 import de.muenchen.demo.service.domain.MandantRepository;
 import de.muenchen.demo.service.domain.PassRepository;
-import de.muenchen.demo.service.domain.Permission;
 import de.muenchen.demo.service.domain.PermissionRepository;
 import de.muenchen.demo.service.domain.StaatsangehoerigkeitReferenceRepository;
 import de.muenchen.demo.service.domain.UserAuthorityRepository;
 import de.muenchen.demo.service.domain.UserRepository;
-import de.muenchen.demo.service.domain.WohnungRepository;
-import de.muenchen.demo.service.services.AuthorityPermissionService;
-import de.muenchen.demo.service.util.IdService;
+import de.muenchen.demo.service.services.SachbearbeiterService;
 import de.muenchen.demo.test.integration.InitTest;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
@@ -56,10 +50,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebIntegrationTest({"server.port=0", "management.port=0"})
-public class AuthorityPermissionServiceTest {
+public class SachbearbeiterServiceTest {
 
     @Autowired
-    AuthorityPermissionService service;
+    SachbearbeiterService service;
 
     @Autowired
     UserRepository usersRepo;
@@ -84,9 +78,10 @@ public class AuthorityPermissionServiceTest {
     @Autowired
     PassRepository passRepo;
     @Autowired
-    WohnungRepository wohnRepo;
+    SachbearbeiterRepository wohnRepo;
     @Autowired
     StaatsangehoerigkeitReferenceRepository staatRepo;
+
 
     @Autowired
     //@Qualifier("authenticationManager")
@@ -116,69 +111,85 @@ public class AuthorityPermissionServiceTest {
     }
 
     @Test
-    public void saveTest() throws JsonProcessingException, AuthenticationException {
-        Mandant mandant = new Mandant();
-        mandant.setOid("10");
-        mandantRepo.save(mandant);
-        Authority auth = new Authority();
-        auth.setAuthority("ADMIN");
-        auth.setOid(IdService.next());
-        authRepo.save(auth);
-        Permission permission = new Permission();
-        permission.setPermision("New_Buerger");
-        permission.setOid(IdService.next());
-        permRepo.save(permission);
-        AuthorityPermission authPerm = new AuthorityPermission();
-        AuthPermId idA = new AuthPermId(permission, auth);
-        authPerm.setId(idA);
-        AuthorityPermission a = service.save(authPerm);
-        assertNotEquals(null, a);
+    public void createTest() throws JsonProcessingException {
 
-        
-        
+        Sachbearbeiter a = service.create();
+        assertNotEquals(null, a.getOid());
+    }
+
+    @Test
+    public void saveTest() throws JsonProcessingException, AuthenticationException {
+        Sachbearbeiter sachbearbeiter = new Sachbearbeiter();
+        sachbearbeiter.setOid("123");
+        sachbearbeiter.setFax("089214589");
+        sachbearbeiter.setFunktion("employe");
+        Sachbearbeiter a = service.save(sachbearbeiter);
+        assertNotEquals(null, a.getOid());
+
+    }
+
+    @Test
+    public void updateTest() throws JsonProcessingException, AuthenticationException {
+       Sachbearbeiter sachbearbeiter = new Sachbearbeiter();
+        sachbearbeiter.setOid("123");
+        sachbearbeiter.setFax("089214589");
+        sachbearbeiter.setFunktion("employe");
+        Sachbearbeiter response = service.save(sachbearbeiter);
+        response.setOid("12");
+        Sachbearbeiter a = service.update(response);
+        assertEquals(response.getId(), a.getId());
+
+    }
+
+    @Test
+    public void readTest() throws JsonProcessingException, AuthenticationException {
+        Sachbearbeiter sachbearbeiter = new Sachbearbeiter();
+        sachbearbeiter.setOid("123");
+        sachbearbeiter.setFax("089214589");
+        sachbearbeiter.setFunktion("employe");
+        service.save(sachbearbeiter);
+        Sachbearbeiter a = service.read("123");
+        assertEquals("123", a.getOid());
+
     }
 
     @Test
     public void deleteTest() throws JsonProcessingException, AuthenticationException {
-        Mandant mandant = new Mandant();
-        mandant.setOid("10");
-        mandantRepo.save(mandant);
-        Authority auth = new Authority();
-        auth.setAuthority("SACHBEARBEITER");
-        auth.setOid(IdService.next());
-        authRepo.save(auth);
-        Permission permission = new Permission();
-        permission.setPermision("New_Buerger");
-        permission.setOid(IdService.next());
-        permRepo.save(permission);
-        AuthorityPermission authPerm = new AuthorityPermission();
-        AuthPermId idA = new AuthPermId(permission, auth);
-        authPerm.setId(idA);
-        service.save(authPerm);
-        service.delete(idA);
-        List<AuthorityPermission> a = service.readByAuthority("SACHBEARBEITER");
+        Sachbearbeiter sachbearbeiter = new Sachbearbeiter();
+        sachbearbeiter.setOid("123");
+        sachbearbeiter.setFax("089214589");
+        sachbearbeiter.setFunktion("employe");
+        service.save(sachbearbeiter);
+        service.delete("123");
+        Sachbearbeiter a = service.read("123");
         assertEquals(null, a);
     }
 
     @Test
     public void queryTest() throws JsonProcessingException, AuthenticationException {
-        Mandant mandant = new Mandant();
-        mandant.setOid("10");
-        mandantRepo.save(mandant);
-        Authority auth = new Authority();
-        auth.setAuthority("ADMIN");
-        auth.setOid(IdService.next());
-        authRepo.save(auth);
-        Permission permission = new Permission();
-        permission.setPermision("New_Buerger");
-        permission.setOid(IdService.next());
-        permRepo.save(permission);
-        AuthorityPermission authPerm = new AuthorityPermission();
-        AuthPermId idA = new AuthPermId(permission, auth);
-        authPerm.setId(idA);
-        service.save(authPerm);
-        List<AuthorityPermission> a = service.query();
-        assertEquals(false, a.isEmpty());
+        Sachbearbeiter sachbearbeiter = new Sachbearbeiter();
+        sachbearbeiter.setOid("123");
+        sachbearbeiter.setFax("089214589");
+        sachbearbeiter.setFunktion("employe");
+        service.save(sachbearbeiter);
+        Sachbearbeiter sachbearbeiter2 = new Sachbearbeiter();
+        sachbearbeiter2.setOid("124");
+        sachbearbeiter2.setFax("089214589");
+        sachbearbeiter2.setFunktion("employe");
+        service.save(sachbearbeiter2);
+        List<Sachbearbeiter> a = service.query();
+        assertEquals(2, a.size());
+    }
+
+    @Test
+    public void copyTest() throws JsonProcessingException, AuthenticationException {
+        Sachbearbeiter sachbearbeiter = new Sachbearbeiter();
+        sachbearbeiter.setOid("123");
+        sachbearbeiter.setFax("089214589");
+        sachbearbeiter.setFunktion("employe");
+        service.save(sachbearbeiter);
+        Sachbearbeiter a = service.copy("123");
+        assertNotEquals(a.getId(), sachbearbeiter.getId());
     }
 
     @After

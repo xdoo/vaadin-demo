@@ -10,6 +10,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.ui.app.views.events.AppEvent;
+import de.muenchen.vaadin.ui.components.buttons.Action;
 import de.muenchen.vaadin.ui.controller.ControllerContext;
 import de.muenchen.vaadin.ui.util.I18nPaths;
 
@@ -50,7 +51,7 @@ public class GenericConfirmationWindow extends Window {
      * @param controller der Controller
      * @param action Art des Fensters
      */
-    public GenericConfirmationWindow(AppEvent event, ControllerContext<?> controller, I18nPaths.Action action){
+    public GenericConfirmationWindow(AppEvent event, ControllerContext<?> controller, Action action){
         this.okButton = controller.resolve(getConfirmationPath(action, I18nPaths.Type.confirm));
         this.cancelButton = controller.resolve(getConfirmationPath(action, I18nPaths.Type.cancel));
         this.message = controller.resolve(getConfirmationPath(action, I18nPaths.Type.text));
@@ -79,7 +80,7 @@ public class GenericConfirmationWindow extends Window {
         this.setCloseShortcut(KeyCode.ESCAPE, null);
     }
 
-    private FontAwesome getIconFor(I18nPaths.Action action) {
+    private FontAwesome getIconFor(Action action) {
         switch(action){
             case delete:
                 return FontAwesome.TRASH_O;

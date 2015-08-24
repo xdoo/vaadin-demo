@@ -6,12 +6,13 @@
 package de.muenchen.demo.service.domain;
 
 import java.util.List;
+import org.springframework.data.repository.CrudRepository;
 
 /**
  *
  * @author praktikant.tmar
  */
-public interface AuthorityRepository  extends BaseRepository<Authority>{
+public interface AuthorityRepository  extends CrudRepository<Authority, Long>{
 
     public List<Authority> findByOid(String oid);
 }

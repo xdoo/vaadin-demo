@@ -3,10 +3,13 @@ package de.muenchen.vaadin.ui.app;
 import com.google.common.eventbus.Subscribe;
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.server.*;
+import de.muenchen.vaadin.demo.api.domain.BaseEntity;
 import de.muenchen.vaadin.ui.app.views.events.AppEvent;
 import de.muenchen.vaadin.ui.app.views.events.LogoutEvent;
 import de.muenchen.vaadin.ui.components.GenericConfirmationWindow;
+import de.muenchen.vaadin.ui.components.buttons.Action;
 import de.muenchen.vaadin.ui.controller.ControllerContext;
+import de.muenchen.vaadin.ui.util.EventType;
 import de.muenchen.vaadin.ui.util.I18nPaths;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.vaadin.annotations.Theme;
@@ -51,7 +54,7 @@ import static de.muenchen.vaadin.ui.util.I18nPaths.*;
 import javax.servlet.annotation.WebServlet;
 
 @SpringUI
-@Title("Vaadin Spring-security Sample")
+@Title("Vaadin Spring-Security Sample")
 @Theme("valo")
 @PreserveOnRefresh
 //@Widgetset("de.muenchen.vaadin.Widgetset")
@@ -132,6 +135,21 @@ public class MainUI extends UI implements ControllerContext {
                 // Check if a user has logged in
                 boolean isLoggedIn = security.isLoggedIn();
                 boolean isLoginView = event.getNewView() instanceof LoginView;
+            /*    boolean fromTable = event.getOldView() instanceof BuergerTableView;
+                boolean fromUpdate = event.getOldView() instanceof BuergerUpdateView;
+                boolean fromDetail = event.getOldView() instanceof BuergerDetailView;
+                if (fromTable) {
+                    BuergerTableView old = (BuergerTableView) event.getOldView();
+                    old.unRegisterTable();
+                }
+                if (fromUpdate) {
+                    BuergerUpdateView old = (BuergerUpdateView) event.getOldView();
+                    old.unRegisterForm();
+                }
+                if (fromDetail) {
+                    BuergerDetailView old = (BuergerDetailView) event.getOldView();
+                    old.unRegister();
+                }*/
 
                 if (!isLoggedIn && !isLoginView) {
                     // Redirect to login view always if a user has not yet
@@ -281,6 +299,16 @@ public class MainUI extends UI implements ControllerContext {
     @Override
     public String resolveRelative(String relativePath) {
         return i18n.get(relativePath);
+    }
+
+    @Override
+    public AppEvent<? extends BaseEntity> buildEvent(EventType eventType) {
+        return null;
+    }
+
+    @Override
+    public String getBasePath() {
+        return null;
     }
 
     @Override

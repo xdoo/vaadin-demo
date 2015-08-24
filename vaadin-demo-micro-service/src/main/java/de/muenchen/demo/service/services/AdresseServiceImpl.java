@@ -163,7 +163,7 @@ public class AdresseServiceImpl implements AdresseService {
                 this.referenceRepo.delete(resultReference);
                 this.externeRepo.delete(resultExterne);
             } else {
-                List<AdresseInterne> resultInterne = this.interneRepo.findByOid(oid);
+                List<AdresseInterne> resultInterne = this.interneRepo.findByOidAndMandantOid(oid, readUser().getMandant().getOid());
                 this.wohnungService.deleteWohnungAdresse(oid);
                 this.referenceRepo.delete(resultReference);
                 this.interneRepo.delete(resultInterne);

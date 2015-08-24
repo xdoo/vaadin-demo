@@ -12,8 +12,10 @@ public class BuergerResource extends BaseResource {
     public static final String KINDER = "kinder";
     public static final String SAVE_KIND = "save_kind";
     public static final String WOHNUNGEN = "wohnungen";
+    public static final String SACHBEARBEITER = "sachbearbeiter";
     public static final String STAATSANGEHOERIGKEITEN = "staatsangehoerigkeiten";
     public static final String SAVE_WOHNUNG = "save_wohnung";
+    public static final String SAVE_SACHBEARBEITER = "save_sachbearbeiter";
     public static final String PAESSE = "paesse";
     public static final String SAVE_PASS = "save_pass";
     public static final String ELTERN = "eltern";
@@ -21,6 +23,7 @@ public class BuergerResource extends BaseResource {
     public static final String RELEASE_KINDER = "release_kinder";
     public static final String RELEASE_PAESSE = "release_paesse";
     public static final String RELEASE_WOHNUNGEN = "release_wohnungen";
+    public static final String RELEASE_SACHBEARBEITER = "release_sachbearbeiter";
     public static final String RELEASE_STAATSANGEHOERIGKEITEN = "release_staatsangehoerigkeiten";
 
 

@@ -2,8 +2,14 @@ package de.muenchen.vaadin.demo.api.services;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vaadin.navigator.Navigator;
 import de.muenchen.vaadin.demo.api.domain.Principal;
 import de.muenchen.vaadin.demo.api.rest.SecurityRestClient;
+import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.spring.annotation.UIScope;
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.Optional;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;
@@ -18,12 +24,7 @@ import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.Optional;
 
 /**
  * VORSICHT HACK! DAS MUSS ALLES NOCHMAL HINTERFRAGT UND GETESTET WERDEN!
@@ -31,12 +32,13 @@ import java.util.Optional;
  * 
  * @author claus.straube
  */
-@Component
+@SpringComponent @UIScope
 public class SecurityServiceImpl implements SecurityService, Serializable {
     
     private static final Logger LOG = LoggerFactory.getLogger(SecurityService.class);
     
     private boolean login;
+    private Navigator navigator;
     private Principal principal;
     private RestTemplate restTemplate;
     
@@ -64,7 +66,7 @@ public class SecurityServiceImpl implements SecurityService, Serializable {
         converter.setSupportedMediaTypes(MediaType.parseMediaTypes("application/hal+json"));
         converter.setObjectMapper(mapper);
         
-        // security
+        // Security 
         BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
         credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(username, password));
         
@@ -87,6 +89,10 @@ public class SecurityServiceImpl implements SecurityService, Serializable {
         }
     }
     
+    @Override
+    public void setNavigator(Navigator navigator) {
+        this.navigator = navigator;
+    }  
 
     @Override
     public void logout() {

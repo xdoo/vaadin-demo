@@ -28,6 +28,7 @@ import de.muenchen.demo.service.rest.BuergerController;
 import de.muenchen.demo.service.rest.CompanyBaseInfoController;
 import de.muenchen.demo.service.rest.MandantController;
 import de.muenchen.demo.service.rest.PermissionController;
+import de.muenchen.demo.service.rest.SachbearbeiterController;
 import de.muenchen.demo.service.rest.SecurityRestClientController;
 import de.muenchen.demo.service.rest.StaatsangehoerigkeitController;
 import de.muenchen.demo.service.rest.UserAuthorityController;
@@ -88,7 +89,6 @@ public class InitTest {
         Authority auth = new Authority();
         auth.setAuthority("ADMIN");
         auth.setOid(IdService.next());
-        auth.setMandant(mandant);
         authRepo.save(auth);
 
         List<String> Permissions = new ArrayList();
@@ -125,6 +125,10 @@ public class InitTest {
             String name = method.getName();
             Permissions.add("PERM_" + name);
         }
+        for (Method method : SachbearbeiterController.class.getDeclaredMethods()) {
+            String name = method.getName();
+            Permissions.add("PERM_" + name);
+        }
         for (Method method : PermissionController.class.getDeclaredMethods()) {
             String name = method.getName();
             Permissions.add("PERM_" + name);
@@ -157,7 +161,6 @@ public class InitTest {
             permission.setOid(IdService.next());
             return permission;
         }).map((permission) -> {
-            permission.setMandant(mandant);
             return permission;
         }).map((permission) -> {
             permRepo.save(permission);

@@ -11,7 +11,6 @@ import de.muenchen.demo.service.domain.AdresseExterneRepository;
 import de.muenchen.demo.service.domain.AdresseInterneRepository;
 import de.muenchen.demo.service.domain.AdresseReferenceRepository;
 import de.muenchen.demo.service.domain.AuthorityPermissionRepository;
-import de.muenchen.demo.service.domain.AuthorityRepository;
 import de.muenchen.demo.service.domain.Authority;
 import de.muenchen.demo.service.domain.AuthorityRepository;
 import de.muenchen.demo.service.domain.BuergerRepository;
@@ -172,7 +171,7 @@ public class AuthorityServiceTest {
         authority2.setAuthority("USER");
         service.save(authority2);
         List<Authority> a = service.query();
-        assertEquals(3, a.size());
+        assertEquals(4, a.size());
     }
 
     @Test

@@ -26,7 +26,7 @@ import org.hibernate.search.annotations.Indexed;
 @Entity
 @Indexed
 @Table(name = "BUERGER")
-public class Buerger extends BaseEntity implements Serializable {
+public class Buerger extends BaseEntity {
 
     @Field
     @Column(length = 70, nullable = true, name = "BUER_VORNAME")
@@ -42,8 +42,8 @@ public class Buerger extends BaseEntity implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date geburtsdatum;
 
-    @ManyToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
-    private User sachbearbeiter;
+    @OneToMany (cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    private Set<Sachbearbeiter> sachbearbeiter= new HashSet<>();
 
     @Transient
     private Set<Staatsangehoerigkeit> staatsangehoerigkeiten = new HashSet<>();
@@ -106,11 +106,11 @@ public class Buerger extends BaseEntity implements Serializable {
         this.wohnungen = wohnungen;
     }
 
-    public User getSachbearbeiter() {
+    public Set<Sachbearbeiter> getSachbearbeiter() {
         return sachbearbeiter;
     }
 
-    public void setSachbearbeiter(User sachbearbeiter) {
+    public void setSachbearbeiter(Set<Sachbearbeiter> sachbearbeiter) {
         this.sachbearbeiter = sachbearbeiter;
     }
 

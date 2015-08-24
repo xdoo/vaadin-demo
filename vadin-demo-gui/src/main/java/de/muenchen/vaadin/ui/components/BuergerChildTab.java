@@ -9,8 +9,13 @@ import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
 import static de.muenchen.vaadin.ui.components.BuergerReadForm.LOG;
+
+import de.muenchen.vaadin.ui.components.buttons.Action;
+import de.muenchen.vaadin.ui.components.buttons.EntityButton;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.EventType;
+import de.muenchen.vaadin.ui.util.I18nPaths;
+
 import java.util.Optional;
 
 /**
@@ -25,7 +30,7 @@ public class BuergerChildTab extends CustomComponent {
         
         this.controller = controller;
         
-        BuergerCreateButton create = new BuergerCreateButton(controller, navigateToForCreate, from);
+        EntityButton<Buerger> create = EntityButton.make(controller, Action.create).navigateTo(navigateToForCreate).from(from).build();
         table = controller.generateChildTable(navigateToForDetail, from);
         
         // Layout für die Schaltflächen über der Tabelle
@@ -55,5 +60,8 @@ public class BuergerChildTab extends CustomComponent {
     }
     public BuergerTable getTable(){
         return table;
+    }
+    public void setTable(BuergerTable table){
+        this.table=table;
     }
 }
