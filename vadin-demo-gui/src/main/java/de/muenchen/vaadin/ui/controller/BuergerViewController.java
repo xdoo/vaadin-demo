@@ -36,6 +36,7 @@ import static de.muenchen.vaadin.ui.util.I18nPaths.*;
 import de.muenchen.vaadin.ui.util.VaadinUtil;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 import java.util.Stack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -274,15 +275,19 @@ public class BuergerViewController implements Serializable,ControllerContext<Bue
 
     public BuergerCreateForm generateCreateForm(String navigateTo) {
         LOG.debug("creating 'create' buerger form");
+        if(!createForm.isPresent()){
         BuergerCreateForm form = new BuergerCreateForm(this, navigateTo);
-        return form;
+        createForm = Optional.of(form);}
+        return createForm.get();
     }
     
     public BuergerCreateForm generateCreateChildForm(String navigateTo) {
         LOG.debug("creating 'create child' buerger form");
+        if(!createChildForm.isPresent()){
         BuergerCreateForm form = new BuergerCreateForm(this, navigateTo);
         form.setType(EventType.SAVE_CHILD);
-        return form;
+        createChildForm=Optional.of(form);}
+        return createChildForm.get();
     }
     
     /**
@@ -290,49 +295,57 @@ public class BuergerViewController implements Serializable,ControllerContext<Bue
      * 
      * @param navigateToForDetail Zielseite um sich die Details des 'Child' Objektes anzeigen zu lassen
      * @param navigateForCreate Zielseite um ein neues 'Child' Objekt zu erstellen
+     * @param navigateForAdd Zielseite zum Hinzufügen eines Kindes
      * @param from Ausgangsseite zu der zurück navigiert werden soll
      * @return {@link TabSheet.Tab} das Tab
      */
     public BuergerChildTab generateChildTab(String navigateToForDetail, String navigateForCreate, String navigateForAdd, String from) {
-        if(childTab.isPresent()){
-            BuergerTable tmp = childTab.get().getTable();
-           // childTab.get().setTable(this.generateChildTable(navigateToForDetail, from));
-           // eventbus.unregister(tmp);
-        }
-        else
+        if(!childTab.isPresent())
         {
         BuergerChildTab tab = new BuergerChildTab(this, navigateToForDetail, navigateForCreate, navigateForAdd, from);
         this.eventbus.register(tab);
-        return tab;
+        childTab = Optional.of(tab);}
+        return childTab.get();
     }
     
+    /**
+     *
+     * @return
+     */
     public BuergerCreateForm generateCreateChildForm() {
         return this.generateCreateChildForm(this.popFrom());
     }
 
     public BuergerUpdateForm generateUpdateForm(String navigateTo, String from) { 
         LOG.debug("creating 'update' buerger form");
+        if(!updateForm.isPresent()){
         BuergerUpdateForm form = new BuergerUpdateForm(this, navigateTo, this.popFrom(), from);
         this.eventbus.register(form);
         this.eventbus.post(new BuergerComponentEvent(this.current, EventType.SELECT2UPDATE));
-        return form;
+        
+        updateForm=Optional.of(form);}
+        return updateForm.get();
     }
     
-    public BuergerUpdateForm generateUpdateForm(String from) { 
+    public BuergerUpdateForm generateUpdateForm(String from) {
+        
         return this.generateUpdateForm(this.peekFrom(), from);
     }
     
     public BuergerReadForm generateReadForm(String navigateToUpdate, String from) {
         LOG.debug("creating 'read' buerger form");
+        if(!readForm.isPresent()){
         BuergerReadForm form = new BuergerReadForm(this, navigateToUpdate, this.peekFrom(), from);
         this.eventbus.register(form);
         this.eventbus.post(new BuergerComponentEvent(this.current, EventType.SELECT2READ));
-        return form;
+        readForm=Optional.of(form);}
+        return readForm.get();
     }
     
     public BuergerSearchTable generateSearchTable(String navigateToForEdit, String navigateToForDetail, String navigateForCreate, String navigateFrom) {
         LOG.debug("creating 'search' table for buerger");
-
+        if(!searchTable.isPresent()){
+        LOG.debug("new searchtabel");
         TableActionButton.Builder detail = TableActionButton.Builder.make(this, TableAction.tabledetail,navigateToForDetail,(container,id) -> {
             getEventbus().post(new BuergerAppEvent(container.getItem(id), id, EventType.SELECT2READ).navigateTo(navigateToForDetail).from(navigateFrom));
         });
@@ -346,7 +359,7 @@ public class BuergerViewController implements Serializable,ControllerContext<Bue
             getEventbus().post(new BuergerAppEvent(container.getItem(id),id,EventType.DELETE).navigateTo(navigateToForEdit).from(navigateFrom));
         });
 
-        return new BuergerSearchTable(
+       searchTable=Optional.of(new BuergerSearchTable(
                 this,
                 navigateForCreate,
                 navigateFrom,
@@ -356,16 +369,18 @@ public class BuergerViewController implements Serializable,ControllerContext<Bue
                 copy,
                 delete
         ));}
-        return searchTable.get();
+        return searchTable.get();}
         
-    }
+    
     
     public ChildSearchTable generateChildSearchTable(String navigateToForEdit, String navigateToForDetail, String navigateForCreate, String navigateFrom) {
         
        
         if(!childSearchTable.isPresent()){
             //BuergerTableButtonFactory detail = BuergerTableButtonFactory.getFactory(navigateToForDetail, BuergerTableDetailButton.class);
-        BuergerTableButtonFactory select = BuergerTableButtonFactory.getFactory(BuergerDetailView.NAME, BuergerTableSelectButton.class);
+        TableActionButton.Builder select = TableActionButton.Builder.make(this, TableAction.tableadd,navigateToForEdit, (container, id) -> {
+            getEventbus().post(new BuergerAppEvent(container.getItem(id),id,EventType.SAVE_AS_CHILD).navigateTo(navigateToForDetail).from(navigateFrom));
+        });
             LOG.debug("creating 'search' table for buerger");
         childSearchTable = Optional.of(new ChildSearchTable(
                 this, 
@@ -381,6 +396,7 @@ public class BuergerViewController implements Serializable,ControllerContext<Bue
     }
     
     public BuergerTable generateChildTable(String navigateToForDetail, String from) {
+        
         TableActionButton.Builder detail = TableActionButton.Builder.make(this, TableAction.tabledetail, navigateToForDetail, (container, id) -> {
             getEventbus().post(new BuergerAppEvent(container.getItem(id), id, EventType.SELECT2READ).navigateTo(navigateToForDetail).from(from));
         });
@@ -571,7 +587,7 @@ public class BuergerViewController implements Serializable,ControllerContext<Bue
             LOG.debug("query child event");
             
             // UI Komponenten aktualisieren
-            this.eventbus.post(new BuergerComponentEvent(EventType.QUERY).addEntities(this.queryKinder(event.getEntity())));
+            this.eventbus.post(new BuergerComponentEvent(EventType.CHILDQUERY).addEntities(this.queryKinder(event.getEntity())));
         }
         
         // cancel
@@ -591,9 +607,9 @@ public class BuergerViewController implements Serializable,ControllerContext<Bue
         if(event.getType().equals(EventType.SAVE_AS_CHILD)){
             LOG.debug("save as Child event");
             this.addBuergerKind(event.getEntity());
-            GenericSuccessNotification succes = new GenericSuccessNotification(
-                    resolveRelative(getNotificationPath(NotificationType.success, Action.save, Type.label)),
-                    resolveRelative(getNotificationPath(NotificationType.success, Action.save, Type.text)));
+           GenericSuccessNotification succes = new GenericSuccessNotification(
+                    resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.add, Type.label)),
+                    resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.add, Type.text)));
             succes.show(Page.getCurrent());
             this.navigator.navigateTo(event.getNavigateTo());
         }

@@ -36,7 +36,7 @@ public class BuergerChildTab extends CustomComponent {
             controller.postToEventBus(new BuergerAppEvent(EventType.CREATE).navigateTo(navigateToForCreate).from(from));
         });
         ActionButton add = new ActionButton(controller, SimpleAction.add,navigateToForAdd);
-        create.addClickListener(clickEvent -> {
+        add.addClickListener(clickEvent -> {
             controller.postToEventBus(new BuergerAppEvent(EventType.ADD_SEARCHED_CHILD).navigateTo(navigateToForAdd).from(from));
         });
 
