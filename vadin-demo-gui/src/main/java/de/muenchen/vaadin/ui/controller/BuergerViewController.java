@@ -276,7 +276,7 @@ public class BuergerViewController implements Serializable,ControllerContext<Bue
     public BuergerCreateForm generateCreateForm(String navigateTo) {
         LOG.debug("creating 'create' buerger form");
         if(!createForm.isPresent()){
-        BuergerCreateForm form = new BuergerCreateForm(this, navigateTo);
+        BuergerCreateForm form = new BuergerCreateForm(this, navigateTo, EventType.SAVE);
         createForm = Optional.of(form);}
         return createForm.get();
     }
@@ -284,8 +284,7 @@ public class BuergerViewController implements Serializable,ControllerContext<Bue
     public BuergerCreateForm generateCreateChildForm(String navigateTo) {
         LOG.debug("creating 'create child' buerger form");
         if(!createChildForm.isPresent()){
-        BuergerCreateForm form = new BuergerCreateForm(this, navigateTo);
-        form.setType(EventType.SAVE_CHILD);
+        BuergerCreateForm form = new BuergerCreateForm(this, navigateTo, EventType.SAVE_CHILD);
         createChildForm=Optional.of(form);}
         return createChildForm.get();
     }
@@ -400,8 +399,17 @@ public class BuergerViewController implements Serializable,ControllerContext<Bue
         TableActionButton.Builder detail = TableActionButton.Builder.make(this, TableAction.tabledetail, navigateToForDetail, (container, id) -> {
             getEventbus().post(new BuergerAppEvent(container.getItem(id), id, EventType.SELECT2READ).navigateTo(navigateToForDetail).from(from));
         });
+         LOG.debug("creating table for childs");
+        BuergerTable table = new ChildTable(this, detail);
         
-        BuergerTable table = this.createTable(from, this.queryKinder(this.current.getBean()), detail);
+        table.setFrom(from);
+        List<Buerger> entities = this.queryKinder(this.current.getBean());
+        this.eventbus.register(table);
+        BuergerComponentEvent event = new BuergerComponentEvent(EventType.CHILDQUERY);
+        event.addEntities(entities);
+        this.eventbus.post(event);
+        
+                
         return table;
     }
 

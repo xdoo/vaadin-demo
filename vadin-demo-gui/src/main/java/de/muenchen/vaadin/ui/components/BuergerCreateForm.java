@@ -33,7 +33,7 @@ public class BuergerCreateForm extends CustomComponent {
     private final String navigateTo;
     private String back;
     private final BuergerViewController controller;
-    private EventType type = EventType.SAVE;
+    private EventType type;
 
     /**
      * Formular zum Erstellen eines {@link Buerger}s. Über diesen
@@ -44,11 +44,11 @@ public class BuergerCreateForm extends CustomComponent {
      * @param controller der Entity Controller
      * @param navigateTo Zielseite nach Druck der 'erstellen' Schaltfläche
      */
-    public BuergerCreateForm(final BuergerViewController controller, final String navigateTo) {
+    public BuergerCreateForm(final BuergerViewController controller, final String navigateTo, EventType type) {
         this.navigateTo = navigateTo;
         this.back = navigateTo;
         this.controller = controller;
-        
+        this.type=type;
         this.createForm();
     }
     
