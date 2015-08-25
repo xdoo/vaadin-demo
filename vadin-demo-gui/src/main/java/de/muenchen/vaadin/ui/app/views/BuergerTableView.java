@@ -24,7 +24,7 @@ public class BuergerTableView extends DefaultBuergerView {
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerCreateView.class);
     private BuergerSearchTable table;
     @Autowired
-    public BuergerTableView(BuergerViewController controller, MainUI ui ){ 
+    public BuergerTableView(BuergerViewController controller, MainUI ui) {
         super(controller, ui);
         LOG.debug("creating 'buerger_table_view'");
         
