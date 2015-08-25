@@ -1,20 +1,21 @@
 package de.muenchen.vaadin.services;
 
+import com.google.common.collect.Lists;
+import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.spring.annotation.UIScope;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
 import de.muenchen.vaadin.demo.api.rest.BuergerRestClient;
 import de.muenchen.vaadin.demo.api.services.SecurityService;
-import com.google.common.collect.Lists;
-import com.vaadin.spring.annotation.SpringComponent;
-import com.vaadin.spring.annotation.UIScope;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
 import org.springframework.web.client.RestTemplate;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -28,77 +29,93 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
     private BuergerRestClient client;
     private InfoService infoService;
     private RestTemplate template;
+    private SecurityService securityService;
 
     @Autowired
     public BuergerServiceImpl(BuergerRestClient client, InfoService infoService, SecurityService securityService) {
         this.client = client;
         this.infoService = infoService;
-        if(securityService.getRestTemplate().isPresent()) {
-            this.template = securityService.getRestTemplate().get();
-        } else {
-            LOG.warn("Cannot acquire rest template from security service.");
-        }
+        this.securityService=securityService;
+
+        this.template = getTemplate();
+
     }
 
     @Override
     public Buerger createBuerger() {
         Link link = this.infoService.getUrl("buerger_new");
         ArrayList<Link> links = Lists.newArrayList(link.withRel(HateoasUtil.REL_NEW));
-        return client.newBuerger(links, this.template);
+        return client.newBuerger(links, getTemplate());
     }
 
     @Override
     public Buerger readBuerger(Buerger entity) {
-        return client.readBuerger(entity.getLinks(), this.template);
+        return client.readBuerger(entity.getLinks(), getTemplate());
     }
 
     @Override
     public Buerger updateBuerger(Buerger buerger) {
-        return client.updateBuerger(buerger, this.template);
+        return client.updateBuerger(buerger, getTemplate());
     }
 
     @Override
     public Buerger saveBuerger(Buerger entity) {
-       return client.saveBuerger(entity, this.template);
+       return client.saveBuerger(entity, getTemplate());
     }
     
     @Override
     public void deleteBuerger(Buerger buerger) {
-        client.deleteBuerger(buerger.getLinks(), this.template);
+        client.deleteBuerger(buerger.getLinks(), getTemplate());
     }
 
     @Override
     public List<Buerger> queryBuerger() {
         Link link = this.infoService.getUrl("buerger_query");
         ArrayList<Link> links = Lists.newArrayList(link.withRel(HateoasUtil.REL_QUERY));
-        return client.queryBuerger(links, this.template);
+        return client.queryBuerger(links, getTemplate());
     }
 
     @Override
     public List<Buerger> queryBuerger(String query) {
         Link link = this.infoService.getUrl("buerger_query");
         ArrayList<Link> links = Lists.newArrayList(link.withRel(HateoasUtil.REL_QUERY));
-        return client.queryBuerger(query, links, this.template);
+        return client.queryBuerger(query, links, getTemplate());
     }
     
     @Override
     public Buerger copyBuerger(Buerger entity) {
-        return client.copyBuerger(entity.getLinks(), this.template);
+        return client.copyBuerger(entity.getLinks(), getTemplate());
     }
 
     @Override
     public List<Buerger> queryKinder(Buerger entity) {
-        return client.queryKinder(entity.getLinks(), this.template);
+        return client.queryKinder(entity.getLinks(), getTemplate());
     }
 
     @Override
     public Buerger saveKind(Buerger entity, Buerger kind) {
-        return client.saveBuergerKind(entity, kind, template);
+        return client.saveBuergerKind(entity, kind, getTemplate());
     }
     
     @Override
     public Buerger addKind(Buerger entity, Buerger kind) {
-        return client.addBuergerKind(entity, kind, template);
+        return client.addBuergerKind(entity, kind, getTemplate());
+    }
+
+    /**
+     * Gets the resttemplate from the security if not present
+     * @return resttemplate of this session
+     */
+    public RestTemplate getTemplate() {
+        if (template != null) {
+            return template;
+        }
+        if (securityService.getRestTemplate().isPresent()) {
+            return securityService.getRestTemplate().get();
+        }
+        LOG.warn("Cannot acquire rest template from security service.");
+        return null;
+
     }
   
 }
