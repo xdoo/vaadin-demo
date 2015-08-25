@@ -1,46 +1,38 @@
 package de.muenchen.vaadin.ui.controller;
 
+import com.google.common.eventbus.Subscribe;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.FontAwesome;
-import com.vaadin.ui.UI;
-import de.muenchen.vaadin.demo.api.domain.Buerger;
-import com.google.common.eventbus.Subscribe;
 import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.TabSheet;
+import com.vaadin.ui.UI;
+import de.muenchen.vaadin.demo.api.domain.Buerger;
+import de.muenchen.vaadin.demo.api.util.EventType;
 import de.muenchen.vaadin.services.BuergerService;
 import de.muenchen.vaadin.services.MessageService;
 import de.muenchen.vaadin.ui.app.MainUI;
-import de.muenchen.vaadin.ui.app.views.BuergerDetailView;
-
 import de.muenchen.vaadin.ui.app.views.events.AppEvent;
-import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
-import de.muenchen.vaadin.ui.components.BuergerChildTab;
-import de.muenchen.vaadin.ui.components.BuergerCreateForm;
-import de.muenchen.vaadin.ui.components.BuergerReadForm;
-import de.muenchen.vaadin.ui.components.BuergerSearchTable;
-import de.muenchen.vaadin.ui.components.BuergerTable;
-import de.muenchen.vaadin.ui.components.GenericSuccessNotification;
-import de.muenchen.vaadin.ui.components.BuergerUpdateForm;
+import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
+import de.muenchen.vaadin.ui.components.*;
 import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.components.buttons.TableAction;
 import de.muenchen.vaadin.ui.components.buttons.TableActionButton;
-import de.muenchen.vaadin.ui.components.ChildSearchTable;
-import de.muenchen.vaadin.ui.components.ChildTable;
 import de.muenchen.vaadin.ui.util.EventBus;
-import de.muenchen.vaadin.demo.api.util.EventType;
-import static de.muenchen.vaadin.ui.util.I18nPaths.*;
 import de.muenchen.vaadin.ui.util.VaadinUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 import java.util.Stack;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import static de.muenchen.vaadin.ui.util.I18nPaths.*;
 
 /**
  * Der Controller ist die zentrale Klasse um die Logik im Kontext Buerger abzubilden.
@@ -603,12 +595,12 @@ public class BuergerViewController implements Serializable,ControllerContext<Bue
             LOG.debug("cancel event");
             
             // Zur Seite wechseln
-            this.navigator.navigateTo(event.getNavigateTo()); 
+            this.navigator.navigateTo(event.getNavigateTo());
         }
         
         if(event.getType().equals(EventType.ADD_SEARCHED_CHILD)){
             LOG.debug("select Child event");
-          
+
             this.navigator.navigateTo(event.getNavigateTo());
         }
         
