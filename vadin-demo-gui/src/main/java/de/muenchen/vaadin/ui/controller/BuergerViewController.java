@@ -13,6 +13,7 @@ import com.vaadin.ui.TabSheet;
 import de.muenchen.vaadin.services.BuergerService;
 import de.muenchen.vaadin.services.MessageService;
 import de.muenchen.vaadin.ui.app.MainUI;
+import de.muenchen.vaadin.ui.app.views.BuergerDetailView;
 
 import de.muenchen.vaadin.ui.app.views.events.AppEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
@@ -27,8 +28,10 @@ import de.muenchen.vaadin.ui.components.BuergerTableCopyButton;
 import de.muenchen.vaadin.ui.components.BuergerTableDeleteButton;
 import de.muenchen.vaadin.ui.components.BuergerTableDetailButton;
 import de.muenchen.vaadin.ui.components.BuergerTableEditButton;
+import de.muenchen.vaadin.ui.components.BuergerTableSelectButton;
 import de.muenchen.vaadin.ui.components.GenericSuccessNotification;
 import de.muenchen.vaadin.ui.components.BuergerUpdateForm;
+import de.muenchen.vaadin.ui.components.ChildSearchTable;
 import de.muenchen.vaadin.ui.components.ChildTable;
 import de.muenchen.vaadin.ui.util.EventBus;
 import de.muenchen.vaadin.ui.util.EventType;
@@ -74,6 +77,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
     private final EventBus eventbus;
     
     private Optional<BuergerSearchTable> searchTable = Optional.<BuergerSearchTable>empty();
+    private Optional<ChildSearchTable> childSearchTable = Optional.empty();
     private Optional<BuergerChildTab> childTab = Optional.empty();
     private Optional<BuergerCreateForm> createForm = Optional.empty();
     private Optional<BuergerCreateForm> createChildForm = Optional.empty();
@@ -88,7 +92,6 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
      * {@link UI} {@link Navigator}
      */
     Navigator navigator;
-
     @Autowired
     public BuergerViewController(BuergerService service, VaadinUtil util, EventBus eventBus) {
         this.service = service;
@@ -219,6 +222,16 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
     }
     
     /**
+     * Speichert eine Kindbeziehung zu einem {@link Buerger} Objekt in der Datenbank.
+     * 
+     * @param entity
+     * @return 
+     */
+    public Buerger addBuergerKind(Buerger entity) {
+        return service.addKind(this.current.getBean(), entity);
+    }
+    
+    /**
      * Speichert die Änderungen an einem {@link Buerger} Objekt in der Datenbank.
      * 
      * @param entity
@@ -281,7 +294,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
      * @param from Ausgangsseite zu der zurück navigiert werden soll
      * @return {@link TabSheet.Tab} das Tab
      */
-    public BuergerChildTab generateChildTab(String navigateToForDetail, String navigateForCreate, String from) {
+    public BuergerChildTab generateChildTab(String navigateToForDetail, String navigateForCreate, String navigateForAdd, String from) {
         if(childTab.isPresent()){
             BuergerTable tmp = childTab.get().getTable();
            // childTab.get().setTable(this.generateChildTable(navigateToForDetail, from));
@@ -289,7 +302,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
         }
         else
         {
-        BuergerChildTab tab = new BuergerChildTab(this, navigateToForDetail, navigateForCreate, from);
+        BuergerChildTab tab = new BuergerChildTab(this, navigateToForDetail, navigateForCreate, navigateForAdd, from);
         this.eventbus.register(tab);
         childTab=Optional.of(tab);
         }
@@ -348,6 +361,26 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
                 delete
         ));}
         return searchTable.get();
+        
+    }
+    
+    public ChildSearchTable generateChildSearchTable(String navigateToForEdit, String navigateToForDetail, String navigateForCreate, String navigateFrom) {
+        
+       
+        if(!childSearchTable.isPresent()){
+            //BuergerTableButtonFactory detail = BuergerTableButtonFactory.getFactory(navigateToForDetail, BuergerTableDetailButton.class);
+        BuergerTableButtonFactory select = BuergerTableButtonFactory.getFactory(BuergerDetailView.NAME, BuergerTableSelectButton.class);
+            LOG.debug("creating 'search' table for buerger");
+        childSearchTable = Optional.of(new ChildSearchTable(
+                this, 
+                navigateToForEdit, 
+                navigateToForDetail, 
+                navigateForCreate, 
+                navigateFrom,
+                // Schaltflächen
+                select
+        ));}
+        return childSearchTable.get();
         
     }
     
@@ -464,7 +497,6 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
                     resolveRelative(getNotificationPath(NotificationType.success, Action.save, Type.label)),
                     resolveRelative(getNotificationPath(NotificationType.success, Action.save, Type.text)));
             succes.show(Page.getCurrent());
-            
             // Zur Seite wechseln
             this.navigator.navigateTo(event.getNavigateTo());
             
@@ -576,6 +608,22 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
             // Zur Seite wechseln
             //eventbus.register(searchTable.get().getTable());
             this.navigator.navigateTo(event.getNavigateTo()); 
+        }
+        
+        if(event.getType().equals(EventType.ADD_SEARCHED_CHILD)){
+            LOG.debug("select Child event");
+          
+            this.navigator.navigateTo(event.getNavigateTo());
+        }
+        
+        if(event.getType().equals(EventType.SAVE_AS_CHILD)){
+            LOG.debug("save as Child event");
+            this.addBuergerKind(event.getEntity());
+            GenericSuccessNotification succes = new GenericSuccessNotification(
+                    resolveRelative(getNotificationPath(NotificationType.success, Action.save, Type.label)),
+                    resolveRelative(getNotificationPath(NotificationType.success, Action.save, Type.text)));
+            succes.show(Page.getCurrent());
+            this.navigator.navigateTo(event.getNavigateTo());
         }
     }
     

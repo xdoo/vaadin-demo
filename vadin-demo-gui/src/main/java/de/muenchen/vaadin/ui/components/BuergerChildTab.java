@@ -21,15 +21,16 @@ public class BuergerChildTab extends CustomComponent {
 
     BuergerViewController controller;
     private BuergerTable table;
-    public BuergerChildTab(BuergerViewController controller, String navigateToForDetail, String navigateToForCreate, String from) {
+    public BuergerChildTab(BuergerViewController controller, String navigateToForDetail, String navigateToForCreate, String navigateToForAdd, String from) {
         
         this.controller = controller;
         
         BuergerCreateButton create = new BuergerCreateButton(controller, navigateToForCreate, from);
+        ChildAddButton add = new ChildAddButton(controller, navigateToForAdd, from);
         table = controller.generateChildTable(navigateToForDetail, from);
         
         // Layout für die Schaltflächen über der Tabelle
-        HorizontalLayout hlayout = new HorizontalLayout(create);
+        HorizontalLayout hlayout = new HorizontalLayout(create, add);
         hlayout.setSpacing(true);
         // Gesamtlayout
         VerticalLayout vlayout = new VerticalLayout(hlayout, table);
