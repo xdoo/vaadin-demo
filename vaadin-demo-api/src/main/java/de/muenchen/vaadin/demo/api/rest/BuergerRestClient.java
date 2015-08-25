@@ -113,4 +113,6 @@ public interface BuergerRestClient {
      */
     public Buerger saveBuergerKind(Buerger buerger, Buerger kind, RestTemplate restTemplate);
     
+    public Buerger addBuergerKind(Buerger buerger, Buerger kind, RestTemplate restTemplate);
+    
 }

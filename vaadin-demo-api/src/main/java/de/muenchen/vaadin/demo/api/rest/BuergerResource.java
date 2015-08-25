@@ -11,6 +11,7 @@ public class BuergerResource extends BaseResource {
     // HATEOAS Relations zu den Relationen
     public static final String KINDER = "kinder";
     public static final String SAVE_KIND = "save_kind";
+    public static final String ADD_KIND = "add_kind";
     public static final String WOHNUNGEN = "wohnungen";
     public static final String SACHBEARBEITER = "sachbearbeiter";
     public static final String STAATSANGEHOERIGKEITEN = "staatsangehoerigkeiten";

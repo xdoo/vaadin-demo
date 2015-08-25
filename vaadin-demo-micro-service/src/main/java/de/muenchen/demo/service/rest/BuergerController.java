@@ -404,13 +404,14 @@ public class BuergerController {
      * @param kindOid
      * @return
      */
-    @Secured({"PERM_addKindBuerger"})
-    @RequestMapping(value = "/add/buerger/{bOid}/kind/{kOid}", method = {RequestMethod.GET})
+
+    @RolesAllowed({"PERM_addKindBuerger"})
+    @RequestMapping(value = "/add/buerger/{bOid}/kind/{kOid}", method = {RequestMethod.POST})
     public ResponseEntity addKindBuerger(@PathVariable("bOid") String buergerOid, @PathVariable("kOid") String kindOid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Add Kind buerger");
         }
-
+        
         Buerger kind = service.read(kindOid);
         Buerger entity = service.read(buergerOid);
 
@@ -421,6 +422,8 @@ public class BuergerController {
         resource.add(linkTo(methodOn(BuergerController.class).addKindBuerger(buergerOid, kindOid)).withSelfRel()); // add self link with params
         return ResponseEntity.ok(resource);
     }
+    
+    
 
     /**
      * Assoziiert eine Wohnung mit einem Buerger .

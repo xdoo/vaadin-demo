@@ -5,3 +5,4 @@
 /vaadin-demo-configcloud/target/*.iml
 /.idea/*
 *.iml
+/vaadin-demo-configcloud/target/
