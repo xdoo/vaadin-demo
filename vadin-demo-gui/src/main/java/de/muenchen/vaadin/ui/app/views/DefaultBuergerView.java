@@ -2,14 +2,16 @@ package de.muenchen.vaadin.ui.app.views;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
-import static de.muenchen.vaadin.ui.util.I18nPaths.*;
+
 import javax.annotation.PostConstruct;
+
+import static de.muenchen.vaadin.ui.util.I18nPaths.Type;
+import static de.muenchen.vaadin.ui.util.I18nPaths.getPagePath;
 
 
 /**
@@ -49,9 +51,7 @@ public abstract class DefaultBuergerView extends VerticalLayout implements View{
         pageTitle.addStyleName(ValoTheme.LABEL_COLORED);
         
         
-        //
-        
-        HorizontalLayout head = new HorizontalLayout(pageTitle);
+        //HorizontalLayout head = new HorizontalLayout(pageTitle);
         addComponent(pageTitle);
     }
     
