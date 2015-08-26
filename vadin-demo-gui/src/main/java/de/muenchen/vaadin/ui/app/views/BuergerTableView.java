@@ -1,10 +1,7 @@
 package de.muenchen.vaadin.ui.app.views;
 
-import com.vaadin.navigator.Navigator;
-import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.Component;
 import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.components.BuergerSearchTable;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
@@ -32,8 +29,8 @@ public class BuergerTableView extends DefaultBuergerView {
 
     @Override
     protected void site() {     
-        
-        table= this.controller.generateSearchTable(BuergerUpdateView.NAME, BuergerDetailView.NAME, BuergerCreateView.NAME, this.NAME);
+
+        table= this.controller.getViewFactory().generateSearchTable(BuergerUpdateView.NAME, BuergerDetailView.NAME, BuergerCreateView.NAME, this.NAME);
         addComponent(table);
     }
     

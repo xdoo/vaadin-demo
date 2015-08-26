@@ -4,6 +4,8 @@ import de.muenchen.demo.service.domain.AuthorityPermission;
 import de.muenchen.demo.service.domain.UserAuthority;
 import de.muenchen.demo.service.services.AuthorityPermissionService;
 import de.muenchen.demo.service.services.UserAuthorityService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +29,8 @@ import java.util.List;
 @ComponentScan
 @EnableWebSecurity
 public class CustomLdapAuthoritiesPopulator implements LdapAuthoritiesPopulator {
+
+    private static final Logger LOG = LoggerFactory.getLogger(CustomLdapAuthoritiesPopulator.class);
 
     @Autowired
     private UserAuthorityService userAuthService;
@@ -64,6 +68,8 @@ public class CustomLdapAuthoritiesPopulator implements LdapAuthoritiesPopulator 
 
 
         });
+
+        LOG.info("User " + username + " got Permissions:"+ gas.toString());
 
         return gas;
     }

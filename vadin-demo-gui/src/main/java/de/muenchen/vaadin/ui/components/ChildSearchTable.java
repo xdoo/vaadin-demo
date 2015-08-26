@@ -9,7 +9,6 @@ import de.muenchen.vaadin.ui.components.buttons.ActionButton;
 import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.components.buttons.TableActionButton;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
-import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +21,7 @@ public class ChildSearchTable extends CustomComponent {
     private BuergerTable table;
     public ChildSearchTable(final BuergerViewController controller, String navigateToForEdit, String navigateToForBack, String navigateToForCreate, String from, final TableActionButton.Builder... buttonfactory) {
     
-        table = controller.generateTable(from, buttonfactory);
+        table = controller.getViewFactory().generateTable(from, buttonfactory);
         BuergerSearchForm search = new BuergerSearchForm(controller);
         search.setWidth("100%"); 
         ActionButton backButton = new ActionButton(controller, SimpleAction.back,navigateToForBack);

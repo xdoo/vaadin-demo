@@ -26,7 +26,7 @@ public class BuergerSearchTable extends CustomComponent {
             controller.postToEventBus(new BuergerAppEvent(EventType.CREATE).navigateTo(navigateToForCreate).from(from));
         });
 
-        table = controller.generateTable(from, buttonBuilders);
+        table = controller.getViewFactory().generateTable(from, buttonBuilders);
         BuergerSearchForm search = new BuergerSearchForm(controller);
         search.setWidth("100%");
         

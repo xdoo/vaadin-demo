@@ -6,16 +6,16 @@ import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
+import de.muenchen.vaadin.demo.api.util.EventType;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
-import static de.muenchen.vaadin.ui.components.BuergerReadForm.LOG;
-
 import de.muenchen.vaadin.ui.components.buttons.ActionButton;
 import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
-import de.muenchen.vaadin.demo.api.util.EventType;
 
 import java.util.Optional;
+
+import static de.muenchen.vaadin.ui.components.BuergerReadForm.LOG;
 
 /**
  *
@@ -40,7 +40,7 @@ public class BuergerChildTab extends CustomComponent {
             controller.postToEventBus(new BuergerAppEvent(EventType.ADD_SEARCHED_CHILD).navigateTo(navigateToForAdd).from(from));
         });
 
-        table = controller.generateChildTable(navigateToForDetail, from);
+        table = controller.getViewFactory().generateChildTable(navigateToForDetail, from);
         
         // Layout für die Schaltflächen über der Tabelle
         HorizontalLayout hlayout = new HorizontalLayout(create, add);
