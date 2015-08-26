@@ -5,12 +5,11 @@ import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Table;
-import com.vaadin.ui.Table.ColumnGenerator;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
+import de.muenchen.vaadin.demo.api.util.EventType;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
 import de.muenchen.vaadin.ui.components.buttons.TableActionButton;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
-import de.muenchen.vaadin.demo.api.util.EventType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,14 +51,9 @@ public class BuergerTable extends CustomComponent {
         table.setContainerDataSource(this.container);
 
         //set action column
-        table.addGeneratedColumn("button", new ColumnGenerator() {
-            @Override
-            public Object generateCell(Table source, Object itemId,
-                    Object columnId) {
-                
-                return addButtons(itemId);
-            }
-        });
+        table.addGeneratedColumn("button",
+                (Table source, Object itemId, Object columnId) -> addButtons(itemId)
+        );
        
         //configure
         table.setWidth("100%");
@@ -84,6 +78,7 @@ public class BuergerTable extends CustomComponent {
     
     @Subscribe
     public void update(BuergerComponentEvent event) {
+
         if(event.getEventType().equals(EventType.SAVE)) {
             this.add(event.getEntity());
         }
@@ -127,8 +122,8 @@ public class BuergerTable extends CustomComponent {
      * "SimpleAction" Buttons für jede Tabellenzeile. In jeder Tabellenzeile
      * gibt "SimpleAction" Buttons.
      * 
-     * @param id
-     * @return 
+     * @param id ID
+     * @return HL
      */
     public HorizontalLayout addButtons(final Object id) {
         HorizontalLayout layout = new HorizontalLayout();

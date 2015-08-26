@@ -361,7 +361,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 
 
         // UI Komponenten aktualisieren
-        this.eventbus.post(new BuergerComponentEvent(EventType.CHILDQUERY).addEntities(this.queryKinder(event.getEntity())));
+        this.eventbus.post(new BuergerComponentEvent(EventType.QUERY_CHILD).addEntities(this.queryKinder(event.getEntity())));
     }
 
     private void queryEventHandler(BuergerAppEvent event) {
@@ -443,6 +443,8 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 
         // Service Operation ausführen
         this.saveBuergerKind(event.getEntity());
+
+        getEventbus().post(new BuergerComponentEvent(event.getEntity(), EventType.SAVE_CHILD));
 
         GenericSuccessNotification succes = new GenericSuccessNotification(
                 resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.save, Type.label)),
