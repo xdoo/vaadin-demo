@@ -25,9 +25,9 @@ public class ChildSearchTable extends CustomComponent {
         BuergerSearchForm search = new BuergerSearchForm(controller);
         search.setWidth("100%"); 
         ActionButton backButton = new ActionButton(controller, SimpleAction.back,navigateToForBack);
-        backButton.addClickListener((clickEvent -> {
-            controller.postToEventBus(new BuergerAppEvent(EventType.CANCEL).navigateTo(navigateToForBack));
-        }));
+        backButton.addClickListener((clickEvent ->
+            controller.postToEventBus(new BuergerAppEvent(EventType.CANCEL).navigateTo(navigateToForBack))
+        ));
         // Layout für die Schaltflächen über der Tabelle
         HorizontalLayout hlayout = new HorizontalLayout(backButton, search);
         hlayout.setSpacing(true);

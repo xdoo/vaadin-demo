@@ -22,9 +22,9 @@ public class BuergerSearchTable extends CustomComponent {
     private BuergerTable table;
     public BuergerSearchTable(final BuergerViewController controller, String navigateToForCreate, String from, final TableActionButton.Builder... buttonBuilders) {
         ActionButton create = new ActionButton(controller, SimpleAction.create,navigateToForCreate);
-        create.addClickListener(clickEvent -> {
-            controller.postToEventBus(new BuergerAppEvent(EventType.CREATE).navigateTo(navigateToForCreate).from(from));
-        });
+        create.addClickListener(clickEvent ->
+            controller.postToEventBus(new BuergerAppEvent(EventType.CREATE).navigateTo(navigateToForCreate).from(from))
+        );
 
         table = controller.getViewFactory().generateTable(from, buttonBuilders);
         BuergerSearchForm search = new BuergerSearchForm(controller);

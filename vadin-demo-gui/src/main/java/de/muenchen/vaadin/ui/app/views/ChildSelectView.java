@@ -30,7 +30,7 @@ public class ChildSelectView extends DefaultBuergerView {
     @Override
     protected void site() {     
         
-        table= this.controller.getViewFactory().generateChildSearchTable(BuergerUpdateView.NAME, BuergerDetailView.NAME, BuergerCreateView.NAME, this.NAME);
+        table= this.controller.getViewFactory().generateChildSearchTable(BuergerUpdateView.NAME, BuergerDetailView.NAME, BuergerCreateView.NAME, ChildSelectView.NAME);
         addComponent(table);
     }
 

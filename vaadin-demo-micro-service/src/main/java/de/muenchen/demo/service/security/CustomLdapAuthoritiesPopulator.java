@@ -42,7 +42,7 @@ public class CustomLdapAuthoritiesPopulator implements LdapAuthoritiesPopulator 
     @Transactional(readOnly = true)
     public Collection<? extends GrantedAuthority> getGrantedAuthorities(
             DirContextOperations userData, String username) {
-        Collection<GrantedAuthority> gas = new HashSet<GrantedAuthority>();
+        Collection<GrantedAuthority> gas = new HashSet<>();
 
         /*
         Gets a list of all authorities of this user

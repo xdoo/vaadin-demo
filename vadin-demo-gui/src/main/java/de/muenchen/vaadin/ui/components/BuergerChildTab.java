@@ -32,13 +32,13 @@ public class BuergerChildTab extends CustomComponent {
 
 
         ActionButton create = new ActionButton(controller, SimpleAction.create,navigateToForCreate);
-        create.addClickListener(clickEvent -> {
-            controller.postToEventBus(new BuergerAppEvent(EventType.CREATE).navigateTo(navigateToForCreate).from(from));
-        });
+        create.addClickListener(clickEvent ->
+            controller.postToEventBus(new BuergerAppEvent(EventType.CREATE).navigateTo(navigateToForCreate).from(from))
+        );
         ActionButton add = new ActionButton(controller, SimpleAction.add,navigateToForAdd);
-        add.addClickListener(clickEvent -> {
-            controller.postToEventBus(new BuergerAppEvent(EventType.ADD_SEARCHED_CHILD).navigateTo(navigateToForAdd).from(from));
-        });
+        add.addClickListener(clickEvent ->
+            controller.postToEventBus(new BuergerAppEvent(EventType.ADD_SEARCHED_CHILD).navigateTo(navigateToForAdd).from(from))
+        );
 
         table = controller.getViewFactory().generateChildTable(navigateToForDetail, from);
         
