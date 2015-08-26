@@ -405,13 +405,13 @@ public class BuergerController {
      * @return
      */
 
-    @RolesAllowed({"PERM_addKindBuerger"})
+    @Secured({"PERM_addKindBuerger"})
     @RequestMapping(value = "/add/buerger/{bOid}/kind/{kOid}", method = {RequestMethod.POST})
     public ResponseEntity addKindBuerger(@PathVariable("bOid") String buergerOid, @PathVariable("kOid") String kindOid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Add Kind buerger");
         }
-        
+        LOG.warn("restrequestrecieved");
         Buerger kind = service.read(kindOid);
         Buerger entity = service.read(buergerOid);
 

@@ -41,9 +41,7 @@ public class ChildSelectView extends DefaultBuergerView {
     /**
      * removes the table from the EventBus for garbageCollection
      */
-    public void unRegisterTable(){
-        controller.getBus().unregister(table.getTable());
-    }
+    
     
     
 }
