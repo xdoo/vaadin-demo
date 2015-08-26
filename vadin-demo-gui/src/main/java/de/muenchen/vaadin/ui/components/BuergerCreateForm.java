@@ -16,12 +16,16 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
+import de.muenchen.vaadin.demo.api.util.EventType;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
-import de.muenchen.vaadin.demo.api.util.EventType;
 import de.muenchen.vaadin.ui.util.ValidatorFactory;
-import static de.muenchen.vaadin.ui.util.I18nPaths.*;
+
+import static de.muenchen.vaadin.ui.util.I18nPaths.Component;
+import static de.muenchen.vaadin.ui.util.I18nPaths.Type;
+import static de.muenchen.vaadin.ui.util.I18nPaths.getEntityFieldPath;
+import static de.muenchen.vaadin.ui.util.I18nPaths.getFormPath;
 
 /**
  * Formular zum Erstellen eines {@link Buerger}s.
@@ -29,7 +33,7 @@ import static de.muenchen.vaadin.ui.util.I18nPaths.*;
  * @author claus.straube
  */
 public class BuergerCreateForm extends CustomComponent {
-    
+
     private final String navigateTo;
     private String back;
     private final BuergerViewController controller;
@@ -156,6 +160,9 @@ public class BuergerCreateForm extends CustomComponent {
                 controller.getEventbus().post(new BuergerAppEvent(binder.getItemDataSource().getBean(), this.type).navigateTo(navigateTo));
                 controller.getEventbus().post(new BuergerAppEvent(binder.getItemDataSource().getBean(), EventType.UPDATE).navigateTo(navigateTo));
                 //reset
+                firstField.removeValidator(val);
+                secField.removeValidator(val);
+                birthdayfield.removeValidator(val);
                 binder.setItemDataSource(controller.createBuerger());
             } catch (CommitException | Validator.InvalidValueException e) {
                 GenericErrorNotification error = new GenericErrorNotification("Fehler","Beim erstellen der Person ist ein Fehler aufgetreten. Bitte füllen Sie alle Felder mit gültigen Werten aus.");
