@@ -30,7 +30,9 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Stack;
 
-import static de.muenchen.vaadin.ui.util.I18nPaths.*;
+import static de.muenchen.vaadin.ui.util.I18nPaths.NotificationType;
+import static de.muenchen.vaadin.ui.util.I18nPaths.Type;
+import static de.muenchen.vaadin.ui.util.I18nPaths.getNotificationPath;
 
 /**
  * Der Controller ist die zentrale Klasse um die Logik im Kontext Buerger abzubilden.
@@ -453,10 +455,10 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
     private void saveEventHandler(BuergerAppEvent event) {
 
         // Service Operationen ausführen
-        this.saveBuerger(event.getEntity());
+        Buerger newBuerger = this.saveBuerger(event.getEntity());
 
         // UI Komponenten aktualisieren
-        this.eventbus.post(new BuergerComponentEvent(event.getEntity(), EventType.SAVE));
+        this.eventbus.post(new BuergerComponentEvent(newBuerger, EventType.SAVE));
 
         GenericSuccessNotification succes = new GenericSuccessNotification(
                 resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.save, Type.label)),

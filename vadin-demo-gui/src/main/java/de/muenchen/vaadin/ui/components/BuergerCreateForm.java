@@ -130,7 +130,7 @@ public class BuergerCreateForm extends CustomComponent {
         secField.addValidator(val0);
         layout.addComponent(secField);
         DateField birthdayfield = controller.getUtil().createFormDateField(binder,
-                controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.label)),
+                controller.resolveRelative(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.label)),
                 Buerger.GEBURTSDATUM, BuergerViewController.I18N_BASE_PATH);
         String errorMsg = controller.resolveRelative(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.validation));
         Validator val3 = ValidatorFactory.getValidator("DateRange",errorMsg,"0",null);
@@ -158,7 +158,7 @@ public class BuergerCreateForm extends CustomComponent {
                 
                 binder.commit();
                 controller.getEventbus().post(new BuergerAppEvent(binder.getItemDataSource().getBean(), this.type).navigateTo(navigateTo));
-                controller.getEventbus().post(new BuergerAppEvent(binder.getItemDataSource().getBean(), EventType.UPDATE).navigateTo(navigateTo));
+
                 //reset
                 firstField.removeValidator(val);
                 secField.removeValidator(val);
