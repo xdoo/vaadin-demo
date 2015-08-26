@@ -351,6 +351,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
                  resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.add, Type.label)),
                  resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.add, Type.text)));
         succes.show(Page.getCurrent());
+        this.eventbus.post(new BuergerComponentEvent(event.getEntity(), EventType.UPDATE));
         navigateEventHandler(event);
     }
 
