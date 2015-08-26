@@ -34,4 +34,6 @@ public class ChildSelectView extends DefaultBuergerView {
         addComponent(table);
     }
 
+    
+    
 }
