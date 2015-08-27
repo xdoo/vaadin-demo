@@ -20,7 +20,7 @@ public class MessageServiceImpl implements MessageService, Serializable {
     @Autowired
     private I18nService i18n;
 
-    private Locale locale = Locale.ENGLISH;
+    private Locale locale = Locale.getDefault();
 
     @Autowired
     private Environment env;
