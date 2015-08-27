@@ -15,6 +15,7 @@ import org.springframework.hateoas.ExposesResourceFor;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,7 +47,7 @@ public class CompanyBaseInfoController {
      *
      * @return
      */
-        @RolesAllowed({"PERM_queryCompanyBaseInfo"})
+    @Secured({"PERM_queryCompanyBaseInfo"})
     @RequestMapping(value = "/query", method = {RequestMethod.GET})
     public ResponseEntity queryCompanyBaseInfo() {
         if (LOG.isDebugEnabled()) {
@@ -64,7 +65,7 @@ public class CompanyBaseInfoController {
      *
      * @return
      */
-    @RolesAllowed({"PERM_newCompanyBaseInfo"})
+    @Secured({"PERM_newCompanyBaseInfo"})
     @RequestMapping(value = "/new", method = {RequestMethod.GET})
     public ResponseEntity newCompanyBaseInfo() {
         if (LOG.isDebugEnabled()) {
@@ -82,7 +83,7 @@ public class CompanyBaseInfoController {
      * @param oid
      * @return
      */
-        @RolesAllowed({"PERM_readCompanyBaseInfo"})
+        @Secured({"PERM_readCompanyBaseInfo"})
     @RequestMapping(value = "/{oid}", method = {RequestMethod.GET})
     public ResponseEntity readCompanyBaseInfo(@PathVariable("oid") String oid) {
         if (LOG.isDebugEnabled()) {
@@ -100,7 +101,7 @@ public class CompanyBaseInfoController {
      * @param request
      * @return
      */
-       @RolesAllowed({"PERM_updateCompanyBaseInfo"})
+       @Secured({"PERM_updateCompanyBaseInfo"})
  @RequestMapping(value = "/{oid}", method = {RequestMethod.POST})
     public ResponseEntity updateCompanyBaseInfo(@PathVariable("oid") String oid, @RequestBody CompanyBaseInfoResource request) {
         if (LOG.isDebugEnabled()) {
@@ -121,7 +122,7 @@ public class CompanyBaseInfoController {
      * @param request
      * @return
      */
-       @RolesAllowed({"PERM_saveCompanyBaseInfo"})
+       @Secured({"PERM_saveCompanyBaseInfo"})
  @RequestMapping(value = "/save", method = {RequestMethod.POST})
     public ResponseEntity saveCompanyBaseInfo(@RequestBody CompanyBaseInfoResource request) {
         if (LOG.isDebugEnabled()) {
@@ -140,7 +141,7 @@ public class CompanyBaseInfoController {
      * @param oid
      * @return
      */
-      @RolesAllowed({"PERM_deleteCompanyBaseInfo"})
+      @Secured({"PERM_deleteCompanyBaseInfo"})
   @RequestMapping(value = "/{oid}", method = {RequestMethod.DELETE})
     public ResponseEntity deleteCompanyBaseInfo(@PathVariable("oid") String oid) {
         if (LOG.isDebugEnabled()) {

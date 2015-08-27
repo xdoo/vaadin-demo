@@ -33,6 +33,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -75,7 +76,7 @@ public class PassController {
      *
      * @return
      */
-    @RolesAllowed({"PERM_queryPass"})
+    @Secured({"PERM_queryPass"})
     @RequestMapping(value = "/query", method = {RequestMethod.GET})
     public ResponseEntity queryPass() {
         if (LOG.isDebugEnabled()) {
@@ -92,7 +93,7 @@ public class PassController {
      * @param filter
      * @return
      */
-    @RolesAllowed({"PERM_queryPass"})
+    @Secured({"PERM_queryPass"})
     @RequestMapping(value = "/query", params = {"filter"})
     public ResponseEntity queryPass(@RequestParam(value = "filter") String filter) {
         if (LOG.isDebugEnabled()) {
@@ -109,7 +110,7 @@ public class PassController {
      *
      * @return
      */
-    @RolesAllowed({"PERM_newPass"})
+    @Secured({"PERM_newPass"})
     @RequestMapping(value = "/new", method = {RequestMethod.GET})
     public ResponseEntity newPass() {
         if (LOG.isDebugEnabled()) {
@@ -128,7 +129,7 @@ public class PassController {
      * @param oid
      * @return
      */
-    @RolesAllowed({"PERM_copyPass"})
+    @Secured({"PERM_copyPass"})
     @RequestMapping(value = "/copy/{oid}", method = {RequestMethod.GET})
     public ResponseEntity copyPass(@PathVariable String oid) {
         if (LOG.isDebugEnabled()) {
@@ -145,7 +146,7 @@ public class PassController {
      * @param oid
      * @return
      */
-    @RolesAllowed({"PERM_readPass"})
+    @Secured({"PERM_readPass"})
     @RequestMapping(value = "/{oid}", method = {RequestMethod.GET})
     public ResponseEntity readPass(@PathVariable("oid") String oid) {
         if (LOG.isDebugEnabled()) {
@@ -184,7 +185,7 @@ public class PassController {
      * @param request
      * @return
      */
-    @RolesAllowed({"PERM_savePass"})
+    @Secured({"PERM_savePass"})
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
     public ResponseEntity savePass(@RequestBody PassResource request) {
         if (LOG.isDebugEnabled()) {
@@ -203,7 +204,7 @@ public class PassController {
      * @param oid
      * @return
      */
-    @RolesAllowed({"PERM_deletePass"})
+    @Secured({"PERM_deletePass"})
     @RequestMapping(value = "/{oid}", method = {RequestMethod.DELETE})
     public ResponseEntity deletePass(@PathVariable("oid") String oid) {
         if (LOG.isDebugEnabled()) {
@@ -278,7 +279,7 @@ public class PassController {
      * @param oid
      * @return
      */
-    @RolesAllowed({"PERM_readPassStaatsangehoerigkeiten"})
+    @Secured({"PERM_readPassStaatsangehoerigkeiten"})
     @RequestMapping(value = "/staat/{oid}", method = {RequestMethod.GET})
     @SuppressWarnings("empty-statement")
     public ResponseEntity readPassStaatsangehoerigkeiten(@PathVariable("oid") String oid) {
@@ -298,7 +299,7 @@ public class PassController {
      * @param passOid
      * @return
      */
-    @RolesAllowed({"PERM_readPassBuerger"})
+    @Secured({"PERM_readPassBuerger"})
     @RequestMapping(value = "/buerger/{passOid}", method = {RequestMethod.GET})
     public ResponseEntity readPassBuerger(@PathVariable("passOid") String passOid) {
         if (LOG.isDebugEnabled()) {
@@ -316,7 +317,7 @@ public class PassController {
      * @param passOid
      * @return
      */
-    @RolesAllowed({"PERM_releasePassBuerger"})
+    @Secured({"PERM_releasePassBuerger"})
     @RequestMapping(value = "/release/buerger/{passOid}", method = {RequestMethod.GET})
     public ResponseEntity releasePassBuerger(@PathVariable("passOid") String passOid) {
         if (LOG.isDebugEnabled()) {

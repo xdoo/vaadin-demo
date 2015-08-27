@@ -27,7 +27,7 @@ public class BuergerCreateChildView extends DefaultBuergerView {
 
     @Override
     protected void site() {
-        addComponent(this.controller.generateCreateChildForm());
+        addComponent(this.controller.getViewFactory().generateCreateChildForm());
     }
     
 }

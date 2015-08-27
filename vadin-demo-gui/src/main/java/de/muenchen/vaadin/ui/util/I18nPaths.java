@@ -37,7 +37,7 @@ public class I18nPaths {
      * Type of a Notification.
      */
     public enum NotificationType implements I18nPath {
-        error,success,warning,info
+        error,success,warning,info,failure
     }
 
     /**

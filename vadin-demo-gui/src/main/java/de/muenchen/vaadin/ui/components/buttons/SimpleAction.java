@@ -29,7 +29,9 @@ public enum SimpleAction implements Action {
     delete(FontAwesome.TRASH_O),
     cancel,
     copy,
+    add,
     logout(FontAwesome.SIGN_OUT);
+    
 
     /** The potential empy set of {@link com.vaadin.ui.themes.ValoTheme} style Strings. */
     private final Set<String> styleNames;

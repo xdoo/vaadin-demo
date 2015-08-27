@@ -20,6 +20,7 @@ import org.springframework.hateoas.ExposesResourceFor;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,7 +53,7 @@ public class UserAuthorityController {
      *
      * @return
      */
-    @RolesAllowed({"PERM_queryUserAuthority"})
+    @Secured({"PERM_queryUserAuthority"})
     @RequestMapping(value = "/query", method = {RequestMethod.GET})
     public ResponseEntity queryUserAuthority() {
         if (LOG.isDebugEnabled()) {
@@ -70,7 +71,7 @@ public class UserAuthorityController {
      * @param name
      * @return
      */
-    @RolesAllowed({"PERM_readByUsernameUserAuthority"})
+    @Secured({"PERM_readByUsernameUserAuthority"})
     @RequestMapping(value = "/user/{name}", method = {RequestMethod.GET})
     public ResponseEntity readByUsernameUserAuthority(@PathVariable("name") String name) {
         if (LOG.isDebugEnabled()) {
@@ -89,7 +90,7 @@ public class UserAuthorityController {
      * @param authorityOid
      * @return
      */
-    @RolesAllowed({"PERM_readUserAuthority"})
+    @Secured({"PERM_readUserAuthority"})
     @RequestMapping(value = "/{uoid}/{aoid}", method = {RequestMethod.GET})
     public ResponseEntity readUserAuthority(@PathVariable("uoid") String userOid, @PathVariable("aoid") String authorityOid) {
 
@@ -113,7 +114,7 @@ public class UserAuthorityController {
      * @param authorityOid
      * @return
      */
-    @RolesAllowed({"PERM_saveUserAuthority"})
+    @Secured({"PERM_saveUserAuthority"})
     @RequestMapping(value = "/save/{uoid}/{aoid}", method = {RequestMethod.GET})
     public ResponseEntity saveUserAuthority(@PathVariable("uoid") String userOid, @PathVariable("aoid") String authorityOid) {
         if (LOG.isDebugEnabled()) {
@@ -135,7 +136,7 @@ public class UserAuthorityController {
      * @param aoid
      * @return
      */
-    @RolesAllowed({"PERM_deleteUserAuthority"})
+    @Secured({"PERM_deleteUserAuthority"})
     @RequestMapping(value = "/{uoid}/{aoid}", method = {RequestMethod.DELETE})
     public ResponseEntity deleteUserAuthority(@PathVariable("uoid") String uoid, @PathVariable("aoid") String aoid) {
 

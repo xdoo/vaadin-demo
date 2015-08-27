@@ -15,6 +15,7 @@ import org.springframework.hateoas.ExposesResourceFor;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,7 +45,7 @@ public class PermissionController {
      *
      * @return
      */
-    @RolesAllowed({"PERM_queryPermission"})
+    @Secured({"PERM_queryPermission"})
     @RequestMapping(value = "/query", method = {RequestMethod.GET})
     public ResponseEntity queryPermission() {
         if (LOG.isDebugEnabled()) {
@@ -62,7 +63,7 @@ public class PermissionController {
      * @param oid
      * @return
      */
-    @RolesAllowed({"PERM_readPermission"})
+    @Secured({"PERM_readPermission"})
     @RequestMapping(value = "/{oid}", method = {RequestMethod.GET})
     public ResponseEntity readPermission(@PathVariable("oid") String oid) {
         if (LOG.isDebugEnabled()) {
@@ -79,7 +80,7 @@ public class PermissionController {
      * @param request
      * @return
      */
-    @RolesAllowed({"PERM_savePermission"})
+    @Secured({"PERM_savePermission"})
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
     public ResponseEntity savePermission(@RequestBody PermissionResource request) {
         if (LOG.isDebugEnabled()) {
@@ -98,7 +99,7 @@ public class PermissionController {
      * @param oid
      * @return
      */
-    @RolesAllowed({"PERM_deletePermission"})
+    @Secured({"PERM_deletePermission"})
     @RequestMapping(value = "/{oid}", method = {RequestMethod.DELETE})
     public ResponseEntity deletePermission(@PathVariable("oid") String oid) {
         if (LOG.isDebugEnabled()) {

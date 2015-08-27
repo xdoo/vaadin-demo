@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityLinks;
 import org.springframework.stereotype.Service;
 import de.muenchen.vaadin.demo.api.rest.BuergerResource;
+import org.springframework.hateoas.Link;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 
 /**
@@ -167,6 +168,12 @@ public class BuergerResourceAssembler {
         if (relations.contains(de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_STAATSANGEHOERIGKEITEN)) {
             resource.add(linkTo(methodOn(BuergerController.class).addStaatangehoerigkeitBuerger(buerger.getOid(),null)).withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_STAATSANGEHOERIGKEITEN));
         }
+        if (relations.contains(de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_KIND)) {
+            resource.add(new Link("/add/buerger/"+buerger.getOid()+"/kind/").withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_KIND));
+
+        }
+        
+        
         return resource;
     }
 

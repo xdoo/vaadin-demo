@@ -15,6 +15,7 @@ import org.springframework.hateoas.ExposesResourceFor;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,7 +47,7 @@ public class AccountController {
      *
      * @return
      */
-    @RolesAllowed({"PERM_queryAccount"})
+    @Secured({"PERM_queryAccount"})
     @RequestMapping(value = "/query", method = {RequestMethod.GET})
     public ResponseEntity queryAccount() {
         if (LOG.isDebugEnabled()) {
@@ -64,7 +65,7 @@ public class AccountController {
      *
      * @return
      */
-@RolesAllowed({"PERM_newAccount"})
+@Secured({"PERM_newAccount"})
 @RequestMapping(value = "/new", method = {RequestMethod.GET})
     public ResponseEntity newAccount() {
         if (LOG.isDebugEnabled()) {
@@ -82,7 +83,7 @@ public class AccountController {
      * @param oid
      * @return
      */
-    @RolesAllowed({"PERM_readAccount"})
+    @Secured({"PERM_readAccount"})
     @RequestMapping(value = "/{oid}", method = {RequestMethod.GET})
     public ResponseEntity readAccount(@PathVariable("oid") String oid) {
         if (LOG.isDebugEnabled()) {
@@ -100,7 +101,7 @@ public class AccountController {
      * @param request
      * @return
      */
-    @RolesAllowed({"PERM_updateAccount"})
+    @Secured({"PERM_updateAccount"})
     @RequestMapping(value = "/{oid}", method = {RequestMethod.POST})
     public ResponseEntity updateAccount(@PathVariable("oid") String oid, @RequestBody AccountResource request) {
         if (LOG.isDebugEnabled()) {
@@ -121,7 +122,7 @@ public class AccountController {
      * @param request
      * @return
      */
-    @RolesAllowed({"PERM_saveAccount"})
+    @Secured({"PERM_saveAccount"})
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
     public ResponseEntity saveAccount(@RequestBody AccountResource request) {
         if (LOG.isDebugEnabled()) {
@@ -140,7 +141,7 @@ public class AccountController {
      * @param oid
      * @return
      */
-    @RolesAllowed({"PERM_deleteAccount"})
+    @Secured({"PERM_deleteAccount"})
     @RequestMapping(value = "/{oid}", method = {RequestMethod.DELETE})
     public ResponseEntity deleteAccount(@PathVariable("oid") String oid) {
         if (LOG.isDebugEnabled()) {
