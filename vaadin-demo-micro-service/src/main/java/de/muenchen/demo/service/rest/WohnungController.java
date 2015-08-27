@@ -26,6 +26,7 @@ import org.springframework.hateoas.ExposesResourceFor;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -65,7 +66,7 @@ public class WohnungController {
      *
      * @return
      */
-    @RolesAllowed({"PERM_queryWohnung"})
+    @Secured({"PERM_queryWohnung"})
     @RequestMapping(value = "/query", method = {RequestMethod.GET})
     public ResponseEntity queryWohnung() {
         if (LOG.isDebugEnabled()) {
@@ -83,7 +84,7 @@ public class WohnungController {
      *
      * @return
      */
-    @RolesAllowed({"PERM_newWohnung"})
+    @Secured({"PERM_newWohnung"})
     @RequestMapping(value = "/new", method = {RequestMethod.GET})
     public ResponseEntity newWohnung() {
         if (LOG.isDebugEnabled()) {
@@ -101,7 +102,7 @@ public class WohnungController {
      * @param oid
      * @return
      */
-    @RolesAllowed({"PERM_copyWohnung"})
+    @Secured({"PERM_copyWohnung"})
     @RequestMapping(value = "/copy/{oid}", method = {RequestMethod.GET})
     public ResponseEntity copyWohnung(@PathVariable String oid) {
         if (LOG.isDebugEnabled()) {
@@ -118,7 +119,7 @@ public class WohnungController {
      * @param oid
      * @return
      */
-    @RolesAllowed({"PERM_readWohnung"})
+    @Secured({"PERM_readWohnung"})
     @RequestMapping(value = "/{oid}", method = {RequestMethod.GET})
     public ResponseEntity readWohnung(@PathVariable("oid") String oid) {
         if (LOG.isDebugEnabled()) {
@@ -136,7 +137,7 @@ public class WohnungController {
      * @param request
      * @return
      */
-    @RolesAllowed({"PERM_updateWohnung"})
+    @Secured({"PERM_updateWohnung"})
     @RequestMapping(value = "/{oid}", method = {RequestMethod.POST})
     public ResponseEntity updateWohnung(@PathVariable("oid") String oid, @RequestBody WohnungResource request) {
         if (LOG.isDebugEnabled()) {
@@ -157,7 +158,7 @@ public class WohnungController {
      * @param request
      * @return
      */
-    @RolesAllowed({"PERM_saveWohnung"})
+    @Secured({"PERM_saveWohnung"})
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
     public ResponseEntity saveWohnung(@RequestBody WohnungResource request) {
         if (LOG.isDebugEnabled()) {
@@ -176,7 +177,7 @@ public class WohnungController {
      * @param oid
      * @return
      */
-    @RolesAllowed({"PERM_deleteWohnung"})
+    @Secured({"PERM_deleteWohnung"})
     @RequestMapping(value = "/{oid}", method = {RequestMethod.DELETE})
     public ResponseEntity deleteWohnung(@PathVariable("oid") String oid) {
         if (LOG.isDebugEnabled()) {
@@ -192,7 +193,7 @@ public class WohnungController {
      * @param oid
      * @return
      */
-    @RolesAllowed({"PERM_readWohnungAdresse"})
+    @Secured({"PERM_readWohnungAdresse"})
     @RequestMapping(value = "/adresse/{oid}", method = {RequestMethod.GET})
     public ResponseEntity readWohnungAdresse(@PathVariable("oid") String oid) {
         if (LOG.isDebugEnabled()) {
@@ -211,7 +212,7 @@ public class WohnungController {
      * @param aOid
      * @return
      */
-    @RolesAllowed({"PERM_addAdresseWohnung"})
+    @Secured({"PERM_addAdresseWohnung"})
     @RequestMapping(value = "add/wohnung/{wOid}/adresse/{aOid}", method = {RequestMethod.GET})
     public ResponseEntity addAdresseWohnung(@PathVariable("wOid") String wOid, @PathVariable("aOid") String aOid) {
         if (LOG.isDebugEnabled()) {
@@ -234,7 +235,7 @@ public class WohnungController {
      * @param wohnungOid
      * @return
      */
-    @RolesAllowed({"PERM_readWohnungBuerger"})
+    @Secured({"PERM_readWohnungBuerger"})
     @RequestMapping(value = "/buerger/{wohnungOid}", method = {RequestMethod.GET})
     public ResponseEntity readWohnungBuerger(@PathVariable("wohnungOid") String wohnungOid) {
         if (LOG.isDebugEnabled()) {
@@ -252,7 +253,7 @@ public class WohnungController {
      * @param wohnungOid
      * @return
      */
-    @RolesAllowed({"PERM_releaseWohnungAllBuerger"})
+    @Secured({"PERM_releaseWohnungAllBuerger"})
     @RequestMapping(value = "/release/buerger/{wohnungOid}", method = {RequestMethod.GET})
     public ResponseEntity releaseWohnungAllBuerger(@PathVariable("wohnungOid") String wohnungOid) {
         if (LOG.isDebugEnabled()) {
@@ -270,7 +271,7 @@ public class WohnungController {
      * @param buergerOid
      * @return
      */
-    @RolesAllowed({"PERM_releaseWohnungBuerger"})
+    @Secured({"PERM_releaseWohnungBuerger"})
     @RequestMapping(value = "/release/buerger/{wohnungOid}/{buergerOid}", method = {RequestMethod.GET})
     public ResponseEntity releaseWohnungBuerger(@PathVariable("wohnungOid") String wohnungOid, @PathVariable("buergerOid") String buergerOid) {
         if (LOG.isDebugEnabled()) {

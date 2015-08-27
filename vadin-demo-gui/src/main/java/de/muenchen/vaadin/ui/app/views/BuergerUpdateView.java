@@ -17,10 +17,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 @SpringView(name = BuergerUpdateView.NAME)
 @UIScope
 public class BuergerUpdateView extends DefaultBuergerView {
-    
+
     public static final String NAME = "buerger_update_view";
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerUpdateView.class);
     private BuergerUpdateForm form;
+
     @Autowired
     public BuergerUpdateView(BuergerViewController controller, EventBus eventbus, MainUI ui) {
         super(controller, ui);
@@ -29,10 +30,7 @@ public class BuergerUpdateView extends DefaultBuergerView {
 
     @Override
     protected void site() {
-        form = this.controller.generateUpdateForm(BuergerTableView.NAME);
+        form = this.controller.getViewFactory().generateUpdateForm(BuergerTableView.NAME);
         addComponent(form);
-    }
-    public void unRegisterForm(){
-        controller.getEventbus().unregister(form);
     }
 }

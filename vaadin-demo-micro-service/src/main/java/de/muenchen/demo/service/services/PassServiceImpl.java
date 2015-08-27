@@ -14,6 +14,7 @@ import de.muenchen.demo.service.domain.PassRepository;
 import de.muenchen.demo.service.util.IdService;
 import de.muenchen.demo.service.util.QueryService;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,13 +67,13 @@ public class PassServiceImpl implements PassService {
 
     @Override
     public Pass read(String oid) {
-        List<Pass> result = this.repo.findByOidAndMandantOid(oid, readUser().getMandant().getOid());
-        if (result.isEmpty()) {
-// TODO
+        Pass result = this.repo.findFirstByOidAndMandantOid(oid, readUser().getMandant().getOid());
+
+        if (Objects.isNull(result)) {
             LOG.warn(String.format("found no pass with oid '%s'", oid));
             return null;
         } else {
-            return result.get(0);
+            return result;
         }
     }
 
@@ -112,7 +113,7 @@ public class PassServiceImpl implements PassService {
 
     @Override
     public Pass readStaat(String oid) {
-        return repo.findByStaatsangehoerigkeitReferenceReferencedOidAndMandantOid(oid, readUser().getMandant().getOid());
+        return repo.findFirstByStaatsangehoerigkeitReferenceReferencedOidAndMandantOid(oid, readUser().getMandant().getOid());
     }
 
     @Override

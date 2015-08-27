@@ -17,6 +17,7 @@ import org.springframework.hateoas.ExposesResourceFor;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,7 +51,7 @@ public class UserController {
      *
      * @return
      */
-    @RolesAllowed({"PERM_queryUser"})
+    @Secured({"PERM_queryUser"})
     @RequestMapping(value = "/query", method = {RequestMethod.GET})
     public ResponseEntity queryUser() {
         if (LOG.isDebugEnabled()) {
@@ -68,7 +69,7 @@ public class UserController {
      *
      * @return
      */
-    @RolesAllowed({"PERM_newUser"})
+    @Secured({"PERM_newUser"})
     @RequestMapping(value = "/new", method = {RequestMethod.GET})
     public ResponseEntity newUser() {
         if (LOG.isDebugEnabled()) {
@@ -86,7 +87,7 @@ public class UserController {
      * @param oid
      * @return
      */
-    @RolesAllowed({"PERM_readUser"})
+    @Secured({"PERM_readUser"})
     @RequestMapping(value = "/{oid}", method = {RequestMethod.GET})
     public ResponseEntity readUser(@PathVariable("oid") String oid) {
         if (LOG.isDebugEnabled()) {
@@ -103,7 +104,7 @@ public class UserController {
      * @param name
      * @return
      */
-    @RolesAllowed({"PERM_readUsername"})
+    @Secured({"PERM_readUsername"})
     @RequestMapping(value = "/name/{name}", method = {RequestMethod.GET})
     public ResponseEntity readUsername(@PathVariable("name") String name) {
         if (LOG.isDebugEnabled()) {
@@ -121,7 +122,7 @@ public class UserController {
      * @param request
      * @return
      */
-    @RolesAllowed({"PERM_updateUser"})
+    @Secured({"PERM_updateUser"})
     @RequestMapping(value = "/{oid}", method = {RequestMethod.POST})
     public ResponseEntity updateUser(@PathVariable("oid") String oid, @RequestBody UserResource request) {
         if (LOG.isDebugEnabled()) {
@@ -142,7 +143,7 @@ public class UserController {
      * @param request
      * @return
      */
-    @RolesAllowed({"PERM_saveUser"})
+    @Secured({"PERM_saveUser"})
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
     public ResponseEntity saveUser(@RequestBody UserResource request) {
         if (LOG.isDebugEnabled()) {
@@ -161,7 +162,7 @@ public class UserController {
      * @param oid
      * @return
      */
-    @RolesAllowed({"PERM_deleteUser"})
+    @Secured({"PERM_deleteUser"})
     @RequestMapping(value = "/{oid}", method = {RequestMethod.DELETE})
     public ResponseEntity deleteUser(@PathVariable("oid") String oid) {
         if (LOG.isDebugEnabled()) {
@@ -177,7 +178,7 @@ public class UserController {
      * @param mandantOid
      * @return
      */
-    @RolesAllowed({"PERM_addMandantUser"})
+    @Secured({"PERM_addMandantUser"})
     @RequestMapping(value = "add/user/{uOid}/mandant/{mOid}", method = {RequestMethod.GET})
     public ResponseEntity addMandantUser(@PathVariable("uOid") String userOid, @PathVariable("mOid") String mandantOid) {
         if (LOG.isDebugEnabled()) {
@@ -201,7 +202,7 @@ public class UserController {
      * @param oid
      * @return
      */
-    @RolesAllowed({"PERM_copyUser"})
+    @Secured({"PERM_copyUser"})
     @RequestMapping(value = "/copy/{oid}", method = {RequestMethod.GET})
     public ResponseEntity copyUser(@PathVariable String oid) {
         if (LOG.isDebugEnabled()) {

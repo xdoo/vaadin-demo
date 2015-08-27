@@ -37,7 +37,7 @@ public class BuergerDetailView extends DefaultBuergerView {
         layout.setSpacing(true);
         
         // read form
-        readForm = this.controller.generateReadForm(BuergerUpdateView.NAME, this.NAME);
+        readForm = this.controller.getViewFactory().generateReadForm(BuergerUpdateView.NAME, NAME);
         layout.addComponent(readForm);
         
         // tab sheet
@@ -45,7 +45,7 @@ public class BuergerDetailView extends DefaultBuergerView {
         tabSheet.addStyleName(ValoTheme.TABSHEET_FRAMED);
         
         // add kind tab
-        childTab=controller.generateChildTab(BuergerDetailView.NAME, BuergerCreateChildView.NAME, NAME);
+        childTab=controller.getViewFactory().generateChildTab(BuergerDetailView.NAME, BuergerCreateChildView.NAME, ChildSelectView.NAME, NAME);
         TabSheet.Tab kindTab = tabSheet.addTab(childTab);
         kindTab.setCaption("Kinder"); // TODO -> i18n
         
@@ -53,9 +53,5 @@ public class BuergerDetailView extends DefaultBuergerView {
         
         addComponent(layout);
     }
-    public void unRegister(){
-        controller.getEventbus().unregister(childTab.getTable());
-        controller.getEventbus().unregister(childTab);
-        controller.getEventbus().unregister(readForm);
-    }
+
 }

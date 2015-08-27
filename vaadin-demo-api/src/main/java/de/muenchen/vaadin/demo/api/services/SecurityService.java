@@ -1,6 +1,5 @@
 package de.muenchen.vaadin.demo.api.services;
 
-import com.vaadin.navigator.Navigator;
 import java.util.Optional;
 import org.springframework.web.client.RestTemplate;
 
@@ -23,7 +22,6 @@ public interface SecurityService {
     public boolean login(String username, String password);
     
     public void logout();
-    
-    public void setNavigator(Navigator navigator);
+
     
 }

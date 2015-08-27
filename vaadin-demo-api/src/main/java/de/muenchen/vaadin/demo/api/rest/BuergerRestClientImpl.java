@@ -2,8 +2,6 @@ package de.muenchen.vaadin.demo.api.rest;
 
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
-import java.util.List;
-import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
@@ -13,6 +11,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  *
@@ -75,6 +76,16 @@ public class BuergerRestClientImpl implements BuergerRestClient {
     @Override
     public Buerger saveBuergerKind(Buerger buerger, Buerger kind, RestTemplate restTemplate) {
         Optional<Link> link = HateoasUtil.findLinkForRel(BuergerResource.SAVE_KIND, buerger.getLinks());
+        LOG.warn("used Link: "+link.get().toString());
+        return this.writeSingleSource(link, kind, restTemplate);
+    }
+    
+    
+    @Override
+    public Buerger addBuergerKind(Buerger buerger, Buerger kind, RestTemplate restTemplate) {
+        //ToDO solve need for hardcoded link
+        Optional<Link> link = Optional.of(new Link("http://localhost:8080/buerger/add/buerger/"+buerger.getOid()+"/kind/"+kind.getOid()+"").withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_KIND));
+        LOG.warn("used Link: "+link.get().toString());
         return this.writeSingleSource(link, kind, restTemplate);
     }
     

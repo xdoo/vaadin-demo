@@ -1,21 +1,24 @@
 package de.muenchen.vaadin.ui.components;
 
-import com.google.common.collect.Lists;
 import com.google.common.eventbus.Subscribe;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Table;
-import com.vaadin.ui.Table.ColumnGenerator;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
+import de.muenchen.vaadin.demo.api.util.EventType;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
+import de.muenchen.vaadin.ui.components.buttons.TableActionButton;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
-import de.muenchen.vaadin.ui.util.EventType;
-import static de.muenchen.vaadin.ui.util.I18nPaths.*;
-import java.util.List;
-import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
+import static de.muenchen.vaadin.ui.util.I18nPaths.Type;
+import static de.muenchen.vaadin.ui.util.I18nPaths.getEntityFieldPath;
 
 /**
  *
@@ -31,14 +34,14 @@ public class BuergerTable extends CustomComponent {
     private String from;
     
     // Buttons
-    List<BuergerTableButtonFactory> buttonFactories;
+    List<TableActionButton.Builder> buttonBuilders;
     
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerTable.class);
     
-    public BuergerTable(final BuergerViewController controller, final BuergerTableButtonFactory... buttonfactory) {
+    public BuergerTable(final BuergerViewController controller, final TableActionButton.Builder... buttonBuilders) {
         
         this.controller = controller;
-        this.buttonFactories = Lists.newArrayList(buttonfactory);
+        this.buttonBuilders = Arrays.asList(buttonBuilders);
         
         // Have a container of some type to contain the data
         this.container = new BeanItemContainer<>(Buerger.class);
@@ -48,14 +51,9 @@ public class BuergerTable extends CustomComponent {
         table.setContainerDataSource(this.container);
 
         //set action column
-        table.addGeneratedColumn("button", new ColumnGenerator() {
-            @Override
-            public Object generateCell(Table source, Object itemId,
-                    Object columnId) {
-                
-                return addButtons(itemId);
-            }
-        });
+        table.addGeneratedColumn("button",
+                (Table source, Object itemId, Object columnId) -> addButtons(itemId)
+        );
        
         //configure
         table.setWidth("100%");
@@ -80,6 +78,7 @@ public class BuergerTable extends CustomComponent {
     
     @Subscribe
     public void update(BuergerComponentEvent event) {
+
         if(event.getEventType().equals(EventType.SAVE)) {
             this.add(event.getEntity());
         }
@@ -87,7 +86,7 @@ public class BuergerTable extends CustomComponent {
         if(event.getEventType().equals(EventType.COPY)) {
             this.add(event.getEntity());
         }
-        
+
         if(event.getEventType().equals(EventType.DELETE)) {
             this.delete(event.getItemID());
         }
@@ -120,26 +119,20 @@ public class BuergerTable extends CustomComponent {
     }
     
     /**
-     * "Action" Buttons für jede Tabellenzeile. In jeder Tabellenzeile
-     * gibt "Action" Buttons.
+     * "SimpleAction" Buttons für jede Tabellenzeile. In jeder Tabellenzeile
+     * gibt "SimpleAction" Buttons.
      * 
-     * @param id
-     * @return 
+     * @param id ID
+     * @return HL
      */
     public HorizontalLayout addButtons(final Object id) {
         HorizontalLayout layout = new HorizontalLayout();
         
-        this.buttonFactories.stream().forEachOrdered(f -> {
-            BuergerTableButton b = f.createButton();
-            b.setItemId(id);
-            b.setContainer(container);
-            b.setController(controller);
-            b.setNavigateFrom(from);
-            layout.addComponent(b.getComponent());
-        });
+        this.buttonBuilders.stream()
+                .map((builder) -> builder.build(container,id))
+                .forEachOrdered(layout::addComponent);
 
         layout.setSpacing(true);
-        
         return layout;
     }
     
@@ -158,10 +151,10 @@ public class BuergerTable extends CustomComponent {
      * bzw. die vorhandenen Schaltflächen in eine neue reihenfolge gebracht
      * werden.
      * 
-     * @return Liste der {@link BuergerTableButtonFactory}
+     * @return Liste der {@link de.muenchen.vaadin.ui.components.buttons.TableActionButton.Builder}
      */
-    public List<BuergerTableButtonFactory> getButtonFactories() {
-        return buttonFactories;
+    public List<TableActionButton.Builder> getButtonBuilders() {
+        return buttonBuilders;
     }
     
 }

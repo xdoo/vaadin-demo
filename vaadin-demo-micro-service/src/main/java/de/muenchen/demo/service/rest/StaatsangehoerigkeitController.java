@@ -23,6 +23,7 @@ import org.springframework.hateoas.ExposesResourceFor;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,7 +56,7 @@ public class StaatsangehoerigkeitController {
      *
      * @return
      */
-    @RolesAllowed({"PERM_queryStaatsangehoerigkeit"})
+    @Secured({"PERM_queryStaatsangehoerigkeit"})
     @RequestMapping(value = "/query", method = {RequestMethod.GET})
     public ResponseEntity queryStaatsangehoerigkeit() {
         if (LOG.isDebugEnabled()) {
@@ -73,7 +74,7 @@ public class StaatsangehoerigkeitController {
      * @param referencedOid
      * @return
      */
-    @RolesAllowed({"PERM_createStaatsangehoerigkeit"})
+    @Secured({"PERM_createStaatsangehoerigkeit"})
     @RequestMapping(value = "/create/{referencedOid}", method = {RequestMethod.GET})
     public ResponseEntity createStaatsangehoerigkeit(@PathVariable("referencedOid") String referencedOid) {
         if (LOG.isDebugEnabled()) {
@@ -90,7 +91,7 @@ public class StaatsangehoerigkeitController {
      * @param referencedOid
      * @return
      */
-    @RolesAllowed({"PERM_readStaatsangehoerigkeit"})
+    @Secured({"PERM_readStaatsangehoerigkeit"})
     @RequestMapping(value = "/{referencedOid}", method = {RequestMethod.GET})
     public ResponseEntity readStaatsangehoerigkeit(@PathVariable("referencedOid") String referencedOid) {
         if (LOG.isDebugEnabled()) {
@@ -107,7 +108,7 @@ public class StaatsangehoerigkeitController {
      * @param referencedOid
      * @return
      */
-    @RolesAllowed({"PERM_deleteStaatsangehoerigkeit"})
+    @Secured({"PERM_deleteStaatsangehoerigkeit"})
     @RequestMapping(value = "/{referencedOid}", method = {RequestMethod.DELETE})
     public ResponseEntity deleteStaatsangehoerigkeit(@PathVariable("referencedOid") String referencedOid) {
         if (LOG.isDebugEnabled()) {
@@ -123,7 +124,7 @@ public class StaatsangehoerigkeitController {
      * @param staatsangehoerigkeitOid
      * @return
      */
-    @RolesAllowed({"PERM_readStaatsangehoerigkeitBuerger"})
+    @Secured({"PERM_readStaatsangehoerigkeitBuerger"})
     @RequestMapping(value = "/buerger/{staatsangehoerigkeitOid}", method = {RequestMethod.GET})
     public ResponseEntity readStaatsangehoerigkeitBuerger(@PathVariable("staatsangehoerigkeitOid") String staatsangehoerigkeitOid) {
         if (LOG.isDebugEnabled()) {
@@ -142,7 +143,7 @@ public class StaatsangehoerigkeitController {
      * @param staatsangehoerigkeitOid
      * @return
      */
-    @RolesAllowed({"PERM_releaseStaatsangehoerigkeitAllBuerger"})
+    @Secured({"PERM_releaseStaatsangehoerigkeitAllBuerger"})
     @RequestMapping(value = "/release/buerger/{staatsangehoerigkeitOid}", method = {RequestMethod.GET})
     public ResponseEntity releaseStaatsangehoerigkeitAllBuerger(@PathVariable("staatsangehoerigkeitOid") String staatsangehoerigkeitOid) {
         if (LOG.isDebugEnabled()) {
@@ -161,7 +162,7 @@ public class StaatsangehoerigkeitController {
      * @param buergerOid
      * @return
      */
-    @RolesAllowed({"PERM_releaseStaatsangehoerigkeitBuerger"})
+    @Secured({"PERM_releaseStaatsangehoerigkeitBuerger"})
     @RequestMapping(value = "/release/buerger/{staatsangehoerigkeitOid}/{buergerOid}", method = {RequestMethod.GET})
     public ResponseEntity releaseStaatsangehoerigkeitBuerger(@PathVariable("staatsangehoerigkeitOid") String staatsangehoerigkeitOid, @PathVariable("buergerOid") String buergerOid) {
         if (LOG.isDebugEnabled()) {

@@ -6,9 +6,10 @@
 package de.muenchen.vaadin.ui.components;
 
 import com.google.common.eventbus.Subscribe;
+import de.muenchen.vaadin.demo.api.util.EventType;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
+import de.muenchen.vaadin.ui.components.buttons.TableActionButton;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
-import de.muenchen.vaadin.ui.util.EventType;
 
 /**
  *
@@ -16,14 +17,14 @@ import de.muenchen.vaadin.ui.util.EventType;
  */
 public class ChildTable extends BuergerTable {
 
-    public ChildTable(BuergerViewController controller, BuergerTableButtonFactory... buttonfactory) {
-        super(controller, buttonfactory);
+    public ChildTable(BuergerViewController controller, TableActionButton.Builder... buttonBuilders) {
+        super(controller, buttonBuilders);
     }
     
     @Override
     @Subscribe
     public void update(BuergerComponentEvent event) {
-        if(event.getEventType().equals(EventType.CHILDSAVE)) {
+        if(event.getEventType().equals(EventType.SAVE_CHILD)) {
             this.add(event.getEntity());
         }
         
@@ -39,7 +40,7 @@ public class ChildTable extends BuergerTable {
             this.add(event.getEntity());
         }
         
-        if(event.getEventType().equals(EventType.CHILDQUERY)) {
+        if(event.getEventType().equals(EventType.QUERY_CHILD)) {
             this.addAll(event.getEntities());
         }
     }

@@ -1,10 +1,7 @@
 package de.muenchen.vaadin.ui.app.views;
 
-import com.vaadin.navigator.Navigator;
-import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.Component;
 import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.components.BuergerSearchTable;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
@@ -24,7 +21,7 @@ public class BuergerTableView extends DefaultBuergerView {
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerCreateView.class);
     private BuergerSearchTable table;
     @Autowired
-    public BuergerTableView(BuergerViewController controller, MainUI ui ){ 
+    public BuergerTableView(BuergerViewController controller, MainUI ui) {
         super(controller, ui);
         LOG.debug("creating 'buerger_table_view'");
         
@@ -32,17 +29,11 @@ public class BuergerTableView extends DefaultBuergerView {
 
     @Override
     protected void site() {     
-        
-        table= this.controller.generateSearchTable(BuergerUpdateView.NAME, BuergerDetailView.NAME, BuergerCreateView.NAME, this.NAME);
+
+        table= this.controller.getViewFactory().generateSearchTable(BuergerUpdateView.NAME, BuergerDetailView.NAME, BuergerCreateView.NAME, BuergerTableView.NAME);
         addComponent(table);
     }
     
-    /**
-     * removes the table from the EventBus for garbageCollection
-     */
-    public void unRegisterTable(){
-        controller.getBus().unregister(table.getTable());
-    }
-    
+
     
 }

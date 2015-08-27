@@ -16,12 +16,16 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
+import de.muenchen.vaadin.demo.api.util.EventType;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
-import de.muenchen.vaadin.ui.components.buttons.Action;
+import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
-import de.muenchen.vaadin.ui.util.EventType;
 import de.muenchen.vaadin.ui.util.ValidatorFactory;
-import static de.muenchen.vaadin.ui.util.I18nPaths.*;
+
+import static de.muenchen.vaadin.ui.util.I18nPaths.Component;
+import static de.muenchen.vaadin.ui.util.I18nPaths.Type;
+import static de.muenchen.vaadin.ui.util.I18nPaths.getEntityFieldPath;
+import static de.muenchen.vaadin.ui.util.I18nPaths.getFormPath;
 
 /**
  * Formular zum Erstellen eines {@link Buerger}s.
@@ -29,11 +33,11 @@ import static de.muenchen.vaadin.ui.util.I18nPaths.*;
  * @author claus.straube
  */
 public class BuergerCreateForm extends CustomComponent {
-    
+
     private final String navigateTo;
     private String back;
     private final BuergerViewController controller;
-    private EventType type = EventType.SAVE;
+    private EventType type;
 
     /**
      * Formular zum Erstellen eines {@link Buerger}s. Über diesen
@@ -44,11 +48,11 @@ public class BuergerCreateForm extends CustomComponent {
      * @param controller der Entity Controller
      * @param navigateTo Zielseite nach Druck der 'erstellen' Schaltfläche
      */
-    public BuergerCreateForm(final BuergerViewController controller, final String navigateTo) {
+    public BuergerCreateForm(final BuergerViewController controller, final String navigateTo, EventType type) {
         this.navigateTo = navigateTo;
         this.back = navigateTo;
         this.controller = controller;
-        
+        this.type=type;
         this.createForm();
     }
     
@@ -82,7 +86,7 @@ public class BuergerCreateForm extends CustomComponent {
         
         // headline
         Label headline = new Label(controller.resolveRelative(
-                getFormPath(Action.create,
+                getFormPath(SimpleAction.create,
                         Component.headline,
                         Type.label)));
         headline.addStyleName(ValoTheme.LABEL_H3);
@@ -125,7 +129,7 @@ public class BuergerCreateForm extends CustomComponent {
         secField.addValidator(val0);
         layout.addComponent(secField);
         DateField birthdayfield = controller.getUtil().createFormDateField(binder,
-                controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.label)),
+                controller.resolveRelative(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.label)),
                 Buerger.GEBURTSDATUM, BuergerViewController.I18N_BASE_PATH);
         String errorMsg = controller.resolveRelative(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.validation));
         Validator val3 = ValidatorFactory.getValidator("DateRange",errorMsg,"0",null);
@@ -135,7 +139,7 @@ public class BuergerCreateForm extends CustomComponent {
         layout.addComponent(buttonLayout);
         // die 'speichern' Schaltfläche
         String createLabel = controller.resolveRelative(
-                getFormPath(Action.create,
+                getFormPath(SimpleAction.create,
                         Component.button,
                         Type.label));
         Button createButton = new Button(createLabel, (ClickEvent click) -> {
@@ -153,8 +157,11 @@ public class BuergerCreateForm extends CustomComponent {
                 
                 binder.commit();
                 controller.getEventbus().post(new BuergerAppEvent(binder.getItemDataSource().getBean(), this.type).navigateTo(navigateTo));
-                controller.getEventbus().post(new BuergerAppEvent(binder.getItemDataSource().getBean(), EventType.UPDATE).navigateTo(navigateTo));
+
                 //reset
+                firstField.removeValidator(val);
+                secField.removeValidator(val);
+                birthdayfield.removeValidator(val);
                 binder.setItemDataSource(controller.createBuerger());
             } catch (CommitException | Validator.InvalidValueException e) {
                 GenericErrorNotification error = new GenericErrorNotification(controller.resolveRelative(getNotificationPath(NotificationType.failure,Action.save, Type.label)),
@@ -168,7 +175,7 @@ public class BuergerCreateForm extends CustomComponent {
         buttonLayout.addComponent(createButton);
         // die 'abbrechen' Schaltfläche
         buttonLayout.addComponent(new GenericCancelButton(
-                controller.resolveRelative(getFormPath(Action.cancel, Component.button, Type.label)),
+                controller.resolveRelative(getFormPath(SimpleAction.cancel, Component.button, Type.label)),
                 new BuergerAppEvent(binder.getItemDataSource().getBean(), EventType.CANCEL).navigateTo(this.back), 
                 this.controller.getEventbus()));
         setCompositionRoot(layout);

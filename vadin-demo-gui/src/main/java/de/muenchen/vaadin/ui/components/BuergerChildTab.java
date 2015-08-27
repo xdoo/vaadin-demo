@@ -6,17 +6,16 @@ import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
+import de.muenchen.vaadin.demo.api.util.EventType;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
-import static de.muenchen.vaadin.ui.components.BuergerReadForm.LOG;
-
-import de.muenchen.vaadin.ui.components.buttons.Action;
-import de.muenchen.vaadin.ui.components.buttons.EntityButton;
+import de.muenchen.vaadin.ui.components.buttons.ActionButton;
+import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
-import de.muenchen.vaadin.ui.util.EventType;
-import de.muenchen.vaadin.ui.util.I18nPaths;
 
 import java.util.Optional;
+
+import static de.muenchen.vaadin.ui.components.BuergerReadForm.LOG;
 
 /**
  *
@@ -26,15 +25,25 @@ public class BuergerChildTab extends CustomComponent {
 
     BuergerViewController controller;
     private BuergerTable table;
-    public BuergerChildTab(BuergerViewController controller, String navigateToForDetail, String navigateToForCreate, String from) {
+    public BuergerChildTab(BuergerViewController controller, String navigateToForDetail, String navigateToForCreate, String navigateToForAdd, String from) {
         
         this.controller = controller;
-        
-        EntityButton<Buerger> create = EntityButton.make(controller, Action.create).navigateTo(navigateToForCreate).from(from).build();
-        table = controller.generateChildTable(navigateToForDetail, from);
+
+
+
+        ActionButton create = new ActionButton(controller, SimpleAction.create,navigateToForCreate);
+        create.addClickListener(clickEvent ->
+            controller.postToEventBus(new BuergerAppEvent(EventType.CREATE).navigateTo(navigateToForCreate).from(from))
+        );
+        ActionButton add = new ActionButton(controller, SimpleAction.add,navigateToForAdd);
+        add.addClickListener(clickEvent ->
+            controller.postToEventBus(new BuergerAppEvent(EventType.ADD_SEARCHED_CHILD).navigateTo(navigateToForAdd).from(from))
+        );
+
+        table = controller.getViewFactory().generateChildTable(navigateToForDetail, from);
         
         // Layout für die Schaltflächen über der Tabelle
-        HorizontalLayout hlayout = new HorizontalLayout(create);
+        HorizontalLayout hlayout = new HorizontalLayout(create, add);
         hlayout.setSpacing(true);
         // Gesamtlayout
         VerticalLayout vlayout = new VerticalLayout(hlayout, table);
