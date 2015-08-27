@@ -153,23 +153,23 @@ public class StaatsangehoerigkeitController {
 
     }
 
-    /**
-     * Entfernt die Beziehung zwischen eine Staatsangehoerigkeit und ein
-     * Buerger.
-     *
-     * @param staatsangehoerigkeitOid
-     * @param buergerOid
-     * @return
-     */
-    @RolesAllowed({"PERM_releaseStaatsangehoerigkeitBuerger"})
-    @RequestMapping(value = "/release/buerger/{staatsangehoerigkeitOid}/{buergerOid}", method = {RequestMethod.GET})
-    public ResponseEntity releaseStaatsangehoerigkeitBuerger(@PathVariable("staatsangehoerigkeitOid") String staatsangehoerigkeitOid, @PathVariable("buergerOid") String buergerOid) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("delete Staatsangehoerigkeit Buerger");
-        }
-        this.buergerService.releaseStaatsangehoerigkeitBuerger(staatsangehoerigkeitOid, buergerOid);
-        return ResponseEntity.ok().build();
-
-    }
+//    /**
+//     * Entfernt die Beziehung zwischen eine Staatsangehoerigkeit und ein
+//     * Buerger.
+//     *
+//     * @param staatsangehoerigkeitOid
+//     * @param buergerOid
+//     * @return
+//     */
+//    @RolesAllowed({"PERM_releaseStaatsangehoerigkeitBuerger"})
+//    @RequestMapping(value = "/release/buerger/{staatsangehoerigkeitOid}/{buergerOid}", method = {RequestMethod.GET})
+//    public ResponseEntity releaseStaatsangehoerigkeitBuerger(@PathVariable("staatsangehoerigkeitOid") String staatsangehoerigkeitOid, @PathVariable("buergerOid") String buergerOid) {
+//        if (LOG.isDebugEnabled()) {
+//            LOG.debug("delete Staatsangehoerigkeit Buerger");
+//        }
+//        this.buergerService.releaseStaatsangehoerigkeitBuerger(staatsangehoerigkeitOid, buergerOid);
+//        return ResponseEntity.ok().build();
+//
+//    }
 
 }

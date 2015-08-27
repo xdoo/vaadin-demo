@@ -24,6 +24,7 @@ import de.muenchen.demo.service.services.BuergerService;
 import de.muenchen.demo.service.services.PassService;
 import de.muenchen.demo.service.services.StaatsangehoerigkeitService;
 import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
+import java.util.ArrayList;
 import javax.annotation.security.RolesAllowed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -134,7 +135,7 @@ public class PassController {
             LOG.debug("copy pass");
         }
         Pass entity = this.service.copy(oid);
-        PassResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
+        PassResource resource = this.assembler.assembleWithAllLinks(entity);
         return ResponseEntity.ok(resource);
     }
 
@@ -151,7 +152,7 @@ public class PassController {
             LOG.debug("read pass");
         }
         Pass entity = this.service.read(oid);
-        PassResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
+        PassResource resource = this.assembler.assembleWithAllLinks(entity);
         return ResponseEntity.ok(resource);
     }
 
@@ -163,7 +164,7 @@ public class PassController {
      * @return
      */
     @RolesAllowed({"PERM_updatePass"})
-    @RequestMapping(value = "/{oid}", method = {RequestMethod.POST})
+    @RequestMapping(value = "/{oid}", method = {RequestMethod.PUT})
     public ResponseEntity updatePass(@PathVariable("oid") String oid, @RequestBody PassResource request) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("update pass");
@@ -173,7 +174,7 @@ public class PassController {
         this.assembler.fromResource(request, entity);
         LOG.info("danach > " + entity.toString());
         this.service.update(entity);
-        PassResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
+        PassResource resource = this.assembler.assembleWithAllLinks(entity);
         return ResponseEntity.ok(resource);
     }
 
@@ -192,7 +193,7 @@ public class PassController {
         Pass entity = new Pass();
         this.assembler.fromResource(request, entity);
         this.service.save(entity);
-        PassResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
+        PassResource resource = this.assembler.assembleWithAllLinks(entity);
         return ResponseEntity.ok(resource);
     }
 
@@ -211,6 +212,38 @@ public class PassController {
         this.service.delete(oid);
         return ResponseEntity.ok().build();
     }
+ /**
+     * Löscht mehrere Bürger.
+     *
+     * @param oids
+     * @return
+     */
+    @RolesAllowed({"PERM_deleteListPass"})
+    @RequestMapping(method = {RequestMethod.POST})
+    public ResponseEntity deleteListPass(@RequestBody ArrayList<String> oids) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("delete Pass");
+        }
+        this.service.delete(oids);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * Macht eine Kopie mehreres Büergers. Diese Kopie wird bei Erstellung in
+     * der DB gespeichert.
+     *
+     * @param oids
+     * @return
+     */
+    @RolesAllowed({"PERM_copyListPass"})
+    @RequestMapping(value = "/copy", method = {RequestMethod.POST})
+    public ResponseEntity copyListPass(@RequestBody ArrayList<String> oids) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("copy pass");
+        }
+        this.service.copy(oids);
+        return ResponseEntity.ok().build();
+    }
 
     /**
      * Assoziiert ein Staatsangehoerigkeit mit einem Pass .
@@ -220,8 +253,8 @@ public class PassController {
      * @return
      */
     @RolesAllowed({"PERM_addStaatangehoerigkeitPass"})
-    @RequestMapping(value = "add/pass/{pOid}/staats/{sOid}", method = {RequestMethod.GET})
-    public ResponseEntity addStaatangehoerigkeitPass(@PathVariable("pOid") String passOid, @PathVariable("sOid") String statsOid) {
+    @RequestMapping(value = "add/{pOid}/staats", method = {RequestMethod.POST})
+    public ResponseEntity addStaatangehoerigkeitPass(@PathVariable("pOid") String passOid,@RequestBody String statsOid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Add staatsangehoerigkeit pass");
         }
@@ -234,7 +267,7 @@ public class PassController {
         entity.setStaatsangehoerigkeitReference(staatRef);
         this.service.update(entity);
 
-        PassResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
+        PassResource resource = this.assembler.assembleWithAllLinks(entity);
         resource.add(linkTo(methodOn(PassController.class).addStaatangehoerigkeitPass(passOid, statsOid)).withSelfRel()); // add self link with params
         return ResponseEntity.ok(resource);
     }
@@ -252,7 +285,6 @@ public class PassController {
         if (LOG.isDebugEnabled()) {
             LOG.debug("read Pass Staatsangehoerigkeiten");
         }
-        Pass a = this.service.read(oid);
         Staatsangehoerigkeit staat = this.staatsService.read(this.service.read(oid).getStaatsangehoerigkeitReference().getReferencedOid());
 
         StaatsangehoerigkeitResource resources;

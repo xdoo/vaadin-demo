@@ -113,7 +113,7 @@ public class StaatsangehoerigkeitServiceImpl implements StaatsangehoerigkeitServ
     public void delete(String referencedOid) {
         StaatsangehoerigkeitReference item = this.readReference(referencedOid);
         this.buergerService.releaseStaatsangehoerigkeitAllBuerger(referencedOid);
-        this.passService.deletePassStaat(referencedOid);
+        this.passService.releaseStaatsangehoerigkeitPass(referencedOid);
 
         this.repo.delete(item);
     }

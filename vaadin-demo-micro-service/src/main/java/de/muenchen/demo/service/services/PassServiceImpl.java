@@ -117,8 +117,17 @@ public class PassServiceImpl implements PassService {
     }
 
     @Override
-    public void deletePassStaat(String adresseOid) {
-        Pass pass = this.readStaat(adresseOid);
+    public void releasePassStaatsangehoerigkeit(String passOid) {
+        Pass pass = this.read(passOid);
+        if (pass != null) {
+            pass.setStaatsangehoerigkeitReference(null);
+            this.update(pass);
+        }
+    }
+
+    @Override
+    public void releaseStaatsangehoerigkeitPass(String staatOid) {
+        Pass pass = this.readStaat(staatOid);
         if (pass != null) {
             pass.setStaatsangehoerigkeitReference(null);
             this.update(pass);
@@ -130,5 +139,15 @@ public class PassServiceImpl implements PassService {
         Pass item = this.read(oid);
         this.buergerService.releasePassBuerger(oid);
         this.repo.delete(item);
+    }
+
+    @Override
+    public void copy(List<String> oids) {
+        oids.stream().forEach(this::copy);
+    }
+
+    @Override
+    public void delete(List<String> oids) {
+        oids.stream().forEach(this::delete);
     }
 }
