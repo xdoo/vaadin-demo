@@ -61,9 +61,13 @@ public class Application {
     }
 
     @Bean
-    public AuthenticationConfiguratorAdapter authenticationSecurity() {
+    public AuthenticationConfiguratorAdapter authenticationSecurityJDBC() {
+        return AuthenticationConfiguratorAdapter.findAdapter("JDBC_Authentication");
+    }
+
+    @Bean
+    public AuthenticationConfiguratorAdapter authenticationSecurityLDAP(){
         return AuthenticationConfiguratorAdapter.findAdapter("LDAP_Authentication");
-        //return AuthenticationConfiguratorAdapter.findAdapter("JDBC_Authentication");
     }
 
     @Order(ManagementServerProperties.ACCESS_OVERRIDE_ORDER)
