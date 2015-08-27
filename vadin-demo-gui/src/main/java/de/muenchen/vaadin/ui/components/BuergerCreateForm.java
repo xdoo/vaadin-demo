@@ -22,10 +22,7 @@ import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.ValidatorFactory;
 
-import static de.muenchen.vaadin.ui.util.I18nPaths.Component;
-import static de.muenchen.vaadin.ui.util.I18nPaths.Type;
-import static de.muenchen.vaadin.ui.util.I18nPaths.getEntityFieldPath;
-import static de.muenchen.vaadin.ui.util.I18nPaths.getFormPath;
+import static de.muenchen.vaadin.ui.util.I18nPaths.*;
 
 /**
  * Formular zum Erstellen eines {@link Buerger}s.
@@ -164,8 +161,8 @@ public class BuergerCreateForm extends CustomComponent {
                 birthdayfield.removeValidator(val);
                 binder.setItemDataSource(controller.createBuerger());
             } catch (CommitException | Validator.InvalidValueException e) {
-                GenericErrorNotification error = new GenericErrorNotification(controller.resolveRelative(getNotificationPath(NotificationType.failure,Action.save, Type.label)),
-                        controller.resolveRelative(getNotificationPath(NotificationType.failure,Action.save,Type.text)));
+                GenericErrorNotification error = new GenericErrorNotification(controller.resolveRelative(getNotificationPath(NotificationType.failure,SimpleAction.save, Type.label)),
+                        controller.resolveRelative(getNotificationPath(NotificationType.failure,SimpleAction.save,Type.text)));
                         error.show(Page.getCurrent());
             }
         });
