@@ -6,6 +6,7 @@ import com.vaadin.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 
+import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.util.Locale;
 
@@ -16,6 +17,9 @@ import java.util.Locale;
 @SpringComponent
 @UIScope
 public class MessageServiceImpl implements MessageService, Serializable {
+
+    /** Default Local of App if requested local is not supported**/
+    private final static Locale DEFAULT_LOCAL = Locale.GERMANY;
     
     @Autowired
     private I18nService i18n;
@@ -24,6 +28,15 @@ public class MessageServiceImpl implements MessageService, Serializable {
 
     @Autowired
     private Environment env;
+
+    @PostConstruct
+    private void init() {
+        //TODO Better check if locale is supported
+        if (!i18n.get("supported" , locale).equals("TRUE")) {
+            locale = DEFAULT_LOCAL;
+        }
+
+    }
 
     @Override
     public String get(String path) {
