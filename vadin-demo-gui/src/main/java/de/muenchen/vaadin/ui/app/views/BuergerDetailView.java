@@ -45,7 +45,7 @@ public class BuergerDetailView extends DefaultBuergerView {
         tabSheet.addStyleName(ValoTheme.TABSHEET_FRAMED);
         
         // add kind tab
-        childTab=controller.getViewFactory().generateChildTab(BuergerDetailView.NAME, BuergerCreateChildView.NAME, ChildSelectView.NAME, NAME);
+        childTab=controller.getViewFactory().generateChildTab(BuergerDetailView.NAME, BuergerCreateChildView.NAME, NAME);
         TabSheet.Tab kindTab = tabSheet.addTab(childTab);
         kindTab.setCaption("Kinder"); // TODO -> i18n
         

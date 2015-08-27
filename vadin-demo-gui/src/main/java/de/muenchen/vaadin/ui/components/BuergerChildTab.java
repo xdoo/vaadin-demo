@@ -25,7 +25,7 @@ public class BuergerChildTab extends CustomComponent {
 
     BuergerViewController controller;
     private BuergerTable table;
-    public BuergerChildTab(BuergerViewController controller, String navigateToForDetail, String navigateToForCreate, String navigateToForAdd, String from) {
+    public BuergerChildTab(BuergerViewController controller, String navigateToForDetail, String navigateToForCreate, String from) {
         
         this.controller = controller;
 
@@ -35,9 +35,9 @@ public class BuergerChildTab extends CustomComponent {
         create.addClickListener(clickEvent ->
             controller.postToEventBus(new BuergerAppEvent(EventType.CREATE).navigateTo(navigateToForCreate).from(from))
         );
-        ActionButton add = new ActionButton(controller, SimpleAction.add,navigateToForAdd);
+        ActionButton add = new ActionButton(controller, SimpleAction.add,"");
         add.addClickListener(clickEvent ->
-            controller.postToEventBus(new BuergerAppEvent(EventType.ADD_SEARCHED_CHILD).navigateTo(navigateToForAdd).from(from))
+            controller.postToEventBus(new BuergerAppEvent(EventType.ADD_SEARCHED_CHILD).from(from))
         );
 
         table = controller.getViewFactory().generateChildTable(navigateToForDetail, from);
