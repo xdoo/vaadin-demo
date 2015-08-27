@@ -157,7 +157,7 @@ public class BuergerController {
      * @param oids
      * @return
      */
-    @RolesAllowed({"PERM_deleteListBuerger"})
+    @Secured({"PERM_deleteListBuerger"})
     @RequestMapping(method = {RequestMethod.POST})
     public ResponseEntity deleteListBuerger(@RequestBody ArrayList<String> oids) {
         if (LOG.isDebugEnabled()) {
@@ -208,7 +208,7 @@ public class BuergerController {
      * @param request
      * @return
      */
-    @RolesAllowed({"PERM_updateBuerger"})
+    @Secured({"PERM_updateBuerger"})
     @RequestMapping(value = "/{oid}", method = {RequestMethod.PUT})
     public ResponseEntity updateBuerger(@PathVariable("oid") String oid, @RequestBody BuergerResource request) {
         if (LOG.isDebugEnabled()) {
@@ -265,24 +265,6 @@ public class BuergerController {
         }
         this.service.delete(oid);
         return ResponseEntity.ok().build();
-    }
-
-    /**
-     * Liest die Wohnunugen einer Bürger.
-     *
-     * @param oid
-     * @return
-     */
-    @Secured({"PERM_readBuergerWohnungen"})
-    @RequestMapping(value = "/wohnungen/{oid}", method = {RequestMethod.GET})
-    public ResponseEntity readBuergerWohnungen(@PathVariable("oid") String oid) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("read buerger Wohunungen");
-        }
-        Set<Wohnung> wohnungen = this.service.read(oid).getWohnungen();
-
-        List<WohnungResource> resources = wohnungAssembler.toResource(wohnungen, HateoasUtil.REL_SELF);
-        return ResponseEntity.ok(resources);
     }
 
     /**
@@ -362,7 +344,7 @@ public class BuergerController {
      * @param elternteilOid
      * @return
      */
-    @RolesAllowed({"PERM_releaseBuergerElternteil"})
+    @Secured({"PERM_releaseBuergerElternteil"})
     @RequestMapping(value = "/release/elternteil/{oid}", method = {RequestMethod.POST})
     public ResponseEntity releaseBuergerElternteil(@PathVariable("oid") String oid, @RequestBody String elternteilOid) {
         if (LOG.isDebugEnabled()) {
@@ -404,8 +386,8 @@ public class BuergerController {
      * @param kindOid
      * @return
      */
-    @RolesAllowed({"PERM_addKindBuerger"})
-    @RequestMapping(value = "/add/{bOid}/kind/", method = {RequestMethod.POST})
+    @Secured({"PERM_addKindBuerger"})
+    @RequestMapping(value = "/add/{bOid}/kind", method = {RequestMethod.POST})
     public ResponseEntity addKindBuerger(@PathVariable("bOid") String buergerOid, @RequestBody String kindOid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Add Kind buerger");
@@ -479,7 +461,7 @@ public class BuergerController {
      * @param oid
      * @return
      */
-    @RolesAllowed({"PERM_readBuergerWohnungen"})
+    @Secured({"PERM_readBuergerWohnungen"})
     @RequestMapping(value = "/wohnungen/{oid}", method = {RequestMethod.GET})
     public ResponseEntity readBuergerWohnungen(@PathVariable("oid") String oid) {
         if (LOG.isDebugEnabled()) {
@@ -515,7 +497,7 @@ public class BuergerController {
      * @param wohnungOid
      * @return
      */
-    @RolesAllowed({"PERM_releaseWohnungBuerger"})
+    @Secured({"PERM_releaseWohnungBuerger"})
     @RequestMapping(value = "/release/wohnung/{oid}", method = {RequestMethod.POST})
     public ResponseEntity releaseWohnungBuerger(@PathVariable("oid") String oid, @RequestBody String wohnungOid) {
         if (LOG.isDebugEnabled()) {
@@ -556,7 +538,7 @@ public class BuergerController {
      * @param staatsOid
      * @return
      */
-    @RolesAllowed({"PERM_addStaatangehoerigkeitBuerger"})
+    @Secured({"PERM_addStaatangehoerigkeitBuerger"})
     @RequestMapping(value = "/add/{bOid}/staats", method = {RequestMethod.POST})
     public ResponseEntity addStaatangehoerigkeitBuerger(@PathVariable("bOid") String buergerOid, @RequestBody String staatsOid) {
         if (LOG.isDebugEnabled()) {
@@ -583,7 +565,7 @@ public class BuergerController {
      * @param passOid
      * @return
      */
-    @RolesAllowed({"PERM_addPassBuerger"})
+    @Secured({"PERM_addPassBuerger"})
     @RequestMapping(value = "/add/{bOid}/pass", method = {RequestMethod.POST})
     public ResponseEntity addPassBuerger(@PathVariable("bOid") String buergerOid, @RequestBody String passOid) {
         if (LOG.isDebugEnabled()) {
@@ -650,7 +632,7 @@ public class BuergerController {
      * @return
      */
     //
-    @RolesAllowed({"PERM_releaseBuergerPaesse"})
+    @Secured({"PERM_releaseBuergerPaesse"})
     @RequestMapping(value = "/release/paesse/{oid}", method = {RequestMethod.GET})
     public ResponseEntity releaseBuergerPaesse(@PathVariable("oid") String oid) {
         if (LOG.isDebugEnabled()) {
@@ -686,7 +668,7 @@ public class BuergerController {
      * @param sachbearbeiterOid
      * @return
      */
-    @RolesAllowed({"PERM_addSachbearbeiterBuerger"})
+    @Secured({"PERM_addSachbearbeiterBuerger"})
     @RequestMapping(value = "/add/{bOid}/Sachbearbeiter", method = {RequestMethod.POST})
     public ResponseEntity addSachbearbeiterBuerger(@PathVariable("bOid") String buergerOid, @RequestBody String sachbearbeiterOid) {
         if (LOG.isDebugEnabled()) {

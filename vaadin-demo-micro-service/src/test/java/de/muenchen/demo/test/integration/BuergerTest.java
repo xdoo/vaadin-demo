@@ -424,8 +424,8 @@ public class BuergerTest {
     @WithMockUser(username = DomainConstants.M2_U001_NAME)
     public void AddBuergerKindTest() {
         System.out.println("========== Add Bürger Kind Test ==========");
-        String URL2 = "http://localhost:" + port + "/buerger/add/" + DomainConstants.M2_B007 + "/kind/";
-        restTemplate.postForEntity(URL2, DomainConstants.M2_B008, BuergerResource.class).getBody();
+        String URL2 = "http://localhost:" + port + "/buerger/add/" + DomainConstants.M2_B007 + "/kind";
+        restTemplate.postForEntity(URL2, DomainConstants.M2_B008, BuergerResource.class);
         assertEquals(1, this.checkChild(DomainConstants.M2_B008, DomainConstants.M2_B007));
         System.out.println(String.format("das Kind mit OID '%s' könnte zu dem Bürger mit OID '%s' hinzufügt werden.", DomainConstants.M2_B008, DomainConstants.M2_B007));
 
@@ -489,7 +489,8 @@ public class BuergerTest {
         System.out.println("========== Add Bürger Wohnung Test ==========");
         assertEquals(0, this.checkWohnung(DomainConstants.M2_B007, DomainConstants.M2_W008));
         String URL2 = "http://localhost:" + port + "/buerger/add/" + DomainConstants.M2_B007 + "/wohnung/";
-        restTemplate.postForEntity(URL2, DomainConstants.M2_W008, BuergerResource.class).getBody();
+        String oid = DomainConstants.M2_W008;
+        restTemplate.postForEntity(URL2, "OIDM2_WOHNUNG008" , BuergerResource.class);
         assertEquals(1, this.checkWohnung(DomainConstants.M2_B007, DomainConstants.M2_W008));
         System.out.println(String.format("die Wohnung mit OID '%s' könnte zu dem Bürger mit OID '%s' hinzufügt werden.", DomainConstants.M2_W008, DomainConstants.M2_B007));
 
@@ -509,7 +510,8 @@ public class BuergerTest {
         System.out.println("========== Save Bürger Wohnung Test ==========");
         String URL1 = "http://localhost:" + port + "/buerger/create/wohnung/" + DomainConstants.M2_B007;
         String oid = "oidWohnung";
-        restTemplate.postForEntity(URL1, this.createWohnung(oid), BuergerResource.class).getBody();
+        Wohnung w= this.createWohnung(oid);
+        restTemplate.postForEntity(URL1, w, BuergerResource.class);
         assertEquals(1, this.checkWohnung(DomainConstants.M2_B007, "oidWohnung"));
         System.out.println(String.format("eine Wohnung könnte erstellt und zu dem Bürger mit OID '%s' hinzufügt werden.", DomainConstants.M2_B007));
 
@@ -546,7 +548,7 @@ public class BuergerTest {
     public void AddBuergerPassTest() {
         System.out.println("========== Add Bürger Pass Test ==========");
         assertEquals(0, this.checkPass(DomainConstants.M2_B007, DomainConstants.M2_P008));
-        String URL2 = "http://localhost:" + port + "/buerger/add/" + DomainConstants.M2_B007 + "/pass/";
+        String URL2 = "http://localhost:" + port + "/buerger/add/" + DomainConstants.M2_B007 + "/pass";
         restTemplate.postForEntity(URL2, DomainConstants.M2_P008, BuergerResource.class).getBody();
         assertEquals(1, this.checkPass(DomainConstants.M2_B007, DomainConstants.M2_P008));
         System.out.println(String.format("der Pass mit OID '%s' könnte zu dem Bürger mit OID '%s' hinzufügt werden.", DomainConstants.M2_P008, DomainConstants.M2_B007));
@@ -592,7 +594,7 @@ public class BuergerTest {
     public void AddBuergerStaatsangehoerigkeitTest() {
         System.out.println("========== Add Bürger Staatsanghörigkeit Test ==========");
         assertEquals(0, this.checkStaatsangehoerigkeit(DomainConstants.M2_B007, DomainConstants.M2_S008));
-        String URL2 = "http://localhost:" + port + "/buerger/add/" + DomainConstants.M2_B007 + "/staats/";
+        String URL2 = "http://localhost:" + port + "/buerger/add/" + DomainConstants.M2_B007 + "/staats";
         restTemplate.postForEntity(URL2, DomainConstants.M2_S008, BuergerResource.class).getBody();
         assertEquals(1, this.checkStaatsangehoerigkeit(DomainConstants.M2_B007, DomainConstants.M2_S008));
         System.out.println(String.format("die Staatsangehoerigkeit mit OID '%s' könnte zu dem Bürger mit OID '%s' hinzufügt werden.", DomainConstants.M2_S008, DomainConstants.M2_B007));
@@ -632,7 +634,7 @@ public class BuergerTest {
     public void AddBuergerSachbearbeiterTest() {
         System.out.println("========== Add Bürger Sachbearbeiter Test ==========");
         assertEquals(0, this.checkSachbearbeiter(DomainConstants.M2_B007, DomainConstants.M2_SA008));
-        String URL2 = "http://localhost:" + port + "/buerger/add/" + DomainConstants.M2_B007 + "/Sachbearbeiter/";
+        String URL2 = "http://localhost:" + port + "/buerger/add/" + DomainConstants.M2_B007 + "/Sachbearbeiter";
         restTemplate.postForEntity(URL2, DomainConstants.M2_SA008, BuergerResource.class).getBody();
         assertEquals(1, this.checkSachbearbeiter(DomainConstants.M2_B007, DomainConstants.M2_SA008));
         System.out.println(String.format("der Sachbearbeiter mit OID '%s' könnte zu dem Bürger mit OID '%s' hinzufügt werden.", DomainConstants.M2_SA008, DomainConstants.M2_B007));

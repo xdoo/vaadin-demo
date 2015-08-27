@@ -1,18 +1,13 @@
 package de.muenchen.demo.service.rest;
 
-import com.google.common.collect.Lists;
 import de.muenchen.demo.service.domain.Buerger;
 import de.muenchen.demo.service.domain.Pass;
 import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
 import de.muenchen.demo.service.domain.StaatsangehoerigkeitReference;
-import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
 import de.muenchen.vaadin.demo.api.rest.BuergerResource;
 import de.muenchen.demo.service.rest.api.BuergerResourceAssembler;
 import de.muenchen.demo.service.rest.api.PassResource;
 
-import de.muenchen.demo.service.rest.api.PassResourceAssembler;
-import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
-import de.muenchen.vaadin.demo.api.rest.StaatsangehoerigkeitResource;
 
 
 import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
@@ -25,7 +20,6 @@ import de.muenchen.demo.service.services.PassService;
 import de.muenchen.demo.service.services.StaatsangehoerigkeitService;
 import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
 import java.util.ArrayList;
-import javax.annotation.security.RolesAllowed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -164,7 +158,7 @@ public class PassController {
      * @param request
      * @return
      */
-    @RolesAllowed({"PERM_updatePass"})
+    @Secured({"PERM_updatePass"})
     @RequestMapping(value = "/{oid}", method = {RequestMethod.PUT})
     public ResponseEntity updatePass(@PathVariable("oid") String oid, @RequestBody PassResource request) {
         if (LOG.isDebugEnabled()) {
@@ -219,7 +213,7 @@ public class PassController {
      * @param oids
      * @return
      */
-    @RolesAllowed({"PERM_deleteListPass"})
+    @Secured({"PERM_deleteListPass"})
     @RequestMapping(method = {RequestMethod.POST})
     public ResponseEntity deleteListPass(@RequestBody ArrayList<String> oids) {
         if (LOG.isDebugEnabled()) {
@@ -236,7 +230,7 @@ public class PassController {
      * @param oids
      * @return
      */
-    @RolesAllowed({"PERM_copyListPass"})
+    @Secured({"PERM_copyListPass"})
     @RequestMapping(value = "/copy", method = {RequestMethod.POST})
     public ResponseEntity copyListPass(@RequestBody ArrayList<String> oids) {
         if (LOG.isDebugEnabled()) {
@@ -253,7 +247,7 @@ public class PassController {
      * @param statsOid
      * @return
      */
-    @RolesAllowed({"PERM_addStaatangehoerigkeitPass"})
+    @Secured({"PERM_addStaatangehoerigkeitPass"})
     @RequestMapping(value = "add/{pOid}/staats", method = {RequestMethod.POST})
     public ResponseEntity addStaatangehoerigkeitPass(@PathVariable("pOid") String passOid,@RequestBody String statsOid) {
         if (LOG.isDebugEnabled()) {
