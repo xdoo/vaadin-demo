@@ -18,8 +18,8 @@ public class ChildSelectWindow extends Window {
 
 
     public ChildSelectWindow(BuergerViewController controller, String from) {
-        //TODO I18N
-        super("Add Child", controller.getViewFactory().generateChildSearchTable(from));
+
+        super(controller.resolveRelative("form.add.headline.label"), controller.getViewFactory().generateChildSearchTable(from));
 
         LOG.debug("creating 'child select window'");
 
