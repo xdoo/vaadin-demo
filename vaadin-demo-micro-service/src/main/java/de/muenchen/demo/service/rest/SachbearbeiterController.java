@@ -17,7 +17,6 @@ import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
 import de.muenchen.vaadin.demo.api.rest.BuergerResource;
 import java.util.List;
 import java.util.Set;
-import javax.annotation.security.RolesAllowed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

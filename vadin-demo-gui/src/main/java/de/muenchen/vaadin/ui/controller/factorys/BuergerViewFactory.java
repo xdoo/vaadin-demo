@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +26,9 @@ import java.util.Optional;
  */
 @Component
 @UIScope
-public class BuergerViewFactory {
+public class BuergerViewFactory implements Serializable{
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * Logger
@@ -35,13 +38,13 @@ public class BuergerViewFactory {
     private BuergerViewController controller;
 
     /**Singeltons of Components. **/
-    private  Optional<BuergerSearchTable> searchTable = Optional.<BuergerSearchTable>empty();
-    private  Optional<ChildSearchTable> childSearchTable = Optional.empty();
-    private  Optional<BuergerChildTab> childTab = Optional.empty();
-    private  Optional<BuergerCreateForm> createForm = Optional.empty();
-    private  Optional<BuergerCreateForm> createChildForm = Optional.empty();
-    private  Optional<BuergerUpdateForm> updateForm = Optional.empty();
-    private  Optional<BuergerReadForm> readForm = Optional.empty();
+    private transient Optional<BuergerSearchTable> searchTable = Optional.<BuergerSearchTable>empty();
+    private transient Optional<ChildSearchTable> childSearchTable = Optional.empty();
+    private transient Optional<BuergerChildTab> childTab = Optional.empty();
+    private transient Optional<BuergerCreateForm> createForm = Optional.empty();
+    private transient Optional<BuergerCreateForm> createChildForm = Optional.empty();
+    private transient Optional<BuergerUpdateForm> updateForm = Optional.empty();
+    private transient Optional<BuergerReadForm> readForm = Optional.empty();
 
 
 
@@ -74,10 +77,10 @@ public class BuergerViewFactory {
      * @param from Ausgangsseite zu der zurück navigiert werden soll
      * @return {@link TabSheet.Tab} das Tab
      */
-    public BuergerChildTab generateChildTab(String navigateToForDetail, String navigateForCreate, String navigateForAdd, String from) {
+    public BuergerChildTab generateChildTab(String navigateToForDetail, String navigateForCreate, String from) {
         if(!childTab.isPresent())
         {
-            BuergerChildTab tab = new BuergerChildTab(controller, navigateToForDetail, navigateForCreate, navigateForAdd, from);
+            BuergerChildTab tab = new BuergerChildTab(controller, navigateToForDetail, navigateForCreate, from);
             getEventBus().register(tab);
             childTab = Optional.of(tab);}
         return childTab.get();
@@ -155,22 +158,19 @@ public class BuergerViewFactory {
 
 
 
-    public ChildSearchTable generateChildSearchTable(String navigateToForEdit, String navigateToForDetail, String navigateForCreate, String navigateFrom) {
+    public ChildSearchTable generateChildSearchTable( String navigateFrom) {
 
 
         if(!childSearchTable.isPresent()){
             //BuergerTableButtonFactory detail = BuergerTableButtonFactory.getFactory(navigateToForDetail, BuergerTableDetailButton.class);
-            TableActionButton.Builder select = TableActionButton.Builder.make(controller, TableAction.tableadd,navigateToForEdit, (container, id) ->
-                            getEventBus().post(new BuergerAppEvent(container.getItem(id),id,EventType.SAVE_AS_CHILD).navigateTo(navigateToForDetail).from(navigateFrom))
+            TableActionButton.Builder select = TableActionButton.Builder.make(controller, TableAction.tableadd,null, (container, id) ->
+                            getEventBus().post(new BuergerAppEvent(container.getItem(id), id, EventType.SAVE_AS_CHILD))
             );
 
 
             LOG.debug("creating 'search' table for buerger");
             childSearchTable = Optional.of(new ChildSearchTable(
                     controller,
-                    navigateToForEdit,
-                    navigateToForDetail,
-                    navigateForCreate,
                     navigateFrom,
                     // Schaltflächen
                     select

@@ -175,4 +175,69 @@ public interface DomainConstants {
     public final static String M3_S011 = "OIDM3_STAATS011";
     public final static String M3_S012 = "OIDM3_STAATS012";
 
+    //Sachbearbeiter
+    public final static String M2_SA001 = "OIDM2_SACHBEARBEITERS001";
+    public final static String M2_SA002 = "OIDM2_SACHBEARBEITERS002";
+    public final static String M2_SA003 = "OIDM2_SACHBEARBEITERS003";
+    public final static String M2_SA004 = "OIDM2_SACHBEARBEITERS004";
+    public final static String M2_SA005 = "OIDM2_SACHBEARBEITERS005";
+    public final static String M2_SA006 = "OIDM2_SACHBEARBEITERS006";
+    public final static String M2_SA007 = "OIDM2_SACHBEARBEITERS007";
+    public final static String M2_SA008 = "OIDM2_SACHBEARBEITERS008";
+    public final static String M2_SA009 = "OIDM2_SACHBEARBEITERS009";
+    public final static String M2_SA010 = "OIDM2_SACHBEARBEITERS010";
+    public final static String M2_SA011 = "OIDM2_SACHBEARBEITERS011";
+    public final static String M2_SA012 = "OIDM2_SACHBEARBEITERS012";
+    public final static String M2_SA013 = "OIDM2_SACHBEARBEITERS013";
+    public final static String M2_SA014 = "OIDM2_SACHBEARBEITERS014";
+    public final static String M2_SA015 = "OIDM2_SACHBEARBEITERS015";
+    public final static String M2_SA016 = "OIDM2_SACHBEARBEITERS016";
+    public final static String M2_SA017 = "OIDM2_SACHBEARBEITERS017";
+    public final static String M2_SA018 = "OIDM2_SACHBEARBEITERS018";
+    public final static String M2_SA019 = "OIDM2_SACHBEARBEITERS019";
+    public final static String M2_SA020 = "OIDM2_SACHBEARBEITERS020";
+    public final static String M3_SA001 = "OIDM3_SACHBEARBEITERS001";
+    public final static String M3_SA002 = "OIDM3_SACHBEARBEITERS002";
+    public final static String M3_SA003 = "OIDM3_SACHBEARBEITERS003";
+    public final static String M3_SA004 = "OIDM3_SACHBEARBEITERS004";
+    public final static String M3_SA005 = "OIDM3_SACHBEARBEITERS005";
+    public final static String M3_SA006 = "OIDM3_SACHBEARBEITERS006";
+    public final static String M3_SA007 = "OIDM3_SACHBEARBEITERS007";
+    public final static String M3_SA008 = "OIDM3_SACHBEARBEITERS008";
+    public final static String M3_SA009 = "OIDM3_SACHBEARBEITERS009";
+    public final static String M3_SA010 = "OIDM3_SACHBEARBEITERS010";
+
+    //Adresse Externe
+    public final static String M2_AE001 = "OIDM2_ADRESSEEXTA001";
+    public final static String M2_AE002 = "OIDM2_ADRESSEEXTA002";
+    public final static String M2_AE003 = "OIDM2_ADRESSEEXTA003";
+    public final static String M2_AE004 = "OIDM2_ADRESSEEXTA004";
+    public final static String M2_AE005 = "OIDM2_ADRESSEEXTA005";
+    public final static String M2_AE006 = "OIDM2_ADRESSEEXTA006";
+    public final static String M2_AE007 = "OIDM2_ADRESSEEXTA007";
+    public final static String M2_AE008 = "OIDM2_ADRESSEEXTA008";
+    public final static String M2_AE009 = "OIDM2_ADRESSEEXTA009";
+    public final static String M2_AE010 = "OIDM2_ADRESSEEXTA010";
+    public final static String M2_AE011 = "OIDM2_ADRESSEEXTA011";
+    public final static String M2_AE012 = "OIDM2_ADRESSEEXTA012";
+    public final static String M2_AE013 = "OIDM2_ADRESSEEXTA013";
+    public final static String M2_AE014 = "OIDM2_ADRESSEEXTA014";
+    public final static String M2_AE015 = "OIDM2_ADRESSEEXTA015";
+    public final static String M2_AE016 = "OIDM2_ADRESSEEXTA016";
+    public final static String M2_AE017 = "OIDM2_ADRESSEEXTA017";
+    public final static String M2_AE018 = "OIDM2_ADRESSEEXTA018";
+    public final static String M2_AE019 = "OIDM2_ADRESSEEXTA019";
+    public final static String M3_AE001 = "OIDM3_ADRESSEEXTA001";
+    public final static String M3_AE002 = "OIDM3_ADRESSEEXTA002";
+    public final static String M3_AE003 = "OIDM3_ADRESSEEXTA003";
+    public final static String M3_AE004 = "OIDM3_ADRESSEEXTA004";
+    public final static String M3_AE005 = "OIDM3_ADRESSEEXTA005";
+    public final static String M3_AE006 = "OIDM3_ADRESSEEXTA006";
+    public final static String M3_AE007 = "OIDM3_ADRESSEEXTA007";
+    public final static String M3_AE008 = "OIDM3_ADRESSEEXTA008";
+    public final static String M3_AE009 = "OIDM3_ADRESSEEXTA009";
+    public final static String M3_AE010 = "OIDM3_ADRESSEEXTA010";
+    public final static String M3_AE011 = "OIDM3_ADRESSEEXTA011";
+    public final static String M3_AE012 = "OIDM3_ADRESSEEXTA012";
+
 }

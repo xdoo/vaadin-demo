@@ -11,21 +11,8 @@ import org.junit.Test;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import de.muenchen.demo.service.Application;
-import de.muenchen.demo.service.domain.AdresseExterneRepository;
-import de.muenchen.demo.service.domain.AdresseInterneRepository;
-import de.muenchen.demo.service.domain.AdresseReferenceRepository;
-import de.muenchen.demo.service.domain.AuthorityPermissionRepository;
-import de.muenchen.demo.service.domain.AuthorityRepository;
-import de.muenchen.demo.service.domain.Buerger;
-import de.muenchen.demo.service.domain.BuergerRepository;
-import de.muenchen.demo.service.domain.MandantRepository;
-import de.muenchen.demo.service.domain.PassRepository;
-import de.muenchen.demo.service.domain.PermissionRepository;
 import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
-import de.muenchen.demo.service.domain.StaatsangehoerigkeitReferenceRepository;
-import de.muenchen.demo.service.domain.UserAuthorityRepository;
-import de.muenchen.demo.service.domain.UserRepository;
-import de.muenchen.demo.service.domain.WohnungRepository;
+import de.muenchen.demo.test.service.DomainConstants;
 import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
 import de.muenchen.vaadin.demo.api.rest.StaatsangehoerigkeitResource;
 import java.security.KeyManagementException;
@@ -34,6 +21,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
 import javax.net.ssl.SSLContext;
 import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.AuthenticationException;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;
 import org.apache.http.conn.ssl.AllowAllHostnameVerifier;
@@ -42,13 +30,15 @@ import org.apache.http.conn.ssl.SSLContexts;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.junit.After;
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Rule;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.TestRestTemplate;
@@ -58,6 +48,7 @@ import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
 
@@ -73,60 +64,94 @@ public class StaatsangehoerigkeitTest {
     private RestTemplate restTemplate = new TestRestTemplate();
     @Value("${local.server.port}")
     private int port;
-    private final Buerger buerger = new Buerger();
-    private String urlBuergerSave;
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
     public StaatsangehoerigkeitTest() {
     }
     @Rule
     public WireMockRule wireMockRule = new WireMockRule(8089);
 
-    @Autowired
-    UserRepository usersRepo;
-    @Autowired
-    AuthorityRepository authRepo;
-    @Autowired
-    PermissionRepository permRepo;
-    @Autowired
-    UserAuthorityRepository userAuthRepo;
-    @Autowired
-    AuthorityPermissionRepository authPermRepo;
-    @Autowired
-    StaatsangehoerigkeitReferenceRepository staatRepo;
-    @Autowired
-    BuergerRepository buergerRepo;
-    @Autowired
-    WohnungRepository wohnRepo;
-    @Autowired
-    PassRepository passRepo;
-    @Autowired
-    AdresseInterneRepository interneRepo;
-    @Autowired
-    AdresseExterneRepository externeRepo;
-    @Autowired
-    AdresseReferenceRepository referenceRepo;
-    @Autowired
-    MandantRepository mandantRepo;
 
     @Before
     public void setUp() throws JsonProcessingException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
 
-        authPermRepo.deleteAll();
-        userAuthRepo.deleteAll();
-        usersRepo.deleteAll();
-        authRepo.deleteAll();
-        permRepo.deleteAll();
-        buergerRepo.deleteAll();
-        staatRepo.deleteAll();
-        wohnRepo.deleteAll();
-        passRepo.deleteAll();
-        referenceRepo.deleteAll();
-        interneRepo.deleteAll();
-        externeRepo.deleteAll();
-        mandantRepo.deleteAll();
+        ObjectMapper mapper = new ObjectMapper(); // can reuse, share globally
+        Staatsangehoerigkeit staatCreate = new Staatsangehoerigkeit();
+        staatCreate.setCode("it");
+        staatCreate.setLand("Italien");
+        staatCreate.setSprache("Italienisch");
+        staatCreate.setReference("OID_CCREATE");
 
-        InitTest initTest = new InitTest(usersRepo, authRepo, permRepo, userAuthRepo, authPermRepo, mandantRepo);
-        initTest.init();
+        String jsonCreate = mapper.writeValueAsString(staatCreate);
+
+        stubFor(get(urlEqualTo("/staat/OID_CCREATE")).willReturn(
+                aResponse().withHeader("Content-Type", "application/json")
+                .withBody(jsonCreate)
+        ));
+        Staatsangehoerigkeit staat10 = new Staatsangehoerigkeit();
+        staat10.setCode("it");
+        staat10.setLand("Italien");
+        staat10.setSprache("Italienisch");
+        staat10.setReference(DomainConstants.M2_S011);
+
+        String json10 = mapper.writeValueAsString(staat10);
+
+        stubFor(get(urlEqualTo("/staat/" + DomainConstants.M2_S011)).willReturn(
+                aResponse().withHeader("Content-Type", "application/json")
+                .withBody(json10)
+        ));
+        Staatsangehoerigkeit staat = new Staatsangehoerigkeit();
+        staat.setCode("it");
+        staat.setLand("Italien");
+        staat.setSprache("Italienisch");
+        staat.setReference(DomainConstants.M2_S007);
+
+        String json = mapper.writeValueAsString(staat);
+
+        stubFor(get(urlEqualTo("/staat/" + DomainConstants.M2_S007)).willReturn(
+                aResponse().withHeader("Content-Type", "application/json")
+                .withBody(json)
+        ));
+
+        Staatsangehoerigkeit staat2 = new Staatsangehoerigkeit();
+        staat2.setCode("fr");
+        staat2.setLand("Frankreich");
+        staat2.setSprache("französisch");
+        staat2.setReference(DomainConstants.M2_S008);
+
+        String json2 = mapper.writeValueAsString(staat2);
+
+        stubFor(get(urlEqualTo("/staat/" + DomainConstants.M2_S008)).willReturn(
+                aResponse().withHeader("Content-Type", "application/json")
+                .withBody(json2)
+        ));
+
+        Staatsangehoerigkeit staat3 = new Staatsangehoerigkeit();
+        staat3.setCode("tn");
+        staat3.setLand("Tunesien");
+        staat3.setSprache("Arabisch");
+        staat3.setReference(DomainConstants.M2_S015);
+
+        String json3 = mapper.writeValueAsString(staat3);
+
+        stubFor(get(urlEqualTo("/staat/" + DomainConstants.M2_S015)).willReturn(
+                aResponse().withHeader("Content-Type", "application/json")
+                .withBody(json3)
+        ));
+
+        Staatsangehoerigkeit staat4 = new Staatsangehoerigkeit();
+        staat4.setCode("de");
+        staat4.setLand("Deutschland");
+        staat4.setSprache("Deutsch");
+        staat4.setReference(DomainConstants.M2_S016);
+
+        String json4 = mapper.writeValueAsString(staat4);
+
+        stubFor(get(urlEqualTo("/staat/" + DomainConstants.M2_S016)).willReturn(
+                aResponse().withHeader("Content-Type", "application/json")
+                .withBody(json4)
+        ));
 
         SSLContext sslContext = SSLContexts.custom().loadTrustMaterial(null, new TrustSelfSignedStrategy()).useTLS().build();
         SSLConnectionSocketFactory connectionFactory = new SSLConnectionSocketFactory(sslContext, new AllowAllHostnameVerifier());
@@ -147,87 +172,68 @@ public class StaatsangehoerigkeitTest {
         converter.setObjectMapper(objectMapper);
         restTemplate.setMessageConverters(Collections.<HttpMessageConverter<?>>singletonList(converter));
 
-        ObjectMapper mapper = new ObjectMapper(); // can reuse, share globally
+    }
 
-        Staatsangehoerigkeit staat = new Staatsangehoerigkeit();
-        staat.setCode("de");
-        staat.setLand("Deutschland");
-        staat.setSprache("Deutsch");
-        staat.setReference("123");
+    @Test
+    @WithMockUser(username = DomainConstants.M2_U001_NAME)
+    public void readTest() throws JsonProcessingException, AuthenticationException {
+        System.out.println("========== create StaatsangehoerigkeitRefence Test ==========");
+        String URL = "http://localhost:" + port + "/staat/" + DomainConstants.M2_S007;
+        StaatsangehoerigkeitResource staat2 = restTemplate.getForEntity(URL, StaatsangehoerigkeitResource.class).getBody();
+        assertNotNull(staat2);
+        assertNotNull(null, staat2.getLink("self"));
+        assertNotNull(null, staat2.getLink("delete"));
+        System.out.println(String.format("Staatsangehoerigkeit konnte mit ReferenceOid '%s' aus der DB gelesen werden.", staat2.getReference()));
 
-        String json = mapper.writeValueAsString(staat);
+    }
 
-        stubFor(get(urlEqualTo("/staat/123")).willReturn(
-                aResponse().withHeader("Content-Type", "application/json")
-                .withBody(json)
-        ));
-        urlBuergerSave = "http://localhost:" + port + "/buerger/save";
+    @Test
+    @WithMockUser(username = DomainConstants.M2_U001_NAME)
+    public void deleteTest() throws JsonProcessingException, AuthenticationException {
+        System.out.println("========== delete StaatsangehoerigkeitRefence Test ==========");
+        String urlRead = "http://localhost:" + port + "/staat/" + DomainConstants.M2_S015;
+        StaatsangehoerigkeitResource staat = restTemplate.getForEntity(urlRead, StaatsangehoerigkeitResource.class).getBody();
+        assertNotNull(staat);
+        String URL = "http://localhost:" + port + "/staat/" + DomainConstants.M2_S015;
+        restTemplate.delete(URL);
+        thrown.expect(org.springframework.web.client.HttpServerErrorException.class);
+        thrown.expectMessage(equalTo("500 Internal Server Error"));
+        StaatsangehoerigkeitResource staat2 = restTemplate.getForEntity(urlRead, StaatsangehoerigkeitResource.class).getBody();
+        assertNull(staat2);
+        System.out.println(String.format("Staatsangehoerigkeit konnte mit ReferenceOid '%s' aus der DB (und dem Cache) gelöscht werden.", DomainConstants.M2_S010));
 
-        buerger.setOid("30");
-        buerger.setNachname("hans");
-        buerger.setVorname("vater");
     }
 
     @Test
     public void createReadStaatsangehoerigkeitTest() throws JsonProcessingException {
 
-        String URL2 = "http://localhost:" + port + "/staat/create/123";
+        System.out.println("========== create StaatsangehoerigkeitRefence Test ==========");
+        String URL2 = "http://localhost:" + port + "/staat/create/OID_CCREATE";
         StaatsangehoerigkeitResource staat = restTemplate.getForEntity(URL2, StaatsangehoerigkeitResource.class).getBody();
-        assertEquals("de", staat.getCode());
-
-        String URL = "http://localhost:" + port + "/staat/123";
-        StaatsangehoerigkeitResource staat2 = restTemplate.getForEntity(URL, StaatsangehoerigkeitResource.class).getBody();
-        assertEquals("de", staat2.getCode());
-        assertNotNull(null, staat2.getLink("self"));
-        assertNotNull(null, staat2.getLink("delete"));
+        assertNotNull(staat);
+        System.out.println(String.format("Staatsangehoerigkeit wurde mit neuer ReferenceOid '%s' erstellt (und in der DB gespeichert)", staat.getReference()));
 
     }
-
-    @Test
-    public void queryStaatsangehoerigkeitTest() throws JsonProcessingException {
-
-        String URL2 = "http://localhost:" + port + "/staat/create/123";
-        StaatsangehoerigkeitResource staat = restTemplate.getForEntity(URL2, StaatsangehoerigkeitResource.class).getBody();
-        assertEquals("de", staat.getCode());
-
-        String URL = "http://localhost:" + port + "/staat/query";
-        SearchResultResource response = restTemplate.getForEntity(URL, SearchResultResource.class).getBody();
-        assertEquals(1, response.getResult().size());
-        assertNotNull(response.getLink("self"));
-        assertNotNull(response.getLink("query"));
+ @Test
+    public void readBuergerStaatsangehoerigkeitTest() {
+        System.out.println("========== read Bürger Staatsangehoerigkeit Test ==========");
+        String URL1 = "http://localhost:" + port + "/staat/buerger/" + DomainConstants.M2_S008;
+        SearchResultResource responseList = restTemplate.getForEntity(URL1, SearchResultResource.class).getBody();
+        assertFalse(responseList.getResult().isEmpty());
+        System.out.println(String.format("die Staatsangehoerigkeit von dem Bürger mit OID '%s' konnten aus der DB gelesen werden.", DomainConstants.M2_B007));
 
     }
-
-    @Test
-    public void deleteStaatsangehoerigkeitTest() {
-
-        String URL2 = "http://localhost:" + port + "/staat/create/123";
-        StaatsangehoerigkeitResource staat = restTemplate.getForEntity(URL2, StaatsangehoerigkeitResource.class).getBody();
-        assertEquals("de", staat.getCode());
-        String URL = "http://localhost:" + port + "/staat/123";
-        restTemplate.delete(URL);
-        String URL3 = "http://localhost:" + port + "/staat/query";
-        SearchResultResource response = restTemplate.getForEntity(URL3, SearchResultResource.class).getBody();
-
-        assertEquals(true, response.getResult().isEmpty());
-
+@Test
+    public void releaseStaatsangehoerigkeitBuergerTest() {
+        System.out.println("========== release Staatsangehoerigkeit Buerger Test ==========");
+        String urlBuerger = "http://localhost:" + port + "/staat/buerger/" + DomainConstants.M2_S016;
+        SearchResultResource responseListBuerger = restTemplate.getForEntity(urlBuerger, SearchResultResource.class).getBody();
+        assertFalse(responseListBuerger.getResult().isEmpty());
+        String urlReleaseBuerger = "http://localhost:" + port + "/staat/release/buerger/" + DomainConstants.M2_S016;
+        restTemplate.getForEntity(urlReleaseBuerger, StaatsangehoerigkeitResource.class);
+        SearchResultResource responseListBuerger2 = restTemplate.getForEntity(urlBuerger, SearchResultResource.class).getBody();
+        assertTrue(responseListBuerger2.getResult().isEmpty());
+        System.out.println(String.format("release operation für den Buerger einer Staatsangehoerigkeit mit OID '%s' konnte aus der DB erfolgreich durchgeführt.", DomainConstants.M2_S016));
     }
 
-    @After
-    public void TearDown() {
-        authPermRepo.deleteAll();
-        userAuthRepo.deleteAll();
-        usersRepo.deleteAll();
-        authRepo.deleteAll();
-        permRepo.deleteAll();
-        buergerRepo.deleteAll();
-        staatRepo.deleteAll();
-        wohnRepo.deleteAll();
-        passRepo.deleteAll();
-        referenceRepo.deleteAll();
-        interneRepo.deleteAll();
-        externeRepo.deleteAll();
-        mandantRepo.deleteAll();
-
-    }
 }

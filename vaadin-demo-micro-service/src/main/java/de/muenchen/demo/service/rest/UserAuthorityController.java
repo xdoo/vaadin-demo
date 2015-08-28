@@ -11,7 +11,6 @@ import de.muenchen.demo.service.services.AuthorityService;
 import de.muenchen.demo.service.services.UserAuthorityService;
 import de.muenchen.demo.service.services.UserService;
 import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
-import javax.annotation.security.RolesAllowed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

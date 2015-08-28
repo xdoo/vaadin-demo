@@ -26,7 +26,12 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 
-import static de.muenchen.vaadin.ui.util.I18nPaths.*;
+import static de.muenchen.vaadin.ui.util.I18nPaths.Component;
+import static de.muenchen.vaadin.ui.util.I18nPaths.NotificationType;
+import static de.muenchen.vaadin.ui.util.I18nPaths.Type;
+import static de.muenchen.vaadin.ui.util.I18nPaths.getEntityFieldPath;
+import static de.muenchen.vaadin.ui.util.I18nPaths.getFormPath;
+import static de.muenchen.vaadin.ui.util.I18nPaths.getNotificationPath;
 
 /**
  * Formular zum Erstellen eines {@link Buerger}s.
@@ -165,7 +170,7 @@ public class BuergerCreateForm extends CustomComponent {
                 birthdayfield.removeValidator(val);
                 binder.setItemDataSource(controller.createBuerger());
             } catch (CommitException | Validator.InvalidValueException e) {
-                GenericErrorNotification error = new GenericErrorNotification(controller.resolveRelative(getNotificationPath(NotificationType.failure,SimpleAction.save, Type.label)),
+                GenericErrorNotification error = new GenericErrorNotification(controller.resolveRelative(getNotificationPath(NotificationType.failure, SimpleAction.save, Type.label)),
                         controller.resolveRelative(getNotificationPath(NotificationType.failure,SimpleAction.save,Type.text)));
                         error.show(Page.getCurrent());
             }

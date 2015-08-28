@@ -13,6 +13,7 @@ import de.muenchen.vaadin.demo.api.util.EventType;
 import de.muenchen.vaadin.services.BuergerService;
 import de.muenchen.vaadin.services.MessageService;
 import de.muenchen.vaadin.ui.app.MainUI;
+import de.muenchen.vaadin.ui.app.views.ChildSelectWindow;
 import de.muenchen.vaadin.ui.app.views.events.AppEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
@@ -338,7 +339,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
                 saveAsChildEventHandler(event);
                 break;
             case ADD_SEARCHED_CHILD:
-                navigateEventHandler(event);
+                addSearchedChildEventHandler(event);
                 break;
             case RELEASE:
                 releaseChildHandler(event);
@@ -380,6 +381,11 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
         getNavigator().navigateTo(event.getNavigateTo());
     }
 
+    private void addSearchedChildEventHandler(BuergerAppEvent event){
+
+        navigator.getUI().addWindow(new ChildSelectWindow(this, event.getFrom().get()));
+    }
+
     private void saveAsChildEventHandler(BuergerAppEvent event) {
 
         this.addBuergerKind(event.getEntity());
@@ -388,7 +394,6 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
                  resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.add, Type.text)));
         succes.show(Page.getCurrent());
         this.eventbus.post(new BuergerComponentEvent(event.getEntity(), EventType.UPDATE));
-        navigateEventHandler(event);
     }
 
     private void queryChildEventHandler(BuergerAppEvent event) {

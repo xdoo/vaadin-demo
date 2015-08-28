@@ -83,10 +83,12 @@ public class BuergerRestClientImpl implements BuergerRestClient {
     
     @Override
     public Buerger addBuergerKind(Buerger buerger, Buerger kind, RestTemplate restTemplate) {
-        //ToDO solve need for hardcoded link
-        Optional<Link> link = Optional.of(new Link("http://localhost:8080/buerger/add/buerger/" + buerger.getOid() + "/kind/" + kind.getOid() + "").withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_KIND));
+
+        Optional<Link> link = HateoasUtil.findLinkForRel(BuergerResource.ADD_KIND, buerger.getLinks());
         LOG.warn("used Link: "+link.get().toString());
-        return this.writeSingleSource(link, kind, restTemplate);
+
+        return this.writeSingleSource(link, kind.getOid(), restTemplate);
+
     }
 
     @Override
