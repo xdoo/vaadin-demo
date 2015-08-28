@@ -84,11 +84,22 @@ public class BuergerRestClientImpl implements BuergerRestClient {
     @Override
     public Buerger addBuergerKind(Buerger buerger, Buerger kind, RestTemplate restTemplate) {
         //ToDO solve need for hardcoded link
-        Optional<Link> link = Optional.of(new Link("http://localhost:8080/buerger/add/buerger/"+buerger.getOid()+"/kind/"+kind.getOid()+"").withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_KIND));
+        Optional<Link> link = Optional.of(new Link("http://localhost:8080/buerger/add/buerger/" + buerger.getOid() + "/kind/" + kind.getOid() + "").withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_KIND));
         LOG.warn("used Link: "+link.get().toString());
         return this.writeSingleSource(link, kind, restTemplate);
     }
-    
+
+    @Override
+    public Buerger releaseBuergerKind(Buerger buerger, Buerger kind, RestTemplate restTemplate) {
+        //ToDO solve need for hardcoded link
+        Optional<Link> link = Optional.of(new Link("http://localhost:8080/buerger/"+buerger.getOid()+"/release/kind/"+kind.getOid()+"").withRel(BuergerResource.RELEASE_KIND));
+        LOG.warn("used Link: "+link.get().toString());
+        return this.writeSingleSource(link, kind, restTemplate);
+    }
+
+
+
+
     public Buerger writeSingleSource(String rel, Buerger buerger, RestTemplate restTemplate) {
         Optional<Link> link = HateoasUtil.findLinkForRel(rel, buerger.getLinks());
         return this.writeSingleSource(link, buerger, restTemplate);

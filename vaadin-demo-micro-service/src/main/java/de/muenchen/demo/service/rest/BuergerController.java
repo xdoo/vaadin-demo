@@ -356,6 +356,25 @@ public class BuergerController {
     }
 
     /**
+     * Entfernt die Beziehung zwischen einem Buerger und einem Kind.
+     *
+     * @param kOid
+     * @param bOid
+     * @return
+     */
+    @Secured({"PERM_releaseBuergerKind"})
+    @RequestMapping(value = "/{bOid}/release/kind/{oid}", method = {RequestMethod.POST})
+    public ResponseEntity releaseBuergerKind(@PathVariable("bOid") String bOid,@PathVariable("kOid") String kOid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("release Buerger Kinder");
+        }
+        this.service.releaseBuergerKind(bOid,kOid);
+        return ResponseEntity.ok().build();
+
+    }
+
+
+    /**
      * Entfernt die Beziehung zwischen einem Buerger und seinem Elternteil.
      *
      * @param oid
