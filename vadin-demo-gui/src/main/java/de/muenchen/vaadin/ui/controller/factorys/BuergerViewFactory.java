@@ -1,6 +1,7 @@
 package de.muenchen.vaadin.ui.controller.factorys;
 
 import com.google.common.eventbus.EventBus;
+import com.vaadin.data.util.BeanItem;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.TabSheet;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
@@ -15,6 +16,8 @@ import de.muenchen.vaadin.ui.components.BuergerTable;
 import de.muenchen.vaadin.ui.components.BuergerUpdateForm;
 import de.muenchen.vaadin.ui.components.ChildSearchTable;
 import de.muenchen.vaadin.ui.components.ChildTable;
+import de.muenchen.vaadin.ui.components.GenericConfirmationWindow;
+import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.components.buttons.TableAction;
 import de.muenchen.vaadin.ui.components.buttons.TableActionButton;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
@@ -78,6 +81,7 @@ public class BuergerViewFactory implements Serializable{
      *
      * @param navigateToForDetail Zielseite um sich die Details des 'Child' Objektes anzeigen zu lassen
      * @param navigateForCreate Zielseite um ein neues 'Child' Objekt zu erstellen
+     * @param navigateForAdd Zielseite zum Hinzufügen eines Kindes
      * @param from Ausgangsseite zu der zurück navigiert werden soll
      * @return {@link TabSheet.Tab} das Tab
      */
@@ -137,8 +141,15 @@ public class BuergerViewFactory implements Serializable{
             TableActionButton.Builder copy = TableActionButton.Builder.<Buerger>make(controller, TableAction.tablecopy,null, (container, id) ->
                             getEventBus().post(new BuergerAppEvent(container.getItem(id),id,EventType.COPY))
             );
-            TableActionButton.Builder delete = TableActionButton.Builder.<Buerger>make(controller, TableAction.tabledelete,navigateToForEdit, (container, id) ->
-                            getEventBus().post(new BuergerAppEvent(container.getItem(id),id,EventType.DELETE).navigateTo(navigateToForEdit).from(navigateFrom))
+            TableActionButton.Builder delete = TableActionButton.Builder.make(controller, TableAction.tabledelete,navigateToForEdit, (container, id) ->
+                    {
+                        BeanItem<Buerger> item = container.getItem(id);
+                        GenericConfirmationWindow win = new GenericConfirmationWindow(new BuergerAppEvent(item, id, EventType.DELETE), controller, SimpleAction.delete);
+                        controller.getNavigator().getUI().addWindow(win);
+                        win.center();
+                        win.focus();
+                    }
+                            //getEventBus().post(new BuergerAppEvent(container.getItem(id),id,EventType.DELETE).navigateTo(navigateToForEdit).from(navigateFrom))
             );
 
             searchTable=Optional.of(new BuergerSearchTable(
@@ -163,6 +174,8 @@ public class BuergerViewFactory implements Serializable{
             TableActionButton.Builder select = TableActionButton.Builder.<Buerger>make(controller, TableAction.tableadd,null, (container, id) ->
                             getEventBus().post(new BuergerAppEvent(container.getItem(id), id, EventType.SAVE_AS_CHILD))
             );
+
+
             LOG.debug("creating 'search' table for buerger");
             childSearchTable = Optional.of(new ChildSearchTable(
                     controller,
@@ -179,8 +192,19 @@ public class BuergerViewFactory implements Serializable{
         TableActionButton.Builder detail = TableActionButton.Builder.<Buerger>make(controller, TableAction.tabledetail, navigateToForDetail, (container, id) ->
                         getEventBus().post(new BuergerAppEvent(container.getItem(id), id, EventType.SELECT2READ).navigateTo(navigateToForDetail).from(from))
         );
+
+        TableActionButton.Builder delete = TableActionButton.Builder.make(controller, TableAction.tabledelete,navigateToForDetail, (container, id) ->
+                {
+                    BeanItem<Buerger> item = container.getItem(id);
+                    GenericConfirmationWindow win = new GenericConfirmationWindow(new BuergerAppEvent(container.getItem(id), id, EventType.RELEASE_PARENT), controller, SimpleAction.release);
+                    controller.getNavigator().getUI().addWindow(win);
+                    win.center();
+                    win.focus();
+                }
+        );
+
         LOG.debug("creating table for childs");
-        BuergerTable table = new ChildTable(controller, detail);
+        BuergerTable table = new ChildTable(controller, detail, delete);
 
         table.setFrom(from);
         List<Buerger> entities = controller.queryKinder(controller.getCurrent().getBean());

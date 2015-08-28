@@ -233,7 +233,16 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
     public Buerger saveBuergerKind(Buerger entity) {
         return service.saveKind(getCurrent().getBean(), entity);
     }
-    
+
+    /**
+     * Zerstört die Verbindung zwischen einem Bürger und seinem Kind
+     *
+     * @param event
+     */
+    private void releaseParent(BuergerAppEvent event) {
+        service.releaseElternteil(getCurrent().getBean(), event.getEntity());
+    }
+
     /**
      * Speichert eine Kindbeziehung zu einem {@link Buerger} Objekt in der Datenbank.
      * 
@@ -332,11 +341,39 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
             case ADD_SEARCHED_CHILD:
                 addSearchedChildEventHandler(event);
                 break;
+            case RELEASE_PARENT:
+                releaseParentHandler(event);
+                break;
             default:
                 LOG.debug("No matching handler found.");
         }
 
     }
+
+
+    private void releaseParentHandler(BuergerAppEvent event) {
+        // Service Operationen ausführen
+        this.releaseParent(event);
+        // UI Komponenten aktualisieren
+
+        LOG.error("released");
+
+        GenericSuccessNotification succes = new GenericSuccessNotification(
+                resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.release, Type.label)),
+                resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.release, Type.text)));
+        succes.show(Page.getCurrent());
+
+        LOG.error("shown");
+
+        BuergerComponentEvent buergerComponentEvent = new BuergerComponentEvent(EventType.UPDATE);
+        buergerComponentEvent.setItemID(event.getItemId());
+        this.eventbus.post(buergerComponentEvent);
+
+        LOG.error("done");
+    }
+
+
+
 
     /**
      * Navigiert zu der durch das Event angeforderten Seite.
