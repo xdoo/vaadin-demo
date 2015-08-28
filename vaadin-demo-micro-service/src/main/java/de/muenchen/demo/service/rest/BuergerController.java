@@ -363,8 +363,8 @@ public class BuergerController {
      * @return
      */
     @Secured({"PERM_releaseBuergerKind"})
-    @RequestMapping(value = "/{bOid}/release/kind/{oid}", method = {RequestMethod.POST})
-    public ResponseEntity releaseBuergerKind(@PathVariable("bOid") String bOid,@PathVariable("kOid") String kOid) {
+    @RequestMapping(value = "/{bOid}/release/kind/", method = {RequestMethod.POST})
+    public ResponseEntity releaseBuergerKind(@PathVariable("bOid") String bOid,@RequestBody String kOid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("release Buerger Kinder");
         }

@@ -356,7 +356,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
             // Service Operationen ausführen
             //this.deleteBuerger(event.getEntity());
             this.releaseChild(event);
-
+            LOG.error("this.releaseChild(event) done");
             // UI Komponenten aktualisieren
             BuergerComponentEvent buergerComponentEvent = new BuergerComponentEvent(event.getEntity(),EventType.RELEASE);
             buergerComponentEvent.setItemID(event.getItemId());

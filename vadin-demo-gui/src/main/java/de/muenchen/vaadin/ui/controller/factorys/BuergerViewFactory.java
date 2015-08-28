@@ -188,7 +188,7 @@ public class BuergerViewFactory {
         TableActionButton.Builder delete = TableActionButton.Builder.make(controller, TableAction.tabledelete,navigateToForDetail, (container, id) ->
                 {
                     BeanItem<Buerger> item = container.getItem(id);
-                    GenericConfirmationWindow win = new GenericConfirmationWindow(new BuergerAppEvent(item, id, EventType.RELEASE), controller, SimpleAction.release);
+                    GenericConfirmationWindow win = new GenericConfirmationWindow(new BuergerAppEvent(container.getItem(id), id, EventType.RELEASE), controller, SimpleAction.release);
                     controller.getNavigator().getUI().addWindow(win);
                     win.center();
                     win.focus();

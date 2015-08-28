@@ -92,9 +92,15 @@ public class BuergerRestClientImpl implements BuergerRestClient {
     @Override
     public Buerger releaseBuergerKind(Buerger buerger, Buerger kind, RestTemplate restTemplate) {
         //ToDO solve need for hardcoded link
-        Optional<Link> link = Optional.of(new Link("http://localhost:8080/buerger/"+buerger.getOid()+"/release/kind/"+kind.getOid()+"").withRel(BuergerResource.RELEASE_KIND));
-        LOG.warn("used Link: "+link.get().toString());
-        return this.writeSingleSource(link, kind, restTemplate);
+
+        buerger.getLinks().forEach(link1 -> LOG.error(link1.toString()));
+        Optional<Link> link = HateoasUtil.findLinkForRel(BuergerResource.RELEASE_KIND,buerger.getLinks());
+                //Optional.of(new Link("http://localhost:8080/buerger/"+buerger.getOid()+"/release/kind/"+kind.getOid()+"").withRel(BuergerResource.RELEASE_KIND));
+        if(link.isPresent()) {
+            LOG.warn("used Link: " + link.get().toString());
+            return this.writeSingleSource(link, kind.getOid(), restTemplate);
+        }else
+        return null;
     }
 
 
@@ -105,7 +111,7 @@ public class BuergerRestClientImpl implements BuergerRestClient {
         return this.writeSingleSource(link, buerger, restTemplate);
     }
     
-    public Buerger writeSingleSource(Optional<Link> link, Buerger buerger, RestTemplate restTemplate) {
+    public Buerger writeSingleSource(Optional<Link> link, Object buerger, RestTemplate restTemplate) {
         if(link.isPresent()) {
             ResponseEntity<BuergerResource> resource = restTemplate.postForEntity(link.get().getHref(), buerger, BuergerResource.class);
             return BuergerAssembler.fromResource(resource.getBody());
