@@ -81,7 +81,6 @@ public class BuergerViewFactory implements Serializable{
      *
      * @param navigateToForDetail Zielseite um sich die Details des 'Child' Objektes anzeigen zu lassen
      * @param navigateForCreate Zielseite um ein neues 'Child' Objekt zu erstellen
-     * @param navigateForAdd Zielseite zum Hinzufügen eines Kindes
      * @param from Ausgangsseite zu der zurück navigiert werden soll
      * @return {@link TabSheet.Tab} das Tab
      */
@@ -141,7 +140,7 @@ public class BuergerViewFactory implements Serializable{
             TableActionButton.Builder copy = TableActionButton.Builder.<Buerger>make(controller, TableAction.tablecopy,null, (container, id) ->
                             getEventBus().post(new BuergerAppEvent(container.getItem(id),id,EventType.COPY))
             );
-            TableActionButton.Builder delete = TableActionButton.Builder.make(controller, TableAction.tabledelete,navigateToForEdit, (container, id) ->
+            TableActionButton.Builder delete = TableActionButton.Builder.<Buerger>make(controller, TableAction.tabledelete,navigateToForEdit, (container, id) ->
                     {
                         BeanItem<Buerger> item = container.getItem(id);
                         GenericConfirmationWindow win = new GenericConfirmationWindow(new BuergerAppEvent(item, id, EventType.DELETE), controller, SimpleAction.delete);
@@ -193,7 +192,7 @@ public class BuergerViewFactory implements Serializable{
                         getEventBus().post(new BuergerAppEvent(container.getItem(id), id, EventType.SELECT2READ).navigateTo(navigateToForDetail).from(from))
         );
 
-        TableActionButton.Builder delete = TableActionButton.Builder.make(controller, TableAction.tabledelete,navigateToForDetail, (container, id) ->
+        TableActionButton.Builder delete = TableActionButton.Builder.<Buerger>make(controller, TableAction.tabledelete,navigateToForDetail, (container, id) ->
                 {
                     BeanItem<Buerger> item = container.getItem(id);
                     GenericConfirmationWindow win = new GenericConfirmationWindow(new BuergerAppEvent(container.getItem(id), id, EventType.RELEASE_PARENT), controller, SimpleAction.release);
