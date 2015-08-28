@@ -365,7 +365,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 
         LOG.error("shown");
 
-        BuergerComponentEvent buergerComponentEvent = new BuergerComponentEvent(EventType.UPDATE);
+        BuergerComponentEvent buergerComponentEvent = new BuergerComponentEvent(EventType.DELETE);
         buergerComponentEvent.setItemID(event.getItemId());
         this.eventbus.post(buergerComponentEvent);
 

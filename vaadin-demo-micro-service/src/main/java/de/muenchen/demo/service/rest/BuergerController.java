@@ -7,16 +7,12 @@ import de.muenchen.demo.service.domain.Sachbearbeiter;
 import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
 import de.muenchen.demo.service.domain.StaatsangehoerigkeitReference;
 import de.muenchen.demo.service.domain.Wohnung;
-import de.muenchen.vaadin.demo.api.rest.BuergerResource;
 import de.muenchen.demo.service.rest.api.BuergerResourceAssembler;
 import de.muenchen.demo.service.rest.api.PassResource;
 import de.muenchen.demo.service.rest.api.PassResourceAssembler;
 import de.muenchen.demo.service.rest.api.SachbearbeiterResource;
 import de.muenchen.demo.service.rest.api.SachbearbeiterResourceAssembler;
-import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
-import de.muenchen.vaadin.demo.api.rest.StaatsangehoerigkeitResource;
 import de.muenchen.demo.service.rest.api.StaatsangehoerigkeitResourceAssembler;
-import de.muenchen.vaadin.demo.api.rest.WohnungResource;
 import de.muenchen.demo.service.rest.api.WohnungResourceAssembler;
 import de.muenchen.demo.service.services.BuergerService;
 import de.muenchen.demo.service.services.PassService;
@@ -25,25 +21,32 @@ import de.muenchen.demo.service.services.StaatsangehoerigkeitService;
 import de.muenchen.demo.service.services.UserService;
 import de.muenchen.demo.service.services.WohnungService;
 import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import javax.annotation.security.RolesAllowed;
+import de.muenchen.vaadin.demo.api.rest.BuergerResource;
+import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
+import de.muenchen.vaadin.demo.api.rest.StaatsangehoerigkeitResource;
+import de.muenchen.vaadin.demo.api.rest.WohnungResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.ExposesResourceFor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.RequestBody;
+
+import javax.annotation.security.RolesAllowed;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 /**
  * Schnittstelle um einen Bürger verwalten zu können.
@@ -351,8 +354,10 @@ public class BuergerController {
             LOG.debug("release Buerger elternteil");
         }
         this.service.releaseBuergerElternteil(oid, elternteilOid);
-        return ResponseEntity.ok().build();
 
+
+        BuergerResource resource = this.assembler.assembleWithAllLinks(service.read(oid));
+        return ResponseEntity.ok(resource);
     }
 
     /**
