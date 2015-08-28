@@ -8,7 +8,15 @@ import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.demo.api.util.EventType;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
-import de.muenchen.vaadin.ui.components.*;
+import de.muenchen.vaadin.ui.components.BuergerChildTab;
+import de.muenchen.vaadin.ui.components.BuergerCreateForm;
+import de.muenchen.vaadin.ui.components.BuergerReadForm;
+import de.muenchen.vaadin.ui.components.BuergerSearchTable;
+import de.muenchen.vaadin.ui.components.BuergerTable;
+import de.muenchen.vaadin.ui.components.BuergerUpdateForm;
+import de.muenchen.vaadin.ui.components.ChildSearchTable;
+import de.muenchen.vaadin.ui.components.ChildTable;
+import de.muenchen.vaadin.ui.components.GenericConfirmationWindow;
 import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.components.buttons.TableAction;
 import de.muenchen.vaadin.ui.components.buttons.TableActionButton;
@@ -73,7 +81,6 @@ public class BuergerViewFactory implements Serializable{
      *
      * @param navigateToForDetail Zielseite um sich die Details des 'Child' Objektes anzeigen zu lassen
      * @param navigateForCreate Zielseite um ein neues 'Child' Objekt zu erstellen
-     * @param navigateForAdd Zielseite zum Hinzufügen eines Kindes
      * @param from Ausgangsseite zu der zurück navigiert werden soll
      * @return {@link TabSheet.Tab} das Tab
      */

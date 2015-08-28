@@ -51,7 +51,7 @@ public class BuergerRestClientImpl implements BuergerRestClient {
     
     @Override
     public Buerger updateBuerger(Buerger buerger, RestTemplate restTemplate) {
-        return this.writeSingleSource(HateoasUtil.REL_UPDATE, buerger, restTemplate);
+        return this.updateSingleSource(HateoasUtil.REL_UPDATE, buerger, restTemplate);
     }
     
     @Override
@@ -110,6 +110,20 @@ public class BuergerRestClientImpl implements BuergerRestClient {
         if(link.isPresent()) {
             ResponseEntity<BuergerResource> resource = restTemplate.postForEntity(link.get().getHref(), buerger, BuergerResource.class);
             return BuergerAssembler.fromResource(resource.getBody());
+        }
+        LOG.warn("Found no link to self.");
+        return null;
+    }
+
+    public Buerger updateSingleSource(String rel, Buerger buerger, RestTemplate restTemplate) {
+        Optional<Link> link = HateoasUtil.findLinkForRel(rel, buerger.getLinks());
+        return this.updateSingleSource(link, buerger, restTemplate);
+    }
+
+    public Buerger updateSingleSource(Optional<Link> link, Buerger buerger, RestTemplate restTemplate) {
+        if(link.isPresent()) {
+            restTemplate.put(link.get().getHref(), buerger, BuergerResource.class);
+            return buerger;
         }
         LOG.warn("Found no link to self.");
         return null;
