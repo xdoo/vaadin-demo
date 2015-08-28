@@ -78,7 +78,6 @@ public class BuergerViewFactory implements Serializable{
      *
      * @param navigateToForDetail Zielseite um sich die Details des 'Child' Objektes anzeigen zu lassen
      * @param navigateForCreate Zielseite um ein neues 'Child' Objekt zu erstellen
-     * @param navigateForAdd Zielseite zum Hinzufügen eines Kindes
      * @param from Ausgangsseite zu der zurück navigiert werden soll
      * @return {@link TabSheet.Tab} das Tab
      */
@@ -129,16 +128,16 @@ public class BuergerViewFactory implements Serializable{
         LOG.debug("creating 'search' table for buerger");
         if(!searchTable.isPresent()){
             LOG.debug("new searchtabel");
-            TableActionButton.Builder detail = TableActionButton.Builder.make(controller, TableAction.tabledetail,navigateToForDetail,(container,id) ->
+            TableActionButton.Builder detail = TableActionButton.Builder.<Buerger>make(controller, TableAction.tabledetail,navigateToForDetail,(container,id) ->
                             getEventBus().post(new BuergerAppEvent(container.getItem(id), id, EventType.SELECT2READ).navigateTo(navigateToForDetail).from(navigateFrom))
             );
-            TableActionButton.Builder edit = TableActionButton.Builder.make(controller, TableAction.tableedit, navigateToForEdit, (container, id) ->
+            TableActionButton.Builder edit = TableActionButton.Builder.<Buerger>make(controller, TableAction.tableedit, navigateToForEdit, (container, id) ->
                             getEventBus().post(new BuergerAppEvent(container.getItem(id), id, EventType.SELECT2UPDATE).navigateTo(navigateToForEdit).from(navigateFrom))
             );
-            TableActionButton.Builder copy = TableActionButton.Builder.make(controller, TableAction.tablecopy,null, (container, id) ->
+            TableActionButton.Builder copy = TableActionButton.Builder.<Buerger>make(controller, TableAction.tablecopy,null, (container, id) ->
                             getEventBus().post(new BuergerAppEvent(container.getItem(id),id,EventType.COPY))
             );
-            TableActionButton.Builder delete = TableActionButton.Builder.make(controller, TableAction.tabledelete,navigateToForEdit, (container, id) ->
+            TableActionButton.Builder delete = TableActionButton.Builder.<Buerger>make(controller, TableAction.tabledelete,navigateToForEdit, (container, id) ->
                             getEventBus().post(new BuergerAppEvent(container.getItem(id),id,EventType.DELETE).navigateTo(navigateToForEdit).from(navigateFrom))
             );
 
@@ -161,7 +160,7 @@ public class BuergerViewFactory implements Serializable{
 
         if(!childSearchTable.isPresent()){
             //BuergerTableButtonFactory detail = BuergerTableButtonFactory.getFactory(navigateToForDetail, BuergerTableDetailButton.class);
-            TableActionButton.Builder select = TableActionButton.Builder.make(controller, TableAction.tableadd,null, (container, id) ->
+            TableActionButton.Builder select = TableActionButton.Builder.<Buerger>make(controller, TableAction.tableadd,null, (container, id) ->
                             getEventBus().post(new BuergerAppEvent(container.getItem(id), id, EventType.SAVE_AS_CHILD))
             );
             LOG.debug("creating 'search' table for buerger");
@@ -177,7 +176,7 @@ public class BuergerViewFactory implements Serializable{
 
     public BuergerTable generateChildTable(String navigateToForDetail, String from) {
 
-        TableActionButton.Builder detail = TableActionButton.Builder.make(controller, TableAction.tabledetail, navigateToForDetail, (container, id) -> 
+        TableActionButton.Builder detail = TableActionButton.Builder.<Buerger>make(controller, TableAction.tabledetail, navigateToForDetail, (container, id) ->
                         getEventBus().post(new BuergerAppEvent(container.getItem(id), id, EventType.SELECT2READ).navigateTo(navigateToForDetail).from(from))
         );
         LOG.debug("creating table for childs");
