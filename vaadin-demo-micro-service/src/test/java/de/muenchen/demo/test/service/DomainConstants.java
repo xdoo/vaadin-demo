@@ -206,6 +206,15 @@ public interface DomainConstants {
     public final static String M3_SA008 = "OIDM3_SACHBEARBEITERS008";
     public final static String M3_SA009 = "OIDM3_SACHBEARBEITERS009";
     public final static String M3_SA010 = "OIDM3_SACHBEARBEITERS010";
+    public final static String M2_SA030 = "OIDM2_SACHBEARBEITERS030";
+    public final static String M2_SA031 = "OIDM2_SACHBEARBEITERS031";
+    public final static String M2_SA032 = "OIDM2_SACHBEARBEITERS032";
+    public final static String M2_SA033 = "OIDM2_SACHBEARBEITERS033";
+    public final static String M2_SA034 = "OIDM2_SACHBEARBEITERS034";
+    public final static String M2_SA035 = "OIDM2_SACHBEARBEITERS035";
+    public final static String M2_SA036 = "OIDM2_SACHBEARBEITERS036";
+    public final static String M2_SA037 = "OIDM2_SACHBEARBEITERS037";
+    public final static String M2_SA038 = "OIDM2_SACHBEARBEITERS038";
 
     //Adresse Externe
     public final static String M2_AE001 = "OIDM2_ADRESSEEXTA001";
@@ -239,5 +248,49 @@ public interface DomainConstants {
     public final static String M3_AE010 = "OIDM3_ADRESSEEXTA010";
     public final static String M3_AE011 = "OIDM3_ADRESSEEXTA011";
     public final static String M3_AE012 = "OIDM3_ADRESSEEXTA012";
+
+    //Authority
+    public final static String M2_AU001 = "OIDM2_AUTHORITY001";
+    public final static String M2_AU002 = "OIDM2_AUTHORITY002";
+    public final static String M2_AU003 = "OIDM2_AUTHORITY003";
+    public final static String M2_AU004 = "OIDM2_AUTHORITY004";
+    public final static String M2_AU005 = "OIDM2_AUTHORITY005";
+    public final static String M2_AU006 = "OIDM2_AUTHORITY006";
+    public final static String M2_AU007 = "OIDM2_AUTHORITY007";
+    public final static String M2_AU008 = "OIDM2_AUTHORITY008";
+    public final static String M2_AU009 = "OIDM2_AUTHORITY009";
+    public final static String M2_AU010 = "OIDM2_AUTHORITY010";
+    public final static String M2_AU011 = "OIDM2_AUTHORITY011";
+    public final static String M2_AU012 = "OIDM2_AUTHORITY012";
+    public final static String M2_AU013 = "OIDM2_AUTHORITY013";
+    public final static String M2_AU014 = "OIDM2_AUTHORITY014";
+    public final static String M2_AU015 = "OIDM2_AUTHORITY015";
+    public final static String M2_AU016 = "OIDM2_AUTHORITY016";
+    public final static String M2_AU017 = "OIDM2_AUTHORITY017";
+    public final static String M2_AU018 = "OIDM2_AUTHORITY018";
+    public final static String M2_AU019 = "OIDM2_AUTHORITY019";
+    public final static String M2_AU020 = "OIDM2_AUTHORITY020";
+
+    //Permission Test
+    public final static String M_P001 = "OIDM_PERMISSION001";
+    public final static String M_P002 = "OIDM_PERMISSION002";
+    public final static String M_P003 = "OIDM_PERMISSION003";
+    public final static String M_P004 = "OIDM_PERMISSION004";
+    public final static String M_P005 = "OIDM_PERMISSION005";
+    public final static String M_P006 = "OIDM_PERMISSION006";
+    public final static String M_P007 = "OIDM_PERMISSION007";
+    public final static String M_P008 = "OIDM_PERMISSION008";
+    public final static String M_P009 = "OIDM_PERMISSION009";
+    public final static String M_P010 = "OIDM_PERMISSION010";
+    public final static String M_P011 = "OIDM_PERMISSION011";
+    public final static String M_P012 = "OIDM_PERMISSION012";
+    public final static String M_P013 = "OIDM_PERMISSION013";
+    public final static String M_P014 = "OIDM_PERMISSION014";
+    public final static String M_P015 = "OIDM_PERMISSION015";
+    public final static String M_P016 = "OIDM_PERMISSION016";
+    public final static String M_P017 = "OIDM_PERMISSION017";
+    public final static String M_P018 = "OIDM_PERMISSION018";
+    public final static String M_P019 = "OIDM_PERMISSION019";
+    public final static String M_P020 = "OIDM_PERMISSION020";
 
 }

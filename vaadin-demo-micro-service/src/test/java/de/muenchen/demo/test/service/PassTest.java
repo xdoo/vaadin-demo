@@ -5,12 +5,10 @@ import com.google.common.collect.Lists;
 import de.muenchen.demo.service.Application;
 import de.muenchen.demo.service.domain.PassRepository;
 import de.muenchen.demo.service.domain.Pass;
-import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
 import de.muenchen.demo.service.domain.StaatsangehoerigkeitReference;
 import de.muenchen.demo.service.services.PassService;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import static org.junit.Assert.*;
 import org.junit.Test;
@@ -167,7 +165,7 @@ public class PassTest {
     }
 @Test
     @WithMockUser(username = DomainConstants.M2_U001_NAME)
-    public void copyListBuergerTest() {
+    public void passCopyLisTest() {
         System.out.println("========== copy Liste Pass Test ==========");
         int x = this.count(DomainConstants.M2);
         ArrayList<String> oids = new ArrayList();
@@ -199,7 +197,7 @@ public class PassTest {
     @Test
     @WithMockUser(username = DomainConstants.M2_U001_NAME)
     public void releaseStaatsangehoerigkeitPassTest() {
-        System.out.println("========== release Staatsangehoerigkeit Bürger Test ==========");
+        System.out.println("========== release Staatsangehoerigkeit Pass Test ==========");
         Pass p1 = service.readStaat(DomainConstants.M2_S012);
         assertNotNull(p1);
         service.releaseStaatsangehoerigkeitPass(DomainConstants.M2_S012);
@@ -211,13 +209,13 @@ public class PassTest {
     @Test
     @WithMockUser(username = DomainConstants.M2_U001_NAME)
     public void releasePassStaatsangehoerigkeitTest() {
-        System.out.println("========== release Bürger Staatsangehoerigkeiten Test ==========");
+        System.out.println("========== release Pass Staatsangehoerigkeiten Test ==========");
         StaatsangehoerigkeitReference b1 = service.read(DomainConstants.M2_P014).getStaatsangehoerigkeitReference();
         assertNotNull(b1);
         service.releasePassStaatsangehoerigkeit(DomainConstants.M2_P014);
         StaatsangehoerigkeitReference b2 = service.read(DomainConstants.M2_P014).getStaatsangehoerigkeitReference();
         assertTrue(b2 == null);
-        System.out.println(String.format("release operation für die kinder eines Bürgers mit OID '%s' konnte aus der DB erfolgreich durchgeführt.", DomainConstants.M2_B002));
+        System.out.println(String.format("release operation für die Staatsangehoerigkeit eines Pass mit OID '%s' konnte aus der DB erfolgreich durchgeführt.", DomainConstants.M2_P014));
     }
 
     @Test

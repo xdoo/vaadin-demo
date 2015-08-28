@@ -18,14 +18,14 @@ import javax.persistence.Table;
 public class Permission extends SecurityEntity {
 
     @Column(name = "PERM_PERMISSION")
-    private String permision;
+    private String permission;
 
-    public String getPermision() {
-        return permision;
+    public String getPermission() {
+        return permission;
     }
 
-    public void setPermision(String permision) {
-        this.permision = permision;
+    public void setPermission(String permission) {
+        this.permission = permission;
     }
 
 }

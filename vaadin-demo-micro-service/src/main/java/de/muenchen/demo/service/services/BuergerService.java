@@ -33,7 +33,7 @@ public interface BuergerService {
 
     public void releaseBuergerEltern(String oid);
 
-    public void releaseBuergerElternteil(String kindOid, String buergerOid);
+    public void releaseBuergerElternteil(String kindOid, String elternteilOid);
 
     public void releaseBuergerKinder(String oid);
 

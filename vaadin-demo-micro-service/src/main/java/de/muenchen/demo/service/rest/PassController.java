@@ -8,8 +8,6 @@ import de.muenchen.vaadin.demo.api.rest.BuergerResource;
 import de.muenchen.demo.service.rest.api.BuergerResourceAssembler;
 import de.muenchen.demo.service.rest.api.PassResource;
 
-
-
 import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
 import de.muenchen.vaadin.demo.api.rest.StaatsangehoerigkeitResource;
 
@@ -207,8 +205,9 @@ public class PassController {
         this.service.delete(oid);
         return ResponseEntity.ok().build();
     }
- /**
-     * Löscht mehrere Bürger.
+
+    /**
+     * Löscht mehrere Pässe.
      *
      * @param oids
      * @return
@@ -224,8 +223,8 @@ public class PassController {
     }
 
     /**
-     * Macht eine Kopie mehreres Büergers. Diese Kopie wird bei Erstellung in
-     * der DB gespeichert.
+     * Macht eine Kopie mehreres Pässes. Diese Kopie wird bei Erstellung in der
+     * DB gespeichert.
      *
      * @param oids
      * @return
@@ -249,7 +248,7 @@ public class PassController {
      */
     @Secured({"PERM_addStaatangehoerigkeitPass"})
     @RequestMapping(value = "add/{pOid}/staats", method = {RequestMethod.POST})
-    public ResponseEntity addStaatangehoerigkeitPass(@PathVariable("pOid") String passOid,@RequestBody String statsOid) {
+    public ResponseEntity addStaatangehoerigkeitPass(@PathVariable("pOid") String passOid, @RequestBody String statsOid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Add staatsangehoerigkeit pass");
         }
@@ -268,7 +267,7 @@ public class PassController {
     }
 
     /**
-     * Liest die Staatsangehoerigkeiten einer Bürger.
+     * Liest die Staatsangehoerigkeiten einer Pass.
      *
      * @param oid
      * @return
@@ -306,7 +305,7 @@ public class PassController {
     }
 
     /**
-     * Release Operation für den Pass eines Bürgers.
+     * Release Operation für den Pass eines Passs.
      *
      * @param passOid
      * @return

@@ -168,10 +168,10 @@ public class SachbearbeiterTest {
     @WithMockUser(username = DomainConstants.M2_U001_NAME)
     public void releaseSachbearbeiterAllBuergerTest() {
         System.out.println("========== release Sachbearbeiter All Bürger Test ==========");
-        Set<Buerger> b1 = service.read(DomainConstants.M2_SA015).getBuerger();
+        Set<Buerger> b1 = service.read(DomainConstants.M2_SA002).getBuerger();
         assertFalse(b1.isEmpty());
-        service.releaseSachbearbeiterAllBuerger(DomainConstants.M2_SA015);
-        Set<Buerger> b2 = service.read(DomainConstants.M2_SA015).getBuerger();
+        service.releaseSachbearbeiterAllBuerger(DomainConstants.M2_SA002);
+        Set<Buerger> b2 = service.read(DomainConstants.M2_SA002).getBuerger();
         assertTrue(b2.isEmpty());
         System.out.println(String.format("release operation für die Sachbearbeiter eines Bürgers mit OID '%s' konnte aus der DB erfolgreich durchgeführt.", DomainConstants.M2_SA015));
     }
@@ -189,4 +189,35 @@ public class SachbearbeiterTest {
     private long checkBuerger(String oid, Sachbearbeiter b1) {
         return b1.getBuerger().stream().filter(k -> k.getOid().equals(oid)).count();
     }
+    @Test
+    @WithMockUser(username = DomainConstants.M2_U001_NAME)
+    public void sachbearbeiterCopyListTest() {
+        System.out.println("========== copy Liste Sachbearbeiter Test ==========");
+        int x = this.count(DomainConstants.M2);
+        ArrayList<String> oids = new ArrayList();
+        oids.add(DomainConstants.M2_SA010);
+        oids.add(DomainConstants.M2_SA011);
+        service.copy(oids);
+        List<Sachbearbeiter> bs = service.query();
+        assertEquals(x + 2, bs.size());
+        System.out.println(String.format("Objekte mit der OID '%s' und der OID '%s' konnte erfolgreich in Objekt  kopiert (und in DB gespeichert) werden", DomainConstants.M2_SA010, DomainConstants.M2_SA011));
+
+    }
+
+    @Test
+    @WithMockUser(username = DomainConstants.M2_U001_NAME)
+    public void SachbearbeiterDeleteListTest() {
+        System.out.println("========== delete Sachbearbeiter Test ==========");
+        ArrayList<String> oids = new ArrayList();
+        oids.add(DomainConstants.M2_SA012);
+        oids.add(DomainConstants.M2_SA013);
+        service.delete(oids);
+        Sachbearbeiter b1 = service.read(DomainConstants.M2_SA012);
+        assertNull(b1);
+        Sachbearbeiter b2 = service.read(DomainConstants.M2_SA013);
+        assertNull(b2);
+        System.out.println(String.format("Sachbearbeiter  mit OID '%s'und OID '%s' konnte aus der DB (und dem Cache) gelöscht werden.", DomainConstants.M2_SA012, DomainConstants.M2_SA013));
+
+    }
+
 }

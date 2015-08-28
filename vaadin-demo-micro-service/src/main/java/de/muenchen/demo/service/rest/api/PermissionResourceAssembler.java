@@ -91,7 +91,7 @@ public class PermissionResourceAssembler {
 //            this.dozer.map(resource, entity);
             entity.setOid(resource.getOid());
             // start field mapping
-            entity.setPermision(resource.getPermision());
+            entity.setPermission(resource.getPermision());
             entity.setCreatedBy(resource.getCreatedBy());
             entity.setCreatedDate(resource.getCreatedDate());
             entity.setLastModBy(resource.getLastModBy());

@@ -60,7 +60,7 @@ public class CustomLdapAuthoritiesPopulator implements LdapAuthoritiesPopulator 
 
             authorityPermissionsList.stream().forEach(authorityPermission -> {
 
-                String authName = authorityPermission.getId().getPermission().getPermision();
+                String authName = authorityPermission.getId().getPermission().getPermission();
 
                 gas.add(new SimpleGrantedAuthority(authName));
 

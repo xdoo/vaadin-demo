@@ -11,6 +11,7 @@ import de.muenchen.demo.service.domain.AuthorityPermission;
 import de.muenchen.demo.service.domain.AuthorityPermissionRepository;
 import de.muenchen.demo.service.util.QueryService;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,13 +58,13 @@ public class AuthorityPermissionServiceImpl implements AuthorityPermissionServic
 
     @Override
     public AuthorityPermission read(AuthPermId id) {
-        List<AuthorityPermission> result = this.repo.findById(id);
-        if(result.isEmpty()) {
+        AuthorityPermission result = this.repo.findFirstById(id);
+        if(Objects.isNull(result)) {
             // TODO
             LOG.warn(String.format("found no users with oid '%s'", id));
             return null;
         } else {
-            return result.get(0);
+            return result;
         }
     }
 
