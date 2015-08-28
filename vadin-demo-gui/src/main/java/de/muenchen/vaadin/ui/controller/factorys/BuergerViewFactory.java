@@ -1,6 +1,7 @@
 package de.muenchen.vaadin.ui.controller.factorys;
 
 import com.google.common.eventbus.EventBus;
+import com.vaadin.data.util.BeanItem;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.TabSheet;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
@@ -15,6 +16,8 @@ import de.muenchen.vaadin.ui.components.BuergerTable;
 import de.muenchen.vaadin.ui.components.BuergerUpdateForm;
 import de.muenchen.vaadin.ui.components.ChildSearchTable;
 import de.muenchen.vaadin.ui.components.ChildTable;
+import de.muenchen.vaadin.ui.components.GenericConfirmationWindow;
+import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.components.buttons.TableAction;
 import de.muenchen.vaadin.ui.components.buttons.TableActionButton;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
@@ -22,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,7 +34,9 @@ import java.util.Optional;
  */
 @Component
 @UIScope
-public class BuergerViewFactory {
+public class BuergerViewFactory implements Serializable{
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * Logger
@@ -40,13 +46,13 @@ public class BuergerViewFactory {
     private BuergerViewController controller;
 
     /**Singeltons of Components. **/
-    private  Optional<BuergerSearchTable> searchTable = Optional.<BuergerSearchTable>empty();
-    private  Optional<ChildSearchTable> childSearchTable = Optional.empty();
-    private  Optional<BuergerChildTab> childTab = Optional.empty();
-    private  Optional<BuergerCreateForm> createForm = Optional.empty();
-    private  Optional<BuergerCreateForm> createChildForm = Optional.empty();
-    private  Optional<BuergerUpdateForm> updateForm = Optional.empty();
-    private  Optional<BuergerReadForm> readForm = Optional.empty();
+    private transient Optional<BuergerSearchTable> searchTable = Optional.<BuergerSearchTable>empty();
+    private transient Optional<ChildSearchTable> childSearchTable = Optional.empty();
+    private transient Optional<BuergerChildTab> childTab = Optional.empty();
+    private transient Optional<BuergerCreateForm> createForm = Optional.empty();
+    private transient Optional<BuergerCreateForm> createChildForm = Optional.empty();
+    private transient Optional<BuergerUpdateForm> updateForm = Optional.empty();
+    private transient Optional<BuergerReadForm> readForm = Optional.empty();
 
 
 
@@ -75,14 +81,13 @@ public class BuergerViewFactory {
      *
      * @param navigateToForDetail Zielseite um sich die Details des 'Child' Objektes anzeigen zu lassen
      * @param navigateForCreate Zielseite um ein neues 'Child' Objekt zu erstellen
-     * @param navigateForAdd Zielseite zum Hinzufügen eines Kindes
      * @param from Ausgangsseite zu der zurück navigiert werden soll
      * @return {@link TabSheet.Tab} das Tab
      */
-    public BuergerChildTab generateChildTab(String navigateToForDetail, String navigateForCreate, String navigateForAdd, String from) {
+    public BuergerChildTab generateChildTab(String navigateToForDetail, String navigateForCreate, String from) {
         if(!childTab.isPresent())
         {
-            BuergerChildTab tab = new BuergerChildTab(controller, navigateToForDetail, navigateForCreate, navigateForAdd, from);
+            BuergerChildTab tab = new BuergerChildTab(controller, navigateToForDetail, navigateForCreate, from);
             getEventBus().register(tab);
             childTab = Optional.of(tab);}
         return childTab.get();
@@ -136,7 +141,14 @@ public class BuergerViewFactory {
                             getEventBus().post(new BuergerAppEvent(container.getItem(id),id,EventType.COPY))
             );
             TableActionButton.Builder delete = TableActionButton.Builder.make(controller, TableAction.tabledelete,navigateToForEdit, (container, id) ->
-                            getEventBus().post(new BuergerAppEvent(container.getItem(id),id,EventType.DELETE).navigateTo(navigateToForEdit).from(navigateFrom))
+                    {
+                        BeanItem<Buerger> item = container.getItem(id);
+                        GenericConfirmationWindow win = new GenericConfirmationWindow(new BuergerAppEvent(item, id, EventType.DELETE), controller, SimpleAction.delete);
+                        controller.getNavigator().getUI().addWindow(win);
+                        win.center();
+                        win.focus();
+                    }
+                            //getEventBus().post(new BuergerAppEvent(container.getItem(id),id,EventType.DELETE).navigateTo(navigateToForEdit).from(navigateFrom))
             );
 
             searchTable=Optional.of(new BuergerSearchTable(
@@ -153,20 +165,19 @@ public class BuergerViewFactory {
 
 
 
-    public ChildSearchTable generateChildSearchTable(String navigateToForEdit, String navigateToForDetail, String navigateForCreate, String navigateFrom) {
+    public ChildSearchTable generateChildSearchTable( String navigateFrom) {
 
 
         if(!childSearchTable.isPresent()){
             //BuergerTableButtonFactory detail = BuergerTableButtonFactory.getFactory(navigateToForDetail, BuergerTableDetailButton.class);
-            TableActionButton.Builder select = TableActionButton.Builder.make(controller, TableAction.tableadd,navigateToForEdit, (container, id) ->
-                            getEventBus().post(new BuergerAppEvent(container.getItem(id),id,EventType.SAVE_AS_CHILD).navigateTo(navigateToForDetail).from(navigateFrom))
+            TableActionButton.Builder select = TableActionButton.Builder.make(controller, TableAction.tableadd,null, (container, id) ->
+                            getEventBus().post(new BuergerAppEvent(container.getItem(id), id, EventType.SAVE_AS_CHILD))
             );
+
+
             LOG.debug("creating 'search' table for buerger");
             childSearchTable = Optional.of(new ChildSearchTable(
                     controller,
-                    navigateToForEdit,
-                    navigateToForDetail,
-                    navigateForCreate,
                     navigateFrom,
                     // Schaltflächen
                     select
@@ -180,8 +191,19 @@ public class BuergerViewFactory {
         TableActionButton.Builder detail = TableActionButton.Builder.make(controller, TableAction.tabledetail, navigateToForDetail, (container, id) -> 
                         getEventBus().post(new BuergerAppEvent(container.getItem(id), id, EventType.SELECT2READ).navigateTo(navigateToForDetail).from(from))
         );
+
+        TableActionButton.Builder delete = TableActionButton.Builder.make(controller, TableAction.tabledelete,navigateToForDetail, (container, id) ->
+                {
+                    BeanItem<Buerger> item = container.getItem(id);
+                    GenericConfirmationWindow win = new GenericConfirmationWindow(new BuergerAppEvent(container.getItem(id), id, EventType.RELEASE_PARENT), controller, SimpleAction.release);
+                    controller.getNavigator().getUI().addWindow(win);
+                    win.center();
+                    win.focus();
+                }
+        );
+
         LOG.debug("creating table for childs");
-        BuergerTable table = new ChildTable(controller, detail);
+        BuergerTable table = new ChildTable(controller, detail, delete);
 
         table.setFrom(from);
         List<Buerger> entities = controller.queryKinder(controller.getCurrent().getBean());

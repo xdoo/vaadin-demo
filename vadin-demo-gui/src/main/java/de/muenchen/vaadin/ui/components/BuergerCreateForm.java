@@ -21,9 +21,13 @@ import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.ValidatorFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Date;
 
 import static de.muenchen.vaadin.ui.util.I18nPaths.Component;
-import de.muenchen.vaadin.ui.util.I18nPaths.NotificationType;
+import static de.muenchen.vaadin.ui.util.I18nPaths.NotificationType;
 import static de.muenchen.vaadin.ui.util.I18nPaths.Type;
 import static de.muenchen.vaadin.ui.util.I18nPaths.getEntityFieldPath;
 import static de.muenchen.vaadin.ui.util.I18nPaths.getFormPath;
@@ -134,7 +138,7 @@ public class BuergerCreateForm extends CustomComponent {
                 controller.resolveRelative(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.label)),
                 Buerger.GEBURTSDATUM, BuergerViewController.I18N_BASE_PATH);
         String errorMsg = controller.resolveRelative(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.validation));
-        Validator val3 = ValidatorFactory.getValidator("DateRange",errorMsg,"0",null);
+        Validator val3 = ValidatorFactory.getValidator("DateRange",errorMsg, "start",null);
         birthdayfield.addValidator(val3);
         layout.addComponent(birthdayfield);    
 
@@ -166,7 +170,7 @@ public class BuergerCreateForm extends CustomComponent {
                 birthdayfield.removeValidator(val);
                 binder.setItemDataSource(controller.createBuerger());
             } catch (CommitException | Validator.InvalidValueException e) {
-                GenericErrorNotification error = new GenericErrorNotification(controller.resolveRelative(getNotificationPath(NotificationType.failure,SimpleAction.save, Type.label)),
+                GenericErrorNotification error = new GenericErrorNotification(controller.resolveRelative(getNotificationPath(NotificationType.failure, SimpleAction.save, Type.label)),
                         controller.resolveRelative(getNotificationPath(NotificationType.failure,SimpleAction.save,Type.text)));
                         error.show(Page.getCurrent());
             }

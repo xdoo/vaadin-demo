@@ -223,16 +223,8 @@ public class BuergerServiceImpl implements BuergerService {
     public void releaseBuergerKinder(String buergerOid) {
 
         Buerger buerger = this.read(buergerOid);
-
-        Set<Buerger> kinder = buerger.getKinder();
-        Collection<Buerger> removeKinder = new LinkedList<>();
-        kinder.stream().forEach((kind) -> {
-            removeKinder.add(kind);
-        });
-
-        kinder.removeAll(removeKinder);
+        buerger.getKinder().clear();
         this.update(buerger);
-
     }
 
     /**

@@ -13,6 +13,7 @@ import de.muenchen.vaadin.demo.api.util.EventType;
 import de.muenchen.vaadin.services.BuergerService;
 import de.muenchen.vaadin.services.MessageService;
 import de.muenchen.vaadin.ui.app.MainUI;
+import de.muenchen.vaadin.ui.app.views.ChildSelectWindow;
 import de.muenchen.vaadin.ui.app.views.events.AppEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
@@ -232,7 +233,16 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
     public Buerger saveBuergerKind(Buerger entity) {
         return service.saveKind(getCurrent().getBean(), entity);
     }
-    
+
+    /**
+     * Zerstört die Verbindung zwischen einem Bürger und seinem Kind
+     *
+     * @param event
+     */
+    private void releaseParent(BuergerAppEvent event) {
+        service.releaseElternteil(getCurrent().getBean(), event.getEntity());
+    }
+
     /**
      * Speichert eine Kindbeziehung zu einem {@link Buerger} Objekt in der Datenbank.
      * 
@@ -329,13 +339,41 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
                 saveAsChildEventHandler(event);
                 break;
             case ADD_SEARCHED_CHILD:
-                navigateEventHandler(event);
+                addSearchedChildEventHandler(event);
+                break;
+            case RELEASE_PARENT:
+                releaseParentHandler(event);
                 break;
             default:
                 LOG.debug("No matching handler found.");
         }
 
     }
+
+
+    private void releaseParentHandler(BuergerAppEvent event) {
+        // Service Operationen ausführen
+        this.releaseParent(event);
+        // UI Komponenten aktualisieren
+
+        LOG.error("released");
+
+        GenericSuccessNotification succes = new GenericSuccessNotification(
+                resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.release, Type.label)),
+                resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.release, Type.text)));
+        succes.show(Page.getCurrent());
+
+        LOG.error("shown");
+
+        BuergerComponentEvent buergerComponentEvent = new BuergerComponentEvent(EventType.DELETE);
+        buergerComponentEvent.setItemID(event.getItemId());
+        this.eventbus.post(buergerComponentEvent);
+
+        LOG.error("done");
+    }
+
+
+
 
     /**
      * Navigiert zu der durch das Event angeforderten Seite.
@@ -346,6 +384,11 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
         getNavigator().navigateTo(event.getNavigateTo());
     }
 
+    private void addSearchedChildEventHandler(BuergerAppEvent event){
+
+        navigator.getUI().addWindow(new ChildSelectWindow(this, event.getFrom().get()));
+    }
+
     private void saveAsChildEventHandler(BuergerAppEvent event) {
 
         this.addBuergerKind(event.getEntity());
@@ -354,7 +397,6 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
                  resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.add, Type.text)));
         succes.show(Page.getCurrent());
         this.eventbus.post(new BuergerComponentEvent(event.getEntity(), EventType.UPDATE));
-        navigateEventHandler(event);
     }
 
     private void queryChildEventHandler(BuergerAppEvent event) {

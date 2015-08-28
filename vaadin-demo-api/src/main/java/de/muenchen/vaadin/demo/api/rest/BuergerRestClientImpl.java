@@ -51,7 +51,7 @@ public class BuergerRestClientImpl implements BuergerRestClient {
     
     @Override
     public Buerger updateBuerger(Buerger buerger, RestTemplate restTemplate) {
-        return this.writeSingleSource(HateoasUtil.REL_UPDATE, buerger, restTemplate);
+        return this.updateSingleSource(HateoasUtil.REL_UPDATE, buerger, restTemplate);
     }
     
     @Override
@@ -83,21 +83,47 @@ public class BuergerRestClientImpl implements BuergerRestClient {
     
     @Override
     public Buerger addBuergerKind(Buerger buerger, Buerger kind, RestTemplate restTemplate) {
-        //ToDO solve need for hardcoded link
-        Optional<Link> link = Optional.of(new Link("http://localhost:8080/buerger/add/buerger/"+buerger.getOid()+"/kind/"+kind.getOid()+"").withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_KIND));
+
+        Optional<Link> link = HateoasUtil.findLinkForRel(BuergerResource.ADD_KIND, buerger.getLinks());
         LOG.warn("used Link: "+link.get().toString());
-        return this.writeSingleSource(link, kind, restTemplate);
+
+        return this.writeSingleSource(link, kind.getOid(), restTemplate);
+
     }
-    
+
+    @Override
+    public Buerger releaseBuergerElternteil(Buerger elternteil, Buerger kind, RestTemplate restTemplate) {
+        Optional<Link> link = HateoasUtil.findLinkForRel(BuergerResource.RELEASE_ELTERNTEIL,kind.getLinks());
+        if(link.isPresent()) {
+            LOG.warn("used Link: " + link.get().toString());
+            return this.writeSingleSource(link, elternteil.getOid(), restTemplate);
+        }else
+        return null;
+    }
+
     public Buerger writeSingleSource(String rel, Buerger buerger, RestTemplate restTemplate) {
         Optional<Link> link = HateoasUtil.findLinkForRel(rel, buerger.getLinks());
         return this.writeSingleSource(link, buerger, restTemplate);
     }
     
-    public Buerger writeSingleSource(Optional<Link> link, Buerger buerger, RestTemplate restTemplate) {
+    public Buerger writeSingleSource(Optional<Link> link, Object buerger, RestTemplate restTemplate) {
         if(link.isPresent()) {
             ResponseEntity<BuergerResource> resource = restTemplate.postForEntity(link.get().getHref(), buerger, BuergerResource.class);
             return BuergerAssembler.fromResource(resource.getBody());
+        }
+        LOG.warn("Found no link to self.");
+        return null;
+    }
+
+    public Buerger updateSingleSource(String rel, Buerger buerger, RestTemplate restTemplate) {
+        Optional<Link> link = HateoasUtil.findLinkForRel(rel, buerger.getLinks());
+        return this.updateSingleSource(link, buerger, restTemplate);
+    }
+
+    public Buerger updateSingleSource(Optional<Link> link, Buerger buerger, RestTemplate restTemplate) {
+        if(link.isPresent()) {
+            restTemplate.put(link.get().getHref(), buerger, BuergerResource.class);
+            return buerger;
         }
         LOG.warn("Found no link to self.");
         return null;
