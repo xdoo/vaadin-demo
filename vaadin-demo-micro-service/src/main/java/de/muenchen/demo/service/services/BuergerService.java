@@ -37,8 +37,6 @@ public interface BuergerService {
 
     public void releaseBuergerKinder(String oid);
 
-    public void releaseBuergerKind(String bOid, String kOid);
-
     public Iterable<Buerger> readWohnungBuerger(String oid);
 
     public void releaseWohnungAllBuerger(String oid);

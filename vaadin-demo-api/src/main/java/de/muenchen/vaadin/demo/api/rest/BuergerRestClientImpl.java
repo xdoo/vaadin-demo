@@ -92,17 +92,14 @@ public class BuergerRestClientImpl implements BuergerRestClient {
     }
 
     @Override
-    public Buerger releaseBuergerKind(Buerger buerger, Buerger kind, RestTemplate restTemplate) {
-        Optional<Link> link = HateoasUtil.findLinkForRel(BuergerResource.RELEASE_KIND,buerger.getLinks());
+    public Buerger releaseBuergerElternteil(Buerger elternteil, Buerger kind, RestTemplate restTemplate) {
+        Optional<Link> link = HateoasUtil.findLinkForRel(BuergerResource.RELEASE_ELTERNTEIL,kind.getLinks());
         if(link.isPresent()) {
             LOG.warn("used Link: " + link.get().toString());
-            return this.writeSingleSource(link, kind.getOid(), restTemplate);
+            return this.writeSingleSource(link, elternteil.getOid(), restTemplate);
         }else
         return null;
     }
-
-
-
 
     public Buerger writeSingleSource(String rel, Buerger buerger, RestTemplate restTemplate) {
         Optional<Link> link = HateoasUtil.findLinkForRel(rel, buerger.getLinks());

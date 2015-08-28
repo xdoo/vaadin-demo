@@ -102,8 +102,9 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
         return client.addBuergerKind(entity, kind, getTemplate());
     }
 
-    public Buerger releaseKind(Buerger entity, Buerger kind){
-        return client.releaseBuergerKind(entity, kind, getTemplate());
+    @Override
+    public Buerger releaseElternteil(Buerger elternteil, Buerger kind){
+        return client.releaseBuergerElternteil(elternteil, kind, getTemplate());
     }
 
 

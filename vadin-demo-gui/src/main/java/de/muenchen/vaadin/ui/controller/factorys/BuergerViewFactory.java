@@ -188,12 +188,11 @@ public class BuergerViewFactory implements Serializable{
         TableActionButton.Builder delete = TableActionButton.Builder.make(controller, TableAction.tabledelete,navigateToForDetail, (container, id) ->
                 {
                     BeanItem<Buerger> item = container.getItem(id);
-                    GenericConfirmationWindow win = new GenericConfirmationWindow(new BuergerAppEvent(container.getItem(id), id, EventType.RELEASE), controller, SimpleAction.release);
+                    GenericConfirmationWindow win = new GenericConfirmationWindow(new BuergerAppEvent(container.getItem(id), id, EventType.RELEASE_PARENT), controller, SimpleAction.release);
                     controller.getNavigator().getUI().addWindow(win);
                     win.center();
                     win.focus();
                 }
-                //getEventBus().post(new BuergerAppEvent(container.getItem(id),id,EventType.DELETE).navigateTo(navigateToForEdit).from(navigateFrom))
         );
 
         LOG.debug("creating table for childs");

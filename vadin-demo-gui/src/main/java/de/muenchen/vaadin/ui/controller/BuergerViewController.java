@@ -239,8 +239,8 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
      *
      * @param event
      */
-    private void releaseChild(BuergerAppEvent event) {
-        service.releaseKind(getCurrent().getBean(),event.getEntity());
+    private void releaseParent(BuergerAppEvent event) {
+        service.releaseElternteil(getCurrent().getBean(), event.getEntity());
     }
 
     /**
@@ -341,8 +341,8 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
             case ADD_SEARCHED_CHILD:
                 addSearchedChildEventHandler(event);
                 break;
-            case RELEASE:
-                releaseChildHandler(event);
+            case RELEASE_PARENT:
+                releaseParentHandler(event);
                 break;
             default:
                 LOG.debug("No matching handler found.");
@@ -351,22 +351,25 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
     }
 
 
-    private void releaseChildHandler(BuergerAppEvent event) {
+    private void releaseParentHandler(BuergerAppEvent event) {
+        // Service Operationen ausführen
+        this.releaseParent(event);
+        // UI Komponenten aktualisieren
 
+        LOG.error("released");
 
-            // Service Operationen ausführen
-            //this.deleteBuerger(event.getEntity());
-            this.releaseChild(event);
-            LOG.error("this.releaseChild(event) done");
-            // UI Komponenten aktualisieren
-            BuergerComponentEvent buergerComponentEvent = new BuergerComponentEvent(event.getEntity(),EventType.RELEASE);
-            buergerComponentEvent.setItemID(event.getItemId());
+        GenericSuccessNotification succes = new GenericSuccessNotification(
+                resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.release, Type.label)),
+                resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.release, Type.text)));
+        succes.show(Page.getCurrent());
+
+        LOG.error("shown");
+
+        BuergerComponentEvent buergerComponentEvent = new BuergerComponentEvent(EventType.UPDATE);
+        buergerComponentEvent.setItemID(event.getItemId());
         this.eventbus.post(buergerComponentEvent);
 
-            GenericSuccessNotification succes = new GenericSuccessNotification(
-                    resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.release, Type.label)),
-                    resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.release, Type.text)));
-            succes.show(Page.getCurrent());
+        LOG.error("done");
     }
 
 
