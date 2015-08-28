@@ -223,16 +223,8 @@ public class BuergerServiceImpl implements BuergerService {
     public void releaseBuergerKinder(String buergerOid) {
 
         Buerger buerger = this.read(buergerOid);
-
-        Set<Buerger> kinder = buerger.getKinder();
-        Collection<Buerger> removeKinder = new LinkedList<>();
-        kinder.stream().forEach((kind) -> {
-            removeKinder.add(kind);
-        });
-
-        kinder.removeAll(removeKinder);
+        buerger.getKinder().clear();
         this.update(buerger);
-
     }
 
     /**
@@ -242,19 +234,12 @@ public class BuergerServiceImpl implements BuergerService {
      */
     @Override
     public void releaseBuergerKind(String buergerOid,String kindOid) {
-
         Buerger buerger = this.read(buergerOid);
-
-        /*Set<Buerger> kinder = buerger.getKinder();
-        Collection<Buerger> removeKinder = new LinkedList<>();
-        kinder.stream().forEach((kind) -> {
-            removeKinder.add(kind);
-        });
-
-        kinder.removeAll(removeKinder);*/
-        buerger.getKinder().remove(this.read(kindOid));
+        Buerger kind = this.read(kindOid);
+        for(Buerger next : buerger.getKinder())
+            if(next.getOid().equals(kindOid))
+                buerger.getKinder().remove(next);
         this.update(buerger);
-
     }
 
     /**

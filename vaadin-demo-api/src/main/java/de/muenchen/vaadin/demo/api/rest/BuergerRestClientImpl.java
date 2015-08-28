@@ -93,11 +93,7 @@ public class BuergerRestClientImpl implements BuergerRestClient {
 
     @Override
     public Buerger releaseBuergerKind(Buerger buerger, Buerger kind, RestTemplate restTemplate) {
-        //ToDO solve need for hardcoded link
-
-        buerger.getLinks().forEach(link1 -> LOG.error(link1.toString()));
         Optional<Link> link = HateoasUtil.findLinkForRel(BuergerResource.RELEASE_KIND,buerger.getLinks());
-                //Optional.of(new Link("http://localhost:8080/buerger/"+buerger.getOid()+"/release/kind/"+kind.getOid()+"").withRel(BuergerResource.RELEASE_KIND));
         if(link.isPresent()) {
             LOG.warn("used Link: " + link.get().toString());
             return this.writeSingleSource(link, kind.getOid(), restTemplate);

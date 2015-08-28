@@ -348,7 +348,7 @@ public class BuergerController {
     @RequestMapping(value = "/{bOid}/release/kind/", method = {RequestMethod.POST})
     public ResponseEntity releaseBuergerKind(@PathVariable("bOid") String bOid,@RequestBody String kOid) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("release Buerger Kinder");
+            LOG.debug("release Buerger Kind");
         }
         this.service.releaseBuergerKind(bOid,kOid);
         return ResponseEntity.ok().build();
