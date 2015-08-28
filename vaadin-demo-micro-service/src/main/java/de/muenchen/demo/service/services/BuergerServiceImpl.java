@@ -239,6 +239,28 @@ public class BuergerServiceImpl implements BuergerService {
     }
 
     /**
+     * release Operation für ein Kind eines Bürgers.
+     *
+     * @param buergerOid
+     */
+    @Override
+    public void releaseBuergerKind(String buergerOid,String kindOid) {
+
+        Buerger buerger = this.read(buergerOid);
+
+        /*Set<Buerger> kinder = buerger.getKinder();
+        Collection<Buerger> removeKinder = new LinkedList<>();
+        kinder.stream().forEach((kind) -> {
+            removeKinder.add(kind);
+        });
+
+        kinder.removeAll(removeKinder);*/
+        buerger.getKinder().remove(this.read(kindOid));
+        this.update(buerger);
+
+    }
+
+    /**
      * read der bürger eines Pass.
      *
      * @param passOid

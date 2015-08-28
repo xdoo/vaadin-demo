@@ -1,20 +1,15 @@
 package de.muenchen.vaadin.ui.controller.factorys;
 
 import com.google.common.eventbus.EventBus;
+import com.vaadin.data.util.BeanItem;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.TabSheet;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.demo.api.util.EventType;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
-import de.muenchen.vaadin.ui.components.BuergerChildTab;
-import de.muenchen.vaadin.ui.components.BuergerCreateForm;
-import de.muenchen.vaadin.ui.components.BuergerReadForm;
-import de.muenchen.vaadin.ui.components.BuergerSearchTable;
-import de.muenchen.vaadin.ui.components.BuergerTable;
-import de.muenchen.vaadin.ui.components.BuergerUpdateForm;
-import de.muenchen.vaadin.ui.components.ChildSearchTable;
-import de.muenchen.vaadin.ui.components.ChildTable;
+import de.muenchen.vaadin.ui.components.*;
+import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.components.buttons.TableAction;
 import de.muenchen.vaadin.ui.components.buttons.TableActionButton;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
@@ -136,7 +131,14 @@ public class BuergerViewFactory {
                             getEventBus().post(new BuergerAppEvent(container.getItem(id),id,EventType.COPY))
             );
             TableActionButton.Builder delete = TableActionButton.Builder.make(controller, TableAction.tabledelete,navigateToForEdit, (container, id) ->
-                            getEventBus().post(new BuergerAppEvent(container.getItem(id),id,EventType.DELETE).navigateTo(navigateToForEdit).from(navigateFrom))
+                    {
+                        BeanItem<Buerger> item = container.getItem(id);
+                        GenericConfirmationWindow win = new GenericConfirmationWindow(new BuergerAppEvent(item, id, EventType.DELETE), controller, SimpleAction.delete);
+                        controller.getNavigator().getUI().addWindow(win);
+                        win.center();
+                        win.focus();
+                    }
+                            //getEventBus().post(new BuergerAppEvent(container.getItem(id),id,EventType.DELETE).navigateTo(navigateToForEdit).from(navigateFrom))
             );
 
             searchTable=Optional.of(new BuergerSearchTable(
@@ -161,6 +163,8 @@ public class BuergerViewFactory {
             TableActionButton.Builder select = TableActionButton.Builder.make(controller, TableAction.tableadd,navigateToForEdit, (container, id) ->
                             getEventBus().post(new BuergerAppEvent(container.getItem(id),id,EventType.SAVE_AS_CHILD).navigateTo(navigateToForDetail).from(navigateFrom))
             );
+
+
             LOG.debug("creating 'search' table for buerger");
             childSearchTable = Optional.of(new ChildSearchTable(
                     controller,
@@ -180,8 +184,20 @@ public class BuergerViewFactory {
         TableActionButton.Builder detail = TableActionButton.Builder.make(controller, TableAction.tabledetail, navigateToForDetail, (container, id) -> 
                         getEventBus().post(new BuergerAppEvent(container.getItem(id), id, EventType.SELECT2READ).navigateTo(navigateToForDetail).from(from))
         );
+
+        TableActionButton.Builder delete = TableActionButton.Builder.make(controller, TableAction.tabledelete,navigateToForDetail, (container, id) ->
+                {
+                    BeanItem<Buerger> item = container.getItem(id);
+                    GenericConfirmationWindow win = new GenericConfirmationWindow(new BuergerAppEvent(item, id, EventType.RELEASE), controller, SimpleAction.release);
+                    controller.getNavigator().getUI().addWindow(win);
+                    win.center();
+                    win.focus();
+                }
+                //getEventBus().post(new BuergerAppEvent(container.getItem(id),id,EventType.DELETE).navigateTo(navigateToForEdit).from(navigateFrom))
+        );
+
         LOG.debug("creating table for childs");
-        BuergerTable table = new ChildTable(controller, detail);
+        BuergerTable table = new ChildTable(controller, detail, delete);
 
         table.setFrom(from);
         List<Buerger> entities = controller.queryKinder(controller.getCurrent().getBean());

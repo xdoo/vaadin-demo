@@ -77,4 +77,6 @@ public interface BuergerService {
     
     public Buerger saveKind(Buerger entity, Buerger kind);
     public Buerger addKind(Buerger entity, Buerger kind);
+
+    public Buerger releaseKind(Buerger entity, Buerger kind);
 }
