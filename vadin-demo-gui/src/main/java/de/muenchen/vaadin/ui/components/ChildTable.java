@@ -36,10 +36,6 @@ public class ChildTable extends BuergerTable {
             this.delete(event.getItemID());
         }
 
-        if (event.getEventType().equals(EventType.RELEASE_PARENT)) {
-            this.delete(event.getItemID());
-        }
-
         if(event.getEventType().equals(EventType.UPDATE)) {
             this.add(event.getEntity());
         }

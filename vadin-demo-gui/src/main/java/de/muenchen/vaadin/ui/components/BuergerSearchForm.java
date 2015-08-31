@@ -16,6 +16,8 @@ import de.muenchen.vaadin.ui.controller.BuergerViewController;
  * @author claus
  */
 public class BuergerSearchForm extends CustomComponent {
+    private Button search;
+
 
     public BuergerSearchForm(final BuergerViewController controller) {
         
@@ -37,7 +39,7 @@ public class BuergerSearchForm extends CustomComponent {
         });
         reset.setId(String.format("%s_RESET_BUTTON", BuergerViewController.I18N_BASE_PATH));
         // Suche Schaltfläche
-        Button search = new Button(FontAwesome.SEARCH);
+        search = new Button(FontAwesome.SEARCH);
         search.setStyleName(ValoTheme.BUTTON_ICON_ONLY);
         search.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         search.addClickListener(e -> {
@@ -51,5 +53,9 @@ public class BuergerSearchForm extends CustomComponent {
         group.addComponents(query, search, reset);
         search.click();
         setCompositionRoot(group);
+    }
+
+    public void refresh() {
+        search.click();
     }
 }
