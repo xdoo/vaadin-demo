@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory;
  * @author claus.straube
  */
 public class ChildSearchTable extends CustomComponent {
+    BuergerSearchForm search;
+
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerSearchTable.class);
     private BuergerTable table;
     public ChildSearchTable(final BuergerViewController controller, String from, final TableActionButton.Builder... buttonfactory) {
@@ -20,7 +22,7 @@ public class ChildSearchTable extends CustomComponent {
         table = controller.getViewFactory().generateTable(from, buttonfactory);
         table.setSizeUndefined();
 
-        BuergerSearchForm search = new BuergerSearchForm(controller);
+        search = new BuergerSearchForm(controller);
         search.setWidth("100%"); 
 
         // Layout für die Schaltflächen über der Tabelle
@@ -39,5 +41,9 @@ public class ChildSearchTable extends CustomComponent {
     }
     public void setTable(BuergerTable table){
         this.table = table;
+    }
+
+    public void refresh(){
+        search.refresh();
     }
 }
