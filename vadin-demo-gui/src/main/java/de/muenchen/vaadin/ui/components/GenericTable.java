@@ -24,7 +24,8 @@ import static de.muenchen.vaadin.ui.util.I18nPaths.Type;
 import static de.muenchen.vaadin.ui.util.I18nPaths.getEntityFieldPath;
 
 /**
- *
+ * Generic table for all Entities.
+ * @param <T>  the type of Entity
  * @author rene.zarwel
  */
 public class GenericTable<T extends BaseEntity> extends CustomComponent {
@@ -38,11 +39,23 @@ public class GenericTable<T extends BaseEntity> extends CustomComponent {
     // Navigation
     private String from;
 
-    // Buttons
+    /**
+     * The Button builders.
+     */
     List<TableActionButton.Builder> buttonBuilders;
 
+    /**
+     * The constant LOG.
+     */
     protected static final Logger LOG = LoggerFactory.getLogger(GenericTable.class);
 
+    /**
+     * Instantiates a new Generic table.
+     *
+     * @param controller the controller
+     * @param entityClass the entity class
+     * @param buttonBuilders the button builders
+     */
     public GenericTable(final BuergerViewController controller, Class<T> entityClass, final TableActionButton.Builder... buttonBuilders) {
 
         this.entityClass = entityClass;
@@ -58,7 +71,7 @@ public class GenericTable<T extends BaseEntity> extends CustomComponent {
         table.setContainerDataSource(this.container);
 
         //set action column
-        table.addGeneratedColumn("button",
+        table.addGeneratedColumn("table_buttons",
                 (Table source, Object itemId, Object columnId) -> addButtons(itemId)
         );
 
@@ -74,6 +87,8 @@ public class GenericTable<T extends BaseEntity> extends CustomComponent {
                 .map(Field::getName)
                 .collect(Collectors.toList());
 
+        columnList.add("table_buttons");
+
         table.setVisibleColumns(columnList.toArray());
 
         columnList.stream()
@@ -85,12 +100,14 @@ public class GenericTable<T extends BaseEntity> extends CustomComponent {
                 });
 
 
-        table.setColumnHeader("button", "");
-
-
         setCompositionRoot(table);
     }
 
+    /**
+     * Eventhandler für Eventbus
+     *
+     * @param event the event
+     */
     @Subscribe
     public void update(ComponentEvent<T> event) {
 
@@ -115,6 +132,11 @@ public class GenericTable<T extends BaseEntity> extends CustomComponent {
         }
     }
 
+    /**
+     * Adds a entity.
+     *
+     * @param entity the entity
+     */
     public void add(Optional<T> entity) {
         if(entity.isPresent()) {
             LOG.debug("added entity to table.");
@@ -122,12 +144,22 @@ public class GenericTable<T extends BaseEntity> extends CustomComponent {
         }
     }
 
+    /**
+     * Adds a list of entities.
+     *
+     * @param entity the entity
+     */
     public void addAll(List<T> entity) {
         LOG.debug("added search result");
         this.container.removeAllItems();
         this.container.addAll(entity);
     }
 
+    /**
+     * Delete an entity.
+     *
+     * @param id the id
+     */
     public void delete(Object id) {
         LOG.debug("deleted buerger from table.");
         this.container.removeItem(id);
@@ -138,7 +170,7 @@ public class GenericTable<T extends BaseEntity> extends CustomComponent {
      * gibt "SimpleAction" Buttons.
      *
      * @param id ID
-     * @return HL
+     * @return HL horizontal layout
      */
     public HorizontalLayout addButtons(final Object id) {
         HorizontalLayout layout = new HorizontalLayout();
@@ -153,10 +185,20 @@ public class GenericTable<T extends BaseEntity> extends CustomComponent {
 
     // Members
 
+    /**
+     * Gets from.
+     *
+     * @return the from
+     */
     public String getFrom() {
         return from;
     }
 
+    /**
+     * Sets from.
+     *
+     * @param from the from
+     */
     public void setFrom(String from) {
         this.from = from;
     }
@@ -166,7 +208,7 @@ public class GenericTable<T extends BaseEntity> extends CustomComponent {
      * bzw. die vorhandenen Schaltflächen in eine neue reihenfolge gebracht
      * werden.
      *
-     * @return Liste der {@link TableActionButton.Builder}
+     * @return Liste der
      */
     public List<TableActionButton.Builder> getButtonBuilders() {
         return buttonBuilders;

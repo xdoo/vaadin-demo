@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ChildSearchTable extends CustomComponent {
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerSearchTable.class);
-    private BuergerTable table;
+    private GenericTable table;
     public ChildSearchTable(final BuergerViewController controller, String from, final TableActionButton.Builder... buttonfactory) {
     
         table = controller.getViewFactory().generateTable(from, buttonfactory);
@@ -34,10 +34,10 @@ public class ChildSearchTable extends CustomComponent {
 
         setCompositionRoot(vlayout);
     }
-    public BuergerTable getTable(){
+    public GenericTable getTable(){
         return table;
     }
-    public void setTable(BuergerTable table){
+    public void setTable(GenericTable table){
         this.table = table;
     }
 }

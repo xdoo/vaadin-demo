@@ -12,11 +12,11 @@ import de.muenchen.vaadin.ui.components.BuergerChildTab;
 import de.muenchen.vaadin.ui.components.BuergerCreateForm;
 import de.muenchen.vaadin.ui.components.BuergerReadForm;
 import de.muenchen.vaadin.ui.components.BuergerSearchTable;
-import de.muenchen.vaadin.ui.components.BuergerTable;
 import de.muenchen.vaadin.ui.components.BuergerUpdateForm;
 import de.muenchen.vaadin.ui.components.ChildSearchTable;
 import de.muenchen.vaadin.ui.components.ChildTable;
 import de.muenchen.vaadin.ui.components.GenericConfirmationWindow;
+import de.muenchen.vaadin.ui.components.GenericTable;
 import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.components.buttons.TableAction;
 import de.muenchen.vaadin.ui.components.buttons.TableActionButton;
@@ -186,7 +186,7 @@ public class BuergerViewFactory implements Serializable{
 
     }
 
-    public BuergerTable generateChildTable(String navigateToForDetail, String from) {
+    public ChildTable generateChildTable(String navigateToForDetail, String from) {
 
         TableActionButton.Builder detail = TableActionButton.Builder.<Buerger>make(controller, TableAction.tabledetail, navigateToForDetail, (container, id) ->
                         getEventBus().post(new BuergerAppEvent(container.getItem(id), id, EventType.SELECT2READ).navigateTo(navigateToForDetail).from(from))
@@ -203,7 +203,7 @@ public class BuergerViewFactory implements Serializable{
         );
 
         LOG.debug("creating table for childs");
-        BuergerTable table = new ChildTable(controller, detail, delete);
+        ChildTable table = new ChildTable(controller, detail, delete);
 
         table.setFrom(from);
         List<Buerger> entities = controller.queryKinder(controller.getCurrent().getBean());
@@ -216,13 +216,13 @@ public class BuergerViewFactory implements Serializable{
         return table;
     }
 
-    public BuergerTable generateTable(String from, final TableActionButton.Builder... buttonBuilders) {
+    public GenericTable generateTable(String from, final TableActionButton.Builder... buttonBuilders) {
         return this.createTable(from, controller.queryBuerger(), buttonBuilders);
     }
 
-    private BuergerTable createTable(String from, List<Buerger> entities, final TableActionButton.Builder... buttonBuilders) {
+    private GenericTable createTable(String from, List<Buerger> entities, final TableActionButton.Builder... buttonBuilders) {
         LOG.debug("creating table for buerger");
-        BuergerTable table = new BuergerTable(controller, buttonBuilders);
+        GenericTable table = new GenericTable<>(controller, Buerger.class, buttonBuilders);
 
         table.setFrom(from);
 

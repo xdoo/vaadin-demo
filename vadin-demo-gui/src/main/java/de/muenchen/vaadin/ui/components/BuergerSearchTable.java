@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 public class BuergerSearchTable extends CustomComponent {
 
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerSearchTable.class);
-    private BuergerTable table;
+    private GenericTable table;
     public BuergerSearchTable(final BuergerViewController controller, String navigateToForCreate, String from, final TableActionButton.Builder... buttonBuilders) {
         ActionButton create = new ActionButton(controller, SimpleAction.create,navigateToForCreate);
         create.addClickListener(clickEvent ->
@@ -39,7 +39,7 @@ public class BuergerSearchTable extends CustomComponent {
         
         setCompositionRoot(vlayout);
     }
-    public BuergerTable getTable(){
+    public GenericTable getTable(){
         return table;
     }
     

@@ -10,15 +10,18 @@ import java.util.Date;
  */
 public class Buerger extends BaseEntity {
 
-    @FieldIdentifier
+
     public static final String VORNAME = "vorname";
-    @FieldIdentifier
+
     public static final String NACHNAME = "nachname";
-    @FieldIdentifier
+
     public static final String GEBURTSDATUM = "geburtsdatum";
-    
+
+    @FieldIdentifier
     private String vorname;
+    @FieldIdentifier
     private String nachname;
+    @FieldIdentifier
     private Date geburtsdatum;
 
     public String getVorname() {
