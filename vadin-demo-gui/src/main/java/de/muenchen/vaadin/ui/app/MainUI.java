@@ -12,9 +12,16 @@ import com.vaadin.server.VaadinService;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
-import com.vaadin.ui.*;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.ComponentContainer;
+import com.vaadin.ui.CssLayout;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.BaseEntity;
 import de.muenchen.vaadin.demo.api.services.SecurityService;
@@ -36,7 +43,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.Locale;
 import java.util.Map.Entry;
 
 @SpringUI
@@ -54,6 +60,13 @@ public class MainUI extends UI implements ControllerContext {
     private final SecurityService security;
     private final MessageService i18n;
     private final EventBus eventBus;
+    private final boolean testMode = false;
+    private final LinkedHashMap<String, String> menuItems = new LinkedHashMap<String, String>();
+    protected ValoMenuLayout root = new ValoMenuLayout();
+    protected ComponentContainer viewDisplay = root.getContentContainer();
+    protected CssLayout menu = new CssLayout();
+    protected CssLayout menuItemsLayout = new CssLayout();
+    private Navigator navigator;
 
     @Autowired
     public MainUI(SpringViewProvider ViewProvider, SecurityService security, MessageService i18n, EventBus eventBus) {
@@ -65,20 +78,12 @@ public class MainUI extends UI implements ControllerContext {
         this.eventBus.register(this);
     }
 
-    private final boolean testMode = false;
-
-    protected ValoMenuLayout root = new ValoMenuLayout();
-    protected ComponentContainer viewDisplay = root.getContentContainer();
-    protected CssLayout menu = new CssLayout();
-    protected CssLayout menuItemsLayout = new CssLayout();
-    private Navigator navigator;
-    private final LinkedHashMap<String, String> menuItems = new LinkedHashMap<String, String>();
-
     @Override
     protected void init(VaadinRequest request) {
 
-        // hack
-        setLocale(Locale.GERMANY);
+        // Set Browser Locale
+        setLocale(getPage().getWebBrowser().getLocale());
+        i18n.setLocale(getPage().getWebBrowser().getLocale());
 
         // IE Support
         if (getPage().getWebBrowser().isIE()
