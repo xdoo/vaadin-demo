@@ -51,7 +51,7 @@ public class BuergerSearchForm extends CustomComponent {
         search.setId(String.format("%s_SEARCH_BUTTON", BuergerViewController.I18N_BASE_PATH));
         
         group.addComponents(query, search, reset);
-        search.click();
+
         setCompositionRoot(group);
     }
 

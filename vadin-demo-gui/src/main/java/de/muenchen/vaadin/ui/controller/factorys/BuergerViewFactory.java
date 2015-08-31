@@ -227,9 +227,9 @@ public class BuergerViewFactory implements Serializable{
         table.setFrom(from);
 
         getEventBus().register(table);
-        BuergerComponentEvent event = new BuergerComponentEvent(EventType.QUERY);
+/*        BuergerComponentEvent event = new BuergerComponentEvent(EventType.QUERY);
         event.addEntities(entities);
-        getEventBus().post(event);
+        getEventBus().post(event);*/
 
         return table;
     }

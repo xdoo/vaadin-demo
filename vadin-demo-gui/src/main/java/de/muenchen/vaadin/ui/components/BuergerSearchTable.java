@@ -39,7 +39,6 @@ public class BuergerSearchTable extends CustomComponent {
         vlayout.setSpacing(true);
         
         setCompositionRoot(vlayout);
-        search.refresh();
     }
     public GenericTable getTable(){
         return table;
