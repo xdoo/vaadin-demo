@@ -8,6 +8,8 @@ package de.muenchen.demo.service.services;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import de.muenchen.demo.service.domain.User;
+import de.muenchen.demo.service.domain.UserAuthority;
+import de.muenchen.demo.service.domain.UserAuthorityRepository;
 import de.muenchen.demo.service.domain.UserRepository;
 import de.muenchen.demo.service.util.Eventbus;
 import de.muenchen.demo.service.util.IdService;
@@ -17,6 +19,7 @@ import javax.persistence.EntityManager;
 
 import de.muenchen.demo.service.util.events.UserEvent;
 import de.muenchen.vaadin.demo.api.util.EventType;
+import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,22 +31,23 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class UserServiceImpl implements UserService {
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
-    
+
     UserRepository repo;
     QueryService<User> search;
-
+    @Autowired
+    UserAuthorityRepository userAuthorityRepository;
     Eventbus eventbus;
 
     @Autowired
     public UserServiceImpl(UserRepository repo, EntityManager em, Eventbus eventBus) {
         this.repo = repo;
-        this.search = new QueryService<>(this, em, User.class,"userName", "email");
+        this.search = new QueryService<>(this, em, User.class, "userName", "email");
         this.eventbus = eventBus;
         eventBus.register(this);
     }
-    
+
     @Override
     public User create() {
         User users = new User();
@@ -57,34 +61,43 @@ public class UserServiceImpl implements UserService {
         Preconditions.checkArgument(users.getId() == null, "On save, the ID must be empty");
         return this.repo.save(users);
     }
-    
+
     @Override
     public User read(String oid) {
-        List<User> result = this.repo.findByOid(oid);
-        if(result.isEmpty()) {
+        User result = this.repo.findFirstByOid(oid);
+        if (Objects.isNull(result)) {
             // TODO
             LOG.warn(String.format("found no users with oid '%s'", oid));
             return null;
         } else {
-            return result.get(0);
+            return result;
         }
     }
-    
+
     @Override
     public User update(User users) {
         return this.repo.save(users);
     }
-    
+
     @Override
     public void delete(String oid) {
         User item = this.read(oid);
 
         //this.sachbearbeiterService.releaseUserSachbearbeiter(oid);
+        this.deleteUser(item.getUsername());
         eventbus.post(new UserEvent(EventType.RELEASE, item));
 
         this.repo.delete(item);
     }
 
+    public void deleteUser(String username) {
+        List<UserAuthority> result = this.userAuthorityRepository.findByIdUserUsername(username);
+        if (result != null) {
+            result.stream().forEach(u -> {
+                this.userAuthorityRepository.delete(u);
+            });
+        }
+    }
     @Override
     public List<User> query() {
         Iterable<User> all = this.repo.findAll();
@@ -92,19 +105,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> query(String query) { 
+    public List<User> query(String query) {
         return this.search.query(query);
     }
 
     @Override
     public User readByUsername(String username) {
-        List<User> result = this.repo.findByUsername(username);
-        if(result.isEmpty()) {
+        User result = this.repo.findFirstByUsername(username);
+        if (Objects.isNull(result)) {
             // TODO
             LOG.warn(String.format("found no users with username '%s'", username));
             return null;
         } else {
-            return result.get(0);
+            return result;
         }
     }
 
@@ -123,7 +136,4 @@ public class UserServiceImpl implements UserService {
         return out;
     }
 
-
-    
 }
-

@@ -5,6 +5,7 @@
  */
 package de.muenchen.demo.service.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -27,7 +28,7 @@ import org.hibernate.search.annotations.Indexed;
 @Entity
 @Indexed
 @Table(name = "USERS")
-public class User {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue

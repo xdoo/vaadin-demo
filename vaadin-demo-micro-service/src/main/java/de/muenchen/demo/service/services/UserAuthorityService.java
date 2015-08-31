@@ -26,5 +26,4 @@ public interface UserAuthorityService {
     public List<UserAuthority> readByUsername(String username);
 
     public void delete(UserAuthId usersAuthoritys);
-
 }

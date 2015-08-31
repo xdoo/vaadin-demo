@@ -90,10 +90,48 @@ insert  into users ( ID,user_email, user_enabled, oid, user_password, user_usern
 insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (10,'claus.straube@muenchen.de',TRUE,'oid9',null,'claus.straube',3);
 insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (11,'m.kurz@muenchen.de',TRUE,'oid10',null,'m.kurz',3);
 insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (12,'sebastian.schoebel@muenchen.de',TRUE,'oid11',null,'sebastian.schoebel',3);
+insert  into users (id, user_email, user_enabled, mandant, oid, user_password, user_username) values ('13','user1@muenchen.de',TRUE,'2','oid13','user13','user13');
+insert  into users (id, user_email, user_enabled, mandant, oid, user_password, user_username) values ('14','user1@muenchen.de',TRUE,'2','oid14','user14','user14');
+insert  into users (id, user_email, user_enabled, mandant, oid, user_password, user_username) values ('15','user1@muenchen.de',TRUE,'2','oid15','user15','user15');
+insert  into users (id, user_email, user_enabled, mandant, oid, user_password, user_username) values ('16','user1@muenchen.de',TRUE,'2','oid16','user16','user16');
+insert  into users (id, user_email, user_enabled, mandant, oid, user_password, user_username) values ('17','user1@muenchen.de',TRUE,'2','oid17','user17','user17');
+insert  into users (id, user_email, user_enabled, mandant, oid, user_password, user_username) values ('18','user1@muenchen.de',TRUE,'2','oid18','user18','user18');
+insert  into users (id, user_email, user_enabled, mandant, oid, user_password, user_username) values ('19','user1@muenchen.de',TRUE,'2','oid19','user19','user19');
+insert  into users (id, user_email, user_enabled, mandant, oid, user_password, user_username) values ('20','user1@muenchen.de',TRUE,'2','oid20','user20','user20');
+insert  into users (id, user_email, user_enabled, mandant, oid, user_password, user_username) values ('21','user1@muenchen.de',TRUE,'2','oid21','user21','user21');
+insert  into users (id, user_email, user_enabled, mandant, oid, user_password, user_username) values ('22','user1@muenchen.de',TRUE,'2','oid22','user22','user22');
+insert  into users (id, user_email, user_enabled, mandant, oid, user_password, user_username) values ('23','user1@muenchen.de',TRUE,'2','oid23','user23','user23');
+insert  into users (id, user_email, user_enabled, mandant, oid, user_password, user_username) values ('24','user1@muenchen.de',TRUE,'2','oid24','user24','user24');
+insert  into users (id, user_email, user_enabled, mandant, oid, user_password, user_username) values ('25','user1@muenchen.de',TRUE,'2','oid25','user25','user25');
+insert  into users (id, user_email, user_enabled, mandant, oid, user_password, user_username) values ('26','user1@muenchen.de',TRUE,'2','oid26','user26','user26');
+insert  into users (id, user_email, user_enabled, mandant, oid, user_password, user_username) values ('27','user1@muenchen.de',TRUE,'2','oid27','user27','user27');
+insert  into users (id, user_email, user_enabled, mandant, oid, user_password, user_username) values ('28','user1@muenchen.de',TRUE,'2','oid28','user28','user28');
+insert  into users (id, user_email, user_enabled, mandant, oid, user_password, user_username) values ('29','user1@muenchen.de',TRUE,'2','oid29','user29','user29');
 
 
 insert  into authoritys (id, oid, auth_authority) values ('2','2','ADMIN');					
 insert into authoritys (id, oid, auth_authority) values ('3', '3', 'ADMIN');
+insert  into authoritys (id, oid, auth_authority) values ('9000','OIDM2_AUTHORITY001','USER1');
+insert  into authoritys (id, oid, auth_authority) values ('9001','OIDM2_AUTHORITY002','USER2');
+insert  into authoritys (id, oid, auth_authority) values ('9002','OIDM2_AUTHORITY003','USER3');
+insert  into authoritys (id, oid, auth_authority) values ('9003','OIDM2_AUTHORITY004','USER4');
+insert  into authoritys (id, oid, auth_authority) values ('9004','OIDM2_AUTHORITY005','USER5');
+insert  into authoritys (id, oid, auth_authority) values ('9005','OIDM2_AUTHORITY006','USER6');
+insert  into authoritys (id, oid, auth_authority) values ('9006','OIDM2_AUTHORITY007','USER7');
+insert  into authoritys (id, oid, auth_authority) values ('9007','OIDM2_AUTHORITY008','USER8');
+insert  into authoritys (id, oid, auth_authority) values ('9008','OIDM2_AUTHORITY009','USER9');
+insert  into authoritys (id, oid, auth_authority) values ('9009','OIDM2_AUTHORITY010','USER10');
+insert  into authoritys (id, oid, auth_authority) values ('9010','OIDM2_AUTHORITY011','USER11');
+insert  into authoritys (id, oid, auth_authority) values ('9011','OIDM2_AUTHORITY012','USER12');
+insert  into authoritys (id, oid, auth_authority) values ('9012','OIDM2_AUTHORITY013','USER13');
+insert  into authoritys (id, oid, auth_authority) values ('9013','OIDM2_AUTHORITY014','USER14');
+insert  into authoritys (id, oid, auth_authority) values ('9014','OIDM2_AUTHORITY015','USER15');
+insert  into authoritys (id, oid, auth_authority) values ('9015','OIDM2_AUTHORITY016','USER16');
+insert  into authoritys (id, oid, auth_authority) values ('9016','OIDM2_AUTHORITY017','USER17');
+insert  into authoritys (id, oid, auth_authority) values ('9017','OIDM2_AUTHORITY018','USER18');
+insert  into authoritys (id, oid, auth_authority) values ('9018','OIDM2_AUTHORITY019','USER19');
+insert  into authoritys (id, oid, auth_authority) values ('9019','OIDM2_AUTHORITY020','USER20');
+
 
 insert  into permissions (id,perm_permission,oid) values ('1000','PERM_newAdresse','1000');									
 insert  into permissions (id,perm_permission,oid) values ('1001','PERM_queryAdresse','1001');									
@@ -236,6 +274,30 @@ insert  into permissions (id, perm_permission,oid) values ('1137','PERM_copyList
 insert  into permissions (id, perm_permission,oid) values ('1138','PERM_deleteListPass','1138');
 insert  into permissions (id, perm_permission,oid) values ('1139','PERM_releaseStaatsangehoerigkeitAllBuerger','1139');
 insert  into permissions (id, perm_permission,oid) values ('1140','PERM_readStaatsangehoerigkeitBuerger','1140');
+
+--Permission Test
+
+insert  into permissions (id,perm_permission,oid) values ('500','PERM1','OIDM_PERMISSION001');
+insert  into permissions (id,perm_permission,oid) values ('501','PERM2','OIDM_PERMISSION002');
+insert  into permissions (id,perm_permission,oid) values ('502','PERM3','OIDM_PERMISSION003');
+insert  into permissions (id,perm_permission,oid) values ('503','PERM4','OIDM_PERMISSION004');
+insert  into permissions (id,perm_permission,oid) values ('504','PERM5','OIDM_PERMISSION005');
+insert  into permissions (id,perm_permission,oid) values ('505','PERM6','OIDM_PERMISSION006');
+insert  into permissions (id,perm_permission,oid) values ('506','PERM7','OIDM_PERMISSION007');
+insert  into permissions (id,perm_permission,oid) values ('507','PERM8','OIDM_PERMISSION008');
+insert  into permissions (id,perm_permission,oid) values ('508','PERM9','OIDM_PERMISSION009');
+insert  into permissions (id,perm_permission,oid) values ('509','PERM10','OIDM_PERMISSION010');
+insert  into permissions (id,perm_permission,oid) values ('510','PERM11','OIDM_PERMISSION011');
+insert  into permissions (id,perm_permission,oid) values ('511','PERM12','OIDM_PERMISSION012');
+insert  into permissions (id,perm_permission,oid) values ('512','PERM13','OIDM_PERMISSION013');
+insert  into permissions (id,perm_permission,oid) values ('513','PERM14','OIDM_PERMISSION014');
+insert  into permissions (id,perm_permission,oid) values ('514','PERM15','OIDM_PERMISSION015');
+insert  into permissions (id,perm_permission,oid) values ('515','PERM16','OIDM_PERMISSION016');
+insert  into permissions (id,perm_permission,oid) values ('516','PERM17','OIDM_PERMISSION017');
+insert  into permissions (id,perm_permission,oid) values ('517','PERM18','OIDM_PERMISSION018');
+insert  into permissions (id,perm_permission,oid) values ('518','PERM19','OIDM_PERMISSION019');
+insert  into permissions (id,perm_permission,oid) values ('519','PERM20','OIDM_PERMISSION020');
+
 
 
 
@@ -385,6 +447,17 @@ insert into authoritys_permissions (authority_id, permission_id) values ('2','11
 insert into authoritys_permissions (authority_id, permission_id) values ('2','1138');
 insert into authoritys_permissions (authority_id, permission_id) values ('2','1139');
 insert into authoritys_permissions (authority_id, permission_id) values ('2','1140');
+insert into authoritys_permissions (authority_id, permission_id) values ('9001','500');
+insert into authoritys_permissions (authority_id, permission_id) values ('9001','501');
+insert into authoritys_permissions (authority_id, permission_id) values ('9001','502');
+insert into authoritys_permissions (authority_id, permission_id) values ('9001','503');
+insert into authoritys_permissions (authority_id, permission_id) values ('9001','504');
+insert into authoritys_permissions (authority_id, permission_id) values ('9001','505');
+insert into authoritys_permissions (authority_id, permission_id) values ('9001','506');
+insert into authoritys_permissions (authority_id, permission_id) values ('9001','507');
+insert into authoritys_permissions (authority_id, permission_id) values ('9001','508');
+insert into authoritys_permissions (authority_id, permission_id) values ('9001','509');
+insert into authoritys_permissions (authority_id, permission_id) values ('9001','510');
 
 
 
@@ -404,6 +477,24 @@ insert into users_authoritys (authority_id, user_id) values (2, 9);
 insert into users_authoritys (authority_id, user_id) values (2, 10);
 insert into users_authoritys (authority_id, user_id) values (2, 11);
 insert into users_authoritys (authority_id, user_id) values (2, 12);
+insert  into users_authoritys (authority_id, user_id) values ('9000','13');
+insert  into users_authoritys (authority_id, user_id) values ('9000','14');
+insert  into users_authoritys (authority_id, user_id) values ('9007','15');
+insert  into users_authoritys (authority_id, user_id) values ('9002','16');
+insert  into users_authoritys (authority_id, user_id) values ('9002','17');
+insert  into users_authoritys (authority_id, user_id) values ('9002','18');
+insert  into users_authoritys (authority_id, user_id) values ('9003','19');
+insert  into users_authoritys (authority_id, user_id) values ('9004','20');
+insert  into users_authoritys (authority_id, user_id) values ('9006','21');
+insert  into users_authoritys (authority_id, user_id) values ('9006','22');
+insert  into users_authoritys (authority_id, user_id) values ('9008','23');
+insert  into users_authoritys (authority_id, user_id) values ('9010','24');
+insert  into users_authoritys (authority_id, user_id) values ('9008','25');
+insert  into users_authoritys (authority_id, user_id) values ('9002','26');
+insert  into users_authoritys (authority_id, user_id) values ('9001','27');
+insert  into users_authoritys (authority_id, user_id) values ('9003','28');
+insert  into users_authoritys (authority_id, user_id) values ('9005','29');
+
 
 
 
@@ -754,7 +845,7 @@ insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigke
 
 --Sachbearbeiter
 
-insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit,  MANDANT) values ('6000','OIDM2_SACHBEARBEITERS001','beamte','892154856','892541523','BA011S','2');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit, MANDANT) values ('6000','OIDM2_SACHBEARBEITERS001','beamte','892154856','892541523','BA011S','2');
 insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit,  MANDANT) values ('6001','OIDM2_SACHBEARBEITERS002','beamte','892154857','892541524','BA011S','2');
 insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit,  MANDANT) values ('6002','OIDM2_SACHBEARBEITERS003','beamte','892154858','892541525','BA011S','2');
 insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit,  MANDANT) values ('6003','OIDM2_SACHBEARBEITERS004','beamte','892154859','892541526','BA011S','2');
@@ -784,6 +875,15 @@ insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_
 insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit,  MANDANT) values ('6027','OIDM3_SACHBEARBEITERS008','beamte','892154883','892541550','BA011S','3');
 insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit,  MANDANT) values ('6028','OIDM3_SACHBEARBEITERS009','beamte','892154884','892541551','BA011S','3');
 insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit,  MANDANT) values ('6029','OIDM3_SACHBEARBEITERS010','beamte','892154885','892541552','BA011S','3');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit, user_id , MANDANT) values ('6030','OIDM2_SACHBEARBEITERS030','beamte','892154856','892154856','BA011S','13','2');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit, user_id , MANDANT) values ('6031','OIDM2_SACHBEARBEITERS031','beamte','892154857','892154857','BA011S','14','2');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit, user_id , MANDANT) values ('6032','OIDM2_SACHBEARBEITERS032','beamte','892154858','892154858','BA011S','15','2');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit, user_id , MANDANT) values ('6033','OIDM2_SACHBEARBEITERS033','beamte','892154859','892154859','BA011S','16','2');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit, user_id , MANDANT) values ('6034','OIDM2_SACHBEARBEITERS034','beamte','892154860','892154860','BA011S','17','2');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit, user_id , MANDANT) values ('6035','OIDM2_SACHBEARBEITERS035','beamte','892154861','892154861','BA011S','18','2');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit, user_id , MANDANT) values ('6036','OIDM2_SACHBEARBEITERS036','beamte','892154862','892154862','BA011S','19','2');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit, user_id , MANDANT) values ('6037','OIDM2_SACHBEARBEITERS037','beamte','892154863','892154863','BA011S','20','2');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit, user_id , MANDANT) values ('6038','OIDM2_SACHBEARBEITERS038','beamte','892154864','892154864','BA011S','21','2');
 
 --Bürger zu Sachbearbeiter
 insert into buerger_sachbearbeiter (BUERGER, SACHBEARBEITER) values ('2000','6000');

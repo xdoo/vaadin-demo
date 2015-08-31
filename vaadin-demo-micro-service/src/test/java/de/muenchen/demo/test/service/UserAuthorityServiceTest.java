@@ -1,218 +1,135 @@
-///*
-// * To change this license header, choose License Headers in Project Properties.
-// * To change this template file, choose Tools | Templates
-// * and open the template in the editor.
-// */
-//package de.muenchen.demo.test.service;
-//
-//import com.fasterxml.jackson.core.JsonProcessingException;
-//import de.muenchen.demo.service.Application;
-//import de.muenchen.demo.service.domain.AdresseExterneRepository;
-//import de.muenchen.demo.service.domain.AdresseInterneRepository;
-//import de.muenchen.demo.service.domain.AdresseReferenceRepository;
-//import de.muenchen.demo.service.domain.Authority;
-//import de.muenchen.demo.service.domain.AuthorityPermissionRepository;
-//import de.muenchen.demo.service.domain.AuthorityRepository;
-//import de.muenchen.demo.service.domain.BuergerRepository;
-//import de.muenchen.demo.service.domain.Mandant;
-//import de.muenchen.demo.service.domain.UserAuthority;
-//import de.muenchen.demo.service.domain.UserAuthorityRepository;
-//import de.muenchen.demo.service.domain.MandantRepository;
-//import de.muenchen.demo.service.domain.PassRepository;
-//import de.muenchen.demo.service.domain.PermissionRepository;
-//import de.muenchen.demo.service.domain.StaatsangehoerigkeitReferenceRepository;
-//import de.muenchen.demo.service.domain.User;
-//import de.muenchen.demo.service.domain.UserAuthId;
-//import de.muenchen.demo.service.domain.UserAuthorityRepository;
-//import de.muenchen.demo.service.domain.UserRepository;
-//import de.muenchen.demo.service.domain.WohnungRepository;
-//import de.muenchen.demo.service.services.UserAuthorityService;
-//import de.muenchen.demo.service.util.IdService;
-//import de.muenchen.demo.test.integration.InitTest;
-//import static java.lang.Boolean.TRUE;
-//import java.security.KeyManagementException;
-//import java.security.KeyStoreException;
-//import java.security.NoSuchAlgorithmException;
-//import java.util.List;
-//import org.apache.http.auth.AuthenticationException;
-//import org.junit.After;
-//import static org.junit.Assert.assertEquals;
-//import static org.junit.Assert.assertNotEquals;
-//import org.junit.Before;
-//import org.junit.Test;
-//import org.junit.runner.RunWith;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.test.SpringApplicationConfiguration;
-//import org.springframework.boot.test.WebIntegrationTest;
-//import org.springframework.security.authentication.AuthenticationManager;
-//import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-//import org.springframework.security.core.Authentication;
-//import org.springframework.security.core.context.SecurityContextHolder;
-//import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-//
-///**
-// *
-// * @author praktikant.tmar
-// */
-////@RunWith(SpringJUnit4ClassRunner.class)
-////@SpringApplicationConfiguration(classes = Application.class)
-////@WebIntegrationTest({"server.port=0", "management.port=0"})
-//public class UserAuthorityServiceTest {
-//
-//    @Autowired
-//    UserAuthorityService service;
-//
-//    @Autowired
-//    UserRepository usersRepo;
-//    @Autowired
-//    AuthorityRepository authRepo;
-//    @Autowired
-//    PermissionRepository permRepo;
-//    @Autowired
-//    UserAuthorityRepository userAuthRepo;
-//    @Autowired
-//    AuthorityPermissionRepository authPermRepo;
-//    @Autowired
-//    MandantRepository mandantRepo;
-//    @Autowired
-//    AdresseInterneRepository interneRepo;
-//    @Autowired
-//    AdresseExterneRepository externeRepo;
-//    @Autowired
-//    AdresseReferenceRepository referenceRepo;
-//    @Autowired
-//    BuergerRepository buergerRepo;
-//    @Autowired
-//    PassRepository passRepo;
-//    @Autowired
-//    WohnungRepository wohnRepo;
-//    @Autowired
-//    StaatsangehoerigkeitReferenceRepository staatRepo;
-//
-//
-//    @Autowired
-//    //@Qualifier("authenticationManager")
-//    AuthenticationManager authenticationManager;
-//
-//    @Before
-//    public void setUp() throws JsonProcessingException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
-//
-//        authPermRepo.deleteAll();
-//        userAuthRepo.deleteAll();
-//        usersRepo.deleteAll();
-//        authRepo.deleteAll();
-//        permRepo.deleteAll();
-//        buergerRepo.deleteAll();
-//        staatRepo.deleteAll();
-//        wohnRepo.deleteAll();
-//        passRepo.deleteAll();
-//        referenceRepo.deleteAll();
-//        interneRepo.deleteAll();
-//        externeRepo.deleteAll();
-//        mandantRepo.deleteAll();
-//        InitTest initTest = new InitTest(usersRepo, authRepo, permRepo, userAuthRepo, authPermRepo, mandantRepo);
-//        initTest.init();
-//        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken("hans", "test");
-//        Authentication auth = authenticationManager.authenticate(token);
-//        SecurityContextHolder.getContext().setAuthentication(auth);
-//    }
-//
-//
-//
+
+package de.muenchen.demo.test.service;
+
+import com.google.common.collect.Lists;
+import de.muenchen.demo.service.Application;
+import de.muenchen.demo.service.domain.UserAuthId;
+import de.muenchen.demo.service.domain.Authority;
+import de.muenchen.demo.service.domain.User;
+import de.muenchen.demo.service.domain.UserAuthority;
+import de.muenchen.demo.service.domain.UserAuthorityRepository;
+import de.muenchen.demo.service.services.UserAuthorityService;
+import de.muenchen.demo.service.services.AuthorityService;
+import de.muenchen.demo.service.services.UserService;
+import java.util.ArrayList;
+import java.util.List;
+import static org.junit.Assert.*;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.WebIntegrationTest;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+/**
+ *
+ * @author praktikant.tmar
+ */
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = Application.class)
+@WebIntegrationTest({"server.port=0", "management.port=0"})
+public class UserAuthorityServiceTest {
+
+    @Autowired
+    UserAuthorityService service;
+    @Autowired
+    AuthorityService authorityService;
+    @Autowired
+    UserService userService;
+    @Autowired
+    UserAuthorityRepository repo;
+    @Autowired
+    CacheManager cacheManager;
+
+    @Test
+    @WithMockUser(username = DomainConstants.M2_U001_NAME)
+    public void testCacheOnSave() {
+        System.out.println("========== save cache Test ==========");
+        Cache cache = cacheManager.getCache(UserAuthorityRepository.UserAuthority_CACHE);
+        Authority a1 = authorityService.read(DomainConstants.M2_AU003);
+        User u1 = userService.read("oid14");
+        UserAuthId idA = new UserAuthId(u1, a1);
+        UserAuthority authPerm = new UserAuthority();
+        authPerm.setId(idA);
+        assertNull(cache.get(authPerm.getId(), UserAuthority.class));
+        UserAuthority au1 = service.save(authPerm);
+        assertNotNull(cache.get(authPerm.getId(), UserAuthority.class));
+        System.out.println(String.format("Objekt wurde beim Speichern mit der ID '%s' in den Cache gelegt.", authPerm.getId()));
+    }
+
 //    @Test
-//    public void saveTest() throws JsonProcessingException, AuthenticationException {
-//        User user = new User();
-//        user.setEmail("user@muenchen.de");
-//        user.setPassword("user");
-//        user.setUsername("user");
-//        user.setOid(IdService.next());
-//        user.setEnabled(TRUE);
-//        Mandant mandant = new Mandant();
-//        mandant.setOid("10");
-//        mandantRepo.save(mandant);
-//        user.setMandant(mandant);
-//        usersRepo.save(user);
-//        Authority auth = new Authority();
-//        auth.setAuthority("ADMIN");
-//        auth.setOid(IdService.next());
-//        authRepo.save(auth);
-//        UserAuthority userAuth = new UserAuthority();
-//        UserAuthId id = new UserAuthId(user, auth);
-//        userAuth.setId(id);
-//        UserAuthority a = service.save(userAuth);
-//        assertNotEquals(null, a.getId());
+//    @WithMockUser(username = DomainConstants.M2_U001_NAME)
+//    public void testCacheOnRead() {
+//        System.out.println("========== read cache Test ==========");
+//        Cache cache = cacheManager.getCache(UserAuthorityRepository.UserAuthority_CACHE);
 //
+//        Authority a1 = authorityService.read(DomainConstants.M2_AU003);
+//        user u1 = userService.read("oid26");
+//        UserAuthId idA = new UserAuthId(u1, a1);
+//        UserAuthId cacheId = idA;
+//        assertNull(cache.get(cacheId));
+//        UserAuthority b1 = service.read(idA);
+//        assertNotNull(cache.get(b1.getId(), UserAuthority.class));
+//        assertEquals(cacheId, b1.getId());
+//        System.out.println(String.format("Objekt wurde beim Lesen mit der ID '%s' in den Cache gelegt.", b1.getId()));
 //    }
-//
-//
-//
-//    @Test
-//    public void deleteTest() throws JsonProcessingException, AuthenticationException {
-//        User user = new User();
-//        user.setEmail("user@muenchen.de");
-//        user.setPassword("user");
-//        user.setUsername("user");
-//        user.setOid(IdService.next());
-//        user.setEnabled(TRUE);
-//        Mandant mandant = new Mandant();
-//        mandant.setOid("10");
-//        mandantRepo.save(mandant);
-//        user.setMandant(mandant);
-//        usersRepo.save(user);
-//        Authority auth = new Authority();
-//        auth.setAuthority("ADMIN");
-//        auth.setOid(IdService.next());
-//        authRepo.save(auth);
-//        UserAuthority userAuth = new UserAuthority();
-//        UserAuthId id = new UserAuthId(user, auth);
-//        userAuth.setId(id);
-//        service.save(userAuth);
-//        service.delete(id);
-//        List<UserAuthority> a = service.readByUsername("user");
-//        assertEquals(null, a);
-//    }
-//
-//    @Test
-//    public void queryTest() throws JsonProcessingException, AuthenticationException {
-//        User user = new User();
-//        user.setEmail("user@muenchen.de");
-//        user.setPassword("user");
-//        user.setUsername("user");
-//        user.setOid(IdService.next());
-//        user.setEnabled(TRUE);
-//        Mandant mandant = new Mandant();
-//        mandant.setOid("10");
-//        mandantRepo.save(mandant);
-//        user.setMandant(mandant);
-//        usersRepo.save(user);
-//        Authority auth = new Authority();
-//        auth.setAuthority("ADMIN");
-//        auth.setOid(IdService.next());
-//        authRepo.save(auth);
-//        UserAuthority userAuth = new UserAuthority();
-//        UserAuthId id = new UserAuthId(user, auth);
-//        userAuth.setId(id);
-//        service.save(userAuth);
-//        List<UserAuthority> a = service.query();
-//        assertEquals(3, a.size());
-//    }
-//
-//
-//    @After
-//    public void TearDown() {
-//        authPermRepo.deleteAll();
-//        userAuthRepo.deleteAll();
-//        usersRepo.deleteAll();
-//        authRepo.deleteAll();
-//        permRepo.deleteAll();
-//        buergerRepo.deleteAll();
-//        staatRepo.deleteAll();
-//        wohnRepo.deleteAll();
-//        passRepo.deleteAll();
-//        referenceRepo.deleteAll();
-//        interneRepo.deleteAll();
-//        externeRepo.deleteAll();
-//        mandantRepo.deleteAll();
-//
-//    }
-//}
+
+    @Test
+    @WithMockUser(username = DomainConstants.M2_U001_NAME)
+    public void saveTest() {
+        System.out.println("========== save UserAuthority Test ==========");
+        Authority a1 = authorityService.read(DomainConstants.M2_AU003);
+        User u1 = userService.read("oid13");
+        UserAuthId idA = new UserAuthId(u1, a1);
+        UserAuthority authPerm = new UserAuthority();
+        authPerm.setId(idA);
+        UserAuthority au1 = service.save(authPerm);
+        assertNotNull(au1);
+        assertNotNull(repo.findFirstById(idA));
+        System.out.println(String.format("UserAuthority wurde in der DB gespeichert."));
+    }
+
+    @Test
+    @WithMockUser(username = DomainConstants.M2_U001_NAME)
+    public void readTest() {
+        System.out.println("========== read UserAuthority Test ==========");
+        Authority a1 = authorityService.read(DomainConstants.M2_AU003);
+        User u1 = userService.read("oid16");
+        UserAuthId idA = new UserAuthId(u1, a1);
+        UserAuthority b1 = service.read(idA);
+        assertNotNull(b1);
+        System.out.println(String.format("UserAuthority konnte mit OID '%s' aus der DB gelesen werden.", b1.getId()));
+    }
+
+    @Test
+    @WithMockUser(username = DomainConstants.M2_U001_NAME)
+    public void deleteTest() {
+        System.out.println("========== delete UserAuthority Test ==========");
+        Authority a1 = authorityService.read(DomainConstants.M2_AU011);
+        User u1 = userService.read("oid24");
+        UserAuthId idA = new UserAuthId(u1, a1);
+        int x = this.count();
+        service.delete(idA);
+        assertEquals(x - 1, this.count());
+        System.out.println(String.format("UserAuthority konnte  aus der DB (und dem Cache) gelöscht werden."));
+    }
+
+    @Test
+    @WithMockUser(username = DomainConstants.M2_U001_NAME)
+    public void queryTest() {
+        System.out.println("========== query UserAuthority==========");
+        int x = this.count();
+        List<UserAuthority> bs = service.query();
+        assertEquals(x, bs.size());
+        System.out.println(String.format("Suche wurde erfolgreich durchgeführt.  Ergebnis der Suche: %s", bs.size()));
+    }
+
+    private int count() {
+        ArrayList<UserAuthority> all = Lists.newArrayList(repo.findAll());
+        return all.size();
+    }
+
+}

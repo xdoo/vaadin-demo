@@ -8,10 +8,15 @@ package de.muenchen.demo.service.services;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import de.muenchen.demo.service.domain.Authority;
+import de.muenchen.demo.service.domain.AuthorityPermission;
+import de.muenchen.demo.service.domain.AuthorityPermissionRepository;
 import de.muenchen.demo.service.domain.AuthorityRepository;
+import de.muenchen.demo.service.domain.UserAuthority;
+import de.muenchen.demo.service.domain.UserAuthorityRepository;
 import de.muenchen.demo.service.util.IdService;
 import de.muenchen.demo.service.util.QueryService;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,22 +29,25 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class AuthorityServiceImpl implements AuthorityService {
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(AuthorityService.class);
-    
+
     AuthorityRepository repo;
     QueryService<Authority> search;
-
+    @Autowired
+    UserAuthorityRepository userAuthorityRepository;
+    @Autowired
+    AuthorityPermissionRepository authorityPermissionRepository;
 
     public AuthorityServiceImpl() {
     }
 
     @Autowired
-    public AuthorityServiceImpl(AuthorityRepository repo,UserService userService, EntityManager em) {
+    public AuthorityServiceImpl(AuthorityRepository repo, UserService userService, EntityManager em) {
         this.repo = repo;
-        this.search = new QueryService<>(userService, em, Authority.class,"userName", "email");
+        this.search = new QueryService<>(userService, em, Authority.class, "userName", "email");
     }
-    
+
     @Override
     public Authority create() {
         Authority authority = new Authority();
@@ -53,28 +61,48 @@ public class AuthorityServiceImpl implements AuthorityService {
         Preconditions.checkArgument(authority.getId() == null, "On save, the ID must be empty");
         return this.repo.save(authority);
     }
-    
+
     @Override
     public Authority read(String oid) {
-        List<Authority> result = this.repo.findByOid(oid);
-        if(result.isEmpty()) {
+        Authority result = this.repo.findFirstByOid(oid);
+        if (Objects.isNull(result)) {
             // TODO
             LOG.warn(String.format("found no authority with oid '%s'", oid));
             return null;
         } else {
-            return result.get(0);
+            return result;
         }
     }
-    
+
     @Override
     public Authority update(Authority authority) {
         return this.repo.save(authority);
     }
-    
+
     @Override
     public void delete(String oid) {
         Authority item = this.read(oid);
+        this.deleteUserAuthority(item.getAuthority());
+        this.deletePermissionAuthority(item.getAuthority());
         this.repo.delete(item);
+    }
+
+    public void deleteUserAuthority(String authority) {
+        List<UserAuthority> result = this.userAuthorityRepository.findByIdAuthorityAuthority(authority);
+        if (result != null) {
+            result.stream().forEach(u -> {
+                this.userAuthorityRepository.delete(u);
+            });
+        }
+    }
+
+    public void deletePermissionAuthority(String authority) {
+        List<AuthorityPermission> result = this.authorityPermissionRepository.findByIdAuthorityAuthority(authority);
+        if (result != null) {
+            result.stream().forEach(u -> {
+                this.authorityPermissionRepository.delete(u);
+            });
+        }
     }
 
     @Override
@@ -84,11 +112,10 @@ public class AuthorityServiceImpl implements AuthorityService {
     }
 
     @Override
-    public List<Authority> query(String query) { 
+    public List<Authority> query(String query) {
         return this.search.query(query);
     }
 
-    
     @Override
     public Authority copy(String oid) {
 
@@ -104,7 +131,4 @@ public class AuthorityServiceImpl implements AuthorityService {
         return out;
     }
 
-
-    
 }
-

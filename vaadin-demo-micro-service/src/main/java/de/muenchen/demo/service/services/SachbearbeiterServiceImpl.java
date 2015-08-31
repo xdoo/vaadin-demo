@@ -133,6 +133,16 @@ public class SachbearbeiterServiceImpl implements SachbearbeiterService {
     }
 
     @Override
+    public void copy(List<String> oids) {
+        oids.stream().forEach(this::copy);
+    }
+
+    @Override
+    public void delete(List<String> oids) {
+        oids.stream().forEach(this::delete);
+    }
+
+    @Override
     public void releaseSachbearbeiterBuerger(String buergerOid, String sOid) {
 
         Sachbearbeiter sachbearbeiter = this.read(sOid);
@@ -208,17 +218,19 @@ public class SachbearbeiterServiceImpl implements SachbearbeiterService {
     }
 
     @Subscribe
-    public void sachbearbeiterEventHandler(SachbearbeiterEvent event){
+    public void sachbearbeiterEventHandler(SachbearbeiterEvent event) {
         switch (event.getEventType()) {
-            case UPDATE: update(event.getEntity());
-                        break;
-            }
+            case UPDATE:
+                update(event.getEntity());
+                break;
+        }
     }
 
     @Subscribe
-    public void userEventHandler(UserEvent event){
+    public void userEventHandler(UserEvent event) {
         switch (event.getEventType()) {
-            case RELEASE: readUserSachbearbeiter(event.getEntity().getOid());
+            case RELEASE:
+                readUserSachbearbeiter(event.getEntity().getOid());
                 break;
         }
     }
