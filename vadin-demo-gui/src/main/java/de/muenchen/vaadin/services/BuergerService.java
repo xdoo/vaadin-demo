@@ -1,6 +1,7 @@
 package de.muenchen.vaadin.services;
 
 import de.muenchen.vaadin.demo.api.domain.Buerger;
+
 import java.util.List;
 
 /**
@@ -74,7 +75,9 @@ public interface BuergerService {
     public Buerger copyBuerger(Buerger entity);
     
     public List<Buerger> queryKinder(Buerger entity);
+    public List<Buerger> queryPartner(Buerger entity);
     
     public Buerger saveKind(Buerger entity, Buerger kind);
     public Buerger addKind(Buerger entity, Buerger kind);
+    public Buerger addPartner(Buerger entity, Buerger partner);
 }

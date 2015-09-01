@@ -72,6 +72,11 @@ public class BuergerRestClientImpl implements BuergerRestClient {
     public List<Buerger> queryKinder(List<Link> links, RestTemplate restTemplate) {
         return this.requestMultiSource(HttpMethod.GET, "kinder", links, restTemplate);
     }
+
+    @Override
+    public List<Buerger> queryPartner(List<Link> links, RestTemplate restTemplate) {
+        return this.requestMultiSource(HttpMethod.GET, "partner", links, restTemplate);
+    }
     
     @Override
     public Buerger saveBuergerKind(Buerger buerger, Buerger kind, RestTemplate restTemplate) {
@@ -84,9 +89,16 @@ public class BuergerRestClientImpl implements BuergerRestClient {
     @Override
     public Buerger addBuergerKind(Buerger buerger, Buerger kind, RestTemplate restTemplate) {
         //ToDO solve need for hardcoded link
-        Optional<Link> link = Optional.of(new Link("http://localhost:8080/buerger/add/buerger/"+buerger.getOid()+"/kind/"+kind.getOid()+"").withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_KIND));
+        Optional<Link> link = Optional.of(new Link("http://localhost:8080/buerger/add/buerger/" + buerger.getOid() + "/kind/" + kind.getOid() + "").withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_KIND));
         LOG.warn("used Link: "+link.get().toString());
         return this.writeSingleSource(link, kind, restTemplate);
+    }
+    @Override
+    public Buerger addBuergerPartner(Buerger buerger, Buerger partner, RestTemplate restTemplate) {
+        //ToDO solve need for hardcoded link
+        Optional<Link> link = Optional.of(new Link("http://localhost:8080/buerger/add/buerger/"+buerger.getOid()+"/partner/"+partner.getOid()+"").withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_KIND));
+        LOG.warn("used Link: "+link.get().toString());
+        return this.writeSingleSource(link, partner, restTemplate);
     }
     
     public Buerger writeSingleSource(String rel, Buerger buerger, RestTemplate restTemplate) {

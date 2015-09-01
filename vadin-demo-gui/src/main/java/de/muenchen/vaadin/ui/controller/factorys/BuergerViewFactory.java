@@ -35,7 +35,9 @@ public class BuergerViewFactory {
     /**Singeltons of Components. **/
     private  Optional<BuergerSearchTable> searchTable = Optional.<BuergerSearchTable>empty();
     private  Optional<ChildSearchTable> childSearchTable = Optional.empty();
+    private  Optional<ChildSearchTable> partnerSearchTable = Optional.empty();
     private  Optional<BuergerChildTab> childTab = Optional.empty();
+    private  Optional<BuergerPartnerTab> partnerTab = Optional.empty();
     private  Optional<BuergerCreateForm> createForm = Optional.empty();
     private  Optional<BuergerCreateForm> createChildForm = Optional.empty();
     private  Optional<BuergerUpdateForm> updateForm = Optional.empty();
@@ -79,6 +81,15 @@ public class BuergerViewFactory {
             getEventBus().register(tab);
             childTab = Optional.of(tab);}
         return childTab.get();
+    }
+
+    public BuergerPartnerTab generatePartnerTab(String navigateToForDetail, String navigateForCreate, String navigateForAdd, String from) {
+        if(!partnerTab.isPresent())
+        {
+            BuergerPartnerTab tab = new BuergerPartnerTab(controller, navigateToForDetail, navigateForCreate, navigateForAdd, from);
+            getEventBus().register(tab);
+            partnerTab = Optional.of(tab);}
+        return partnerTab.get();
     }
 
     /**
@@ -167,6 +178,27 @@ public class BuergerViewFactory {
         return childSearchTable.get();
 
     }
+    public ChildSearchTable generateBuergerPartnerSearchTable(String navigateToForEdit, String navigateToForDetail, String navigateForCreate, String navigateFrom) {
+
+
+        if(!partnerSearchTable.isPresent()){
+            //BuergerTableButtonFactory detail = BuergerTableButtonFactory.getFactory(navigateToForDetail, BuergerTableDetailButton.class);
+            TableActionButton.Builder select = TableActionButton.Builder.make(controller, TableAction.tableadd,navigateToForEdit, (container, id) ->
+                            getEventBus().post(new BuergerAppEvent(container.getItem(id),id,EventType.SAVE_AS_PARTNER).navigateTo(navigateToForDetail).from(navigateFrom))
+            );
+            LOG.debug("creating 'partnerSearch' table for buerger");
+            partnerSearchTable = Optional.of(new ChildSearchTable(
+                    controller,
+                    navigateToForEdit,
+                    navigateToForDetail,
+                    navigateForCreate,
+                    navigateFrom,
+                    // Schaltflächen
+                    select
+            ));}
+        return partnerSearchTable.get();
+
+    }
 
     public BuergerTable generateChildTable(String navigateToForDetail, String from) {
 
@@ -180,6 +212,25 @@ public class BuergerViewFactory {
         List<Buerger> entities = controller.queryKinder(controller.getCurrent().getBean());
         getEventBus().register(table);
         BuergerComponentEvent event = new BuergerComponentEvent(EventType.CHILDQUERY);
+        event.addEntities(entities);
+        getEventBus().post(event);
+
+
+        return table;
+    }
+
+    public BuergerTable generatePartnerTable(String navigateToForDetail, String from) {
+
+        TableActionButton.Builder detail = TableActionButton.Builder.make(controller, TableAction.tabledetail, navigateToForDetail, (container, id) ->
+                        getEventBus().post(new BuergerAppEvent(container.getItem(id), id, EventType.SELECT2READ).navigateTo(navigateToForDetail).from(from))
+        );
+        LOG.debug("creating table for partner");
+        BuergerTable table = new BuergerTable(controller, detail);
+
+        table.setFrom(from);
+        List<Buerger> entities = controller.queryPartner(controller.getCurrent().getBean());
+        getEventBus().register(table);
+        BuergerComponentEvent event = new BuergerComponentEvent(EventType.QUERY);
         event.addEntities(entities);
         getEventBus().post(event);
 

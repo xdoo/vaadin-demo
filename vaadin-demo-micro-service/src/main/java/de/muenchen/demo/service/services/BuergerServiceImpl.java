@@ -416,6 +416,7 @@ public class BuergerServiceImpl implements BuergerService {
         this.update(buerger);
     }
 
+
     @Subscribe
     public void evnetHandler(BuergerEvent event){
         switch (event.getEventType()) {

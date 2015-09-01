@@ -240,7 +240,17 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
     public Buerger addBuergerKind(Buerger entity) {
         return service.addKind(getCurrent().getBean(), entity);
     }
-    
+
+    /**
+     * Speichert eine Partnerschaftesbeziehung zu einem {@link Buerger} Objekt in der Datenbank.
+     *
+     * @param entity Kind
+     * @return Buerger
+     */
+    public Buerger addBuergerPartner(Buerger entity) {
+        return service.addPartner(getCurrent().getBean(), entity);
+    }
+
     /**
      * Speichert die Änderungen an einem {@link Buerger} Objekt in der Datenbank.
      * 
@@ -272,6 +282,10 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
         return service.queryKinder(entity);
     }
 
+    public List<Buerger> queryPartner(Buerger entity) {
+
+        return service.queryPartner(entity);
+    }
     
     /////////////////////
     // Event Steuerung //
@@ -329,10 +343,24 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
             case ADD_SEARCHED_CHILD:
                 navigateEventHandler(event);
                 break;
+            case SAVE_AS_PARTNER:
+                saveAsPartnerEventHandler(event);
+            case ADD_PARTNER:
+                navigateEventHandler(event);
             default:
                 LOG.debug("No matching handler found.");
         }
 
+    }
+
+    private void saveAsPartnerEventHandler(BuergerAppEvent event) {
+        this.addBuergerPartner(event.getEntity());
+        GenericSuccessNotification succes = new GenericSuccessNotification(
+                resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.add, Type.label)),
+                resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.add, Type.text)));
+        succes.show(Page.getCurrent());
+        this.eventbus.post(new BuergerComponentEvent(event.getEntity(), EventType.UPDATE));
+        navigateEventHandler(event);
     }
 
     /**
