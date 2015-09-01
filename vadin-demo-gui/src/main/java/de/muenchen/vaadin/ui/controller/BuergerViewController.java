@@ -104,6 +104,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
         //Set Controller in Factory after Contruct.
         //to prevent circular reference
         buergerViewFactory.setController(this);
+        getEventbus().register(buergerViewFactory);
     }
 
     

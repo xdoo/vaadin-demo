@@ -9,6 +9,7 @@ import org.springframework.core.env.Environment;
 
 import java.io.Serializable;
 import java.util.Locale;
+import java.util.Set;
 
 /**
  * @author claus.straube
@@ -57,6 +58,7 @@ public class MessageServiceImpl implements MessageService, Serializable {
     @Override
     public void setLocale(Locale locale) {
         if (i18n.getSupportedLocales().contains(locale)) {
+            LOG.debug("Locale set to " + locale.getDisplayLanguage());
             this.locale = locale;
         } else {
             LOG.warn("Browser Locale " + locale.toLanguageTag() + " not supported. Using fallback locale.");
@@ -64,4 +66,8 @@ public class MessageServiceImpl implements MessageService, Serializable {
         }
     }
 
+    @Override
+    public Set<Locale> getSupportedLocales() {
+        return i18n.getSupportedLocales();
+    }
 }

@@ -6,22 +6,13 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.server.Responsive;
-import com.vaadin.server.VaadinRequest;
-import com.vaadin.server.VaadinService;
+import com.vaadin.server.*;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
+import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.ComponentContainer;
-import com.vaadin.ui.CssLayout;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.BaseEntity;
 import de.muenchen.vaadin.demo.api.services.SecurityService;
@@ -33,6 +24,7 @@ import de.muenchen.vaadin.ui.app.views.MainView;
 import de.muenchen.vaadin.ui.app.views.events.AppEvent;
 import de.muenchen.vaadin.ui.app.views.events.LoginEvent;
 import de.muenchen.vaadin.ui.app.views.events.LogoutEvent;
+import de.muenchen.vaadin.ui.app.views.events.RefreshEvent;
 import de.muenchen.vaadin.ui.components.GenericConfirmationWindow;
 import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.controller.ControllerContext;
@@ -41,8 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Iterator;
-import java.util.LinkedHashMap;
+import java.util.*;
 import java.util.Map.Entry;
 
 @SpringUI
@@ -200,8 +191,8 @@ public class MainUI extends UI implements ControllerContext {
 
     private CssLayout buildMenu() {
         this.menu.addComponent(this.createMenuTitle());
-        this.menu.addComponent(this.createRightCorner());
         this.menu.addComponent(this.createNavigationMenu());
+        this.menu.addComponent(this.createLanguageSelector());
         return menu;
     }
 
@@ -218,9 +209,32 @@ public class MainUI extends UI implements ControllerContext {
         return top;
     }
 
-    private Component createRightCorner() {
-        Label label = new Label("foo");
-        return label;
+    private Component createLanguageSelector() {
+        final HorizontalLayout bottom = new HorizontalLayout();
+
+        ArrayList<String> languages = new ArrayList<>();
+        i18n.getSupportedLocales().stream().forEach(locale -> languages.add(locale.getDisplayLanguage()));
+
+        LOG.debug("Available Languages: " + i18n.getSupportedLocales().size());
+        ComboBox box = new ComboBox("Sprache", languages);
+        box.setValue(i18n.getLocale().getDisplayLanguage());
+        box.setNullSelectionAllowed(false);
+        box.setTextInputAllowed(false);
+
+
+        box.addValueChangeListener(valueChangeEvent -> i18n.getSupportedLocales().stream().forEach(locale -> {
+            if (valueChangeEvent.getProperty().getValue().equals(locale.getDisplayLanguage())) {
+                i18n.setLocale(locale);
+                eventBus.post(new RefreshEvent());
+            }
+        }));
+
+        bottom.setHeight("10%");
+        bottom.setMargin(false);
+        bottom.setSpacing(false);
+        bottom.addComponent(box);
+        bottom.setComponentAlignment(box, Alignment.BOTTOM_CENTER);
+        return bottom;
     }
 
     private Component createSettings() {

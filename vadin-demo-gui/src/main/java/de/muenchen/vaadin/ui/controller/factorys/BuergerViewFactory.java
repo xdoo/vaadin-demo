@@ -1,13 +1,17 @@
 package de.muenchen.vaadin.ui.controller.factorys;
 
 import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import com.vaadin.data.util.BeanItem;
+import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.TabSheet;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.demo.api.util.EventType;
+import de.muenchen.vaadin.ui.app.views.MainView;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
+import de.muenchen.vaadin.ui.app.views.events.RefreshEvent;
 import de.muenchen.vaadin.ui.components.BuergerChildTab;
 import de.muenchen.vaadin.ui.components.BuergerCreateForm;
 import de.muenchen.vaadin.ui.components.BuergerReadForm;
@@ -244,5 +248,22 @@ public class BuergerViewFactory implements Serializable{
 
     public void setController(BuergerViewController controller) {
         this.controller = controller;
+    }
+
+    @Subscribe
+    public void refresh(RefreshEvent event){
+        LOG.debug("RefreshEvent received");
+        searchTable = Optional.<BuergerSearchTable>empty();
+        childSearchTable = Optional.empty();
+        childTab = Optional.empty();
+        createForm = Optional.empty();
+        createChildForm = Optional.empty();
+        updateForm = Optional.empty();
+        readForm = Optional.empty();
+
+        //Work around to reload the current page for the changes to take effect.
+        String old = controller.getNavigator().getState();
+        controller.getNavigator().navigateTo(MainView.NAME);
+        controller.getNavigator().navigateTo(old);
     }
 }
