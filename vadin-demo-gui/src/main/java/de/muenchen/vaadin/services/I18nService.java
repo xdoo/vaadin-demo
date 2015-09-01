@@ -20,5 +20,12 @@ public interface I18nService {
      */
     Set<Locale> getSupportedLocales();
 
+    /**
+     * Get the fallback Locale.
+     * <p>
+     * This can be used as the default Locale if e.g. the desired Locale is not contained in the supported ones.
+     *
+     * @return the fallback locale.
+     */
     Locale getFallbackLocale();
 }

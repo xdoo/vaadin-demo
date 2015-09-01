@@ -55,7 +55,7 @@ public class I18nServiceConfigImpl implements I18nService {
         String message = env.getProperty(fullPath);
         if (message == null) {
             LOG.warn(String.format("found no message to path \"%s\"", fullPath));
-            return fullPath;
+            return getDebug() ? fullPath : "Could not be resolved in this language.";
         }
         return isoToUtf8(message);
     }
@@ -106,6 +106,14 @@ public class I18nServiceConfigImpl implements I18nService {
         return forLanguageTag(localeString);
     }
 
+    /**
+     * Try to convert a well-formed language-tag String into a Locale.
+     * <p>
+     * If the language tag can't be parsed an IllegalArgumentException will be thrown.
+     *
+     * @param s , formed as a language tag, e.g. de-DE
+     * @return the best fitted Locale to the string.
+     */
     private Locale forLanguageTag(String s) {
         Locale locale = Locale.forLanguageTag(s);
 
@@ -113,5 +121,14 @@ public class I18nServiceConfigImpl implements I18nService {
             throw new IllegalArgumentException(s + " could not be converted to a Locale.");
 
         return locale;
+    }
+
+    /**
+     * Get if this Service is in debug mode.
+     *
+     * @return true if in debug.
+     */
+    private boolean getDebug() {
+        return LOG.isDebugEnabled();
     }
 }
