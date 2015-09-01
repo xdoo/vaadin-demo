@@ -1,6 +1,30 @@
 package de.muenchen.demo.service.rest;
 
 import com.google.common.collect.Lists;
+import de.muenchen.demo.service.domain.Buerger;
+import de.muenchen.demo.service.domain.Pass;
+import de.muenchen.demo.service.domain.Sachbearbeiter;
+import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
+import de.muenchen.demo.service.domain.StaatsangehoerigkeitReference;
+import de.muenchen.demo.service.domain.Wohnung;
+import de.muenchen.demo.service.rest.api.BuergerResourceAssembler;
+import de.muenchen.demo.service.rest.api.PassResource;
+import de.muenchen.demo.service.rest.api.PassResourceAssembler;
+import de.muenchen.demo.service.rest.api.SachbearbeiterResource;
+import de.muenchen.demo.service.rest.api.SachbearbeiterResourceAssembler;
+import de.muenchen.demo.service.rest.api.StaatsangehoerigkeitResourceAssembler;
+import de.muenchen.demo.service.rest.api.WohnungResourceAssembler;
+import de.muenchen.demo.service.services.BuergerService;
+import de.muenchen.demo.service.services.PassService;
+import de.muenchen.demo.service.services.SachbearbeiterService;
+import de.muenchen.demo.service.services.StaatsangehoerigkeitService;
+import de.muenchen.demo.service.services.UserService;
+import de.muenchen.demo.service.services.WohnungService;
+import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
+import de.muenchen.vaadin.demo.api.rest.BuergerResource;
+import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
+import de.muenchen.vaadin.demo.api.rest.StaatsangehoerigkeitResource;
+import de.muenchen.vaadin.demo.api.rest.WohnungResource;
 import de.muenchen.demo.service.domain.*;
 import de.muenchen.demo.service.rest.api.*;
 import de.muenchen.demo.service.services.*;
@@ -22,7 +46,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -144,7 +172,7 @@ public class BuergerController {
      * @return
      */
     @Secured({"PERM_deleteListBuerger"})
-    @RequestMapping(value = "/delete", method = {RequestMethod.POST})
+    @RequestMapping(method = {RequestMethod.POST})
     public ResponseEntity deleteListBuerger(@RequestBody ArrayList<String> oids) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("delete buerger");
@@ -195,7 +223,7 @@ public class BuergerController {
      * @return
      */
     @Secured({"PERM_updateBuerger"})
-    @RequestMapping(value = "/{oid}", method = {RequestMethod.POST})
+    @RequestMapping(value = "/{oid}", method = {RequestMethod.PUT})
     public ResponseEntity updateBuerger(@PathVariable("oid") String oid, @RequestBody BuergerResource request) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("update buerger");
@@ -349,14 +377,17 @@ public class BuergerController {
      * @return
      */
     @Secured({"PERM_releaseBuergerElternteil"})
-    @RequestMapping(value = "/release/elternteil/{oid}/{elternteilOid}", method = {RequestMethod.GET})
-    public ResponseEntity releaseBuergerElternteil(@PathVariable("oid") String oid, @PathVariable("elternteilOid") String elternteilOid) {
+    @RequestMapping(value = "/release/elternteil/{oid}", method = {RequestMethod.POST})
+    public ResponseEntity releaseBuergerElternteil(@PathVariable("oid") String oid, @RequestBody String elternteilOid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("release Buerger elternteil");
         }
         this.service.releaseBuergerElternteil(oid, elternteilOid);
-        return ResponseEntity.ok().build();
+       
 
+
+        BuergerResource resource = this.assembler.assembleWithAllLinks(service.read(oid));
+        return ResponseEntity.ok(resource);
     }
 
     /**
@@ -390,10 +421,9 @@ public class BuergerController {
      * @param kindOid
      * @return
      */
-
     @Secured({"PERM_addKindBuerger"})
-    @RequestMapping(value = "/add/buerger/{bOid}/kind/{kOid}", method = {RequestMethod.POST})
-    public ResponseEntity addKindBuerger(@PathVariable("bOid") String buergerOid, @PathVariable("kOid") String kindOid) {
+    @RequestMapping(value = "/add/{bOid}/kind", method = {RequestMethod.POST})
+    public ResponseEntity addKindBuerger(@PathVariable("bOid") String buergerOid, @RequestBody String kindOid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Add Kind buerger");
         }
@@ -418,9 +448,9 @@ public class BuergerController {
      * @param wohnungOid
      * @return
      */
-    @Secured({"PERM_addWohnungBuerger"})
-    @RequestMapping(value = "/add/buerger/{bOid}/wohnung/{wOid}", method = {RequestMethod.GET})
-    public ResponseEntity addWohnungBuerger(@PathVariable("bOid") String buergerOid, @PathVariable("wOid") String wohnungOid) {
+    @RolesAllowed({"PERM_addWohnungBuerger"})
+    @RequestMapping(value = "/add/{bOid}/wohnung", method = {RequestMethod.POST})
+    public ResponseEntity addWohnungBuerger(@PathVariable("bOid") String buergerOid, @RequestBody String wohnungOid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Add wohnung buerger");
         }
@@ -461,6 +491,24 @@ public class BuergerController {
     }
 
     /**
+     * Liest die Wohnunugen einer Bürger.
+     *
+     * @param oid
+     * @return
+     */
+    @Secured({"PERM_readBuergerWohnungen"})
+    @RequestMapping(value = "/wohnungen/{oid}", method = {RequestMethod.GET})
+    public ResponseEntity readBuergerWohnungen(@PathVariable("oid") String oid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("read buerger Wohunungen");
+        }
+        Set<Wohnung> wohnungen = this.service.read(oid).getWohnungen();
+
+        List<WohnungResource> resources = wohnungAssembler.toResource(wohnungen, HateoasUtil.REL_SELF);
+        return ResponseEntity.ok(resources);
+    }
+
+    /**
      * Entfernt die Beziehung zwischen einem Buerger und seinen Wohnungen.
      *
      * @param oid
@@ -473,6 +521,24 @@ public class BuergerController {
             LOG.debug("release Buerger Wohnungen");
         }
         this.service.releaseBuergerWohnungen(oid);
+        return ResponseEntity.ok().build();
+
+    }
+
+    /**
+     * Entfernt die Beziehung zwischen einem Buerger und seiner Wohnung.
+     *
+     * @param oid
+     * @param wohnungOid
+     * @return
+     */
+    @Secured({"PERM_releaseWohnungBuerger"})
+    @RequestMapping(value = "/release/wohnung/{oid}", method = {RequestMethod.POST})
+    public ResponseEntity releaseWohnungBuerger(@PathVariable("oid") String oid, @RequestBody String wohnungOid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("release Buerger Wohnung");
+        }
+        this.service.releaseWohnungBuerger(wohnungOid, oid);
         return ResponseEntity.ok().build();
 
     }
@@ -508,8 +574,8 @@ public class BuergerController {
      * @return
      */
     @Secured({"PERM_addStaatangehoerigkeitBuerger"})
-    @RequestMapping(value = "/add/buerger/{bOid}/staats/{sOid}", method = {RequestMethod.GET})
-    public ResponseEntity addStaatangehoerigkeitBuerger(@PathVariable("bOid") String buergerOid, @PathVariable("sOid") String staatsOid) {
+    @RequestMapping(value = "/add/{bOid}/staats", method = {RequestMethod.POST})
+    public ResponseEntity addStaatangehoerigkeitBuerger(@PathVariable("bOid") String buergerOid, @RequestBody String staatsOid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Add staatsangehoerigkeit buerger");
         }
@@ -535,8 +601,8 @@ public class BuergerController {
      * @return
      */
     @Secured({"PERM_addPassBuerger"})
-    @RequestMapping(value = "/add/buerger/{bOid}/pass/{pOid}", method = {RequestMethod.GET})
-    public ResponseEntity addPassBuerger(@PathVariable("bOid") String buergerOid, @PathVariable("pOid") String passOid) {
+    @RequestMapping(value = "/add/{bOid}/pass", method = {RequestMethod.POST})
+    public ResponseEntity addPassBuerger(@PathVariable("bOid") String buergerOid, @RequestBody String passOid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Add Pass buerger");
         }
@@ -606,7 +672,7 @@ public class BuergerController {
         if (LOG.isDebugEnabled()) {
             LOG.debug("release Buerger Paesse");
         }
-        this.service.releasePassBuerger(oid);
+        this.service.releaseBuergerPaesse(oid);
         return ResponseEntity.ok().build();
 
     }
@@ -637,8 +703,8 @@ public class BuergerController {
      * @return
      */
     @Secured({"PERM_addSachbearbeiterBuerger"})
-    @RequestMapping(value = "/add/buerger/{bOid}/Sachbearbeiter/{sOid}", method = {RequestMethod.GET})
-    public ResponseEntity addSachbearbeiterBuerger(@PathVariable("bOid") String buergerOid, @PathVariable("sOid") String sachbearbeiterOid) {
+    @RequestMapping(value = "/add/{bOid}/Sachbearbeiter", method = {RequestMethod.POST})
+    public ResponseEntity addSachbearbeiterBuerger(@PathVariable("bOid") String buergerOid, @RequestBody String sachbearbeiterOid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Add Sachbearbeiter buerger");
         }

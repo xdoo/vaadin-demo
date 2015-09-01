@@ -82,19 +82,57 @@ insert into MANDANT (ID,OID) values (3,'3');
 
 insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (2,'hans@test.de',TRUE,'oid1','test','hans',2);
 insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (3,'franz@test.de',TRUE,'oid2','test','franz',3);
-insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (4,'rene.zarwel@muenchen.de',TRUE,'oid3','test','rene.zarwel',3);
-insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (5,'p.mueller@muenchen.de',TRUE,'oid4','test','p.mueller',3);
-insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (6,'maximilian.schug@muenchen.de',TRUE,'oid5','test','maximilian.schug',3);
-insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (7,'arne.schoentag@muenchen.de',TRUE,'oid6','test','arne.schoentag',3);
-insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (8,'maximilian.zollbrecht@muenchen.de',TRUE,'oid7','test','maximilian.zollbrecht',3);
-insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (9,'praktikant.tmar@muenchen.de',TRUE,'oid8','test','praktikant.tmar',3);
-insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (10,'claus.straube@muenchen.de',TRUE,'oid9','test','claus.straube',3);
-insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (11,'m.kurz@muenchen.de',TRUE,'oid10','test','m.kurz',3);
-insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (12,'sebastian.schoebel@muenchen.de',TRUE,'oid11','test','sebastian.schoebel',3);
+insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (4,'rene.zarwel@muenchen.de',TRUE,'oid3',null,'rene.zarwel',3);
+insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (5,'p.mueller@muenchen.de',TRUE,'oid4',null,'p.mueller',3);
+insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (6,'maximilian.schug@muenchen.de',TRUE,'oid5',null,'maximilian.schug',3);
+insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (7,'arne.schoentag@muenchen.de',TRUE,'oid6',null,'arne.schoentag',3);
+insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (8,'maximilian.zollbrecht@muenchen.de',TRUE,'oid7',null,'maximilian.zollbrecht',3);
+insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (9,'praktikant.tmar@muenchen.de',TRUE,'oid8',null,'praktikant.tmar',3);
+insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (10,'claus.straube@muenchen.de',TRUE,'oid9',null,'claus.straube',3);
+insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (11,'m.kurz@muenchen.de',TRUE,'oid10',null,'m.kurz',3);
+insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (12,'sebastian.schoebel@muenchen.de',TRUE,'oid11',null,'sebastian.schoebel',3);
+insert  into users (id, user_email, user_enabled, mandant, oid, user_password, user_username) values ('13','user1@muenchen.de',TRUE,'2','oid13','user13','user13');
+insert  into users (id, user_email, user_enabled, mandant, oid, user_password, user_username) values ('14','user1@muenchen.de',TRUE,'2','oid14','user14','user14');
+insert  into users (id, user_email, user_enabled, mandant, oid, user_password, user_username) values ('15','user1@muenchen.de',TRUE,'2','oid15','user15','user15');
+insert  into users (id, user_email, user_enabled, mandant, oid, user_password, user_username) values ('16','user1@muenchen.de',TRUE,'2','oid16','user16','user16');
+insert  into users (id, user_email, user_enabled, mandant, oid, user_password, user_username) values ('17','user1@muenchen.de',TRUE,'2','oid17','user17','user17');
+insert  into users (id, user_email, user_enabled, mandant, oid, user_password, user_username) values ('18','user1@muenchen.de',TRUE,'2','oid18','user18','user18');
+insert  into users (id, user_email, user_enabled, mandant, oid, user_password, user_username) values ('19','user1@muenchen.de',TRUE,'2','oid19','user19','user19');
+insert  into users (id, user_email, user_enabled, mandant, oid, user_password, user_username) values ('20','user1@muenchen.de',TRUE,'2','oid20','user20','user20');
+insert  into users (id, user_email, user_enabled, mandant, oid, user_password, user_username) values ('21','user1@muenchen.de',TRUE,'2','oid21','user21','user21');
+insert  into users (id, user_email, user_enabled, mandant, oid, user_password, user_username) values ('22','user1@muenchen.de',TRUE,'2','oid22','user22','user22');
+insert  into users (id, user_email, user_enabled, mandant, oid, user_password, user_username) values ('23','user1@muenchen.de',TRUE,'2','oid23','user23','user23');
+insert  into users (id, user_email, user_enabled, mandant, oid, user_password, user_username) values ('24','user1@muenchen.de',TRUE,'2','oid24','user24','user24');
+insert  into users (id, user_email, user_enabled, mandant, oid, user_password, user_username) values ('25','user1@muenchen.de',TRUE,'2','oid25','user25','user25');
+insert  into users (id, user_email, user_enabled, mandant, oid, user_password, user_username) values ('26','user1@muenchen.de',TRUE,'2','oid26','user26','user26');
+insert  into users (id, user_email, user_enabled, mandant, oid, user_password, user_username) values ('27','user1@muenchen.de',TRUE,'2','oid27','user27','user27');
+insert  into users (id, user_email, user_enabled, mandant, oid, user_password, user_username) values ('28','user1@muenchen.de',TRUE,'2','oid28','user28','user28');
+insert  into users (id, user_email, user_enabled, mandant, oid, user_password, user_username) values ('29','user1@muenchen.de',TRUE,'2','oid29','user29','user29');
 
 
 insert  into authoritys (id, oid, auth_authority) values ('2','2','ADMIN');					
 insert into authoritys (id, oid, auth_authority) values ('3', '3', 'ADMIN');
+insert  into authoritys (id, oid, auth_authority) values ('9000','OIDM2_AUTHORITY001','USER1');
+insert  into authoritys (id, oid, auth_authority) values ('9001','OIDM2_AUTHORITY002','USER2');
+insert  into authoritys (id, oid, auth_authority) values ('9002','OIDM2_AUTHORITY003','USER3');
+insert  into authoritys (id, oid, auth_authority) values ('9003','OIDM2_AUTHORITY004','USER4');
+insert  into authoritys (id, oid, auth_authority) values ('9004','OIDM2_AUTHORITY005','USER5');
+insert  into authoritys (id, oid, auth_authority) values ('9005','OIDM2_AUTHORITY006','USER6');
+insert  into authoritys (id, oid, auth_authority) values ('9006','OIDM2_AUTHORITY007','USER7');
+insert  into authoritys (id, oid, auth_authority) values ('9007','OIDM2_AUTHORITY008','USER8');
+insert  into authoritys (id, oid, auth_authority) values ('9008','OIDM2_AUTHORITY009','USER9');
+insert  into authoritys (id, oid, auth_authority) values ('9009','OIDM2_AUTHORITY010','USER10');
+insert  into authoritys (id, oid, auth_authority) values ('9010','OIDM2_AUTHORITY011','USER11');
+insert  into authoritys (id, oid, auth_authority) values ('9011','OIDM2_AUTHORITY012','USER12');
+insert  into authoritys (id, oid, auth_authority) values ('9012','OIDM2_AUTHORITY013','USER13');
+insert  into authoritys (id, oid, auth_authority) values ('9013','OIDM2_AUTHORITY014','USER14');
+insert  into authoritys (id, oid, auth_authority) values ('9014','OIDM2_AUTHORITY015','USER15');
+insert  into authoritys (id, oid, auth_authority) values ('9015','OIDM2_AUTHORITY016','USER16');
+insert  into authoritys (id, oid, auth_authority) values ('9016','OIDM2_AUTHORITY017','USER17');
+insert  into authoritys (id, oid, auth_authority) values ('9017','OIDM2_AUTHORITY018','USER18');
+insert  into authoritys (id, oid, auth_authority) values ('9018','OIDM2_AUTHORITY019','USER19');
+insert  into authoritys (id, oid, auth_authority) values ('9019','OIDM2_AUTHORITY020','USER20');
+
 
 insert  into permissions (id,perm_permission,oid) values ('1000','PERM_newAdresse','1000');									
 insert  into permissions (id,perm_permission,oid) values ('1001','PERM_queryAdresse','1001');									
@@ -217,7 +255,54 @@ insert  into permissions (id,perm_permission,oid) values ('1117','PERM_readSachb
 insert  into permissions (id,perm_permission,oid) values ('1118','PERM_readBuergerSachbearbeiter','1118');									
 insert  into permissions (id,perm_permission,oid) values ('1119','PERM_addSachbearbeiterBuerger','1119');									
 insert  into permissions (id,perm_permission,oid) values ('1120','PERM_createSachbearbeiterBuerger','1120');									
-insert  into permissions (id,perm_permission,oid) values ('1121','PERM_releaseBuergerAllSachbearbeiter','1121');									
+insert  into permissions (id,perm_permission,oid) values ('1121','PERM_releaseBuergerAllSachbearbeiter','1121');
+insert  into permissions (id, perm_permission,oid) values ('1122','PERM_createWohnungBuerger','1122');
+insert  into permissions (id, perm_permission,oid) values ('1123','PERM_addStaatangehoerigkeitBuerger','1123');
+insert  into permissions (id, perm_permission,oid) values ('1124','PERM_addPassBuerger','1124');
+insert  into permissions (id, perm_permission,oid) values ('1125','PERM_createPassBuerger','1125');
+insert  into permissions (id, perm_permission,oid) values ('1126','PERM_readBuergerPass','1126');
+insert  into permissions (id, perm_permission,oid) values ('1127','PERM_releaseBuergerPaesse','1127');
+insert  into permissions (id, perm_permission,oid) values ('1128','PERM_readBuergerSachbearbeiter','1128');
+insert  into permissions (id, perm_permission,oid) values ('1129','PERM_addSachbearbeiterBuerger','1129');
+insert  into permissions (id, perm_permission,oid) values ('1130','PERM_createSachbearbeiterBuerger','1130');
+insert  into permissions (id, perm_permission,oid) values ('1131','PERM_releaseBuergerAllSachbearbeiter','1131');
+insert  into permissions (id, perm_permission,oid) values ('1132','PERM_copyListBuerger','1132');
+insert  into permissions (id, perm_permission,oid) values ('1133','PERM_releaseBuergerWohnungen','1133');
+insert  into permissions (id, perm_permission,oid) values ('1134','PERM_deleteListBuerger','1134');
+insert  into permissions (id, perm_permission,oid) values ('1135','PERM_releasePassBuerger','1135');
+insert  into permissions (id, perm_permission,oid) values ('1136','PERM_readPassBuerger','1136');
+insert  into permissions (id, perm_permission,oid) values ('1137','PERM_copyListPass','1137');
+insert  into permissions (id, perm_permission,oid) values ('1138','PERM_deleteListPass','1138');
+insert  into permissions (id, perm_permission,oid) values ('1139','PERM_releaseStaatsangehoerigkeitAllBuerger','1139');
+insert  into permissions (id, perm_permission,oid) values ('1140','PERM_readStaatsangehoerigkeitBuerger','1140');
+
+--Permission Test
+
+insert  into permissions (id,perm_permission,oid) values ('500','PERM1','OIDM_PERMISSION001');
+insert  into permissions (id,perm_permission,oid) values ('501','PERM2','OIDM_PERMISSION002');
+insert  into permissions (id,perm_permission,oid) values ('502','PERM3','OIDM_PERMISSION003');
+insert  into permissions (id,perm_permission,oid) values ('503','PERM4','OIDM_PERMISSION004');
+insert  into permissions (id,perm_permission,oid) values ('504','PERM5','OIDM_PERMISSION005');
+insert  into permissions (id,perm_permission,oid) values ('505','PERM6','OIDM_PERMISSION006');
+insert  into permissions (id,perm_permission,oid) values ('506','PERM7','OIDM_PERMISSION007');
+insert  into permissions (id,perm_permission,oid) values ('507','PERM8','OIDM_PERMISSION008');
+insert  into permissions (id,perm_permission,oid) values ('508','PERM9','OIDM_PERMISSION009');
+insert  into permissions (id,perm_permission,oid) values ('509','PERM10','OIDM_PERMISSION010');
+insert  into permissions (id,perm_permission,oid) values ('510','PERM11','OIDM_PERMISSION011');
+insert  into permissions (id,perm_permission,oid) values ('511','PERM12','OIDM_PERMISSION012');
+insert  into permissions (id,perm_permission,oid) values ('512','PERM13','OIDM_PERMISSION013');
+insert  into permissions (id,perm_permission,oid) values ('513','PERM14','OIDM_PERMISSION014');
+insert  into permissions (id,perm_permission,oid) values ('514','PERM15','OIDM_PERMISSION015');
+insert  into permissions (id,perm_permission,oid) values ('515','PERM16','OIDM_PERMISSION016');
+insert  into permissions (id,perm_permission,oid) values ('516','PERM17','OIDM_PERMISSION017');
+insert  into permissions (id,perm_permission,oid) values ('517','PERM18','OIDM_PERMISSION018');
+insert  into permissions (id,perm_permission,oid) values ('518','PERM19','OIDM_PERMISSION019');
+insert  into permissions (id,perm_permission,oid) values ('519','PERM20','OIDM_PERMISSION020');
+
+
+
+
+									
 			
 							
 								
@@ -343,7 +428,41 @@ insert into authoritys_permissions (authority_id, permission_id) values ('2','11
 insert into authoritys_permissions (authority_id, permission_id) values ('2','1118');					
 insert into authoritys_permissions (authority_id, permission_id) values ('2','1119');					
 insert into authoritys_permissions (authority_id, permission_id) values ('2','1120');					
-insert into authoritys_permissions (authority_id, permission_id) values ('2','1121');					
+insert into authoritys_permissions (authority_id, permission_id) values ('2','1121');	
+insert into authoritys_permissions (authority_id, permission_id) values ('2','1122');
+insert into authoritys_permissions (authority_id, permission_id) values ('2','1123');
+insert into authoritys_permissions (authority_id, permission_id) values ('2','1124');
+insert into authoritys_permissions (authority_id, permission_id) values ('2','1125');
+insert into authoritys_permissions (authority_id, permission_id) values ('2','1126');
+insert into authoritys_permissions (authority_id, permission_id) values ('2','1127');
+insert into authoritys_permissions (authority_id, permission_id) values ('2','1128');
+insert into authoritys_permissions (authority_id, permission_id) values ('2','1129');
+insert into authoritys_permissions (authority_id, permission_id) values ('2','1130');
+insert into authoritys_permissions (authority_id, permission_id) values ('2','1131');
+insert into authoritys_permissions (authority_id, permission_id) values ('2','1132');
+insert into authoritys_permissions (authority_id, permission_id) values ('2','1133');
+insert into authoritys_permissions (authority_id, permission_id) values ('2','1134');
+insert into authoritys_permissions (authority_id, permission_id) values ('2','1135');
+insert into authoritys_permissions (authority_id, permission_id) values ('2','1136');
+insert into authoritys_permissions (authority_id, permission_id) values ('2','1137');
+insert into authoritys_permissions (authority_id, permission_id) values ('2','1138');
+insert into authoritys_permissions (authority_id, permission_id) values ('2','1139');
+insert into authoritys_permissions (authority_id, permission_id) values ('2','1140');
+insert into authoritys_permissions (authority_id, permission_id) values ('9001','500');
+insert into authoritys_permissions (authority_id, permission_id) values ('9001','501');
+insert into authoritys_permissions (authority_id, permission_id) values ('9001','502');
+insert into authoritys_permissions (authority_id, permission_id) values ('9001','503');
+insert into authoritys_permissions (authority_id, permission_id) values ('9001','504');
+insert into authoritys_permissions (authority_id, permission_id) values ('9001','505');
+insert into authoritys_permissions (authority_id, permission_id) values ('9001','506');
+insert into authoritys_permissions (authority_id, permission_id) values ('9001','507');
+insert into authoritys_permissions (authority_id, permission_id) values ('9001','508');
+insert into authoritys_permissions (authority_id, permission_id) values ('9001','509');
+insert into authoritys_permissions (authority_id, permission_id) values ('9001','510');
+
+
+
+				
 					
 				
 				
@@ -359,6 +478,24 @@ insert into users_authoritys (authority_id, user_id) values (2, 9);
 insert into users_authoritys (authority_id, user_id) values (2, 10);
 insert into users_authoritys (authority_id, user_id) values (2, 11);
 insert into users_authoritys (authority_id, user_id) values (2, 12);
+insert  into users_authoritys (authority_id, user_id) values ('9000','13');
+insert  into users_authoritys (authority_id, user_id) values ('9000','14');
+insert  into users_authoritys (authority_id, user_id) values ('9007','15');
+insert  into users_authoritys (authority_id, user_id) values ('9002','16');
+insert  into users_authoritys (authority_id, user_id) values ('9002','17');
+insert  into users_authoritys (authority_id, user_id) values ('9002','18');
+insert  into users_authoritys (authority_id, user_id) values ('9003','19');
+insert  into users_authoritys (authority_id, user_id) values ('9004','20');
+insert  into users_authoritys (authority_id, user_id) values ('9006','21');
+insert  into users_authoritys (authority_id, user_id) values ('9006','22');
+insert  into users_authoritys (authority_id, user_id) values ('9008','23');
+insert  into users_authoritys (authority_id, user_id) values ('9010','24');
+insert  into users_authoritys (authority_id, user_id) values ('9008','25');
+insert  into users_authoritys (authority_id, user_id) values ('9002','26');
+insert  into users_authoritys (authority_id, user_id) values ('9001','27');
+insert  into users_authoritys (authority_id, user_id) values ('9003','28');
+insert  into users_authoritys (authority_id, user_id) values ('9005','29');
+
 
 
 
@@ -419,27 +556,65 @@ insert into BUERGER (ID, OID, BUER_VORNAME, BUER_NACHNAME, BUER_GEBURTSDATUM, MA
 insert into BUERGER (ID, OID, BUER_VORNAME, BUER_NACHNAME, BUER_GEBURTSDATUM, MANDANT) values ('2038','OIDM3_BUERGER009','Gabi002','Test','2000-12-24','3');
 insert into BUERGER (ID, OID, BUER_VORNAME, BUER_NACHNAME, BUER_GEBURTSDATUM, MANDANT) values ('2039','OIDM3_BUERGER010','Gabi003','Huber','2000-12-24','3');
 
+
+--Staatsangehoerigkeit
+
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5000','OIDM2_STAATS001','2');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5001','OIDM2_STAATS002','2');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5002','OIDM2_STAATS003','2');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5003','OIDM2_STAATS004','2');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5004','OIDM2_STAATS005','2');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5005','OIDM2_STAATS006','2');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5006','OIDM2_STAATS007','2');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5007','OIDM2_STAATS008','2');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5008','OIDM2_STAATS009','2');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5009','OIDM2_STAATS010','2');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5010','OIDM2_STAATS011','2');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5011','OIDM2_STAATS012','2');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5012','OIDM2_STAATS013','2');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5013','OIDM2_STAATS014','2');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5014','OIDM2_STAATS015','2');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5015','OIDM2_STAATS016','2');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5016','OIDM2_STAATS017','2');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5017','OIDM2_STAATS018','2');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5018','OIDM2_STAATS019','2');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5019','OIDM2_STAATS020','2');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5020','OIDM3_STAATS001','3');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5021','OIDM3_STAATS002','3');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5022','OIDM3_STAATS003','3');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5023','OIDM3_STAATS004','3');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5024','OIDM3_STAATS005','3');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5025','OIDM3_STAATS006','3');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5026','OIDM3_STAATS007','3');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5027','OIDM3_STAATS008','3');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5028','OIDM3_STAATS009','3');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5029','OIDM3_STAATS010','3');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5030','OIDM3_STAATS011','3');	
+insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5031','OIDM3_STAATS012','3');
+
+
 -- Pass
-insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT) values ('3000','OIDM2_PASS001','DE-598589647','Reisepass','DE471178','167','rot','2014-11-02','2020-11-02','M233333','2');
-insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT) values ('3001','OIDM2_PASS002','DE-598589646','Reisepass','DE471179','167','blau','2014-11-02','2020-11-02','M233333','2');
-insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT) values ('3002','OIDM2_PASS003','DE-598589645','Reisepass','DE471180','167','grün','2014-11-02','2020-11-02','M233333','2');
-insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT) values ('3003','OIDM2_PASS004','DE-598589644','Reisepass','DE471181','167','braun','2014-11-02','2020-11-02','M233333','2');
-insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT) values ('3004','OIDM2_PASS005','DE-598589643','Reisepass','DE471182','167','rot','2014-11-02','2020-11-02','M233333','2');
-insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT) values ('3005','OIDM2_PASS006','DE-598589642','Reisepass','DE471183','167','blau','2014-11-02','2020-11-02','M233333','2');
-insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT) values ('3006','OIDM2_PASS007','DE-598589641','Reisepass','DE471184','167','grün','2014-11-02','2020-11-02','M233333','2');
-insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT) values ('3007','OIDM2_PASS008','DE-598589640','Reisepass','DE471185','167','braun','2014-11-02','2020-11-02','M233333','2');
-insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT) values ('3008','OIDM2_PASS009','DE-598589639','Reisepass','DE471186','167','braun','2014-11-02','2020-11-02','M233333','2');
-insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT) values ('3009','OIDM2_PASS010','DE-598589638','Reisepass','DE471187','167','braun','2014-11-02','2020-11-02','M233333','2');
-insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT) values ('3010','OIDM2_PASS011','DE-598589637','Reisepass','DE471188','167','braun','2014-11-02','2020-11-02','M233333','2');
-insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT) values ('3011','OIDM2_PASS012','DE-598589636','Reisepass','DE471189','167','braun','2014-11-02','2020-11-02','M233333','2');
-insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT) values ('3012','OIDM2_PASS013','DE-598589635','Reisepass','DE471190','167','braun','2014-11-02','2020-11-02','M233333','2');
-insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT) values ('3013','OIDM2_PASS014','DE-598589634','Reisepass','DE471191','167','braun','2014-11-02','2020-11-02','M233333','2');
-insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT) values ('3014','OIDM2_PASS015','DE-598589633','Reisepass','DE471192','167','braun','2014-11-02','2020-11-02','M233333','2');
-insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT) values ('3015','OIDM2_PASS016','DE-598589632','Reisepass','DE471193','167','braun','2014-11-02','2020-11-02','M233333','2');
-insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT) values ('3016','OIDM2_PASS017','DE-598589631','Reisepass','DE471194','167','braun','2014-11-02','2020-11-02','M233333','2');
-insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT) values ('3017','OIDM2_PASS018','DE-598589630','Reisepass','DE471195','167','braun','2014-11-02','2020-11-02','M233333','2');
-insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT) values ('3018','OIDM2_PASS019','DE-598589629','Reisepass','DE471196','167','braun','2014-11-02','2020-11-02','M233333','2');
-insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT) values ('3019','OIDM2_PASS020','DE-598589628','Reisepass','DE471197','167','braun','2014-11-02','2020-11-02','M233333','2');
+insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT, staatsangehoerigkeit_reference) values ('3000','OIDM2_PASS001','DE-598589647','Reisepass','DE471178','167','rot','2014-11-02','2020-11-02','M233333','2','5000');
+insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT, staatsangehoerigkeit_reference) values ('3001','OIDM2_PASS002','DE-598589646','Reisepass','DE471179','167','blau','2014-11-02','2020-11-02','M233333','2','5001');
+insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT, staatsangehoerigkeit_reference) values ('3002','OIDM2_PASS003','DE-598589645','Reisepass','DE471180','167','grün','2014-11-02','2020-11-02','M233333','2','5002');
+insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT, staatsangehoerigkeit_reference) values ('3003','OIDM2_PASS004','DE-598589644','Reisepass','DE471181','167','braun','2014-11-02','2020-11-02','M233333','2','5003');
+insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT, staatsangehoerigkeit_reference) values ('3004','OIDM2_PASS005','DE-598589643','Reisepass','DE471182','167','rot','2014-11-02','2020-11-02','M233333','2','5004');
+insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT, staatsangehoerigkeit_reference) values ('3005','OIDM2_PASS006','DE-598589642','Reisepass','DE471183','167','blau','2014-11-02','2020-11-02','M233333','2','5005');
+insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT, staatsangehoerigkeit_reference) values ('3006','OIDM2_PASS007','DE-598589641','Reisepass','DE471184','167','grün','2014-11-02','2020-11-02','M233333','2','5006');
+insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT, staatsangehoerigkeit_reference) values ('3007','OIDM2_PASS008','DE-598589640','Reisepass','DE471185','167','braun','2014-11-02','2020-11-02','M233333','2','5007');
+insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT, staatsangehoerigkeit_reference) values ('3008','OIDM2_PASS009','DE-598589639','Reisepass','DE471186','167','braun','2014-11-02','2020-11-02','M233333','2','5008');
+insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT, staatsangehoerigkeit_reference) values ('3009','OIDM2_PASS010','DE-598589638','Reisepass','DE471187','167','braun','2014-11-02','2020-11-02','M233333','2','5009');
+insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT, staatsangehoerigkeit_reference) values ('3010','OIDM2_PASS011','DE-598589637','Reisepass','DE471188','167','braun','2014-11-02','2020-11-02','M233333','2','5010');
+insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT, staatsangehoerigkeit_reference) values ('3011','OIDM2_PASS012','DE-598589636','Reisepass','DE471189','167','braun','2014-11-02','2020-11-02','M233333','2','5011');
+insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT, staatsangehoerigkeit_reference) values ('3012','OIDM2_PASS013','DE-598589635','Reisepass','DE471190','167','braun','2014-11-02','2020-11-02','M233333','2','5012');
+insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT, staatsangehoerigkeit_reference) values ('3013','OIDM2_PASS014','DE-598589634','Reisepass','DE471191','167','braun','2014-11-02','2020-11-02','M233333','2','5013');
+insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT, staatsangehoerigkeit_reference) values ('3014','OIDM2_PASS015','DE-598589633','Reisepass','DE471192','167','braun','2014-11-02','2020-11-02','M233333','2','5014');
+insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT, staatsangehoerigkeit_reference) values ('3015','OIDM2_PASS016','DE-598589632','Reisepass','DE471193','167','braun','2014-11-02','2020-11-02','M233333','2','5015');
+insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT, staatsangehoerigkeit_reference) values ('3016','OIDM2_PASS017','DE-598589631','Reisepass','DE471194','167','braun','2014-11-02','2020-11-02','M233333','2','5016');
+insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT, staatsangehoerigkeit_reference) values ('3017','OIDM2_PASS018','DE-598589630','Reisepass','DE471195','167','braun','2014-11-02','2020-11-02','M233333','2','5017');
+insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT, staatsangehoerigkeit_reference) values ('3018','OIDM2_PASS019','DE-598589629','Reisepass','DE471196','167','braun','2014-11-02','2020-11-02','M233333','2','5018');
+insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT, staatsangehoerigkeit_reference) values ('3019','OIDM2_PASS020','DE-598589628','Reisepass','DE471197','167','braun','2014-11-02','2020-11-02','M233333','2','5019');
+
 insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT) values ('3020','OIDM2_PASS021','DE-598589627','Reisepass','DE471198','167','braun','2014-11-02','2020-11-02','M233333','2');
 insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT) values ('3021','OIDM2_PASS022','DE-598589626','Reisepass','DE471199','167','braun','2014-11-02','2020-11-02','M233333','2');
 insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT) values ('3022','OIDM2_PASS023','DE-598589625','Reisepass','DE471200','167','braun','2014-11-02','2020-11-02','M233333','2');
@@ -628,43 +803,6 @@ insert into buerger_wohnungen (BUERGER, WOHNUNGEN) values ('2016','4026');
 insert into buerger_wohnungen (BUERGER, WOHNUNGEN) values ('2017','4027');
 insert into buerger_wohnungen (BUERGER, WOHNUNGEN) values ('2018','4028');
 
-
-
---Staatsangehoerigkeit
-
-insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5000','OIDM2_STAATS001','2');	
-insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5001','OIDM2_STAATS002','2');	
-insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5002','OIDM2_STAATS003','2');	
-insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5003','OIDM2_STAATS004','2');	
-insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5004','OIDM2_STAATS005','2');	
-insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5005','OIDM2_STAATS006','2');	
-insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5006','OIDM2_STAATS007','2');	
-insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5007','OIDM2_STAATS008','2');	
-insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5008','OIDM2_STAATS009','2');	
-insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5009','OIDM2_STAATS010','2');	
-insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5010','OIDM2_STAATS011','2');	
-insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5011','OIDM2_STAATS012','2');	
-insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5012','OIDM2_STAATS013','2');	
-insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5013','OIDM2_STAATS014','2');	
-insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5014','OIDM2_STAATS015','2');	
-insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5015','OIDM2_STAATS016','2');	
-insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5016','OIDM2_STAATS017','2');	
-insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5017','OIDM2_STAATS018','2');	
-insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5018','OIDM2_STAATS019','2');	
-insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5019','OIDM2_STAATS020','2');	
-insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5020','OIDM3_STAATS001','3');	
-insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5021','OIDM3_STAATS002','3');	
-insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5022','OIDM3_STAATS003','3');	
-insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5023','OIDM3_STAATS004','3');	
-insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5024','OIDM3_STAATS005','3');	
-insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5025','OIDM3_STAATS006','3');	
-insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5026','OIDM3_STAATS007','3');	
-insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5027','OIDM3_STAATS008','3');	
-insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5028','OIDM3_STAATS009','3');	
-insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5029','OIDM3_STAATS010','3');	
-insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5030','OIDM3_STAATS011','3');	
-insert into staatsangehoerigkeit_reference (ID, ref_oid,  MANDANT) values ('5031','OIDM3_STAATS012','3');	
-
 --Staatsangehoerigkeiten zu bürger
 
 insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2000','5000');
@@ -705,4 +843,169 @@ insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigke
 insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2017','5027');
 insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2018','5028');
 insert into buerger_staatsangehoerigkeit_references (BUERGER, staatsangehoerigkeit_references) values ('2019','5029');
+
+--Sachbearbeiter
+
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit, MANDANT) values ('6000','OIDM2_SACHBEARBEITERS001','beamte','892154856','892541523','BA011S','2');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit,  MANDANT) values ('6001','OIDM2_SACHBEARBEITERS002','beamte','892154857','892541524','BA011S','2');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit,  MANDANT) values ('6002','OIDM2_SACHBEARBEITERS003','beamte','892154858','892541525','BA011S','2');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit,  MANDANT) values ('6003','OIDM2_SACHBEARBEITERS004','beamte','892154859','892541526','BA011S','2');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit,  MANDANT) values ('6004','OIDM2_SACHBEARBEITERS005','beamte','892154860','892541527','BA011S','2');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit,  MANDANT) values ('6005','OIDM2_SACHBEARBEITERS006','beamte','892154861','892541528','BA011S','2');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit,  MANDANT) values ('6006','OIDM2_SACHBEARBEITERS007','beamte','892154862','892541529','BA011S','2');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit,  MANDANT) values ('6007','OIDM2_SACHBEARBEITERS008','beamte','892154863','892541530','BA011S','2');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit,  MANDANT) values ('6008','OIDM2_SACHBEARBEITERS009','beamte','892154864','892541531','BA011S','2');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit,  MANDANT) values ('6009','OIDM2_SACHBEARBEITERS010','beamte','892154865','892541532','BA011S','2');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit,  MANDANT) values ('6010','OIDM2_SACHBEARBEITERS011','beamte','892154866','892541533','BA011S','2');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit,  MANDANT) values ('6011','OIDM2_SACHBEARBEITERS012','beamte','892154867','892541534','BA011S','2');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit,  MANDANT) values ('6012','OIDM2_SACHBEARBEITERS013','beamte','892154868','892541535','BA011S','2');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit,  MANDANT) values ('6013','OIDM2_SACHBEARBEITERS014','beamte','892154869','892541536','BA011S','2');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit,  MANDANT) values ('6014','OIDM2_SACHBEARBEITERS015','beamte','892154870','892541537','BA011S','2');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit,  MANDANT) values ('6015','OIDM2_SACHBEARBEITERS016','beamte','892154871','892541538','BA011S','2');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit,  MANDANT) values ('6016','OIDM2_SACHBEARBEITERS017','beamte','892154872','892541539','BA011S','2');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit,  MANDANT) values ('6017','OIDM2_SACHBEARBEITERS018','beamte','892154873','892541540','BA011S','2');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit,  MANDANT) values ('6018','OIDM2_SACHBEARBEITERS019','beamte','892154874','892541541','BA011S','2');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit,  MANDANT) values ('6019','OIDM2_SACHBEARBEITERS020','beamte','892154875','892541542','BA011S','2');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit,  MANDANT) values ('6020','OIDM3_SACHBEARBEITERS001','beamte','892154876','892541543','BA011S','3');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit,  MANDANT) values ('6021','OIDM3_SACHBEARBEITERS002','beamte','892154877','892541544','BA011S','3');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit,  MANDANT) values ('6022','OIDM3_SACHBEARBEITERS003','beamte','892154878','892541545','BA011S','3');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit,  MANDANT) values ('6023','OIDM3_SACHBEARBEITERS004','beamte','892154879','892541546','BA011S','3');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit,  MANDANT) values ('6024','OIDM3_SACHBEARBEITERS005','beamte','892154880','892541547','BA011S','3');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit,  MANDANT) values ('6025','OIDM3_SACHBEARBEITERS006','beamte','892154881','892541548','BA011S','3');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit,  MANDANT) values ('6026','OIDM3_SACHBEARBEITERS007','beamte','892154882','892541549','BA011S','3');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit,  MANDANT) values ('6027','OIDM3_SACHBEARBEITERS008','beamte','892154883','892541550','BA011S','3');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit,  MANDANT) values ('6028','OIDM3_SACHBEARBEITERS009','beamte','892154884','892541551','BA011S','3');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit,  MANDANT) values ('6029','OIDM3_SACHBEARBEITERS010','beamte','892154885','892541552','BA011S','3');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit, user_id , MANDANT) values ('6030','OIDM2_SACHBEARBEITERS030','beamte','892154856','892154856','BA011S','13','2');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit, user_id , MANDANT) values ('6031','OIDM2_SACHBEARBEITERS031','beamte','892154857','892154857','BA011S','14','2');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit, user_id , MANDANT) values ('6032','OIDM2_SACHBEARBEITERS032','beamte','892154858','892154858','BA011S','15','2');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit, user_id , MANDANT) values ('6033','OIDM2_SACHBEARBEITERS033','beamte','892154859','892154859','BA011S','16','2');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit, user_id , MANDANT) values ('6034','OIDM2_SACHBEARBEITERS034','beamte','892154860','892154860','BA011S','17','2');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit, user_id , MANDANT) values ('6035','OIDM2_SACHBEARBEITERS035','beamte','892154861','892154861','BA011S','18','2');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit, user_id , MANDANT) values ('6036','OIDM2_SACHBEARBEITERS036','beamte','892154862','892154862','BA011S','19','2');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit, user_id , MANDANT) values ('6037','OIDM2_SACHBEARBEITERS037','beamte','892154863','892154863','BA011S','20','2');
+insert into sachbearbeiter (ID, oid,sach_funktion,sach_fax, sach_telephone,sach_organisationseinheit, user_id , MANDANT) values ('6038','OIDM2_SACHBEARBEITERS038','beamte','892154864','892154864','BA011S','21','2');
+
+--Bürger zu Sachbearbeiter
+insert into buerger_sachbearbeiter (BUERGER, SACHBEARBEITER) values ('2000','6000');
+insert into buerger_sachbearbeiter (BUERGER, SACHBEARBEITER) values ('2001','6001');
+insert into buerger_sachbearbeiter (BUERGER, SACHBEARBEITER) values ('2002','6002');
+insert into buerger_sachbearbeiter (BUERGER, SACHBEARBEITER) values ('2003','6003');
+insert into buerger_sachbearbeiter (BUERGER, SACHBEARBEITER) values ('2004','6004');
+insert into buerger_sachbearbeiter (BUERGER, SACHBEARBEITER) values ('2005','6005');
+insert into buerger_sachbearbeiter (BUERGER, SACHBEARBEITER) values ('2006','6006');
+insert into buerger_sachbearbeiter (BUERGER, SACHBEARBEITER) values ('2007','6007');
+insert into buerger_sachbearbeiter (BUERGER, SACHBEARBEITER) values ('2008','6008');
+insert into buerger_sachbearbeiter (BUERGER, SACHBEARBEITER) values ('2009','6009');
+insert into buerger_sachbearbeiter (BUERGER, SACHBEARBEITER) values ('2010','6010');
+insert into buerger_sachbearbeiter (BUERGER, SACHBEARBEITER) values ('2011','6011');
+insert into buerger_sachbearbeiter (BUERGER, SACHBEARBEITER) values ('2012','6012');
+insert into buerger_sachbearbeiter (BUERGER, SACHBEARBEITER) values ('2013','6013');
+insert into buerger_sachbearbeiter (BUERGER, SACHBEARBEITER) values ('2014','6014');
+insert into buerger_sachbearbeiter (BUERGER, SACHBEARBEITER) values ('2015','6015');
+insert into buerger_sachbearbeiter (BUERGER, SACHBEARBEITER) values ('2016','6016');
+insert into buerger_sachbearbeiter (BUERGER, SACHBEARBEITER) values ('2017','6017');
+insert into buerger_sachbearbeiter (BUERGER, SACHBEARBEITER) values ('2018','6018');
+insert into buerger_sachbearbeiter (BUERGER, SACHBEARBEITER) values ('2019','6019');
+insert into buerger_sachbearbeiter (BUERGER, SACHBEARBEITER) values ('2000','6010');
+insert into buerger_sachbearbeiter (BUERGER, SACHBEARBEITER) values ('2001','6011');
+insert into buerger_sachbearbeiter (BUERGER, SACHBEARBEITER) values ('2002','6012');
+insert into buerger_sachbearbeiter (BUERGER, SACHBEARBEITER) values ('2003','6013');
+insert into buerger_sachbearbeiter (BUERGER, SACHBEARBEITER) values ('2004','6014');
+insert into buerger_sachbearbeiter (BUERGER, SACHBEARBEITER) values ('2005','6015');
+insert into buerger_sachbearbeiter (BUERGER, SACHBEARBEITER) values ('2006','6016');
+insert into buerger_sachbearbeiter (BUERGER, SACHBEARBEITER) values ('2007','6017');
+insert into buerger_sachbearbeiter (BUERGER, SACHBEARBEITER) values ('2008','6018');
+insert into buerger_sachbearbeiter (BUERGER, SACHBEARBEITER) values ('2009','6019');
+insert into buerger_sachbearbeiter (BUERGER, SACHBEARBEITER) values ('2010','6020');
+insert into buerger_sachbearbeiter (BUERGER, SACHBEARBEITER) values ('2011','6021');
+insert into buerger_sachbearbeiter (BUERGER, SACHBEARBEITER) values ('2012','6022');
+insert into buerger_sachbearbeiter (BUERGER, SACHBEARBEITER) values ('2013','6023');
+insert into buerger_sachbearbeiter (BUERGER, SACHBEARBEITER) values ('2014','6024');
+insert into buerger_sachbearbeiter (BUERGER, SACHBEARBEITER) values ('2015','6025');
+insert into buerger_sachbearbeiter (BUERGER, SACHBEARBEITER) values ('2016','6026');
+insert into buerger_sachbearbeiter (BUERGER, SACHBEARBEITER) values ('2017','6027');
+insert into buerger_sachbearbeiter (BUERGER, SACHBEARBEITER) values ('2018','6028');
+insert into buerger_sachbearbeiter (BUERGER, SACHBEARBEITER) values ('2019','6029');
+
+--Sachbearbeiter zu Bürger
+
+insert into  sachbearbeiter_buerger (BUERGER, SACHBEARBEITER) values ('2000','6000');						
+insert into  sachbearbeiter_buerger (BUERGER, SACHBEARBEITER) values ('2001','6001');						
+insert into  sachbearbeiter_buerger (BUERGER, SACHBEARBEITER) values ('2002','6002');						
+insert into  sachbearbeiter_buerger (BUERGER, SACHBEARBEITER) values ('2003','6003');						
+insert into  sachbearbeiter_buerger (BUERGER, SACHBEARBEITER) values ('2004','6004');						
+insert into  sachbearbeiter_buerger (BUERGER, SACHBEARBEITER) values ('2005','6005');						
+insert into  sachbearbeiter_buerger (BUERGER, SACHBEARBEITER) values ('2006','6006');						
+insert into  sachbearbeiter_buerger (BUERGER, SACHBEARBEITER) values ('2007','6007');						
+insert into  sachbearbeiter_buerger (BUERGER, SACHBEARBEITER) values ('2008','6008');						
+insert into  sachbearbeiter_buerger (BUERGER, SACHBEARBEITER) values ('2009','6009');						
+insert into  sachbearbeiter_buerger (BUERGER, SACHBEARBEITER) values ('2010','6010');						
+insert into  sachbearbeiter_buerger (BUERGER, SACHBEARBEITER) values ('2011','6011');						
+insert into  sachbearbeiter_buerger (BUERGER, SACHBEARBEITER) values ('2012','6012');						
+insert into  sachbearbeiter_buerger (BUERGER, SACHBEARBEITER) values ('2013','6013');						
+insert into  sachbearbeiter_buerger (BUERGER, SACHBEARBEITER) values ('2014','6014');						
+insert into  sachbearbeiter_buerger (BUERGER, SACHBEARBEITER) values ('2015','6015');						
+insert into  sachbearbeiter_buerger (BUERGER, SACHBEARBEITER) values ('2016','6016');						
+insert into  sachbearbeiter_buerger (BUERGER, SACHBEARBEITER) values ('2017','6017');						
+insert into  sachbearbeiter_buerger (BUERGER, SACHBEARBEITER) values ('2018','6018');						
+insert into  sachbearbeiter_buerger (BUERGER, SACHBEARBEITER) values ('2019','6019');						
+insert into  sachbearbeiter_buerger (BUERGER, SACHBEARBEITER) values ('2000','6010');						
+insert into  sachbearbeiter_buerger (BUERGER, SACHBEARBEITER) values ('2001','6011');						
+insert into  sachbearbeiter_buerger (BUERGER, SACHBEARBEITER) values ('2002','6012');						
+insert into  sachbearbeiter_buerger (BUERGER, SACHBEARBEITER) values ('2003','6013');						
+insert into  sachbearbeiter_buerger (BUERGER, SACHBEARBEITER) values ('2004','6014');						
+insert into  sachbearbeiter_buerger (BUERGER, SACHBEARBEITER) values ('2005','6015');						
+insert into  sachbearbeiter_buerger (BUERGER, SACHBEARBEITER) values ('2006','6016');						
+insert into  sachbearbeiter_buerger (BUERGER, SACHBEARBEITER) values ('2007','6017');						
+insert into  sachbearbeiter_buerger (BUERGER, SACHBEARBEITER) values ('2008','6018');						
+insert into  sachbearbeiter_buerger (BUERGER, SACHBEARBEITER) values ('2009','6019');						
+insert into  sachbearbeiter_buerger (BUERGER, SACHBEARBEITER) values ('2010','6020');						
+insert into  sachbearbeiter_buerger (BUERGER, SACHBEARBEITER) values ('2011','6021');						
+insert into  sachbearbeiter_buerger (BUERGER, SACHBEARBEITER) values ('2012','6022');						
+insert into  sachbearbeiter_buerger (BUERGER, SACHBEARBEITER) values ('2013','6023');						
+insert into  sachbearbeiter_buerger (BUERGER, SACHBEARBEITER) values ('2014','6024');						
+insert into  sachbearbeiter_buerger (BUERGER, SACHBEARBEITER) values ('2015','6025');						
+insert into  sachbearbeiter_buerger (BUERGER, SACHBEARBEITER) values ('2016','6026');						
+insert into  sachbearbeiter_buerger (BUERGER, SACHBEARBEITER) values ('2017','6027');						
+insert into  sachbearbeiter_buerger (BUERGER, SACHBEARBEITER) values ('2018','6028');						
+insert into  sachbearbeiter_buerger (BUERGER, SACHBEARBEITER) values ('2019','6029');						
+
+--AdresseExterne
+
+
+insert into adresse_externe (ID, oid,adr_hausnummer,adr_plz, adr_str,adr_stadt,  MANDANT) values ('7000','OIDM2_ADRESSEEXTA001','1','69034','panoramaStr.','Passau','2');
+insert into adresse_externe (ID, oid,adr_hausnummer,adr_plz, adr_str,adr_stadt,  MANDANT) values ('7001','OIDM2_ADRESSEEXTA002','2','69034','panoramaStr.','Passau','2');
+insert into adresse_externe (ID, oid,adr_hausnummer,adr_plz, adr_str,adr_stadt,  MANDANT) values ('7002','OIDM2_ADRESSEEXTA003','3','69034','panoramaStr.','Passau','2');
+insert into adresse_externe (ID, oid,adr_hausnummer,adr_plz, adr_str,adr_stadt,  MANDANT) values ('7003','OIDM2_ADRESSEEXTA004','4','69034','panoramaStr.','Passau','2');
+insert into adresse_externe (ID, oid,adr_hausnummer,adr_plz, adr_str,adr_stadt,  MANDANT) values ('7004','OIDM2_ADRESSEEXTA005','5','69034','panoramaStr.','Passau','2');
+insert into adresse_externe (ID, oid,adr_hausnummer,adr_plz, adr_str,adr_stadt,  MANDANT) values ('7005','OIDM2_ADRESSEEXTA006','6','69034','panoramaStr.','Passau','2');
+insert into adresse_externe (ID, oid,adr_hausnummer,adr_plz, adr_str,adr_stadt,  MANDANT) values ('7006','OIDM2_ADRESSEEXTA007','7','69034','panoramaStr.','Passau','2');
+insert into adresse_externe (ID, oid,adr_hausnummer,adr_plz, adr_str,adr_stadt,  MANDANT) values ('7007','OIDM2_ADRESSEEXTA008','8','69034','panoramaStr.','Passau','2');
+insert into adresse_externe (ID, oid,adr_hausnummer,adr_plz, adr_str,adr_stadt,  MANDANT) values ('7008','OIDM2_ADRESSEEXTA009','9','69034','panoramaStr.','Passau','2');
+insert into adresse_externe (ID, oid,adr_hausnummer,adr_plz, adr_str,adr_stadt,  MANDANT) values ('7009','OIDM2_ADRESSEEXTA010','10','69034','panoramaStr.','Passau','2');
+insert into adresse_externe (ID, oid,adr_hausnummer,adr_plz, adr_str,adr_stadt,  MANDANT) values ('7010','OIDM2_ADRESSEEXTA011','11','69034','panoramaStr.','Passau','2');
+insert into adresse_externe (ID, oid,adr_hausnummer,adr_plz, adr_str,adr_stadt,  MANDANT) values ('7011','OIDM2_ADRESSEEXTA012','12','69034','panoramaStr.','Passau','2');
+insert into adresse_externe (ID, oid,adr_hausnummer,adr_plz, adr_str,adr_stadt,  MANDANT) values ('7012','OIDM2_ADRESSEEXTA013','13','69034','panoramaStr.','Passau','2');
+insert into adresse_externe (ID, oid,adr_hausnummer,adr_plz, adr_str,adr_stadt,  MANDANT) values ('7013','OIDM2_ADRESSEEXTA014','14','69034','panoramaStr.','Passau','2');
+insert into adresse_externe (ID, oid,adr_hausnummer,adr_plz, adr_str,adr_stadt,  MANDANT) values ('7014','OIDM2_ADRESSEEXTA015','15','69034','panoramaStr.','Passau','2');
+insert into adresse_externe (ID, oid,adr_hausnummer,adr_plz, adr_str,adr_stadt,  MANDANT) values ('7015','OIDM2_ADRESSEEXTA016','16','69034','panoramaStr.','Passau','2');
+insert into adresse_externe (ID, oid,adr_hausnummer,adr_plz, adr_str,adr_stadt,  MANDANT) values ('7016','OIDM2_ADRESSEEXTA017','17','69034','panoramaStr.','Passau','2');
+insert into adresse_externe (ID, oid,adr_hausnummer,adr_plz, adr_str,adr_stadt,  MANDANT) values ('7017','OIDM2_ADRESSEEXTA018','18','69034','panoramaStr.','Passau','2');
+insert into adresse_externe (ID, oid,adr_hausnummer,adr_plz, adr_str,adr_stadt,  MANDANT) values ('7018','OIDM2_ADRESSEEXTA019','19','69034','panoramaStr.','Passau','2');
+insert into adresse_externe (ID, oid,adr_hausnummer,adr_plz, adr_str,adr_stadt,  MANDANT) values ('7019','OIDM3_ADRESSEEXTA001','1','26003','donauStr','heidelberg','3');
+insert into adresse_externe (ID, oid,adr_hausnummer,adr_plz, adr_str,adr_stadt,  MANDANT) values ('7020','OIDM3_ADRESSEEXTA002','2','26004','donauStr','heidelberg','3');
+insert into adresse_externe (ID, oid,adr_hausnummer,adr_plz, adr_str,adr_stadt,  MANDANT) values ('7021','OIDM3_ADRESSEEXTA003','3','26005','donauStr','heidelberg','3');
+insert into adresse_externe (ID, oid,adr_hausnummer,adr_plz, adr_str,adr_stadt,  MANDANT) values ('7022','OIDM3_ADRESSEEXTA004','4','26006','donauStr','heidelberg','3');
+insert into adresse_externe (ID, oid,adr_hausnummer,adr_plz, adr_str,adr_stadt,  MANDANT) values ('7023','OIDM3_ADRESSEEXTA005','5','26007','donauStr','heidelberg','3');
+insert into adresse_externe (ID, oid,adr_hausnummer,adr_plz, adr_str,adr_stadt,  MANDANT) values ('7024','OIDM3_ADRESSEEXTA006','6','26008','donauStr','heidelberg','3');
+insert into adresse_externe (ID, oid,adr_hausnummer,adr_plz, adr_str,adr_stadt,  MANDANT) values ('7025','OIDM3_ADRESSEEXTA007','7','26009','donauStr','heidelberg','3');
+insert into adresse_externe (ID, oid,adr_hausnummer,adr_plz, adr_str,adr_stadt,  MANDANT) values ('7026','OIDM3_ADRESSEEXTA008','8','26010','donauStr','heidelberg','3');
+insert into adresse_externe (ID, oid,adr_hausnummer,adr_plz, adr_str,adr_stadt,  MANDANT) values ('7027','OIDM3_ADRESSEEXTA009','9','26011','donauStr','heidelberg','3');
+insert into adresse_externe (ID, oid,adr_hausnummer,adr_plz, adr_str,adr_stadt,  MANDANT) values ('7028','OIDM3_ADRESSEEXTA010','10','26012','donauStr','heidelberg','3');
+insert into adresse_externe (ID, oid,adr_hausnummer,adr_plz, adr_str,adr_stadt,  MANDANT) values ('7029','OIDM3_ADRESSEEXTA011','11','26013','donauStr','heidelberg','3');
+insert into adresse_externe (ID, oid,adr_hausnummer,adr_plz, adr_str,adr_stadt,  MANDANT) values ('7030','OIDM3_ADRESSEEXTA012','12','26014','donauStr','heidelberg','3');
+
+
+
 

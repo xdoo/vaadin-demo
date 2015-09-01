@@ -46,7 +46,7 @@ public class SecurityRestClientImpl implements SecurityRestClient {
             return userAuthority1;
         }).map((userAuthority1) -> authorityPermissionService.readByAuthority(userAuthority1.getId().getAuthority().getAuthority())).forEach((authPerm) -> {
             authPerm.stream().forEach((authPerm1) -> {
-                principal.getPermissions().add(authPerm1.getId().getPermission().getPermision());
+                principal.getPermissions().add(authPerm1.getId().getPermission().getPermission());
             });
         });
 

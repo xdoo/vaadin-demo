@@ -32,7 +32,7 @@ public class ValidatorFactory {
             case "DateRange"    :
                 if(args.length<3)
                     return null;
-                return new DateRangeValidator(args[0],((args[1]!=null||!"".equals(args[1])) ? new Date(Integer.parseInt(args[1])) :new Date() ),((args[2]==null||"".equals(args[2])) ? new Date(): new Date(Integer.parseInt(args[2]))),Resolution.YEAR);    
+                return new DateRangeValidator(args[0],((args[1]!=null||!"".equals(args[1])) ? (args[1].equals("start"))? new Date(Long.MIN_VALUE):new Date(Integer.parseInt(args[1])) :new Date() ),((args[2]==null||"".equals(args[2])) ? new Date(): new Date(Integer.parseInt(args[2]))),Resolution.YEAR);
             case "IntegerRange" :
                 if(args.length<3)
                     return null;

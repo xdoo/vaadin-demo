@@ -32,7 +32,11 @@ public interface SachbearbeiterService {
     public Sachbearbeiter readUserSachbearbeiter(String oid);
 
     public void releaseUserSachbearbeiter(String userOid);
-    
+
     public void releaseSachbearbeiterUser(String sOid);
+
+    public void copy(List<String> oids);
+
+    public void delete(List<String> oids);
 
 }

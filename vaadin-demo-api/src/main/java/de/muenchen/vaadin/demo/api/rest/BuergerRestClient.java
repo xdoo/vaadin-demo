@@ -1,10 +1,9 @@
 package de.muenchen.vaadin.demo.api.rest;
 
 import de.muenchen.vaadin.demo.api.domain.Buerger;
+import java.util.List;
 import org.springframework.hateoas.Link;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.List;
 
 /**
  *
@@ -104,7 +103,7 @@ public interface BuergerRestClient {
      * @return 
      */
     public List<Buerger> queryKinder(List<Link> links, RestTemplate restTemplate);
-
+    
     /**
      *
      * @param links
@@ -123,5 +122,8 @@ public interface BuergerRestClient {
     public Buerger saveBuergerKind(Buerger buerger, Buerger kind, RestTemplate restTemplate);
     
     public Buerger addBuergerKind(Buerger buerger, Buerger kind, RestTemplate restTemplate);
+
+    public Buerger releaseBuergerElternteil(Buerger buerger, Buerger kind, RestTemplate restTemplate);
+    
     public Buerger addBuergerPartner(Buerger buerger, Buerger kind, RestTemplate restTemplate);
 }

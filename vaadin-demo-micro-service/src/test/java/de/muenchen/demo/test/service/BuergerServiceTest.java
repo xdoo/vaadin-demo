@@ -6,6 +6,7 @@ import de.muenchen.demo.service.Application;
 import de.muenchen.demo.service.domain.Buerger;
 import de.muenchen.demo.service.domain.BuergerRepository;
 import de.muenchen.demo.service.domain.Pass;
+import de.muenchen.demo.service.domain.Sachbearbeiter;
 import de.muenchen.demo.service.domain.Wohnung;
 import de.muenchen.demo.service.services.BuergerService;
 import java.util.ArrayList;
@@ -168,6 +169,37 @@ public class BuergerServiceTest {
 
     @Test
     @WithMockUser(username = DomainConstants.M2_U001_NAME)
+    public void copyListBuergerTest() {
+        System.out.println("========== copy Liste Bürger Test ==========");
+        int x = this.count(DomainConstants.M2);
+        ArrayList<String> oids = new ArrayList();
+        oids.add(DomainConstants.M2_B027);
+        oids.add(DomainConstants.M2_B028);
+        service.copy(oids);
+        List<Buerger> bs = service.query();
+        assertEquals(x + 2, bs.size());
+        System.out.println(String.format("Objekte mit der OID '%s' und der OID '%s' konnte erfolgreich in Objekt  kopiert (und in DB gespeichert) werden", DomainConstants.M2_B027, DomainConstants.M2_B028));
+
+    }
+
+    @Test
+    @WithMockUser(username = DomainConstants.M2_U001_NAME)
+    public void buergerDeleteListTest() {
+        System.out.println("========== delete Bürger Test ==========");
+        ArrayList<String> oids = new ArrayList();
+        oids.add(DomainConstants.M2_B022);
+        oids.add(DomainConstants.M2_B023);
+        service.delete(oids);
+        Buerger b1 = service.read(DomainConstants.M2_B022);
+        assertNull(b1);
+        Buerger b2 = service.read(DomainConstants.M2_B023);
+        assertNull(b2);
+        System.out.println(String.format("Bürger  mit OID '%s'und OID '%s' konnte aus der DB (und dem Cache) gelöscht werden.", DomainConstants.M2_B022, DomainConstants.M2_B023));
+
+    }
+
+    @Test
+    @WithMockUser(username = DomainConstants.M2_U001_NAME)
     public void readPassBürgerTest() {
         System.out.println("========== read Pass Bürger Test ==========");
         Buerger b1 = service.readPassBuerger(DomainConstants.M2_P001);
@@ -190,7 +222,7 @@ public class BuergerServiceTest {
         System.out.println("========== release Bürger Elternteil Test ==========");
         Buerger b1 = service.read(DomainConstants.M2_B001);
         assertEquals(1, this.checkChild(DomainConstants.M2_B011, b1));
-        service.releaseBuergerElternteil(DomainConstants.M2_B001, DomainConstants.M2_B011);
+        service.releaseBuergerElternteil(DomainConstants.M2_B011, DomainConstants.M2_B001);
         Buerger b2 = service.read(DomainConstants.M2_B001);
         assertEquals(0, this.checkChild(DomainConstants.M2_B011, b2));
         System.out.println(String.format("release operation für den Bürger mit OID '%s' und den elternteil mit OID '%s' konnte aus der DB erfolgreich durchgeführt.", DomainConstants.M2_B011, DomainConstants.M2_B001));
@@ -247,7 +279,7 @@ public class BuergerServiceTest {
 
     @Test
     @WithMockUser(username = DomainConstants.M2_U001_NAME)
-    public void releaseBuergrPaesseTest() {
+    public void releaseBuergerPaesseTest() {
         System.out.println("========== release Bürger Paesse Test ==========");
         Set<Pass> b1 = service.read(DomainConstants.M2_B002).getPass();
         assertFalse(b1.isEmpty());
@@ -309,8 +341,8 @@ public class BuergerServiceTest {
     private long checkWohnung(String oid, Buerger b1) {
         return b1.getWohnungen().stream().filter(k -> k.getOid().equals(oid)).count();
     }
-    
-     @Test
+
+    @Test
     @WithMockUser(username = DomainConstants.M2_U001_NAME)
     public void readStaatsangehoerigkeitBuergerTest() {
         System.out.println("========== read Staatsangehoerigkeit Bürger Test ==========");
@@ -343,10 +375,20 @@ public class BuergerServiceTest {
         System.out.println(String.format("release operation für den Eltern eines Bürgers mit OID '%s' konnte aus der DB erfolgreich durchgeführt.", DomainConstants.M2_B012));
     }
 
-
     private long checkStaatsangehoerigkeit(String oid, Buerger b1) {
         return b1.getStaatsangehoerigkeitReferences().stream().filter(k -> k.getReferencedOid().equals(oid)).count();
     }
-    
-    
+
+    @Test
+    @WithMockUser(username = DomainConstants.M2_U001_NAME)
+    public void releaseBuergerAllSAchbearbeiterTest() {
+        System.out.println("========== release Bürger Wohnungen Test ==========");
+        Set<Sachbearbeiter> b1 = service.read(DomainConstants.M2_B014).getSachbearbeiter();
+        assertFalse(b1.isEmpty());
+        service.releaseBuergerAllSachbearbeiter(DomainConstants.M2_B014);
+        Set<Sachbearbeiter> b2 = service.read(DomainConstants.M2_B014).getSachbearbeiter();
+        assertTrue(b2.isEmpty());
+        System.out.println(String.format("release operation für die kinder eines Bürgers mit OID '%s' konnte aus der DB erfolgreich durchgeführt.", DomainConstants.M2_B002));
+    }
+
 }

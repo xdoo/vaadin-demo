@@ -5,8 +5,6 @@
  */
 package de.muenchen.demo.service.rest.api;
 
-import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
-import de.muenchen.demo.service.domain.StaatsangehoerigkeitReference;
 import java.util.Date;
 
 /**
@@ -30,10 +28,12 @@ public class PassResource extends BaseResource {
     private Date gueltigBis;
 
     private String behoerde;
+    
+    public static final String ADD_STAATSANGEHOERIGKEIT = "add_staatsangehoerigkeit";
+    public static final String STAATSANGEHOERIGKEIT = "staatsangehoerigkeit";
+    public static final String BUERGER = "buerger";
+    public static final String RELEASE_BUERGER = "release_buerger";    
 
-    private StaatsangehoerigkeitReference staatsangehoerigkeitReference;
-
-    private Staatsangehoerigkeit staatsangehoerigkeit;
 
     public String getPassNummer() {
         return passNummer;
@@ -99,22 +99,6 @@ public class PassResource extends BaseResource {
 
     public void setBehoerde(String behoerde) {
         this.behoerde = behoerde;
-    }
-
-    public Staatsangehoerigkeit getStaatsangehoerigkeit() {
-        return staatsangehoerigkeit;
-    }
-
-    public void setStaatsangehoerigkeit(Staatsangehoerigkeit staatsangehoerigkeit) {
-        this.staatsangehoerigkeit = staatsangehoerigkeit;
-    }
-
-    public StaatsangehoerigkeitReference getStaatsangehoerigkeitReference() {
-        return staatsangehoerigkeitReference;
-    }
-
-    public void setStaatsangehoerigkeitReference(StaatsangehoerigkeitReference staatsangehoerigkeitReference) {
-        this.staatsangehoerigkeitReference = staatsangehoerigkeitReference;
     }
 
 }

@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  *
@@ -35,10 +36,6 @@ public class BuergerServiceImpl implements BuergerService {
     private UserService userService;
     @Autowired
     MandantService mandantService;
-    @Autowired
-    private WohnungService wohnungService;
-    @Autowired
-    private StaatsangehoerigkeitService staatService;
 
     EventBus eventbus;
 
@@ -142,14 +139,14 @@ public class BuergerServiceImpl implements BuergerService {
         if (list != null) {
             Iterator<Sachbearbeiter> iter = list.iterator();
             Collection<Sachbearbeiter> removeSachbearbeiter = new LinkedList<>();
-            removeSachbearbeiter.add(null);
+            //removeSachbearbeiter.add(null);
             while (iter.hasNext()) {
                 Sachbearbeiter sachbearbeiter = iter.next();
                 removeSachbearbeiter.add(sachbearbeiter);
                 
                 Set<Buerger> buergerList = sachbearbeiter.getBuerger();
                 Collection<Buerger> removeBuerger = new LinkedList<>();
-                buergerList.stream().filter((element) -> (element == this.read(buergerOid))).forEach(removeBuerger::add);
+                buergerList.stream().filter((element) -> (element.getOid().equals(buergerOid) )).forEach(removeBuerger::add);
                 buergerList.removeAll(removeBuerger);
 
                 //this.sachbearbeiterService.update(sachbearbeiter);
@@ -203,7 +200,7 @@ public class BuergerServiceImpl implements BuergerService {
      * @param elternOid
      */
     @Override
-    public void releaseBuergerElternteil(String elternOid, String kindOid) {
+    public void releaseBuergerElternteil(String kindOid, String elternOid) {
 
         Buerger elternteil = this.read(elternOid);
         List<Buerger> kinder = elternteil.getKinder().stream().filter(k -> k.getOid().equals(kindOid)).collect(Collectors.toList());
@@ -226,16 +223,8 @@ public class BuergerServiceImpl implements BuergerService {
     public void releaseBuergerKinder(String buergerOid) {
 
         Buerger buerger = this.read(buergerOid);
-
-        Set<Buerger> kinder = buerger.getKinder();
-        Collection<Buerger> removeKinder = new LinkedList<>();
-        kinder.stream().forEach((kind) -> {
-            removeKinder.add(kind);
-        });
-
-        kinder.removeAll(removeKinder);
+        buerger.getKinder().clear();
         this.update(buerger);
-
     }
 
     /**

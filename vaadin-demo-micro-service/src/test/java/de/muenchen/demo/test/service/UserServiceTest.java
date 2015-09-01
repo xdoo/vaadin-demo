@@ -1,47 +1,23 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package de.muenchen.demo.test.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.common.collect.Lists;
 import de.muenchen.demo.service.Application;
-import de.muenchen.demo.service.domain.AdresseExterneRepository;
-import de.muenchen.demo.service.domain.AdresseInterneRepository;
-import de.muenchen.demo.service.domain.AdresseReferenceRepository;
-import de.muenchen.demo.service.domain.AuthorityPermissionRepository;
-import de.muenchen.demo.service.domain.AuthorityRepository;
-import de.muenchen.demo.service.domain.BuergerRepository;
+import de.muenchen.demo.service.domain.UserRepository;
 import de.muenchen.demo.service.domain.User;
-import de.muenchen.demo.service.domain.UserRepository;
-import de.muenchen.demo.service.domain.MandantRepository;
-import de.muenchen.demo.service.domain.PassRepository;
-import de.muenchen.demo.service.domain.PermissionRepository;
-import de.muenchen.demo.service.domain.StaatsangehoerigkeitReferenceRepository;
-import de.muenchen.demo.service.domain.UserAuthorityRepository;
-import de.muenchen.demo.service.domain.UserRepository;
-import de.muenchen.demo.service.domain.WohnungRepository;
 import de.muenchen.demo.service.services.UserService;
-import de.muenchen.demo.test.integration.InitTest;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
-import org.apache.http.auth.AuthenticationException;
-import org.junit.After;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import org.junit.Before;
+import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
@@ -55,147 +31,126 @@ public class UserServiceTest {
 
     @Autowired
     UserService service;
+    @Autowired
+    UserRepository repo;
+    @Autowired
+    CacheManager cacheManager;
 
-    @Autowired
-    UserRepository usersRepo;
-    @Autowired
-    AuthorityRepository authRepo;
-    @Autowired
-    PermissionRepository permRepo;
-    @Autowired
-    UserAuthorityRepository userAuthRepo;
-    @Autowired
-    AuthorityPermissionRepository authPermRepo;
-    @Autowired
-    MandantRepository mandantRepo;
-    @Autowired
-    AdresseInterneRepository interneRepo;
-    @Autowired
-    AdresseExterneRepository externeRepo;
-    @Autowired
-    AdresseReferenceRepository referenceRepo;
-    @Autowired
-    BuergerRepository buergerRepo;
-    @Autowired
-    PassRepository passRepo;
-    @Autowired
-    WohnungRepository wohnRepo;
-    @Autowired
-    StaatsangehoerigkeitReferenceRepository staatRepo;
-
-    @Autowired
-    //@Qualifier("authenticationManager")
-    AuthenticationManager authenticationManager;
-
-    @Before
-    public void setUp() throws JsonProcessingException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
-
-        authPermRepo.deleteAll();
-        userAuthRepo.deleteAll();
-        usersRepo.deleteAll();
-        authRepo.deleteAll();
-        permRepo.deleteAll();
-        buergerRepo.deleteAll();
-        staatRepo.deleteAll();
-        wohnRepo.deleteAll();
-        passRepo.deleteAll();
-        referenceRepo.deleteAll();
-        interneRepo.deleteAll();
-        externeRepo.deleteAll();
-        mandantRepo.deleteAll();
-        InitTest initTest = new InitTest(usersRepo, authRepo, permRepo, userAuthRepo, authPermRepo, mandantRepo);
-        initTest.init();
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken("hans", "test");
-        Authentication auth = authenticationManager.authenticate(token);
-        SecurityContextHolder.getContext().setAuthentication(auth);
+    @Test
+    @WithMockUser(username = DomainConstants.M2_U001_NAME)
+    public void testCacheOnSave() {
+        System.out.println("========== save cache Test ==========");
+        Cache cache = cacheManager.getCache(UserRepository.User_CACHE);
+        User b1 = this.createUser("OIDC00");
+        assertNull(cache.get(b1.getOid(), User.class));
+        service.save(b1);
+        assertNotNull(cache.get(b1.getOid(), User.class));
+        System.out.println(String.format("Objekt wurde beim Speichern mit der ID '%s' in den Cache gelegt.", b1.getOid() ));
     }
 
     @Test
+    @WithMockUser(username = DomainConstants.M2_U001_NAME)
+    public void testCacheOnRead() {
+        System.out.println("========== read cache Test ==========");
+        Cache cache = cacheManager.getCache(UserRepository.User_CACHE);
+        String cacheId = "oid6";
+        assertNull(cache.get(cacheId));
+        User b1 = service.read("oid6");
+        assertNotNull(cache.get(b1.getOid(), User.class));
+        assertEquals(cacheId, b1.getOid());
+        System.out.println(String.format("Objekt wurde beim Lesen mit der ID '%s' in den Cache gelegt.", b1.getOid() ));
+    }
+
+    @Test
+    @WithMockUser(username = DomainConstants.M2_U001_NAME)
     public void createTest() throws JsonProcessingException {
-
-        User a = service.create();
-        assertNotEquals(null, a.getOid());
+        System.out.println("========== create User Test ==========");
+        User b1 = service.create();
+        assertNotNull(b1);
+        assertNotNull(b1.getOid());
+        assertNull(repo.findFirstByOid(b1.getOid()));
+        System.out.println(String.format("User wurde mit neuer OID '%s' erstellt (und nicht in der DB gespeichert)", b1.getOid()));
     }
 
     @Test
-    public void saveTest() throws JsonProcessingException, AuthenticationException {
-        User user = new User();
-        user.setOid("123");
-        user.setUsername("user");
-        user.setPassword("user");
-        User a = service.save(user);
-        assertNotEquals(null, a.getOid());
+    @WithMockUser(username = DomainConstants.M2_U001_NAME)
+    public void saveTest() {
+        System.out.println("========== save User Test ==========");
+        String oid = "OID0";
+        User b1 = service.save(this.createUser(oid));
+        assertEquals(oid, b1.getOid());
+        assertNotNull(repo.findFirstByOid(oid));
+        System.out.println(String.format("User wurde in der DB gespeichert."));
+    }
 
+    private User createUser(String oid) {
+        User user = new User();
+        user.setOid(oid);
+        user.setUsername("sandi");
+        user.setPassword("1234");
+        return user;
     }
 
     @Test
-    public void updateTest() throws JsonProcessingException, AuthenticationException {
-        User user = new User();
-        user.setOid("123");
-        user.setUsername("user");
-        user.setPassword("user");
-        User response = service.save(user);
-        response.setOid("12");
-        User a = service.update(response);
-        assertEquals(response.getId(), a.getId());
-
+    @WithMockUser(username = DomainConstants.M2_U001_NAME)
+    public void updateTest() {
+        System.out.println("========== update User Test ==========");
+        User b1 = service.read("oid25");
+        b1.setUsername("lukas");
+        service.update(b1);
+        User b2 = service.read("oid25");
+        assertEquals("lukas", b2.getUsername());
+        System.out.println("User wurde mit neuem Vornamen in der DB gespeichert.");
     }
 
     @Test
-    public void readTest() throws JsonProcessingException, AuthenticationException {
-        User user = new User();
-        user.setOid("123");
-        user.setUsername("user");
-        user.setPassword("user");
-        service.save(user);
-        User a = service.read("123");
-        assertEquals("123", a.getOid());
-
+    @WithMockUser(username = DomainConstants.M2_U001_NAME)
+    public void readTest() {
+        System.out.println("========== read User Test ==========");
+        User b1 = service.read("oid25");
+        assertNotNull(b1);
+        System.out.println(String.format("User konnte mit OID '%s' aus der DB gelesen werden.", b1.getOid()));
     }
 
     @Test
-    public void deleteTest() throws JsonProcessingException, AuthenticationException {
-        User user = new User();
-        user.setOid("123");
-        user.setUsername("user");
-        user.setPassword("user");
-        service.save(user);
-        service.delete("123");
-        User a = service.read("123");
-        assertEquals(null, a);
+    @WithMockUser(username = DomainConstants.M2_U001_NAME)
+    public void deleteTest() {
+        System.out.println("========== delete User Test ==========");
+        User b1 = service.read("oid22");
+        assertNotNull(b1);
+        service.delete("oid22");
+        User b2 = service.read("oid22");
+        assertNull(b2);
+        System.out.println(String.format("User konnte mit OID '%s' aus der DB (und dem Cache) gelöscht werden.", "oid22"));
     }
 
     @Test
-    public void queryTest() throws JsonProcessingException, AuthenticationException {
-        User user = new User();
-        user.setOid("123");
-        user.setUsername("user");
-        user.setPassword("user");
-        service.save(user);
-        User user2 = new User();
-        user2.setOid("124");
-        user2.setUsername("user2");
-        user2.setPassword("user2");
-        service.save(user2);
-        List<User> a = service.query();
-        assertEquals(4, a.size());
+    @WithMockUser(username = DomainConstants.M2_U001_NAME)
+    public void queryTest() {
+        System.out.println("========== query User  ==========");
+        int x = this.count();
+        List<User> bs = service.query();
+        assertEquals(x, bs.size());
+        System.out.println(String.format("Suche wurde erfolgreich durchgeführt.  Ergebnis der Suche: %s",  bs.size()));
     }
 
-     @After
-    public void TearDown() {
-        authPermRepo.deleteAll();
-        userAuthRepo.deleteAll();
-        usersRepo.deleteAll();
-        authRepo.deleteAll();
-        permRepo.deleteAll();
-        buergerRepo.deleteAll();
-        staatRepo.deleteAll();
-        wohnRepo.deleteAll();
-        passRepo.deleteAll();
-        referenceRepo.deleteAll();
-        interneRepo.deleteAll();
-        externeRepo.deleteAll();
-        mandantRepo.deleteAll();
 
+
+    private int count() {
+        ArrayList<User> all = Lists.newArrayList(repo.findAll());
+        return all.size();
+    }
+
+    @Test
+    @WithMockUser(username = DomainConstants.M2_U001_NAME)
+    public void copyTest() {
+        System.out.println("========== copy User Test ==========");
+        User b1 = service.copy("oid26");
+        assertNotNull(b1);
+        User b2 = service.read(b1.getOid());
+        assertNotNull(b2);
+        assertEquals(b1.getUsername(), b2.getUsername());
+        assertEquals(b1.getPassword(), b2.getPassword());
+        System.out.println(String.format("Objekt mit der OID '%s' konnte erfolgreich in Objekt '%s' kopiert (und in DB gespeichert) werden", "oid26", b2.getOid()));
     }
 }

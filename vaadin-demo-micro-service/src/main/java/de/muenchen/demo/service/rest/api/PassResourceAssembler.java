@@ -83,6 +83,13 @@ public class PassResourceAssembler {
         if (relations.contains(HateoasUtil.REL_SAVE)) {
             resource.add(linkTo(methodOn(PassController.class).savePass(null)).withRel(HateoasUtil.REL_SAVE));
         }
+         if (relations.contains(HateoasUtil.REL_DELETE_LIST)) {
+            resource.add(linkTo(methodOn(PassController.class).deleteListPass(null)).withRel(HateoasUtil.REL_DELETE_LIST));
+        }
+
+        if (relations.contains(HateoasUtil.REL_COPY_LIST)) {
+            resource.add(linkTo(methodOn(PassController.class).copyListPass(null)).withRel(HateoasUtil.REL_COPY_LIST));
+        }
 
         if (relations.contains(HateoasUtil.REL_COPY)) {
             resource.add(linkTo(methodOn(PassController.class).copyPass(pass.getOid())).withRel(HateoasUtil.REL_COPY));
@@ -108,10 +115,8 @@ public class PassResourceAssembler {
             entity.setKode(resource.getKode());
             entity.setTyp(resource.getTyp());
             entity.setPassNummer(resource.getPassNummer());
-            entity.setStaatsangehoerigkeit(resource.getStaatsangehoerigkeit());
             entity.setGroesse(resource.getGroesse());
             entity.setAugenFarbe(resource.getAugenFarbe());
-            entity.setStaatsangehoerigkeitReference(resource.getStaatsangehoerigkeitReference());
             // end field mapping
         } else {
             LOG.error(resource.toString());
@@ -127,5 +132,28 @@ public class PassResourceAssembler {
         });
         return resource;
     }
-
+ /**
+     *
+     *
+     * @param entity
+     * @return
+     */
+    public PassResource assembleWithAllLinks(Pass entity) {
+        return this.toResource(entity,
+                HateoasUtil.REL_SELF,
+                HateoasUtil.REL_NEW,
+                HateoasUtil.REL_DELETE,
+                HateoasUtil.REL_UPDATE,
+                HateoasUtil.REL_COPY,
+                HateoasUtil.REL_COPY_LIST,
+                HateoasUtil.REL_DELETE_LIST,
+                // Relationen
+                PassResource.STAATSANGEHOERIGKEIT,
+                PassResource.BUERGER,
+                PassResource.RELEASE_BUERGER,
+                PassResource.ADD_STAATSANGEHOERIGKEIT
+                
+                
+        );
+    }
 }

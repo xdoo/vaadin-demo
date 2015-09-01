@@ -32,6 +32,12 @@ public interface PassService {
 
     public Pass readStaat(String oid);
 
-    public void deletePassStaat(String adresseOid);
+    public void releasePassStaatsangehoerigkeit(String passOid);
+
+    public void releaseStaatsangehoerigkeitPass(String staatOid);
+
+    public void copy(List<String> oids);
+
+    public void delete(List<String> oids);
 
 }

@@ -1,52 +1,27 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package de.muenchen.demo.test.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.common.collect.Lists;
 import de.muenchen.demo.service.Application;
-import de.muenchen.demo.service.domain.AdresseExterneRepository;
-import de.muenchen.demo.service.domain.AdresseInterneRepository;
-import de.muenchen.demo.service.domain.AdresseReferenceRepository;
 import de.muenchen.demo.service.domain.AuthPermId;
 import de.muenchen.demo.service.domain.Authority;
-import de.muenchen.demo.service.domain.AuthorityPermissionRepository;
-import de.muenchen.demo.service.domain.AuthorityRepository;
 import de.muenchen.demo.service.domain.AuthorityPermission;
 import de.muenchen.demo.service.domain.AuthorityPermissionRepository;
-import de.muenchen.demo.service.domain.BuergerRepository;
-import de.muenchen.demo.service.domain.Mandant;
-import de.muenchen.demo.service.domain.MandantRepository;
-import de.muenchen.demo.service.domain.PassRepository;
 import de.muenchen.demo.service.domain.Permission;
-import de.muenchen.demo.service.domain.PermissionRepository;
-import de.muenchen.demo.service.domain.StaatsangehoerigkeitReferenceRepository;
-import de.muenchen.demo.service.domain.UserAuthorityRepository;
-import de.muenchen.demo.service.domain.UserRepository;
-import de.muenchen.demo.service.domain.WohnungRepository;
 import de.muenchen.demo.service.services.AuthorityPermissionService;
-import de.muenchen.demo.service.util.IdService;
-import de.muenchen.demo.test.integration.InitTest;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
+import de.muenchen.demo.service.services.AuthorityService;
+import de.muenchen.demo.service.services.PermissionService;
+import java.util.ArrayList;
 import java.util.List;
-import org.apache.http.auth.AuthenticationException;
-import org.junit.After;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import org.junit.Before;
+import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
@@ -60,142 +35,101 @@ public class AuthorityPermissionServiceTest {
 
     @Autowired
     AuthorityPermissionService service;
+    @Autowired
+    AuthorityService authorityService;
+    @Autowired
+    PermissionService permissionService;
+    @Autowired
+    AuthorityPermissionRepository repo;
+    @Autowired
+    CacheManager cacheManager;
 
-    @Autowired
-    UserRepository usersRepo;
-    @Autowired
-    AuthorityRepository authRepo;
-    @Autowired
-    PermissionRepository permRepo;
-    @Autowired
-    UserAuthorityRepository userAuthRepo;
-    @Autowired
-    AuthorityPermissionRepository authPermRepo;
-    @Autowired
-    MandantRepository mandantRepo;
-    @Autowired
-    AdresseInterneRepository interneRepo;
-    @Autowired
-    AdresseExterneRepository externeRepo;
-    @Autowired
-    AdresseReferenceRepository referenceRepo;
-    @Autowired
-    BuergerRepository buergerRepo;
-    @Autowired
-    PassRepository passRepo;
-    @Autowired
-    WohnungRepository wohnRepo;
-    @Autowired
-    StaatsangehoerigkeitReferenceRepository staatRepo;
+    @Test
+    @WithMockUser(username = DomainConstants.M2_U001_NAME)
+    public void testCacheOnSave() {
+        System.out.println("========== save cache Test ==========");
+        Cache cache = cacheManager.getCache(AuthorityPermissionRepository.AuthorityPermission_CACHE);
+        Authority a1 = authorityService.read(DomainConstants.M2_AU001);
+        Permission p1 = permissionService.read(DomainConstants.M_P008);
+        AuthPermId idA = new AuthPermId(p1, a1);
+        AuthorityPermission authPerm = new AuthorityPermission();
+        authPerm.setId(idA);
+        assertNull(cache.get(authPerm.getId(), AuthorityPermission.class));
+        AuthorityPermission ap1 = service.save(authPerm);
+        assertNotNull(cache.get(authPerm.getId(), AuthorityPermission.class));
+        System.out.println(String.format("Objekt wurde beim Speichern mit der ID '%s' in den Cache gelegt.", authPerm.getId()));
+    }
 
-    @Autowired
-    //@Qualifier("authenticationManager")
-    AuthenticationManager authenticationManager;
+//    @Test
+//    @WithMockUser(username = DomainConstants.M2_U001_NAME)
+//    public void testCacheOnRead() {
+//        System.out.println("========== read cache Test ==========");
+//        Cache cache = cacheManager.getCache(AuthorityPermissionRepository.AuthorityPermission_CACHE);
+//
+//        Authority a1 = authorityService.read(DomainConstants.M2_AU002);
+//        Permission p1 = permissionService.read(DomainConstants.M_P009);
+//        AuthPermId idA = new AuthPermId(p1, a1);
+//        AuthPermId cacheId = idA;
+//        assertNull(cache.get(cacheId));
+//        AuthorityPermission b1 = service.read(idA);
+//        assertNotNull(cache.get(b1.getId(), AuthorityPermission.class));
+//        assertEquals(cacheId, b1.getId());
+//        System.out.println(String.format("Objekt wurde beim Lesen mit der ID '%s' in den Cache gelegt.", b1.getId()));
+//    }
 
-    @Before
-    public void setUp() throws JsonProcessingException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
-
-        authPermRepo.deleteAll();
-        userAuthRepo.deleteAll();
-        usersRepo.deleteAll();
-        authRepo.deleteAll();
-        permRepo.deleteAll();
-        buergerRepo.deleteAll();
-        staatRepo.deleteAll();
-        wohnRepo.deleteAll();
-        passRepo.deleteAll();
-        referenceRepo.deleteAll();
-        interneRepo.deleteAll();
-        externeRepo.deleteAll();
-        mandantRepo.deleteAll();
-        InitTest initTest = new InitTest(usersRepo, authRepo, permRepo, userAuthRepo, authPermRepo, mandantRepo);
-        initTest.init();
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken("hans", "test");
-        Authentication auth = authenticationManager.authenticate(token);
-        SecurityContextHolder.getContext().setAuthentication(auth);
+    @Test
+    @WithMockUser(username = DomainConstants.M2_U001_NAME)
+    public void saveTest() {
+        System.out.println("========== save AuthorityPermission Test ==========");
+        Authority a1 = authorityService.read(DomainConstants.M2_AU001);
+        Permission p1 = permissionService.read(DomainConstants.M_P007);
+        AuthPermId idA = new AuthPermId(p1, a1);
+        AuthorityPermission authPerm = new AuthorityPermission();
+        authPerm.setId(idA);
+        AuthorityPermission ap1 = service.save(authPerm);
+        assertNotNull(ap1);
+        assertNotNull(repo.findFirstById(idA));
+        System.out.println(String.format("AuthorityPermission wurde in der DB gespeichert."));
     }
 
     @Test
-    public void saveTest() throws JsonProcessingException, AuthenticationException {
-        Mandant mandant = new Mandant();
-        mandant.setOid("10");
-        mandantRepo.save(mandant);
-        Authority auth = new Authority();
-        auth.setAuthority("ADMIN");
-        auth.setOid(IdService.next());
-        authRepo.save(auth);
-        Permission permission = new Permission();
-        permission.setPermision("New_Buerger");
-        permission.setOid(IdService.next());
-        permRepo.save(permission);
-        AuthorityPermission authPerm = new AuthorityPermission();
-        AuthPermId idA = new AuthPermId(permission, auth);
-        authPerm.setId(idA);
-        AuthorityPermission a = service.save(authPerm);
-        assertNotEquals(null, a);
-
-        
-        
+    @WithMockUser(username = DomainConstants.M2_U001_NAME)
+    public void readTest() {
+        System.out.println("========== read AuthorityPermission Test ==========");
+        Authority a1 = authorityService.read(DomainConstants.M2_AU002);
+        Permission p1 = permissionService.read(DomainConstants.M_P006);
+        AuthPermId idA = new AuthPermId(p1, a1);
+        AuthorityPermission b1 = service.read(idA);
+        assertNotNull(b1);
+        System.out.println(String.format("AuthorityPermission konnte mit OID '%s' aus der DB gelesen werden.", b1.getId()));
     }
 
     @Test
-    public void deleteTest() throws JsonProcessingException, AuthenticationException {
-        Mandant mandant = new Mandant();
-        mandant.setOid("10");
-        mandantRepo.save(mandant);
-        Authority auth = new Authority();
-        auth.setAuthority("SACHBEARBEITER");
-        auth.setOid(IdService.next());
-        authRepo.save(auth);
-        Permission permission = new Permission();
-        permission.setPermision("New_Buerger");
-        permission.setOid(IdService.next());
-        permRepo.save(permission);
-        AuthorityPermission authPerm = new AuthorityPermission();
-        AuthPermId idA = new AuthPermId(permission, auth);
-        authPerm.setId(idA);
-        service.save(authPerm);
+    @WithMockUser(username = DomainConstants.M2_U001_NAME)
+    public void deleteTest() {
+        System.out.println("========== delete AuthorityPermission Test ==========");
+        Authority a1 = authorityService.read(DomainConstants.M2_AU002);
+        Permission p1 = permissionService.read(DomainConstants.M_P008);
+        AuthPermId idA = new AuthPermId(p1, a1);
+        int x = this.count();
         service.delete(idA);
-        List<AuthorityPermission> a = service.readByAuthority("SACHBEARBEITER");
-        assertEquals(null, a);
+        assertEquals(x - 1, this.count());
+        System.out.println(String.format("AuthorityPermission konnte  aus der DB (und dem Cache) gelöscht werden."));
     }
 
     @Test
-    public void queryTest() throws JsonProcessingException, AuthenticationException {
-        Mandant mandant = new Mandant();
-        mandant.setOid("10");
-        mandantRepo.save(mandant);
-        Authority auth = new Authority();
-        auth.setAuthority("ADMIN");
-        auth.setOid(IdService.next());
-        authRepo.save(auth);
-        Permission permission = new Permission();
-        permission.setPermision("New_Buerger");
-        permission.setOid(IdService.next());
-        permRepo.save(permission);
-        AuthorityPermission authPerm = new AuthorityPermission();
-        AuthPermId idA = new AuthPermId(permission, auth);
-        authPerm.setId(idA);
-        service.save(authPerm);
-        List<AuthorityPermission> a = service.query();
-        assertEquals(false, a.isEmpty());
+    @WithMockUser(username = DomainConstants.M2_U001_NAME)
+    public void queryTest() {
+        System.out.println("========== query AuthorityPermission==========");
+        int x = this.count();
+        List<AuthorityPermission> bs = service.query();
+        assertEquals(x, bs.size());
+        System.out.println(String.format("Suche wurde erfolgreich durchgeführt.  Ergebnis der Suche: %s", bs.size()));
     }
 
-    @After
-    public void TearDown() {
-        authPermRepo.deleteAll();
-        userAuthRepo.deleteAll();
-        usersRepo.deleteAll();
-        authRepo.deleteAll();
-        permRepo.deleteAll();
-        buergerRepo.deleteAll();
-        staatRepo.deleteAll();
-        wohnRepo.deleteAll();
-        passRepo.deleteAll();
-        referenceRepo.deleteAll();
-        interneRepo.deleteAll();
-        externeRepo.deleteAll();
-        mandantRepo.deleteAll();
-
+    private int count() {
+        ArrayList<AuthorityPermission> all = Lists.newArrayList(repo.findAll());
+        return all.size();
     }
+
 }

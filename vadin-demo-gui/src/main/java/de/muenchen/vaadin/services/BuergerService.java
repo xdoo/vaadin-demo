@@ -79,5 +79,7 @@ public interface BuergerService {
     
     public Buerger saveKind(Buerger entity, Buerger kind);
     public Buerger addKind(Buerger entity, Buerger kind);
+
+    public Buerger releaseElternteil(Buerger elternteil, Buerger kind);
     public Buerger addPartner(Buerger entity, Buerger partner);
 }

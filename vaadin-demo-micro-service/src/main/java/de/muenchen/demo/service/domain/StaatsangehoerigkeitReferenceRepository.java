@@ -19,11 +19,11 @@ public final static String StaatsangehoerigkeitReference_CACHE = "STAATSANGEHOER
 
 
     @Override
-    @CachePut(value = StaatsangehoerigkeitReference_CACHE, key = "#p0.oid + #p0.mandant.oid")
+    @CachePut(value = StaatsangehoerigkeitReference_CACHE, key = "#p0.referencedOid + #p0.mandant.oid")
     public StaatsangehoerigkeitReference save(StaatsangehoerigkeitReference entity);
 
     @Override
-    @CacheEvict(value = StaatsangehoerigkeitReference_CACHE, key = "#p0.oid + #p0.mandant.oid")
+    @CacheEvict(value = StaatsangehoerigkeitReference_CACHE, key = "#p0.referencedOid + #p0.mandant.oid")
     public void delete(StaatsangehoerigkeitReference entity);
     public List<StaatsangehoerigkeitReference> findByMandantOid(String mid);
    // public List<StaatsangehoerigkeitReference> findByReferencedOidAndMandantOid(String referencedOid, String mid);

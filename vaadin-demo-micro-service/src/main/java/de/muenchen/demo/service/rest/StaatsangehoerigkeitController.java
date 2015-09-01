@@ -14,7 +14,6 @@ import de.muenchen.demo.service.services.BuergerService;
 
 import de.muenchen.demo.service.services.StaatsangehoerigkeitService;
 import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
-import javax.annotation.security.RolesAllowed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -154,23 +153,23 @@ public class StaatsangehoerigkeitController {
 
     }
 
-    /**
-     * Entfernt die Beziehung zwischen eine Staatsangehoerigkeit und ein
-     * Buerger.
-     *
-     * @param staatsangehoerigkeitOid
-     * @param buergerOid
-     * @return
-     */
-    @Secured({"PERM_releaseStaatsangehoerigkeitBuerger"})
-    @RequestMapping(value = "/release/buerger/{staatsangehoerigkeitOid}/{buergerOid}", method = {RequestMethod.GET})
-    public ResponseEntity releaseStaatsangehoerigkeitBuerger(@PathVariable("staatsangehoerigkeitOid") String staatsangehoerigkeitOid, @PathVariable("buergerOid") String buergerOid) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("delete Staatsangehoerigkeit Buerger");
-        }
-        this.buergerService.releaseStaatsangehoerigkeitBuerger(staatsangehoerigkeitOid, buergerOid);
-        return ResponseEntity.ok().build();
-
-    }
+//    /**
+//     * Entfernt die Beziehung zwischen eine Staatsangehoerigkeit und ein
+//     * Buerger.
+//     *
+//     * @param staatsangehoerigkeitOid
+//     * @param buergerOid
+//     * @return
+//     */
+//    @RolesAllowed({"PERM_releaseStaatsangehoerigkeitBuerger"})
+//    @RequestMapping(value = "/release/buerger/{staatsangehoerigkeitOid}/{buergerOid}", method = {RequestMethod.GET})
+//    public ResponseEntity releaseStaatsangehoerigkeitBuerger(@PathVariable("staatsangehoerigkeitOid") String staatsangehoerigkeitOid, @PathVariable("buergerOid") String buergerOid) {
+//        if (LOG.isDebugEnabled()) {
+//            LOG.debug("delete Staatsangehoerigkeit Buerger");
+//        }
+//        this.buergerService.releaseStaatsangehoerigkeitBuerger(staatsangehoerigkeitOid, buergerOid);
+//        return ResponseEntity.ok().build();
+//
+//    }
 
 }

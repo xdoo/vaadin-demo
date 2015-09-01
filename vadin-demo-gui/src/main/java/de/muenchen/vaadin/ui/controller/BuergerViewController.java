@@ -13,6 +13,7 @@ import de.muenchen.vaadin.demo.api.util.EventType;
 import de.muenchen.vaadin.services.BuergerService;
 import de.muenchen.vaadin.services.MessageService;
 import de.muenchen.vaadin.ui.app.MainUI;
+import de.muenchen.vaadin.ui.app.views.ChildSelectWindow;
 import de.muenchen.vaadin.ui.app.views.events.AppEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
@@ -30,7 +31,9 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Stack;
 
-import static de.muenchen.vaadin.ui.util.I18nPaths.*;
+import static de.muenchen.vaadin.ui.util.I18nPaths.NotificationType;
+import static de.muenchen.vaadin.ui.util.I18nPaths.Type;
+import static de.muenchen.vaadin.ui.util.I18nPaths.getNotificationPath;
 
 /**
  * Der Controller ist die zentrale Klasse um die Logik im Kontext Buerger abzubilden.
@@ -101,6 +104,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
         //Set Controller in Factory after Contruct.
         //to prevent circular reference
         buergerViewFactory.setController(this);
+        getEventbus().register(buergerViewFactory);
     }
 
     
@@ -230,7 +234,16 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
     public Buerger saveBuergerKind(Buerger entity) {
         return service.saveKind(getCurrent().getBean(), entity);
     }
-    
+
+    /**
+     * Zerstört die Verbindung zwischen einem Bürger und seinem Kind
+     *
+     * @param event
+     */
+    private void releaseParent(BuergerAppEvent event) {
+        service.releaseElternteil(getCurrent().getBean(), event.getEntity());
+    }
+
     /**
      * Speichert eine Kindbeziehung zu einem {@link Buerger} Objekt in der Datenbank.
      * 
@@ -240,7 +253,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
     public Buerger addBuergerKind(Buerger entity) {
         return service.addKind(getCurrent().getBean(), entity);
     }
-
+    
     /**
      * Speichert eine Partnerschaftesbeziehung zu einem {@link Buerger} Objekt in der Datenbank.
      *
@@ -341,7 +354,10 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
                 saveAsChildEventHandler(event);
                 break;
             case ADD_SEARCHED_CHILD:
-                navigateEventHandler(event);
+                addSearchedChildEventHandler(event);
+                break;
+            case RELEASE_PARENT:
+                releaseParentHandler(event);
                 break;
             case SAVE_AS_PARTNER:
                 saveAsPartnerEventHandler(event);
@@ -363,6 +379,26 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
         navigateEventHandler(event);
     }
 
+
+    private void releaseParentHandler(BuergerAppEvent event) {
+        // Service Operationen ausführen
+        this.releaseParent(event);
+        // UI Komponenten aktualisieren
+
+        GenericSuccessNotification succes = new GenericSuccessNotification(
+                resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.release, Type.label)),
+                resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.release, Type.text)));
+        succes.show(Page.getCurrent());
+
+        BuergerComponentEvent buergerComponentEvent = new BuergerComponentEvent(EventType.DELETE);
+        buergerComponentEvent.setItemID(event.getItemId());
+        this.eventbus.post(buergerComponentEvent);
+
+    }
+
+
+
+
     /**
      * Navigiert zu der durch das Event angeforderten Seite.
      *
@@ -370,6 +406,11 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
      */
     private void navigateEventHandler(BuergerAppEvent event){
         getNavigator().navigateTo(event.getNavigateTo());
+    }
+
+    private void addSearchedChildEventHandler(BuergerAppEvent event){
+
+        navigator.getUI().addWindow(new ChildSelectWindow(this, event.getFrom().get()));
     }
 
     private void saveAsChildEventHandler(BuergerAppEvent event) {
@@ -380,14 +421,13 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
                  resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.add, Type.text)));
         succes.show(Page.getCurrent());
         this.eventbus.post(new BuergerComponentEvent(event.getEntity(), EventType.UPDATE));
-        navigateEventHandler(event);
     }
 
     private void queryChildEventHandler(BuergerAppEvent event) {
 
 
         // UI Komponenten aktualisieren
-        this.eventbus.post(new BuergerComponentEvent(EventType.CHILDQUERY).addEntities(this.queryKinder(event.getEntity())));
+        this.eventbus.post(new BuergerComponentEvent(EventType.QUERY_CHILD).addEntities(this.queryKinder(event.getEntity())));
     }
 
     private void queryEventHandler(BuergerAppEvent event) {
@@ -470,6 +510,8 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
         // Service Operation ausführen
         this.saveBuergerKind(event.getEntity());
 
+        getEventbus().post(new BuergerComponentEvent(event.getEntity(), EventType.SAVE_CHILD));
+
         GenericSuccessNotification succes = new GenericSuccessNotification(
                 resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.save, Type.label)),
                 resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.save, Type.text)));
@@ -481,10 +523,10 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
     private void saveEventHandler(BuergerAppEvent event) {
 
         // Service Operationen ausführen
-        this.saveBuerger(event.getEntity());
+        Buerger newBuerger = this.saveBuerger(event.getEntity());
 
         // UI Komponenten aktualisieren
-        this.eventbus.post(new BuergerComponentEvent(event.getEntity(), EventType.SAVE));
+        this.eventbus.post(new BuergerComponentEvent(newBuerger, EventType.SAVE));
 
         GenericSuccessNotification succes = new GenericSuccessNotification(
                 resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.save, Type.label)),

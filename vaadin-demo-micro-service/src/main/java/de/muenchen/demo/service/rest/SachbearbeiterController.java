@@ -15,9 +15,9 @@ import de.muenchen.demo.service.services.MandantService;
 import de.muenchen.demo.service.services.SachbearbeiterService;
 import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
 import de.muenchen.vaadin.demo.api.rest.BuergerResource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import javax.annotation.security.RolesAllowed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -138,7 +138,7 @@ public class SachbearbeiterController {
      * @return
      */
     @Secured({"PERM_updateSachbearbeiter"})
-    @RequestMapping(value = "/{oid}", method = {RequestMethod.POST})
+    @RequestMapping(value = "/{oid}", method = {RequestMethod.PUT})
     public ResponseEntity updateSachbearbeiter(@PathVariable("oid") String oid, @RequestBody SachbearbeiterResource request) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("update sachbearbeiter");
@@ -204,6 +204,38 @@ public class SachbearbeiterController {
         UserResource resources = userAssembler.toResource(user, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
         return ResponseEntity.ok(resources);
     }
+/**
+     * Löscht mehrere Bürger.
+     *
+     * @param oids
+     * @return
+     */
+    //@Secured({"PERM_deleteListSachbearbeiter"})
+    @RequestMapping(method = {RequestMethod.POST})
+    public ResponseEntity deleteListSachbearbeiter(@RequestBody ArrayList<String> oids) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("delete Sachbearbeiter");
+        }
+        this.service.delete(oids);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * Macht eine Kopie mehreres Büergers. Diese Kopie wird bei Erstellung in
+     * der DB gespeichert.
+     *
+     * @param oids
+     * @return
+     */
+    //@Secured({"PERM_copyListSachbearbeiter"})
+    @RequestMapping(value = "/copy", method = {RequestMethod.POST})
+    public ResponseEntity copyListSachbearbeiter(@RequestBody ArrayList<String> oids) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("copy Sachbearbeiter");
+        }
+        this.service.copy(oids);
+        return ResponseEntity.ok().build();
+    }
 
     /**
      * Assoziiert ein User mit einem Sachbearbeiter .
@@ -213,8 +245,8 @@ public class SachbearbeiterController {
      * @return
      */
     @Secured({"PERM_addUserSachbearbeiter"})
-    @RequestMapping(value = "add/sachbearbeiter/{sOid}/user/{uOid}", method = {RequestMethod.GET})
-    public ResponseEntity addUserSachbearbeiter(@PathVariable("sOid") String sachOid, @PathVariable("uOid") String userOid) {
+    @RequestMapping(value = "add/{sOid}/user", method = {RequestMethod.POST})
+    public ResponseEntity addUserSachbearbeiter(@PathVariable("sOid") String sachOid, @RequestBody String userOid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Add User to sachbearbeiter");
         }
@@ -344,7 +376,7 @@ public class SachbearbeiterController {
     }
 
     @Secured({"PERM_releaseSachbearbeiterUser"})
-    @RequestMapping(value = "release/user/{sOid}/", method = {RequestMethod.GET})
+    @RequestMapping(value = "release/user/{sOid}", method = {RequestMethod.GET})
     public ResponseEntity releaseSachbearbeiterUser(@PathVariable("sOid") String sachOid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("release sachbearbeiter user");

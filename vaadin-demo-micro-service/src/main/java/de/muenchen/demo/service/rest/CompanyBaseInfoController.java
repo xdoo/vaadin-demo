@@ -6,7 +6,6 @@ import de.muenchen.demo.service.rest.api.CompanyBaseInfoResource;
 import de.muenchen.demo.service.rest.api.CompanyBaseInfoResourceAssembler;
 import de.muenchen.demo.service.services.CompanyBaseInfoService;
 import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
-import javax.annotation.security.RolesAllowed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

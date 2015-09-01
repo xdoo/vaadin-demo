@@ -16,12 +16,22 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
+import de.muenchen.vaadin.demo.api.util.EventType;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
-import de.muenchen.vaadin.demo.api.util.EventType;
 import de.muenchen.vaadin.ui.util.ValidatorFactory;
-import static de.muenchen.vaadin.ui.util.I18nPaths.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Date;
+
+import static de.muenchen.vaadin.ui.util.I18nPaths.Component;
+import static de.muenchen.vaadin.ui.util.I18nPaths.NotificationType;
+import static de.muenchen.vaadin.ui.util.I18nPaths.Type;
+import static de.muenchen.vaadin.ui.util.I18nPaths.getEntityFieldPath;
+import static de.muenchen.vaadin.ui.util.I18nPaths.getFormPath;
+import static de.muenchen.vaadin.ui.util.I18nPaths.getNotificationPath;
 
 /**
  * Formular zum Erstellen eines {@link Buerger}s.
@@ -29,7 +39,7 @@ import static de.muenchen.vaadin.ui.util.I18nPaths.*;
  * @author claus.straube
  */
 public class BuergerCreateForm extends CustomComponent {
-    
+
     private final String navigateTo;
     private String back;
     private final BuergerViewController controller;
@@ -121,15 +131,14 @@ public class BuergerCreateForm extends CustomComponent {
                 controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.label)),
                 controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.input_prompt)),
                 Buerger.NACHNAME, BuergerViewController.I18N_BASE_PATH);
-        //Validator val2 = ValidatorFactory.getValidator("StringLength",controller.getMsg().get("m1.buerger.nachname.validation"),1+"",""+Integer.MAX_VALUE, "true");
         secField.addValidator(val1);
         secField.addValidator(val0);
         layout.addComponent(secField);
         DateField birthdayfield = controller.getUtil().createFormDateField(binder,
-                controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.label)),
+                controller.resolveRelative(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.label)),
                 Buerger.GEBURTSDATUM, BuergerViewController.I18N_BASE_PATH);
         String errorMsg = controller.resolveRelative(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.validation));
-        Validator val3 = ValidatorFactory.getValidator("DateRange",errorMsg,"0",null);
+        Validator val3 = ValidatorFactory.getValidator("DateRange",errorMsg, "start",null);
         birthdayfield.addValidator(val3);
         layout.addComponent(birthdayfield);    
 
@@ -154,12 +163,16 @@ public class BuergerCreateForm extends CustomComponent {
                 
                 binder.commit();
                 controller.getEventbus().post(new BuergerAppEvent(binder.getItemDataSource().getBean(), this.type).navigateTo(navigateTo));
-                controller.getEventbus().post(new BuergerAppEvent(binder.getItemDataSource().getBean(), EventType.UPDATE).navigateTo(navigateTo));
+
                 //reset
+                firstField.removeValidator(val);
+                secField.removeValidator(val);
+                birthdayfield.removeValidator(val);
                 binder.setItemDataSource(controller.createBuerger());
             } catch (CommitException | Validator.InvalidValueException e) {
-                GenericErrorNotification error = new GenericErrorNotification("Fehler","Beim erstellen der Person ist ein Fehler aufgetreten. Bitte füllen Sie alle Felder mit gültigen Werten aus.");
-                error.show(Page.getCurrent());
+                GenericErrorNotification error = new GenericErrorNotification(controller.resolveRelative(getNotificationPath(NotificationType.failure, SimpleAction.save, Type.label)),
+                        controller.resolveRelative(getNotificationPath(NotificationType.failure,SimpleAction.save,Type.text)));
+                        error.show(Page.getCurrent());
             }
         });
         createButton.addStyleName(ValoTheme.BUTTON_FRIENDLY);

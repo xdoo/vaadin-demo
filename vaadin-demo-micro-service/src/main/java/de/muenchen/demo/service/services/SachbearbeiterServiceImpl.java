@@ -26,6 +26,8 @@ import de.muenchen.demo.service.util.events.BuergerEvent;
 import de.muenchen.demo.service.util.events.SachbearbeiterEvent;
 import de.muenchen.demo.service.util.events.UserEvent;
 import de.muenchen.vaadin.demo.api.util.EventType;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,13 +88,13 @@ public class SachbearbeiterServiceImpl implements SachbearbeiterService {
 
     @Override
     public Sachbearbeiter read(String oid) {
-        List<Sachbearbeiter> result = this.repo.findByOidAndMandantOid(oid, readUser().getMandant().getOid());
-        if (result.isEmpty()) {
+        Sachbearbeiter result = this.repo.findFirstByOidAndMandantOid(oid, readUser().getMandant().getOid());
+        if (Objects.isNull(result)) {
 // TODO
             LOG.warn(String.format("found no sachbearbeiter with oid '%s'", oid));
             return null;
         } else {
-            return result.get(0);
+            return result;
         }
     }
 
@@ -131,14 +133,32 @@ public class SachbearbeiterServiceImpl implements SachbearbeiterService {
     }
 
     @Override
+    public void copy(List<String> oids) {
+        oids.stream().forEach(this::copy);
+    }
+
+    @Override
+    public void delete(List<String> oids) {
+        oids.stream().forEach(this::delete);
+    }
+
+    @Override
     public void releaseSachbearbeiterBuerger(String buergerOid, String sOid) {
 
         Sachbearbeiter sachbearbeiter = this.read(sOid);
         Buerger buerger = this.buergerService.read(buergerOid);
-        Set<Buerger> buergerList = sachbearbeiter.getBuerger();
-        Set<Sachbearbeiter> sachbearbeiterList = buerger.getSachbearbeiter();
-        sachbearbeiterList.remove(sachbearbeiter);
-        buergerList.remove(buerger);
+        List<Buerger> b = sachbearbeiter.getBuerger().stream().filter(k -> k.getOid().equals(buergerOid)).collect(Collectors.toList());
+        if (!b.isEmpty()) {
+            sachbearbeiter.getBuerger().remove(b.get(0));
+        } else {
+            LOG.warn(String.format("found no buerger with oid %s", buergerOid));
+        }
+        List<Sachbearbeiter> s = buerger.getSachbearbeiter().stream().filter(k -> k.getOid().equals(sOid)).collect(Collectors.toList());
+        if (!s.isEmpty()) {
+            buerger.getSachbearbeiter().remove(s.get(0));
+        } else {
+            LOG.warn(String.format("found no sachbearbeiter with oid %s", sOid));
+        }
         this.update(sachbearbeiter);
 
         //this.buergerService.update(buerger);
@@ -198,17 +218,19 @@ public class SachbearbeiterServiceImpl implements SachbearbeiterService {
     }
 
     @Subscribe
-    public void sachbearbeiterEventHandler(SachbearbeiterEvent event){
+    public void sachbearbeiterEventHandler(SachbearbeiterEvent event) {
         switch (event.getEventType()) {
-            case UPDATE: update(event.getEntity());
-                        break;
-            }
+            case UPDATE:
+                update(event.getEntity());
+                break;
+        }
     }
 
     @Subscribe
-    public void userEventHandler(UserEvent event){
+    public void userEventHandler(UserEvent event) {
         switch (event.getEventType()) {
-            case RELEASE: readUserSachbearbeiter(event.getEntity().getOid());
+            case RELEASE:
+                readUserSachbearbeiter(event.getEntity().getOid());
                 break;
         }
     }

@@ -3,6 +3,7 @@ package de.muenchen.vaadin.services;
 import com.vaadin.server.FontAwesome;
 
 import java.util.Locale;
+import java.util.Set;
 
 /**
  *
@@ -18,6 +19,8 @@ public interface MessageService {
     public void setLocale(Locale locale);
     
     public Locale getLocale();
+
+    public Set<Locale> getSupportedLocales();
 
     /*
     public String readLabel(String baseKey, String property);

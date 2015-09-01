@@ -1,5 +1,7 @@
 package de.muenchen.vaadin.demo.api.domain;
 
+import de.muenchen.vaadin.demo.api.util.FieldIdentifier;
+
 import java.util.Date;
 
 /**
@@ -12,8 +14,12 @@ public class Buerger extends BaseEntity {
     public static final String NACHNAME = "nachname";
     public static final String GEBURTSDATUM = "geburtsdatum";
     public static final String PARTNER = "partner";
+
+    @FieldIdentifier
     private String vorname;
+    @FieldIdentifier
     private String nachname;
+    @FieldIdentifier
     private Date geburtsdatum;
 
     public String getVorname() {
