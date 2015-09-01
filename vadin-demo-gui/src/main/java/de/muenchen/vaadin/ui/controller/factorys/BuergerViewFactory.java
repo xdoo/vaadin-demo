@@ -12,6 +12,7 @@ import de.muenchen.vaadin.ui.components.BuergerChildTab;
 import de.muenchen.vaadin.ui.components.BuergerCreateForm;
 import de.muenchen.vaadin.ui.components.BuergerReadForm;
 import de.muenchen.vaadin.ui.components.BuergerSearchTable;
+import de.muenchen.vaadin.ui.components.BuergerTable;
 import de.muenchen.vaadin.ui.components.BuergerUpdateForm;
 import de.muenchen.vaadin.ui.components.ChildSearchTable;
 import de.muenchen.vaadin.ui.components.ChildTable;
@@ -222,14 +223,11 @@ public class BuergerViewFactory implements Serializable{
 
     private GenericTable createTable(String from, List<Buerger> entities, final TableActionButton.Builder... buttonBuilders) {
         LOG.debug("creating table for buerger");
-        GenericTable table = new GenericTable<>(controller, Buerger.class, buttonBuilders);
+        GenericTable table = new BuergerTable(controller, buttonBuilders);
 
         table.setFrom(from);
 
         getEventBus().register(table);
-/*        BuergerComponentEvent event = new BuergerComponentEvent(EventType.QUERY);
-        event.addEntities(entities);
-        getEventBus().post(event);*/
 
         return table;
     }

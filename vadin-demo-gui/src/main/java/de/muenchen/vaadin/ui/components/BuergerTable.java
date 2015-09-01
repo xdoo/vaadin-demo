@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package de.muenchen.vaadin.ui.components;
 
 import com.google.common.eventbus.Subscribe;
@@ -13,25 +8,31 @@ import de.muenchen.vaadin.ui.components.buttons.TableActionButton;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
 /**
- *
- * @author maximilian.schug
+ * Created by rene.zarwel on 01.09.15.
  */
-public class ChildTable extends GenericTable<Buerger> {
+public class BuergerTable extends GenericTable<Buerger> {
 
-    public ChildTable(BuergerViewController controller, TableActionButton.Builder... buttonBuilders) {
+    public BuergerTable(BuergerViewController controller, TableActionButton.Builder... buttonBuilders) {
         super(controller, Buerger.class, buttonBuilders);
     }
 
+
+    /**
+     * Eventhandler für Eventbus
+     *
+     * @param event the event
+     */
     @Subscribe
     public void update(BuergerComponentEvent event) {
-        if(event.getEventType().equals(EventType.SAVE_CHILD)) {
+
+        if(event.getEventType().equals(EventType.SAVE)) {
             this.add(event.getEntity());
         }
-        
-       /* if(event.getEventType().equals(EventType.COPY)) {
+
+        if(event.getEventType().equals(EventType.COPY)) {
             this.add(event.getEntity());
         }
-        */
+
         if(event.getEventType().equals(EventType.DELETE)) {
             this.delete(event.getItemID());
         }
@@ -39,8 +40,8 @@ public class ChildTable extends GenericTable<Buerger> {
         if(event.getEventType().equals(EventType.UPDATE)) {
             this.add(event.getEntity());
         }
-        
-        if(event.getEventType().equals(EventType.QUERY_CHILD)) {
+
+        if(event.getEventType().equals(EventType.QUERY)) {
             this.addAll(event.getEntities());
         }
     }
