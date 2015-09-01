@@ -119,12 +119,11 @@ public class BuergerViewFactory implements Serializable{
 
     public BuergerReadForm generateReadForm(String navigateToUpdate, String from) {
         LOG.debug("creating 'read' buerger form");
-        getEventBus().post(new BuergerComponentEvent(controller.getCurrent(), EventType.SELECT2READ));
         if(!readForm.isPresent()){
             BuergerReadForm form = new BuergerReadForm(controller, navigateToUpdate, controller.peekFrom(), from);
             getEventBus().register(form);
-            getEventBus().post(new BuergerComponentEvent(controller.getCurrent(), EventType.SELECT2READ));
             readForm=Optional.of(form);}
+        getEventBus().post(new BuergerComponentEvent(controller.getCurrent(), EventType.SELECT2READ));
         return readForm.get();
     }
 
