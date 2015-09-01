@@ -1,14 +1,11 @@
 package de.muenchen.vaadin.ui.components;
 
-import com.google.common.eventbus.Subscribe;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Table;
 import de.muenchen.vaadin.demo.api.domain.BaseEntity;
-import de.muenchen.vaadin.demo.api.util.EventType;
 import de.muenchen.vaadin.demo.api.util.FieldIdentifier;
-import de.muenchen.vaadin.ui.app.views.events.ComponentEvent;
 import de.muenchen.vaadin.ui.components.buttons.TableActionButton;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.slf4j.Logger;
@@ -29,8 +26,6 @@ import static de.muenchen.vaadin.ui.util.I18nPaths.getEntityFieldPath;
  * @author rene.zarwel
  */
 public class GenericTable<T extends BaseEntity> extends CustomComponent {
-
-    private final Class<T> entityClass;
 
     private final BeanItemContainer<T> container;
     private BuergerViewController controller;
@@ -57,8 +52,6 @@ public class GenericTable<T extends BaseEntity> extends CustomComponent {
      * @param buttonBuilders the button builders
      */
     public GenericTable(final BuergerViewController controller, Class<T> entityClass, final TableActionButton.Builder... buttonBuilders) {
-
-        this.entityClass = entityClass;
 
         this.controller = controller;
         this.buttonBuilders = Arrays.asList(buttonBuilders);
@@ -101,35 +94,6 @@ public class GenericTable<T extends BaseEntity> extends CustomComponent {
 
 
         setCompositionRoot(table);
-    }
-
-    /**
-     * Eventhandler für Eventbus
-     *
-     * @param event the event
-     */
-    @Subscribe
-    public void update(ComponentEvent<T> event) {
-
-        if(event.getEventType().equals(EventType.SAVE)) {
-            this.add(event.getEntity());
-        }
-
-        if(event.getEventType().equals(EventType.COPY)) {
-            this.add(event.getEntity());
-        }
-
-        if(event.getEventType().equals(EventType.DELETE)) {
-            this.delete(event.getItemID());
-        }
-
-        if(event.getEventType().equals(EventType.UPDATE)) {
-            this.add(event.getEntity());
-        }
-
-        if(event.getEventType().equals(EventType.QUERY)) {
-            this.addAll(event.getEntities());
-        }
     }
 
     /**
