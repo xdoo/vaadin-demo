@@ -131,7 +131,7 @@ public class BuergerUpdateForm extends CustomComponent {
         
         layout.addComponent(buttonLayout);
         // die Schaltfläche zum Aktualisieren
-        String update = controller.resolveRelative(getFormPath(SimpleAction.update, Component.button, Type.label));
+        String update = controller.resolveRelative(getFormPath(SimpleAction.save, Component.button, Type.label));
         Button updateButton = new Button(update, (Button.ClickEvent click) -> {
             try {
                 binder.commit();

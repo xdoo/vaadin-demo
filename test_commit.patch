@@ -1,0 +1,379 @@
+Index: vaadin-demo-api/src/main/java/de/muenchen/vaadin/demo/api/rest/BuergerRestClient.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- vaadin-demo-api/src/main/java/de/muenchen/vaadin/demo/api/rest/BuergerRestClient.java	(date 1440680655000)
++++ vaadin-demo-api/src/main/java/de/muenchen/vaadin/demo/api/rest/BuergerRestClient.java	(revision )
+@@ -114,5 +114,7 @@
+     public Buerger saveBuergerKind(Buerger buerger, Buerger kind, RestTemplate restTemplate);
+     
+     public Buerger addBuergerKind(Buerger buerger, Buerger kind, RestTemplate restTemplate);
+-    
++
++    public Buerger releaseBuergerKind(Buerger buerger, Buerger kind, RestTemplate restTemplate);
++    
+ }
+Index: vadin-demo-gui/src/main/java/de/muenchen/vaadin/ui/components/GenericErrorNotification.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- vadin-demo-gui/src/main/java/de/muenchen/vaadin/ui/components/GenericErrorNotification.java	(date 1440680655000)
++++ vadin-demo-gui/src/main/java/de/muenchen/vaadin/ui/components/GenericErrorNotification.java	(revision )
+@@ -16,6 +16,7 @@
+         super.setStyleName(ValoTheme.NOTIFICATION_CLOSABLE);
+         super.setStyleName(ValoTheme.NOTIFICATION_TRAY);
+         super.setStyleName(ValoTheme.NOTIFICATION_SMALL);
++        super.setStyleName(ValoTheme.NOTIFICATION_FAILURE);
+         super.setDelayMsec(3000);
+         super.setPosition(Position.BOTTOM_RIGHT);
+     }
+Index: vaadin-demo-api/src/main/java/de/muenchen/vaadin/demo/api/rest/BuergerResource.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- vaadin-demo-api/src/main/java/de/muenchen/vaadin/demo/api/rest/BuergerResource.java	(date 1440680655000)
++++ vaadin-demo-api/src/main/java/de/muenchen/vaadin/demo/api/rest/BuergerResource.java	(revision )
+@@ -22,6 +22,7 @@
+     public static final String ELTERN = "eltern";
+     public static final String RELEASE_ELTERN = "release_eltern";
+     public static final String RELEASE_KINDER = "release_kinder";
++    public static final String RELEASE_KIND = "release_kind";
+     public static final String RELEASE_PAESSE = "release_paesse";
+     public static final String RELEASE_WOHNUNGEN = "release_wohnungen";
+     public static final String RELEASE_SACHBEARBEITER = "release_sachbearbeiter";
+Index: vadin-demo-gui/src/main/java/de/muenchen/vaadin/ui/controller/BuergerViewController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- vadin-demo-gui/src/main/java/de/muenchen/vaadin/ui/controller/BuergerViewController.java	(date 1440680655000)
++++ vadin-demo-gui/src/main/java/de/muenchen/vaadin/ui/controller/BuergerViewController.java	(revision )
+@@ -232,8 +232,17 @@
+     public Buerger saveBuergerKind(Buerger entity) {
+         return service.saveKind(getCurrent().getBean(), entity);
+     }
+-    
++
+     /**
++     * Zerstört die Verbindung zwischen einem Bürger und seinem Kind
++     *
++     * @param event
++     */
++    private void releaseChild(BuergerAppEvent event) {
++        service.releaseKind(getCurrent().getBean(),event.getEntity());
++    }
++
++    /**
+      * Speichert eine Kindbeziehung zu einem {@link Buerger} Objekt in der Datenbank.
+      * 
+      * @param entity Kind
+@@ -331,11 +340,36 @@
+             case ADD_SEARCHED_CHILD:
+                 navigateEventHandler(event);
+                 break;
++            case RELEASE:
++                releaseChildHandler(event);
++                break;
+             default:
+                 LOG.debug("No matching handler found.");
+         }
+ 
+     }
++
++
++    private void releaseChildHandler(BuergerAppEvent event) {
++
++
++            // Service Operationen ausführen
++            //this.deleteBuerger(event.getEntity());
++            this.releaseChild(event);
++
++            // UI Komponenten aktualisieren
++            BuergerComponentEvent buergerComponentEvent = new BuergerComponentEvent(event.getEntity(),EventType.RELEASE);
++            buergerComponentEvent.setItemID(event.getItemId());
++        this.eventbus.post(buergerComponentEvent);
++
++            GenericSuccessNotification succes = new GenericSuccessNotification(
++                    resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.release, Type.label)),
++                    resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.release, Type.text)));
++            succes.show(Page.getCurrent());
++    }
++
++
++
+ 
+     /**
+      * Navigiert zu der durch das Event angeforderten Seite.
+Index: vaadin-demo-micro-service/src/main/java/de/muenchen/demo/service/rest/BuergerController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- vaadin-demo-micro-service/src/main/java/de/muenchen/demo/service/rest/BuergerController.java	(date 1440680655000)
++++ vaadin-demo-micro-service/src/main/java/de/muenchen/demo/service/rest/BuergerController.java	(revision )
+@@ -356,6 +356,25 @@
+     }
+ 
+     /**
++     * Entfernt die Beziehung zwischen einem Buerger und einem Kind.
++     *
++     * @param kOid
++     * @param bOid
++     * @return
++     */
++    @Secured({"PERM_releaseBuergerKind"})
++    @RequestMapping(value = "/{bOid}/release/kind/{oid}", method = {RequestMethod.POST})
++    public ResponseEntity releaseBuergerKind(@PathVariable("bOid") String bOid,@PathVariable("kOid") String kOid) {
++        if (LOG.isDebugEnabled()) {
++            LOG.debug("release Buerger Kinder");
++        }
++        this.service.releaseBuergerKind(bOid,kOid);
++        return ResponseEntity.ok().build();
++
++    }
++
++
++    /**
+      * Entfernt die Beziehung zwischen einem Buerger und seinem Elternteil.
+      *
+      * @param oid
+Index: vadin-demo-gui/src/main/java/de/muenchen/vaadin/ui/controller/factorys/BuergerViewFactory.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- vadin-demo-gui/src/main/java/de/muenchen/vaadin/ui/controller/factorys/BuergerViewFactory.java	(date 1440680655000)
++++ vadin-demo-gui/src/main/java/de/muenchen/vaadin/ui/controller/factorys/BuergerViewFactory.java	(revision )
+@@ -1,20 +1,15 @@
+ package de.muenchen.vaadin.ui.controller.factorys;
+ 
+ import com.google.common.eventbus.EventBus;
++import com.vaadin.data.util.BeanItem;
+ import com.vaadin.spring.annotation.UIScope;
+ import com.vaadin.ui.TabSheet;
+ import de.muenchen.vaadin.demo.api.domain.Buerger;
+ import de.muenchen.vaadin.demo.api.util.EventType;
+ import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
+ import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
+-import de.muenchen.vaadin.ui.components.BuergerChildTab;
+-import de.muenchen.vaadin.ui.components.BuergerCreateForm;
+-import de.muenchen.vaadin.ui.components.BuergerReadForm;
+-import de.muenchen.vaadin.ui.components.BuergerSearchTable;
+-import de.muenchen.vaadin.ui.components.BuergerTable;
+-import de.muenchen.vaadin.ui.components.BuergerUpdateForm;
+-import de.muenchen.vaadin.ui.components.ChildSearchTable;
+-import de.muenchen.vaadin.ui.components.ChildTable;
++import de.muenchen.vaadin.ui.components.*;
++import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
+ import de.muenchen.vaadin.ui.components.buttons.TableAction;
+ import de.muenchen.vaadin.ui.components.buttons.TableActionButton;
+ import de.muenchen.vaadin.ui.controller.BuergerViewController;
+@@ -136,7 +131,14 @@
+                             getEventBus().post(new BuergerAppEvent(container.getItem(id),id,EventType.COPY))
+             );
+             TableActionButton.Builder delete = TableActionButton.Builder.make(controller, TableAction.tabledelete,navigateToForEdit, (container, id) ->
+-                            getEventBus().post(new BuergerAppEvent(container.getItem(id),id,EventType.DELETE).navigateTo(navigateToForEdit).from(navigateFrom))
++                    {
++                        BeanItem<Buerger> item = container.getItem(id);
++                        GenericConfirmationWindow win = new GenericConfirmationWindow(new BuergerAppEvent(item, id, EventType.DELETE), controller, SimpleAction.delete);
++                        controller.getNavigator().getUI().addWindow(win);
++                        win.center();
++                        win.focus();
++                    }
++                            //getEventBus().post(new BuergerAppEvent(container.getItem(id),id,EventType.DELETE).navigateTo(navigateToForEdit).from(navigateFrom))
+             );
+ 
+             searchTable=Optional.of(new BuergerSearchTable(
+@@ -161,6 +163,8 @@
+             TableActionButton.Builder select = TableActionButton.Builder.make(controller, TableAction.tableadd,navigateToForEdit, (container, id) ->
+                             getEventBus().post(new BuergerAppEvent(container.getItem(id),id,EventType.SAVE_AS_CHILD).navigateTo(navigateToForDetail).from(navigateFrom))
+             );
++
++
+             LOG.debug("creating 'search' table for buerger");
+             childSearchTable = Optional.of(new ChildSearchTable(
+                     controller,
+@@ -180,8 +184,20 @@
+         TableActionButton.Builder detail = TableActionButton.Builder.make(controller, TableAction.tabledetail, navigateToForDetail, (container, id) -> 
+                         getEventBus().post(new BuergerAppEvent(container.getItem(id), id, EventType.SELECT2READ).navigateTo(navigateToForDetail).from(from))
+         );
++
++        TableActionButton.Builder delete = TableActionButton.Builder.make(controller, TableAction.tabledelete,navigateToForDetail, (container, id) ->
++                {
++                    BeanItem<Buerger> item = container.getItem(id);
++                    GenericConfirmationWindow win = new GenericConfirmationWindow(new BuergerAppEvent(item, id, EventType.RELEASE), controller, SimpleAction.release);
++                    controller.getNavigator().getUI().addWindow(win);
++                    win.center();
++                    win.focus();
++                }
++                //getEventBus().post(new BuergerAppEvent(container.getItem(id),id,EventType.DELETE).navigateTo(navigateToForEdit).from(navigateFrom))
++        );
++
+         LOG.debug("creating table for childs");
+-        BuergerTable table = new ChildTable(controller, detail);
++        BuergerTable table = new ChildTable(controller, detail, delete);
+ 
+         table.setFrom(from);
+         List<Buerger> entities = controller.queryKinder(controller.getCurrent().getBean());
+Index: vaadin-demo-micro-service/src/main/java/de/muenchen/demo/service/services/BuergerService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- vaadin-demo-micro-service/src/main/java/de/muenchen/demo/service/services/BuergerService.java	(date 1440680655000)
++++ vaadin-demo-micro-service/src/main/java/de/muenchen/demo/service/services/BuergerService.java	(revision )
+@@ -19,6 +19,8 @@
+ 
+     public void releaseBuergerKinder(String oid);
+ 
++    public void releaseBuergerKind(String bOid, String kOid);
++
+     public Iterable<Buerger> readWohnungBuerger(String oid);
+ 
+     public void releaseWohnungAllBuerger(String oid);
+Index: vaadin-demo-micro-service/src/main/java/de/muenchen/demo/service/services/BuergerServiceImpl.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- vaadin-demo-micro-service/src/main/java/de/muenchen/demo/service/services/BuergerServiceImpl.java	(date 1440680655000)
++++ vaadin-demo-micro-service/src/main/java/de/muenchen/demo/service/services/BuergerServiceImpl.java	(revision )
+@@ -239,6 +239,28 @@
+     }
+ 
+     /**
++     * release Operation für ein Kind eines Bürgers.
++     *
++     * @param buergerOid
++     */
++    @Override
++    public void releaseBuergerKind(String buergerOid,String kindOid) {
++
++        Buerger buerger = this.read(buergerOid);
++
++        /*Set<Buerger> kinder = buerger.getKinder();
++        Collection<Buerger> removeKinder = new LinkedList<>();
++        kinder.stream().forEach((kind) -> {
++            removeKinder.add(kind);
++        });
++
++        kinder.removeAll(removeKinder);*/
++        buerger.getKinder().remove(this.read(kindOid));
++        this.update(buerger);
++
++    }
++
++    /**
+      * read der bürger eines Pass.
+      *
+      * @param passOid
+Index: vadin-demo-gui/src/main/java/de/muenchen/vaadin/services/BuergerServiceImpl.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- vadin-demo-gui/src/main/java/de/muenchen/vaadin/services/BuergerServiceImpl.java	(date 1440680655000)
++++ vadin-demo-gui/src/main/java/de/muenchen/vaadin/services/BuergerServiceImpl.java	(revision )
+@@ -102,6 +102,11 @@
+         return client.addBuergerKind(entity, kind, getTemplate());
+     }
+ 
++    public Buerger releaseKind(Buerger entity, Buerger kind){
++        return client.releaseBuergerKind(entity, kind, getTemplate());
++    }
++
++
+     /**
+      * Gets the resttemplate from the security if not present
+      * @return resttemplate of this session
+Index: vadin-demo-gui/src/main/java/de/muenchen/vaadin/services/BuergerService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- vadin-demo-gui/src/main/java/de/muenchen/vaadin/services/BuergerService.java	(date 1440680655000)
++++ vadin-demo-gui/src/main/java/de/muenchen/vaadin/services/BuergerService.java	(revision )
+@@ -77,4 +77,6 @@
+     
+     public Buerger saveKind(Buerger entity, Buerger kind);
+     public Buerger addKind(Buerger entity, Buerger kind);
++
++    public Buerger releaseKind(Buerger entity, Buerger kind);
+ }
+Index: vaadin-demo-api/src/main/java/de/muenchen/vaadin/demo/api/rest/BuergerRestClientImpl.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- vaadin-demo-api/src/main/java/de/muenchen/vaadin/demo/api/rest/BuergerRestClientImpl.java	(date 1440680655000)
++++ vaadin-demo-api/src/main/java/de/muenchen/vaadin/demo/api/rest/BuergerRestClientImpl.java	(revision )
+@@ -84,11 +84,22 @@
+     @Override
+     public Buerger addBuergerKind(Buerger buerger, Buerger kind, RestTemplate restTemplate) {
+         //ToDO solve need for hardcoded link
+-        Optional<Link> link = Optional.of(new Link("http://localhost:8080/buerger/add/buerger/"+buerger.getOid()+"/kind/"+kind.getOid()+"").withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_KIND));
++        Optional<Link> link = Optional.of(new Link("http://localhost:8080/buerger/add/buerger/" + buerger.getOid() + "/kind/" + kind.getOid() + "").withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_KIND));
+         LOG.warn("used Link: "+link.get().toString());
+         return this.writeSingleSource(link, kind, restTemplate);
+     }
+-    
++
++    @Override
++    public Buerger releaseBuergerKind(Buerger buerger, Buerger kind, RestTemplate restTemplate) {
++        //ToDO solve need for hardcoded link
++        Optional<Link> link = Optional.of(new Link("http://localhost:8080/buerger/"+buerger.getOid()+"/release/kind/"+kind.getOid()+"").withRel(BuergerResource.RELEASE_KIND));
++        LOG.warn("used Link: "+link.get().toString());
++        return this.writeSingleSource(link, kind, restTemplate);
++    }
++
++
++
++
+     public Buerger writeSingleSource(String rel, Buerger buerger, RestTemplate restTemplate) {
+         Optional<Link> link = HateoasUtil.findLinkForRel(rel, buerger.getLinks());
+         return this.writeSingleSource(link, buerger, restTemplate);
+Index: vadin-demo-gui/src/main/java/de/muenchen/vaadin/ui/components/buttons/SimpleAction.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- vadin-demo-gui/src/main/java/de/muenchen/vaadin/ui/components/buttons/SimpleAction.java	(date 1440680655000)
++++ vadin-demo-gui/src/main/java/de/muenchen/vaadin/ui/components/buttons/SimpleAction.java	(revision )
+@@ -30,6 +30,7 @@
+     cancel,
+     copy,
+     add,
++    release,
+     logout(FontAwesome.SIGN_OUT);
+     
+ 
+Index: vaadin-demo-micro-service/src/main/java/de/muenchen/demo/service/rest/api/BuergerResourceAssembler.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- vaadin-demo-micro-service/src/main/java/de/muenchen/demo/service/rest/api/BuergerResourceAssembler.java	(date 1440680655000)
++++ vaadin-demo-micro-service/src/main/java/de/muenchen/demo/service/rest/api/BuergerResourceAssembler.java	(revision )
+@@ -152,7 +152,10 @@
+             resource.add(new Link("/add/buerger/"+buerger.getOid()+"/kind/").withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_KIND));
+ 
+         }
++        if (relations.contains(BuergerResource.RELEASE_KIND)) {
++            resource.add(new Link("/"+buerger.getOid()+"/release/kind/").withRel(BuergerResource.RELEASE_KIND));
+-        
++
++        }
+         
+         return resource;
+     }
+@@ -216,6 +219,7 @@
+                 de.muenchen.vaadin.demo.api.rest.BuergerResource.ELTERN,
+                 de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_ELTERN,
+                 de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_KINDER,
++                de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_KIND,
+                 de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_PAESSE,
+                 de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_WOHNUNGEN,
+                 de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_SACHBEARBEITER
