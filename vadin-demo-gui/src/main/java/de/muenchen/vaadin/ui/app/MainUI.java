@@ -6,17 +6,16 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.server.*;
+import com.vaadin.server.FontAwesome;
+import com.vaadin.server.Responsive;
+import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinService;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.*;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.BaseEntity;
 import de.muenchen.vaadin.demo.api.services.SecurityService;
@@ -37,7 +36,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
 @SpringUI
@@ -96,11 +96,13 @@ public class MainUI extends UI implements ControllerContext {
         setContent(root);
         root.setWidth("100%");
         root.addMenu(buildMenu());
-        root.addComponent(buildMenuBar());
         addStyleName(ValoTheme.UI_WITH_MENU);
 
         // configure navigator
-        this.navigator = new Navigator(this, this.viewDisplay);
+        AbsoluteLayout componentContainer = new AbsoluteLayout();
+        viewDisplay.addComponent(buildMenuBar());
+        viewDisplay.addComponent(componentContainer);
+        this.navigator = new Navigator(this, componentContainer);
         this.navigator.addProvider(viewProvider);
         setNavigator(this.navigator);
 
