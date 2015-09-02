@@ -5,6 +5,8 @@
  */
 package de.muenchen.demo.service.domain;
 
+import org.hibernate.envers.Audited;
+
 import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -21,6 +23,7 @@ import javax.persistence.Transient;
  * @author praktikant.tmar
  */
 @Entity
+@Audited
 @Table(name = "PASS")
 public class Pass extends BaseEntity {
 
