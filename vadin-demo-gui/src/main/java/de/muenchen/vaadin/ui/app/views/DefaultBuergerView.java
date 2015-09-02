@@ -2,6 +2,7 @@ package de.muenchen.vaadin.ui.app.views;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
@@ -58,7 +59,7 @@ public abstract class DefaultBuergerView extends VerticalLayout implements View{
     private void configureLayout() {
         setSizeFull();
         this.setHeightUndefined();
-        setMargin(true);
+        setMargin(new MarginInfo(false, true, false, true));
     }
     
     @Override
