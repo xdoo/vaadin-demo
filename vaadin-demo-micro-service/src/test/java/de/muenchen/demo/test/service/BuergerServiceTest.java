@@ -114,7 +114,10 @@ public class BuergerServiceTest {
         System.out.println("========== read Bürger Test ==========");
         Buerger b1 = service.read(DomainConstants.M2_B003);
         assertNotNull(b1);
-        System.out.println(String.format("Bürger konnte mit OID '%s' aus der DB gelesen werden.", b1.getOid()));
+        System.out.println(String.format("Bürger konnte mit OID '%s' und Mandant 2 aus der DB gelesen werden.", b1.getOid()));
+        Buerger b2 = service.read(DomainConstants.M3_B003);
+        assertNull(b2);
+        System.out.println(String.format("Bürger konnte mit OID '%s' und Mandant 3 aus der DB nicht gelesen werden.", DomainConstants.M3_B003));
     }
 
     @Test
@@ -127,6 +130,106 @@ public class BuergerServiceTest {
         Buerger b2 = service.read(DomainConstants.M2_B004);
         assertNull(b2);
         System.out.println(String.format("Bürger konnte mit OID '%s' aus der DB (und dem Cache) gelöscht werden.", DomainConstants.M2_B004));
+    }
+    
+    @Test
+    @WithMockUser(username = DomainConstants.M3_U002_NAME)
+    public void createM3Test() throws JsonProcessingException {
+        System.out.println("========== create Bürger M3 Test ==========");
+        Buerger b1 = service.create();
+        assertNotNull(b1);
+        assertNotNull(b1.getOid());
+        assertNull(repo.findFirstByOidAndMandantOid(b1.getOid(), DomainConstants.M3));
+        System.out.println(String.format("Bürger wurde mit neuer OID '%s' erstellt (und nicht in der DB gespeichert)", b1.getOid()));
+    }
+
+    @Test
+    @WithMockUser(username = DomainConstants.M3_U002_NAME)
+    public void saveM3Test() {
+        System.out.println("========== save Bürger Test ==========");
+        String oid = "OID0M3";
+        Buerger b1 = service.save(this.createBuerger(oid));
+        assertEquals(oid, b1.getOid());
+        assertEquals(DomainConstants.M3, b1.getMandant().getOid());
+        assertNotNull(repo.findFirstByOidAndMandantOid(oid, DomainConstants.M3));
+        System.out.println(String.format("Bürger wurde mit Mandant '%s' in der DB gespeichert.", b1.getMandant().getOid()));
+    }
+
+    @Test
+    @WithMockUser(username = DomainConstants.M3_U002_NAME)
+    public void updateM3Test() {
+        System.out.println("========== update Bürger Test ==========");
+        Buerger b1 = service.read(DomainConstants.M3_B002);
+        b1.setVorname("armin");
+        service.update(b1);
+        Buerger b2 = service.read(DomainConstants.M3_B002);
+        assertEquals("armin", b2.getVorname());
+        System.out.println("Bürger wurde mit neuem Vornamen in der DB gespeichert.");
+    }
+
+    @Test
+    @WithMockUser(username = DomainConstants.M3_U002_NAME)
+    public void readM3Test() {
+        System.out.println("========== read Bürger M3 Test ==========");
+        Buerger b1 = service.read(DomainConstants.M3_B003);
+        assertNotNull(b1);
+        System.out.println(String.format("Bürger konnte mit OID '%s' und Mandant 3 aus der DB nicht gelesen werden.", DomainConstants.M2_B003));
+    }
+
+    @Test
+    @WithMockUser(username = DomainConstants.M3_U002_NAME)
+    public void deleteM3Test() {
+        System.out.println("========== delete Bürger Test ==========");
+        Buerger b1 = service.read(DomainConstants.M3_B004);
+        assertNotNull(b1);
+        service.delete(DomainConstants.M3_B004);
+        Buerger b2 = service.read(DomainConstants.M3_B004);
+        assertNull(b2);
+        System.out.println(String.format("Bürger konnte mit OID '%s' aus der DB (und dem Cache) gelöscht werden.", DomainConstants.M3_B004));
+    }
+
+    @Test
+    @WithMockUser(username = DomainConstants.M3_U002_NAME)
+    public void copyM3Test() {
+        System.out.println("========== copy Bürger Test ==========");
+        Buerger b1 = service.copy(DomainConstants.M3_B005);
+        assertNotNull(b1);
+        Buerger b2 = service.read(b1.getOid());
+        assertNotNull(b2);
+        assertEquals(b1.getVorname(), b2.getVorname());
+        assertEquals(b1.getNachname(), b2.getNachname());
+        System.out.println(String.format("Objekt mit der OID '%s' konnte erfolgreich in Objekt '%s' kopiert (und in DB gespeichert) werden", DomainConstants.M3_B005, b2.getOid()));
+    }
+
+    @Test
+    @WithMockUser(username = DomainConstants.M3_U002_NAME)
+    public void copyListBuergerM3Test() {
+        System.out.println("========== copy Liste Bürger Test ==========");
+        int x = this.count(DomainConstants.M3);
+        ArrayList<String> oids = new ArrayList();
+        oids.add(DomainConstants.M3_B007);
+        oids.add(DomainConstants.M3_B008);
+        service.copy(oids);
+        List<Buerger> bs = service.query();
+        assertEquals(x + 2, bs.size());
+        System.out.println(String.format("Objekte mit der OID '%s' und der OID '%s' konnte erfolgreich in Objekt  kopiert (und in DB gespeichert) werden", DomainConstants.M3_B007, DomainConstants.M3_B008));
+
+    }
+
+    @Test
+    @WithMockUser(username = DomainConstants.M3_U002_NAME)
+    public void buergerDeleteM3ListTest() {
+        System.out.println("========== delete Bürger Test ==========");
+        ArrayList<String> oids = new ArrayList();
+        oids.add(DomainConstants.M3_B009);
+        oids.add(DomainConstants.M3_B010);
+        service.delete(oids);
+        Buerger b1 = service.read(DomainConstants.M3_B010);
+        assertNull(b1);
+        Buerger b2 = service.read(DomainConstants.M3_B009);
+        assertNull(b2);
+        System.out.println(String.format("Bürger  mit OID '%s'und OID '%s' konnte aus der DB (und dem Cache) gelöscht werden.", DomainConstants.M3_B010, DomainConstants.M3_B009));
+
     }
 
     @Test
@@ -165,6 +268,10 @@ public class BuergerServiceTest {
         assertEquals(b1.getVorname(), b2.getVorname());
         assertEquals(b1.getNachname(), b2.getNachname());
         System.out.println(String.format("Objekt mit der OID '%s' konnte erfolgreich in Objekt '%s' kopiert (und in DB gespeichert) werden", DomainConstants.M2_B005, b2.getOid()));
+        Buerger b3 = service.copy(DomainConstants.M3_B005);
+        assertNull(b3);
+        System.out.println(String.format("Objekt mit der OID '%s' und der Mandant 3 konnte nicht in einem    Objekt  kopiert  werden", DomainConstants.M3_B005));
+
     }
 
     @Test
@@ -212,7 +319,7 @@ public class BuergerServiceTest {
     public void readElternTest() {
         System.out.println("========== read Eltern Test ==========");
         Iterable<Buerger> b1 = service.readEltern(DomainConstants.M2_B001);
-        assertNotNull(b1);
+        assertFalse(Lists.newArrayList(b1).isEmpty());
         System.out.println(String.format("die Eltern von dem Bürger mit OID '%s' konnten aus der DB gelesen werden.", DomainConstants.M2_B001));
     }
 
@@ -261,7 +368,7 @@ public class BuergerServiceTest {
     public void readPassBuergerTest() {
         System.out.println("========== read Pass Test ==========");
         Buerger b1 = service.readPassBuerger(DomainConstants.M2_P001);
-        assertNotNull(b1);
+        assertFalse(Lists.newArrayList(b1).isEmpty());
         System.out.println(String.format("der Bürger von dem Pass mit OID '%s' konnte aus der DB gelesen werden.", DomainConstants.M2_P001));
     }
 
@@ -298,7 +405,7 @@ public class BuergerServiceTest {
     public void readWohnungBuergerTest() {
         System.out.println("========== read Wohnung Bürger Test ==========");
         Iterable<Buerger> b1 = service.readWohnungBuerger(DomainConstants.M2_W011);
-        assertNotNull(b1);
+        assertFalse(Lists.newArrayList(b1).isEmpty());
         System.out.println(String.format("die Eltern von dem Bürger mit OID '%s' konnten aus der DB gelesen werden.", DomainConstants.M2_B001));
     }
 
@@ -389,6 +496,97 @@ public class BuergerServiceTest {
         Set<Sachbearbeiter> b2 = service.read(DomainConstants.M2_B014).getSachbearbeiter();
         assertTrue(b2.isEmpty());
         System.out.println(String.format("release operation für die kinder eines Bürgers mit OID '%s' konnte aus der DB erfolgreich durchgeführt.", DomainConstants.M2_B002));
+    }
+
+
+    @Test
+    @WithMockUser(username = DomainConstants.M3_U002_NAME)
+    public void readElternM3Test() {
+        System.out.println("========== read Eltern Test ==========");
+        Iterable<Buerger> b1 = service.readEltern(DomainConstants.M3_B006);
+        assertFalse(Lists.newArrayList(b1).isEmpty());
+        System.out.println(String.format("die Eltern von dem Bürger mit OID '%s' konnten aus der DB gelesen werden.", DomainConstants.M3_B006));
+        Iterable<Buerger> b2 = service.readEltern(DomainConstants.M2_B010);
+        assertTrue(Lists.newArrayList(b2).isEmpty());
+        System.out.println(String.format("die Eltern von dem Bürger mit OID '%s'und mandant 2 konnten aus der DB nicht gelesen werden.", DomainConstants.M3_B010));
+    }
+
+    @Test
+    @WithMockUser(username = DomainConstants.M3_U002_NAME)
+    public void releaseBuergerElternteilM3Test() {
+        System.out.println("========== release Bürger Elternteil Test ==========");
+        Buerger b1 = service.read(DomainConstants.M3_B001);
+        assertEquals(1, this.checkChild(DomainConstants.M3_B006, b1));
+        service.releaseBuergerElternteil(DomainConstants.M3_B006, DomainConstants.M3_B001);
+        Buerger b2 = service.read(DomainConstants.M3_B001);
+        assertEquals(0, this.checkChild(DomainConstants.M3_B006, b2));
+        System.out.println(String.format("release operation für den Bürger mit OID '%s' und den elternteil mit OID '%s' konnte aus der DB erfolgreich durchgeführt.", DomainConstants.M3_B004, DomainConstants.M3_B001));
+    }
+
+    @Test
+    @WithMockUser(username = DomainConstants.M3_U002_NAME)
+    public void releaseBuergerElternM3Test() {
+        System.out.println("========== release Bürger Eltern Test ==========");
+        ArrayList<Buerger> b1 = Lists.newArrayList(service.readEltern(DomainConstants.M3_B008));
+        assertFalse(b1.isEmpty());
+        service.releaseBuergerEltern(DomainConstants.M3_B008);
+        ArrayList<Buerger> b2 = Lists.newArrayList(service.readEltern(DomainConstants.M3_B008));
+        assertTrue(b2.isEmpty());
+        System.out.println(String.format("release operation für den Eltern eines Bürgers mit OID '%s' konnte aus der DB erfolgreich durchgeführt.", DomainConstants.M3_B008));
+    }
+
+    @Test
+    @WithMockUser(username = DomainConstants.M3_U002_NAME)
+    public void releaseBuergerKinderM3Test() {
+        System.out.println("========== release Bürger Kinder Test ==========");
+        ArrayList<Buerger> b1 = Lists.newArrayList(service.read(DomainConstants.M3_B001).getKinder());
+        assertFalse(b1.isEmpty());
+        service.releaseBuergerKinder(DomainConstants.M3_B001);
+        ArrayList<Buerger> b2 = Lists.newArrayList(service.read(DomainConstants.M3_B001).getKinder());
+        assertTrue(b2.isEmpty());
+        System.out.println(String.format("release operation für die kinder eines Bürgers mit OID '%s' konnte aus der DB erfolgreich durchgeführt.", DomainConstants.M3_B001));
+    }
+
+    @Test
+    @WithMockUser(username = DomainConstants.M3_U002_NAME)
+    public void readPassBuergerM3Test() {
+        System.out.println("========== read Pass Test ==========");
+        Buerger b1 = service.readPassBuerger(DomainConstants.M3_P001);
+        assertNotNull(b1);
+        System.out.println(String.format("der Bürger von dem Pass mit OID '%s' konnte aus der DB gelesen werden.", DomainConstants.M3_P001));
+        Buerger b2 = service.readPassBuerger(DomainConstants.M2_P001);
+        assertNull(b2);
+        System.out.println(String.format("der Bürger von dem Pass mit OID '%s' und den Mandant 3 konnte aus der DB gelesen werden.", DomainConstants.M2_P001));
+
+    }
+
+
+    
+    @Test
+    @WithMockUser(username = DomainConstants.M3_U002_NAME)
+    public void readWohnungBuergerM3Test() {
+        System.out.println("========== read Wohnung Bürger Test ==========");
+        
+        Iterable<Buerger> b1 = service.readWohnungBuerger(DomainConstants.M3_W001);
+        assertFalse(Lists.newArrayList(b1).isEmpty());
+        System.out.println(String.format("die Büreger von dem Wohnungen mit OID '%s' konnten aus der DB gelesen werden.", DomainConstants.M3_W001));
+        
+        Iterable<Buerger> b2 = service.readWohnungBuerger(DomainConstants.M2_W011);
+        assertTrue(Lists.newArrayList(b2).isEmpty());
+        System.out.println(String.format("die Büreger von dem Wohnungen mit OID '%s'und Mandant 2 konnten nicht aus der DB gelesen werden.", DomainConstants.M2_W011));
+    
+    }
+
+    @Test
+    @WithMockUser(username = DomainConstants.M3_U002_NAME)
+    public void readStaatsangehoerigkeitBuergerM3Test() {
+        System.out.println("========== read Staatsangehoerigkeit Bürger Test ==========");
+        Iterable<Buerger> b1 = service.readStaatsangehoerigkeitBuerger(DomainConstants.M3_S001);
+        assertFalse(Lists.newArrayList(b1).isEmpty());
+        System.out.println(String.format("die Bürger von dem Staatsangehoerigkeit mit OID '%s' konnten aus der DB gelesen werden.", DomainConstants.M3_S001));
+        Iterable<Buerger> b2 = service.readStaatsangehoerigkeitBuerger(DomainConstants.M2_S001);
+        assertTrue(Lists.newArrayList(b2).isEmpty());
+        System.out.println(String.format("die Eltern von dem Staatsangehoerigkeit mit OID '%s' und Mandant 2 konnten nicht aus der DB gelesen werden.", DomainConstants.M3_S001));
     }
 
 }
