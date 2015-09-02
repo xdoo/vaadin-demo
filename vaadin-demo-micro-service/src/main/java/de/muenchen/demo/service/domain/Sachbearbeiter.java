@@ -1,5 +1,7 @@
 package de.muenchen.demo.service.domain;
 
+import org.hibernate.envers.Audited;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -17,6 +19,7 @@ import javax.persistence.Table;
  * @author claus.straube
  */
 @Entity
+@Audited
 @Table(name = "SACHBEARBEITER")
 public class Sachbearbeiter extends BaseEntity {
 

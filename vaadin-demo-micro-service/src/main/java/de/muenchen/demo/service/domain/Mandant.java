@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.envers.Audited;
 import org.hibernate.search.annotations.Field;
 
 /**
@@ -20,6 +21,7 @@ import org.hibernate.search.annotations.Field;
  * @author praktikant.tmar
  */
 @Entity
+@Audited
 @Table(name = "MANDANT")
 public class Mandant implements Serializable {
 

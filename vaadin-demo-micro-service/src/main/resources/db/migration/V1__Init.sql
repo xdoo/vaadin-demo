@@ -90,7 +90,7 @@ insert  into users ( ID,user_email, user_enabled, oid, user_password, user_usern
 insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (10,'claus.straube@muenchen.de',TRUE,'oid9',null,'claus.straube',3);
 insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (11,'m.kurz@muenchen.de',TRUE,'oid10',null,'m.kurz',3);
 insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (12,'sebastian.schoebel@muenchen.de',TRUE,'oid11',null,'sebastian.schoebel',3);
-insert  into users (id, user_email, user_enabled, mandant, oid, user_password, user_username) values ('13','user1@muenchen.de',TRUE,'2','oid13','user13','user13');
+insert  into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (13,'fabian.holtkoetter@muenchen.de',TRUE,'oid12',null,'fabian.holtkoetter',3);
 insert  into users (id, user_email, user_enabled, mandant, oid, user_password, user_username) values ('14','user1@muenchen.de',TRUE,'2','oid14','user14','user14');
 insert  into users (id, user_email, user_enabled, mandant, oid, user_password, user_username) values ('15','user1@muenchen.de',TRUE,'2','oid15','user15','user15');
 insert  into users (id, user_email, user_enabled, mandant, oid, user_password, user_username) values ('16','user1@muenchen.de',TRUE,'2','oid16','user16','user16');
@@ -477,7 +477,7 @@ insert into users_authoritys (authority_id, user_id) values (2, 9);
 insert into users_authoritys (authority_id, user_id) values (2, 10);
 insert into users_authoritys (authority_id, user_id) values (2, 11);
 insert into users_authoritys (authority_id, user_id) values (2, 12);
-insert  into users_authoritys (authority_id, user_id) values ('9000','13');
+insert into users_authoritys (authority_id, user_id) values (2, 13);
 insert  into users_authoritys (authority_id, user_id) values ('9000','14');
 insert  into users_authoritys (authority_id, user_id) values ('9007','15');
 insert  into users_authoritys (authority_id, user_id) values ('9002','16');

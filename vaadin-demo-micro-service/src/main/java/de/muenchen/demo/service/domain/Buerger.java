@@ -16,6 +16,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import org.hibernate.envers.Audited;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 
@@ -24,6 +25,7 @@ import org.hibernate.search.annotations.Indexed;
  * @author claus.straube
  */
 @Entity
+@Audited
 @Indexed
 @Table(name = "BUERGER")
 public class Buerger extends BaseEntity {

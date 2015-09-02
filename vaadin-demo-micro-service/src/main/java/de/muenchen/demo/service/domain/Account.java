@@ -7,6 +7,8 @@ package de.muenchen.demo.service.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+
+import org.hibernate.envers.Audited;
 import org.hibernate.search.annotations.Indexed;
 
 /**
@@ -14,6 +16,7 @@ import org.hibernate.search.annotations.Indexed;
  * @author praktikant.tmar
  */
 @Entity
+@Audited
 @Indexed
 @Table(name = "ACCOUNTS")
 public class Account extends SecurityEntity{
