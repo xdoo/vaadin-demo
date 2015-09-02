@@ -76,6 +76,7 @@ public class GenericConfirmationWindow extends Window {
         this.setHeight(prevHeight);
         this.setClosable(false);
         this.setResizable(false);
+        this.setModal(true);
         this.setContent(root);
         this.setCloseShortcut(KeyCode.ESCAPE, null);
     }

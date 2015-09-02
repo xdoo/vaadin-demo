@@ -104,6 +104,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
         //Set Controller in Factory after Contruct.
         //to prevent circular reference
         buergerViewFactory.setController(this);
+        getEventbus().register(buergerViewFactory);
     }
 
     
@@ -356,20 +357,15 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
         this.releaseParent(event);
         // UI Komponenten aktualisieren
 
-        LOG.error("released");
-
         GenericSuccessNotification succes = new GenericSuccessNotification(
                 resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.release, Type.label)),
                 resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.release, Type.text)));
         succes.show(Page.getCurrent());
 
-        LOG.error("shown");
-
         BuergerComponentEvent buergerComponentEvent = new BuergerComponentEvent(EventType.DELETE);
         buergerComponentEvent.setItemID(event.getItemId());
         this.eventbus.post(buergerComponentEvent);
 
-        LOG.error("done");
     }
 
 
