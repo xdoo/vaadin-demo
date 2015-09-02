@@ -29,7 +29,6 @@ import de.muenchen.vaadin.demo.api.rest.WohnungResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -61,10 +60,11 @@ public class BuergerController {
 
     private static final Logger LOG = LoggerFactory.getLogger(BuergerController.class);
 
-    @Autowired
-    EntityLinks entityLinks;
+
     @Autowired
     BuergerService service;
+    @Autowired
+    EntityLinks entityLinks;
     @Autowired
     WohnungService wohnungService;
     @Autowired
@@ -271,6 +271,7 @@ public class BuergerController {
         return ResponseEntity.ok().build();
     }
 
+
     /**
      * Liest die Kinder einer Bürger.
      *
@@ -355,6 +356,7 @@ public class BuergerController {
             LOG.debug("release Buerger elternteil");
         }
         this.service.releaseBuergerElternteil(oid, elternteilOid);
+       
 
 
         BuergerResource resource = this.assembler.assembleWithAllLinks(service.read(oid));
@@ -638,7 +640,6 @@ public class BuergerController {
      * @param oid
      * @return
      */
-    //
     @Secured({"PERM_releaseBuergerPaesse"})
     @RequestMapping(value = "/release/paesse/{oid}", method = {RequestMethod.GET})
     public ResponseEntity releaseBuergerPaesse(@PathVariable("oid") String oid) {
@@ -736,5 +737,42 @@ public class BuergerController {
         this.service.releaseBuergerAllSachbearbeiter(oid);
         return ResponseEntity.ok().build();
 
+    }
+
+    @Secured({"PERM_addPartner"})
+    @RequestMapping(value = "/add/buerger/{bOid}/partner/{pOid}", method = {RequestMethod.POST})
+    public ResponseEntity addPartnerBuerger(@PathVariable("bOid") String buergerOid, @PathVariable("pOid") String partnerOid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Add Partner buerger");
+        }
+        LOG.warn("set Partner");
+        Buerger partner = service.read(partnerOid);
+        Buerger entity = service.read(buergerOid);
+
+        entity.setBeziehungsPartner(partner);
+        this.service.update(entity);
+
+        BuergerResource resource = this.assembler.assembleWithAllLinks(entity);
+        resource.add(linkTo(methodOn(BuergerController.class).addPartnerBuerger(buergerOid, partnerOid)).withSelfRel()); // add self link with params
+        return ResponseEntity.ok(resource);
+    }
+
+    /**
+     * Liest die partner eines Bürger.
+     *
+     * @param oid
+     * @return
+     */
+    @Secured({"PERM_readBuergerPartner"})
+    @RequestMapping(value = "/partner/{oid}", method = {RequestMethod.GET})
+    public ResponseEntity readBuergerPartner(@PathVariable("oid") String oid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("read buerger  partner");
+        }
+        LOG.warn("got to buergerController in Mircroservice");
+        Set<Buerger> partner = this.service.read(oid).getBeziehungsPartner();
+        SearchResultResource<BuergerResource> resource = this.assembler.toResource(Lists.newArrayList(partner));
+        resource.add(linkTo(methodOn(BuergerController.class).readBuergerPartner(oid)).withSelfRel());
+        return ResponseEntity.ok(resource);
     }
 }

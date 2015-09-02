@@ -9,13 +9,11 @@ import java.util.Date;
  * @author claus.straube
  */
 public class Buerger extends BaseEntity {
-
-
+    
     public static final String VORNAME = "vorname";
-
     public static final String NACHNAME = "nachname";
-
     public static final String GEBURTSDATUM = "geburtsdatum";
+    public static final String PARTNER = "partner";
 
     @FieldIdentifier
     private String vorname;

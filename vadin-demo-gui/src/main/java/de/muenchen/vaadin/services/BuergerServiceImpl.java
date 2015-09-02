@@ -93,6 +93,11 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
     }
 
     @Override
+    public List<Buerger> queryPartner(Buerger entity) {
+        return client.queryPartner(entity.getLinks(), getTemplate());
+    }
+
+    @Override
     public Buerger saveKind(Buerger entity, Buerger kind) {
         return client.saveBuergerKind(entity, kind, getTemplate());
     }
@@ -100,6 +105,11 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
     @Override
     public Buerger addKind(Buerger entity, Buerger kind) {
         return client.addBuergerKind(entity, kind, getTemplate());
+    }
+
+    @Override
+    public Buerger addPartner(Buerger entity, Buerger partner) {
+        return client.addBuergerPartner(entity, partner, getTemplate());
     }
 
     @Override
