@@ -1,6 +1,7 @@
 package de.muenchen.demo.service.rest;
 
 import com.google.common.collect.Lists;
+import de.muenchen.demo.service.domain.Adresse;
 import de.muenchen.demo.service.domain.Buerger;
 import de.muenchen.demo.service.domain.Pass;
 import de.muenchen.demo.service.domain.Sachbearbeiter;
@@ -450,8 +451,9 @@ public class BuergerController {
             LOG.debug("Create wohnung buerger");
         }
         Wohnung wohnung = new Wohnung();
-        this.wohnungAssembler.fromResource(request, wohnung);
-        this.wohnungService.save(wohnung);
+        Adresse adresse = new Adresse();
+        this.wohnungAssembler.fromResource(request, wohnung, adresse);
+        this.wohnungService.save(wohnung,adresse);
         Buerger entity = service.read(oid);
         entity.getWohnungen().add(wohnung);
         this.service.update(entity);

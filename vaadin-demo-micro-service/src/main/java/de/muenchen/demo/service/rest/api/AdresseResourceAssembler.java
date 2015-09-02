@@ -44,12 +44,15 @@ public class AdresseResourceAssembler {
 
     public SearchResultResource<AdresseResource> toResource(final List<Adresse> adresse) {
         SearchResultResource<AdresseResource> resource = new SearchResultResource<>();
-        adresse.stream().forEach((b) -> {
-            resource.add(this.toResource(b, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE));
-        });
+        for (Adresse adresse1 : adresse) {
+                        resource.add(this.toResource(adresse1));
+
+        }
+//        adresse.stream().forEach((b) -> {
+//            resource.add(this.toResource(b, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE));
+//        });
         // add query link
-        resource.add(linkTo(methodOn(AdresseController.class).queryAdresse()).withRel(HateoasUtil.REL_QUERY));
-        List<AdresseResource> liste = resource.getResult();
+       // resource.add(linkTo(methodOn(AdresseController.class).queryAdresse()).withRel(HateoasUtil.REL_QUERY));
         return resource;
     }
 

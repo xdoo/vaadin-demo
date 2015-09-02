@@ -216,39 +216,6 @@ public interface DomainConstants {
     public final static String M2_SA037 = "OIDM2_SACHBEARBEITERS037";
     public final static String M2_SA038 = "OIDM2_SACHBEARBEITERS038";
 
-    //Adresse Externe
-    public final static String M2_AE001 = "OIDM2_ADRESSEEXTA001";
-    public final static String M2_AE002 = "OIDM2_ADRESSEEXTA002";
-    public final static String M2_AE003 = "OIDM2_ADRESSEEXTA003";
-    public final static String M2_AE004 = "OIDM2_ADRESSEEXTA004";
-    public final static String M2_AE005 = "OIDM2_ADRESSEEXTA005";
-    public final static String M2_AE006 = "OIDM2_ADRESSEEXTA006";
-    public final static String M2_AE007 = "OIDM2_ADRESSEEXTA007";
-    public final static String M2_AE008 = "OIDM2_ADRESSEEXTA008";
-    public final static String M2_AE009 = "OIDM2_ADRESSEEXTA009";
-    public final static String M2_AE010 = "OIDM2_ADRESSEEXTA010";
-    public final static String M2_AE011 = "OIDM2_ADRESSEEXTA011";
-    public final static String M2_AE012 = "OIDM2_ADRESSEEXTA012";
-    public final static String M2_AE013 = "OIDM2_ADRESSEEXTA013";
-    public final static String M2_AE014 = "OIDM2_ADRESSEEXTA014";
-    public final static String M2_AE015 = "OIDM2_ADRESSEEXTA015";
-    public final static String M2_AE016 = "OIDM2_ADRESSEEXTA016";
-    public final static String M2_AE017 = "OIDM2_ADRESSEEXTA017";
-    public final static String M2_AE018 = "OIDM2_ADRESSEEXTA018";
-    public final static String M2_AE019 = "OIDM2_ADRESSEEXTA019";
-    public final static String M3_AE001 = "OIDM3_ADRESSEEXTA001";
-    public final static String M3_AE002 = "OIDM3_ADRESSEEXTA002";
-    public final static String M3_AE003 = "OIDM3_ADRESSEEXTA003";
-    public final static String M3_AE004 = "OIDM3_ADRESSEEXTA004";
-    public final static String M3_AE005 = "OIDM3_ADRESSEEXTA005";
-    public final static String M3_AE006 = "OIDM3_ADRESSEEXTA006";
-    public final static String M3_AE007 = "OIDM3_ADRESSEEXTA007";
-    public final static String M3_AE008 = "OIDM3_ADRESSEEXTA008";
-    public final static String M3_AE009 = "OIDM3_ADRESSEEXTA009";
-    public final static String M3_AE010 = "OIDM3_ADRESSEEXTA010";
-    public final static String M3_AE011 = "OIDM3_ADRESSEEXTA011";
-    public final static String M3_AE012 = "OIDM3_ADRESSEEXTA012";
-
     //Authority
     public final static String M2_AU001 = "OIDM2_AUTHORITY001";
     public final static String M2_AU002 = "OIDM2_AUTHORITY002";
@@ -292,5 +259,24 @@ public interface DomainConstants {
     public final static String M_P018 = "OIDM_PERMISSION018";
     public final static String M_P019 = "OIDM_PERMISSION019";
     public final static String M_P020 = "OIDM_PERMISSION020";
+
+    //Adresse Reference
+    public final static String M2_AR001 = "OIDM2_ADREF001";
+    public final static String M2_AR002 = "OIDM2_ADREF002";
+    public final static String M2_AR003 = "OIDM2_ADREF003";
+    public final static String M2_AR004 = "OIDM2_ADREF004";
+    public final static String M2_AR005 = "OIDM2_ADREF005";
+    public final static String M2_AR006 = "OIDM2_ADREF006";
+
+//Adresse Interne 
+    public final static String M2_AI001 = "OIDM2_ADIN001";
+    public final static String M2_AI002 = "OIDM2_ADIN002";
+    public final static String M2_AI003 = "OIDM2_ADIN003";
+    public final static String M2_AI004 = "OIDM2_ADIN004";
+
+//Adresse Externe
+    public final static String M2_AE001 = "OIDM2_ADEN001";
+    public final static String M2_AE002 = "OIDM2_ADEN002";
+    public final static String M2_AE003 = "OIDM2_ADEN003";
 
 }

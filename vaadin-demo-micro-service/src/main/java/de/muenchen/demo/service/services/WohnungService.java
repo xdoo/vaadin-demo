@@ -5,6 +5,7 @@
  */
 package de.muenchen.demo.service.services;
 
+import de.muenchen.demo.service.domain.Adresse;
 import de.muenchen.demo.service.domain.Wohnung;
 import java.util.List;
 
@@ -20,17 +21,19 @@ public interface WohnungService {
 
     public Wohnung create();
 
-    public Wohnung save(Wohnung wohnung);
+    public Wohnung save(Wohnung wohnung, Adresse adresse);
 
     public Wohnung read(String oid);
+    
+    public Adresse readAdresse(String oid);
 
-    public Wohnung update(Wohnung whonung);
+    public Wohnung update(Wohnung whonung, Adresse adresse);
 
     public void delete(String oid);
 
     public Wohnung copy(String oid);
 
-    public Wohnung readAdresse(String oid);
+  //  public Wohnung readAdresse(String oid);
 
-    public void deleteWohnungAdresse(String adresseOid);
+   // public void deleteWohnungAdresse(String adresseOid);
 }

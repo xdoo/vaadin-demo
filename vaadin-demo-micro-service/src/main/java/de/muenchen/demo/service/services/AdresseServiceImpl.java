@@ -44,8 +44,6 @@ public class AdresseServiceImpl implements AdresseService {
     private String URL;
     RestTemplate restTemplate = new TestRestTemplate();
     private String plz;
-    @Autowired
-    private WohnungService wohnungService;
 
     public AdresseServiceImpl() {
     }
@@ -113,6 +111,15 @@ public class AdresseServiceImpl implements AdresseService {
     }
 
     @Override
+    public Adresse[] suche(String query) {
+        String URL2 = URL + "adresse/" + query;
+        Adresse[] responseListe = this.restTemplate.getForEntity(URL2, Adresse[].class).getBody();
+        return responseListe;
+
+    }
+    
+
+    @Override
     public Adresse read(String oid) {
         List<AdresseReference> resultReference = this.referenceRepo.findByOidAndMandantOid(oid, readUser().getMandant().getOid());
         if (resultReference.isEmpty()) {
@@ -159,12 +166,10 @@ public class AdresseServiceImpl implements AdresseService {
         } else {
             if (resultReference.get(0).getAdresseInterne() == null) {
                 List<AdresseExterne> resultExterne = this.externeRepo.findByOidAndMandantOid(oid, readUser().getMandant().getOid());
-                this.wohnungService.deleteWohnungAdresse(oid);
                 this.referenceRepo.delete(resultReference);
                 this.externeRepo.delete(resultExterne);
             } else {
                 List<AdresseInterne> resultInterne = this.interneRepo.findByOidAndMandantOid(oid, readUser().getMandant().getOid());
-                this.wohnungService.deleteWohnungAdresse(oid);
                 this.referenceRepo.delete(resultReference);
                 this.interneRepo.delete(resultInterne);
             }
@@ -190,7 +195,6 @@ public class AdresseServiceImpl implements AdresseService {
     @Override
     public Adresse update(Adresse adresse) {
         LOG.info(adresse.toString());
-        plz = Integer.toString(adresse.getPlz());
         this.delete(adresse.getOid());
         return (this.save(adresse));
 

@@ -503,19 +503,19 @@ public class BuergerTest {
         wohnung.setStock("4");
         return wohnung;
     }
-
-    @Test
-    @WithMockUser(username = DomainConstants.M2_U001_NAME)
-    public void CreateBuergerWohnungTest() {
-        System.out.println("========== Save Bürger Wohnung Test ==========");
-        String URL1 = "http://localhost:" + port + "/buerger/create/wohnung/" + DomainConstants.M2_B007;
-        String oid = "oidWohnung";
-        Wohnung w= this.createWohnung(oid);
-        restTemplate.postForEntity(URL1, w, BuergerResource.class);
-        assertEquals(1, this.checkWohnung(DomainConstants.M2_B007, "oidWohnung"));
-        System.out.println(String.format("eine Wohnung könnte erstellt und zu dem Bürger mit OID '%s' hinzufügt werden.", DomainConstants.M2_B007));
-
-    }
+//
+//    @Test
+//    @WithMockUser(username = DomainConstants.M2_U001_NAME)
+//    public void CreateBuergerWohnungTest() {
+//        System.out.println("========== Save Bürger Wohnung Test ==========");
+//        String URL1 = "http://localhost:" + port + "/buerger/create/wohnung/" + DomainConstants.M2_B007;
+//        String oid = "oidWohnung";
+//        Wohnung w= this.createWohnung(oid);
+//        restTemplate.postForEntity(URL1, w, BuergerResource.class);
+//        assertEquals(1, this.checkWohnung(DomainConstants.M2_B007, "oidWohnung"));
+//        System.out.println(String.format("eine Wohnung könnte erstellt und zu dem Bürger mit OID '%s' hinzufügt werden.", DomainConstants.M2_B007));
+//
+//    }
 
     @Test
     public void readBuergerPaesseTest() {

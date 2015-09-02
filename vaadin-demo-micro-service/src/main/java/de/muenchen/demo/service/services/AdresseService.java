@@ -30,5 +30,7 @@ public interface AdresseService {
     public Adresse copy(String oid);
     
     public Adresse update(Adresse adresse);
+    
+    public Adresse[] suche(String query);
 
 }

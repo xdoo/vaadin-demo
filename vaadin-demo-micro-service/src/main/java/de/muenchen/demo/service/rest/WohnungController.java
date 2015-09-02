@@ -143,10 +143,12 @@ public class WohnungController {
             LOG.debug("update wohnung");
         }
         Wohnung entity = service.read(request.getOid());
+        Adresse adresse = service.readAdresse(request.getOid());
+
         LOG.info("davor > " + entity.toString());
-        this.assembler.fromResource(request, entity);
+        this.assembler.fromResource(request, entity, adresse);
         LOG.info("danach > " + entity.toString());
-        this.service.update(entity);
+        this.service.update(entity,adresse);
         WohnungResource resource = this.assembler.assembleWithAllLinks(entity);
         return ResponseEntity.ok(resource);
     }
@@ -164,8 +166,10 @@ public class WohnungController {
             LOG.debug("save wohnung");
         }
         Wohnung entity = new Wohnung();
-        this.assembler.fromResource(request, entity);
-        this.service.save(entity);
+        Adresse adresse = new Adresse();
+        this.assembler.fromResource(request, entity,adresse);
+        this.service.save(entity,adresse);
+
         WohnungResource resource = this.assembler.assembleWithAllLinks(entity);
         return ResponseEntity.ok(resource);
     }
@@ -204,29 +208,29 @@ public class WohnungController {
         return ResponseEntity.ok(resources);
     }
 
-    /**
-     * Assoziiert eine Adresse mit einer Wonunug .
-     *
-     * @param wOid
-     * @param aOid
-     * @return
-     */
-    @Secured({"PERM_addAdresseWohnung"})
-    @RequestMapping(value = "add/wohnung/{wOid}/adresse/{aOid}", method = {RequestMethod.GET})
-    public ResponseEntity addAdresseWohnung(@PathVariable("wOid") String wOid, @PathVariable("aOid") String aOid) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Add Adresse to wohnung");
-        }
-
-        AdresseReference adresse = adresseService.readReference(aOid);
-        Wohnung entity = service.read(wOid);
-
-        entity.setAdresse(adresse);
-        this.service.update(entity);
-
-        WohnungResource resource = this.assembler.assembleWithAllLinks(entity);
-        return ResponseEntity.ok(resource);
-    }
+//    /**
+//     * Assoziiert eine Adresse mit einer Wonunug .
+//     *
+//     * @param wOid
+//     * @param aOid
+//     * @return
+//     */
+//    @Secured({"PERM_addAdresseWohnung"})
+//    @RequestMapping(value = "add/adresse/{wOid}", method = {RequestMethod.POST})
+//    public ResponseEntity addAdresseWohnung(@PathVariable("wOid") String wOid, @RequestBody String aOid) {
+//        if (LOG.isDebugEnabled()) {
+//            LOG.debug("Add Adresse to wohnung");
+//        }
+//
+//        AdresseReference adresse = adresseService.readReference(aOid);
+//        Wohnung entity = service.read(wOid);
+//
+//        entity.setAdresse(adresse);
+//        this.service.update(entity);
+//
+//        WohnungResource resource = this.assembler.assembleWithAllLinks(entity);
+//        return ResponseEntity.ok(resource);
+//    }
 
     /**
      * Liest die Buerger einer Wohnung.

@@ -2,8 +2,10 @@ package de.muenchen.demo.service.rest.api;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+import de.muenchen.demo.service.domain.Adresse;
 import de.muenchen.demo.service.domain.Wohnung;
 import de.muenchen.demo.service.rest.WohnungController;
+import de.muenchen.demo.service.services.AdresseService;
 import de.muenchen.demo.service.services.WohnungService;
 import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
 import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
@@ -17,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityLinks;
 import org.springframework.stereotype.Service;
 import de.muenchen.vaadin.demo.api.rest.WohnungResource;
+import java.util.Objects;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 
 /**
@@ -33,6 +36,8 @@ public class WohnungResourceAssembler {
     @Autowired
     WohnungService service;
     @Autowired
+    AdresseService adresseService;
+    @Autowired
     EntityLinks entityLinks;
 
     /**
@@ -41,7 +46,6 @@ public class WohnungResourceAssembler {
      * @param wohnung
      * @return
      */
-
     public SearchResultResource<WohnungResource> toResource(final List<Wohnung> wohnung) {
         SearchResultResource<WohnungResource> resource = new SearchResultResource<>();
         wohnung.stream().forEach((b) -> {
@@ -62,6 +66,17 @@ public class WohnungResourceAssembler {
     public WohnungResource toResource(final Wohnung wohnung, String... r) {
         // map
         WohnungResource resource = this.dozer.map(wohnung, WohnungResource.class);
+        if (Objects.isNull(wohnung.getAdresse())) {
+            LOG.warn(String.format("found no adresse for this wohnung"));
+        } else {
+            Adresse ad = this.service.readAdresse(wohnung.getOid());
+            resource.setAdOid(ad.getOid());
+            resource.setHausnummer(ad.getHausnummer());
+            resource.setStadt(ad.getStadt());
+            resource.setStrasse(ad.getStrasse());
+            resource.setPlz(ad.getPlz());
+            resource.setStrasseReference(ad.getStrasseReference());
+        }
 
         // add links
         ArrayList<String> relations = Lists.newArrayList(r);
@@ -86,8 +101,8 @@ public class WohnungResourceAssembler {
         if (relations.contains(HateoasUtil.REL_SAVE)) {
             resource.add(linkTo(methodOn(WohnungController.class).saveWohnung(null)).withRel(HateoasUtil.REL_SAVE));
         }
-        
-         if (relations.contains(WohnungResource.ADRESSEN)) {
+
+        if (relations.contains(WohnungResource.ADRESSEN)) {
             resource.add(linkTo(methodOn(WohnungController.class).readWohnungAdresse(wohnung.getOid())).withRel(WohnungResource.ADRESSEN));
         }
 
@@ -102,16 +117,24 @@ public class WohnungResourceAssembler {
      * Mapping einer Resource auf eine Entity
      *
      * @param resource
-     * @param entity
+     * @param wohnungEntity
+     * @param adresseEntity
      */
-    public void fromResource(final WohnungResource resource, final Wohnung entity) {
+    public void fromResource(final WohnungResource resource, final Wohnung wohnungEntity,final Adresse adresseEntity ) {
         if (!Strings.isNullOrEmpty(resource.getOid())) {
 //            this.dozer.map(resource, entity);
-            entity.setOid(resource.getOid());
+            wohnungEntity.setOid(resource.getOid());
             // start field mapping
-            entity.setAusrichtung(resource.getAusrichtung());
-            entity.setStock(resource.getStock());
+            wohnungEntity.setAusrichtung(resource.getAusrichtung());
+            wohnungEntity.setStock(resource.getStock());
+            adresseEntity.setOid(resource.getAdOid());
+            adresseEntity.setStrasse(resource.getStrasse());
+            adresseEntity.setHausnummer(resource.getHausnummer());
+            adresseEntity.setPlz(resource.getPlz());
+            adresseEntity.setStadt(resource.getStadt());
+            adresseEntity.setStrasseReference(resource.getStrasseReference());
             // end field mapping
+
         } else {
             LOG.error(resource.toString());
             throw new IllegalArgumentException("The object id (oid) field must be filled.");

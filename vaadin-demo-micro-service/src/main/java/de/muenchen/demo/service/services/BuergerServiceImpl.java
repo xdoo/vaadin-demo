@@ -108,12 +108,15 @@ public class BuergerServiceImpl implements BuergerService {
     public Buerger copy(String oid) {
         Buerger in = this.read(oid);
         // map
-        Buerger out = new Buerger(in);
-        out.setOid(IdService.next());
+        if (in != null) {
+            Buerger out = new Buerger(in);
+            out.setOid(IdService.next());
 
-        // in DB speichern
-        this.save(out);
-        return out;
+            // in DB speichern
+            this.save(out);
+            return out;
+        }
+        return null;
     }
 
     @Override
@@ -143,15 +146,15 @@ public class BuergerServiceImpl implements BuergerService {
             while (iter.hasNext()) {
                 Sachbearbeiter sachbearbeiter = iter.next();
                 removeSachbearbeiter.add(sachbearbeiter);
-                
+
                 Set<Buerger> buergerList = sachbearbeiter.getBuerger();
                 Collection<Buerger> removeBuerger = new LinkedList<>();
-                buergerList.stream().filter((element) -> (element.getOid().equals(buergerOid) )).forEach(removeBuerger::add);
+                buergerList.stream().filter((element) -> (element.getOid().equals(buergerOid))).forEach(removeBuerger::add);
                 buergerList.removeAll(removeBuerger);
 
                 //this.sachbearbeiterService.update(sachbearbeiter);
                 eventbus.post(new SachbearbeiterEvent(EventType.UPDATE, sachbearbeiter));
-                
+
             }
 
             list.removeAll(removeSachbearbeiter);
@@ -278,7 +281,7 @@ public class BuergerServiceImpl implements BuergerService {
         Set<Pass> paesse = buerger.getPass();
         Collection<Pass> removePaesse = new LinkedList<>();
         paesse.stream().forEach(removePaesse::add);
-        
+
         paesse.removeAll(removePaesse);
         this.update(buerger);
 
@@ -329,7 +332,7 @@ public class BuergerServiceImpl implements BuergerService {
         Set<Wohnung> wohnungen = buerger.getWohnungen();
         Collection<Wohnung> removeWohnungnen = new LinkedList<>();
         wohnungen.stream().forEach(removeWohnungnen::add);
-        
+
         wohnungen.removeAll(removeWohnungnen);
         this.update(buerger);
 
@@ -406,9 +409,10 @@ public class BuergerServiceImpl implements BuergerService {
     }
 
     @Subscribe
-    public void evnetHandler(BuergerEvent event){
+    public void evnetHandler(BuergerEvent event) {
         switch (event.getEventType()) {
-            case UPDATE: update(event.getEntity());
+            case UPDATE:
+                update(event.getEntity());
                 break;
         }
     }

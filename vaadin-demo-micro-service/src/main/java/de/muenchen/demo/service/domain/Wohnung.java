@@ -6,8 +6,10 @@
 package de.muenchen.demo.service.domain;
 
 import java.io.Serializable;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -33,10 +35,10 @@ public class Wohnung extends BaseEntity implements Serializable  {
     
 
     @NotAudited
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)   
     @JoinColumn(name = "Adresse_Id", referencedColumnName = "Id")
     private AdresseReference adresse;
-
+    
     public Wohnung() {
     }
 
@@ -67,6 +69,7 @@ public class Wohnung extends BaseEntity implements Serializable  {
     }
 
     public void setAdresse(AdresseReference adresse) {
+        
         this.adresse = adresse;
     }
 

@@ -6,6 +6,7 @@ import de.muenchen.vaadin.demo.api.rest.AdresseResource;
 import de.muenchen.demo.service.rest.api.AdresseResourceAssembler;
 import de.muenchen.demo.service.services.AdresseService;
 import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -149,6 +150,23 @@ public class AdresseController {
         AdresseResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
         return ResponseEntity.ok(resource);
 
+    }
+    /**
+     * Adressen
+     * mit Parametern suchen.
+     *
+     * @param query
+     * @return
+     */
+    //@Secured({"PERM_sucheAdresse"})
+    @RequestMapping(value = "/suche", method = {RequestMethod.POST})
+    public ResponseEntity sucheAdresse(@RequestBody String query) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("suche Adresse with query > " + query);
+        }
+        Adresse[] result = this.service.suche(query);
+        //SearchResultResource<AdresseResource> resource = this.assembler.toResource(result);
+        return ResponseEntity.ok(result);
     }
 
     /**
