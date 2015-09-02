@@ -1,30 +1,6 @@
 package de.muenchen.demo.service.rest;
 
 import com.google.common.collect.Lists;
-import de.muenchen.demo.service.domain.Buerger;
-import de.muenchen.demo.service.domain.Pass;
-import de.muenchen.demo.service.domain.Sachbearbeiter;
-import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
-import de.muenchen.demo.service.domain.StaatsangehoerigkeitReference;
-import de.muenchen.demo.service.domain.Wohnung;
-import de.muenchen.demo.service.rest.api.BuergerResourceAssembler;
-import de.muenchen.demo.service.rest.api.PassResource;
-import de.muenchen.demo.service.rest.api.PassResourceAssembler;
-import de.muenchen.demo.service.rest.api.SachbearbeiterResource;
-import de.muenchen.demo.service.rest.api.SachbearbeiterResourceAssembler;
-import de.muenchen.demo.service.rest.api.StaatsangehoerigkeitResourceAssembler;
-import de.muenchen.demo.service.rest.api.WohnungResourceAssembler;
-import de.muenchen.demo.service.services.BuergerService;
-import de.muenchen.demo.service.services.PassService;
-import de.muenchen.demo.service.services.SachbearbeiterService;
-import de.muenchen.demo.service.services.StaatsangehoerigkeitService;
-import de.muenchen.demo.service.services.UserService;
-import de.muenchen.demo.service.services.WohnungService;
-import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
-import de.muenchen.vaadin.demo.api.rest.BuergerResource;
-import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
-import de.muenchen.vaadin.demo.api.rest.StaatsangehoerigkeitResource;
-import de.muenchen.vaadin.demo.api.rest.WohnungResource;
 import de.muenchen.demo.service.domain.*;
 import de.muenchen.demo.service.rest.api.*;
 import de.muenchen.demo.service.services.*;
@@ -46,9 +22,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.annotation.security.RolesAllowed;
 import java.util.ArrayList;
@@ -281,23 +254,6 @@ public class BuergerController {
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * Liest die Wohnunugen einer Bürger.
-     *
-     * @param oid
-     * @return
-     */
-    @Secured({"PERM_readBuergerWohnungen"})
-    @RequestMapping(value = "/wohnungen/{oid}", method = {RequestMethod.GET})
-    public ResponseEntity readBuergerWohnungen(@PathVariable("oid") String oid) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("read buerger Wohunungen");
-        }
-        Set<Wohnung> wohnungen = this.service.read(oid).getWohnungen();
-
-        List<WohnungResource> resources = wohnungAssembler.toResource(wohnungen, HateoasUtil.REL_SELF);
-        return ResponseEntity.ok(resources);
-    }
 
     /**
      * Liest die Kinder einer Bürger.
@@ -448,6 +404,7 @@ public class BuergerController {
      * @param wohnungOid
      * @return
      */
+
     @RolesAllowed({"PERM_addWohnungBuerger"})
     @RequestMapping(value = "/add/{bOid}/wohnung", method = {RequestMethod.POST})
     public ResponseEntity addWohnungBuerger(@PathVariable("bOid") String buergerOid, @RequestBody String wohnungOid) {

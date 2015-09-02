@@ -8,18 +8,13 @@ import de.muenchen.demo.service.services.BuergerService;
 import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
 import de.muenchen.vaadin.demo.api.rest.BuergerResource;
 import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 import org.dozer.DozerBeanMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityLinks;
-import org.springframework.stereotype.Service;
-import de.muenchen.vaadin.demo.api.rest.BuergerResource;
 import org.springframework.hateoas.Link;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -182,7 +177,7 @@ public class BuergerResourceAssembler {
         }
         
         if (relations.contains(de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_STAATSANGEHOERIGKEITEN)) {
-            resource.add(linkTo(methodOn(BuergerController.class).addStaatangehoerigkeitBuerger(buerger.getOid(),null)).withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_STAATSANGEHOERIGKEITEN));
+            resource.add(linkTo(methodOn(BuergerController.class).addStaatangehoerigkeitBuerger(buerger.getOid(), null)).withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_STAATSANGEHOERIGKEITEN));
         }
         return resource;
     }
@@ -256,10 +251,10 @@ public class BuergerResourceAssembler {
                 de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_PASS,
                 de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_SACHBEARBEITER,
                 de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_STAATSANGEHOERIGKEITEN,
-                de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_WOHNUNG
+                de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_WOHNUNG,
                 de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_SACHBEARBEITER,
-                BuergerResource.PARTNER,
-                BuergerResource.ADD_PARTNER
+                de.muenchen.vaadin.demo.api.rest.BuergerResource.PARTNER,
+                de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_PARTNER
         );
     }
 

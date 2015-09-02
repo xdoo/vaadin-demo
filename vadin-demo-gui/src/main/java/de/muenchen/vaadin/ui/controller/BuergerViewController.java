@@ -14,6 +14,7 @@ import de.muenchen.vaadin.services.BuergerService;
 import de.muenchen.vaadin.services.MessageService;
 import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.app.views.ChildSelectWindow;
+import de.muenchen.vaadin.ui.app.views.PartnerSelectWindow;
 import de.muenchen.vaadin.ui.app.views.events.AppEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
@@ -31,9 +32,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Stack;
 
-import static de.muenchen.vaadin.ui.util.I18nPaths.NotificationType;
-import static de.muenchen.vaadin.ui.util.I18nPaths.Type;
-import static de.muenchen.vaadin.ui.util.I18nPaths.getNotificationPath;
+import static de.muenchen.vaadin.ui.util.I18nPaths.*;
 
 /**
  * Der Controller ist die zentrale Klasse um die Logik im Kontext Buerger abzubilden.
@@ -362,11 +361,17 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
             case SAVE_AS_PARTNER:
                 saveAsPartnerEventHandler(event);
             case ADD_PARTNER:
-                navigateEventHandler(event);
+                addPartnerEventHandler(event);
+            case QUERY_PARTNER:
+                queryPartner(event.getEntity());
             default:
                 LOG.debug("No matching handler found.");
         }
 
+    }
+
+    private void addPartnerEventHandler(BuergerAppEvent event) {
+        navigator.getUI().addWindow(new PartnerSelectWindow(this, event.getFrom().get()));
     }
 
     private void saveAsPartnerEventHandler(BuergerAppEvent event) {

@@ -24,7 +24,7 @@ import static de.muenchen.vaadin.ui.components.BuergerReadForm.LOG;
 public class BuergerPartnerTab extends CustomComponent {
 
     BuergerViewController controller;
-    private BuergerTable table;
+    private PartnerTable table;
     public BuergerPartnerTab(BuergerViewController controller, String navigateToForDetail, String navigateToForCreate, String navigateToForAdd, String from) {
 
         this.controller = controller;
@@ -67,10 +67,10 @@ public class BuergerPartnerTab extends CustomComponent {
             }
         }
     }
-    public BuergerTable getTable(){
+    public PartnerTable getTable(){
         return table;
     }
-    public void setTable(BuergerTable table){
+    public void setTable(PartnerTable table){
         this.table=table;
     }
 }
