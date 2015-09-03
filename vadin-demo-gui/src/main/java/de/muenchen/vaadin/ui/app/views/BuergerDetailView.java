@@ -5,13 +5,17 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.components.BuergerChildTab;
 import de.muenchen.vaadin.ui.components.BuergerReadForm;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
+import de.muenchen.vaadin.ui.util.I18nPaths;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import static de.muenchen.vaadin.ui.util.I18nPaths.getEntityFieldPath;
 
 /**
  *
@@ -47,7 +51,7 @@ public class BuergerDetailView extends DefaultBuergerView {
         // add kind tab
         childTab=controller.getViewFactory().generateChildTab(BuergerDetailView.NAME, BuergerCreateChildView.NAME, NAME);
         TabSheet.Tab kindTab = tabSheet.addTab(childTab);
-        kindTab.setCaption("Kinder"); // TODO -> i18n
+        kindTab.setCaption(controller.resolveRelative(getEntityFieldPath(Buerger.KINDER, I18nPaths.Type.label)));
         
         layout.addComponent(tabSheet);
         

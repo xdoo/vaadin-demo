@@ -30,6 +30,7 @@ public enum SimpleAction implements Action {
     cancel,
     copy,
     add,
+    history(FontAwesome.ARCHIVE),
     release(FontAwesome.TRASH_O),
     logout(FontAwesome.SIGN_OUT);
     

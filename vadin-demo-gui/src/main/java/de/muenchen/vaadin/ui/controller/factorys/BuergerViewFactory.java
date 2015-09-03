@@ -3,7 +3,6 @@ package de.muenchen.vaadin.ui.controller.factorys;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.vaadin.data.util.BeanItem;
-import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.TabSheet;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
@@ -12,16 +11,7 @@ import de.muenchen.vaadin.ui.app.views.MainView;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
 import de.muenchen.vaadin.ui.app.views.events.RefreshEvent;
-import de.muenchen.vaadin.ui.components.BuergerChildTab;
-import de.muenchen.vaadin.ui.components.BuergerCreateForm;
-import de.muenchen.vaadin.ui.components.BuergerReadForm;
-import de.muenchen.vaadin.ui.components.BuergerSearchTable;
-import de.muenchen.vaadin.ui.components.BuergerTable;
-import de.muenchen.vaadin.ui.components.BuergerUpdateForm;
-import de.muenchen.vaadin.ui.components.ChildSearchTable;
-import de.muenchen.vaadin.ui.components.ChildTable;
-import de.muenchen.vaadin.ui.components.GenericConfirmationWindow;
-import de.muenchen.vaadin.ui.components.GenericTable;
+import de.muenchen.vaadin.ui.components.*;
 import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.components.buttons.TableAction;
 import de.muenchen.vaadin.ui.components.buttons.TableActionButton;
@@ -33,6 +23,8 @@ import org.springframework.stereotype.Component;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
+
+import static de.muenchen.vaadin.demo.api.util.EventType.HISTORY;
 
 /**
  * Created by rene.zarwel on 26.08.15.
@@ -58,6 +50,7 @@ public class BuergerViewFactory implements Serializable{
     private transient Optional<BuergerCreateForm> createChildForm = Optional.empty();
     private transient Optional<BuergerUpdateForm> updateForm = Optional.empty();
     private transient Optional<BuergerReadForm> readForm = Optional.empty();
+    private transient Optional<HistoryForm> historyForm = Optional.empty();
 
 
 
@@ -132,7 +125,7 @@ public class BuergerViewFactory implements Serializable{
         return readForm.get();
     }
 
-    public BuergerSearchTable generateSearchTable(String navigateToForEdit, String navigateToForDetail, String navigateForCreate, String navigateFrom) {
+    public BuergerSearchTable generateSearchTable(String navigateToForEdit, String navigateToForDetail, String navigateForCreate, String navigateFrom, String navigateToForHistory) {
         LOG.debug("creating 'search' table for buerger");
         if(!searchTable.isPresent()){
             LOG.debug("new searchtabel");
@@ -155,6 +148,9 @@ public class BuergerViewFactory implements Serializable{
                     }
                             //getEventBus().post(new BuergerAppEvent(container.getItem(id),id,EventType.DELETE).navigateTo(navigateToForEdit).from(navigateFrom))
             );
+            TableActionButton.Builder history = TableActionButton.Builder.<Buerger>make(controller, TableAction.tablehistory,navigateToForHistory, (container, id) ->
+                            getEventBus().post(new BuergerAppEvent(container.getItem(id),id, HISTORY).navigateTo(navigateToForHistory).from(navigateFrom))
+            );
 
             searchTable=Optional.of(new BuergerSearchTable(
                     controller,
@@ -164,10 +160,19 @@ public class BuergerViewFactory implements Serializable{
                     detail,
                     edit,
                     copy,
-                    delete
+                    delete,
+                    history
             ));}
         return searchTable.get();}
 
+
+    public HistoryForm generateHistoryTable(String navigateFrom){
+        LOG.error("creating 'history' buerger form");
+        if(!historyForm.isPresent()){
+            HistoryForm form = new HistoryForm(controller, navigateFrom);
+            historyForm=Optional.of(form);}
+        return historyForm.get();
+        }
 
 
     public ChildSearchTable generateChildSearchTable( String navigateFrom) {
@@ -258,6 +263,7 @@ public class BuergerViewFactory implements Serializable{
         createChildForm = Optional.empty();
         updateForm = Optional.empty();
         readForm = Optional.empty();
+        historyForm = Optional.empty();
 
         //Work around to reload the current page for the changes to take effect.
         String old = controller.getNavigator().getState();

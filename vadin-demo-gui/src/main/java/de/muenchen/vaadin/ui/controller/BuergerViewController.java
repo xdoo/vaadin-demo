@@ -345,9 +345,28 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
             case RELEASE_PARENT:
                 releaseParentHandler(event);
                 break;
+            case HISTORY:
+                historyHandler(event);
+                break;
             default:
                 LOG.debug("No matching handler found.");
         }
+
+    }
+
+    private void historyHandler(BuergerAppEvent event) {
+        LOG.error("History not yet implementet");
+
+        this.current = event.getItem();
+
+        // UI Komponente aktualisieren
+        this.eventbus.post(new BuergerComponentEvent(event.getItem().getBean(), EventType.HISTORY));
+
+        // Verlauf protokollieren
+        this.pushFrom(event);
+
+        // Zur Seite wechseln
+        navigateEventHandler(event);
 
     }
 
@@ -377,6 +396,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
      * @param event mit gesetztem NavigateTo
      */
     private void navigateEventHandler(BuergerAppEvent event){
+        LOG.error(event.getNavigateTo());
         getNavigator().navigateTo(event.getNavigateTo());
     }
 
