@@ -19,6 +19,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
+
+import org.hibernate.envers.Audited;
 import org.hibernate.search.annotations.Indexed;
 
 /**
@@ -26,6 +28,7 @@ import org.hibernate.search.annotations.Indexed;
  * @author praktikant.tmar
  */
 @Entity
+@Audited
 @Indexed
 @Table(name = "USERS")
 public class User implements Serializable {
