@@ -167,6 +167,27 @@
             <artifactId>metainf-services</artifactId>
             <version>1.6</version>
         </dependency>
+        <!-- GIS Server -->
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-cxf</artifactId>
+            <version>2.12.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-ws-security</artifactId>
+            <version>2.7.13</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+            <version>2.1.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jvnet.jaxb2_commons</groupId>
+            <artifactId>jaxb2-basics-runtime</artifactId>
+            <version>0.6.2</version>
+        </dependency> 
     </dependencies>
     <build>
         <plugins>
@@ -183,6 +204,48 @@
                     <source>1.8</source>
                     <target>1.8</target>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-codegen-plugin</artifactId>
+                <version>2.7.13</version>
+                <executions>
+                    <execution>
+                        <id>generate-sources</id>
+                        <phase>generate-sources</phase>
+                        <configuration>
+
+                            <sourceRoot>${basedir}/target/generated-sources/cxf-codegen-plugin</sourceRoot>
+                            <wsdlOptions>
+                                <wsdlOption>
+
+                                    <wsdl>${basedir}/src/main/resources/wsdl/gis-service.wsdl</wsdl>
+                                    <extraargs>
+                                        <extraarg>-impl</extraarg>
+
+                                        <extraarg>-xjc-Xvalue-constructor</extraarg>
+                                        <extraarg>-xjc-XtoString</extraarg>
+                                    </extraargs>
+                                </wsdlOption>
+                            </wsdlOptions>
+                        </configuration>
+                        <goals>
+                            <goal>wsdl2java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.jvnet.jaxb2_commons</groupId>
+                        <artifactId>jaxb2-value-constructor</artifactId>
+                        <version>3.0</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.jvnet.jaxb2_commons</groupId>
+                        <artifactId>jaxb2-basics</artifactId>
+                        <version>0.6.2</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
         <resources>

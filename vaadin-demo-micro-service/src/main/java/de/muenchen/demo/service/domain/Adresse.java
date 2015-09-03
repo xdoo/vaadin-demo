@@ -15,11 +15,13 @@ public class Adresse {
     
     private String oid;
     
-    private String strasseReference;
+    private Integer strasseReference;
 
     private String strasse;
 
-    private String hausnummer;
+    private Integer hausnummer;
+    
+    private String buchstabe;
     
     private Mandant mandant;
 
@@ -47,20 +49,28 @@ public class Adresse {
         this.strasse = strasse;
     }
 
-    public String getStrasseReference() {
+    public Integer getStrasseReference() {
         return strasseReference;
     }
 
-    public void setStrasseReference(String strasseReference) {
+    public void setStrasseReference(Integer strasseReference) {
         this.strasseReference = strasseReference;
     }
 
-    public String getHausnummer() {
+    public Integer getHausnummer() {
         return hausnummer;
     }
 
-    public void setHausnummer(String hausnummer) {
+    public void setHausnummer(Integer hausnummer) {
         this.hausnummer = hausnummer;
+    }
+
+    public String getBuchstabe() {
+        return buchstabe;
+    }
+
+    public void setBuchstabe(String buchstabe) {
+        this.buchstabe = buchstabe;
     }
 
     public String getStadt() {

@@ -7,17 +7,18 @@ import de.muenchen.demo.service.domain.AdresseInterne;
 import de.muenchen.demo.service.domain.AdresseInterneRepository;
 import de.muenchen.demo.service.domain.AdresseReference;
 import de.muenchen.demo.service.domain.AdresseReferenceRepository;
-import de.muenchen.demo.service.domain.Mandant;
 import de.muenchen.demo.service.domain.User;
 import de.muenchen.demo.service.util.IdService;
 import de.muenchen.demo.service.util.QueryService;
+import de.muenchen.gis_service._1_0.Adresssuche;
+import de.muenchen.gis_service._1_0.SucheAdressenAntwort;
+import de.muenchen.gis_service._1_0.SucheAdressenAuskunft;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.TestRestTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,16 +35,15 @@ public class AdresseServiceImpl implements AdresseService {
     private static final Logger LOG = LoggerFactory.getLogger(AdresseService.class);
 
     @Autowired
+    GisSpringService gisService;
+    @Autowired
     MandantService mandantService;
     UserService userService;
     AdresseInterneRepository interneRepo;
     AdresseExterneRepository externeRepo;
     AdresseReferenceRepository referenceRepo;
     QueryService<Adresse> search;
-    @Value("${URL}")
-    private String URL;
     RestTemplate restTemplate = new TestRestTemplate();
-    private String plz;
 
     public AdresseServiceImpl() {
     }
@@ -59,18 +59,12 @@ public class AdresseServiceImpl implements AdresseService {
 
     @Override
     public List<Adresse> query() {
-        Iterable<AdresseExterne> allExterne = this.externeRepo.findByMandantOid(readUser().getMandant().getOid());
-        Iterable<AdresseInterne> allInterne = this.interneRepo.findByMandantOid(readUser().getMandant().getOid());
+        Iterable<AdresseReference> allReferences = this.referenceRepo.findByMandantOid(readUser().getMandant().getOid());
         ArrayList<Adresse> list = new ArrayList();
-        for (AdresseExterne ad : allExterne) {
-            list.add(read(ad.getOid()));
-
+        for (AdresseReference ad : allReferences) {
+            list.add(this.read(ad.getOid()));
+            
         }
-
-        for (AdresseInterne ad : allInterne) {
-            list.add(read(ad.getOid()));
-        }
-
         return list;
     }
 
@@ -82,63 +76,61 @@ public class AdresseServiceImpl implements AdresseService {
     }
 
     @Override
-    public Adresse save(Adresse adresse) {
-        LOG.info(adresse.toString());
-        plz = Integer.toString(adresse.getPlz());
-        if (adresse.getStadt().equals("München")) {
-            String URL2 = URL + "adresse/" + plz;
-            Adresse[] responseListe = this.restTemplate.getForEntity(URL2, Adresse[].class).getBody();
-            for (Adresse ad : responseListe) {
-                if (ad.getStrasse().equals(adresse.getStrasse())) {
-                    Mandant mandant = mandantService.read(readUser().getMandant().getOid());
-                    ad.setMandant(mandant);
-                    ad.setHausnummer(adresse.getHausnummer());
-                    ad.setOid(adresse.getOid());
-                    AdresseReference a = toReferenceInterne(ad);
-                    this.referenceRepo.save(a);
-                    return ad;
-                }
-
-            }
-        } else {
-            Mandant mandant = mandantService.read(readUser().getMandant().getOid());
-            adresse.setMandant(mandant);
-            this.referenceRepo.save(toReferenceExterne(adresse));
-            return adresse;
-        }
-        LOG.warn(String.format("found no adresse in münchen"));
-        return null;
-    }
-
-    @Override
-    public Adresse[] suche(String query) {
-        String URL2 = URL + "adresse/" + query;
-        Adresse[] responseListe = this.restTemplate.getForEntity(URL2, Adresse[].class).getBody();
-        return responseListe;
+    public List<Adresse> suche(Adresse adresse) {
+        SucheAdressenAuskunft suche = fromAdresse(adresse);
+        SucheAdressenAntwort antwort = gisService.getGisService().sucheAdressen(suche);
+        return toAdressen(antwort);
 
     }
-    
+
+    public SucheAdressenAuskunft fromAdresse(Adresse adresse) {
+        Adresssuche adresssuche = new Adresssuche(null, adresse.getStrasse(), adresse.getStrasseReference(), adresse.getHausnummer(), null, adresse.getBuchstabe(),
+                null, adresse.getPlz(), null);
+        return new SucheAdressenAuskunft(adresssuche, null, null);
+    }
+
+    public List<Adresse> toAdressen(SucheAdressenAntwort adr) {
+        List<Adresse> list = new ArrayList<>();
+        adr.getAdressen().stream().forEach(a -> {
+            Adresse adresse = new Adresse();
+            adresse.setHausnummer(a.getHausnummer());
+            adresse.setPlz(a.getPlz());
+            adresse.setBuchstabe(a.getBuchstabe());
+            adresse.setStrasse(a.getStrasse());
+            adresse.setStrasseReference(a.getStrassenschluessel());
+            adresse.setStadt("München");
+            list.add(adresse);
+        });
+
+        return list;
+    }
 
     @Override
     public Adresse read(String oid) {
         List<AdresseReference> resultReference = this.referenceRepo.findByOidAndMandantOid(oid, readUser().getMandant().getOid());
         if (resultReference.isEmpty()) {
             // TODO
-            LOG.warn(String.format("found no users with oid '%s'", oid));
+            LOG.warn(String.format("found no Adresse with oid '%s'", oid));
             return null;
 
         } else {
             if (resultReference.get(0).getAdresseInterne() == null) {
-                List<AdresseExterne> resultExterne = this.externeRepo.findByOidAndMandantOid(oid, readUser().getMandant().getOid());
+                List<AdresseExterne> resultExterne = this.externeRepo.findByOidAndMandantOid(resultReference.get(0).getAdresseExterne().getOid(), readUser().getMandant().getOid());
                 return fromExterne(resultExterne.get(0));
 
             } else {
-                List<AdresseInterne> resultInterne = this.interneRepo.findByOidAndMandantOid(oid, readUser().getMandant().getOid());
-                String URL2 = URL + "adresse/" + resultInterne.get(0).getStrasseReference();
-                Adresse result2 = this.restTemplate.getForEntity(URL2, Adresse.class).getBody();
-                result2.setHausnummer(resultInterne.get(0).getHausnummer());
-                result2.setOid(oid);
-                return result2;
+                AdresseInterne resultInterne = this.interneRepo.findByOidAndMandantOid(resultReference.get(0).getAdresseInterne().getOid(), readUser().getMandant().getOid()).get(0);
+                Adresse adr = new Adresse();
+                adr.setHausnummer(resultInterne.getHausnummer());
+                adr.setBuchstabe(resultInterne.getBuchstabe());
+                adr.setStrasseReference(resultInterne.getStrasseReference());
+                SucheAdressenAuskunft suche = fromAdresse(adr);
+                SucheAdressenAntwort antwort = gisService.getGisService().sucheAdressen(suche);
+                List<Adresse> result2 = toAdressen(antwort);
+
+                result2.get(0).setOid(resultInterne.getOid());
+                result2.get(0).setMandant(resultInterne.getMandant());
+                return result2.get(0);
             }
         }
     }
@@ -155,54 +147,10 @@ public class AdresseServiceImpl implements AdresseService {
         }
     }
 
-    @Override
-    public void delete(String oid) {
-
-        List<AdresseReference> resultReference = this.referenceRepo.findByOidAndMandantOid(oid, readUser().getMandant().getOid());
-        if (resultReference.isEmpty()) {
-            // TODO
-            LOG.warn(String.format("found no users with oid '%s'", oid));
-
-        } else {
-            if (resultReference.get(0).getAdresseInterne() == null) {
-                List<AdresseExterne> resultExterne = this.externeRepo.findByOidAndMandantOid(oid, readUser().getMandant().getOid());
-                this.referenceRepo.delete(resultReference);
-                this.externeRepo.delete(resultExterne);
-            } else {
-                List<AdresseInterne> resultInterne = this.interneRepo.findByOidAndMandantOid(oid, readUser().getMandant().getOid());
-                this.referenceRepo.delete(resultReference);
-                this.interneRepo.delete(resultInterne);
-            }
-        }
-    }
-
-    @Override
-    public Adresse copy(String oid) {
-
-        Adresse in = this.read(oid);
-
-        // map
-        Adresse out = new Adresse(in);
-        out.setOid(IdService.next());
-
-        // in DB speichern
-        this.save(out);
-
-        return out;
-
-    }
-
-    @Override
-    public Adresse update(Adresse adresse) {
-        LOG.info(adresse.toString());
-        this.delete(adresse.getOid());
-        return (this.save(adresse));
-
-    }
-
     public AdresseExterne toExterne(Adresse adresse) {
         AdresseExterne adresseExterne = new AdresseExterne();
         adresseExterne.setHausnummer(adresse.getHausnummer());
+        adresseExterne.setBuchstabe(adresse.getBuchstabe());
         adresseExterne.setOid(adresse.getOid());
         adresseExterne.setMandant(adresse.getMandant());
         adresseExterne.setPlz(adresse.getPlz());
@@ -214,6 +162,8 @@ public class AdresseServiceImpl implements AdresseService {
     public Adresse fromExterne(AdresseExterne adresseExterne) {
         Adresse adresse = new Adresse();
         adresse.setHausnummer(adresseExterne.getHausnummer());
+        adresse.setBuchstabe(adresseExterne.getBuchstabe());
+
         adresse.setOid(adresseExterne.getOid());
         adresse.setPlz(adresseExterne.getPlz());
         adresse.setStadt(adresseExterne.getStadt());
@@ -228,6 +178,7 @@ public class AdresseServiceImpl implements AdresseService {
         adresseInterne.setOid(adresse.getOid());
         adresseInterne.setStrasseReference(adresse.getStrasseReference());
         adresseInterne.setHausnummer(adresse.getHausnummer());
+        adresseInterne.setBuchstabe(adresse.getBuchstabe());
         adresseInterne.setMandant(adresse.getMandant());
         return adresseInterne;
     }

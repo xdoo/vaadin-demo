@@ -11,16 +11,20 @@ package de.muenchen.vaadin.demo.api.rest;
  */
 public class WohnungResource extends BaseResource {
 
-    public final static String ADRESSEN = "adressen";
+    // HATEOAS Relations zu den Relationen   
+
+    public static final String BUERGER = "buerger";
+    public static final String RELEASE_BUERGERS = "release_buergers";
 
     private String stock;
     private String ausrichtung;
     private String adOid;
-    private String strasseReference;
+    private Integer strasseReference;
     private String strasse;
-    private String hausnummer;
-    private String stadt;
+    private Integer hausnummer;
+    private String buchstabe;
     private int plz;
+    private String stadt;
 
     public String getAdOid() {
         return adOid;
@@ -30,11 +34,11 @@ public class WohnungResource extends BaseResource {
         this.adOid = adOid;
     }
 
-    public String getStrasseReference() {
+    public Integer getStrasseReference() {
         return strasseReference;
     }
 
-    public void setStrasseReference(String strasseReference) {
+    public void setStrasseReference(Integer strasseReference) {
         this.strasseReference = strasseReference;
     }
 
@@ -46,12 +50,20 @@ public class WohnungResource extends BaseResource {
         this.strasse = strasse;
     }
 
-    public String getHausnummer() {
+    public Integer getHausnummer() {
         return hausnummer;
     }
 
-    public void setHausnummer(String hausnummer) {
+    public void setHausnummer(Integer hausnummer) {
         this.hausnummer = hausnummer;
+    }
+
+    public String getBuchstabe() {
+        return buchstabe;
+    }
+
+    public void setBuchstabe(String buchstabe) {
+        this.buchstabe = buchstabe;
     }
 
     public String getStadt() {
@@ -88,6 +100,6 @@ public class WohnungResource extends BaseResource {
 
     @Override
     public String toString() {
-        return String.format("Oid > %s | ausrichtung > %s | stock > %s ", this.getOid(), this.ausrichtung, this.stock);
+        return String.format("Oid > %s | ausrichtung > %s | stock > %s | strasse > %s | hausnummer > %s | buchstabe > %s| plz > %s | stadt > %s  ", this.getOid(), this.ausrichtung, this.stock,this.strasse,this.hausnummer,this.buchstabe,this.plz,this.stadt);
     }
 }
