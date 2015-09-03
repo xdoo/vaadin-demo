@@ -1,6 +1,5 @@
 package de.muenchen.vaadin.ui.components;
 
-import com.google.common.eventbus.Subscribe;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.CustomComponent;
@@ -10,14 +9,16 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.demo.api.util.EventType;
-import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
-import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
+import de.muenchen.vaadin.ui.app.views.events.AppEvent;
+import de.muenchen.vaadin.ui.app.views.events.ComponentEvent;
 import de.muenchen.vaadin.ui.components.buttons.ActionButton;
 import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.I18nPaths;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import reactor.bus.Event;
+import reactor.fn.Consumer;
 
 import java.util.Optional;
 
@@ -29,7 +30,7 @@ import static de.muenchen.vaadin.ui.util.I18nPaths.getFormPath;
  *
  * @author claus
  */
-public class BuergerReadForm extends CustomComponent {
+public class BuergerReadForm extends CustomComponent implements Consumer<Event<ComponentEvent<Buerger>>> {
     
     /**
      * Logger
@@ -105,30 +106,17 @@ public class BuergerReadForm extends CustomComponent {
         // die Schaltfläche zum Aktualisieren
         ActionButton backButton = new ActionButton(controller, SimpleAction.back,this.back);
         backButton.addClickListener((clickEvent -> {
-            controller.postToEventBus(new BuergerAppEvent(EventType.CANCEL).navigateTo(this.back));
+            controller.postEvent(new AppEvent<Buerger>(EventType.CANCEL).navigateTo(this.back));
         }));
         buttonLayout.addComponent(backButton);
 
         // die Schaltfläche zum Bearbeiten
         ActionButton updateButton = new ActionButton(controller, SimpleAction.update,this.navigateToUpdate);
         updateButton.addClickListener(clickEvent -> {
-            controller.postToEventBus(new BuergerAppEvent(EventType.SELECT2UPDATE).setEntity(this.binder.getItemDataSource().getBean()).setItem(binder.getItemDataSource()).navigateTo(this.navigateToUpdate).from(this.from));
+            controller.postEvent(new AppEvent<Buerger>(EventType.SELECT2UPDATE).setEntity(this.binder.getItemDataSource().getBean()).setItem(binder.getItemDataSource()).navigateTo(this.navigateToUpdate).from(this.from));
         });
         buttonLayout.addComponent(updateButton);
         setCompositionRoot(layout);
-    }
-    
-    @Subscribe
-    public void update(BuergerComponentEvent event) {     
-        if (event.getEventType().equals(EventType.SELECT2READ)) {
-            LOG.debug("seleted buerger to modify.");
-            Optional<BeanItem<Buerger>> opt = event.getItem();
-            if (opt.isPresent()) {
-                this.binder.setItemDataSource(opt.get());
-            } else {
-                LOG.warn("No item present.");
-            }
-        }
     }
 
     public String getNavigateBack() {
@@ -139,4 +127,18 @@ public class BuergerReadForm extends CustomComponent {
         this.back = back;
     }
 
+    @Override
+    public void accept(reactor.bus.Event<ComponentEvent<Buerger>> eventWrapper) {
+        ComponentEvent event = eventWrapper.getData();
+
+        if (event.getEventType().equals(EventType.SELECT2READ)) {
+            LOG.debug("seleted buerger to modify.");
+            Optional<BeanItem<Buerger>> opt = event.getItem();
+            if (opt.isPresent()) {
+                this.binder.setItemDataSource(opt.get());
+            } else {
+                LOG.warn("No item present.");
+            }
+        }
+    }
 }

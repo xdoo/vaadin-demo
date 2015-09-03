@@ -1,17 +1,18 @@
 package de.muenchen.vaadin.ui.components;
 
-import com.google.common.eventbus.Subscribe;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.demo.api.util.EventType;
-import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
-import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
+import de.muenchen.vaadin.ui.app.views.events.AppEvent;
+import de.muenchen.vaadin.ui.app.views.events.ComponentEvent;
 import de.muenchen.vaadin.ui.components.buttons.ActionButton;
 import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
+import reactor.bus.Event;
+import reactor.fn.Consumer;
 
 import java.util.Optional;
 
@@ -21,7 +22,7 @@ import static de.muenchen.vaadin.ui.components.BuergerReadForm.LOG;
  *
  * @author Maximilian Schug
  */
-public class BuergerPartnerTab extends CustomComponent {
+public class BuergerPartnerTab extends CustomComponent implements Consumer<Event<ComponentEvent<Buerger>>> {
 
     BuergerViewController controller;
     private PartnerTable table;
@@ -33,11 +34,11 @@ public class BuergerPartnerTab extends CustomComponent {
 
         ActionButton create = new ActionButton(controller, SimpleAction.create,navigateToForCreate);
         create.addClickListener(clickEvent ->
-                        controller.postToEventBus(new BuergerAppEvent(EventType.CREATE).navigateTo(navigateToForCreate).from(from))
+                        controller.postEvent(new AppEvent<Buerger>(EventType.CREATE).navigateTo(navigateToForCreate).from(from))
         );
         ActionButton add = new ActionButton(controller, SimpleAction.add,navigateToForAdd);
         add.addClickListener(clickEvent ->
-                        controller.postToEventBus(new BuergerAppEvent(EventType.ADD_PARTNER).navigateTo(navigateToForAdd).from(from))
+                        controller.postEvent(new AppEvent<Buerger>(EventType.ADD_PARTNER).navigateTo(navigateToForAdd).from(from))
         );
 
         table = controller.getViewFactory().generatePartnerTable(navigateToForDetail, from);
@@ -54,23 +55,27 @@ public class BuergerPartnerTab extends CustomComponent {
         setCompositionRoot(vlayout);
     }
 
-    @Subscribe
-    public void update(BuergerComponentEvent event) {
-        if (event.getEventType().equals(EventType.SELECT2READ)) {
-            LOG.debug("seleted buerger to show childs.");
-            Optional<BeanItem<Buerger>> opt = event.getItem();
-            if (opt.isPresent()) {
-                Buerger entity = opt.get().getBean();
-                this.controller.getEventbus().post(new BuergerAppEvent(EventType.QUERY_CHILD).setEntity(entity));
-            } else {
-                LOG.warn("No item present.");
-            }
-        }
-    }
+
     public PartnerTable getTable(){
         return table;
     }
     public void setTable(PartnerTable table){
         this.table=table;
+    }
+
+    @Override
+    public void accept(reactor.bus.Event<ComponentEvent<Buerger>> eventWrapper) {
+        ComponentEvent event = eventWrapper.getData();
+
+        if (event.getEventType().equals(EventType.SELECT2READ)) {
+            LOG.debug("seleted buerger to show childs.");
+            Optional<BeanItem<Buerger>> opt = event.getItem();
+            if (opt.isPresent()) {
+                Buerger entity = opt.get().getBean();
+                this.controller.postEvent(new AppEvent<Buerger>(EventType.QUERY_CHILD).setEntity(entity));
+            } else {
+                LOG.warn("No item present.");
+            }
+        }
     }
 }

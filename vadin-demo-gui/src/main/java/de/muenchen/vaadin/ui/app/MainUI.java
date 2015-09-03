@@ -1,6 +1,5 @@
 package de.muenchen.vaadin.ui.app;
 
-import com.google.common.eventbus.Subscribe;
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
@@ -13,9 +12,18 @@ import com.vaadin.server.VaadinService;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
-import com.vaadin.ui.*;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.ComponentContainer;
+import com.vaadin.ui.CssLayout;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.MenuBar;
+import com.vaadin.ui.UI;
+import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.BaseEntity;
 import de.muenchen.vaadin.demo.api.services.SecurityService;
@@ -31,21 +39,24 @@ import de.muenchen.vaadin.ui.app.views.events.RefreshEvent;
 import de.muenchen.vaadin.ui.components.GenericConfirmationWindow;
 import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.controller.ControllerContext;
-import de.muenchen.vaadin.ui.util.EventBus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import reactor.bus.EventBus;
 
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
+
+import static reactor.bus.Event.wrap;
+import static reactor.bus.selector.Selectors.T;
 
 @SpringUI
 @Title("Vaadin Spring-Security Sample")
 @Theme("valo")
 @PreserveOnRefresh
 //@Widgetset("de.muenchen.vaadin.Widgetset")
-public class MainUI extends UI implements ControllerContext {
+public class MainUI extends UI implements ControllerContext{
 
     private static final Logger LOG = LoggerFactory.getLogger(MainUI.class);
 
@@ -54,7 +65,8 @@ public class MainUI extends UI implements ControllerContext {
     private final SpringViewProvider viewProvider;
     private final SecurityService security;
     private final MessageService i18n;
-    private final EventBus eventBus;
+    @Autowired
+    private EventBus eventBus;
     private final boolean testMode = false;
     private final LinkedHashMap<String, String> menuItems = new LinkedHashMap<String, String>();
     protected ValoMenuLayout root = new ValoMenuLayout();
@@ -64,13 +76,11 @@ public class MainUI extends UI implements ControllerContext {
     private Navigator navigator;
 
     @Autowired
-    public MainUI(SpringViewProvider ViewProvider, SecurityService security, MessageService i18n, EventBus eventBus) {
+    public MainUI(SpringViewProvider ViewProvider, SecurityService security, MessageService i18n) {
         LOG.info("starting UI");
         this.viewProvider = ViewProvider;
         this.security = security;
         this.i18n = i18n;
-        this.eventBus = eventBus;
-        this.eventBus.register(this);
     }
 
     @Override
@@ -172,17 +182,18 @@ public class MainUI extends UI implements ControllerContext {
                 menu.removeStyleName("valo-menu-visible");
             }
         });
+
+        eventBus.on(T(LoginEvent.class), this::loginEventHandler);
+        eventBus.on(T(LogoutEvent.class),this::logoutEventHandler);
+
     }
 
-    @Subscribe
-    public void login(LoginEvent event) {
+    public void loginEventHandler(reactor.bus.Event<LoginEvent> eventWrapper) {
         this.root.switchOnMenu();
         getNavigator().navigateTo(MainView.NAME);
-
     }
 
-    @Subscribe
-    public void logout(LogoutEvent event) {
+    public void logoutEventHandler(reactor.bus.Event<LogoutEvent> eventwrapper) {
         this.root.switchOffMenu();
         security.logout();
 
@@ -228,7 +239,7 @@ public class MainUI extends UI implements ControllerContext {
         MenuBar.Command languageSelection = selectedItem -> i18n.getSupportedLocales().stream().forEach(locale -> {
             if (selectedItem.getText().equals(locale.getDisplayLanguage())) {
                 i18n.setLocale(locale);
-                eventBus.post(new RefreshEvent());
+                postEvent(new RefreshEvent());
             }
         });
 
@@ -284,6 +295,11 @@ public class MainUI extends UI implements ControllerContext {
     }
 
     @Override
+    public void postEvent(Object event) {
+        eventBus.notify(event.getClass(), wrap(event));
+    }
+
+    @Override
     public AppEvent<? extends BaseEntity> buildEvent(EventType eventType) {
         return null;
     }
@@ -298,8 +314,4 @@ public class MainUI extends UI implements ControllerContext {
         return i18n.get(path);
     }
 
-    @Override
-    public void postToEventBus(AppEvent appEvent) {
-        eventBus.post(appEvent);
-    }
 }

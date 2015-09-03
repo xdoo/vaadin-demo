@@ -17,14 +17,10 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.demo.api.util.EventType;
-import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
+import de.muenchen.vaadin.ui.app.views.events.AppEvent;
 import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.ValidatorFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.Date;
 
 import static de.muenchen.vaadin.ui.util.I18nPaths.Component;
 import static de.muenchen.vaadin.ui.util.I18nPaths.NotificationType;
@@ -162,7 +158,7 @@ public class BuergerCreateForm extends CustomComponent {
                 birthdayfield.validate();
                 
                 binder.commit();
-                controller.getEventbus().post(new BuergerAppEvent(binder.getItemDataSource().getBean(), this.type).navigateTo(navigateTo));
+                controller.postEvent(new AppEvent<Buerger>(binder.getItemDataSource().getBean(), this.type).navigateTo(navigateTo));
 
                 //reset
                 firstField.removeValidator(val);
@@ -182,7 +178,7 @@ public class BuergerCreateForm extends CustomComponent {
         // die 'abbrechen' Schaltfläche
         buttonLayout.addComponent(new GenericCancelButton(
                 controller.resolveRelative(getFormPath(SimpleAction.cancel, Component.button, Type.label)),
-                new BuergerAppEvent(binder.getItemDataSource().getBean(), EventType.CANCEL).navigateTo(this.back), 
+                new AppEvent<Buerger>(binder.getItemDataSource().getBean(), EventType.CANCEL).navigateTo(this.back),
                 this.controller.getEventbus()));
         setCompositionRoot(layout);
     }

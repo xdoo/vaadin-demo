@@ -1,8 +1,9 @@
 package de.muenchen.vaadin.demo.api.rest;
 
-import com.google.common.collect.Lists;
-import java.util.List;
 import org.springframework.hateoas.ResourceSupport;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -11,7 +12,7 @@ import org.springframework.hateoas.ResourceSupport;
  */
 public class SearchResultResource<E> extends ResourceSupport {
     
-    private List<E> result = Lists.newArrayList();
+    private List<E> result = new ArrayList<>();
     
     public void add(E e) {
         this.result.add(e);

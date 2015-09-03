@@ -1,16 +1,13 @@
 package de.muenchen.vaadin.ui.components;
 
-import com.google.common.eventbus.Subscribe;
 import com.vaadin.data.Validator;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
-import com.vaadin.data.validator.DateRangeValidator;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
-import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.DateField;
@@ -20,25 +17,30 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
-import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
-import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
+import de.muenchen.vaadin.demo.api.util.EventType;
+import de.muenchen.vaadin.ui.app.views.events.AppEvent;
+import de.muenchen.vaadin.ui.app.views.events.ComponentEvent;
 import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
-import de.muenchen.vaadin.demo.api.util.EventType;
-import java.util.Date;
-import static de.muenchen.vaadin.ui.util.I18nPaths.*;
 import de.muenchen.vaadin.ui.util.ValidatorFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import reactor.bus.Event;
+import reactor.fn.Consumer;
 
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static de.muenchen.vaadin.ui.util.I18nPaths.Component;
+import static de.muenchen.vaadin.ui.util.I18nPaths.Type;
+import static de.muenchen.vaadin.ui.util.I18nPaths.getEntityFieldPath;
+import static de.muenchen.vaadin.ui.util.I18nPaths.getFormPath;
+import static reactor.bus.selector.Selectors.T;
 
 /**
  *
  * @author claus
  */
-public class BuergerUpdateForm extends CustomComponent {
+public class BuergerUpdateForm extends CustomComponent implements Consumer<Event<ComponentEvent<Buerger>>> {
 
     /**
      * Logger
@@ -79,6 +81,8 @@ public class BuergerUpdateForm extends CustomComponent {
      * Erzeugt das eigentliche Formular.
      */
     private void createForm() {
+
+        controller.getEventbus().on(T(ComponentEvent.class),this);
 
         FormLayout layout = new FormLayout();
         HorizontalLayout buttonLayout = new HorizontalLayout();
@@ -136,7 +140,7 @@ public class BuergerUpdateForm extends CustomComponent {
             try {
                 binder.commit();
                 Buerger entity = binder.getItemDataSource().getBean();
-                controller.getEventbus().post(new BuergerAppEvent(entity, EventType.UPDATE).navigateTo(navigateTo).from(this.from));
+                controller.postEvent(new AppEvent<Buerger>(entity, EventType.UPDATE).navigateTo(navigateTo).from(this.from));
             } catch (FieldGroup.CommitException e) {
                 GenericErrorNotification error = new GenericErrorNotification("Fehler","Beim erstellen der Person ist ein Fehler aufgetreten. Bitte füllen Sie alle Felder mit gültigen Werten aus.");
                 error.show(Page.getCurrent());
@@ -150,13 +154,24 @@ public class BuergerUpdateForm extends CustomComponent {
         // die Schaltfläche zum Abbrechen
         buttonLayout.addComponent(new GenericCancelButton(
                 controller.resolveRelative(getFormPath(SimpleAction.cancel, Component.button, Type.label)),
-                new BuergerAppEvent(null, EventType.CANCEL).navigateTo(this.back), // hier kann eine 'null' gesetzt werden, weil nichts mehr mit dem Objekt passiert
+                new AppEvent<Buerger>(null, EventType.CANCEL).navigateTo(this.back), // hier kann eine 'null' gesetzt werden, weil nichts mehr mit dem Objekt passiert
                 this.controller.getEventbus()));
         setCompositionRoot(layout);
     }
 
-    @Subscribe
-    public void update(BuergerComponentEvent event) {
+
+    public String getNavigateBack() {
+        return back;
+    }
+
+    public void setNavigateBack(String navigateBack) {
+        this.back = navigateBack;
+    }
+
+    @Override
+    public void accept(reactor.bus.Event<ComponentEvent<Buerger>> eventWrapper) {
+        ComponentEvent event = eventWrapper.getData();
+
         if (event.getEventType().equals(EventType.SELECT2UPDATE)) {
             LOG.debug("seleted buerger to modify.");
             Optional<BeanItem<Buerger>> opt = event.getItem();
@@ -167,13 +182,4 @@ public class BuergerUpdateForm extends CustomComponent {
             }
         }
     }
-
-    public String getNavigateBack() {
-        return back;
-    }
-
-    public void setNavigateBack(String navigateBack) {
-        this.back = navigateBack;
-    }
-
 }
