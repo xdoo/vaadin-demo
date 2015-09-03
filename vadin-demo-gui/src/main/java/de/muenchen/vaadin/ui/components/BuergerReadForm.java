@@ -3,21 +3,26 @@ package de.muenchen.vaadin.ui.components;
 import com.google.common.eventbus.Subscribe;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.util.BeanItem;
-import com.vaadin.ui.*;
+import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
+import de.muenchen.vaadin.demo.api.util.EventType;
+import de.muenchen.vaadin.ui.app.views.BuergerPartnerSelectView;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
 import de.muenchen.vaadin.ui.components.buttons.ActionButton;
 import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
-import de.muenchen.vaadin.demo.api.util.EventType;
-import static de.muenchen.vaadin.ui.util.I18nPaths.*;
-import java.util.Optional;
-
 import de.muenchen.vaadin.ui.util.I18nPaths;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Optional;
+
+import static de.muenchen.vaadin.ui.util.I18nPaths.*;
 
 /**
  *
@@ -83,10 +88,20 @@ public class BuergerReadForm extends CustomComponent {
                 controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.label)),
                 controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.input_prompt)),
                 Buerger.NACHNAME, BuergerViewController.I18N_BASE_PATH));
+/*
+        layout.addComponent(controller.getUtil().createFormTextField(binder,
+                controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.label)),
+                controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.input_prompt)),
+                Buerger.NACHNAME, BuergerViewController.I18N_BASE_PATH));
+        */
         layout.addComponent(controller.getUtil().createFormDateField(
                 binder, controller.resolveRelative(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.label)),
                 Buerger.GEBURTSDATUM, BuergerViewController.I18N_BASE_PATH));
-        
+        ActionButton add = new ActionButton(controller, SimpleAction.add, BuergerPartnerSelectView.NAME);
+        add.addClickListener(clickEvent ->
+                        controller.postToEventBus(new BuergerAppEvent(EventType.ADD_PARTNER).navigateTo(BuergerPartnerSelectView.NAME).from(from))
+        );
+        layout.addComponent(add);
         // auf 'read only setzen
         this.binder.setReadOnly(true);
         layout.addComponent(buttonLayout);

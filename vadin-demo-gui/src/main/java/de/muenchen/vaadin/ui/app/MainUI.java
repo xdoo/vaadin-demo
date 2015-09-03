@@ -6,7 +6,10 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.server.*;
+import com.vaadin.server.FontAwesome;
+import com.vaadin.server.Responsive;
+import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinService;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
@@ -33,7 +36,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
 @SpringUI
@@ -95,7 +99,10 @@ public class MainUI extends UI implements ControllerContext {
         addStyleName(ValoTheme.UI_WITH_MENU);
 
         // configure navigator
-        this.navigator = new Navigator(this, this.viewDisplay);
+        AbsoluteLayout componentContainer = new AbsoluteLayout();
+        viewDisplay.addComponent(buildMenuBar());
+        viewDisplay.addComponent(componentContainer);
+        this.navigator = new Navigator(this, componentContainer);
         this.navigator.addProvider(viewProvider);
         setNavigator(this.navigator);
 
@@ -192,7 +199,6 @@ public class MainUI extends UI implements ControllerContext {
     private CssLayout buildMenu() {
         this.menu.addComponent(this.createMenuTitle());
         this.menu.addComponent(this.createNavigationMenu());
-        this.menu.addComponent(this.createLanguageSelector());
         return menu;
     }
 
@@ -209,32 +215,25 @@ public class MainUI extends UI implements ControllerContext {
         return top;
     }
 
-    private Component createLanguageSelector() {
-        final HorizontalLayout bottom = new HorizontalLayout();
+    private MenuBar buildMenuBar() {
+        MenuBar bar = new MenuBar();
+        bar.addStyleName(ValoTheme.MENUBAR_BORDERLESS);
+        addLanguageSelector(bar);
+        return bar;
+    }
 
-        ArrayList<String> languages = new ArrayList<>();
-        i18n.getSupportedLocales().stream().forEach(locale -> languages.add(locale.getDisplayLanguage()));
+    private MenuBar addLanguageSelector(MenuBar bar) {
+        MenuBar.MenuItem language = bar.addItem("Sprache", FontAwesome.LANGUAGE, null);
 
-        LOG.debug("Available Languages: " + i18n.getSupportedLocales().size());
-        ComboBox box = new ComboBox("Sprache", languages);
-        box.setValue(i18n.getLocale().getDisplayLanguage());
-        box.setNullSelectionAllowed(false);
-        box.setTextInputAllowed(false);
-
-
-        box.addValueChangeListener(valueChangeEvent -> i18n.getSupportedLocales().stream().forEach(locale -> {
-            if (valueChangeEvent.getProperty().getValue().equals(locale.getDisplayLanguage())) {
+        MenuBar.Command languageSelection = selectedItem -> i18n.getSupportedLocales().stream().forEach(locale -> {
+            if (selectedItem.getText().equals(locale.getDisplayLanguage())) {
                 i18n.setLocale(locale);
                 eventBus.post(new RefreshEvent());
             }
-        }));
+        });
 
-        bottom.setHeight("10%");
-        bottom.setMargin(false);
-        bottom.setSpacing(false);
-        bottom.addComponent(box);
-        bottom.setComponentAlignment(box, Alignment.BOTTOM_CENTER);
-        return bottom;
+        i18n.getSupportedLocales().stream().forEach(locale -> language.addItem(locale.getDisplayLanguage(), null, languageSelection));
+        return bar;
     }
 
     private Component createSettings() {

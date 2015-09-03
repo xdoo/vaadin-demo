@@ -8,6 +8,7 @@ import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.components.BuergerChildTab;
+import de.muenchen.vaadin.ui.components.BuergerPartnerTab;
 import de.muenchen.vaadin.ui.components.BuergerReadForm;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.I18nPaths;
@@ -28,6 +29,7 @@ public class BuergerDetailView extends DefaultBuergerView {
     public static final String NAME = "buerger_read_view";
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerDetailView.class);
     private BuergerChildTab childTab;
+    private BuergerPartnerTab partnerTab;
     private BuergerReadForm readForm;
     @Autowired
     public BuergerDetailView(BuergerViewController controller, MainUI ui) {
@@ -53,6 +55,11 @@ public class BuergerDetailView extends DefaultBuergerView {
         TabSheet.Tab kindTab = tabSheet.addTab(childTab);
         kindTab.setCaption(controller.resolveRelative(getEntityFieldPath(Buerger.KINDER, I18nPaths.Type.label)));
         
+
+
+        partnerTab=controller.getViewFactory().generatePartnerTab(BuergerDetailView.NAME, BuergerCreateChildView.NAME, BuergerPartnerSelectView.NAME, NAME);
+        TabSheet.Tab pTab = tabSheet.addTab(partnerTab);
+        pTab.setCaption("Partner"); // TODO -> i18n
         layout.addComponent(tabSheet);
         
         addComponent(layout);

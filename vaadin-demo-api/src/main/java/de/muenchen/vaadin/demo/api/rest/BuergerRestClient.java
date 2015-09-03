@@ -105,6 +105,14 @@ public interface BuergerRestClient {
     public List<Buerger> queryKinder(List<Link> links, RestTemplate restTemplate);
     
     /**
+     *
+     * @param links
+     * @param restTemplate
+     * @return
+     */
+    public List<Buerger> queryPartner(List<Link> links, RestTemplate restTemplate);
+
+    /**
      * 
      * @param buerger
      * @param kind
@@ -117,4 +125,5 @@ public interface BuergerRestClient {
 
     public Buerger releaseBuergerElternteil(Buerger buerger, Buerger kind, RestTemplate restTemplate);
     
+    public Buerger addBuergerPartner(Buerger buerger, Buerger kind, RestTemplate restTemplate);
 }

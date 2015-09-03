@@ -1,24 +1,13 @@
 package de.muenchen.demo.service.domain;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
-
 import org.hibernate.envers.Audited;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
+
+import javax.persistence.*;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -62,6 +51,9 @@ public class Buerger extends BaseEntity {
     @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
     private Set<Wohnung> wohnungen = new HashSet<>();
 
+    @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    private Set<Buerger> partner = new HashSet<>();
+
     public Buerger() {
     }
 
@@ -74,6 +66,7 @@ public class Buerger extends BaseEntity {
         this.wohnungen.addAll(buerger.wohnungen);
         this.staatsangehoerigkeiten.addAll(buerger.staatsangehoerigkeiten);
         this.kinder.addAll(buerger.kinder);
+        this.partner =buerger.partner;
     }
 
     public String getVorname() {
@@ -147,6 +140,10 @@ public class Buerger extends BaseEntity {
     public void setPass(Set<Pass> Pass) {
         this.pass = Pass;
     }
+
+    public Set<Buerger> getBeziehungsPartner(){return this.partner;}
+
+    public void setBeziehungsPartner(Buerger partner){ this.partner.add(partner); }
 
     @Override
     public String toString() {

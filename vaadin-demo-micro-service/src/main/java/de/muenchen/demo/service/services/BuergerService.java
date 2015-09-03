@@ -1,6 +1,7 @@
 package de.muenchen.demo.service.services;
 
 import de.muenchen.demo.service.domain.Buerger;
+
 import java.util.List;
 
 /**
@@ -58,5 +59,6 @@ public interface BuergerService {
     public void releaseStaatsangehoerigkeitBuerger(String staatOid, String buergerOid);
 
     public void releaseBuergerAllSachbearbeiter(String buergerOid);
+
 
 }
