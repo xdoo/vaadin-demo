@@ -99,7 +99,7 @@ public class MainUI extends UI implements ControllerContext {
         addStyleName(ValoTheme.UI_WITH_MENU);
 
         // configure navigator
-        AbsoluteLayout componentContainer = new AbsoluteLayout();
+        VerticalLayout componentContainer = new VerticalLayout();
         viewDisplay.addComponent(buildMenuBar());
         viewDisplay.addComponent(componentContainer);
         this.navigator = new Navigator(this, componentContainer);
