@@ -14,16 +14,32 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 public class ApplicationSecurity extends
         WebSecurityConfigurerAdapter {
 
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
+
+                // Allow anonymous resource requests
+                .antMatchers("/").permitAll()
+                .antMatchers("/favicon.ico").permitAll()
+                .antMatchers("**/*.html").permitAll()
+                .antMatchers("**/*.css").permitAll()
+                .antMatchers("**/*.js").permitAll()
+
+                // Allow anonymous service info request
                 .antMatchers("/service_info").permitAll()
+
+                // All other request need to be authenticated
                 .anyRequest().authenticated()
                 .and()
+
                 .httpBasic()
                 .and()
+
                 .csrf().disable();
 
     }
+
+
 }
