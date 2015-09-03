@@ -1,21 +1,22 @@
 package de.muenchen.vaadin.ui.app.views;
-import com.vaadin.server.Page;
-import com.vaadin.shared.Position;
-import com.vaadin.ui.*;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.server.Page;
 import com.vaadin.server.Responsive;
+import com.vaadin.shared.Position;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
+import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.services.SecurityService;
 import de.muenchen.vaadin.ui.app.views.events.LoginEvent;
 import de.muenchen.vaadin.ui.util.EventBus;
+import org.springframework.beans.factory.annotation.Autowired;
 @SpringView(name = LoginView.NAME)
 @UIScope
 public class LoginView extends VerticalLayout implements View {
@@ -44,6 +45,7 @@ public class LoginView extends VerticalLayout implements View {
         final VerticalLayout loginPanel = new VerticalLayout();
         loginPanel.setSizeUndefined();
         loginPanel.setSpacing(true);
+        loginPanel.setMargin(true);
         Responsive.makeResponsive(loginPanel);
         loginPanel.addStyleName("login-panel");
         loginPanel.addComponent(buildLabels());

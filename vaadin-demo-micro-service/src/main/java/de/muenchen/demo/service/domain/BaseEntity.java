@@ -1,19 +1,17 @@
 package de.muenchen.demo.service.domain;
 
-import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.OneToOne;
-
+import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.search.annotations.IndexedEmbedded;
+
+import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  *
  * @author claus.straube
  */
+@Audited
 @MappedSuperclass
 public abstract class BaseEntity implements Cloneable, Serializable {
 

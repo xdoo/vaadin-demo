@@ -9,6 +9,9 @@ import de.muenchen.vaadin.demo.api.rest.BuergerResource;
 import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
 import de.muenchen.vaadin.demo.api.rest.StaatsangehoerigkeitResource;
 import de.muenchen.vaadin.demo.api.rest.WohnungResource;
+import org.dozer.DozerBeanMapper;
+import org.hibernate.envers.AuditReader;
+import org.hibernate.envers.AuditReaderFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +27,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.annotation.security.RolesAllowed;
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
@@ -757,6 +762,27 @@ public class BuergerController {
         Set<Buerger> partner = this.service.read(oid).getBeziehungsPartner();
         SearchResultResource<BuergerResource> resource = this.assembler.toResource(Lists.newArrayList(partner));
         resource.add(linkTo(methodOn(BuergerController.class).readBuergerPartner(oid)).withSelfRel());
+        return ResponseEntity.ok(resource);
+    }
+
+    @Autowired
+    EntityManager entityManager;
+    @Autowired
+    DozerBeanMapper dozer;
+
+    @RequestMapping(value = "/audit/{id}", method = {RequestMethod.GET})
+    public ResponseEntity findAudits(@PathVariable("id") Long id) {
+        AuditReader reader = AuditReaderFactory.get(entityManager);
+        List<Number> revisions = reader.getRevisions(Buerger.class, id);
+
+        List<Buerger> buergerAudits = revisions.stream()
+                .map(number -> reader.find(Buerger.class, id, number))
+                .collect(Collectors.toList());
+
+        LOG.error(buergerAudits.get(0).toString());
+
+        SearchResultResource<BuergerResource> resource = this.assembler.toResource(Lists.newArrayList(buergerAudits));
+
         return ResponseEntity.ok(resource);
     }
 }
