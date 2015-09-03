@@ -93,6 +93,11 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
     }
 
     @Override
+    public List<Buerger> queryHistory(Buerger entity) {
+        return client.queryHistory(entity.getLinks(), getTemplate());
+    }
+
+    @Override
     public List<Buerger> queryPartner(Buerger entity) {
         return client.queryPartner(entity.getLinks(), getTemplate());
     }

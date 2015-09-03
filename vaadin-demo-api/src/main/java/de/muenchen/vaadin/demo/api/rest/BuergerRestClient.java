@@ -126,4 +126,6 @@ public interface BuergerRestClient {
     public Buerger releaseBuergerElternteil(Buerger buerger, Buerger kind, RestTemplate restTemplate);
     
     public Buerger addBuergerPartner(Buerger buerger, Buerger kind, RestTemplate restTemplate);
+
+    public List<Buerger> queryHistory(List<Link> links, RestTemplate restTemplate);
 }

@@ -60,5 +60,5 @@ public interface BuergerService {
 
     public void releaseBuergerAllSachbearbeiter(String buergerOid);
 
-
+    public Iterable<Buerger> readBuergerHistory(String oid);
 }

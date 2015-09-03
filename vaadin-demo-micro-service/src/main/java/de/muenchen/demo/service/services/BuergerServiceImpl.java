@@ -162,6 +162,12 @@ public class BuergerServiceImpl implements BuergerService {
         }
     }
 
+    @Override
+    public List<Buerger> readBuergerHistory(String query) {
+        repo.fin(StaatOid, readUser().getMandant().getOid());
+        return this.search.query(query);
+    }
+
     /**
      * read die Eltern Ein Bürger
      *

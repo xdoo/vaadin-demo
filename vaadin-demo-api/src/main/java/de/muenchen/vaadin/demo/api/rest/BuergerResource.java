@@ -34,6 +34,7 @@ public class BuergerResource extends BaseResource {
     public static final String RELEASE_WOHNUNG = "release_wohnung";
     public static final String RELEASE_WOHNUNGEN = "release_wohnungen";
     public static final String RELEASE_SACHBEARBEITER = "release_sachbearbeiter";
+    public static final String HISTORY = "history";
 
 
 
