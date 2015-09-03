@@ -374,10 +374,13 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
                 break;
             case SAVE_AS_PARTNER:
                 saveAsPartnerEventHandler(event);
+                break;
             case ADD_PARTNER:
                 addPartnerEventHandler(event);
+                break;
             case QUERY_PARTNER:
                 queryPartner(event.getEntity());
+                break;
             default:
                 LOG.debug("No matching handler found.");
         }
