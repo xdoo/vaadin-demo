@@ -34,7 +34,6 @@ import static de.muenchen.vaadin.ui.util.I18nPaths.Component;
 import static de.muenchen.vaadin.ui.util.I18nPaths.Type;
 import static de.muenchen.vaadin.ui.util.I18nPaths.getEntityFieldPath;
 import static de.muenchen.vaadin.ui.util.I18nPaths.getFormPath;
-import static reactor.bus.selector.Selectors.T;
 
 /**
  *
@@ -82,7 +81,7 @@ public class BuergerUpdateForm extends CustomComponent implements Consumer<Event
      */
     private void createForm() {
 
-        controller.getEventbus().on(T(ComponentEvent.class),this);
+        controller.registerToComponentEvent(this);
 
         FormLayout layout = new FormLayout();
         HorizontalLayout buttonLayout = new HorizontalLayout();

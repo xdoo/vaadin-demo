@@ -34,6 +34,7 @@ import java.util.Stack;
 import static de.muenchen.vaadin.ui.util.I18nPaths.NotificationType;
 import static de.muenchen.vaadin.ui.util.I18nPaths.Type;
 import static de.muenchen.vaadin.ui.util.I18nPaths.getNotificationPath;
+import static reactor.bus.selector.Selectors.T;
 
 /**
  * Der Controller ist die zentrale Klasse um die Logik im Kontext Buerger abzubilden.
@@ -102,7 +103,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
         //Set Controller in Factory after Contruct.
         //to prevent circular reference
         buergerViewFactory.setController(this);
-
+        registerToAppEvent(this);
     }
 
     
@@ -165,6 +166,14 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
     @Override
     public void postEvent(Object event) {
         getEventbus().notify(event.getClass(), Event.wrap(event));
+    }
+
+    public void registerToAppEvent(Consumer consumer){
+        getEventbus().on(T(AppEvent.class), consumer);
+    }
+
+    public void registerToComponentEvent(Consumer consumer){
+        getEventbus().on(T(ComponentEvent.class),consumer);
     }
 
 

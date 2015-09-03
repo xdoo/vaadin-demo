@@ -117,7 +117,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
         if(!childTab.isPresent())
         {
             BuergerChildTab tab = new BuergerChildTab(controller, navigateToForDetail, navigateForCreate, from);
-            getEventBus().on(T(ComponentEvent.class),tab);
+            controller.registerToComponentEvent(tab);
             childTab = Optional.of(tab);}
         return childTab.get();
     }
@@ -126,7 +126,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
         if(!partnerTab.isPresent())
         {
             BuergerPartnerTab tab = new BuergerPartnerTab(controller, navigateToForDetail, navigateForCreate, navigateForAdd, from);
-            getEventBus().on(T(ComponentEvent.class), tab);
+            controller.registerToComponentEvent( tab);
             partnerTab = Optional.of(tab);}
         return partnerTab.get();
     }
@@ -143,7 +143,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
         LOG.debug("creating 'update' buerger form");
         if(!updateForm.isPresent()){
             BuergerUpdateForm form = new BuergerUpdateForm(controller, navigateTo, controller.popFrom(), from);
-            getEventBus().on(T(ComponentEvent.class), form);
+            controller.registerToComponentEvent( form);
             controller.postEvent(new ComponentEvent<Buerger>(controller.getCurrent(), EventType.SELECT2UPDATE));
 
             updateForm=Optional.of(form);}
@@ -159,7 +159,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
         LOG.debug("creating 'read' buerger form");
         if(!readForm.isPresent()){
             BuergerReadForm form = new BuergerReadForm(controller, navigateToUpdate, controller.peekFrom(), from);
-            getEventBus().on(T(ComponentEvent.class), form);
+            controller.registerToComponentEvent( form);
             readForm=Optional.of(form);}
         controller.postEvent(new ComponentEvent<Buerger>(controller.getCurrent(), EventType.SELECT2READ));
         return readForm.get();
@@ -261,7 +261,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
 
         table.setFrom(from);
         List<Buerger> entities = controller.queryKinder(controller.getCurrent().getBean());
-        getEventBus().on(T(ComponentEvent.class), table);
+        controller.registerToComponentEvent( table);
         ComponentEvent<Buerger> event = new ComponentEvent<Buerger>(EventType.QUERY_CHILD);
         event.addEntities(entities);
         controller.postEvent(event);
@@ -280,7 +280,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
 
         table.setFrom(from);
         List<Buerger> entities = controller.queryPartner(controller.getCurrent().getBean());
-        getEventBus().on(T(ComponentEvent.class), table);
+        controller.registerToComponentEvent( table);
         ComponentEvent<Buerger> event = new ComponentEvent<Buerger>(EventType.QUERY_PARTNER);
         event.addEntities(entities);
         controller.postEvent(event);
@@ -299,7 +299,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
 
         table.setFrom(from);
 
-        getEventBus().on(T(ComponentEvent.class), table);
+        controller.registerToComponentEvent( table);
 
         return table;
     }
