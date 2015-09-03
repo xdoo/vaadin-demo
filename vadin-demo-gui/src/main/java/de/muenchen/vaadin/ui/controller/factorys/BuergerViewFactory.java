@@ -11,7 +11,18 @@ import de.muenchen.vaadin.ui.app.views.MainView;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
 import de.muenchen.vaadin.ui.app.views.events.RefreshEvent;
-import de.muenchen.vaadin.ui.components.*;
+import de.muenchen.vaadin.ui.components.BuergerChildTab;
+import de.muenchen.vaadin.ui.components.BuergerCreateForm;
+import de.muenchen.vaadin.ui.components.BuergerPartnerTab;
+import de.muenchen.vaadin.ui.components.BuergerReadForm;
+import de.muenchen.vaadin.ui.components.BuergerSearchTable;
+import de.muenchen.vaadin.ui.components.BuergerSelectTable;
+import de.muenchen.vaadin.ui.components.BuergerTable;
+import de.muenchen.vaadin.ui.components.BuergerUpdateForm;
+import de.muenchen.vaadin.ui.components.ChildTable;
+import de.muenchen.vaadin.ui.components.GenericConfirmationWindow;
+import de.muenchen.vaadin.ui.components.GenericTable;
+import de.muenchen.vaadin.ui.components.PartnerTable;
 import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.components.buttons.TableAction;
 import de.muenchen.vaadin.ui.components.buttons.TableActionButton;
@@ -42,14 +53,14 @@ public class BuergerViewFactory implements Serializable{
 
     /**Singeltons of Components. **/
     private transient Optional<BuergerSearchTable> searchTable = Optional.<BuergerSearchTable>empty();
-    private transient Optional<ChildSearchTable> childSearchTable = Optional.empty();
+    private transient Optional<BuergerSelectTable> childSearchTable = Optional.empty();
     private transient Optional<BuergerChildTab> childTab = Optional.empty();
     private transient Optional<BuergerCreateForm> createForm = Optional.empty();
     private transient Optional<BuergerCreateForm> createChildForm = Optional.empty();
     private transient Optional<BuergerCreateForm> createPartnerForm = Optional.empty();
     private transient Optional<BuergerUpdateForm> updateForm = Optional.empty();
     private transient Optional<BuergerReadForm> readForm = Optional.empty();
-    private transient Optional<BuergerPartnerSearchTable> partnerSearchTable = Optional.empty();
+    private transient Optional<BuergerSelectTable> partnerSearchTable = Optional.empty();
     private transient Optional<BuergerPartnerTab> partnerTab = Optional.empty();
 
 
@@ -180,7 +191,7 @@ public class BuergerViewFactory implements Serializable{
 
 
 
-    public ChildSearchTable generateChildSearchTable( String navigateFrom) {
+    public BuergerSelectTable generateChildSearchTable( String navigateFrom) {
 
 
         if(!childSearchTable.isPresent()){
@@ -189,7 +200,7 @@ public class BuergerViewFactory implements Serializable{
                             getEventBus().post(new BuergerAppEvent(container.getItem(id), id, EventType.SAVE_AS_CHILD))
             );
             LOG.debug("creating 'search' table for buerger");
-            childSearchTable = Optional.of(new ChildSearchTable(
+            childSearchTable = Optional.of(new BuergerSelectTable(
                     controller,
                     navigateFrom,
                     // Schaltflächen
@@ -198,7 +209,7 @@ public class BuergerViewFactory implements Serializable{
         return childSearchTable.get();
 
     }
-    public BuergerPartnerSearchTable generateBuergerPartnerSearchTable(String navigateFrom) {
+    public BuergerSelectTable generateBuergerPartnerSearchTable(String navigateFrom) {
 
 
         if(!partnerSearchTable.isPresent()){
@@ -207,7 +218,7 @@ public class BuergerViewFactory implements Serializable{
                             getEventBus().post(new BuergerAppEvent(container.getItem(id), id, EventType.SAVE_AS_PARTNER))
             );
             LOG.debug("creating 'partnerSearch' table for buerger");
-            partnerSearchTable = Optional.of(new BuergerPartnerSearchTable(
+            partnerSearchTable = Optional.of(new BuergerSelectTable(
                     controller,
                     navigateFrom,
                     // Schaltflächen
@@ -280,7 +291,7 @@ public class BuergerViewFactory implements Serializable{
 
         return table;
     }
-    
+
     private EventBus getEventBus(){
         return controller.getBus();
     }
