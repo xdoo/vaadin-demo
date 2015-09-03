@@ -298,6 +298,11 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 
         return service.queryPartner(entity);
     }
+
+    public List<Buerger> queryHistory(Buerger entity) {
+
+        return service.queryHistory(entity);
+    }
     
     /////////////////////
     // Event Steuerung //
@@ -363,10 +368,13 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
                 break;
             case SAVE_AS_PARTNER:
                 saveAsPartnerEventHandler(event);
+                break;
             case ADD_PARTNER:
                 addPartnerEventHandler(event);
+                break;
             case QUERY_PARTNER:
                 queryPartner(event.getEntity());
+                break;
             default:
                 LOG.debug("No matching handler found.");
         }
@@ -389,15 +397,15 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 
     private void historyHandler(BuergerAppEvent event) {
         LOG.error("History not yet implementet");
-
-        this.current = event.getItem();
+        this.eventbus.post(new BuergerComponentEvent(EventType.HISTORY).addEntities(this.queryHistory(event.getEntity())));
+        /*this.current = event.getItem();
 
         // UI Komponente aktualisieren
         this.eventbus.post(new BuergerComponentEvent(event.getItem().getBean(), EventType.HISTORY));
 
         // Verlauf protokollieren
         this.pushFrom(event);
-
+        */
         // Zur Seite wechseln
         navigateEventHandler(event);
 
