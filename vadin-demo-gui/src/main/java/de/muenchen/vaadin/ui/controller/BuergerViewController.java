@@ -13,8 +13,7 @@ import de.muenchen.vaadin.demo.api.util.EventType;
 import de.muenchen.vaadin.services.BuergerService;
 import de.muenchen.vaadin.services.MessageService;
 import de.muenchen.vaadin.ui.app.MainUI;
-import de.muenchen.vaadin.ui.app.views.ChildSelectWindow;
-import de.muenchen.vaadin.ui.app.views.PartnerSelectWindow;
+import de.muenchen.vaadin.ui.app.views.TableSelectWindow;
 import de.muenchen.vaadin.ui.app.views.events.AppEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
@@ -32,7 +31,9 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Stack;
 
-import static de.muenchen.vaadin.ui.util.I18nPaths.*;
+import static de.muenchen.vaadin.ui.util.I18nPaths.NotificationType;
+import static de.muenchen.vaadin.ui.util.I18nPaths.Type;
+import static de.muenchen.vaadin.ui.util.I18nPaths.getNotificationPath;
 
 /**
  * Der Controller ist die zentrale Klasse um die Logik im Kontext Buerger abzubilden.
@@ -235,6 +236,16 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
     }
 
     /**
+     * Speichert ein Kind zu einem {@link Buerger} Objekt in der Datenbank.
+     *
+     * @param entity Zu speicherndes Kind
+     * @return Buerger
+     */
+    public Buerger saveBuergerPartner(Buerger entity) {
+        return service.savePartner(getCurrent().getBean(), entity);
+    }
+
+    /**
      * Zerstört die Verbindung zwischen einem Bürger und seinem Kind
      *
      * @param event
@@ -349,6 +360,9 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
             case SAVE_CHILD:
                 saveChildEventHandler(event);
                 break;
+            case SAVE_PARTNER:
+                savePartnerEventHandler(event);
+                break;
             case SAVE_AS_CHILD:
                 saveAsChildEventHandler(event);
                 break;
@@ -360,10 +374,13 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
                 break;
             case SAVE_AS_PARTNER:
                 saveAsPartnerEventHandler(event);
+                break;
             case ADD_PARTNER:
                 addPartnerEventHandler(event);
+                break;
             case QUERY_PARTNER:
                 queryPartner(event.getEntity());
+                break;
             default:
                 LOG.debug("No matching handler found.");
         }
@@ -371,7 +388,8 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
     }
 
     private void addPartnerEventHandler(BuergerAppEvent event) {
-        navigator.getUI().addWindow(new PartnerSelectWindow(this, event.getFrom().get()));
+        navigator.getUI().addWindow(new TableSelectWindow(this, getViewFactory().generateBuergerPartnerSearchTable(event.getFrom().get())));
+        getEventbus().post(new BuergerAppEvent(EventType.QUERY));
     }
 
     private void saveAsPartnerEventHandler(BuergerAppEvent event) {
@@ -380,7 +398,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
                 resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.add, Type.label)),
                 resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.add, Type.text)));
         succes.show(Page.getCurrent());
-        this.eventbus.post(new BuergerComponentEvent(event.getEntity(), EventType.UPDATE));
+        this.eventbus.post(new BuergerComponentEvent(event.getEntity(), EventType.UPDATE_PARTNER));
         navigateEventHandler(event);
     }
 
@@ -410,12 +428,14 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
      * @param event mit gesetztem NavigateTo
      */
     private void navigateEventHandler(BuergerAppEvent event){
+        LOG.debug("navigating");
         getNavigator().navigateTo(event.getNavigateTo());
     }
 
     private void addSearchedChildEventHandler(BuergerAppEvent event){
 
-        navigator.getUI().addWindow(new ChildSelectWindow(this, event.getFrom().get()));
+        navigator.getUI().addWindow(new TableSelectWindow(this, getViewFactory().generateChildSearchTable(event.getFrom().get())));
+        getEventbus().post(new BuergerAppEvent(EventType.QUERY));
     }
 
     private void saveAsChildEventHandler(BuergerAppEvent event) {
@@ -516,6 +536,21 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
         this.saveBuergerKind(event.getEntity());
 
         getEventbus().post(new BuergerComponentEvent(event.getEntity(), EventType.SAVE_CHILD));
+
+        GenericSuccessNotification succes = new GenericSuccessNotification(
+                resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.save, Type.label)),
+                resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.save, Type.text)));
+        succes.show(Page.getCurrent());
+        // Zur Seite wechseln
+        navigateEventHandler(event);
+    }
+
+    private void savePartnerEventHandler(BuergerAppEvent event) {
+
+        // Service Operation ausführen
+        this.saveBuergerPartner(event.getEntity());
+
+        getEventbus().post(new BuergerComponentEvent(event.getEntity(), EventType.SAVE_PARTNER));
 
         GenericSuccessNotification succes = new GenericSuccessNotification(
                 resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.save, Type.label)),

@@ -10,7 +10,6 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.demo.api.util.EventType;
-import de.muenchen.vaadin.ui.app.views.BuergerPartnerSelectView;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
 import de.muenchen.vaadin.ui.components.buttons.ActionButton;
@@ -22,7 +21,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 
-import static de.muenchen.vaadin.ui.util.I18nPaths.*;
+import static de.muenchen.vaadin.ui.util.I18nPaths.Type;
+import static de.muenchen.vaadin.ui.util.I18nPaths.getEntityFieldPath;
+import static de.muenchen.vaadin.ui.util.I18nPaths.getFormPath;
 
 /**
  *
@@ -97,11 +98,7 @@ public class BuergerReadForm extends CustomComponent {
         layout.addComponent(controller.getUtil().createFormDateField(
                 binder, controller.resolveRelative(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.label)),
                 Buerger.GEBURTSDATUM, BuergerViewController.I18N_BASE_PATH));
-        ActionButton add = new ActionButton(controller, SimpleAction.add, BuergerPartnerSelectView.NAME);
-        add.addClickListener(clickEvent ->
-                        controller.postToEventBus(new BuergerAppEvent(EventType.ADD_PARTNER).navigateTo(BuergerPartnerSelectView.NAME).from(from))
-        );
-        layout.addComponent(add);
+       
         // auf 'read only setzen
         this.binder.setReadOnly(true);
         layout.addComponent(buttonLayout);

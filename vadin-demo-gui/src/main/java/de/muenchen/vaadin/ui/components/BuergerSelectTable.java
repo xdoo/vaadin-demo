@@ -12,12 +12,14 @@ import org.slf4j.LoggerFactory;
  *
  * @author claus.straube
  */
-public class ChildSearchTable extends CustomComponent {
-    BuergerSearchForm search;
+public class BuergerSelectTable extends CustomComponent {
 
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerSearchTable.class);
+
+    BuergerSearchForm search;
     private GenericTable table;
-    public ChildSearchTable(final BuergerViewController controller, String from, final TableActionButton.Builder... buttonfactory) {
+
+    public BuergerSelectTable(final BuergerViewController controller, String from, final TableActionButton.Builder... buttonfactory) {
     
         table = controller.getViewFactory().generateTable(from, buttonfactory);
         table.setSizeUndefined();
