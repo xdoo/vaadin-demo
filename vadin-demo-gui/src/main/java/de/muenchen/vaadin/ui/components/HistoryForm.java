@@ -61,7 +61,7 @@ public class HistoryForm  extends CustomComponent {
     }
 
     private void createForm() {
-        LOG.error("createFrom started");
+        LOG.debug("createFrom started");
         FormLayout layout = new FormLayout();
         HorizontalLayout buttonLayout = new HorizontalLayout();
         buttonLayout.setSpacing(true);
@@ -79,8 +79,6 @@ public class HistoryForm  extends CustomComponent {
         }));
         layout.addComponent(backButton);
         setCompositionRoot(layout);
-
-        LOG.error("Y U NOT WORK?");
     }
 
     @Subscribe

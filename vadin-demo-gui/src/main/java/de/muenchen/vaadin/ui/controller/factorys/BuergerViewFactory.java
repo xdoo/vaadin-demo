@@ -155,10 +155,9 @@ public class BuergerViewFactory implements Serializable{
                         win.center();
                         win.focus();
                     }
-                            //getEventBus().post(new BuergerAppEvent(container.getItem(id),id,EventType.DELETE).navigateTo(navigateToForEdit).from(navigateFrom))
             );
             TableActionButton.Builder history = TableActionButton.Builder.<Buerger>make(controller, TableAction.tablehistory,navigateToForHistory, (container, id) ->
-                            getEventBus().post(new BuergerAppEvent(container.getItem(id),id, HISTORY).navigateTo(navigateToForHistory).from(navigateFrom))
+                            getEventBus().post(new BuergerAppEvent(container.getItem(id),id, EventType.HISTORY).navigateTo(navigateToForHistory).from(navigateFrom))
             );
 
             searchTable=Optional.of(new BuergerSearchTable(
@@ -176,7 +175,7 @@ public class BuergerViewFactory implements Serializable{
 
 
     public HistoryForm generateHistoryTable(String navigateFrom){
-        LOG.error("creating 'history' buerger form");
+        LOG.debug("creating 'history' buerger form");
         if(!historyForm.isPresent()){
             HistoryForm form = new HistoryForm(controller, navigateFrom);
             historyForm=Optional.of(form);}
@@ -307,6 +306,8 @@ public class BuergerViewFactory implements Serializable{
         updateForm = Optional.empty();
         readForm = Optional.empty();
         historyForm = Optional.empty();
+        partnerSearchTable = Optional.empty();
+        partnerTab = Optional.empty();
 
         //Work around to reload the current page for the changes to take effect.
         String old = controller.getNavigator().getState();
