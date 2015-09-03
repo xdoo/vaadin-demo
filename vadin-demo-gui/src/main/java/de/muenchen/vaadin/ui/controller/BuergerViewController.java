@@ -358,6 +358,9 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
             case RELEASE_PARENT:
                 releaseParentHandler(event);
                 break;
+            case HISTORY:
+                historyHandler(event);
+                break;
             case SAVE_AS_PARTNER:
                 saveAsPartnerEventHandler(event);
             case ADD_PARTNER:
@@ -382,6 +385,22 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
         succes.show(Page.getCurrent());
         this.eventbus.post(new BuergerComponentEvent(event.getEntity(), EventType.UPDATE));
         navigateEventHandler(event);
+    }
+
+    private void historyHandler(BuergerAppEvent event) {
+        LOG.error("History not yet implementet");
+
+        this.current = event.getItem();
+
+        // UI Komponente aktualisieren
+        this.eventbus.post(new BuergerComponentEvent(event.getItem().getBean(), EventType.HISTORY));
+
+        // Verlauf protokollieren
+        this.pushFrom(event);
+
+        // Zur Seite wechseln
+        navigateEventHandler(event);
+
     }
 
 

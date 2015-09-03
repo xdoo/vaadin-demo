@@ -30,7 +30,7 @@ public class BuergerTableView extends DefaultBuergerView {
     @Override
     protected void site() {     
 
-        table= this.controller.getViewFactory().generateSearchTable(BuergerUpdateView.NAME, BuergerDetailView.NAME, BuergerCreateView.NAME, BuergerTableView.NAME);
+        table= this.controller.getViewFactory().generateSearchTable(BuergerUpdateView.NAME, BuergerDetailView.NAME, BuergerCreateView.NAME, BuergerTableView.NAME, BuergerHistoryView.NAME);
         addComponent(table);
         table.refresh();
     }
