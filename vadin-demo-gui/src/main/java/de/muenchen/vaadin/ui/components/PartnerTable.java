@@ -27,6 +27,9 @@ public class PartnerTable extends GenericTable<Buerger> {
         if(event.getEventType().equals(EventType.SAVE_AS_PARTNER)) {
             this.add(event.getEntity());
         }
+        if(event.getEventType().equals(EventType.SAVE_PARTNER)) {
+            this.add(event.getEntity());
+        }
         
        /* if(event.getEventType().equals(EventType.COPY)) {
             this.add(event.getEntity());
@@ -36,7 +39,7 @@ public class PartnerTable extends GenericTable<Buerger> {
             this.delete(event.getItemID());
         }
 
-        if(event.getEventType().equals(EventType.UPDATE)) {
+        if(event.getEventType().equals(EventType.UPDATE_PARTNER)) {
             this.add(event.getEntity());
         }
 

@@ -84,6 +84,13 @@ public class BuergerRestClientImpl implements BuergerRestClient {
         LOG.warn("used Link: "+link.get().toString());
         return this.writeSingleSource(link, kind, restTemplate);
     }
+
+    @Override
+    public Buerger saveBuergerPartner(Buerger buerger, Buerger partner, RestTemplate restTemplate) {
+        Optional<Link> link = HateoasUtil.findLinkForRel(BuergerResource.SAVE_PARTNER, buerger.getLinks());
+        LOG.warn("used Link: "+link.get().toString());
+        return this.writeSingleSource(link, partner, restTemplate);
+    }
     
     
     @Override

@@ -98,10 +98,7 @@ public class BuergerReadForm extends CustomComponent {
                 binder, controller.resolveRelative(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.label)),
                 Buerger.GEBURTSDATUM, BuergerViewController.I18N_BASE_PATH));
         ActionButton add = new ActionButton(controller, SimpleAction.add, BuergerPartnerSelectView.NAME);
-        add.addClickListener(clickEvent ->
-                        controller.postToEventBus(new BuergerAppEvent(EventType.ADD_PARTNER).navigateTo(BuergerPartnerSelectView.NAME).from(from))
-        );
-        layout.addComponent(add);
+       
         // auf 'read only setzen
         this.binder.setReadOnly(true);
         layout.addComponent(buttonLayout);

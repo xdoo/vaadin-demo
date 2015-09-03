@@ -46,6 +46,7 @@ public class BuergerViewFactory implements Serializable{
     private transient Optional<BuergerChildTab> childTab = Optional.empty();
     private transient Optional<BuergerCreateForm> createForm = Optional.empty();
     private transient Optional<BuergerCreateForm> createChildForm = Optional.empty();
+    private transient Optional<BuergerCreateForm> createPartnerForm = Optional.empty();
     private transient Optional<BuergerUpdateForm> updateForm = Optional.empty();
     private transient Optional<BuergerReadForm> readForm = Optional.empty();
     private transient Optional<BuergerPartnerSearchTable> partnerSearchTable = Optional.empty();
@@ -71,6 +72,14 @@ public class BuergerViewFactory implements Serializable{
             BuergerCreateForm form = new BuergerCreateForm(controller, navigateTo, EventType.SAVE_CHILD);
             createChildForm=Optional.of(form);}
         return createChildForm.get();
+    }
+
+    public BuergerCreateForm generateCreatePartnerForm(String navigateTo) {
+        LOG.debug("creating 'create partner' buerger form");
+        if(!createPartnerForm.isPresent()){
+            BuergerCreateForm form = new BuergerCreateForm(controller, navigateTo, EventType.SAVE_PARTNER);
+            createPartnerForm=Optional.of(form);}
+        return createPartnerForm.get();
     }
 
     /**
@@ -292,6 +301,7 @@ public class BuergerViewFactory implements Serializable{
         childTab = Optional.empty();
         createForm = Optional.empty();
         createChildForm = Optional.empty();
+        createPartnerForm = Optional.empty();
         updateForm = Optional.empty();
         readForm = Optional.empty();
 
