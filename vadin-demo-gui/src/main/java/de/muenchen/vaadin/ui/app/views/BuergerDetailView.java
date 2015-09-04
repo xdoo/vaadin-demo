@@ -57,7 +57,7 @@ public class BuergerDetailView extends DefaultBuergerView {
         
 
 
-        partnerTab=controller.getViewFactory().generatePartnerTab(BuergerDetailView.NAME, BuergerCreateChildView.NAME, BuergerPartnerSelectView.NAME, NAME);
+        partnerTab=controller.getViewFactory().generatePartnerTab(BuergerDetailView.NAME, BuergerCreatePartnerView.NAME, BuergerPartnerSelectView.NAME, NAME);
         TabSheet.Tab pTab = tabSheet.addTab(partnerTab);
         pTab.setCaption("Partner"); // TODO -> i18n
         layout.addComponent(tabSheet);

@@ -372,6 +372,30 @@ public class BuergerController {
     }
 
     /**
+     * Erzeugt ein partner als Buerger und assoziiert ihm mit einem Buerger .
+     *
+     * @param oid
+     * @param request
+     * @return
+     */
+    @Secured({"PERM_createPartnerBuerger"})
+    @RequestMapping(value = "/create/partner/{oid}", method = {RequestMethod.POST})
+    public ResponseEntity createPartnerBuerger(@PathVariable("oid") String oid, @RequestBody BuergerResource request) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Create Kind buerger");
+        }
+        Buerger partner = new Buerger();
+        this.assembler.fromResource(request, partner);
+        this.service.save(partner);
+        Buerger entity = service.read(oid);
+        entity.getBeziehungsPartner().add(partner);
+        this.service.update(entity);
+
+        BuergerResource resource = this.assembler.assembleWithAllLinks(entity);
+        return ResponseEntity.ok(resource);
+    }
+
+    /**
      * Assoziiert ein Kind mit einem Buerger .
      *
      * @param buergerOid

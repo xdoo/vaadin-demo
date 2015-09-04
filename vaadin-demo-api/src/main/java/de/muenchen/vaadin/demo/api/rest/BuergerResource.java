@@ -13,6 +13,7 @@ public class BuergerResource extends BaseResource {
     public static final String PARTNER = "partner";
     public static final String SAVE_KIND = "save_kind";
     public static final String ADD_KIND = "add_kind";
+    public static final String SAVE_PARTNER = "save_partner";
     public static final String ADD_PARTNER = "add_partner";
     public static final String READ_PARTNER = "read_partner";
     public static final String WOHNUNGEN = "wohnungen";

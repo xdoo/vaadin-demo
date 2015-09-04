@@ -1,9 +1,10 @@
 package de.muenchen.vaadin.demo.api.rest;
 
 import de.muenchen.vaadin.demo.api.domain.Buerger;
-import java.util.List;
 import org.springframework.hateoas.Link;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 
 /**
  *
@@ -128,4 +129,6 @@ public interface BuergerRestClient {
     public Buerger addBuergerPartner(Buerger buerger, Buerger kind, RestTemplate restTemplate);
 
     public List<Buerger> queryHistory(List<Link> links, RestTemplate restTemplate);
+
+    public Buerger saveBuergerPartner(Buerger buerger, Buerger partner, RestTemplate restTemplate);
 }
