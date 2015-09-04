@@ -262,8 +262,8 @@ public class BuergerResourceAssembler {
                 de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_WOHNUNG,
                 de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_SACHBEARBEITER,
                 de.muenchen.vaadin.demo.api.rest.BuergerResource.PARTNER,
-                de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_PARTNER,
                 de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_PARTNER,
+                de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_PARTNER,
                 de.muenchen.vaadin.demo.api.rest.BuergerResource.HISTORY
         );
     }

@@ -1,6 +1,5 @@
 package de.muenchen.vaadin.ui.components;
 
-import com.google.common.eventbus.Subscribe;
 import com.vaadin.data.Validator;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
@@ -17,14 +16,16 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.demo.api.util.EventType;
-import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
-import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
+import de.muenchen.vaadin.ui.app.views.events.AppEvent;
+import de.muenchen.vaadin.ui.app.views.events.ComponentEvent;
 import de.muenchen.vaadin.ui.components.buttons.ActionButton;
 import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.ValidatorFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import reactor.bus.Event;
+import reactor.fn.Consumer;
 
 import java.util.Optional;
 
@@ -37,7 +38,7 @@ import static de.muenchen.vaadin.ui.util.I18nPaths.getFormPath;
  *
  * @author claus
  */
-public class BuergerUpdateForm extends CustomComponent {
+public class BuergerUpdateForm extends CustomComponent implements Consumer<Event<ComponentEvent<Buerger>>> {
 
     /**
      * Logger
@@ -75,6 +76,8 @@ public class BuergerUpdateForm extends CustomComponent {
      * Erzeugt das eigentliche Formular.
      */
     private void createForm() {
+
+        controller.registerToComponentEvent(this);
 
         FormLayout layout = new FormLayout();
         HorizontalLayout buttonLayout = new HorizontalLayout();
@@ -133,7 +136,7 @@ public class BuergerUpdateForm extends CustomComponent {
             try {
                 binder.commit();
                 Buerger buerger = binder.getItemDataSource().getBean();
-                getController().postToEventBus(new BuergerAppEvent(buerger, EventType.UPDATE));
+                controller.postEvent(new AppEvent<Buerger>(buerger, EventType.UPDATE));
                 getNavigator().navigateTo(getNavigateTo());
             } catch (FieldGroup.CommitException e) {
                 GenericErrorNotification errorNotification = new GenericErrorNotification("Fehler", "Beim erstellen der Person ist ein Fehler aufgetreten. Bitte füllen Sie alle Felder mit gültigen Werten aus.");
@@ -150,8 +153,10 @@ public class BuergerUpdateForm extends CustomComponent {
         setCompositionRoot(layout);
     }
 
-    @Subscribe
-    public void update(BuergerComponentEvent event) {
+    @Override
+    public void accept(reactor.bus.Event<ComponentEvent<Buerger>> eventWrapper) {
+        ComponentEvent event = eventWrapper.getData();
+
         if (event.getEventType().equals(EventType.SELECT2UPDATE)) {
             LOG.debug("seleted buerger to modify.");
             Optional<BeanItem<Buerger>> opt = event.getItem();

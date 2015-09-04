@@ -18,7 +18,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.demo.api.util.EventType;
-import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
+import de.muenchen.vaadin.ui.app.views.events.AppEvent;
 import de.muenchen.vaadin.ui.components.buttons.ActionButton;
 import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
@@ -160,7 +160,7 @@ public class BuergerCreateForm extends CustomComponent {
                 birthdayfield.validate();
                 
                 binder.commit();
-                controller.getEventbus().post(new BuergerAppEvent(binder.getItemDataSource().getBean(), this.type));
+                controller.postEvent(new AppEvent<Buerger>(binder.getItemDataSource().getBean(), this.type));
                 getNavigator().navigateTo(getNavigateTo());
 
                 //reset

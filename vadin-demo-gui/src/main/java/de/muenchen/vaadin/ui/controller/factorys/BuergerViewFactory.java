@@ -1,7 +1,5 @@
 package de.muenchen.vaadin.ui.controller.factorys;
 
-import com.google.common.eventbus.EventBus;
-import com.google.common.eventbus.Subscribe;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Notification;
@@ -10,8 +8,8 @@ import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.demo.api.util.EventType;
 import de.muenchen.vaadin.ui.app.views.BuergerTableView;
 import de.muenchen.vaadin.ui.app.views.MainView;
-import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
-import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
+import de.muenchen.vaadin.ui.app.views.events.AppEvent;
+import de.muenchen.vaadin.ui.app.views.events.ComponentEvent;
 import de.muenchen.vaadin.ui.app.views.events.RefreshEvent;
 import de.muenchen.vaadin.ui.components.*;
 import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
@@ -20,20 +18,31 @@ import de.muenchen.vaadin.ui.components.buttons.TableActionButton;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import reactor.bus.Event;
+import reactor.bus.EventBus;
+import reactor.fn.Consumer;
 
+import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
+
+import static reactor.bus.selector.Selectors.T;
 
 /**
  * Created by rene.zarwel on 26.08.15.
  */
 @Component
 @UIScope
-public class BuergerViewFactory implements Serializable{
+public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshEvent>>{
 
     public static final String PENDING_FROM = BuergerTableView.NAME;
+
+    @Autowired
+    EventBus eventBus;
+
     /**
      * Logger
      */
@@ -50,10 +59,14 @@ public class BuergerViewFactory implements Serializable{
     private transient Optional<BuergerCreateForm> createPartnerForm = Optional.empty();
     private transient Optional<BuergerUpdateForm> updateForm = Optional.empty();
     private transient Optional<BuergerReadForm> readForm = Optional.empty();
-    private transient Optional<BuergerSelectTable> partnerSearchTable = Optional.empty();
     private transient Optional<HistoryForm> historyForm = Optional.empty();
+    private transient Optional<BuergerSelectTable> partnerSearchTable = Optional.empty();
     private transient Optional<BuergerPartnerTab> partnerTab = Optional.empty();
 
+    @PostConstruct
+    public void init(){
+        eventBus.on(T(RefreshEvent.class),this);
+    }
 
 
     //////////////////////////////////////////////
@@ -97,7 +110,7 @@ public class BuergerViewFactory implements Serializable{
         if(!childTab.isPresent())
         {
             BuergerChildTab tab = new BuergerChildTab(controller, navigateToForDetail, navigateForCreate, navigateBack);
-            getEventBus().register(tab);
+            controller.registerToComponentEvent(tab);
             childTab = Optional.of(tab);}
         return childTab.get();
     }
@@ -106,7 +119,7 @@ public class BuergerViewFactory implements Serializable{
         if(!partnerTab.isPresent())
         {
             BuergerPartnerTab tab = new BuergerPartnerTab(controller, navigateToForDetail, navigateForCreate, navigateForAdd, navigateBack);
-            getEventBus().register(tab);
+            controller.registerToComponentEvent(tab);
             partnerTab = Optional.of(tab);}
         return partnerTab.get();
     }
@@ -123,8 +136,8 @@ public class BuergerViewFactory implements Serializable{
         LOG.debug("creating 'update' buerger form");
         if(!updateForm.isPresent()){
             BuergerUpdateForm form = new BuergerUpdateForm(controller, navigateTo, PENDING_FROM);
-            getEventBus().register(form);
-            getEventBus().post(new BuergerComponentEvent(controller.getCurrent(), EventType.SELECT2UPDATE));
+            controller.registerToComponentEvent(form);
+            controller.postEvent(new ComponentEvent<Buerger>(controller.getCurrent(), EventType.SELECT2UPDATE));
 
             updateForm=Optional.of(form);}
         return updateForm.get();
@@ -139,9 +152,9 @@ public class BuergerViewFactory implements Serializable{
         LOG.debug("creating 'read' buerger form");
         if(!readForm.isPresent()){
             BuergerReadForm form = new BuergerReadForm(controller, navigateToUpdate, PENDING_FROM);
-            getEventBus().register(form);
+            controller.registerToComponentEvent(form);
             readForm=Optional.of(form);}
-        getEventBus().post(new BuergerComponentEvent(controller.getCurrent(), EventType.SELECT2READ));
+        controller.postEvent(new ComponentEvent<Buerger>(controller.getCurrent(), EventType.SELECT2READ));
         return readForm.get();
     }
 
@@ -150,27 +163,28 @@ public class BuergerViewFactory implements Serializable{
         if(!searchTable.isPresent()){
             LOG.debug("new searchtabel");
             TableActionButton.Builder detail = TableActionButton.Builder.<Buerger>make(controller, TableAction.tabledetail, navigateToForDetail, (container, id) -> {
-                getEventBus().post(new BuergerAppEvent(container.getItem(id), id, EventType.SELECT2READ));
+                controller.postEvent(new AppEvent<Buerger>(container.getItem(id), id, EventType.SELECT2READ));
                 getController().getNavigator().navigateTo(navigateToForDetail);
             });
             TableActionButton.Builder edit = TableActionButton.Builder.<Buerger>make(controller, TableAction.tableedit, navigateToForEdit, (container, id) -> {
-                getEventBus().post(new BuergerAppEvent(container.getItem(id), id, EventType.SELECT2UPDATE));
+                controller.postEvent(new AppEvent<Buerger>(container.getItem(id), id, EventType.SELECT2UPDATE));
                 getController().getNavigator().navigateTo(navigateToForEdit);
             });
             TableActionButton.Builder copy = TableActionButton.Builder.<Buerger>make(controller, TableAction.tablecopy,null, (container, id) ->
-                            getEventBus().post(new BuergerAppEvent(container.getItem(id),id,EventType.COPY))
+                            controller.postEvent(new AppEvent<Buerger>(container.getItem(id), id, EventType.COPY))
             );
             TableActionButton.Builder delete = TableActionButton.Builder.<Buerger>make(controller, TableAction.tabledelete,navigateToForEdit, (container, id) ->
                     {
                         BeanItem<Buerger> item = container.getItem(id);
-                        GenericConfirmationWindow win = new GenericConfirmationWindow(new BuergerAppEvent(item, id, EventType.DELETE), controller, SimpleAction.delete);
+                        GenericConfirmationWindow win = new GenericConfirmationWindow(new AppEvent<Buerger>(item, id, EventType.DELETE), controller, SimpleAction.delete);
                         controller.getNavigator().getUI().addWindow(win);
                         win.center();
                         win.focus();
                     }
+                    //getEventBus().post(new BuergerAppEvent(container.getItem(id),id,EventType.DELETE).navigateTo(navigateToForEdit).navigateBack(navigateFrom))
             );
-            TableActionButton.Builder history = TableActionButton.Builder.<Buerger>make(controller, TableAction.tablehistory,navigateToForHistory, (container, id) ->
-                            getEventBus().post(new BuergerAppEvent(container.getItem(id), id, EventType.HISTORY))
+            TableActionButton.Builder history = TableActionButton.Builder.<Buerger>make(controller, TableAction.tablehistory, navigateToForHistory, (container, id) ->
+                            controller.postEvent(new AppEvent<>(container.getItem(id), id, EventType.HISTORY))
             );
 
             searchTable=Optional.of(new BuergerSearchTable(
@@ -192,7 +206,7 @@ public class BuergerViewFactory implements Serializable{
         if(!childSearchTable.isPresent()){
             //BuergerTableButtonFactory detail = BuergerTableButtonFactory.getFactory(navigateToForDetail, BuergerTableDetailButton.class);
             TableActionButton.Builder select = TableActionButton.Builder.<Buerger>make(controller, TableAction.tableadd,null, (container, id) ->
-                            getEventBus().post(new BuergerAppEvent(container.getItem(id), id, EventType.SAVE_AS_CHILD))
+                            controller.postEvent(new AppEvent<Buerger>(container.getItem(id), id, EventType.SAVE_AS_CHILD))
             );
             LOG.debug("creating 'search' table for buerger");
             childSearchTable = Optional.of(new BuergerSelectTable(
@@ -210,7 +224,7 @@ public class BuergerViewFactory implements Serializable{
         if(!partnerSearchTable.isPresent()){
             //BuergerTableButtonFactory detail = BuergerTableButtonFactory.getFactory(navigateToForDetail, BuergerTableDetailButton.class);
             TableActionButton.Builder select = TableActionButton.Builder.<Buerger>make(controller, TableAction.tableadd, null, (container, id) ->
-                            getEventBus().post(new BuergerAppEvent(container.getItem(id), id, EventType.SAVE_AS_PARTNER))
+                            controller.postEvent(new AppEvent<Buerger>(container.getItem(id), id, EventType.SAVE_AS_PARTNER))
             );
             LOG.debug("creating 'partnerSearch' table for buerger");
             partnerSearchTable = Optional.of(new BuergerSelectTable(
@@ -226,14 +240,14 @@ public class BuergerViewFactory implements Serializable{
     public ChildTable generateChildTable(String navigateToForDetail, String navigateBack) {
 
         TableActionButton.Builder detail = TableActionButton.Builder.<Buerger>make(controller, TableAction.tabledetail, navigateToForDetail, (container, id) -> {
-            getEventBus().post(new BuergerAppEvent(container.getItem(id), id, EventType.SELECT2READ));
+            controller.postEvent(new AppEvent<Buerger>(container.getItem(id), id, EventType.SELECT2READ));
             getController().getNavigator().navigateTo(navigateToForDetail);
         });
 
         TableActionButton.Builder delete = TableActionButton.Builder.<Buerger>make(controller, TableAction.tabledelete,navigateToForDetail, (container, id) ->
                 {
                     BeanItem<Buerger> item = container.getItem(id);
-                    GenericConfirmationWindow win = new GenericConfirmationWindow(new BuergerAppEvent(container.getItem(id), id, EventType.RELEASE_PARENT), controller, SimpleAction.release);
+                    GenericConfirmationWindow win = new GenericConfirmationWindow(new AppEvent<Buerger>(container.getItem(id), id, EventType.RELEASE_PARENT), controller, SimpleAction.release);
                     controller.getNavigator().getUI().addWindow(win);
                     win.center();
                     win.focus();
@@ -244,10 +258,10 @@ public class BuergerViewFactory implements Serializable{
         ChildTable table = new ChildTable(controller, detail, delete);
 
         List<Buerger> entities = controller.queryKinder(controller.getCurrent().getBean());
-        getEventBus().register(table);
-        BuergerComponentEvent event = new BuergerComponentEvent(EventType.QUERY_CHILD);
+        controller.registerToComponentEvent(table);
+        ComponentEvent<Buerger> event = new ComponentEvent<Buerger>(EventType.QUERY_CHILD);
         event.addEntities(entities);
-        getEventBus().post(event);
+        controller.postEvent(event);
 
 
         return table;
@@ -256,16 +270,16 @@ public class BuergerViewFactory implements Serializable{
     public PartnerTable generatePartnerTable(String navigateToForDetail, String navigateBack) {
 
         TableActionButton.Builder detail = TableActionButton.Builder.<Buerger>make(controller, TableAction.tabledetail, navigateToForDetail, (container, id) -> {
-            getEventBus().post(new BuergerAppEvent(container.getItem(id), id, EventType.SELECT2READ));
+            controller.postEvent(new AppEvent<Buerger>(container.getItem(id), id, EventType.SELECT2READ));
             getController().getNavigator().navigateTo(navigateToForDetail);
         });
         LOG.debug("creating table for partner");
         PartnerTable table = new PartnerTable(controller, detail);
         List<Buerger> entities = controller.queryPartner(controller.getCurrent().getBean());
-        getEventBus().register(table);
-        BuergerComponentEvent event = new BuergerComponentEvent(EventType.QUERY_PARTNER);
+        controller.registerToComponentEvent(table);
+        ComponentEvent<Buerger> event = new ComponentEvent<Buerger>(EventType.QUERY_PARTNER);
         event.addEntities(entities);
-        getEventBus().post(event);
+        controller.postEvent(event);
 
 
         return table;
@@ -294,10 +308,10 @@ public class BuergerViewFactory implements Serializable{
 
         HistoryTable table = new HistoryTable(controller, detail);
         List<Buerger> entities = controller.queryHistory(controller.getCurrent().getBean());
-        getEventBus().register(table);
-        BuergerComponentEvent event = new BuergerComponentEvent(EventType.HISTORY);
+        getController().registerToComponentEvent(table);
+        ComponentEvent<Buerger> event = new ComponentEvent<>(EventType.HISTORY);
         event.addEntities(entities);
-        getEventBus().post(event);
+        getController().postEvent(event);
 
         return table;
     }
@@ -310,7 +324,7 @@ public class BuergerViewFactory implements Serializable{
         LOG.debug("creating table for buerger");
         GenericTable table = new BuergerTable(controller, buttonBuilders);
 
-        getEventBus().register(table);
+        controller.registerToComponentEvent(table);
 
         return table;
     }
@@ -327,8 +341,10 @@ public class BuergerViewFactory implements Serializable{
         this.controller = controller;
     }
 
-    @Subscribe
-    public void refresh(RefreshEvent event){
+    @Override
+    public void accept(reactor.bus.Event<RefreshEvent> eventWrapper){
+        RefreshEvent event = eventWrapper.getData();
+
         LOG.debug("RefreshEvent received");
         searchTable = Optional.<BuergerSearchTable>empty();
         childSearchTable = Optional.empty();

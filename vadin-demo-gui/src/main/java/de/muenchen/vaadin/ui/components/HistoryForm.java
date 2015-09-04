@@ -1,6 +1,5 @@
 package de.muenchen.vaadin.ui.components;
 
-import com.google.common.eventbus.Subscribe;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.CustomComponent;
@@ -10,13 +9,14 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.demo.api.util.EventType;
-import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
-import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
+import de.muenchen.vaadin.ui.app.views.events.ComponentEvent;
 import de.muenchen.vaadin.ui.components.buttons.ActionButton;
 import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.I18nPaths;
 import org.slf4j.LoggerFactory;
+import reactor.bus.Event;
+import reactor.fn.Consumer;
 
 import java.util.Optional;
 
@@ -26,7 +26,7 @@ import static de.muenchen.vaadin.ui.util.I18nPaths.getFormPath;
 /**
  * Created by arne.schoentag on 02.09.15.
  */
-public class HistoryForm  extends CustomComponent {
+public class HistoryForm  extends CustomComponent implements Consumer<Event<ComponentEvent<Buerger>>>{
 
     /**
      * Logger
@@ -46,6 +46,7 @@ public class HistoryForm  extends CustomComponent {
      * erstellt werden.
      *
      * @param controller
+     * @param navigateFrom
      */
     public HistoryForm(final BuergerViewController controller, final String navigateFrom) {
 
@@ -75,15 +76,16 @@ public class HistoryForm  extends CustomComponent {
 
         ActionButton backButton = new ActionButton(controller, SimpleAction.back,this.back);
         backButton.addClickListener((clickEvent -> {
-            controller.postToEventBus(new BuergerAppEvent(EventType.CANCEL));
             controller.getNavigator().navigateTo(getNavigateBack());
         }));
         layout.addComponent(backButton);
         setCompositionRoot(layout);
     }
 
-    @Subscribe
-    public void update(BuergerComponentEvent event) {
+    @Override
+    public void accept(reactor.bus.Event<ComponentEvent<Buerger>> eventWrapper) {
+        ComponentEvent event = eventWrapper.getData();
+
         if (event.getEventType().equals(EventType.HISTORY)) {
             LOG.debug("seleted buerger to modify.");
             Optional<BeanItem<Buerger>> opt = event.getItem();
