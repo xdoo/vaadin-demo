@@ -32,13 +32,15 @@ public class BuergerPartnerTab extends CustomComponent {
 
 
         ActionButton create = new ActionButton(controller, SimpleAction.create,navigateToForCreate);
-        create.addClickListener(clickEvent ->
-                        controller.postToEventBus(new BuergerAppEvent(EventType.CREATE).navigateTo(navigateToForCreate).from(from))
-        );
+        create.addClickListener(clickEvent -> {
+            controller.postToEventBus(new BuergerAppEvent(EventType.CREATE));
+            controller.getNavigator().navigateTo(navigateToForCreate);
+        });
         ActionButton add = new ActionButton(controller, SimpleAction.add,navigateToForAdd);
-        add.addClickListener(clickEvent ->
-                        controller.postToEventBus(new BuergerAppEvent(EventType.ADD_PARTNER).navigateTo(navigateToForAdd).from(from))
-        );
+        add.addClickListener(clickEvent -> {
+            controller.postToEventBus(new BuergerAppEvent(EventType.ADD_PARTNER));
+            controller.getNavigator().navigateTo(navigateToForAdd);
+        });
 
         table = controller.getViewFactory().generatePartnerTable(navigateToForDetail, from);
 

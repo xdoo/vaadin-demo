@@ -17,17 +17,18 @@ import org.slf4j.LoggerFactory;
  * @author claus.straube
  */
 public class BuergerSearchTable extends CustomComponent {
-    private BuergerSearchForm search;
-
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerSearchTable.class);
+    private BuergerSearchForm search;
     private GenericTable table;
-    public BuergerSearchTable(final BuergerViewController controller, String navigateToForCreate, String from, final TableActionButton.Builder... buttonBuilders) {
-        ActionButton create = new ActionButton(controller, SimpleAction.create,navigateToForCreate);
-        create.addClickListener(clickEvent ->
-            controller.postToEventBus(new BuergerAppEvent(EventType.CREATE).navigateTo(navigateToForCreate).from(from))
-        );
 
-        table = controller.getViewFactory().generateTable(from, buttonBuilders);
+    public BuergerSearchTable(final BuergerViewController controller, String navigateToForCreate, String navigateBack, final TableActionButton.Builder... buttonBuilders) {
+        ActionButton create = new ActionButton(controller, SimpleAction.create,navigateToForCreate);
+        create.addClickListener(clickEvent -> {
+            controller.postToEventBus(new BuergerAppEvent(EventType.CREATE));
+            controller.getNavigator().navigateTo(navigateToForCreate);
+        });
+
+        table = controller.getViewFactory().generateTable(navigateBack, buttonBuilders);
         search = new BuergerSearchForm(controller);
         search.setWidth("100%");
         
