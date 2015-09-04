@@ -5,13 +5,9 @@ import com.vaadin.data.Validator;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
-import com.vaadin.data.validator.DateRangeValidator;
 import com.vaadin.data.validator.StringLengthValidator;
-import com.vaadin.event.ShortcutAction;
-import com.vaadin.server.FontAwesome;
+import com.vaadin.navigator.Navigator;
 import com.vaadin.server.Page;
-import com.vaadin.shared.ui.datefield.Resolution;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.FormLayout;
@@ -20,19 +16,22 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
-import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
+import de.muenchen.vaadin.demo.api.util.EventType;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
+import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
+import de.muenchen.vaadin.ui.components.buttons.ActionButton;
 import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
-import de.muenchen.vaadin.demo.api.util.EventType;
-import java.util.Date;
-import static de.muenchen.vaadin.ui.util.I18nPaths.*;
 import de.muenchen.vaadin.ui.util.ValidatorFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static de.muenchen.vaadin.ui.util.I18nPaths.Component;
+import static de.muenchen.vaadin.ui.util.I18nPaths.Type;
+import static de.muenchen.vaadin.ui.util.I18nPaths.getEntityFieldPath;
+import static de.muenchen.vaadin.ui.util.I18nPaths.getFormPath;
 
 /**
  *
@@ -45,12 +44,11 @@ public class BuergerUpdateForm extends CustomComponent {
      */
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerUpdateForm.class);
 
-    final BeanFieldGroup<Buerger> binder = new BeanFieldGroup<Buerger>(Buerger.class);
-    final BuergerViewController controller;
+    private final BeanFieldGroup<Buerger> binder = new BeanFieldGroup<Buerger>(Buerger.class);
+    private final BuergerViewController controller;
 
     private final String navigateTo;
-    private String back;
-    private String from;
+    private final String navigateBack;
 
     /**
      * Formular zum Bearbeiten eines {@link Buerger}s. Über diesen Konstruktor kann
@@ -60,15 +58,13 @@ public class BuergerUpdateForm extends CustomComponent {
      *
      * @param controller
      * @param navigateTo
-     * @param back
-     * @param from
+     * @param navigateBack
      */
-    public BuergerUpdateForm(BuergerViewController controller, final String navigateTo, String back, String from) {
+    public BuergerUpdateForm(BuergerViewController controller, final String navigateTo, String navigateBack) {
 
         this.controller = controller;
         this.navigateTo = navigateTo;
-        this.back = back;
-        this.from = from;
+        this.navigateBack = navigateBack;
 
         // create form
         this.createForm();
@@ -131,27 +127,26 @@ public class BuergerUpdateForm extends CustomComponent {
         
         layout.addComponent(buttonLayout);
         // die Schaltfläche zum Aktualisieren
-        String update = controller.resolveRelative(getFormPath(SimpleAction.save, Component.button, Type.label));
-        Button updateButton = new Button(update, (Button.ClickEvent click) -> {
+
+        final ActionButton updateButton = new ActionButton(controller, SimpleAction.save, "lasdfölkjef");
+        updateButton.addClickListener(clickEvent1 -> {
             try {
                 binder.commit();
-                Buerger entity = binder.getItemDataSource().getBean();
-                controller.getEventbus().post(new BuergerAppEvent(entity, EventType.UPDATE).navigateTo(navigateTo).from(this.from));
+                Buerger buerger = binder.getItemDataSource().getBean();
+                getController().postToEventBus(new BuergerAppEvent(buerger, EventType.UPDATE));
+                getNavigator().navigateTo(getNavigateTo());
             } catch (FieldGroup.CommitException e) {
-                GenericErrorNotification error = new GenericErrorNotification("Fehler","Beim erstellen der Person ist ein Fehler aufgetreten. Bitte füllen Sie alle Felder mit gültigen Werten aus.");
-                error.show(Page.getCurrent());
+                GenericErrorNotification errorNotification = new GenericErrorNotification("Fehler", "Beim erstellen der Person ist ein Fehler aufgetreten. Bitte füllen Sie alle Felder mit gültigen Werten aus.");
+                errorNotification.show(Page.getCurrent());
             }
         });
-        updateButton.addStyleName(ValoTheme.BUTTON_FRIENDLY);
-        updateButton.setIcon(FontAwesome.PENCIL);
-        updateButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
-        updateButton.setId(String.format("%s_UPDATE_BUTTON_FORM", BuergerViewController.I18N_BASE_PATH));
         buttonLayout.addComponent(updateButton);
+
         // die Schaltfläche zum Abbrechen
-        buttonLayout.addComponent(new GenericCancelButton(
-                controller.resolveRelative(getFormPath(SimpleAction.cancel, Component.button, Type.label)),
-                new BuergerAppEvent(null, EventType.CANCEL).navigateTo(this.back), // hier kann eine 'null' gesetzt werden, weil nichts mehr mit dem Objekt passiert
-                this.controller.getEventbus()));
+        final ActionButton back = new ActionButton(controller, SimpleAction.back, "egal");
+        back.addClickListener(clickEvent -> getNavigator().navigateTo(getNavigateBack()));
+        buttonLayout.addComponent(back);
+
         setCompositionRoot(layout);
     }
 
@@ -169,11 +164,18 @@ public class BuergerUpdateForm extends CustomComponent {
     }
 
     public String getNavigateBack() {
-        return back;
+        return navigateBack;
     }
 
-    public void setNavigateBack(String navigateBack) {
-        this.back = navigateBack;
+    public Navigator getNavigator() {
+        return getController().getNavigator();
     }
 
+    public BuergerViewController getController() {
+        return controller;
+    }
+
+    public String getNavigateTo() {
+        return navigateTo;
+    }
 }
