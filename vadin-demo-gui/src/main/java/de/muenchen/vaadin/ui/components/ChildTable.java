@@ -23,13 +23,18 @@ public class ChildTable extends GenericTable<Buerger> {
 
     @Override
     public void accept(reactor.bus.Event<ComponentEvent<Buerger>> eventWrapper) {
-        super.accept(eventWrapper);
+        //super.accept(eventWrapper);
         ComponentEvent event = eventWrapper.getData();
 
         if(event.getEventType().equals(EventType.SAVE_CHILD)) {
             this.add(event.getEntity());
         }
-        
+        if(event.getEventType().equals(EventType.DELETE)) {
+            this.delete(event.getItemID());
+        }
+        if(event.getEventType().equals(EventType.UPDATE)) {
+            this.add(event.getEntity());
+        }
         if(event.getEventType().equals(EventType.QUERY_CHILD)) {
             this.addAll(event.getEntities());
         }

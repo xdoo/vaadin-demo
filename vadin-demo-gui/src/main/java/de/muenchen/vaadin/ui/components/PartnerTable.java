@@ -23,7 +23,7 @@ public class PartnerTable extends GenericTable<Buerger> {
 
     @Override
     public void accept(reactor.bus.Event<ComponentEvent<Buerger>> eventWrapper) {
-        super.accept(eventWrapper);
+        //super.accept(eventWrapper);
 
         ComponentEvent event = eventWrapper.getData();
 
