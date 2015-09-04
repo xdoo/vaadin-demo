@@ -4,25 +4,16 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.spring.annotation.UIScope;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.TabSheet;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.demo.api.util.EventType;
+import de.muenchen.vaadin.ui.app.views.BuergerTableView;
 import de.muenchen.vaadin.ui.app.views.MainView;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
 import de.muenchen.vaadin.ui.app.views.events.RefreshEvent;
-import de.muenchen.vaadin.ui.components.BuergerChildTab;
-import de.muenchen.vaadin.ui.components.BuergerCreateForm;
-import de.muenchen.vaadin.ui.components.BuergerPartnerTab;
-import de.muenchen.vaadin.ui.components.BuergerReadForm;
-import de.muenchen.vaadin.ui.components.BuergerSearchTable;
-import de.muenchen.vaadin.ui.components.BuergerSelectTable;
-import de.muenchen.vaadin.ui.components.BuergerTable;
-import de.muenchen.vaadin.ui.components.BuergerUpdateForm;
-import de.muenchen.vaadin.ui.components.ChildTable;
-import de.muenchen.vaadin.ui.components.GenericConfirmationWindow;
-import de.muenchen.vaadin.ui.components.GenericTable;
-import de.muenchen.vaadin.ui.components.PartnerTable;
+import de.muenchen.vaadin.ui.components.*;
 import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.components.buttons.TableAction;
 import de.muenchen.vaadin.ui.components.buttons.TableActionButton;
@@ -61,7 +52,6 @@ public class BuergerViewFactory implements Serializable{
     private transient Optional<BuergerReadForm> readForm = Optional.empty();
     private transient Optional<BuergerSelectTable> partnerSearchTable = Optional.empty();
     private transient Optional<HistoryForm> historyForm = Optional.empty();
-    private transient Optional<BuergerPartnerSearchTable> partnerSearchTable = Optional.empty();
     private transient Optional<BuergerPartnerTab> partnerTab = Optional.empty();
 
 
@@ -180,7 +170,7 @@ public class BuergerViewFactory implements Serializable{
                     }
             );
             TableActionButton.Builder history = TableActionButton.Builder.<Buerger>make(controller, TableAction.tablehistory,navigateToForHistory, (container, id) ->
-                            getEventBus().post(new BuergerAppEvent(container.getItem(id), id, EventType.HISTORY).from(navigateFrom))
+                            getEventBus().post(new BuergerAppEvent(container.getItem(id), id, EventType.HISTORY))
             );
 
             searchTable=Optional.of(new BuergerSearchTable(
@@ -191,19 +181,10 @@ public class BuergerViewFactory implements Serializable{
                     detail,
                     edit,
                     copy,
-                    delete,
-                    history
+                    history,
+                    delete
             ));}
         return searchTable.get();}
-
-
-    public HistoryForm generateHistoryTable(String navigateFrom){
-        LOG.debug("creating 'history' buerger form");
-        if(!historyForm.isPresent()){
-            HistoryForm form = new HistoryForm(controller, navigateFrom);
-            historyForm=Optional.of(form);}
-        return historyForm.get();
-        }
 
     public BuergerSelectTable generateChildSearchTable( String navigateFrom) {
 
@@ -286,6 +267,37 @@ public class BuergerViewFactory implements Serializable{
         event.addEntities(entities);
         getEventBus().post(event);
 
+
+        return table;
+    }
+
+    public HistoryForm generateHistoryForm(String navigateFrom) {
+        LOG.debug("creating 'history' buerger form");
+        if (!historyForm.isPresent()) {
+            HistoryForm form = new HistoryForm(controller, navigateFrom);
+            historyForm = Optional.of(form);
+        }
+        return historyForm.get();
+    }
+
+    public HistoryTable generateHistoryTable(String navigateToForDetail) {
+        LOG.debug("creating 'history' buerger form");
+        LOG.debug("creating table for history");
+
+
+        TableActionButton.Builder detail = TableActionButton.Builder.<Buerger>make(controller, TableAction.tabledetail, navigateToForDetail, (container, id) -> {
+            LOG.debug("Not yet implemented.");
+            //getEventBus().post(new BuergerAppEvent(container.getItem(id), id, EventType.SELECT2READ));
+            //getController().getNavigator().navigateTo(navigateToForDetail);
+            Notification.show("Not yet implemented.", Notification.Type.TRAY_NOTIFICATION);
+        });
+
+        HistoryTable table = new HistoryTable(controller, detail);
+        List<Buerger> entities = controller.queryHistory(controller.getCurrent().getBean());
+        getEventBus().register(table);
+        BuergerComponentEvent event = new BuergerComponentEvent(EventType.HISTORY);
+        event.addEntities(entities);
+        getEventBus().post(event);
 
         return table;
     }

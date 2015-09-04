@@ -3,22 +3,25 @@ package de.muenchen.vaadin.ui.components;
 import com.google.common.eventbus.Subscribe;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.util.BeanItem;
-import com.vaadin.ui.*;
+import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
+import de.muenchen.vaadin.demo.api.util.EventType;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
 import de.muenchen.vaadin.ui.components.buttons.ActionButton;
 import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
-import de.muenchen.vaadin.ui.components.buttons.TableActionButton;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
-import de.muenchen.vaadin.demo.api.util.EventType;
-import static de.muenchen.vaadin.ui.util.I18nPaths.*;
+import de.muenchen.vaadin.ui.util.I18nPaths;
+import org.slf4j.LoggerFactory;
+
 import java.util.Optional;
 
-import de.muenchen.vaadin.ui.util.I18nPaths;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static de.muenchen.vaadin.ui.util.I18nPaths.Type;
+import static de.muenchen.vaadin.ui.util.I18nPaths.getFormPath;
 
 /**
  * Created by arne.schoentag on 02.09.15.
@@ -43,9 +46,6 @@ public class HistoryForm  extends CustomComponent {
      * erstellt werden.
      *
      * @param controller
-     * @param navigateToUpdate
-     * @param back
-     * @param from
      */
     public HistoryForm(final BuergerViewController controller, final String navigateFrom) {
 
@@ -75,7 +75,8 @@ public class HistoryForm  extends CustomComponent {
 
         ActionButton backButton = new ActionButton(controller, SimpleAction.back,this.back);
         backButton.addClickListener((clickEvent -> {
-            controller.postToEventBus(new BuergerAppEvent(EventType.CANCEL).navigateTo(this.back));
+            controller.postToEventBus(new BuergerAppEvent(EventType.CANCEL));
+            controller.getNavigator().navigateTo(getNavigateBack());
         }));
         layout.addComponent(backButton);
         setCompositionRoot(layout);
