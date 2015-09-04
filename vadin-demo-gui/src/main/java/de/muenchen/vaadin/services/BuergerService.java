@@ -83,4 +83,5 @@ public interface BuergerService {
 
     public Buerger releaseElternteil(Buerger elternteil, Buerger kind);
     public Buerger addPartner(Buerger entity, Buerger partner);
+    public List<Buerger> queryHistory(Buerger entity);
 }
