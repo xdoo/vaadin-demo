@@ -31,22 +31,17 @@ import static de.muenchen.vaadin.ui.util.I18nPaths.getEntityFieldPath;
  */
 public class GenericTable<T extends BaseEntity> extends CustomComponent implements Consumer<Event<ComponentEvent<T>>> {
 
-    private final BeanItemContainer<T> container;
-    private BuergerViewController controller;
-    private Table table;
-
-    // Navigation
-    private String from;
-
-    /**
-     * The Button builders.
-     */
-    List<TableActionButton.Builder> buttonBuilders;
-
     /**
      * The constant LOG.
      */
     protected static final Logger LOG = LoggerFactory.getLogger(GenericTable.class);
+    private final BeanItemContainer<T> container;
+    /**
+     * The Button builders.
+     */
+    List<TableActionButton.Builder> buttonBuilders;
+    private BuergerViewController controller;
+    private Table table;
 
     /**
      * Instantiates a new Generic table.
@@ -151,25 +146,6 @@ public class GenericTable<T extends BaseEntity> extends CustomComponent implemen
         return layout;
     }
 
-    // Members
-
-    /**
-     * Gets from.
-     *
-     * @return the from
-     */
-    public String getFrom() {
-        return from;
-    }
-
-    /**
-     * Sets from.
-     *
-     * @param from the from
-     */
-    public void setFrom(String from) {
-        this.from = from;
-    }
 
     /**
      * Über diese Liste können der Tabelle weitere Schaltflächen hinzu gefügt,

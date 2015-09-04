@@ -33,13 +33,15 @@ public class BuergerPartnerTab extends CustomComponent implements Consumer<Event
 
 
         ActionButton create = new ActionButton(controller, SimpleAction.create,navigateToForCreate);
-        create.addClickListener(clickEvent ->
-                        controller.postEvent(new AppEvent<Buerger>(EventType.CREATE).navigateTo(navigateToForCreate).from(from))
-        );
+        create.addClickListener(clickEvent -> {
+            controller.postEvent(new AppEvent<Buerger>(EventType.CREATE));
+            controller.getNavigator().navigateTo(navigateToForCreate);
+        });
         ActionButton add = new ActionButton(controller, SimpleAction.add,navigateToForAdd);
-        add.addClickListener(clickEvent ->
-                        controller.postEvent(new AppEvent<Buerger>(EventType.ADD_PARTNER).navigateTo(navigateToForAdd).from(from))
-        );
+        add.addClickListener(clickEvent -> {
+            controller.postEvent(new AppEvent<Buerger>(EventType.ADD_PARTNER));
+            controller.getNavigator().navigateTo(navigateToForAdd);
+        });
 
         table = controller.getViewFactory().generatePartnerTable(navigateToForDetail, from);
 

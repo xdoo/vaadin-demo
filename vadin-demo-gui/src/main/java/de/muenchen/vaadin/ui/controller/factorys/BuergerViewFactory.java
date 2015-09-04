@@ -5,6 +5,7 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.TabSheet;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.demo.api.util.EventType;
+import de.muenchen.vaadin.ui.app.views.BuergerTableView;
 import de.muenchen.vaadin.ui.app.views.MainView;
 import de.muenchen.vaadin.ui.app.views.events.AppEvent;
 import de.muenchen.vaadin.ui.app.views.events.ComponentEvent;
@@ -47,6 +48,7 @@ import static reactor.bus.selector.Selectors.T;
 @UIScope
 public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshEvent>>{
 
+    public static final String PENDING_FROM = BuergerTableView.NAME;
     private static final long serialVersionUID = 1L;
 
     @Autowired
@@ -56,7 +58,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
      * Logger
      */
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerViewFactory.class);
-
+    private static final long serialVersionUID = 1L;
     private BuergerViewController controller;
 
     /**Singeltons of Components. **/
@@ -99,9 +101,10 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
 
     public BuergerCreateForm generateCreatePartnerForm(String navigateTo) {
         LOG.debug("creating 'create partner' buerger form");
-        if(!createPartnerForm.isPresent()){
+        if (!createPartnerForm.isPresent()) {
             BuergerCreateForm form = new BuergerCreateForm(controller, navigateTo, EventType.SAVE_PARTNER);
-            createPartnerForm=Optional.of(form);}
+            createPartnerForm = Optional.of(form);
+        }
         return createPartnerForm.get();
     }
 
@@ -110,23 +113,23 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
      *
      * @param navigateToForDetail Zielseite um sich die Details des 'Child' Objektes anzeigen zu lassen
      * @param navigateForCreate Zielseite um ein neues 'Child' Objekt zu erstellen
-     * @param from Ausgangsseite zu der zurück navigiert werden soll
+     * @param navigateBack Ausgangsseite zu der zurück navigiert werden soll
      * @return {@link TabSheet.Tab} das Tab
      */
-    public BuergerChildTab generateChildTab(String navigateToForDetail, String navigateForCreate, String from) {
+    public BuergerChildTab generateChildTab(String navigateToForDetail, String navigateForCreate, String navigateBack) {
         if(!childTab.isPresent())
         {
-            BuergerChildTab tab = new BuergerChildTab(controller, navigateToForDetail, navigateForCreate, from);
+            BuergerChildTab tab = new BuergerChildTab(controller, navigateToForDetail, navigateForCreate, navigateBack);
             controller.registerToComponentEvent(tab);
             childTab = Optional.of(tab);}
         return childTab.get();
     }
 
-    public BuergerPartnerTab generatePartnerTab(String navigateToForDetail, String navigateForCreate, String navigateForAdd, String from) {
+    public BuergerPartnerTab generatePartnerTab(String navigateToForDetail, String navigateForCreate, String navigateForAdd, String navigateBack) {
         if(!partnerTab.isPresent())
         {
-            BuergerPartnerTab tab = new BuergerPartnerTab(controller, navigateToForDetail, navigateForCreate, navigateForAdd, from);
-            controller.registerToComponentEvent( tab);
+            BuergerPartnerTab tab = new BuergerPartnerTab(controller, navigateToForDetail, navigateForCreate, navigateForAdd, navigateBack);
+            controller.registerToComponentEvent(tab);
             partnerTab = Optional.of(tab);}
         return partnerTab.get();
     }
@@ -136,30 +139,30 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
      * @return BuergerCreateForm
      */
     public BuergerCreateForm generateCreateChildForm() {
-        return this.generateCreateChildForm(controller.popFrom());
+        return this.generateCreateChildForm(PENDING_FROM);
     }
 
-    public BuergerUpdateForm generateUpdateForm(String navigateTo, String from) {
+    public BuergerUpdateForm generateUpdateForm(String navigateTo, String navigateBack) {
         LOG.debug("creating 'update' buerger form");
         if(!updateForm.isPresent()){
-            BuergerUpdateForm form = new BuergerUpdateForm(controller, navigateTo, controller.popFrom(), from);
-            controller.registerToComponentEvent( form);
+            BuergerUpdateForm form = new BuergerUpdateForm(controller, navigateTo, PENDING_FROM);
+            controller.registerToComponentEvent(form);
             controller.postEvent(new ComponentEvent<Buerger>(controller.getCurrent(), EventType.SELECT2UPDATE));
 
             updateForm=Optional.of(form);}
         return updateForm.get();
     }
 
-    public BuergerUpdateForm generateUpdateForm(String from) {
+    public BuergerUpdateForm generateUpdateForm(String navigateBack) {
 
-        return this.generateUpdateForm(controller.peekFrom(), from);
+        return this.generateUpdateForm(PENDING_FROM, navigateBack);
     }
 
-    public BuergerReadForm generateReadForm(String navigateToUpdate, String from) {
+    public BuergerReadForm generateReadForm(String navigateToUpdate, String navigateBack) {
         LOG.debug("creating 'read' buerger form");
         if(!readForm.isPresent()){
-            BuergerReadForm form = new BuergerReadForm(controller, navigateToUpdate, controller.peekFrom(), from);
-            controller.registerToComponentEvent( form);
+            BuergerReadForm form = new BuergerReadForm(controller, navigateToUpdate, PENDING_FROM);
+            controller.registerToComponentEvent(form);
             readForm=Optional.of(form);}
         controller.postEvent(new ComponentEvent<Buerger>(controller.getCurrent(), EventType.SELECT2READ));
         return readForm.get();
@@ -169,12 +172,14 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
         LOG.debug("creating 'search' table for buerger");
         if(!searchTable.isPresent()){
             LOG.debug("new searchtabel");
-            TableActionButton.Builder detail = TableActionButton.Builder.<Buerger>make(controller, TableAction.tabledetail, navigateToForDetail, (container, id) ->
-                            controller.postEvent(new AppEvent<Buerger>(container.getItem(id), id, EventType.SELECT2READ).navigateTo(navigateToForDetail).from(navigateFrom))
-            );
-            TableActionButton.Builder edit = TableActionButton.Builder.<Buerger>make(controller, TableAction.tableedit, navigateToForEdit, (container, id) ->
-                            controller.postEvent(new AppEvent<Buerger>(container.getItem(id), id, EventType.SELECT2UPDATE).navigateTo(navigateToForEdit).from(navigateFrom))
-            );
+            TableActionButton.Builder detail = TableActionButton.Builder.<Buerger>make(controller, TableAction.tabledetail, navigateToForDetail, (container, id) -> {
+                controller.postEvent(new AppEvent<Buerger>(container.getItem(id), id, EventType.SELECT2READ));
+                getController().getNavigator().navigateTo(navigateToForDetail);
+            });
+            TableActionButton.Builder edit = TableActionButton.Builder.<Buerger>make(controller, TableAction.tableedit, navigateToForEdit, (container, id) -> {
+                controller.postEvent(new AppEvent<Buerger>(container.getItem(id), id, EventType.SELECT2UPDATE));
+                getController().getNavigator().navigateTo(navigateToForEdit);
+            });
             TableActionButton.Builder copy = TableActionButton.Builder.<Buerger>make(controller, TableAction.tablecopy,null, (container, id) ->
                             controller.postEvent(new AppEvent<Buerger>(container.getItem(id), id, EventType.COPY))
             );
@@ -240,11 +245,12 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
 
     }
 
-    public ChildTable generateChildTable(String navigateToForDetail, String from) {
+    public ChildTable generateChildTable(String navigateToForDetail, String navigateBack) {
 
-        TableActionButton.Builder detail = TableActionButton.Builder.<Buerger>make(controller, TableAction.tabledetail, navigateToForDetail, (container, id) ->
-                        controller.postEvent(new AppEvent<Buerger>(container.getItem(id), id, EventType.SELECT2READ).navigateTo(navigateToForDetail).from(from))
-        );
+        TableActionButton.Builder detail = TableActionButton.Builder.<Buerger>make(controller, TableAction.tabledetail, navigateToForDetail, (container, id) -> {
+            controller.postEvent(new AppEvent<Buerger>(container.getItem(id), id, EventType.SELECT2READ));
+            getController().getNavigator().navigateTo(navigateToForDetail);
+        });
 
         TableActionButton.Builder delete = TableActionButton.Builder.<Buerger>make(controller, TableAction.tabledelete,navigateToForDetail, (container, id) ->
                 {
@@ -259,7 +265,6 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
         LOG.debug("creating table for childs");
         ChildTable table = new ChildTable(controller, detail, delete);
 
-        table.setFrom(from);
         List<Buerger> entities = controller.queryKinder(controller.getCurrent().getBean());
         controller.registerToComponentEvent( table);
         ComponentEvent<Buerger> event = new ComponentEvent<Buerger>(EventType.QUERY_CHILD);
@@ -270,15 +275,14 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
         return table;
     }
 
-    public PartnerTable generatePartnerTable(String navigateToForDetail, String from) {
+    public PartnerTable generatePartnerTable(String navigateToForDetail, String navigateBack) {
 
-        TableActionButton.Builder detail = TableActionButton.Builder.<Buerger>make(controller, TableAction.tabledetail, navigateToForDetail, (container, id) ->
-                        controller.postEvent(new AppEvent<Buerger>(container.getItem(id), id, EventType.SELECT2READ).navigateTo(navigateToForDetail).from(from))
-        );
+        TableActionButton.Builder detail = TableActionButton.Builder.<Buerger>make(controller, TableAction.tabledetail, navigateToForDetail, (container, id) -> {
+            controller.postEvent(new AppEvent<Buerger>(container.getItem(id), id, EventType.SELECT2READ));
+            getController().getNavigator().navigateTo(navigateToForDetail);
+        });
         LOG.debug("creating table for partner");
         PartnerTable table = new PartnerTable(controller, detail);
-
-        table.setFrom(from);
         List<Buerger> entities = controller.queryPartner(controller.getCurrent().getBean());
         controller.registerToComponentEvent( table);
         ComponentEvent<Buerger> event = new ComponentEvent<Buerger>(EventType.QUERY_PARTNER);
@@ -289,15 +293,13 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
         return table;
     }
 
-    public GenericTable generateTable(String from, final TableActionButton.Builder... buttonBuilders) {
-        return this.createTable(from, controller.queryBuerger(), buttonBuilders);
+    public GenericTable generateTable(String navigateBack, final TableActionButton.Builder... buttonBuilders) {
+        return this.createTable(navigateBack, controller.queryBuerger(), buttonBuilders);
     }
 
-    private GenericTable createTable(String from, List<Buerger> entities, final TableActionButton.Builder... buttonBuilders) {
+    private GenericTable createTable(String navigateBack, List<Buerger> entities, final TableActionButton.Builder... buttonBuilders) {
         LOG.debug("creating table for buerger");
         GenericTable table = new BuergerTable(controller, buttonBuilders);
-
-        table.setFrom(from);
 
         controller.registerToComponentEvent( table);
 

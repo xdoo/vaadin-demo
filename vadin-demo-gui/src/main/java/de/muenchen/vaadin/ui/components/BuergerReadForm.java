@@ -41,8 +41,7 @@ public class BuergerReadForm extends CustomComponent implements Consumer<Event<C
     final BuergerViewController controller;
     
     private final String navigateToUpdate;
-    private String back;
-    private final String from;
+    private final String navigateBack;
 
 
     /**
@@ -52,16 +51,14 @@ public class BuergerReadForm extends CustomComponent implements Consumer<Event<C
      * 
      * @param controller
      * @param navigateToUpdate
-     * @param back 
-     * @param from 
+     * @param navigateBack
      */
-    public BuergerReadForm(BuergerViewController controller, final String navigateToUpdate, String back, final String from) {
+    public BuergerReadForm(BuergerViewController controller, final String navigateToUpdate, String navigateBack) {
         
         this.controller = controller;
         this.navigateToUpdate = navigateToUpdate;
-        this.back = back;
-        this.from = from;
-        
+        this.navigateBack = navigateBack;
+
         // create form
         this.createForm();
 
@@ -99,21 +96,20 @@ public class BuergerReadForm extends CustomComponent implements Consumer<Event<C
         layout.addComponent(controller.getUtil().createFormDateField(
                 binder, controller.resolveRelative(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.label)),
                 Buerger.GEBURTSDATUM, BuergerViewController.I18N_BASE_PATH));
-       
+        
         // auf 'read only setzen
         this.binder.setReadOnly(true);
         layout.addComponent(buttonLayout);
         // die Schaltfläche zum Aktualisieren
-        ActionButton backButton = new ActionButton(controller, SimpleAction.back,this.back);
-        backButton.addClickListener((clickEvent -> {
-            controller.postEvent(new AppEvent<Buerger>(EventType.CANCEL).navigateTo(this.back));
-        }));
+        ActionButton backButton = new ActionButton(controller, SimpleAction.back, this.navigateBack);
+        backButton.addClickListener(clickEvent -> controller.getNavigator().navigateTo(getNavigateBack()));
         buttonLayout.addComponent(backButton);
 
         // die Schaltfläche zum Bearbeiten
         ActionButton updateButton = new ActionButton(controller, SimpleAction.update,this.navigateToUpdate);
         updateButton.addClickListener(clickEvent -> {
-            controller.postEvent(new AppEvent<Buerger>(EventType.SELECT2UPDATE).setEntity(this.binder.getItemDataSource().getBean()).setItem(binder.getItemDataSource()).navigateTo(this.navigateToUpdate).from(this.from));
+            controller.postEvent(new AppEvent<Buerger>(EventType.SELECT2UPDATE).setEntity(this.binder.getItemDataSource().getBean()).setItem(binder.getItemDataSource()));
+            controller.getNavigator().navigateTo(navigateToUpdate);
         });
         buttonLayout.addComponent(updateButton);
         setCompositionRoot(layout);
@@ -140,5 +136,9 @@ public class BuergerReadForm extends CustomComponent implements Consumer<Event<C
                 LOG.warn("No item present.");
             }
         }
+    }
+
+    public String getNavigateBack() {
+        return navigateBack;
     }
 }

@@ -26,22 +26,24 @@ public class BuergerChildTab extends CustomComponent implements Consumer<Event<C
 
     BuergerViewController controller;
     private GenericTable table;
-    public BuergerChildTab(BuergerViewController controller, String navigateToForDetail, String navigateToForCreate, String from) {
+
+    public BuergerChildTab(BuergerViewController controller, String navigateToForDetail, String navigateToForCreate, String navigateBack) {
         
         this.controller = controller;
 
 
 
         ActionButton create = new ActionButton(controller, SimpleAction.create,navigateToForCreate);
-        create.addClickListener(clickEvent ->
-            controller.postEvent(new AppEvent<Buerger>(EventType.CREATE).navigateTo(navigateToForCreate).from(from))
-        );
+        create.addClickListener(clickEvent -> {
+            controller.postEvent(new AppEvent<Buerger>(EventType.CREATE));
+            controller.getNavigator().navigateTo(navigateToForCreate);
+        });
         ActionButton add = new ActionButton(controller, SimpleAction.add,"");
         add.addClickListener(clickEvent ->
-            controller.postEvent(new AppEvent<Buerger>(EventType.ADD_SEARCHED_CHILD).from(from))
+                        controller.postEvent(new AppEvent<Buerger>(EventType.ADD_SEARCHED_CHILD))
         );
 
-        table = controller.getViewFactory().generateChildTable(navigateToForDetail, from);
+        table = controller.getViewFactory().generateChildTable(navigateToForDetail, navigateBack);
         
         // Layout für die Schaltflächen über der Tabelle
         HorizontalLayout hlayout = new HorizontalLayout(create, add);
@@ -50,8 +52,8 @@ public class BuergerChildTab extends CustomComponent implements Consumer<Event<C
         VerticalLayout vlayout = new VerticalLayout(hlayout, table);
         vlayout.setSpacing(true);
         vlayout.setMargin(true);
-        
-        setId(String.format("%s_%s_%s_CHILD_TAB", navigateToForDetail, from, BuergerViewController.I18N_BASE_PATH));
+
+        setId(String.format("%s_%s_%s_CHILD_TAB", navigateToForDetail, navigateBack, BuergerViewController.I18N_BASE_PATH));
         setCompositionRoot(vlayout);
     } 
 
