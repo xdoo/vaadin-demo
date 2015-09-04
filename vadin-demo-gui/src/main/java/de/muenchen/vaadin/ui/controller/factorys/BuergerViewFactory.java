@@ -21,6 +21,7 @@ import de.muenchen.vaadin.ui.components.BuergerUpdateForm;
 import de.muenchen.vaadin.ui.components.ChildTable;
 import de.muenchen.vaadin.ui.components.GenericConfirmationWindow;
 import de.muenchen.vaadin.ui.components.GenericTable;
+import de.muenchen.vaadin.ui.components.HistoryForm;
 import de.muenchen.vaadin.ui.components.PartnerTable;
 import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.components.buttons.TableAction;
@@ -69,9 +70,8 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
     private transient Optional<BuergerCreateForm> createPartnerForm = Optional.empty();
     private transient Optional<BuergerUpdateForm> updateForm = Optional.empty();
     private transient Optional<BuergerReadForm> readForm = Optional.empty();
-    private transient Optional<BuergerSelectTable> partnerSearchTable = Optional.empty();
     private transient Optional<HistoryForm> historyForm = Optional.empty();
-    private transient Optional<BuergerPartnerSearchTable> partnerSearchTable = Optional.empty();
+    private transient Optional<BuergerSelectTable> partnerSearchTable = Optional.empty();
     private transient Optional<BuergerPartnerTab> partnerTab = Optional.empty();
 
     @PostConstruct
@@ -194,8 +194,8 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
                     }
                             //getEventBus().post(new AppEvent<Buerger>(container.getItem(id),id,EventType.DELETE).navigateTo(navigateToForEdit).from(navigateFrom))
             );
-            TableActionButton.Builder history = TableActionButton.Builder.<Buerger>make(controller, TableAction.tablehistory,navigateToForHistory, (container, id) ->
-                            getEventBus().post(new BuergerAppEvent(container.getItem(id), id, EventType.HISTORY).from(navigateFrom))
+            TableActionButton.Builder history = TableActionButton.Builder.<Buerger>make(controller, TableAction.tablehistory, navigateToForHistory, (container, id) ->
+                            controller.postEvent(new AppEvent<>(container.getItem(id), id, EventType.HISTORY))
             );
 
             searchTable=Optional.of(new BuergerSearchTable(
@@ -216,7 +216,9 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
         LOG.debug("creating 'history' buerger form");
         if(!historyForm.isPresent()){
             HistoryForm form = new HistoryForm(controller, navigateFrom);
-            historyForm=Optional.of(form);}
+            controller.registerToComponentEvent(form);
+            historyForm=Optional.of(form);
+        }
         return historyForm.get();
         }
 
@@ -278,7 +280,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
         ChildTable table = new ChildTable(controller, detail, delete);
 
         List<Buerger> entities = controller.queryKinder(controller.getCurrent().getBean());
-        controller.registerToComponentEvent( table);
+        controller.registerToComponentEvent(table);
         ComponentEvent<Buerger> event = new ComponentEvent<Buerger>(EventType.QUERY_CHILD);
         event.addEntities(entities);
         controller.postEvent(event);
@@ -296,7 +298,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
         LOG.debug("creating table for partner");
         PartnerTable table = new PartnerTable(controller, detail);
         List<Buerger> entities = controller.queryPartner(controller.getCurrent().getBean());
-        controller.registerToComponentEvent( table);
+        controller.registerToComponentEvent(table);
         ComponentEvent<Buerger> event = new ComponentEvent<Buerger>(EventType.QUERY_PARTNER);
         event.addEntities(entities);
         controller.postEvent(event);
@@ -313,7 +315,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
         LOG.debug("creating table for buerger");
         GenericTable table = new BuergerTable(controller, buttonBuilders);
 
-        controller.registerToComponentEvent( table);
+        controller.registerToComponentEvent(table);
 
         return table;
     }

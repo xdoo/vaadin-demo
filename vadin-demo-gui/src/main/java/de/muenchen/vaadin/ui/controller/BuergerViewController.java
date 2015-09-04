@@ -12,9 +12,6 @@ import de.muenchen.vaadin.demo.api.util.EventType;
 import de.muenchen.vaadin.services.BuergerService;
 import de.muenchen.vaadin.services.MessageService;
 import de.muenchen.vaadin.ui.app.MainUI;
-import de.muenchen.vaadin.ui.app.views.BuergerHistoryView;
-import de.muenchen.vaadin.ui.app.views.ChildSelectWindow;
-import de.muenchen.vaadin.ui.app.views.PartnerSelectWindow;
 import de.muenchen.vaadin.ui.app.views.BuergerTableView;
 import de.muenchen.vaadin.ui.app.views.TableSelectWindow;
 import de.muenchen.vaadin.ui.app.views.events.AppEvent;
@@ -409,21 +406,11 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
                 resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.add, Type.text)));
         succes.show(Page.getCurrent());
         postEvent(new AppEvent<Buerger>(event.getEntity(), EventType.UPDATE_PARTNER));
-        navigateEventHandler(event);
     }
 
-    private void historyHandler(BuergerAppEvent event) {
-        this.eventbus.post(new BuergerComponentEvent(EventType.HISTORY).addEntities(this.queryHistory(event.getEntity())));
+    private void historyHandler(AppEvent<Buerger> event) {
+        postEvent(new ComponentEvent<Buerger>(EventType.HISTORY).addEntities(this.queryHistory(event.getEntity())));
         this.current = event.getItem();
-
-        // UI Komponente aktualisieren
-        //this.eventbus.post(new BuergerComponentEvent(event.getItem().getBean(), EventType.HISTORY));
-
-        // Verlauf protokollieren
-        this.pushFrom(event);
-
-        // Zur Seite wechseln
-        navigator.navigateTo(BuergerHistoryView.NAME);
     }
 
 
