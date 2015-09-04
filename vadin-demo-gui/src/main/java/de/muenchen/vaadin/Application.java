@@ -25,8 +25,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
-import reactor.Environment;
-import reactor.bus.EventBus;
+
 
 @SpringBootApplication
 @EnableEurekaClient
@@ -46,17 +45,6 @@ public class Application {
         FilterRegistrationBean registrationBean = new FilterRegistrationBean();
         registrationBean.setFilter(hiddenHttpMethodFilter);
         return registrationBean;
-    }
-
-    @Bean
-    Environment env() {
-        return Environment.initializeIfEmpty()
-                .assignErrorJournal();
-    }
-
-    @Bean
-    EventBus createEventBus(Environment env) {
-        return EventBus.create(env);
     }
 
 }
