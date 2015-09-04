@@ -12,6 +12,7 @@ import de.muenchen.vaadin.demo.api.util.EventType;
 import de.muenchen.vaadin.services.BuergerService;
 import de.muenchen.vaadin.services.MessageService;
 import de.muenchen.vaadin.ui.app.MainUI;
+import de.muenchen.vaadin.ui.app.views.BuergerHistoryView;
 import de.muenchen.vaadin.ui.app.views.BuergerTableView;
 import de.muenchen.vaadin.ui.app.views.TableSelectWindow;
 import de.muenchen.vaadin.ui.app.views.events.AppEvent;
@@ -31,9 +32,7 @@ import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.util.List;
 
-import static de.muenchen.vaadin.ui.util.I18nPaths.NotificationType;
-import static de.muenchen.vaadin.ui.util.I18nPaths.Type;
-import static de.muenchen.vaadin.ui.util.I18nPaths.getNotificationPath;
+import static de.muenchen.vaadin.ui.util.I18nPaths.*;
 import static reactor.bus.selector.Selectors.T;
 
 /**
@@ -166,7 +165,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
     }
 
     public void registerToComponentEvent(Consumer consumer){
-        getEventbus().on(T(ComponentEvent.class),consumer);
+        getEventbus().on(T(ComponentEvent.class), consumer);
     }
 
 
@@ -411,6 +410,12 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
     private void historyHandler(AppEvent<Buerger> event) {
         postEvent(new ComponentEvent<Buerger>(EventType.HISTORY).addEntities(this.queryHistory(event.getEntity())));
         this.current = event.getItem();
+
+        // UI Komponente aktualisieren
+        //this.eventbus.post(new BuergerComponentEvent(event.getItem().getBean(), EventType.HISTORY));
+
+        // Zur Seite wechseln
+        navigator.navigateTo(BuergerHistoryView.NAME);
     }
 
 

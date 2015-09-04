@@ -29,8 +29,8 @@ public class BuergerHistoryView  extends DefaultBuergerView {
     protected void site() {
         VerticalLayout layout = new VerticalLayout();
         layout.setSpacing(true);
-        layout.addComponent(this.controller.getViewFactory().generateHistoryTable(BuergerTableView.NAME));
-        layout.addComponent(this.controller.getViewFactory().generateTable(NAME));
+        layout.addComponent(this.controller.getViewFactory().generateHistoryForm(BuergerTableView.NAME));
+        layout.addComponent(this.controller.getViewFactory().generateHistoryTable(NAME));
         addComponent(layout);
     }
 
