@@ -1,8 +1,6 @@
 package de.muenchen.vaadin.ui.components;
 
 import com.google.common.eventbus.Subscribe;
-import com.vaadin.data.fieldgroup.BeanFieldGroup;
-import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
@@ -10,10 +8,6 @@ import de.muenchen.vaadin.demo.api.util.EventType;
 import de.muenchen.vaadin.ui.app.views.events.BuergerComponentEvent;
 import de.muenchen.vaadin.ui.components.buttons.TableActionButton;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.Optional;
 
 /**
  * Created by arne.schoentag on 02.09.15.
@@ -44,5 +38,20 @@ public class HistoryTable extends GenericTable<Buerger> {
 
 
         setCompositionRoot(vlayout);
+    }
+
+    /**
+     * Eventhandler für Eventbus
+     *
+     * @param event the event
+     */
+    @Subscribe
+    public void update(BuergerComponentEvent event) {
+
+        if (event.getEventType().equals(EventType.HISTORY)) {
+            LOG.error(event.getEntities().toString());
+            this.addAll(event.getEntities());
+        }
+
     }
 }

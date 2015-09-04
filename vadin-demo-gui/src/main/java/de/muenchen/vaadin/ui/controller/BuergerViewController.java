@@ -13,6 +13,7 @@ import de.muenchen.vaadin.demo.api.util.EventType;
 import de.muenchen.vaadin.services.BuergerService;
 import de.muenchen.vaadin.services.MessageService;
 import de.muenchen.vaadin.ui.app.MainUI;
+import de.muenchen.vaadin.ui.app.views.BuergerHistoryView;
 import de.muenchen.vaadin.ui.app.views.ChildSelectWindow;
 import de.muenchen.vaadin.ui.app.views.PartnerSelectWindow;
 import de.muenchen.vaadin.ui.app.views.events.AppEvent;
@@ -396,18 +397,17 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
     }
 
     private void historyHandler(BuergerAppEvent event) {
-        LOG.error("History not yet implementet");
         this.eventbus.post(new BuergerComponentEvent(EventType.HISTORY).addEntities(this.queryHistory(event.getEntity())));
-        /*this.current = event.getItem();
+        this.current = event.getItem();
 
         // UI Komponente aktualisieren
-        this.eventbus.post(new BuergerComponentEvent(event.getItem().getBean(), EventType.HISTORY));
+        //this.eventbus.post(new BuergerComponentEvent(event.getItem().getBean(), EventType.HISTORY));
 
         // Verlauf protokollieren
         this.pushFrom(event);
-        */
+
         // Zur Seite wechseln
-        navigateEventHandler(event);
+        navigator.navigateTo(BuergerHistoryView.NAME);
 
     }
 

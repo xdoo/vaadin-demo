@@ -75,7 +75,7 @@ public class BuergerRestClientImpl implements BuergerRestClient {
 
     @Override
     public List<Buerger> queryHistory(List<Link> links, RestTemplate restTemplate) {
-        return this.requestMultiSource(HttpMethod.GET, "audit", links, restTemplate);
+        return this.requestMultiSource(HttpMethod.GET, "history", links, restTemplate);
     }
 
     @Override
@@ -168,7 +168,7 @@ public class BuergerRestClientImpl implements BuergerRestClient {
             LOG.debug(exchange.toString());
             return BuergerAssembler.fromResources(exchange.getBody());
         }
-        LOG.warn("Found no link.");
+        LOG.warn("Found no link. Link: " + link.toString());
         return null;
     }
     

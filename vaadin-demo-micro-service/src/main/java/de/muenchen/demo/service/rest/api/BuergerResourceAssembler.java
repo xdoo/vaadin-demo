@@ -175,9 +175,13 @@ public class BuergerResourceAssembler {
         if (relations.contains(de.muenchen.vaadin.demo.api.rest.BuergerResource.PARTNER)) {
             resource.add(linkTo(methodOn(BuergerController.class).readBuergerPartner(buerger.getOid())).withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.PARTNER));
         }
-        
+
         if (relations.contains(de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_STAATSANGEHOERIGKEITEN)) {
             resource.add(linkTo(methodOn(BuergerController.class).addStaatangehoerigkeitBuerger(buerger.getOid(), null)).withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_STAATSANGEHOERIGKEITEN));
+        }
+
+        if (relations.contains(BuergerResource.HISTORY)) {
+            resource.add(linkTo(methodOn(BuergerController.class).findAudits(buerger.getId())).withRel(BuergerResource.HISTORY));
         }
         return resource;
     }
@@ -254,7 +258,8 @@ public class BuergerResourceAssembler {
                 de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_WOHNUNG,
                 de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_SACHBEARBEITER,
                 de.muenchen.vaadin.demo.api.rest.BuergerResource.PARTNER,
-                de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_PARTNER
+                de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_PARTNER,
+                de.muenchen.vaadin.demo.api.rest.BuergerResource.HISTORY
         );
     }
 

@@ -1,7 +1,6 @@
 package de.muenchen.demo.service.domain;
 
 import org.hibernate.envers.Audited;
-import org.hibernate.envers.NotAudited;
 import org.hibernate.search.annotations.IndexedEmbedded;
 
 import javax.persistence.*;
@@ -24,7 +23,7 @@ public abstract class BaseEntity implements Cloneable, Serializable {
 	private String oid;
 
 	@IndexedEmbedded(depth = 1, prefix = "mandant")
-	@NotAudited
+
 	@OneToOne
 	private Mandant mandant;
 

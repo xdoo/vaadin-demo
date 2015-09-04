@@ -157,7 +157,7 @@ public class BuergerViewFactory implements Serializable{
                     }
             );
             TableActionButton.Builder history = TableActionButton.Builder.<Buerger>make(controller, TableAction.tablehistory,navigateToForHistory, (container, id) ->
-                            getEventBus().post(new BuergerAppEvent(container.getItem(id),id, EventType.HISTORY).navigateTo(navigateToForHistory).from(navigateFrom))
+                            getEventBus().post(new BuergerAppEvent(container.getItem(id), id, EventType.HISTORY).from(navigateFrom))
             );
 
             searchTable=Optional.of(new BuergerSearchTable(
