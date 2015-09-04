@@ -405,7 +405,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
                 resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.add, Type.label)),
                 resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.add, Type.text)));
         succes.show(Page.getCurrent());
-        postEvent(new AppEvent<Buerger>(event.getEntity(), EventType.UPDATE_PARTNER));
+        postEvent(new ComponentEvent<Buerger>(event.getEntity(), EventType.UPDATE_PARTNER));
     }
 
     private void historyHandler(AppEvent<Buerger> event) {
@@ -443,7 +443,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
                  resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.add, Type.label)),
                  resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.add, Type.text)));
         succes.show(Page.getCurrent());
-        postEvent(new ComponentEvent<Buerger>(event.getEntity(), EventType.UPDATE));
+        postEvent(new ComponentEvent<Buerger>(event.getEntity(), EventType.UPDATE_CHILD));
     }
 
     private void queryChildEventHandler(AppEvent<Buerger> event) {

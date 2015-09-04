@@ -32,7 +32,7 @@ public class ChildTable extends GenericTable<Buerger> {
         if(event.getEventType().equals(EventType.DELETE)) {
             this.delete(event.getItemID());
         }
-        if(event.getEventType().equals(EventType.UPDATE)) {
+        if(event.getEventType().equals(EventType.UPDATE_CHILD)) {
             this.add(event.getEntity());
         }
         if(event.getEventType().equals(EventType.QUERY_CHILD)) {

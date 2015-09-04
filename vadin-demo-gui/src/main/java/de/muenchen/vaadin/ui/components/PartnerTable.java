@@ -37,7 +37,7 @@ public class PartnerTable extends GenericTable<Buerger> {
             this.delete(event.getItemID());
         }
 
-        if (event.getEventType().equals(EventType.UPDATE)) {
+        if (event.getEventType().equals(EventType.UPDATE_PARTNER)) {
             this.add(event.getEntity());
         }
 
