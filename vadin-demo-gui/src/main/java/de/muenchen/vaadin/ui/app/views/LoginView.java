@@ -57,6 +57,7 @@ public class LoginView extends VerticalLayout implements View {
         final VerticalLayout loginPanel = new VerticalLayout();
         loginPanel.setSizeUndefined();
         loginPanel.setSpacing(true);
+        loginPanel.setMargin(true);
         Responsive.makeResponsive(loginPanel);
         loginPanel.addStyleName("login-panel");
         loginPanel.addComponent(buildLabels());

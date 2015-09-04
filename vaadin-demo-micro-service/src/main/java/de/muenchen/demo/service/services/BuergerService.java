@@ -3,6 +3,7 @@ package de.muenchen.demo.service.services;
 import de.muenchen.demo.service.domain.Buerger;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -60,5 +61,5 @@ public interface BuergerService {
 
     public void releaseBuergerAllSachbearbeiter(String buergerOid);
 
-
+    public Set<Buerger> readBuergerHistory(Long id);
 }

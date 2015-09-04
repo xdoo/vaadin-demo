@@ -74,6 +74,11 @@ public class BuergerRestClientImpl implements BuergerRestClient {
     }
 
     @Override
+    public List<Buerger> queryHistory(List<Link> links, RestTemplate restTemplate) {
+        return this.requestMultiSource(HttpMethod.GET, "history", links, restTemplate);
+    }
+
+    @Override
     public List<Buerger> queryPartner(List<Link> links, RestTemplate restTemplate) {
         return this.requestMultiSource(HttpMethod.GET, "partner", links, restTemplate);
     }
@@ -103,7 +108,7 @@ public class BuergerRestClientImpl implements BuergerRestClient {
     @Override
     public Buerger addBuergerPartner(Buerger buerger, Buerger partner, RestTemplate restTemplate) {
         //ToDO solve need for hardcoded link
-        Optional<Link> link = Optional.of(new Link("http://localhost:8080/buerger/add/buerger/"+buerger.getOid()+"/partner/"+partner.getOid()+"").withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_KIND));
+        Optional<Link> link = Optional.of(new Link("http://localhost:8080/buerger/add/buerger/" + buerger.getOid() + "/partner/" + partner.getOid() + "").withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_KIND));
         LOG.warn("used Link: "+link.get().toString());
         return this.writeSingleSource(link, partner, restTemplate);
     }
@@ -170,7 +175,7 @@ public class BuergerRestClientImpl implements BuergerRestClient {
             LOG.debug(exchange.toString());
             return BuergerAssembler.fromResources(exchange.getBody());
         }
-        LOG.warn("Found no link.");
+        LOG.warn("Found no link. Link: " + link.toString());
         return null;
     }
     

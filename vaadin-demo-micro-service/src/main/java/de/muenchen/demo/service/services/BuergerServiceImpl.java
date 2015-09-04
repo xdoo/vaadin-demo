@@ -10,6 +10,8 @@ import de.muenchen.demo.service.util.QueryService;
 import de.muenchen.demo.service.util.events.BuergerEvent;
 import de.muenchen.demo.service.util.events.SachbearbeiterEvent;
 import de.muenchen.vaadin.demo.api.util.EventType;
+import org.hibernate.envers.AuditReader;
+import org.hibernate.envers.AuditReaderFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +22,6 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 /**
  *
@@ -36,6 +37,8 @@ public class BuergerServiceImpl implements BuergerService {
     private UserService userService;
     @Autowired
     MandantService mandantService;
+    @Autowired
+    EntityManager entityManager;
 
     EventBus eventbus;
 
@@ -416,5 +419,17 @@ public class BuergerServiceImpl implements BuergerService {
                 update(event.getEntity());
                 break;
         }
+    }
+
+    @Override
+    public Set<Buerger> readBuergerHistory(Long id) {
+        AuditReader reader = AuditReaderFactory.get(entityManager);
+        List<Number> revisions = reader.getRevisions(Buerger.class, id);
+
+        Set<Buerger> buergerAudits = revisions.stream()
+                .map(number -> reader.find(Buerger.class, id, number))
+                .collect(Collectors.toSet());
+
+        return buergerAudits;
     }
 }

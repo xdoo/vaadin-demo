@@ -70,6 +70,8 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
     private transient Optional<BuergerUpdateForm> updateForm = Optional.empty();
     private transient Optional<BuergerReadForm> readForm = Optional.empty();
     private transient Optional<BuergerSelectTable> partnerSearchTable = Optional.empty();
+    private transient Optional<HistoryForm> historyForm = Optional.empty();
+    private transient Optional<BuergerPartnerSearchTable> partnerSearchTable = Optional.empty();
     private transient Optional<BuergerPartnerTab> partnerTab = Optional.empty();
 
     @PostConstruct
@@ -167,7 +169,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
         return readForm.get();
     }
 
-    public BuergerSearchTable generateSearchTable(String navigateToForEdit, String navigateToForDetail, String navigateForCreate, String navigateFrom) {
+    public BuergerSearchTable generateSearchTable(String navigateToForEdit, String navigateToForDetail, String navigateForCreate, String navigateFrom, String navigateToForHistory) {
         LOG.debug("creating 'search' table for buerger");
         if(!searchTable.isPresent()){
             LOG.debug("new searchtabel");
@@ -192,6 +194,9 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
                     }
                             //getEventBus().post(new AppEvent<Buerger>(container.getItem(id),id,EventType.DELETE).navigateTo(navigateToForEdit).from(navigateFrom))
             );
+            TableActionButton.Builder history = TableActionButton.Builder.<Buerger>make(controller, TableAction.tablehistory,navigateToForHistory, (container, id) ->
+                            getEventBus().post(new BuergerAppEvent(container.getItem(id), id, EventType.HISTORY).from(navigateFrom))
+            );
 
             searchTable=Optional.of(new BuergerSearchTable(
                     controller,
@@ -201,11 +206,19 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
                     detail,
                     edit,
                     copy,
-                    delete
+                    delete,
+                    history
             ));}
         return searchTable.get();}
 
 
+    public HistoryForm generateHistoryTable(String navigateFrom){
+        LOG.debug("creating 'history' buerger form");
+        if(!historyForm.isPresent()){
+            HistoryForm form = new HistoryForm(controller, navigateFrom);
+            historyForm=Optional.of(form);}
+        return historyForm.get();
+        }
 
     public BuergerSelectTable generateChildSearchTable( String navigateFrom) {
 
@@ -330,6 +343,9 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
         createPartnerForm = Optional.empty();
         updateForm = Optional.empty();
         readForm = Optional.empty();
+        historyForm = Optional.empty();
+        partnerSearchTable = Optional.empty();
+        partnerTab = Optional.empty();
 
         //Work around to reload the current page for the changes to take effect.
         String old = controller.getNavigator().getState();
