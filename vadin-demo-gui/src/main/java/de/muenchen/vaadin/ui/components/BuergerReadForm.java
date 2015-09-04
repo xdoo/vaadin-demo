@@ -115,14 +115,6 @@ public class BuergerReadForm extends CustomComponent implements Consumer<Event<C
         setCompositionRoot(layout);
     }
 
-    public String getNavigateBack() {
-        return back;
-    }
-
-    public void setNavigateBack(String back) {
-        this.back = back;
-    }
-
     @Override
     public void accept(reactor.bus.Event<ComponentEvent<Buerger>> eventWrapper) {
         ComponentEvent event = eventWrapper.getData();

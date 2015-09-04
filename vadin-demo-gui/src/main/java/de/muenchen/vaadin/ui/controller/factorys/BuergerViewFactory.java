@@ -49,7 +49,6 @@ import static reactor.bus.selector.Selectors.T;
 public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshEvent>>{
 
     public static final String PENDING_FROM = BuergerTableView.NAME;
-    private static final long serialVersionUID = 1L;
 
     @Autowired
     EventBus eventBus;

@@ -386,7 +386,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 
     }
 
-    private void addPartnerEventHandler(BuergerAppEvent event) {
+    private void addPartnerEventHandler(AppEvent<Buerger> event) {
         navigator.getUI().addWindow(new TableSelectWindow(this, getViewFactory().generateBuergerPartnerSearchTable(PENDING_FROM)));
         postEvent(new AppEvent<Buerger>(EventType.QUERY));
     }
