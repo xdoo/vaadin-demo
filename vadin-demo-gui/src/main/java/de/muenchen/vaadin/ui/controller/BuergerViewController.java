@@ -13,6 +13,7 @@ import de.muenchen.vaadin.demo.api.util.EventType;
 import de.muenchen.vaadin.services.BuergerService;
 import de.muenchen.vaadin.services.MessageService;
 import de.muenchen.vaadin.ui.app.MainUI;
+import de.muenchen.vaadin.ui.app.views.BuergerTableView;
 import de.muenchen.vaadin.ui.app.views.TableSelectWindow;
 import de.muenchen.vaadin.ui.app.views.events.AppEvent;
 import de.muenchen.vaadin.ui.app.views.events.BuergerAppEvent;
@@ -29,7 +30,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Stack;
 
 import static de.muenchen.vaadin.ui.util.I18nPaths.NotificationType;
 import static de.muenchen.vaadin.ui.util.I18nPaths.Type;
@@ -378,7 +378,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
     }
 
     private void addPartnerEventHandler(BuergerAppEvent event) {
-        navigator.getUI().addWindow(new TableSelectWindow(this, getViewFactory().generateBuergerPartnerSearchTable(PENDING_FROM);
+        navigator.getUI().addWindow(new TableSelectWindow(this, getViewFactory().generateBuergerPartnerSearchTable(PENDING_FROM)));
         getEventbus().post(new BuergerAppEvent(EventType.QUERY));
     }
 
@@ -410,7 +410,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 
     private void addSearchedChildEventHandler(BuergerAppEvent event){
 
-        navigator.getUI().addWindow(new TableSelectWindow(this, getViewFactory().generateChildSearchTable(PENDING_FROM);
+        navigator.getUI().addWindow(new TableSelectWindow(this, getViewFactory().generateChildSearchTable(PENDING_FROM)));
         getEventbus().post(new BuergerAppEvent(EventType.QUERY));
     }
 
