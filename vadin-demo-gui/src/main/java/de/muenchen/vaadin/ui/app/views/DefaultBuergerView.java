@@ -51,7 +51,7 @@ public abstract class DefaultBuergerView extends VerticalLayout implements View{
         pageTitle.addStyleName(ValoTheme.LABEL_H1);
         pageTitle.addStyleName(ValoTheme.LABEL_COLORED);
         
-        
+        removeAllComponents();
         //HorizontalLayout head = new HorizontalLayout(pageTitle);
         addComponent(pageTitle);
     }
