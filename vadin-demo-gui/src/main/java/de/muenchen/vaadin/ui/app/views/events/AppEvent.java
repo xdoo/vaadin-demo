@@ -9,7 +9,7 @@ import java.util.Optional;
  *
  * @author claus.straube
  */
-public class AppEvent<T> {
+public class AppEvent<T> extends Event{
    
     protected EventType type;
     protected Object itemId;
@@ -17,25 +17,13 @@ public class AppEvent<T> {
     private T entity;
     private BeanItem<T> item;
 
-    public AppEvent() {
+    private final Class entityClass;
+
+    public AppEvent(Class<T> entityClass, EventType type) {
+        this.type = type;
+        this.entityClass = entityClass;
     }
 
-    public AppEvent(EventType type) {
-        this.type = type;
-    }
-
-    public AppEvent(T entity, EventType type) {
-        this.entity = entity;
-        this.type = type;
-    }
-
-    public AppEvent(BeanItem<T> item, Object itemId, EventType type) {
-        this.entity = item.getBean();
-        this.item = item;
-        this.type = type;
-        this.itemId = itemId;
-    }
-    
     public EventType getType() {
         return type;
     }
@@ -81,4 +69,23 @@ public class AppEvent<T> {
         this.item = item;
         return this;
     }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AppEvent<?> appEvent = (AppEvent<?>) o;
+
+        if (type != appEvent.type) return false;
+        return !(entityClass != null ? !entityClass.equals(appEvent.entityClass) : appEvent.entityClass != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
+
 }

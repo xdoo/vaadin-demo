@@ -3,9 +3,7 @@ package de.muenchen.vaadin.ui.components;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
-import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.demo.api.util.EventType;
-import de.muenchen.vaadin.ui.app.views.events.AppEvent;
 import de.muenchen.vaadin.ui.components.buttons.ActionButton;
 import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.components.buttons.TableActionButton;
@@ -25,7 +23,7 @@ public class BuergerSearchTable extends CustomComponent {
     public BuergerSearchTable(final BuergerViewController controller, String navigateToForCreate, String navigateBack, final TableActionButton.Builder... buttonBuilders) {
         ActionButton create = new ActionButton(controller, SimpleAction.create,navigateToForCreate);
         create.addClickListener(clickEvent -> {
-            controller.postEvent(new AppEvent<Buerger>(EventType.CREATE));
+            controller.postEvent(controller.buildAppEvent(EventType.CREATE));
             controller.getNavigator().navigateTo(navigateToForCreate);
         });
 

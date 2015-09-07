@@ -9,7 +9,6 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.demo.api.util.EventType;
-import de.muenchen.vaadin.ui.app.views.events.AppEvent;
 import de.muenchen.vaadin.ui.app.views.events.ComponentEvent;
 import de.muenchen.vaadin.ui.components.buttons.ActionButton;
 import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
@@ -108,7 +107,7 @@ public class BuergerReadForm extends CustomComponent implements Consumer<Event<C
         // die Schaltfläche zum Bearbeiten
         ActionButton updateButton = new ActionButton(controller, SimpleAction.update,this.navigateToUpdate);
         updateButton.addClickListener(clickEvent -> {
-            controller.postEvent(new AppEvent<Buerger>(EventType.SELECT2UPDATE).setEntity(this.binder.getItemDataSource().getBean()).setItem(binder.getItemDataSource()));
+            controller.postEvent(controller.buildAppEvent(EventType.SELECT2UPDATE).setEntity(this.binder.getItemDataSource().getBean()).setItem(binder.getItemDataSource()));
             controller.getNavigator().navigateTo(navigateToUpdate);
         });
         buttonLayout.addComponent(updateButton);
