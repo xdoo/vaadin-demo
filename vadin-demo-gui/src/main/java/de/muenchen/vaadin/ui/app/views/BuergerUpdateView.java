@@ -30,7 +30,7 @@ public class BuergerUpdateView extends DefaultBuergerView {
 
     @Override
     protected void site() {
-        form = this.controller.getViewFactory().generateUpdateForm(BuergerTableView.NAME);
+        form = this.controller.getViewFactory().generateUpdateForm(BuergerDetailView.NAME, BuergerTableView.NAME);
         addComponent(form);
     }
 }

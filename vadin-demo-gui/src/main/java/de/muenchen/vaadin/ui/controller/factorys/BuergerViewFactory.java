@@ -7,11 +7,23 @@ import com.vaadin.ui.TabSheet;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.demo.api.util.EventType;
 import de.muenchen.vaadin.ui.app.views.BuergerTableView;
-import de.muenchen.vaadin.ui.app.views.MainView;
 import de.muenchen.vaadin.ui.app.views.events.AppEvent;
 import de.muenchen.vaadin.ui.app.views.events.ComponentEvent;
 import de.muenchen.vaadin.ui.app.views.events.RefreshEvent;
-import de.muenchen.vaadin.ui.components.*;
+import de.muenchen.vaadin.ui.components.BuergerChildTab;
+import de.muenchen.vaadin.ui.components.BuergerCreateForm;
+import de.muenchen.vaadin.ui.components.BuergerPartnerTab;
+import de.muenchen.vaadin.ui.components.BuergerReadForm;
+import de.muenchen.vaadin.ui.components.BuergerSearchTable;
+import de.muenchen.vaadin.ui.components.BuergerSelectTable;
+import de.muenchen.vaadin.ui.components.BuergerTable;
+import de.muenchen.vaadin.ui.components.BuergerUpdateForm;
+import de.muenchen.vaadin.ui.components.ChildTable;
+import de.muenchen.vaadin.ui.components.GenericConfirmationWindow;
+import de.muenchen.vaadin.ui.components.GenericTable;
+import de.muenchen.vaadin.ui.components.HistoryForm;
+import de.muenchen.vaadin.ui.components.HistoryTable;
+import de.muenchen.vaadin.ui.components.PartnerTable;
 import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.components.buttons.TableAction;
 import de.muenchen.vaadin.ui.components.buttons.TableActionButton;
@@ -39,15 +51,13 @@ import static reactor.bus.selector.Selectors.T;
 public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshEvent>>{
 
     public static final String PENDING_FROM = BuergerTableView.NAME;
-
-    @Autowired
-    EventBus eventBus;
-
     /**
      * Logger
      */
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerViewFactory.class);
     private static final long serialVersionUID = 1L;
+    @Autowired
+    EventBus eventBus;
     private BuergerViewController controller;
 
     /**Singeltons of Components. **/
@@ -124,18 +134,10 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
         return partnerTab.get();
     }
 
-    /**
-     *Erzeugt eine Create Child Form.
-     * @return BuergerCreateForm
-     */
-    public BuergerCreateForm generateCreateChildForm() {
-        return this.generateCreateChildForm(PENDING_FROM);
-    }
-
     public BuergerUpdateForm generateUpdateForm(String navigateTo, String navigateBack) {
         LOG.debug("creating 'update' buerger form");
         if(!updateForm.isPresent()){
-            BuergerUpdateForm form = new BuergerUpdateForm(controller, navigateTo, PENDING_FROM);
+            BuergerUpdateForm form = new BuergerUpdateForm(controller, navigateTo, navigateBack);
             controller.registerToComponentEvent(form);
             controller.postEvent(new ComponentEvent<Buerger>(controller.getCurrent(), EventType.SELECT2UPDATE));
 
@@ -143,15 +145,10 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
         return updateForm.get();
     }
 
-    public BuergerUpdateForm generateUpdateForm(String navigateBack) {
-
-        return this.generateUpdateForm(PENDING_FROM, navigateBack);
-    }
-
     public BuergerReadForm generateReadForm(String navigateToUpdate, String navigateBack) {
         LOG.debug("creating 'read' buerger form");
         if(!readForm.isPresent()){
-            BuergerReadForm form = new BuergerReadForm(controller, navigateToUpdate, PENDING_FROM);
+            BuergerReadForm form = new BuergerReadForm(controller, navigateToUpdate, navigateBack);
             controller.registerToComponentEvent(form);
             readForm=Optional.of(form);}
         controller.postEvent(new ComponentEvent<Buerger>(controller.getCurrent(), EventType.SELECT2READ));
