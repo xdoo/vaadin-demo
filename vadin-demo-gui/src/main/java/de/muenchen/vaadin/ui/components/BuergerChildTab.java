@@ -6,7 +6,6 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.demo.api.util.EventType;
-import de.muenchen.vaadin.ui.app.views.events.AppEvent;
 import de.muenchen.vaadin.ui.app.views.events.ComponentEvent;
 import de.muenchen.vaadin.ui.components.buttons.ActionButton;
 import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
@@ -35,12 +34,12 @@ public class BuergerChildTab extends CustomComponent implements Consumer<Event<C
 
         ActionButton create = new ActionButton(controller, SimpleAction.create,navigateToForCreate);
         create.addClickListener(clickEvent -> {
-            controller.postEvent(new AppEvent<Buerger>(EventType.CREATE));
+            controller.postEvent(controller.buildAppEvent(EventType.CREATE));
             controller.getNavigator().navigateTo(navigateToForCreate);
         });
         ActionButton add = new ActionButton(controller, SimpleAction.add,"");
         add.addClickListener(clickEvent ->
-                        controller.postEvent(new AppEvent<Buerger>(EventType.ADD_SEARCHED_CHILD))
+                        controller.postEvent(controller.buildAppEvent(EventType.ADD_SEARCHED_CHILD))
         );
 
         table = controller.getViewFactory().generateChildTable(navigateToForDetail, navigateBack);
@@ -72,7 +71,7 @@ public class BuergerChildTab extends CustomComponent implements Consumer<Event<C
             Optional<BeanItem<Buerger>> opt = event.getItem();
             if (opt.isPresent()) {
                 Buerger entity = opt.get().getBean();
-                this.controller.postEvent(new AppEvent<Buerger>(EventType.QUERY_CHILD).setEntity(entity));
+                this.controller.postEvent(controller.buildAppEvent(EventType.QUERY_CHILD).setEntity(entity));
             } else {
                 LOG.warn("No item present.");
             }

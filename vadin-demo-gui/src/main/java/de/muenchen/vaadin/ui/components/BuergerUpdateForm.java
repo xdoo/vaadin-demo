@@ -16,7 +16,6 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.demo.api.util.EventType;
-import de.muenchen.vaadin.ui.app.views.events.AppEvent;
 import de.muenchen.vaadin.ui.app.views.events.ComponentEvent;
 import de.muenchen.vaadin.ui.components.buttons.ActionButton;
 import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
@@ -77,7 +76,7 @@ public class BuergerUpdateForm extends CustomComponent implements Consumer<Event
      */
     private void createForm() {
 
-        controller.registerToComponentEvent(this);
+        controller.registerToAllAppEvents(this);
 
         FormLayout layout = new FormLayout();
         HorizontalLayout buttonLayout = new HorizontalLayout();
@@ -136,7 +135,7 @@ public class BuergerUpdateForm extends CustomComponent implements Consumer<Event
             try {
                 binder.commit();
                 Buerger buerger = binder.getItemDataSource().getBean();
-                controller.postEvent(new AppEvent<Buerger>(buerger, EventType.UPDATE));
+                controller.postEvent(controller.buildAppEvent(EventType.UPDATE).setEntity(buerger));
                 getNavigator().navigateTo(getNavigateTo());
             } catch (FieldGroup.CommitException e) {
                 GenericErrorNotification errorNotification = new GenericErrorNotification("Fehler", "Beim erstellen der Person ist ein Fehler aufgetreten. Bitte füllen Sie alle Felder mit gültigen Werten aus.");
