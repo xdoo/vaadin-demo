@@ -149,11 +149,6 @@ public class MainUI extends UI implements ControllerContext{
                     LOG.warn("login view cannot be entered while logged in.");
                     return false;
                 }
-                if(event.getNewView().equals(event.getOldView())) {
-                    LOG.warn("You are already on: "+ event.getViewName());
-                    return false;
-                }
-
                 return true;
             }
 
