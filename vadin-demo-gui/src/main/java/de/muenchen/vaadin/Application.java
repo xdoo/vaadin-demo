@@ -16,15 +16,22 @@
 package de.muenchen.vaadin;
 
 
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
+
 
 @SpringBootApplication
 @EnableEurekaClient
+@Configuration
+@ComponentScan
+@EnableAutoConfiguration
 //@EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)
 public class Application {
     
@@ -39,4 +46,5 @@ public class Application {
         registrationBean.setFilter(hiddenHttpMethodFilter);
         return registrationBean;
     }
+
 }

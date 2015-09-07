@@ -1,8 +1,8 @@
 package de.muenchen.vaadin.ui.controller;
 
 import de.muenchen.vaadin.demo.api.domain.BaseEntity;
-import de.muenchen.vaadin.ui.app.views.events.AppEvent;
 import de.muenchen.vaadin.demo.api.util.EventType;
+import de.muenchen.vaadin.ui.app.views.events.AppEvent;
 
 /**
  * Interface to open up most important functionality of a Controller.
@@ -26,9 +26,10 @@ public interface ControllerContext<E extends BaseEntity> {
 
     /**
      * Tell the controller to post this Event on the EventBus.
-     * @param appEvent the event to publish.
+     * @param event the event to publish.
      */
-    void postToEventBus(AppEvent<?> appEvent);
+    void postEvent(Object event);
+
 
     /**
      * Build an AppEvent like using the constructor, but using the right Entity/Controller specific Class.

@@ -21,7 +21,8 @@ public enum TableAction implements Action{
     tabledelete(FontAwesome.TRASH_O, ValoTheme.BUTTON_DANGER),
     tabledetail(FontAwesome.FILE_O),
     tableedit(FontAwesome.PENCIL),
-    tableadd(FontAwesome.PLUS);
+    tableadd(FontAwesome.PLUS),
+    tablehistory(FontAwesome.ARCHIVE);
 
     /** The potential empy set of {@link com.vaadin.ui.themes.ValoTheme} style Strings. */
     private final Set<String> styleNames;

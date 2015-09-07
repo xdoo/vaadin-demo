@@ -14,16 +14,16 @@ import de.muenchen.demo.service.domain.UserRepository;
 import de.muenchen.demo.service.util.Eventbus;
 import de.muenchen.demo.service.util.IdService;
 import de.muenchen.demo.service.util.QueryService;
-import java.util.List;
-import javax.persistence.EntityManager;
-
 import de.muenchen.demo.service.util.events.UserEvent;
 import de.muenchen.vaadin.demo.api.util.EventType;
-import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.persistence.EntityManager;
+import java.util.List;
+import java.util.Objects;
 
 /**
  *

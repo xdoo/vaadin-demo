@@ -2,6 +2,7 @@ package de.muenchen.vaadin.ui.app.views.events;
 
 import com.vaadin.data.util.BeanItem;
 import de.muenchen.vaadin.demo.api.util.EventType;
+
 import java.util.Optional;
 
 /**
@@ -12,8 +13,6 @@ public class AppEvent<T> {
    
     protected EventType type;
     protected Object itemId;
-    protected String navigateTo;
-    protected String from;
     protected String query;
     private T entity;
     private BeanItem<T> item;
@@ -46,30 +45,12 @@ public class AppEvent<T> {
         return this;
     }
 
-    public AppEvent<T> setItemId(Object itemId) {
-        this.itemId = itemId;
-        return this;
-    }
-
     public Object getItemId() {
         return itemId;
     }
 
-    public AppEvent<T> navigateTo(String navigateTo) {
-        this.navigateTo = navigateTo;
-        return this;
-    }
-
-    public String getNavigateTo() {
-        return navigateTo;
-    }
-
-    public Optional<String> getFrom() {
-        return Optional.ofNullable(this.from);
-    }
-
-    public AppEvent<T> from(String navigateFrom) {
-        this.from = navigateFrom;
+    public AppEvent<T> setItemId(Object itemId) {
+        this.itemId = itemId;
         return this;
     }
 
@@ -90,14 +71,14 @@ public class AppEvent<T> {
         this.entity = entity;
         return this;
     }
-    
+
+    public BeanItem<T> getItem() {
+        return item;
+    }
+
     public AppEvent<T> setItem(BeanItem<T> item) {
         this.entity = item.getBean();
         this.item = item;
         return this;
-    }
-
-    public BeanItem<T> getItem() {
-        return item;
     }
 }

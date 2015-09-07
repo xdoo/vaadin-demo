@@ -15,6 +15,8 @@ public class Buerger extends BaseEntity {
     public static final String GEBURTSDATUM = "geburtsdatum";
     public static final String PARTNER = "partner";
 
+    public static final String KINDER = "kinder";
+
     @FieldIdentifier
     private String vorname;
     @FieldIdentifier

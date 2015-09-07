@@ -783,4 +783,13 @@ public class BuergerController {
         resource.add(linkTo(methodOn(BuergerController.class).readBuergerPartner(oid)).withSelfRel());
         return ResponseEntity.ok(resource);
     }
+
+
+    @RequestMapping(value = "/history/{id}", method = {RequestMethod.GET})
+    public ResponseEntity findAudits(@PathVariable("id") Long id) {
+        Set<Buerger> audits = this.service.readBuergerHistory(id);
+        LOG.error("Audits geladen: " + audits.toString());
+        SearchResultResource<BuergerResource> resource = this.assembler.toResource(Lists.newArrayList(audits));
+        return ResponseEntity.ok(resource);
+    }
 }

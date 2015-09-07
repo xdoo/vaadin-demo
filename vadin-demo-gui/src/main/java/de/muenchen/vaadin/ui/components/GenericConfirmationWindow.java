@@ -100,7 +100,7 @@ public class GenericConfirmationWindow extends Window {
         ok.setCaption(this.okButton);
         ok.addStyleName(ValoTheme.BUTTON_DANGER);
         ok.addClickListener(e -> {
-            controller.postToEventBus(event);
+            controller.postEvent(event);
             this.close();
         });
         

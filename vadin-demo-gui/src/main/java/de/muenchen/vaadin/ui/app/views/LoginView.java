@@ -1,21 +1,34 @@
 package de.muenchen.vaadin.ui.app.views;
-import com.vaadin.server.Page;
-import com.vaadin.shared.Position;
-import com.vaadin.ui.*;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.server.Page;
 import com.vaadin.server.Responsive;
+import com.vaadin.shared.Position;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.CssLayout;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.PasswordField;
+import com.vaadin.ui.TextField;
+import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.services.SecurityService;
 import de.muenchen.vaadin.ui.app.views.events.LoginEvent;
-import de.muenchen.vaadin.ui.util.EventBus;
+import org.springframework.beans.factory.annotation.Autowired;
+import reactor.bus.EventBus;
+
+import static reactor.bus.Event.wrap;
+
 @SpringView(name = LoginView.NAME)
 @UIScope
 public class LoginView extends VerticalLayout implements View {
@@ -23,14 +36,14 @@ public class LoginView extends VerticalLayout implements View {
     public static final String NAME = SecurityService.LOGIN_VIEW_NAME;
     // Services
     private SecurityService security;
+    @Autowired
     private EventBus eventBus;
     // Vaadin Komponenten
     private TextField username;
     private PasswordField password;
     @Autowired
-    public LoginView(SecurityService security, EventBus eventBus) {
+    public LoginView(SecurityService security) {
         this.security = security;
-        this.eventBus = eventBus;
         setSizeFull();
         Component loginForm = buildLoginForm();
         addComponent(loginForm);
@@ -44,6 +57,7 @@ public class LoginView extends VerticalLayout implements View {
         final VerticalLayout loginPanel = new VerticalLayout();
         loginPanel.setSizeUndefined();
         loginPanel.setSpacing(true);
+        loginPanel.setMargin(true);
         Responsive.makeResponsive(loginPanel);
         loginPanel.addStyleName("login-panel");
         loginPanel.addComponent(buildLabels());
@@ -74,7 +88,7 @@ public class LoginView extends VerticalLayout implements View {
             @Override
             public void buttonClick(final ClickEvent event) {
                 if(security.login(username.getValue(), password.getValue())) {
-                    eventBus.post(new LoginEvent());
+                    eventBus.notify(LoginEvent.class,wrap(new LoginEvent()));
                 } else {
 // Anmeldung fehlgeschlagen
                     Notification notif = new Notification(
