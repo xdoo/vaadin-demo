@@ -32,7 +32,9 @@ import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.util.List;
 
-import static de.muenchen.vaadin.ui.util.I18nPaths.*;
+import static de.muenchen.vaadin.ui.util.I18nPaths.NotificationType;
+import static de.muenchen.vaadin.ui.util.I18nPaths.Type;
+import static de.muenchen.vaadin.ui.util.I18nPaths.getNotificationPath;
 import static reactor.bus.selector.Selectors.T;
 
 /**
@@ -401,8 +403,8 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
     private void saveAsPartnerEventHandler(AppEvent<Buerger> event) {
         this.addBuergerPartner(event.getEntity());
         GenericSuccessNotification succes = new GenericSuccessNotification(
-                resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.add, Type.label)),
-                resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.add, Type.text)));
+                resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.add, Type.label,"partner")),
+                resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.add, Type.text,"partner")));
         succes.show(Page.getCurrent());
         postEvent(new ComponentEvent<Buerger>(event.getEntity(), EventType.UPDATE_PARTNER));
     }
@@ -425,8 +427,8 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
         // UI Komponenten aktualisieren
 
         GenericSuccessNotification succes = new GenericSuccessNotification(
-                resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.release, Type.label)),
-                resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.release, Type.text)));
+                resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.release, Type.label,"child")),
+                resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.release, Type.text,"child")));
         succes.show(Page.getCurrent());
 
         ComponentEvent<Buerger> componentEvent = new ComponentEvent<Buerger>(EventType.DELETE);
@@ -445,8 +447,8 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 
         this.addBuergerKind(event.getEntity());
         GenericSuccessNotification succes = new GenericSuccessNotification(
-                 resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.add, Type.label)),
-                 resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.add, Type.text)));
+                 resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.add, Type.label, "child")),
+                 resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.add, Type.text, "child")));
         succes.show(Page.getCurrent());
         postEvent(new ComponentEvent<Buerger>(event.getEntity(), EventType.UPDATE_CHILD));
     }

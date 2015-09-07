@@ -51,6 +51,16 @@ public class I18nPaths {
     }
 
     /**
+     * Concatenates the additional attributes seperated by "."
+     * @param attribues list of attribues to concatenate
+     * @return concatenated String
+     */
+    private static String addAttribues(final String... attribues) {
+        return Stream.of(attribues)
+                .reduce("", (left, right) -> left + "." + right);
+    }
+
+    /**
      * Returns the formpath-ending for a form with the given arguments.
      * Params may not be null.
      * @param a SimpleAction the GUI is used for.
@@ -58,8 +68,8 @@ public class I18nPaths {
      * @param t Type of this text.
      * @return path
      */
-    public static String getFormPath(Action a, Component c, Type t) {
-        return "form" + get(a, c, t);
+    public static String getFormPath(Action a, Component c, Type t, String... additionalAttributes) {
+        return "form" + get(a, c, t) + addAttribues(additionalAttributes);
     }
 
     /**
@@ -68,8 +78,8 @@ public class I18nPaths {
      * @param t Type of this text.
      * @return path
      */
-    public static String getPagePath(Type t) {
-        return "page" + get(t);
+    public static String getPagePath(Type t, String... additionalAttributes) {
+        return "page" + get(t) + addAttribues(additionalAttributes);
     }
 
     /**
@@ -79,8 +89,8 @@ public class I18nPaths {
      * @param t Type of this text.
      * @return path
      */
-    public static String getNavigationPath(Component c, Type t) {
-        return "navigation" + get(c,t);
+    public static String getNavigationPath(Component c, Type t, String... additionalAttributes) {
+        return "navigation" + get(c,t) + addAttribues(additionalAttributes);
     }
 
     /**
@@ -91,8 +101,8 @@ public class I18nPaths {
      * @param t Type of this text.
      * @return path
      */
-    public static String getNotificationPath(NotificationType nt, Action a, Type t) {
-        return "notification" + get(nt,a,t);
+    public static String getNotificationPath(NotificationType nt, Action a, Type t, String... additionalAttributes) {
+        return "notification" + get(nt,a,t) + addAttribues(additionalAttributes);
     }
 
     /**
@@ -102,8 +112,8 @@ public class I18nPaths {
      * @param t Type of this text.
      * @return path
      */
-    public static String getConfirmationPath(Action a, Type t) {
-        return "confirmation" + get(a,t);
+    public static String getConfirmationPath(Action a, Type t, String... additionalAttributes) {
+        return "confirmation" + get(a,t) + addAttribues(additionalAttributes);
     }
 
     /**
@@ -113,8 +123,8 @@ public class I18nPaths {
      * @param t Type of this text.
      * @return path
      */
-    public static String getEntityFieldPath(String field, Type t){
-        return field + get(t);
+    public static String getEntityFieldPath(String field, Type t, String... additionalAttributes){
+        return field + get(t) + addAttribues(additionalAttributes);
     }
     
 }

@@ -357,10 +357,6 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
         historyForm = Optional.empty();
         partnerSearchTable = Optional.empty();
         partnerTab = Optional.empty();
-
-        //Work around to reload the current page for the changes to take effect.
-        String old = controller.getNavigator().getState();
-        controller.getNavigator().navigateTo(MainView.NAME);
-        controller.getNavigator().navigateTo(old);
+        controller.getNavigator().navigateTo(controller.getNavigator().getState());
     }
 }
