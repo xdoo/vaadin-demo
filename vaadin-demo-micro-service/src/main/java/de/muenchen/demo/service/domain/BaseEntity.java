@@ -1,6 +1,5 @@
 package de.muenchen.demo.service.domain;
 
-import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.search.annotations.IndexedEmbedded;
 
@@ -11,7 +10,6 @@ import java.io.Serializable;
  *
  * @author claus.straube
  */
-@Audited
 @MappedSuperclass
 public abstract class BaseEntity implements Cloneable, Serializable {
 

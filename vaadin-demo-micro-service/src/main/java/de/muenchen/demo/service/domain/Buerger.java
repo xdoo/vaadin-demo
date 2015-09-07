@@ -1,6 +1,6 @@
 package de.muenchen.demo.service.domain;
 
-import org.hibernate.envers.Audited;
+import de.muenchen.demo.service.util.AuditingListener;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 
@@ -14,7 +14,7 @@ import java.util.Set;
  * @author claus.straube
  */
 @Entity
-@Audited
+@EntityListeners(AuditingListener.class)
 @Indexed
 @Table(name = "BUERGER")
 public class Buerger extends BaseEntity {

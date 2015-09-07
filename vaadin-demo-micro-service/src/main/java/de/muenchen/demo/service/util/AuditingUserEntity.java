@@ -1,18 +1,31 @@
 package de.muenchen.demo.service.util;
 
 import org.hibernate.envers.DefaultRevisionEntity;
-import org.hibernate.envers.RevisionEntity;
+import org.hibernate.search.annotations.Field;
 
 import javax.persistence.Entity;
+import java.util.Date;
 
 /**
  * Created by fabian.holtkoetter on 02.09.15.
  */
 @Entity
-@RevisionEntity(AuditingListener.class)
 public class AuditingUserEntity extends DefaultRevisionEntity {
+
+    @Field
+    String entity;
+    @Field
     private String username;
-    private String remoteAdress;
+    @Field
+    private Date date;
+
+    public String getEntity() {
+        return entity;
+    }
+
+    public void setEntity(String entity) {
+        this.entity = entity;
+    }
 
     public String getUsername() {
         return username;
@@ -22,11 +35,11 @@ public class AuditingUserEntity extends DefaultRevisionEntity {
         this.username = username;
     }
 
-    public String getRemoteAdress() {
-        return remoteAdress;
+    public Date getDate() {
+        return date;
     }
 
-    public void setRemoteAdress(String remoteAdress) {
-        this.remoteAdress = remoteAdress;
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

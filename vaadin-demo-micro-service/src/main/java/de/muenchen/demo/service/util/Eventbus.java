@@ -1,9 +1,7 @@
 package de.muenchen.demo.service.util;
 
-import com.google.common.eventbus.EventBus;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import reactor.core.dispatch.SynchronousDispatcher;
 
 import java.io.Serializable;
 
@@ -11,10 +9,10 @@ import java.io.Serializable;
  * Created by rene.zarwel on 24.08.15.
  */
 @Component
-public class Eventbus extends EventBus implements Serializable{
-    protected static final Logger LOG = LoggerFactory.getLogger(EventBus.class);
+//@UIScope
+public class Eventbus extends reactor.bus.EventBus implements Serializable {
 
     public Eventbus(){
-        super();
+        super(SynchronousDispatcher.INSTANCE);
     }
 }

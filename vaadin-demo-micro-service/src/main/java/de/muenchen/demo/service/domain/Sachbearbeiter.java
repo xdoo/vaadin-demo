@@ -1,25 +1,17 @@
 package de.muenchen.demo.service.domain;
 
-import org.hibernate.envers.Audited;
+import de.muenchen.demo.service.util.AuditingListener;
 
+import javax.persistence.*;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
 
 /**
  *
  * @author claus.straube
  */
 @Entity
-@Audited
+@EntityListeners(AuditingListener.class)
 @Table(name = "SACHBEARBEITER")
 public class Sachbearbeiter extends BaseEntity {
 

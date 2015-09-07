@@ -5,20 +5,21 @@
  */
 package de.muenchen.demo.service.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
-import org.hibernate.envers.Audited;
+import de.muenchen.demo.service.util.AuditingListener;
 import org.hibernate.search.annotations.Indexed;
+
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.Table;
 
 /**
  *
  * @author praktikant.tmar
  */
 @Entity
-@Audited
 @Indexed
 @Table(name = "ACCOUNTS")
+@EntityListeners(AuditingListener.class)
 public class Account extends SecurityEntity{
     
     
