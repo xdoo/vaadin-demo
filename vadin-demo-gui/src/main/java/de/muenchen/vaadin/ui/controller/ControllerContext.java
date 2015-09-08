@@ -3,6 +3,7 @@ package de.muenchen.vaadin.ui.controller;
 import de.muenchen.vaadin.demo.api.domain.BaseEntity;
 import de.muenchen.vaadin.demo.api.util.EventType;
 import de.muenchen.vaadin.ui.app.views.events.AppEvent;
+import de.muenchen.vaadin.ui.app.views.events.ComponentEvent;
 
 /**
  * Interface to open up most important functionality of a Controller.
@@ -38,7 +39,16 @@ public interface ControllerContext<E extends BaseEntity> {
      * @param eventType the type the event should be
      * @return an Controller-specific AppEvent.
      */
-    AppEvent<E> buildEvent(EventType eventType);
+    AppEvent<E> buildAppEvent(EventType eventType);
+
+    /**
+     * Build an ComponentEvent like using the constructor, but using the right Entity/Controller specific Class.
+     *
+     * This is needed for the EventBus (it cannot distinguish between generic classes because of type erasure).
+     * @param eventType the type the event should be
+     * @return an Controller-specific AppEvent.
+     */
+    ComponentEvent<E> buildComponentEvent(EventType eventType);
 
     String getBasePath();
 }

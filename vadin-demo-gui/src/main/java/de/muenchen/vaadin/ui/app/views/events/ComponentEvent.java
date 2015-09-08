@@ -2,18 +2,19 @@ package de.muenchen.vaadin.ui.app.views.events;
 
 import com.vaadin.data.util.BeanItem;
 import de.muenchen.vaadin.demo.api.util.EventType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author claus
  * @param <T>
  */
-public class ComponentEvent<T> {
+public class ComponentEvent<T> extends Event{
     
     protected static final Logger LOG = LoggerFactory.getLogger(ComponentEvent.class);
     
@@ -23,20 +24,13 @@ public class ComponentEvent<T> {
     protected Object itemID;
     protected String from;
 
-    public ComponentEvent(EventType eventType) {
+    private final Class entityClass;
+
+    public ComponentEvent(Class<T> entityClass,EventType eventType) {
         this.eventType = eventType;
+        this.entityClass = entityClass;
     }
-    
-    public ComponentEvent(T entity, EventType eventType) {
-        this.entities.add(entity);
-        this.eventType = eventType;
-        this.items.add(new BeanItem<>(entity));
-    }
-    
-    public ComponentEvent(BeanItem<T> item, EventType eventType) {
-        this.items.add(item);
-        this.eventType = eventType;
-    }
+
     
     public ComponentEvent<T> addEntity(T entity) {
         this.entities.add(entity);
@@ -120,5 +114,22 @@ public class ComponentEvent<T> {
         this.from = from;
         return this;
     }
-    
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ComponentEvent<?> event = (ComponentEvent<?>) o;
+
+        if (eventType != event.eventType) return false;
+        return !(entityClass != null ? !entityClass.equals(event.entityClass) : event.entityClass != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
+
 }

@@ -34,15 +34,15 @@ public class BuergerPartnerTab extends CustomComponent implements Consumer<Event
 
         ActionButton create = new ActionButton(controller, SimpleAction.create,navigateToForCreate);
         create.addClickListener(clickEvent -> {
-            controller.postEvent(new AppEvent<Buerger>(EventType.CREATE));
+            controller.postEvent(controller.buildAppEvent(EventType.CREATE));
             controller.getNavigator().navigateTo(navigateToForCreate);
         });
         ActionButton add = new ActionButton(controller, SimpleAction.add,navigateToForAdd);
         add.addClickListener(clickEvent -> {
-            controller.postEvent(new AppEvent<Buerger>(EventType.ADD_PARTNER));
+            controller.postEvent(controller.buildAppEvent(EventType.ADD_PARTNER));
         });
 
-        table = controller.getViewFactory().generatePartnerTable(navigateToForDetail, from);
+        table = controller.getViewFactory().generatePartnerTable(navigateToForDetail);
 
         // Layout für die Schaltflächen über der Tabelle
         HorizontalLayout hlayout = new HorizontalLayout(create, add);
@@ -69,11 +69,11 @@ public class BuergerPartnerTab extends CustomComponent implements Consumer<Event
         ComponentEvent event = eventWrapper.getData();
 
         if (event.getEventType().equals(EventType.SELECT2READ)) {
-            LOG.debug("seleted buerger to show childs.");
+            LOG.debug("seleted buerger to show partner.");
             Optional<BeanItem<Buerger>> opt = event.getItem();
             if (opt.isPresent()) {
                 Buerger entity = opt.get().getBean();
-                this.controller.postEvent(new AppEvent<Buerger>(EventType.QUERY_CHILD).setEntity(entity));
+                this.controller.postEvent(controller.buildAppEvent(EventType.QUERY_CHILD).setEntity(entity));
             } else {
                 LOG.warn("No item present.");
             }

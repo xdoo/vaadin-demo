@@ -43,7 +43,7 @@ public class BuergerDetailView extends DefaultBuergerView {
         layout.setSpacing(true);
         
         // read form
-        readForm = this.controller.getViewFactory().generateReadForm(BuergerUpdateView.NAME, NAME);
+        readForm = this.controller.getViewFactory().generateReadForm(BuergerUpdateView.NAME, BuergerTableView.NAME);
         layout.addComponent(readForm);
         
         // tab sheet
@@ -51,14 +51,14 @@ public class BuergerDetailView extends DefaultBuergerView {
         tabSheet.addStyleName(ValoTheme.TABSHEET_FRAMED);
         
         // add kind tab
-        childTab=controller.getViewFactory().generateChildTab(BuergerDetailView.NAME, BuergerCreateChildView.NAME, NAME);
+        childTab = controller.getViewFactory().generateChildTab(BuergerDetailView.NAME, BuergerCreateChildView.NAME, BuergerTableView.NAME);
         TabSheet.Tab kindTab = tabSheet.addTab(childTab);
         kindTab.setCaption(controller.resolveRelative(getEntityFieldPath(Buerger.KINDER, I18nPaths.Type.label)));
 
 
         partnerTab = controller.getViewFactory().generatePartnerTab(BuergerDetailView.NAME, BuergerCreatePartnerView.NAME, null, NAME);
         TabSheet.Tab pTab = tabSheet.addTab(partnerTab);
-        pTab.setCaption("Partner"); // TODO -> i18n
+        pTab.setCaption(controller.resolveRelative(getEntityFieldPath(Buerger.PARTNER, I18nPaths.Type.label)));
         layout.addComponent(tabSheet);
         
         addComponent(layout);

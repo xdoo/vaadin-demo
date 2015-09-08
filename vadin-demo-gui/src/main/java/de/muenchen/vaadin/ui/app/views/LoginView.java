@@ -88,7 +88,8 @@ public class LoginView extends VerticalLayout implements View {
             @Override
             public void buttonClick(final ClickEvent event) {
                 if(security.login(username.getValue(), password.getValue())) {
-                    eventBus.notify(LoginEvent.class,wrap(new LoginEvent()));
+                    LoginEvent loginEvent = new LoginEvent();
+                    eventBus.notify(loginEvent,wrap(loginEvent));
                 } else {
 // Anmeldung fehlgeschlagen
                     Notification notif = new Notification(

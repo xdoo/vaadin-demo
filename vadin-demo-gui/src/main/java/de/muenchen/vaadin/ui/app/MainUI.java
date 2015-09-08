@@ -33,6 +33,7 @@ import de.muenchen.vaadin.ui.app.views.BuergerTableView;
 import de.muenchen.vaadin.ui.app.views.LoginView;
 import de.muenchen.vaadin.ui.app.views.MainView;
 import de.muenchen.vaadin.ui.app.views.events.AppEvent;
+import de.muenchen.vaadin.ui.app.views.events.ComponentEvent;
 import de.muenchen.vaadin.ui.app.views.events.LoginEvent;
 import de.muenchen.vaadin.ui.app.views.events.LogoutEvent;
 import de.muenchen.vaadin.ui.app.views.events.RefreshEvent;
@@ -49,7 +50,7 @@ import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
 import static reactor.bus.Event.wrap;
-import static reactor.bus.selector.Selectors.T;
+import static reactor.bus.selector.Selectors.object;
 
 @SpringUI
 @Title("Vaadin Spring-Security Sample")
@@ -149,11 +150,6 @@ public class MainUI extends UI implements ControllerContext{
                     LOG.warn("login view cannot be entered while logged in.");
                     return false;
                 }
-                if(event.getNewView().equals(event.getOldView())) {
-                    LOG.warn("You are already on: "+ event.getViewName());
-                    return false;
-                }
-
                 return true;
             }
 
@@ -183,8 +179,8 @@ public class MainUI extends UI implements ControllerContext{
             }
         });
 
-        eventBus.on(T(LoginEvent.class), this::loginEventHandler);
-        eventBus.on(T(LogoutEvent.class),this::logoutEventHandler);
+        eventBus.on(object(new LoginEvent()), this::loginEventHandler);
+        eventBus.on(object(new LogoutEvent()),this::logoutEventHandler);
 
     }
 
@@ -296,11 +292,16 @@ public class MainUI extends UI implements ControllerContext{
 
     @Override
     public void postEvent(Object event) {
-        eventBus.notify(event.getClass(), wrap(event));
+        eventBus.notify(event, wrap(event));
     }
 
     @Override
-    public AppEvent<? extends BaseEntity> buildEvent(EventType eventType) {
+    public AppEvent<? extends BaseEntity> buildAppEvent(EventType eventType) {
+        return null;
+    }
+
+    @Override
+    public ComponentEvent buildComponentEvent(EventType eventType) {
         return null;
     }
 
