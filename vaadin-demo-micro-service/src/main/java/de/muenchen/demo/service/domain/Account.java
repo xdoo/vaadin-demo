@@ -5,11 +5,9 @@
  */
 package de.muenchen.demo.service.domain;
 
-import de.muenchen.demo.service.util.AuditingListener;
 import org.hibernate.search.annotations.Indexed;
 
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.Table;
 
 /**
@@ -19,7 +17,6 @@ import javax.persistence.Table;
 @Entity
 @Indexed
 @Table(name = "ACCOUNTS")
-@EntityListeners(AuditingListener.class)
 public class Account extends SecurityEntity{
     
     

@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.bus.Event;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -41,11 +42,10 @@ public class UserServiceImpl implements UserService {
     Eventbus eventbus;
 
     @Autowired
-    public UserServiceImpl(UserRepository repo, EntityManager em, Eventbus eventBus) {
+    public UserServiceImpl(UserRepository repo, EntityManager em, Eventbus eventbus) {
         this.repo = repo;
         this.search = new QueryService<>(this, em, User.class, "userName", "email");
-        this.eventbus = eventBus;
-        eventBus.register(this);
+        this.eventbus = eventbus;
     }
 
     @Override
@@ -85,7 +85,7 @@ public class UserServiceImpl implements UserService {
 
         //this.sachbearbeiterService.releaseUserSachbearbeiter(oid);
         this.deleteUser(item.getUsername());
-        eventbus.post(new UserEvent(EventType.RELEASE, item));
+        eventbus.notify(UserEvent.class, Event.wrap(new UserEvent(EventType.RELEASE, item)));
 
         this.repo.delete(item);
     }

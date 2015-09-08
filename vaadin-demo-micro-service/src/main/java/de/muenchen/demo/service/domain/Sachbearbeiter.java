@@ -1,8 +1,15 @@
 package de.muenchen.demo.service.domain;
 
-import de.muenchen.demo.service.util.AuditingListener;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,7 +18,6 @@ import java.util.Set;
  * @author claus.straube
  */
 @Entity
-@EntityListeners(AuditingListener.class)
 @Table(name = "SACHBEARBEITER")
 public class Sachbearbeiter extends BaseEntity {
 
@@ -31,6 +37,7 @@ public class Sachbearbeiter extends BaseEntity {
     @JoinColumn(name = "User_Id", referencedColumnName = "Id")
     private User user;
 
+    @JsonBackReference
     @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
     private Set<Buerger> buerger = new HashSet<>();
 

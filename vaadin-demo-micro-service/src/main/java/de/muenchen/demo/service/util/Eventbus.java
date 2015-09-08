@@ -12,7 +12,7 @@ import java.io.Serializable;
 //@UIScope
 public class Eventbus extends reactor.bus.EventBus implements Serializable {
 
-    public Eventbus(){
+    public Eventbus() {
         super(SynchronousDispatcher.INSTANCE);
     }
 }

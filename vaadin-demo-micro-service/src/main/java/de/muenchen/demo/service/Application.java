@@ -48,5 +48,4 @@ public class Application {
     public GlobalAuthenticationConfigurerAdapter configurationAdapter2(){
         return AuthenticationConfiguratorAdapter.findAdapter("LDAP_Authentication");
     }
-
 }
