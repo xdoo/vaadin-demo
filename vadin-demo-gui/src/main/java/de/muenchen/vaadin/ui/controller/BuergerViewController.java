@@ -12,7 +12,6 @@ import de.muenchen.vaadin.demo.api.util.EventType;
 import de.muenchen.vaadin.services.BuergerService;
 import de.muenchen.vaadin.services.MessageService;
 import de.muenchen.vaadin.ui.app.MainUI;
-import de.muenchen.vaadin.ui.app.views.BuergerHistoryView;
 import de.muenchen.vaadin.ui.app.views.TableSelectWindow;
 import de.muenchen.vaadin.ui.app.views.events.AppEvent;
 import de.muenchen.vaadin.ui.app.views.events.ComponentEvent;
@@ -267,6 +266,16 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
     }
 
     /**
+     * Vernichted die Verbindung zwischen einem Bürger und seinem Partner
+     *
+     * @param event
+     */
+    private void releasePartner(AppEvent<Buerger> event) {
+        service.releasePartner(getCurrent().getBean(), event.getEntity());
+    }
+
+
+    /**
      * Speichert eine Kindbeziehung zu einem {@link Buerger} Objekt in der Datenbank.
      * 
      * @param entity Kind
@@ -322,10 +331,6 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
         return service.queryPartner(entity);
     }
 
-    public List<Buerger> queryHistory(Buerger entity) {
-
-        return service.queryHistory(entity);
-    }
     
     /////////////////////
     // Event Steuerung //
@@ -387,8 +392,8 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
             case RELEASE_PARENT:
                 releaseParentHandler(event);
                 break;
-            case HISTORY:
-                historyHandler(event);
+            case RELEASE_PARTNER:
+                releasePartnerHandler(event);
                 break;
             case SAVE_AS_PARTNER:
                 saveAsPartnerEventHandler(event);
@@ -405,6 +410,18 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 
     }
 
+    private void releasePartnerHandler(AppEvent<Buerger> event) {
+        this.releasePartner(event);
+        // UI Komponenten aktualisieren
+
+        GenericSuccessNotification succes = new GenericSuccessNotification(
+                resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.release, Type.label,"partner")),
+                resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.release, Type.text,"partner")));
+        succes.show(Page.getCurrent());
+
+        postEvent(buildComponentEvent(EventType.DELETE).setItemID(event.getItemId()));
+    }
+
     private void addPartnerEventHandler() {
         navigator.getUI().addWindow(new TableSelectWindow(this, getViewFactory().generateBuergerPartnerSearchTable()));
         postEvent(buildAppEvent(EventType.QUERY));
@@ -418,18 +435,6 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
         succes.show(Page.getCurrent());
         postEvent(buildComponentEvent(EventType.UPDATE_PARTNER).addEntity(event.getEntity()));
     }
-
-    private void historyHandler(AppEvent<Buerger> event) {
-        postEvent(buildComponentEvent(EventType.HISTORY).addEntities(this.queryHistory(event.getEntity())));
-        this.current = event.getItem();
-
-        // UI Komponente aktualisieren
-        //this.eventbus.post(new BuergerComponentEvent(event.getItem().getBean(), EventType.HISTORY));
-
-        // Zur Seite wechseln
-        navigator.navigateTo(BuergerHistoryView.NAME);
-    }
-
 
     private void releaseParentHandler(AppEvent<Buerger> event) {
         // Service Operationen ausführen

@@ -6,6 +6,7 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.TabSheet;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.demo.api.util.EventType;
+import de.muenchen.vaadin.ui.app.views.events.AppEvent;
 import de.muenchen.vaadin.ui.app.views.events.RefreshEvent;
 import de.muenchen.vaadin.ui.components.BuergerChildTab;
 import de.muenchen.vaadin.ui.components.BuergerCreateForm;
@@ -18,8 +19,6 @@ import de.muenchen.vaadin.ui.components.BuergerUpdateForm;
 import de.muenchen.vaadin.ui.components.ChildTable;
 import de.muenchen.vaadin.ui.components.GenericConfirmationWindow;
 import de.muenchen.vaadin.ui.components.GenericTable;
-import de.muenchen.vaadin.ui.components.HistoryForm;
-import de.muenchen.vaadin.ui.components.HistoryTable;
 import de.muenchen.vaadin.ui.components.PartnerTable;
 import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.components.buttons.TableAction;
@@ -65,7 +64,6 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
     private transient Optional<BuergerCreateForm> createPartnerForm = Optional.empty();
     private transient Optional<BuergerUpdateForm> updateForm = Optional.empty();
     private transient Optional<BuergerReadForm> readForm = Optional.empty();
-    private transient Optional<HistoryForm> historyForm = Optional.empty();
     private transient Optional<BuergerSelectTable> partnerSearchTable = Optional.empty();
     private transient Optional<BuergerPartnerTab> partnerTab = Optional.empty();
 
@@ -151,7 +149,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
         return readForm.get();
     }
 
-    public BuergerSearchTable generateSearchTable(String navigateToForEdit, String navigateToForDetail, String navigateForCreate, String navigateFrom, String navigateToForHistory) {
+    public BuergerSearchTable generateSearchTable(String navigateToForEdit, String navigateToForDetail, String navigateForCreate, String navigateFrom) {
         LOG.debug("creating 'search' table for buerger");
         if(!searchTable.isPresent()){
             LOG.debug("new searchtabel");
@@ -176,10 +174,6 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
                         win.center();
                         win.focus();
                     }
-                    //getEventBus().post(new BuergerAppEvent(container.getItem(id),id,EventType.DELETE).navigateTo(navigateToForEdit).navigateBack(navigateFrom))
-            );
-            TableActionButton.Builder history = TableActionButton.Builder.<Buerger>make(controller, TableAction.tablehistory, navigateToForHistory, (container, id) ->
-                    controller.postEvent(controller.buildAppEvent(EventType.HISTORY).setItem(container.getItem(id)).setItemId(id))
             );
 
             searchTable=Optional.of(new BuergerSearchTable(
@@ -189,7 +183,6 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
                     detail,
                     edit,
                     copy,
-                    history,
                     delete
             ));}
         return searchTable.get();}
@@ -267,8 +260,19 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
             controller.postEvent(controller.buildAppEvent(EventType.SELECT2READ).setItem(container.getItem(id)).setItemId(id));
             getController().getNavigator().navigateTo(navigateToForDetail);
         });
+        TableActionButton.Builder delete = TableActionButton.Builder.<Buerger>make(controller, TableAction.tabledelete, navigateToForDetail, (container, id) ->
+                {
+                    BeanItem<Buerger> item = container.getItem(id);
+                    GenericConfirmationWindow win = new GenericConfirmationWindow(
+                            controller.buildAppEvent(EventType.RELEASE_PARTNER).setItem(container.getItem(id)).setItemId(id),
+                            controller, SimpleAction.release);
+                    controller.getNavigator().getUI().addWindow(win);
+                    win.center();
+                    win.focus();
+                }
+        );
         LOG.debug("creating table for partner");
-        PartnerTable table = new PartnerTable(controller, detail);
+        PartnerTable table = new PartnerTable(controller, detail, delete);
         List<Buerger> entities = controller.queryPartner(controller.getCurrent().getBean());
         controller.registerToAllComponentEvents(table);
 
@@ -277,34 +281,6 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
         return table;
     }
 
-    public HistoryForm generateHistoryForm(String navigateFrom) {
-        LOG.debug("creating 'history' buerger form");
-        if (!historyForm.isPresent()) {
-            HistoryForm form = new HistoryForm(controller, navigateFrom);
-            historyForm = Optional.of(form);
-        }
-        return historyForm.get();
-    }
-
-    public HistoryTable generateHistoryTable(String navigateToForDetail) {
-        LOG.debug("creating 'history' buerger form");
-        LOG.debug("creating table for history");
-
-
-        TableActionButton.Builder detail = TableActionButton.Builder.<Buerger>make(controller, TableAction.tabledetail, navigateToForDetail, (container, id) -> {
-            LOG.debug("Not yet implemented.");
-            //getEventBus().post(new BuergerAppEvent(container.getItem(id), id, EventType.SELECT2READ));
-            //getController().getNavigator().navigateTo(navigateToForDetail);
-            Notification.show("Not yet implemented.", Notification.Type.TRAY_NOTIFICATION);
-        });
-
-        HistoryTable table = new HistoryTable(controller, detail);
-        List<Buerger> entities = controller.queryHistory(controller.getCurrent().getBean());
-        getController().registerToAllComponentEvents(table);
-        controller.postEvent(controller.buildComponentEvent(EventType.HISTORY).addEntities(entities));
-
-        return table;
-    }
 
     public GenericTable generateTable(final TableActionButton.Builder... buttonBuilders) {
         return this.createTable(buttonBuilders);
@@ -339,7 +315,6 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
         createPartnerForm = Optional.empty();
         updateForm = Optional.empty();
         readForm = Optional.empty();
-        historyForm = Optional.empty();
         partnerSearchTable = Optional.empty();
         partnerTab = Optional.empty();
         controller.getNavigator().navigateTo(controller.getNavigator().getState());
