@@ -12,7 +12,6 @@ import de.muenchen.vaadin.demo.api.util.EventType;
 import de.muenchen.vaadin.services.BuergerService;
 import de.muenchen.vaadin.services.MessageService;
 import de.muenchen.vaadin.ui.app.MainUI;
-import de.muenchen.vaadin.ui.app.views.BuergerHistoryView;
 import de.muenchen.vaadin.ui.app.views.BuergerTableView;
 import de.muenchen.vaadin.ui.app.views.TableSelectWindow;
 import de.muenchen.vaadin.ui.app.views.events.AppEvent;
@@ -320,11 +319,6 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
         return service.queryPartner(entity);
     }
 
-    public List<Buerger> queryHistory(Buerger entity) {
-
-        return service.queryHistory(entity);
-    }
-    
     /////////////////////
     // Event Steuerung //
     /////////////////////
@@ -385,9 +379,6 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
             case RELEASE_PARENT:
                 releaseParentHandler(event);
                 break;
-            case HISTORY:
-                historyHandler(event);
-                break;
             case SAVE_AS_PARTNER:
                 saveAsPartnerEventHandler(event);
                 break;
@@ -434,18 +425,6 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
         succes.show(Page.getCurrent());
         postEvent(new ComponentEvent<Buerger>(event.getEntity(), EventType.UPDATE_PARTNER));
     }
-
-    private void historyHandler(AppEvent<Buerger> event) {
-        postEvent(new ComponentEvent<Buerger>(EventType.HISTORY).addEntities(this.queryHistory(event.getEntity())));
-        this.current = event.getItem();
-
-        // UI Komponente aktualisieren
-        //this.eventbus.post(new BuergerComponentEvent(event.getItem().getBean(), EventType.HISTORY));
-
-        // Zur Seite wechseln
-        navigator.navigateTo(BuergerHistoryView.NAME);
-    }
-
 
     private void releaseParentHandler(AppEvent<Buerger> event) {
         // Service Operationen ausführen
