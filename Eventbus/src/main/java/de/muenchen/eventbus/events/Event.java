@@ -1,4 +1,4 @@
-package de.muenchen.vaadin.ui.app.views.events;
+package de.muenchen.eventbus.events;
 
 /**
  * Created by rene.zarwel on 07.09.15.

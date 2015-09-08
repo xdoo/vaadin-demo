@@ -1,4 +1,4 @@
-package de.muenchen.vaadin.demo.api.util;
+package de.muenchen.eventbus.types;
 
 /**
  *

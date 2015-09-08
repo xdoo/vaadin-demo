@@ -7,7 +7,7 @@ import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.vaadin.demo.api.util.EventType;
+import de.muenchen.eventbus.types.EventType;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
 /**

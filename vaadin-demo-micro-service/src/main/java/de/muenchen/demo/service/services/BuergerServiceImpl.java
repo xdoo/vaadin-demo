@@ -4,12 +4,19 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
-import de.muenchen.demo.service.domain.*;
+import de.muenchen.demo.service.domain.Buerger;
+import de.muenchen.demo.service.domain.BuergerRepository;
+import de.muenchen.demo.service.domain.Mandant;
+import de.muenchen.demo.service.domain.Pass;
+import de.muenchen.demo.service.domain.Sachbearbeiter;
+import de.muenchen.demo.service.domain.StaatsangehoerigkeitReference;
+import de.muenchen.demo.service.domain.User;
+import de.muenchen.demo.service.domain.Wohnung;
 import de.muenchen.demo.service.util.IdService;
 import de.muenchen.demo.service.util.QueryService;
 import de.muenchen.demo.service.util.events.BuergerEvent;
 import de.muenchen.demo.service.util.events.SachbearbeiterEvent;
-import de.muenchen.vaadin.demo.api.util.EventType;
+import de.muenchen.eventbus.types.EventType;
 import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
 import org.slf4j.Logger;
@@ -20,7 +27,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
-import java.util.*;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**

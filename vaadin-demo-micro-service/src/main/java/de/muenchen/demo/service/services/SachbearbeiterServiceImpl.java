@@ -11,29 +11,29 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import de.muenchen.demo.service.domain.Buerger;
 import de.muenchen.demo.service.domain.Mandant;
-import de.muenchen.demo.service.domain.User;
 import de.muenchen.demo.service.domain.Sachbearbeiter;
 import de.muenchen.demo.service.domain.SachbearbeiterRepository;
+import de.muenchen.demo.service.domain.User;
 import de.muenchen.demo.service.util.IdService;
 import de.muenchen.demo.service.util.QueryService;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import javax.persistence.EntityManager;
-
 import de.muenchen.demo.service.util.events.BuergerEvent;
 import de.muenchen.demo.service.util.events.SachbearbeiterEvent;
 import de.muenchen.demo.service.util.events.UserEvent;
-import de.muenchen.vaadin.demo.api.util.EventType;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import de.muenchen.eventbus.types.EventType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import javax.persistence.EntityManager;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  *

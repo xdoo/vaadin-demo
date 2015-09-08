@@ -2,12 +2,10 @@ package de.muenchen.vaadin.ui.controller.factorys;
 
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.TabSheet;
+import de.muenchen.eventbus.events.RefreshEvent;
+import de.muenchen.eventbus.types.EventType;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
-import de.muenchen.vaadin.demo.api.util.EventType;
-import de.muenchen.vaadin.ui.app.views.events.AppEvent;
-import de.muenchen.vaadin.ui.app.views.events.RefreshEvent;
 import de.muenchen.vaadin.ui.components.BuergerChildTab;
 import de.muenchen.vaadin.ui.components.BuergerCreateForm;
 import de.muenchen.vaadin.ui.components.BuergerPartnerTab;
@@ -69,7 +67,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
 
     @PostConstruct
     public void init(){
-        eventBus.on(T(RefreshEvent.class),this);
+        eventBus.on(T(RefreshEvent.class), this);
     }
 
 

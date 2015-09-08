@@ -1,9 +1,9 @@
 package de.muenchen.vaadin.ui.controller;
 
+import de.muenchen.eventbus.events.AppEvent;
+import de.muenchen.eventbus.events.ComponentEvent;
+import de.muenchen.eventbus.types.EventType;
 import de.muenchen.vaadin.demo.api.domain.BaseEntity;
-import de.muenchen.vaadin.demo.api.util.EventType;
-import de.muenchen.vaadin.ui.app.views.events.AppEvent;
-import de.muenchen.vaadin.ui.app.views.events.ComponentEvent;
 
 /**
  * Interface to open up most important functionality of a Controller.

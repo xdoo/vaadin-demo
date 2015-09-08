@@ -7,14 +7,14 @@ import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.UI;
+import de.muenchen.eventbus.events.AppEvent;
+import de.muenchen.eventbus.events.ComponentEvent;
+import de.muenchen.eventbus.types.EventType;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
-import de.muenchen.vaadin.demo.api.util.EventType;
 import de.muenchen.vaadin.services.BuergerService;
 import de.muenchen.vaadin.services.MessageService;
 import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.app.views.TableSelectWindow;
-import de.muenchen.vaadin.ui.app.views.events.AppEvent;
-import de.muenchen.vaadin.ui.app.views.events.ComponentEvent;
 import de.muenchen.vaadin.ui.components.GenericSuccessNotification;
 import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.controller.factorys.BuergerViewFactory;
@@ -31,7 +31,9 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static de.muenchen.vaadin.ui.util.I18nPaths.*;
+import static de.muenchen.vaadin.ui.util.I18nPaths.NotificationType;
+import static de.muenchen.vaadin.ui.util.I18nPaths.Type;
+import static de.muenchen.vaadin.ui.util.I18nPaths.getNotificationPath;
 import static reactor.bus.selector.Selectors.object;
 
 /**
