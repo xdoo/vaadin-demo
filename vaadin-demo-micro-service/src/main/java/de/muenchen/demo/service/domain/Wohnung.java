@@ -5,6 +5,7 @@
  */
 package de.muenchen.demo.service.domain;
 
+import de.muenchen.demo.service.services.AdresseService;
 import java.io.Serializable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,8 +14,10 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
@@ -23,22 +26,25 @@ import org.hibernate.envers.NotAudited;
 @Entity
 @Table(name = "WOHNUNGEN")
 @Audited
-public class Wohnung extends BaseEntity implements Serializable  {
+public class Wohnung extends BaseEntity implements Serializable {
+//    @Transient
+//    @Autowired
+//    AdresseService adresseService;
 
-  
     @Column(name = "WOHN_STOCK")
     private String stock;
 
     @Column(length = 20, name = "WOHN_AUSRICHTUNG")
     private String ausrichtung;
-    
-    
 
     @NotAudited
-    @OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)   
+    @OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinColumn(name = "Adresse_Id", referencedColumnName = "Id")
     private AdresseReference adresse;
-    
+
+    @Transient
+    Adresse adr;
+
     public Wohnung() {
     }
 
@@ -69,7 +75,7 @@ public class Wohnung extends BaseEntity implements Serializable  {
     }
 
     public void setAdresse(AdresseReference adresse) {
-        
+
         this.adresse = adresse;
     }
 
@@ -78,9 +84,14 @@ public class Wohnung extends BaseEntity implements Serializable  {
         return String.format("id > %s | oid > %s  | ausrichtung > %s | stock > %s", this.getId(), this.getOid(), this.ausrichtung, this.stock);
     }
 
+    public Adresse getAdr() {
+        
+//        return adresseService.read(this.adresse.getOid());
+        
+        return this.adr;
+    }
 
-
-    } 
-    
-
-
+    public void setAdr(Adresse adresse) {
+        this.adr = adresse;
+    }
+}

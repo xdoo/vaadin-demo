@@ -53,7 +53,6 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
      * Logger
      */
     private static final Logger LOG = LoggerFactory.getLogger(BuergerViewController.class);
-    private static final String PENDING_FROM = BuergerTableView.NAME;
 
     /**
      * Die Service Klasse
@@ -84,7 +83,6 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
     private BuergerViewFactory buergerViewFactory;
     // item cache
     private BeanItem<Buerger> current;
-    private List<Buerger> currentEntities;
 
     @Autowired
     public BuergerViewController(BuergerService service, VaadinUtil util) {
@@ -269,6 +267,16 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
     }
 
     /**
+     * Vernichted die Verbindung zwischen einem Bürger und seinem Partner
+     *
+     * @param event
+     */
+    private void releasePartner(AppEvent<Buerger> event) {
+        service.releasePartner(getCurrent().getBean(), event.getEntity());
+    }
+
+
+    /**
      * Speichert eine Kindbeziehung zu einem {@link Buerger} Objekt in der Datenbank.
      * 
      * @param entity Kind
@@ -324,10 +332,6 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
         return service.queryPartner(entity);
     }
 
-    public List<Buerger> queryHistory(Buerger entity) {
-
-        return service.queryHistory(entity);
-    }
     
     /////////////////////
     // Event Steuerung //
@@ -384,16 +388,19 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
                 saveAsChildEventHandler(event);
                 break;
             case ADD_SEARCHED_CHILD:
-                addSearchedChildEventHandler(event);
+                addSearchedChildEventHandler();
                 break;
             case RELEASE_PARENT:
                 releaseParentHandler(event);
+                break;
+            case RELEASE_PARTNER:
+                releasePartnerHandler(event);
                 break;
             case SAVE_AS_PARTNER:
                 saveAsPartnerEventHandler(event);
                 break;
             case ADD_PARTNER:
-                addPartnerEventHandler(event);
+                addPartnerEventHandler();
                 break;
             case QUERY_PARTNER:
                 queryPartner(event.getEntity());
@@ -404,8 +411,20 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 
     }
 
-    private void addPartnerEventHandler(AppEvent<Buerger> event) {
-        navigator.getUI().addWindow(new TableSelectWindow(this, getViewFactory().generateBuergerPartnerSearchTable(PENDING_FROM)));
+    private void releasePartnerHandler(AppEvent<Buerger> event) {
+        this.releasePartner(event);
+        // UI Komponenten aktualisieren
+
+        GenericSuccessNotification succes = new GenericSuccessNotification(
+                resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.release, Type.label,"partner")),
+                resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.release, Type.text,"partner")));
+        succes.show(Page.getCurrent());
+
+        postEvent(buildComponentEvent(EventType.DELETE).setItemID(event.getItemId()));
+    }
+
+    private void addPartnerEventHandler() {
+        navigator.getUI().addWindow(new TableSelectWindow(this, getViewFactory().generateBuergerPartnerSearchTable()));
         postEvent(buildAppEvent(EventType.QUERY));
     }
 
@@ -417,7 +436,6 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
         succes.show(Page.getCurrent());
         postEvent(buildComponentEvent(EventType.UPDATE_PARTNER).addEntity(event.getEntity()));
     }
-
 
     private void releaseParentHandler(AppEvent<Buerger> event) {
         // Service Operationen ausführen
@@ -433,9 +451,9 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 
     }
 
-    private void addSearchedChildEventHandler(AppEvent<Buerger> event){
+    private void addSearchedChildEventHandler() {
 
-        navigator.getUI().addWindow(new TableSelectWindow(this, getViewFactory().generateChildSearchTable(PENDING_FROM)));
+        navigator.getUI().addWindow(new TableSelectWindow(this, getViewFactory().generateChildSearchTable()));
         postEvent(buildAppEvent(EventType.QUERY));
     }
 
@@ -458,14 +476,15 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 
     private void queryEventHandler(AppEvent<Buerger> event) {
 
+        List<Buerger> currentEntities;
         if(event.getQuery().isPresent()) {
-            this.currentEntities = this.queryBuerger(event.getQuery().get());
+            currentEntities = this.queryBuerger(event.getQuery().get());
         } else {
-            this.currentEntities = this.queryBuerger();
+            currentEntities = this.queryBuerger();
         }
 
         // UI Komponenten aktualisieren
-        postEvent(buildComponentEvent(EventType.QUERY).addEntities(this.currentEntities));
+        postEvent(buildComponentEvent(EventType.QUERY).addEntities(currentEntities));
     }
 
     private void select2ReadEventHandler(AppEvent<Buerger> event) {

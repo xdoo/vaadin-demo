@@ -69,9 +69,10 @@ public class WohnungResourceAssembler {
         if (Objects.isNull(wohnung.getAdresse())) {
             LOG.warn(String.format("found no adresse for this wohnung"));
         } else {
-            Adresse ad = this.service.readAdresse(wohnung.getOid());
+            Adresse ad = this.adresseService.read(wohnung.getAdresse().getOid());
             resource.setAdOid(ad.getOid());
             resource.setHausnummer(ad.getHausnummer());
+            resource.setBuchstabe(ad.getBuchstabe());
             resource.setStadt(ad.getStadt());
             resource.setStrasse(ad.getStrasse());
             resource.setPlz(ad.getPlz());
@@ -102,14 +103,15 @@ public class WohnungResourceAssembler {
             resource.add(linkTo(methodOn(WohnungController.class).saveWohnung(null)).withRel(HateoasUtil.REL_SAVE));
         }
 
-        if (relations.contains(WohnungResource.ADRESSEN)) {
-            resource.add(linkTo(methodOn(WohnungController.class).readWohnungAdresse(wohnung.getOid())).withRel(WohnungResource.ADRESSEN));
-        }
-
         if (relations.contains(HateoasUtil.REL_COPY)) {
             resource.add(linkTo(methodOn(WohnungController.class).copyWohnung(wohnung.getOid())).withRel(HateoasUtil.REL_COPY));
         }
-
+        if (relations.contains(de.muenchen.vaadin.demo.api.rest.WohnungResource.BUERGER)) {
+            resource.add(linkTo(methodOn(WohnungController.class).readWohnungBuerger(wohnung.getOid())).withRel(de.muenchen.vaadin.demo.api.rest.WohnungResource.BUERGER));
+        }
+        if (relations.contains(de.muenchen.vaadin.demo.api.rest.WohnungResource.RELEASE_BUERGERS)) {
+            resource.add(linkTo(methodOn(WohnungController.class).releaseWohnungAllBuerger(wohnung.getOid())).withRel(de.muenchen.vaadin.demo.api.rest.WohnungResource.RELEASE_BUERGERS));
+        }
         return resource;
     }
 
@@ -120,7 +122,7 @@ public class WohnungResourceAssembler {
      * @param wohnungEntity
      * @param adresseEntity
      */
-    public void fromResource(final WohnungResource resource, final Wohnung wohnungEntity,final Adresse adresseEntity ) {
+    public void fromResource(final WohnungResource resource, final Wohnung wohnungEntity, final Adresse adresseEntity) {
         if (!Strings.isNullOrEmpty(resource.getOid())) {
 //            this.dozer.map(resource, entity);
             wohnungEntity.setOid(resource.getOid());
@@ -130,6 +132,7 @@ public class WohnungResourceAssembler {
             adresseEntity.setOid(resource.getAdOid());
             adresseEntity.setStrasse(resource.getStrasse());
             adresseEntity.setHausnummer(resource.getHausnummer());
+            adresseEntity.setBuchstabe(resource.getBuchstabe());
             adresseEntity.setPlz(resource.getPlz());
             adresseEntity.setStadt(resource.getStadt());
             adresseEntity.setStrasseReference(resource.getStrasseReference());
@@ -152,7 +155,7 @@ public class WohnungResourceAssembler {
 
         List<WohnungResource> resource = new ArrayList<>();
         wohnung.stream().forEach((b) -> {
-            resource.add(this.toResource(b, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE));
+            resource.add(assembleWithAllLinks(b));
         });
         return resource;
     }
@@ -164,8 +167,8 @@ public class WohnungResourceAssembler {
                 HateoasUtil.REL_DELETE,
                 HateoasUtil.REL_UPDATE,
                 HateoasUtil.REL_COPY,
-                // Relationen
-                WohnungResource.ADRESSEN
+                de.muenchen.vaadin.demo.api.rest.WohnungResource.BUERGER,
+                de.muenchen.vaadin.demo.api.rest.WohnungResource.RELEASE_BUERGERS
         );
     }
 

@@ -6,6 +6,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.demo.api.util.EventType;
+import de.muenchen.vaadin.ui.app.views.events.AppEvent;
 import de.muenchen.vaadin.ui.app.views.events.ComponentEvent;
 import de.muenchen.vaadin.ui.components.buttons.ActionButton;
 import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
@@ -41,7 +42,7 @@ public class BuergerPartnerTab extends CustomComponent implements Consumer<Event
             controller.postEvent(controller.buildAppEvent(EventType.ADD_PARTNER));
         });
 
-        table = controller.getViewFactory().generatePartnerTable(navigateToForDetail, from);
+        table = controller.getViewFactory().generatePartnerTable(navigateToForDetail);
 
         // Layout für die Schaltflächen über der Tabelle
         HorizontalLayout hlayout = new HorizontalLayout(create, add);
@@ -68,7 +69,7 @@ public class BuergerPartnerTab extends CustomComponent implements Consumer<Event
         ComponentEvent event = eventWrapper.getData();
 
         if (event.getEventType().equals(EventType.SELECT2READ)) {
-            LOG.debug("seleted buerger to show childs.");
+            LOG.debug("seleted buerger to show partner.");
             Optional<BeanItem<Buerger>> opt = event.getItem();
             if (opt.isPresent()) {
                 Buerger entity = opt.get().getBean();

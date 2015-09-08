@@ -20,8 +20,10 @@ public class AdresseExterne extends BaseEntity implements Serializable {
 
     @Column(length = 70, nullable = true, name = "ADR_STR")
     private String strasse;
-    @Column(length = 70, nullable = true, name = "ADR_HAUSNUMMER")
-    private String hausnummer;
+    @Column(nullable = true, name = "ADR_HAUSNUMMER")
+    private Integer hausnummer;
+    @Column(length = 10, nullable = true, name = "ADR_BUCHSTABE")
+    private String buchstabe;
     @Column(length = 20, nullable = true, name = "ADR_STADT")
     private String stadt;
     @Column(length = 10, nullable = true, name = "ADR_PLZ")
@@ -35,13 +37,22 @@ public class AdresseExterne extends BaseEntity implements Serializable {
         this.strasse = strasse;
     }
 
-    public String getHausnummer() {
+    public Integer getHausnummer() {
         return hausnummer;
     }
 
-    public void setHausnummer(String hausnummer) {
+    public void setHausnummer(Integer hausnummer) {
         this.hausnummer = hausnummer;
     }
+
+    public String getBuchstabe() {
+        return buchstabe;
+    }
+
+    public void setBuchstabe(String buchstabe) {
+        this.buchstabe = buchstabe;
+    }
+
 
     public String getStadt() {
         return stadt;

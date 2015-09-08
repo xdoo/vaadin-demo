@@ -281,10 +281,12 @@ public class BuergerServiceTest {
         int x = this.count(DomainConstants.M2);
         ArrayList<String> oids = new ArrayList();
         oids.add(DomainConstants.M2_B027);
+        oids.add(DomainConstants.M2_B025);
+        oids.add(DomainConstants.M2_B026);
         oids.add(DomainConstants.M2_B028);
         service.copy(oids);
         List<Buerger> bs = service.query();
-        assertEquals(x + 2, bs.size());
+        assertEquals(x + 4, bs.size());
         System.out.println(String.format("Objekte mit der OID '%s' und der OID '%s' konnte erfolgreich in Objekt  kopiert (und in DB gespeichert) werden", DomainConstants.M2_B027, DomainConstants.M2_B028));
 
     }

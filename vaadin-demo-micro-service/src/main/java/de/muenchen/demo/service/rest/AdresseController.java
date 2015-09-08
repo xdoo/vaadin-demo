@@ -6,7 +6,9 @@ import de.muenchen.vaadin.demo.api.rest.AdresseResource;
 import de.muenchen.demo.service.rest.api.AdresseResourceAssembler;
 import de.muenchen.demo.service.services.AdresseService;
 import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,9 +53,9 @@ public class AdresseController {
         if (LOG.isDebugEnabled()) {
             LOG.debug("query adresse");
         }
-        SearchResultResource<AdresseResource> resource;
-        resource = this.assembler.toResource(this.service.query());
-        resource.add(linkTo(methodOn(BuergerController.class).queryBuerger()).withSelfRel()); // add self link
+        List<Adresse> result = this.service.query();
+        SearchResultResource<AdresseResource> resource = this.assembler.toResource(result);
+        resource.add(linkTo(methodOn(AdresseController.class).queryAdresse()).withSelfRel()); // add self link
         return ResponseEntity.ok(resource);
     }
 
@@ -70,25 +72,7 @@ public class AdresseController {
             LOG.debug("new adresse");
         }
         Adresse entity = this.service.create();
-        AdresseResource resource = this.assembler.toResource(entity, HateoasUtil.REL_NEW, HateoasUtil.REL_SAVE);
-        return ResponseEntity.ok(resource);
-    }
-
-    /**
-     * Macht eine Kopie einer Adresse. Diese Kopie wird bei Erstellung in der DB
-     * gespeichert.
-     *
-     * @param oid
-     * @return
-     */
-    @Secured({"PERM_copyAdresse"})
-    @RequestMapping(value = "/copy/{oid}", method = {RequestMethod.GET})
-    public ResponseEntity copyAdresse(@PathVariable String oid) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("copy adresse");
-        }
-        Adresse entity = this.service.copy(oid);
-        AdresseResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
+        AdresseResource resource = this.assembler.toResource(entity, HateoasUtil.REL_NEW);
         return ResponseEntity.ok(resource);
     }
 
@@ -105,83 +89,28 @@ public class AdresseController {
             LOG.debug("read adresse");
         }
         Adresse entity = this.service.read(oid);
-        AdresseResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
+        AdresseResource resource = this.assembler.assembleWithAllLinks(entity);
         return ResponseEntity.ok(resource);
     }
 
     /**
-     * Speichert Änderungen an einer bereits vorhandenen Adresse.
+     * Adressen mit Parametern suchen.
      *
-     * @param oid
-     * @param request
-     * @return
-     */
-    @Secured({"PERM_updateAdresse"})
-    @RequestMapping(value = "/{oid}", method = {RequestMethod.POST})
-    public ResponseEntity updateAdresse(@PathVariable("oid") String oid, @RequestBody AdresseResource request) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("update adresse");
-        }
-        Adresse entity = service.read(request.getOid());
-        LOG.info("davor > " + entity.toString());
-        this.assembler.fromResource(request, entity);
-        LOG.info("danach > " + entity.toString());
-        this.service.update(entity);
-        AdresseResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
-        return ResponseEntity.ok(resource);
-    }
-
-    /**
-     * Speichert eine neue Adresse.
-     *
-     * @param request
-     * @return
-     */
-    @Secured({"PERM_saveAdresse"})
-    @RequestMapping(value = "/save", method = {RequestMethod.POST})
-    public ResponseEntity saveAdresse(@RequestBody AdresseResource request) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("save adresse");
-        }
-        Adresse entity = new Adresse();
-        this.assembler.fromResource(request, entity);
-
-        this.service.save(entity);
-        AdresseResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
-        return ResponseEntity.ok(resource);
-
-    }
-    /**
-     * Adressen
-     * mit Parametern suchen.
-     *
-     * @param query
+     * @param adresse
      * @return
      */
     //@Secured({"PERM_sucheAdresse"})
     @RequestMapping(value = "/suche", method = {RequestMethod.POST})
-    public ResponseEntity sucheAdresse(@RequestBody String query) {
+    public ResponseEntity sucheAdresse(@RequestBody AdresseResource adresse) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("suche Adresse with query > " + query);
+            LOG.debug("suche Adresse with query > " + adresse.toString());
         }
-        Adresse[] result = this.service.suche(query);
-        //SearchResultResource<AdresseResource> resource = this.assembler.toResource(result);
-        return ResponseEntity.ok(result);
+        Adresse entity = new Adresse();
+        this.assembler.fromResource(adresse, entity);
+        List<Adresse> result = this.service.suche(entity);
+        Set<Adresse> set = new HashSet<>(result);
+        List resource = this.assembler.toResource(set, HateoasUtil.REL_NEW);
+        return ResponseEntity.ok(resource);
     }
 
-    /**
-     * Löscht eine Adresse.
-     *
-     * @param oid
-     * @return
-     */
-    @Secured({"PERM_deleteAdresse"})
-    @RequestMapping(value = "/{oid}", method = {RequestMethod.DELETE})
-    public ResponseEntity deleteAdresse(@PathVariable("oid") String oid) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("delete adresse");
-        }
-        this.service.delete(oid);
-        return ResponseEntity.ok().build();
-    }
 }

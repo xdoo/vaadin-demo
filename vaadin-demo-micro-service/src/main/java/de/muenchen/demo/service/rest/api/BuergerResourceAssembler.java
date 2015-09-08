@@ -173,17 +173,17 @@ public class BuergerResourceAssembler {
             resource.add(linkTo(methodOn(BuergerController.class).addKindBuerger(buerger.getOid(), null)).withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_KIND));
         }
         if (relations.contains(de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_PARTNER)) {
-            resource.add(new Link("/add/buerger/"+buerger.getOid()+"/partner/").withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_PARTNER));
-
+            resource.add(linkTo(methodOn(BuergerController.class).addPartnerBuerger(buerger.getOid(), null)).withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_PARTNER));
         }
         if (relations.contains(de.muenchen.vaadin.demo.api.rest.BuergerResource.PARTNER)) {
             resource.add(linkTo(methodOn(BuergerController.class).readBuergerPartner(buerger.getOid())).withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.PARTNER));
         }
-
+        if (relations.contains(de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_PARTNER)) {
+            resource.add(linkTo(methodOn(BuergerController.class).releaseBuergerPartner(buerger.getOid(), null)).withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_PARTNER));
+        }
         if (relations.contains(de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_STAATSANGEHOERIGKEITEN)) {
             resource.add(linkTo(methodOn(BuergerController.class).addStaatangehoerigkeitBuerger(buerger.getOid(), null)).withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_STAATSANGEHOERIGKEITEN));
         }
-
         if (relations.contains(BuergerResource.HISTORY)) {
             resource.add(linkTo(methodOn(BuergerController.class).findAudits(buerger.getId())).withRel(BuergerResource.HISTORY));
         }
@@ -255,6 +255,7 @@ public class BuergerResourceAssembler {
                 de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_SACHBEARBEITER,
                 de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_WOHNUNG,
                 de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_ELTERNTEIL,
+                de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_PARTNER,
                 de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_KIND,
                 de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_PASS,
                 de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_SACHBEARBEITER,

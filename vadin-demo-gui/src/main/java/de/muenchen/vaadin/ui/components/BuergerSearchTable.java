@@ -20,14 +20,14 @@ public class BuergerSearchTable extends CustomComponent {
     private BuergerSearchForm search;
     private GenericTable table;
 
-    public BuergerSearchTable(final BuergerViewController controller, String navigateToForCreate, String navigateBack, final TableActionButton.Builder... buttonBuilders) {
+    public BuergerSearchTable(final BuergerViewController controller, String navigateToForCreate, final TableActionButton.Builder... buttonBuilders) {
         ActionButton create = new ActionButton(controller, SimpleAction.create,navigateToForCreate);
         create.addClickListener(clickEvent -> {
             controller.postEvent(controller.buildAppEvent(EventType.CREATE));
             controller.getNavigator().navigateTo(navigateToForCreate);
         });
 
-        table = controller.getViewFactory().generateTable(navigateBack, buttonBuilders);
+        table = controller.getViewFactory().generateTable(buttonBuilders);
         search = new BuergerSearchForm(controller);
         search.setWidth("100%");
         

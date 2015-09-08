@@ -126,5 +126,5 @@ public class I18nPaths {
     public static String getEntityFieldPath(String field, Type t, String... additionalAttributes){
         return field + get(t) + addAttribues(additionalAttributes);
     }
-    
+
 }

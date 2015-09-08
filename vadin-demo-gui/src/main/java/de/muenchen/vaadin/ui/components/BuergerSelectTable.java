@@ -19,9 +19,9 @@ public class BuergerSelectTable extends CustomComponent {
     BuergerSearchForm search;
     private GenericTable table;
 
-    public BuergerSelectTable(final BuergerViewController controller, String from, final TableActionButton.Builder... buttonfactory) {
-    
-        table = controller.getViewFactory().generateTable(from, buttonfactory);
+    public BuergerSelectTable(final BuergerViewController controller, final TableActionButton.Builder... buttonfactory) {
+
+        table = controller.getViewFactory().generateTable(buttonfactory);
         table.setSizeUndefined();
 
         search = new BuergerSearchForm(controller);
