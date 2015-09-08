@@ -72,6 +72,7 @@ public class WohnungController {
         }
         SearchResultResource<WohnungResource> resource;
         resource = this.assembler.toResource(this.service.query());
+        resource.add(linkTo(methodOn(WohnungController.class).queryWohnung()).withSelfRel()); // add self link
         return ResponseEntity.ok(resource);
     }
 
@@ -106,7 +107,7 @@ public class WohnungController {
             LOG.debug("copy wohnung");
         }
         Wohnung entity = this.service.copy(oid);
-        WohnungResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
+        WohnungResource resource = this.assembler.assembleWithAllLinks(entity);
         return ResponseEntity.ok(resource);
     }
 
@@ -146,7 +147,7 @@ public class WohnungController {
         LOG.info("davor > " + entity.toString());
         this.assembler.fromResource(request, entity, adresse);
         LOG.info("danach > " + entity.toString());
-        this.service.update(entity,adresse);
+        this.service.update(entity, adresse);
         WohnungResource resource = this.assembler.assembleWithAllLinks(entity);
         return ResponseEntity.ok(resource);
     }
@@ -165,8 +166,8 @@ public class WohnungController {
         }
         Wohnung entity = new Wohnung();
         Adresse adresse = new Adresse();
-        this.assembler.fromResource(request, entity,adresse);
-        this.service.save(entity,adresse);
+        this.assembler.fromResource(request, entity, adresse);
+        this.service.save(entity, adresse);
 
         WohnungResource resource = this.assembler.assembleWithAllLinks(entity);
         return ResponseEntity.ok(resource);
@@ -222,7 +223,8 @@ public class WohnungController {
         return ResponseEntity.ok().build();
 
     }
- /**
+
+    /**
      * Löscht mehrere Wohnungen.
      *
      * @param oids

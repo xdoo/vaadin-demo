@@ -33,8 +33,8 @@ public class Buerger extends BaseEntity {
     @Temporal(TemporalType.DATE)
     private Date geburtsdatum;
 
-    @OneToMany (cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
-    private Set<Sachbearbeiter> sachbearbeiter= new HashSet<>();
+    @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    private Set<Sachbearbeiter> sachbearbeiter = new HashSet<>();
 
     @Transient
     private Set<Staatsangehoerigkeit> staatsangehoerigkeiten = new HashSet<>();
@@ -62,11 +62,11 @@ public class Buerger extends BaseEntity {
         this.nachname = buerger.nachname;
         this.geburtsdatum = buerger.geburtsdatum;
         this.staatsangehoerigkeitReferences.addAll(buerger.staatsangehoerigkeitReferences);
-        this.pass.addAll(buerger.pass);
+        // this.pass.addAll(buerger.pass);
         this.wohnungen.addAll(buerger.wohnungen);
         this.staatsangehoerigkeiten.addAll(buerger.staatsangehoerigkeiten);
         this.kinder.addAll(buerger.kinder);
-        this.partner =buerger.partner;
+        this.partner.addAll(buerger.partner);
     }
 
     public String getVorname() {
@@ -141,9 +141,13 @@ public class Buerger extends BaseEntity {
         this.pass = Pass;
     }
 
-    public Set<Buerger> getBeziehungsPartner(){return this.partner;}
+    public Set<Buerger> getBeziehungsPartner() {
+        return this.partner;
+    }
 
-    public void setBeziehungsPartner(Buerger partner){ this.partner.add(partner); }
+    public void setBeziehungsPartner(Buerger partner) {
+        this.partner.add(partner);
+    }
 
     @Override
     public String toString() {

@@ -15,6 +15,7 @@ import de.muenchen.gis_service._1_0.SucheAdressenAntwort;
 import de.muenchen.gis_service._1_0.SucheAdressenAuskunft;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -107,19 +108,19 @@ public class AdresseServiceImpl implements AdresseService {
 
     @Override
     public Adresse read(String oid) {
-        List<AdresseReference> resultReference = this.referenceRepo.findByOidAndMandantOid(oid, readUser().getMandant().getOid());
-        if (resultReference.isEmpty()) {
+        AdresseReference resultReference = this.referenceRepo.findFirstByOidAndMandantOid(oid, readUser().getMandant().getOid());
+        if (Objects.isNull(resultReference)) {
             // TODO
             LOG.warn(String.format("found no Adresse with oid '%s'", oid));
             return null;
 
         } else {
-            if (resultReference.get(0).getAdresseInterne() == null) {
-                List<AdresseExterne> resultExterne = this.externeRepo.findByOidAndMandantOid(resultReference.get(0).getAdresseExterne().getOid(), readUser().getMandant().getOid());
+            if (resultReference.getAdresseInterne() == null) {
+                List<AdresseExterne> resultExterne = this.externeRepo.findByOidAndMandantOid(resultReference.getAdresseExterne().getOid(), readUser().getMandant().getOid());
                 return fromExterne(resultExterne.get(0));
 
             } else {
-                AdresseInterne resultInterne = this.interneRepo.findByOidAndMandantOid(resultReference.get(0).getAdresseInterne().getOid(), readUser().getMandant().getOid()).get(0);
+                AdresseInterne resultInterne = this.interneRepo.findByOidAndMandantOid(resultReference.getAdresseInterne().getOid(), readUser().getMandant().getOid()).get(0);
                 Adresse adr = new Adresse();
                 adr.setHausnummer(resultInterne.getHausnummer());
                 adr.setBuchstabe(resultInterne.getBuchstabe());

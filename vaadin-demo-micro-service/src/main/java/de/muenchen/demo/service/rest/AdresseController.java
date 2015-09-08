@@ -53,8 +53,9 @@ public class AdresseController {
         if (LOG.isDebugEnabled()) {
             LOG.debug("query adresse");
         }
-        List<AdresseResource> resource;
-        resource = this.assembler.toResource(this.service.query());
+        List<Adresse> result = this.service.query();
+        SearchResultResource<AdresseResource> resource = this.assembler.toResource(result);
+        resource.add(linkTo(methodOn(AdresseController.class).queryAdresse()).withSelfRel()); // add self link
         return ResponseEntity.ok(resource);
     }
 

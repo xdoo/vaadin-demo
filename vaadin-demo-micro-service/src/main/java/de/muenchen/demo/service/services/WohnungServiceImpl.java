@@ -225,7 +225,8 @@ public class WohnungServiceImpl implements WohnungService {
 
         return adresseReference;
     }
- @Override
+
+    @Override
     public void copy(List<String> oids) {
         oids.stream().forEach(this::copy);
     }

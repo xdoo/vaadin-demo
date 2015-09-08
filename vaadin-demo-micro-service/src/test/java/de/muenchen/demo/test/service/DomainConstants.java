@@ -108,6 +108,8 @@ public interface DomainConstants {
     public final static String M3_P008 = "OIDM3_PASS016";
     public final static String M3_P009 = "OIDM3_PASS017";
     public final static String M3_P010 = "M2_PASS018";
+    public final static String M2_P042 = "OIDM2_PASS042";
+
 
     //Wohnungen
     public final static String M2_W001 = "OIDM2_WOHNUNG001";

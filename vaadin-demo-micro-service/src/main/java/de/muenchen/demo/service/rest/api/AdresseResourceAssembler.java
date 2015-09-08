@@ -41,11 +41,12 @@ public class AdresseResourceAssembler {
      * @param adresse
      * @return
      */
-    public List<AdresseResource> toResource(final List<Adresse> adresse) {
-        List<AdresseResource> resource = new ArrayList<>();
+    public SearchResultResource<AdresseResource> toResource(final List<Adresse> adresse) {
+        SearchResultResource<AdresseResource> resource = new SearchResultResource<>();
         adresse.stream().forEach(adresse1 -> {
             resource.add(assembleWithAllLinks(adresse1));
         });
+        resource.add(linkTo(methodOn(AdresseController.class).queryAdresse()).withRel(HateoasUtil.REL_QUERY));
 
         return resource;
     }
@@ -84,7 +85,7 @@ public class AdresseResourceAssembler {
      * @param entity
      */
     public void fromResource(final AdresseResource resource, final Adresse entity) {
-        if (!Strings.isNullOrEmpty(resource.getOid())) {
+       // if (!Strings.isNullOrEmpty(resource.getOid())) {
             this.dozer.map(resource, entity);
             entity.setOid(resource.getOid());
             // start field mapping
@@ -94,10 +95,10 @@ public class AdresseResourceAssembler {
             entity.setPlz(resource.getPlz());
             entity.setStadt(resource.getStadt());
             // end field mapping
-        } else {
-            LOG.error(resource.toString());
-            throw new IllegalArgumentException("The object id (oid) field must be filled.");
-        }
+       // } else {
+//            LOG.error(resource.toString());
+//            throw new IllegalArgumentException("The object id (oid) field must be filled.");
+//        }
     }
 
     /**
@@ -125,6 +126,7 @@ public class AdresseResourceAssembler {
     public AdresseResource assembleWithAllLinks(Adresse entity) {
         return this.toResource(entity,
                 HateoasUtil.REL_NEW,
+                HateoasUtil.REL_SELF,
                 de.muenchen.vaadin.demo.api.rest.AdresseResource.SUCHE
         );
     }

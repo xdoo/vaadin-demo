@@ -609,7 +609,6 @@ insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, P
 insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT, staatsangehoerigkeit_reference) values ('3017','OIDM2_PASS018','DE-598589630','Reisepass','DE471195','167','braun','2014-11-02','2020-11-02','M233333','2','5017');
 insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT, staatsangehoerigkeit_reference) values ('3018','OIDM2_PASS019','DE-598589629','Reisepass','DE471196','167','braun','2014-11-02','2020-11-02','M233333','2','5018');
 insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT, staatsangehoerigkeit_reference) values ('3019','OIDM2_PASS020','DE-598589628','Reisepass','DE471197','167','braun','2014-11-02','2020-11-02','M233333','2','5019');
-
 insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT) values ('3020','OIDM2_PASS021','DE-598589627','Reisepass','DE471198','167','braun','2014-11-02','2020-11-02','M233333','2');
 insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT) values ('3021','OIDM2_PASS022','DE-598589626','Reisepass','DE471199','167','braun','2014-11-02','2020-11-02','M233333','2');
 insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT) values ('3022','OIDM2_PASS023','DE-598589625','Reisepass','DE471200','167','braun','2014-11-02','2020-11-02','M233333','2');
@@ -641,6 +640,7 @@ insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, P
 insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT) values ('3048','OIDM3_PASS016','DE-598589632','Reisepass','DE471226','167','braun','2014-11-02','2020-11-02','M233333','3');
 insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT) values ('3049','OIDM3_PASS017','DE-598589631','Reisepass','DE471227','167','braun','2014-11-02','2020-11-02','M233333','3');
 insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT) values ('3050','M2_PASS018','DE-598589630','Reisepass','DE471228','167','braun','2014-11-02','2020-11-02','M233333','3');
+insert into PASS (ID, OID, PASS_PASSNUMMER, PASS_TYP, PASS_KODE, PASS_GROESSE, PASS_AUGENFARBE, PASS_AUSTELLUNGSDATUM, PASS_GUELTIG_BIS, PASS_BEHOERDE, MANDANT) values ('3051','OIDM2_PASS042','DE-598589607','Reisepass','DE471218','167','braun','2014-11-02','2020-11-02','M233333','2');
 
 
 -- Bürger zu Kind
@@ -758,26 +758,26 @@ insert into adresse_interne (ID, OID, adr_hausnummer, adr_strasse, MANDANT) valu
 -- 
 -- 
 -- --ADRESSE EXTERNE
-insert into adresse_externe (ID, OID, adr_hausnummer, adr_str,  adr_plz,  adr_stadt, MANDANT) values ('11000','OIDM2_ADEN001','20','DonauStr.','2','Passau','2');
-insert into adresse_externe (ID, OID, adr_hausnummer, adr_str,  adr_plz,  adr_stadt, MANDANT) values ('11001','OIDM2_ADEN002','21','DonauStr.','2','Passau','2');
-insert into adresse_externe (ID, OID, adr_hausnummer, adr_str,  adr_plz,  adr_stadt, MANDANT) values ('11002','OIDM2_ADEN003','22','DonauStr.','2','Passau','2');
-insert into adresse_externe (ID, OID, adr_hausnummer, adr_str,  adr_plz,  adr_stadt, MANDANT) values ('11003','OIDM2_ADEN004','23','DonauStr.','2','Passau','2');
-insert into adresse_externe (ID, OID, adr_hausnummer, adr_str,  adr_plz,  adr_stadt, MANDANT) values ('11004','OIDM2_ADEN005','24','DonauStr.','2','Passau','2');
-insert into adresse_externe (ID, OID, adr_hausnummer, adr_str,  adr_plz,  adr_stadt, MANDANT) values ('11005','OIDM2_ADEN006','25','DonauStr.','2','Passau','2');
-insert into adresse_externe (ID, OID, adr_hausnummer, adr_str,  adr_plz,  adr_stadt, MANDANT) values ('11006','OIDM2_ADEN007','26','DonauStr.','2','Passau','2');
-insert into adresse_externe (ID, OID, adr_hausnummer, adr_str,  adr_plz,  adr_stadt, MANDANT) values ('11007','OIDM2_ADEN008','27','DonauStr.','2','Passau','2');
-insert into adresse_externe (ID, OID, adr_hausnummer, adr_str,  adr_plz,  adr_stadt, MANDANT) values ('11008','OIDM2_ADEN009','28','DonauStr.','2','Passau','2');
-insert into adresse_externe (ID, OID, adr_hausnummer, adr_str,  adr_plz,  adr_stadt, MANDANT) values ('11009','OIDM2_ADEN010','29','DonauStr.','2','Passau','2');
-insert into adresse_externe (ID, OID, adr_hausnummer, adr_str,  adr_plz,  adr_stadt, MANDANT) values ('11010','OIDM2_ADEN011','30','DonauStr.','2','Passau','2');
-insert into adresse_externe (ID, OID, adr_hausnummer, adr_str,  adr_plz,  adr_stadt, MANDANT) values ('11011','OIDM2_ADEN012','31','DonauStr.','2','Passau','2');
-insert into adresse_externe (ID, OID, adr_hausnummer, adr_str,  adr_plz,  adr_stadt, MANDANT) values ('11012','OIDM2_ADEN013','32','DonauStr.','2','Passau','2');
-insert into adresse_externe (ID, OID, adr_hausnummer, adr_str,  adr_plz,  adr_stadt, MANDANT) values ('11013','OIDM2_ADEN014','33','DonauStr.','2','Passau','2');
-insert into adresse_externe (ID, OID, adr_hausnummer, adr_str,  adr_plz,  adr_stadt, MANDANT) values ('11014','OIDM2_ADEN015','34','DonauStr.','2','Passau','2');
-insert into adresse_externe (ID, OID, adr_hausnummer, adr_str,  adr_plz,  adr_stadt, MANDANT) values ('11015','OIDM2_ADEN016','35','DonauStr.','2','Passau','2');
-insert into adresse_externe (ID, OID, adr_hausnummer, adr_str,  adr_plz,  adr_stadt, MANDANT) values ('11016','OIDM2_ADEN017','36','DonauStr.','2','Passau','2');
-insert into adresse_externe (ID, OID, adr_hausnummer, adr_str,  adr_plz,  adr_stadt, MANDANT) values ('11017','OIDM2_ADEN018','37','DonauStr.','2','Passau','2');
-insert into adresse_externe (ID, OID, adr_hausnummer, adr_str,  adr_plz,  adr_stadt, MANDANT) values ('11018','OIDM2_ADEN019','38','DonauStr.','2','Passau','2');
-insert into adresse_externe (ID, OID, adr_hausnummer, adr_str,  adr_plz,  adr_stadt, MANDANT) values ('11019','OIDM2_ADEN020','39','DonauStr.','2','Passau','2');
+insert into adresse_externe (ID, OID, adr_hausnummer, adr_str,  adr_plz,  adr_stadt, MANDANT) values ('11000','OIDM2_ADEN001','20','DonauStr.','94036','Passau','2');
+insert into adresse_externe (ID, OID, adr_hausnummer, adr_str,  adr_plz,  adr_stadt, MANDANT) values ('11001','OIDM2_ADEN002','21','DonauStr.','94036','Passau','2');
+insert into adresse_externe (ID, OID, adr_hausnummer, adr_str,  adr_plz,  adr_stadt, MANDANT) values ('11002','OIDM2_ADEN003','22','DonauStr.','94036','Passau','2');
+insert into adresse_externe (ID, OID, adr_hausnummer, adr_str,  adr_plz,  adr_stadt, MANDANT) values ('11003','OIDM2_ADEN004','23','DonauStr.','94036','Passau','2');
+insert into adresse_externe (ID, OID, adr_hausnummer, adr_str,  adr_plz,  adr_stadt, MANDANT) values ('11004','OIDM2_ADEN005','24','DonauStr.','94036','Passau','2');
+insert into adresse_externe (ID, OID, adr_hausnummer, adr_str,  adr_plz,  adr_stadt, MANDANT) values ('11005','OIDM2_ADEN006','25','DonauStr.','94036','Passau','2');
+insert into adresse_externe (ID, OID, adr_hausnummer, adr_str,  adr_plz,  adr_stadt, MANDANT) values ('11006','OIDM2_ADEN007','26','DonauStr.','94036','Passau','2');
+insert into adresse_externe (ID, OID, adr_hausnummer, adr_str,  adr_plz,  adr_stadt, MANDANT) values ('11007','OIDM2_ADEN008','27','DonauStr.','94036','Passau','2');
+insert into adresse_externe (ID, OID, adr_hausnummer, adr_str,  adr_plz,  adr_stadt, MANDANT) values ('11008','OIDM2_ADEN009','28','DonauStr.','94036','Passau','2');
+insert into adresse_externe (ID, OID, adr_hausnummer, adr_str,  adr_plz,  adr_stadt, MANDANT) values ('11009','OIDM2_ADEN010','29','DonauStr.','94036','Passau','2');
+insert into adresse_externe (ID, OID, adr_hausnummer, adr_str,  adr_plz,  adr_stadt, MANDANT) values ('11010','OIDM2_ADEN011','30','DonauStr.','94036','Passau','2');
+insert into adresse_externe (ID, OID, adr_hausnummer, adr_str,  adr_plz,  adr_stadt, MANDANT) values ('11011','OIDM2_ADEN012','31','DonauStr.','94036','Passau','2');
+insert into adresse_externe (ID, OID, adr_hausnummer, adr_str,  adr_plz,  adr_stadt, MANDANT) values ('11012','OIDM2_ADEN013','32','DonauStr.','94036','Passau','2');
+insert into adresse_externe (ID, OID, adr_hausnummer, adr_str,  adr_plz,  adr_stadt, MANDANT) values ('11013','OIDM2_ADEN014','33','DonauStr.','94036','Passau','2');
+insert into adresse_externe (ID, OID, adr_hausnummer, adr_str,  adr_plz,  adr_stadt, MANDANT) values ('11014','OIDM2_ADEN015','34','DonauStr.','94036','Passau','2');
+insert into adresse_externe (ID, OID, adr_hausnummer, adr_str,  adr_plz,  adr_stadt, MANDANT) values ('11015','OIDM2_ADEN016','35','DonauStr.','94036','Passau','2');
+insert into adresse_externe (ID, OID, adr_hausnummer, adr_str,  adr_plz,  adr_stadt, MANDANT) values ('11016','OIDM2_ADEN017','36','DonauStr.','94036','Passau','2');
+insert into adresse_externe (ID, OID, adr_hausnummer, adr_str,  adr_plz,  adr_stadt, MANDANT) values ('11017','OIDM2_ADEN018','37','DonauStr.','94036','Passau','2');
+insert into adresse_externe (ID, OID, adr_hausnummer, adr_str,  adr_plz,  adr_stadt, MANDANT) values ('11018','OIDM2_ADEN019','38','DonauStr.','94036','Passau','2');
+insert into adresse_externe (ID, OID, adr_hausnummer, adr_str,  adr_plz,  adr_stadt, MANDANT) values ('11019','OIDM2_ADEN020','39','DonauStr.','94036','Passau','2');
 
 -- 
 -- --ADRESSE REFERENCE

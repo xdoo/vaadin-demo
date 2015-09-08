@@ -60,33 +60,16 @@ public class UserAuthorityServiceTest {
         System.out.println(String.format("Objekt wurde beim Speichern mit der ID '%s' in den Cache gelegt.", authPerm.getId()));
     }
 
-//    @Test
-//    @WithMockUser(username = DomainConstants.M2_U001_NAME)
-//    public void testCacheOnRead() {
-//        System.out.println("========== read cache Test ==========");
-//        Cache cache = cacheManager.getCache(UserAuthorityRepository.UserAuthority_CACHE);
-//
-//        Authority a1 = authorityService.read(DomainConstants.M2_AU003);
-//        user u1 = userService.read("oid26");
-//        UserAuthId idA = new UserAuthId(u1, a1);
-//        UserAuthId cacheId = idA;
-//        assertNull(cache.get(cacheId));
-//        UserAuthority b1 = service.read(idA);
-//        assertNotNull(cache.get(b1.getId(), UserAuthority.class));
-//        assertEquals(cacheId, b1.getId());
-//        System.out.println(String.format("Objekt wurde beim Lesen mit der ID '%s' in den Cache gelegt.", b1.getId()));
-//    }
-
     @Test
     @WithMockUser(username = DomainConstants.M2_U001_NAME)
     public void saveTest() {
         System.out.println("========== save UserAuthority Test ==========");
         Authority a1 = authorityService.read(DomainConstants.M2_AU003);
-        User u1 = userService.read("oid13");
+        User u1 = userService.read("oid15");
         UserAuthId idA = new UserAuthId(u1, a1);
-        UserAuthority authPerm = new UserAuthority();
-        authPerm.setId(idA);
-        UserAuthority au1 = service.save(authPerm);
+        UserAuthority userAuth = new UserAuthority();
+        userAuth.setId(idA);
+        UserAuthority au1 = service.save(userAuth);
         assertNotNull(au1);
         assertNotNull(repo.findFirstById(idA));
         System.out.println(String.format("UserAuthority wurde in der DB gespeichert."));

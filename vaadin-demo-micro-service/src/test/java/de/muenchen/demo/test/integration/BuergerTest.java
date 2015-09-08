@@ -308,8 +308,8 @@ public class BuergerTest {
         int x = this.count(DomainConstants.M2);
         String URL2 = "http://localhost:" + port + "/buerger/copy";
         ArrayList<String> oids = new ArrayList();
-        oids.add(DomainConstants.M2_B025);
-        oids.add(DomainConstants.M2_B026);
+        oids.add(DomainConstants.M2_B027);
+        oids.add(DomainConstants.M2_B028);
         restTemplate.postForEntity(URL2, oids, BuergerResource.class);
         String URL11 = "http://localhost:" + port + "/buerger/query";
         SearchResultResource queryResponse = restTemplate.getForEntity(URL11, SearchResultResource.class).getBody();
@@ -547,11 +547,11 @@ public class BuergerTest {
     @WithMockUser(username = DomainConstants.M2_U001_NAME)
     public void AddBuergerPassTest() {
         System.out.println("========== Add Bürger Pass Test ==========");
-        assertEquals(0, this.checkPass(DomainConstants.M2_B007, DomainConstants.M2_P008));
-        String URL2 = "http://localhost:" + port + "/buerger/add/" + DomainConstants.M2_B007 + "/pass";
-        restTemplate.postForEntity(URL2, DomainConstants.M2_P008, BuergerResource.class).getBody();
-        assertEquals(1, this.checkPass(DomainConstants.M2_B007, DomainConstants.M2_P008));
-        System.out.println(String.format("der Pass mit OID '%s' könnte zu dem Bürger mit OID '%s' hinzufügt werden.", DomainConstants.M2_P008, DomainConstants.M2_B007));
+        assertEquals(0, this.checkPass(DomainConstants.M2_B008, DomainConstants.M2_P042));
+        String URL2 = "http://localhost:" + port + "/buerger/add/" + DomainConstants.M2_B008 + "/pass";
+        restTemplate.postForEntity(URL2, DomainConstants.M2_P042, BuergerResource.class).getBody();
+        assertEquals(1, this.checkPass(DomainConstants.M2_B008, DomainConstants.M2_P042));
+        System.out.println(String.format("der Pass mit OID '%s' könnte zu dem Bürger mit OID '%s' hinzufügt werden.", DomainConstants.M2_P042, DomainConstants.M2_B008));
 
     }
 
