@@ -31,6 +31,7 @@ public class BuergerResource extends BaseResource {
     public static final String RELEASE_ELTERN = "release_eltern";
     public static final String RELEASE_ELTERNTEIL = "release_elternteil";    
     public static final String RELEASE_KINDER = "release_kinder";
+    public static final String RELEASE_PARTNER= "release_partner";
     public static final String RELEASE_PAESSE = "release_paesse";
     public static final String RELEASE_WOHNUNG = "release_wohnung";
     public static final String RELEASE_WOHNUNGEN = "release_wohnungen";

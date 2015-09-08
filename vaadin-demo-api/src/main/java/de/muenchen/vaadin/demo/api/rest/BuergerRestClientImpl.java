@@ -100,27 +100,37 @@ public class BuergerRestClientImpl implements BuergerRestClient {
     
     @Override
     public Buerger addBuergerKind(Buerger buerger, Buerger kind, RestTemplate restTemplate) {
-
         Optional<Link> link = HateoasUtil.findLinkForRel(BuergerResource.ADD_KIND, buerger.getLinks());
         LOG.warn("used Link: "+link.get().toString());
         return this.writeSingleSource(link, kind.getOid(), restTemplate);
     }
     @Override
     public Buerger addBuergerPartner(Buerger buerger, Buerger partner, RestTemplate restTemplate) {
-        //ToDO solve need for hardcoded link
-        Optional<Link> link = Optional.of(new Link("http://localhost:8080/buerger/add/buerger/" + buerger.getOid() + "/partner/" + partner.getOid() + "").withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_KIND));
+        Optional<Link> link =
+                HateoasUtil.findLinkForRel(BuergerResource.ADD_PARTNER, buerger.getLinks());
         LOG.warn("used Link: "+link.get().toString());
-        return this.writeSingleSource(link, partner, restTemplate);
+        return this.writeSingleSource(link, partner.getOid(), restTemplate);
     }
 
     @Override
     public Buerger releaseBuergerElternteil(Buerger elternteil, Buerger kind, RestTemplate restTemplate) {
-        Optional<Link> link = HateoasUtil.findLinkForRel(BuergerResource.RELEASE_ELTERNTEIL,kind.getLinks());
+        Optional<Link> link = HateoasUtil.findLinkForRel(BuergerResource.RELEASE_ELTERNTEIL, kind.getLinks());
         if(link.isPresent()) {
             LOG.warn("used Link: " + link.get().toString());
             return this.writeSingleSource(link, elternteil.getOid(), restTemplate);
         }else
         return null;
+    }
+
+    @Override
+    public Buerger releaseBuergerPartner(Buerger buerger, Buerger partner, RestTemplate restTemplate) {
+        Optional<Link> link = HateoasUtil.findLinkForRel(BuergerResource.RELEASE_PARTNER,partner.getLinks());
+        LOG.error(link.toString());
+        if(link.isPresent()) {
+            LOG.warn("used Link: " + link.get().toString());
+            return this.writeSingleSource(link, buerger.getOid(), restTemplate);
+        }else
+            return null;
     }
 
     public Buerger writeSingleSource(String rel, Buerger buerger, RestTemplate restTemplate) {

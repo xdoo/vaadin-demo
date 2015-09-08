@@ -234,6 +234,25 @@ public class BuergerServiceImpl implements BuergerService {
     }
 
     /**
+     * release Operation für ein Partner eines Bürgers.
+     *
+     * @param buergerOid
+     */
+    @Override
+    public void releaseBuergerPartner(String buergerOid, String partnerOid) {
+
+        Buerger buerger = this.read(buergerOid);
+        List<Buerger> partner = buerger.getBeziehungsPartner().stream().filter(p -> p.getOid().equals(partnerOid)).collect(Collectors.toList());
+        if (!partner.isEmpty()) {
+            buerger.getBeziehungsPartner().remove(partner.get(0));
+        } else {
+            LOG.warn(String.format("found no partner with oid %s", partnerOid));
+        }
+
+        this.update(buerger);
+    }
+
+    /**
      * read der bürger eines Pass.
      *
      * @param passOid
