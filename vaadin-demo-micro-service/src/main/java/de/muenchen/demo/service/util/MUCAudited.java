@@ -17,5 +17,5 @@ public @interface MUCAudited {
     String UPDATE = "update";
     String DELETE = "delete";
 
-    String value() default ALL;
+    String[] value() default ALL;
 }

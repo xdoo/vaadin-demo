@@ -17,6 +17,7 @@ import reactor.bus.Event;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManagerFactory;
+import java.util.stream.Stream;
 
 import static de.muenchen.eventbus.types.EventType.*;
 
@@ -41,16 +42,15 @@ public class AuditingConfiguration {
         EventListenerRegistry registry = sessionFactoryImpl.getServiceRegistry().getService(EventListenerRegistry.class);
 
         registry.getEventListenerGroup(EventType.POST_LOAD).clear();
-        registry.getEventListenerGroup(EventType.POST_COMMIT_DELETE).clear();
-        registry.getEventListenerGroup(EventType.POST_COMMIT_INSERT).clear();
-        registry.getEventListenerGroup(EventType.POST_COMMIT_UPDATE).clear();
+        registry.getEventListenerGroup(EventType.POST_DELETE).clear();
+        registry.getEventListenerGroup(EventType.POST_INSERT).clear();
+        registry.getEventListenerGroup(EventType.POST_UPDATE).clear();
 
         registry.getEventListenerGroup(EventType.POST_LOAD)
                 .appendListener(postLoadEvent -> {
                     Object eventEntity = postLoadEvent.getEntity();
                     MUCAudited annotation = eventEntity.getClass().getAnnotation(MUCAudited.class);
-                    if (annotation != null &&
-                            (annotation.value().equals(MUCAudited.ALL) || annotation.value().equals(MUCAudited.READ))) {
+                    if (shouldBeAudited(MUCAudited.READ, annotation)) {
                         BaseEntity entity = (BaseEntity) eventEntity;
                         eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(AUDIT_READ, entity)));
                     }
@@ -65,8 +65,7 @@ public class AuditingConfiguration {
                     public void onPostDelete(PostDeleteEvent postDeleteEvent) {
                         Object eventEntity = postDeleteEvent.getEntity();
                         MUCAudited annotation = eventEntity.getClass().getAnnotation(MUCAudited.class);
-                        if (annotation != null &&
-                                (annotation.value().equals(MUCAudited.ALL) || annotation.value().equals(MUCAudited.DELETE))) {
+                        if (shouldBeAudited(MUCAudited.DELETE, annotation)) {
                             BaseEntity entity = (BaseEntity) eventEntity;
                             eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(AUDIT_DELETE, entity)));
                         }
@@ -87,8 +86,7 @@ public class AuditingConfiguration {
                     public void onPostInsert(PostInsertEvent postInsertEvent) {
                         Object eventEntity = postInsertEvent.getEntity();
                         MUCAudited annotation = eventEntity.getClass().getAnnotation(MUCAudited.class);
-                        if (annotation != null &&
-                                (annotation.value().equals(MUCAudited.ALL) || annotation.value().equals(MUCAudited.CREATE))) {
+                        if (shouldBeAudited(MUCAudited.CREATE, annotation)) {
                             BaseEntity entity = (BaseEntity) eventEntity;
                             eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(AUDIT_CREATE, entity)));
                         }
@@ -109,8 +107,7 @@ public class AuditingConfiguration {
                     public void onPostUpdate(PostUpdateEvent postUpdateEvent) {
                         Object eventEntity = postUpdateEvent.getEntity();
                         MUCAudited annotation = eventEntity.getClass().getAnnotation(MUCAudited.class);
-                        if (annotation != null &&
-                                (annotation.value().equals(MUCAudited.ALL) || annotation.value().equals(MUCAudited.UPDATE))) {
+                        if (shouldBeAudited(MUCAudited.UPDATE, annotation)) {
                             BaseEntity entity = (BaseEntity) eventEntity;
                             eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(AUDIT_UPDATE, entity)));
                         }
@@ -122,4 +119,13 @@ public class AuditingConfiguration {
                     }
                 });
     }
+
+    private boolean shouldBeAudited(String event, MUCAudited annotation) {
+        if (annotation == null) {
+            return false;
+        }
+        String[] values = annotation.value();
+        return Stream.of(values).anyMatch(s -> s.equals(MUCAudited.ALL) || s.equals(event));
+    }
+
 }
