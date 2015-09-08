@@ -1,7 +1,7 @@
 package de.muenchen.demo.service.util.events;
 
 import de.muenchen.demo.service.domain.Buerger;
-import de.muenchen.vaadin.demo.api.util.EventType;
+import de.muenchen.eventbus.types.EventType;
 
 /**
  * Created by rene.zarwel on 24.08.15.

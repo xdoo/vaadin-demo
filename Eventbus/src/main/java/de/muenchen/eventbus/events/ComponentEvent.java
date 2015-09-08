@@ -1,7 +1,7 @@
-package de.muenchen.vaadin.ui.app.views.events;
+package de.muenchen.eventbus.events;
 
 import com.vaadin.data.util.BeanItem;
-import de.muenchen.vaadin.demo.api.util.EventType;
+import de.muenchen.eventbus.types.EventType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,7 +14,7 @@ import java.util.Optional;
  * @author claus
  * @param <T>
  */
-public class ComponentEvent<T> extends Event{
+public class ComponentEvent<T> extends Event {
     
     protected static final Logger LOG = LoggerFactory.getLogger(ComponentEvent.class);
     

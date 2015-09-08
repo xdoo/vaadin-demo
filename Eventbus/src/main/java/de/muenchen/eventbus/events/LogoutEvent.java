@@ -1,9 +1,9 @@
-package de.muenchen.vaadin.ui.app.views.events;
+package de.muenchen.eventbus.events;
 
 /**
- * Created by fabian.holtkoetter on 01.09.15.
+ * Created by maximilian.zollbrecht on 19.08.15.
  */
-public class RefreshEvent extends Event {
+public class LogoutEvent extends Event {
     @Override
     public boolean equals(Object o){
         if (this == o) return true;

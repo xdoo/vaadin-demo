@@ -1,7 +1,7 @@
-package de.muenchen.vaadin.ui.app.views.events;
+package de.muenchen.eventbus.events;
 
 import com.vaadin.data.util.BeanItem;
-import de.muenchen.vaadin.demo.api.util.EventType;
+import de.muenchen.eventbus.types.EventType;
 
 import java.util.Optional;
 
@@ -9,7 +9,7 @@ import java.util.Optional;
  *
  * @author claus.straube
  */
-public class AppEvent<T> extends Event{
+public class AppEvent<T> extends Event {
    
     protected EventType type;
     protected Object itemId;
