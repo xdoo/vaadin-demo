@@ -7,12 +7,7 @@ import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.Page;
-import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.DateField;
-import com.vaadin.ui.FormLayout;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.TextField;
+import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.demo.api.util.EventType;
@@ -28,10 +23,7 @@ import reactor.fn.Consumer;
 
 import java.util.Optional;
 
-import static de.muenchen.vaadin.ui.util.I18nPaths.Component;
-import static de.muenchen.vaadin.ui.util.I18nPaths.Type;
-import static de.muenchen.vaadin.ui.util.I18nPaths.getEntityFieldPath;
-import static de.muenchen.vaadin.ui.util.I18nPaths.getFormPath;
+import static de.muenchen.vaadin.ui.util.I18nPaths.*;
 
 /**
  *
@@ -76,7 +68,7 @@ public class BuergerUpdateForm extends CustomComponent implements Consumer<Event
      */
     private void createForm() {
 
-        controller.registerToAllAppEvents(this);
+        controller.registerToAllComponentEvents(this);
 
         FormLayout layout = new FormLayout();
         HorizontalLayout buttonLayout = new HorizontalLayout();
