@@ -1,6 +1,7 @@
 package de.muenchen.demo.service;
 
 import de.muenchen.demo.service.security.AuthenticationConfiguratorAdapter;
+import de.muenchen.eventbus.EventBus;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 import org.slf4j.Logger;
@@ -28,6 +29,11 @@ public class Application {
 
     public static void main(String[] args) throws Exception {
         SpringApplication.run(Application.class, args);
+    }
+
+    @Bean
+    public EventBus eventBus() {
+        return new EventBus();
     }
 
 

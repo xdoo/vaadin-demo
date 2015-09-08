@@ -11,10 +11,10 @@ import de.muenchen.demo.service.domain.User;
 import de.muenchen.demo.service.domain.UserAuthority;
 import de.muenchen.demo.service.domain.UserAuthorityRepository;
 import de.muenchen.demo.service.domain.UserRepository;
-import de.muenchen.demo.service.util.Eventbus;
 import de.muenchen.demo.service.util.IdService;
 import de.muenchen.demo.service.util.QueryService;
 import de.muenchen.demo.service.util.events.UserEvent;
+import de.muenchen.eventbus.EventBus;
 import de.muenchen.eventbus.types.EventType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,10 +39,10 @@ public class UserServiceImpl implements UserService {
     QueryService<User> search;
     @Autowired
     UserAuthorityRepository userAuthorityRepository;
-    Eventbus eventbus;
+    EventBus eventbus;
 
     @Autowired
-    public UserServiceImpl(UserRepository repo, EntityManager em, Eventbus eventbus) {
+    public UserServiceImpl(UserRepository repo, EntityManager em, EventBus eventbus) {
         this.repo = repo;
         this.search = new QueryService<>(this, em, User.class, "userName", "email");
         this.eventbus = eventbus;

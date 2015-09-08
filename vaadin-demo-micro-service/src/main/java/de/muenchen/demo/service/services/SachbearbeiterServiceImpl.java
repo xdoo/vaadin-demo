@@ -7,18 +7,13 @@ package de.muenchen.demo.service.services;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import de.muenchen.demo.service.domain.Buerger;
-import de.muenchen.demo.service.domain.Mandant;
-import de.muenchen.demo.service.domain.Sachbearbeiter;
-import de.muenchen.demo.service.domain.SachbearbeiterRepository;
-import de.muenchen.demo.service.domain.User;
-import de.muenchen.demo.service.domain.User;
-import de.muenchen.demo.service.util.Eventbus;
+import de.muenchen.demo.service.domain.*;
 import de.muenchen.demo.service.util.IdService;
 import de.muenchen.demo.service.util.QueryService;
 import de.muenchen.demo.service.util.events.BuergerEvent;
 import de.muenchen.demo.service.util.events.SachbearbeiterEvent;
 import de.muenchen.demo.service.util.events.UserEvent;
+import de.muenchen.eventbus.EventBus;
 import de.muenchen.eventbus.types.EventType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,22 +21,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityManager;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
 import reactor.bus.Event;
 
 import javax.persistence.EntityManager;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static reactor.bus.selector.Selectors.T;
@@ -63,10 +46,10 @@ public class SachbearbeiterServiceImpl implements SachbearbeiterService {
     @Autowired
     MandantService mandantService;
     @Autowired
-    Eventbus eventbus;
+    EventBus eventbus;
 
     @Autowired
-    public SachbearbeiterServiceImpl(SachbearbeiterRepository repo, UserService userService, EntityManager em, Eventbus eventbus) {
+    public SachbearbeiterServiceImpl(SachbearbeiterRepository repo, UserService userService, EntityManager em, EventBus eventbus) {
         this.repo = repo;
         this.search = new QueryService<>(userService, em, Sachbearbeiter.class, "adresseOid", "ausrichtung", "stock");
         this.eventbus = eventbus;

@@ -1,17 +1,11 @@
 package de.muenchen.demo.service.config;
 
 import de.muenchen.demo.service.domain.BaseEntity;
-import de.muenchen.demo.service.util.Eventbus;
 import de.muenchen.demo.service.util.MUCAudited;
 import de.muenchen.demo.service.util.events.AuditingEvent;
+import de.muenchen.eventbus.EventBus;
 import org.hibernate.event.service.spi.EventListenerRegistry;
-import org.hibernate.event.spi.EventType;
-import org.hibernate.event.spi.PostCommitDeleteEventListener;
-import org.hibernate.event.spi.PostCommitInsertEventListener;
-import org.hibernate.event.spi.PostCommitUpdateEventListener;
-import org.hibernate.event.spi.PostDeleteEvent;
-import org.hibernate.event.spi.PostInsertEvent;
-import org.hibernate.event.spi.PostUpdateEvent;
+import org.hibernate.event.spi.*;
 import org.hibernate.internal.SessionFactoryImpl;
 import org.hibernate.jpa.HibernateEntityManagerFactory;
 import org.hibernate.persister.entity.EntityPersister;
@@ -24,10 +18,7 @@ import reactor.bus.Event;
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManagerFactory;
 
-import static de.muenchen.eventbus.types.EventType.AUDIT_CREATE;
-import static de.muenchen.eventbus.types.EventType.AUDIT_DELETE;
-import static de.muenchen.eventbus.types.EventType.AUDIT_READ;
-import static de.muenchen.eventbus.types.EventType.AUDIT_UPDATE;
+import static de.muenchen.eventbus.types.EventType.*;
 
 /**
  * Created by fabian.holtkoetter on 08.09.15.
@@ -41,7 +32,7 @@ public class AuditingConfiguration {
     private EntityManagerFactory entityManagerFactory;
 
     @Autowired
-    Eventbus eventbus;
+    EventBus eventbus;
 
     @PostConstruct
     public void registerListeners() {

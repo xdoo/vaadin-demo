@@ -2,19 +2,12 @@ package de.muenchen.demo.service.services;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import de.muenchen.demo.service.domain.Buerger;
-import de.muenchen.demo.service.domain.BuergerRepository;
-import de.muenchen.demo.service.domain.Mandant;
-import de.muenchen.demo.service.domain.Pass;
-import de.muenchen.demo.service.domain.Sachbearbeiter;
-import de.muenchen.demo.service.domain.StaatsangehoerigkeitReference;
-import de.muenchen.demo.service.domain.User;
-import de.muenchen.demo.service.domain.Wohnung;
-import de.muenchen.demo.service.util.Eventbus;
+import de.muenchen.demo.service.domain.*;
 import de.muenchen.demo.service.util.IdService;
 import de.muenchen.demo.service.util.QueryService;
 import de.muenchen.demo.service.util.events.BuergerEvent;
 import de.muenchen.demo.service.util.events.SachbearbeiterEvent;
+import de.muenchen.eventbus.EventBus;
 import de.muenchen.eventbus.types.EventType;
 import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
@@ -27,12 +20,7 @@ import org.springframework.stereotype.Service;
 import reactor.bus.Event;
 
 import javax.persistence.EntityManager;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static reactor.bus.selector.Selectors.T;
@@ -54,10 +42,10 @@ public class BuergerServiceImpl implements BuergerService {
     @Autowired
     EntityManager entityManager;
     @Autowired
-    Eventbus eventbus;
+    EventBus eventbus;
 
     @Autowired
-    public BuergerServiceImpl(BuergerRepository repo, EntityManager em, UserService userService, Eventbus eventbus) {
+    public BuergerServiceImpl(BuergerRepository repo, EntityManager em, UserService userService, EventBus eventbus) {
         this.repo = repo;
         this.search = new QueryService<>(userService, em, Buerger.class, "vorname", "nachname");
         this.eventbus = eventbus;

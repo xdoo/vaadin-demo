@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.demo.service.domain.AuditingUserEntity;
 import de.muenchen.demo.service.domain.AuditingUserRepository;
-import de.muenchen.demo.service.util.Eventbus;
 import de.muenchen.demo.service.util.events.AuditingEvent;
+import de.muenchen.eventbus.EventBus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +29,10 @@ public class AuditingService {
 
     @Autowired
     AuditingUserRepository repo;
-    Eventbus eventbus;
+    EventBus eventbus;
 
     @Autowired
-    public AuditingService(Eventbus eventbus) {
-        LOG.error("Created");
+    public AuditingService(EventBus eventbus) {
         this.eventbus = eventbus;
         this.eventbus.on(T(AuditingEvent.class), this::eventHandler);
     }
