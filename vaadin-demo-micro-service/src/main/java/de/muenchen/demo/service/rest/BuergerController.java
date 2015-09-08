@@ -340,8 +340,25 @@ public class BuergerController {
             LOG.debug("release Buerger elternteil");
         }
         this.service.releaseBuergerElternteil(oid, elternteilOid);
-       
 
+        BuergerResource resource = this.assembler.assembleWithAllLinks(service.read(oid));
+        return ResponseEntity.ok(resource);
+    }
+
+    /**
+     * Entfernt die Beziehung zwischen einem Buerger und seinem Partner.
+     *
+     * @param oid
+     * @param partnerOid
+     * @return
+     */
+    @Secured({"PERM_releaseBuergerPartner"})
+    @RequestMapping(value = "/release/partner/{oid}", method = {RequestMethod.POST})
+    public ResponseEntity releaseBuergerPartner(@PathVariable("oid") String oid, @RequestBody String partnerOid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("release Buerger Partner");
+        }
+        this.service.releaseBuergerPartner(partnerOid, oid);
 
         BuergerResource resource = this.assembler.assembleWithAllLinks(service.read(oid));
         return ResponseEntity.ok(resource);
@@ -419,7 +436,42 @@ public class BuergerController {
         resource.add(linkTo(methodOn(BuergerController.class).addKindBuerger(buergerOid, kindOid)).withSelfRel()); // add self link with params
         return ResponseEntity.ok(resource);
     }
-    
+
+    @Secured({"PERM_addPartnerBuerger"})
+    @RequestMapping(value = "/add/{bOid}/partner/{pOid}", method = {RequestMethod.POST})
+    public ResponseEntity addPartnerBuerger(@PathVariable("bOid") String buergerOid, @PathVariable("pOid") String partnerOid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Add Partner buerger");
+        }
+        LOG.debug("set Partner");
+        Buerger partner = service.read(partnerOid);
+        Buerger entity = service.read(buergerOid);
+
+        entity.setBeziehungsPartner(partner);
+        this.service.update(entity);
+
+        BuergerResource resource = this.assembler.assembleWithAllLinks(entity);
+        resource.add(linkTo(methodOn(BuergerController.class).addPartnerBuerger(buergerOid, partnerOid)).withSelfRel()); // add self link with params
+        return ResponseEntity.ok(resource);
+    }
+
+    /*@Secured({"PERM_addPartnerBuerger"})
+    @RequestMapping(value = "/add/{bOid}/partner", method = {RequestMethod.POST})
+    public ResponseEntity addPartnerBuerger(@PathVariable("bOid") String bOid, @RequestBody String partnerOid) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Add Partner buerger");
+        }
+        LOG.warn("restrequestrecieved");
+        Buerger partner = service.read(partnerOid);
+        Buerger entity = service.read(bOid);
+
+        entity.getBeziehungsPartner().add(partner);
+        this.service.update(entity);
+
+        BuergerResource resource = this.assembler.assembleWithAllLinks(entity);
+        resource.add(linkTo(methodOn(BuergerController.class).addPartnerBuerger(bOid, partnerOid)).withSelfRel()); // add self link with params
+        return ResponseEntity.ok(resource);
+    }*/
     
 
     /**
@@ -747,23 +799,7 @@ public class BuergerController {
 
     }
 
-    @Secured({"PERM_addPartner"})
-    @RequestMapping(value = "/add/buerger/{bOid}/partner/{pOid}", method = {RequestMethod.POST})
-    public ResponseEntity addPartnerBuerger(@PathVariable("bOid") String buergerOid, @PathVariable("pOid") String partnerOid) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Add Partner buerger");
-        }
-        LOG.warn("set Partner");
-        Buerger partner = service.read(partnerOid);
-        Buerger entity = service.read(buergerOid);
 
-        entity.setBeziehungsPartner(partner);
-        this.service.update(entity);
-
-        BuergerResource resource = this.assembler.assembleWithAllLinks(entity);
-        resource.add(linkTo(methodOn(BuergerController.class).addPartnerBuerger(buergerOid, partnerOid)).withSelfRel()); // add self link with params
-        return ResponseEntity.ok(resource);
-    }
 
     /**
      * Liest die partner eines Bürger.

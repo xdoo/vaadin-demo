@@ -255,6 +255,16 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
     }
 
     /**
+     * Vernichtet die Verbindung zwischen einem Bürger und seinem Partner
+     *
+     * @param event
+     */
+    private void releasePartner(AppEvent<Buerger> event) {
+        service.releasePartner(getCurrent().getBean(), event.getEntity());
+    }
+
+
+    /**
      * Speichert eine Kindbeziehung zu einem {@link Buerger} Objekt in der Datenbank.
      * 
      * @param entity Kind
@@ -387,10 +397,28 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
             case QUERY_PARTNER:
                 queryPartner(event.getEntity());
                 break;
+            case RELEASE_PARTNER:
+                releasePartnerHandler(event);
+                break;
             default:
                 LOG.debug("No matching handler found.");
         }
 
+    }
+
+    private void releasePartnerHandler(AppEvent<Buerger> event) {
+        // Service Operationen ausführen
+        this.releasePartner(event);
+        // UI Komponenten aktualisieren
+
+        GenericSuccessNotification succes = new GenericSuccessNotification(
+                resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.release, Type.label,"partner")),
+                resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.release, Type.text,"partner")));
+        succes.show(Page.getCurrent());
+
+        ComponentEvent<Buerger> componentEvent = new ComponentEvent<Buerger>(EventType.DELETE);
+        componentEvent.setItemID(event.getItemId());
+        postEvent(componentEvent);
     }
 
     private void addPartnerEventHandler(AppEvent<Buerger> event) {

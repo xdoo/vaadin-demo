@@ -126,6 +126,10 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
         return client.releaseBuergerElternteil(elternteil, kind, getTemplate());
     }
 
+    @Override
+    public Buerger releasePartner(Buerger buerger, Buerger partner){
+        return client.releaseBuergerPartner(buerger, partner, getTemplate());
+    }
 
     /**
      * Gets the resttemplate from the security if not present

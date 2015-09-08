@@ -273,8 +273,17 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
             controller.postEvent(new AppEvent<Buerger>(container.getItem(id), id, EventType.SELECT2READ));
             getController().getNavigator().navigateTo(navigateToForDetail);
         });
+        TableActionButton.Builder delete = TableActionButton.Builder.<Buerger>make(controller, TableAction.tabledelete,navigateToForDetail, (container, id) ->
+                {
+                    BeanItem<Buerger> item = container.getItem(id);
+                    GenericConfirmationWindow win = new GenericConfirmationWindow(new AppEvent<Buerger>(container.getItem(id), id, EventType.RELEASE_PARTNER), controller, SimpleAction.release);
+                    controller.getNavigator().getUI().addWindow(win);
+                    win.center();
+                    win.focus();
+                }
+        );
         LOG.debug("creating table for partner");
-        PartnerTable table = new PartnerTable(controller, detail);
+        PartnerTable table = new PartnerTable(controller, detail, delete);
         List<Buerger> entities = controller.queryPartner(controller.getCurrent().getBean());
         controller.registerToComponentEvent(table);
         ComponentEvent<Buerger> event = new ComponentEvent<Buerger>(EventType.QUERY_PARTNER);

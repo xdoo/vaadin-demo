@@ -131,4 +131,6 @@ public interface BuergerRestClient {
     public Buerger saveBuergerPartner(Buerger buerger, Buerger partner, RestTemplate restTemplate);
 
     public List<Buerger> queryHistory(List<Link> links, RestTemplate restTemplate);
+
+    public Buerger releaseBuergerPartner(Buerger buerger, Buerger partner, RestTemplate template);
 }
