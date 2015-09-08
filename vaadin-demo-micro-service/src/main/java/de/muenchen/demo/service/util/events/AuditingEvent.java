@@ -1,6 +1,7 @@
 package de.muenchen.demo.service.util.events;
 
-import de.muenchen.vaadin.demo.api.util.EventType;
+
+import de.muenchen.eventbus.types.EventType;
 
 /**
  * Created by fabian.holtkoetter on 07.09.15.

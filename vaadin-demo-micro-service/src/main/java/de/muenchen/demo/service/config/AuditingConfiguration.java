@@ -24,6 +24,11 @@ import reactor.bus.Event;
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManagerFactory;
 
+import static de.muenchen.eventbus.types.EventType.AUDIT_CREATE;
+import static de.muenchen.eventbus.types.EventType.AUDIT_DELETE;
+import static de.muenchen.eventbus.types.EventType.AUDIT_READ;
+import static de.muenchen.eventbus.types.EventType.AUDIT_UPDATE;
+
 /**
  * Created by fabian.holtkoetter on 08.09.15.
  */
@@ -56,7 +61,7 @@ public class AuditingConfiguration {
                     if (annotation != null &&
                             (annotation.value().equals(MUCAudited.ALL) || annotation.value().equals(MUCAudited.READ))) {
                         BaseEntity entity = (BaseEntity) eventEntity;
-                        eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(de.muenchen.vaadin.demo.api.util.EventType.AUDIT_READ, entity)));
+                        eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(AUDIT_READ, entity)));
                     }
                 });
         registry.getEventListenerGroup(EventType.POST_DELETE)
@@ -72,7 +77,7 @@ public class AuditingConfiguration {
                         if (annotation != null &&
                                 (annotation.value().equals(MUCAudited.ALL) || annotation.value().equals(MUCAudited.DELETE))) {
                             BaseEntity entity = (BaseEntity) eventEntity;
-                            eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(de.muenchen.vaadin.demo.api.util.EventType.AUDIT_DELETE, entity)));
+                            eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(AUDIT_DELETE, entity)));
                         }
                     }
 
@@ -94,7 +99,7 @@ public class AuditingConfiguration {
                         if (annotation != null &&
                                 (annotation.value().equals(MUCAudited.ALL) || annotation.value().equals(MUCAudited.CREATE))) {
                             BaseEntity entity = (BaseEntity) eventEntity;
-                            eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(de.muenchen.vaadin.demo.api.util.EventType.AUDIT_CREATE, entity)));
+                            eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(AUDIT_CREATE, entity)));
                         }
                     }
 
@@ -116,7 +121,7 @@ public class AuditingConfiguration {
                         if (annotation != null &&
                                 (annotation.value().equals(MUCAudited.ALL) || annotation.value().equals(MUCAudited.UPDATE))) {
                             BaseEntity entity = (BaseEntity) eventEntity;
-                            eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(de.muenchen.vaadin.demo.api.util.EventType.AUDIT_UPDATE, entity)));
+                            eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(AUDIT_UPDATE, entity)));
                         }
                     }
 

@@ -34,6 +34,5 @@ public enum EventType {
     LOGOUT,
     AUDIT_READ,
     AUDIT_CREATE,
-    AUDIT_UPDATE,
-    AUDIT_DELETE
+    AUDIT_UPDATE, AUDIT_DELETE
 }
