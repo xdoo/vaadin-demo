@@ -172,13 +172,8 @@ public class BuergerResourceAssembler {
         if (relations.contains(de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_KIND)) {
             resource.add(linkTo(methodOn(BuergerController.class).addKindBuerger(buerger.getOid(), null)).withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_KIND));
         }
-        //LOG.error(resource.getLinks().toString());
-        LOG.error("--------------------------------");
         if (relations.contains(de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_PARTNER)) {
-            resource.add(
-//                    new Link("/add/buerger/"+buerger.getOid()+"/partner/").withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_PARTNER));
-                    new Link("/add/"+buerger.getOid()+"/partner/").withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_PARTNER));
-//                    linkTo(methodOn(BuergerController.class).addPartnerBuerger(buerger.getOid(), null)).withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_PARTNER));
+            resource.add(linkTo(methodOn(BuergerController.class).addPartnerBuerger(buerger.getOid(), null)).withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.ADD_PARTNER));
         }
         if (relations.contains(de.muenchen.vaadin.demo.api.rest.BuergerResource.PARTNER)) {
             resource.add(linkTo(methodOn(BuergerController.class).readBuergerPartner(buerger.getOid())).withRel(de.muenchen.vaadin.demo.api.rest.BuergerResource.PARTNER));
@@ -192,7 +187,6 @@ public class BuergerResourceAssembler {
         if (relations.contains(BuergerResource.HISTORY)) {
             resource.add(linkTo(methodOn(BuergerController.class).findAudits(buerger.getId())).withRel(BuergerResource.HISTORY));
         }
-        LOG.error(resource.getLinks().toString());
         return resource;
     }
 

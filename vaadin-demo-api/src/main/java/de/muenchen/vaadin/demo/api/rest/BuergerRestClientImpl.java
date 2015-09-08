@@ -100,21 +100,16 @@ public class BuergerRestClientImpl implements BuergerRestClient {
     
     @Override
     public Buerger addBuergerKind(Buerger buerger, Buerger kind, RestTemplate restTemplate) {
-
         Optional<Link> link = HateoasUtil.findLinkForRel(BuergerResource.ADD_KIND, buerger.getLinks());
         LOG.warn("used Link: "+link.get().toString());
         return this.writeSingleSource(link, kind.getOid(), restTemplate);
     }
     @Override
     public Buerger addBuergerPartner(Buerger buerger, Buerger partner, RestTemplate restTemplate) {
-        //ToDO solve need for hardcoded link
-        LOG.error(buerger.getLinks().toString());
         Optional<Link> link =
-//                HateoasUtil.findLinkForRel(BuergerResource.ADD_PARTNER, buerger.getLinks());
-//                Optional.of(new Link("http://localhost:8080/buerger/add/buerger/" + buerger.getOid() + "/partner/" + partner.getOid() + "").withRel(BuergerResource.ADD_PARTNER));
-                Optional.of(new Link("http://localhost:8080/buerger/add/" + buerger.getOid() + "/partner/" + partner.getOid() + "").withRel(BuergerResource.ADD_PARTNER));
+                HateoasUtil.findLinkForRel(BuergerResource.ADD_PARTNER, buerger.getLinks());
         LOG.warn("used Link: "+link.get().toString());
-        return this.writeSingleSource(link, partner, restTemplate);
+        return this.writeSingleSource(link, partner.getOid(), restTemplate);
     }
 
     @Override

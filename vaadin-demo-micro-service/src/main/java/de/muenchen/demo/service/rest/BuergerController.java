@@ -425,7 +425,7 @@ public class BuergerController {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Add Kind buerger");
         }
-        LOG.warn("restrequestrecieved");
+
         Buerger kind = service.read(kindOid);
         Buerger entity = service.read(buergerOid);
 
@@ -438,30 +438,12 @@ public class BuergerController {
     }
 
     @Secured({"PERM_addPartnerBuerger"})
-    @RequestMapping(value = "/add/{bOid}/partner/{pOid}", method = {RequestMethod.POST})
-    public ResponseEntity addPartnerBuerger(@PathVariable("bOid") String buergerOid, @PathVariable("pOid") String partnerOid) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Add Partner buerger");
-        }
-        LOG.debug("set Partner");
-        Buerger partner = service.read(partnerOid);
-        Buerger entity = service.read(buergerOid);
-
-        entity.setBeziehungsPartner(partner);
-        this.service.update(entity);
-
-        BuergerResource resource = this.assembler.assembleWithAllLinks(entity);
-        resource.add(linkTo(methodOn(BuergerController.class).addPartnerBuerger(buergerOid, partnerOid)).withSelfRel()); // add self link with params
-        return ResponseEntity.ok(resource);
-    }
-
-    /*@Secured({"PERM_addPartnerBuerger"})
     @RequestMapping(value = "/add/{bOid}/partner", method = {RequestMethod.POST})
     public ResponseEntity addPartnerBuerger(@PathVariable("bOid") String bOid, @RequestBody String partnerOid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Add Partner buerger");
         }
-        LOG.warn("restrequestrecieved");
+
         Buerger partner = service.read(partnerOid);
         Buerger entity = service.read(bOid);
 
@@ -471,7 +453,7 @@ public class BuergerController {
         BuergerResource resource = this.assembler.assembleWithAllLinks(entity);
         resource.add(linkTo(methodOn(BuergerController.class).addPartnerBuerger(bOid, partnerOid)).withSelfRel()); // add self link with params
         return ResponseEntity.ok(resource);
-    }*/
+    }
     
 
     /**
