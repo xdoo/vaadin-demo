@@ -5,16 +5,19 @@
  */
 package de.muenchen.demo.service.domain;
 
-import java.util.List;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.security.access.annotation.Secured;
+
+import java.util.List;
 
 /**
  *
  * @author praktikant.tmar
  */
+@Secured("PERM_Authority")
 public interface AuthorityRepository  extends CrudRepository<Authority, Long> {
 
     public final static String Authority_CACHE = "AUTHORITYPERMISSION_CACHE";
@@ -26,10 +29,12 @@ public interface AuthorityRepository  extends CrudRepository<Authority, Long> {
     @CachePut(value = Authority_CACHE, key = "#p0.oid")
     public Authority save(Authority entity);
 
+
     @Override
     @CacheEvict(value = Authority_CACHE, key = "#p0.oid")
     public void delete(Authority entity);
 
     public List<Authority> findByOid(String oid);
+
 }
 
