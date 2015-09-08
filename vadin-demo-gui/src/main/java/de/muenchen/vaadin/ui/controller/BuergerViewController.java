@@ -13,7 +13,6 @@ import de.muenchen.vaadin.services.BuergerService;
 import de.muenchen.vaadin.services.MessageService;
 import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.app.views.BuergerHistoryView;
-import de.muenchen.vaadin.ui.app.views.BuergerTableView;
 import de.muenchen.vaadin.ui.app.views.TableSelectWindow;
 import de.muenchen.vaadin.ui.app.views.events.AppEvent;
 import de.muenchen.vaadin.ui.app.views.events.ComponentEvent;
@@ -54,7 +53,6 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
      * Logger
      */
     private static final Logger LOG = LoggerFactory.getLogger(BuergerViewController.class);
-    private static final String PENDING_FROM = BuergerTableView.NAME;
 
     /**
      * Die Service Klasse
@@ -85,7 +83,6 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
     private BuergerViewFactory buergerViewFactory;
     // item cache
     private BeanItem<Buerger> current;
-    private List<Buerger> currentEntities;
 
     @Autowired
     public BuergerViewController(BuergerService service, VaadinUtil util) {
@@ -385,7 +382,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
                 saveAsChildEventHandler(event);
                 break;
             case ADD_SEARCHED_CHILD:
-                addSearchedChildEventHandler(event);
+                addSearchedChildEventHandler();
                 break;
             case RELEASE_PARENT:
                 releaseParentHandler(event);
@@ -397,7 +394,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
                 saveAsPartnerEventHandler(event);
                 break;
             case ADD_PARTNER:
-                addPartnerEventHandler(event);
+                addPartnerEventHandler();
                 break;
             case QUERY_PARTNER:
                 queryPartner(event.getEntity());
@@ -408,8 +405,8 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 
     }
 
-    private void addPartnerEventHandler(AppEvent<Buerger> event) {
-        navigator.getUI().addWindow(new TableSelectWindow(this, getViewFactory().generateBuergerPartnerSearchTable(PENDING_FROM)));
+    private void addPartnerEventHandler() {
+        navigator.getUI().addWindow(new TableSelectWindow(this, getViewFactory().generateBuergerPartnerSearchTable()));
         postEvent(buildAppEvent(EventType.QUERY));
     }
 
@@ -448,9 +445,9 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 
     }
 
-    private void addSearchedChildEventHandler(AppEvent<Buerger> event){
+    private void addSearchedChildEventHandler() {
 
-        navigator.getUI().addWindow(new TableSelectWindow(this, getViewFactory().generateChildSearchTable(PENDING_FROM)));
+        navigator.getUI().addWindow(new TableSelectWindow(this, getViewFactory().generateChildSearchTable()));
         postEvent(buildAppEvent(EventType.QUERY));
     }
 
@@ -473,14 +470,15 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 
     private void queryEventHandler(AppEvent<Buerger> event) {
 
+        List<Buerger> currentEntities;
         if(event.getQuery().isPresent()) {
-            this.currentEntities = this.queryBuerger(event.getQuery().get());
+            currentEntities = this.queryBuerger(event.getQuery().get());
         } else {
-            this.currentEntities = this.queryBuerger();
+            currentEntities = this.queryBuerger();
         }
 
         // UI Komponenten aktualisieren
-        postEvent(buildComponentEvent(EventType.QUERY).addEntities(this.currentEntities));
+        postEvent(buildComponentEvent(EventType.QUERY).addEntities(currentEntities));
     }
 
     private void select2ReadEventHandler(AppEvent<Buerger> event) {

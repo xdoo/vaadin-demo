@@ -6,7 +6,6 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.TabSheet;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.demo.api.util.EventType;
-import de.muenchen.vaadin.ui.app.views.BuergerTableView;
 import de.muenchen.vaadin.ui.app.views.events.RefreshEvent;
 import de.muenchen.vaadin.ui.components.BuergerChildTab;
 import de.muenchen.vaadin.ui.components.BuergerCreateForm;
@@ -48,7 +47,6 @@ import static reactor.bus.selector.Selectors.T;
 @UIScope
 public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshEvent>>{
 
-    public static final String PENDING_FROM = BuergerTableView.NAME;
     /**
      * Logger
      */
@@ -187,7 +185,6 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
             searchTable=Optional.of(new BuergerSearchTable(
                     controller,
                     navigateForCreate,
-                    navigateFrom,
                     // Schaltflächen
                     detail,
                     edit,
@@ -197,7 +194,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
             ));}
         return searchTable.get();}
 
-    public BuergerSelectTable generateChildSearchTable( String navigateFrom) {
+    public BuergerSelectTable generateChildSearchTable() {
 
 
         if(!childSearchTable.isPresent()){
@@ -208,14 +205,14 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
             LOG.debug("creating 'search' table for buerger");
             childSearchTable = Optional.of(new BuergerSelectTable(
                     controller,
-                    navigateFrom,
                     // Schaltflächen
                     select
             ));}
         return childSearchTable.get();
 
     }
-    public BuergerSelectTable generateBuergerPartnerSearchTable(String navigateFrom) {
+
+    public BuergerSelectTable generateBuergerPartnerSearchTable() {
 
 
         if(!partnerSearchTable.isPresent()){
@@ -226,7 +223,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
             LOG.debug("creating 'partnerSearch' table for buerger");
             partnerSearchTable = Optional.of(new BuergerSelectTable(
                     controller,
-                    navigateFrom,
+
                     // Schaltflächen
                     select
             ));}
@@ -234,7 +231,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
 
     }
 
-    public ChildTable generateChildTable(String navigateToForDetail, String navigateBack) {
+    public ChildTable generateChildTable(String navigateToForDetail) {
 
         TableActionButton.Builder detail = TableActionButton.Builder.<Buerger>make(controller, TableAction.tabledetail, navigateToForDetail, (container, id) -> {
             controller.postEvent(controller.buildAppEvent(EventType.SELECT2READ).setItem(container.getItem(id)).setItemId(id));
@@ -264,7 +261,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
         return table;
     }
 
-    public PartnerTable generatePartnerTable(String navigateToForDetail, String navigateBack) {
+    public PartnerTable generatePartnerTable(String navigateToForDetail) {
 
         TableActionButton.Builder detail = TableActionButton.Builder.<Buerger>make(controller, TableAction.tabledetail, navigateToForDetail, (container, id) -> {
             controller.postEvent(controller.buildAppEvent(EventType.SELECT2READ).setItem(container.getItem(id)).setItemId(id));
@@ -309,11 +306,11 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
         return table;
     }
 
-    public GenericTable generateTable(String navigateBack, final TableActionButton.Builder... buttonBuilders) {
-        return this.createTable(navigateBack, controller.queryBuerger(), buttonBuilders);
+    public GenericTable generateTable(final TableActionButton.Builder... buttonBuilders) {
+        return this.createTable(buttonBuilders);
     }
 
-    private GenericTable createTable(String navigateBack, List<Buerger> entities, final TableActionButton.Builder... buttonBuilders) {
+    private GenericTable createTable(final TableActionButton.Builder... buttonBuilders) {
         LOG.debug("creating table for buerger");
         GenericTable table = new BuergerTable(controller, buttonBuilders);
 
@@ -322,9 +319,6 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
         return table;
     }
 
-    private EventBus getEventBus(){
-        return controller.getBus();
-    }
 
     public BuergerViewController getController() {
         return controller;
@@ -336,8 +330,6 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
 
     @Override
     public void accept(reactor.bus.Event<RefreshEvent> eventWrapper){
-        RefreshEvent event = eventWrapper.getData();
-
         LOG.debug("RefreshEvent received");
         searchTable = Optional.<BuergerSearchTable>empty();
         childSearchTable = Optional.empty();

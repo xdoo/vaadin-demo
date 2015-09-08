@@ -42,7 +42,7 @@ public class BuergerChildTab extends CustomComponent implements Consumer<Event<C
                         controller.postEvent(controller.buildAppEvent(EventType.ADD_SEARCHED_CHILD))
         );
 
-        table = controller.getViewFactory().generateChildTable(navigateToForDetail, navigateBack);
+        table = controller.getViewFactory().generateChildTable(navigateToForDetail);
         
         // Layout für die Schaltflächen über der Tabelle
         HorizontalLayout hlayout = new HorizontalLayout(create, add);

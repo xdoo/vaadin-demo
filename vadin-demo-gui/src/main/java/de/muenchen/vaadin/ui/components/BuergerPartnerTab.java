@@ -41,7 +41,7 @@ public class BuergerPartnerTab extends CustomComponent implements Consumer<Event
             controller.postEvent(controller.buildAppEvent(EventType.ADD_PARTNER));
         });
 
-        table = controller.getViewFactory().generatePartnerTable(navigateToForDetail, from);
+        table = controller.getViewFactory().generatePartnerTable(navigateToForDetail);
 
         // Layout für die Schaltflächen über der Tabelle
         HorizontalLayout hlayout = new HorizontalLayout(create, add);
