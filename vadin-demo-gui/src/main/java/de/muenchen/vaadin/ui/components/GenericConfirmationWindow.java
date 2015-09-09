@@ -9,11 +9,11 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.vaadin.ui.components.buttons.Action;
-import de.muenchen.vaadin.ui.controller.ControllerContext;
-import de.muenchen.vaadin.ui.util.I18nPaths;
+import de.muenchen.vaadin.demo.i18nservice.buttons.Action;
+import de.muenchen.vaadin.demo.i18nservice.ControllerContext;
+import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 
-import static de.muenchen.vaadin.ui.util.I18nPaths.getConfirmationPath;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getConfirmationPath;
 
 /**
  * Generisches Bestätigungsfenster mit einer "ok" und 

@@ -8,7 +8,7 @@ package de.muenchen.vaadin.ui.components;
 import de.muenchen.eventbus.events.ComponentEvent;
 import de.muenchen.eventbus.types.EventType;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
-import de.muenchen.vaadin.ui.components.buttons.TableActionButton;
+import de.muenchen.vaadin.demo.i18nservice.buttons.TableActionButton;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
 /**
