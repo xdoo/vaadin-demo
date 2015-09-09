@@ -1,4 +1,4 @@
-package de.muenchen.demo.service.util;
+package de.muenchen.demo.service.auditing;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

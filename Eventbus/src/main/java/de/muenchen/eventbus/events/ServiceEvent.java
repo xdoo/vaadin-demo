@@ -1,4 +1,4 @@
-package de.muenchen.demo.service.util.events;
+package de.muenchen.eventbus.events;
 
 import de.muenchen.eventbus.types.EventType;
 
