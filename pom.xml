@@ -15,7 +15,6 @@
         <module>Eventbus</module>
         <module>GUI-Lib</module>
         <module>Auditing</module>
-        <module>BaseEntity</module>
     </modules>
     <properties>
         <main.basedir>${basedir}/../..</main.basedir>
