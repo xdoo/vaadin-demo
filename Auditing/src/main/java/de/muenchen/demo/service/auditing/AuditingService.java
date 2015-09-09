@@ -30,13 +30,11 @@ public class AuditingService {
 
     @Autowired
     public AuditingService(EventBus eventbus) {
-        LOG.error("AUditingService läuft!");
         this.eventbus = eventbus;
         this.eventbus.on(T(AuditingEvent.class), this::eventHandler);
     }
 
     public void eventHandler(Event<AuditingEvent> eventWrapper) {
-        LOG.error("Event Handler aufgerufen!");
         //new Thread(() -> {
         AuditingUserEntity entity = createAuditingUserEntity(eventWrapper.getData());
         repo.save(entity);

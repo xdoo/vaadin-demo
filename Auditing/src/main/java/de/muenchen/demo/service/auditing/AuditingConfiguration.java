@@ -34,7 +34,6 @@ public class AuditingConfiguration {
 
     @PostConstruct
     public void registerListeners() {
-        LOG.error("Register Listeners aufgerufen!");
         HibernateEntityManagerFactory hibernateEntityManagerFactory = (HibernateEntityManagerFactory) this.entityManagerFactory;
         SessionFactoryImpl sessionFactoryImpl = (SessionFactoryImpl) hibernateEntityManagerFactory.getSessionFactory();
         EventListenerRegistry registry = sessionFactoryImpl.getServiceRegistry().getService(EventListenerRegistry.class);
