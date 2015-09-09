@@ -1,4 +1,4 @@
-package de.muenchen.vaadin.services;
+package de.muenchen.vaadin.guilib.services;
 
 import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringComponent;

@@ -1,4 +1,4 @@
-package de.muenchen.vaadin.ui.util;
+package de.muenchen.vaadin.guilib.util;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.spring.annotation.SpringComponent;

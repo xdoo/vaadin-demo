@@ -7,8 +7,8 @@ import com.vaadin.data.util.PropertyValueGenerator;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Grid;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
+import de.muenchen.vaadin.guilib.util.VaadinUtil;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
-import de.muenchen.vaadin.ui.util.VaadinUtil;
 
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Type;
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getEntityFieldPath;

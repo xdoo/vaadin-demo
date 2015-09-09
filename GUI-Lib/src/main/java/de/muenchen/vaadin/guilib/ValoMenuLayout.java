@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.muenchen.vaadin.ui.app;
+package de.muenchen.vaadin.guilib;
 
 import com.vaadin.ui.Component;
 import com.vaadin.ui.ComponentContainer;
