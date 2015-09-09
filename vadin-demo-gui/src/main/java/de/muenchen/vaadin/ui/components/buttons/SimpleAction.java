@@ -25,7 +25,7 @@ public enum SimpleAction implements Action {
     read,
     update(FontAwesome.PENCIL),
     back(FontAwesome.ANGLE_LEFT, ShortcutAction.KeyCode.ARROW_LEFT),
-    save,
+    save(FontAwesome.FLOPPY_O, ValoTheme.BUTTON_FRIENDLY),
     delete(FontAwesome.TRASH_O),
     cancel,
     copy,

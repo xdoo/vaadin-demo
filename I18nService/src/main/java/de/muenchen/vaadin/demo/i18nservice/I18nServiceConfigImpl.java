@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.muenchen.vaadin.services;
+package de.muenchen.vaadin.demo.i18nservice;
 
 import com.vaadin.spring.annotation.SpringComponent;
 import org.slf4j.Logger;

@@ -11,6 +11,7 @@
     <module>vadin-demo-gui</module>
         <module>vaadin-demo</module>
         <module>vaadin-demo-configcloud</module>
+        <module>I18nService</module>
     </modules>
     <properties>
         <main.basedir>${basedir}/../..</main.basedir>

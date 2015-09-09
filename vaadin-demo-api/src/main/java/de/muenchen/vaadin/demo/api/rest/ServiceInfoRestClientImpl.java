@@ -56,7 +56,7 @@ public class ServiceInfoRestClientImpl implements ServiceInfoRestClient {
         restTemplate = new RestTemplate(requestFactory);
 
         try{
-            url = discoveryClient.getNextServerFromEureka(eurekaId, false).getHomePageUrl();
+            url = discoveryClient.getNextServerFromEureka(eurekaId, false).getHomePageUrl()+"/service_info";
         } catch (RuntimeException e){
             // Exception occurs if no eureka server was found.
             // service.info.url will be used

@@ -1,4 +1,4 @@
-package de.muenchen.vaadin.services;
+package de.muenchen.vaadin.demo.i18nservice;
 
 
 
