@@ -1,4 +1,4 @@
-package de.muenchen.vaadin.ui.controller;
+package de.muenchen.vaadin.demo.i18nservice;
 
 import de.muenchen.eventbus.events.AppEvent;
 import de.muenchen.eventbus.events.ComponentEvent;

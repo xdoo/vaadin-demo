@@ -1,6 +1,6 @@
-package de.muenchen.vaadin.ui.util;
+package de.muenchen.vaadin.demo.i18nservice;
 
-import de.muenchen.vaadin.ui.components.buttons.Action;
+import de.muenchen.vaadin.demo.i18nservice.buttons.Action;
 
 import java.util.stream.Stream;
 

@@ -3,7 +3,7 @@ package de.muenchen.vaadin.ui.components;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
-import de.muenchen.vaadin.ui.components.buttons.TableActionButton;
+import de.muenchen.vaadin.demo.i18nservice.buttons.TableActionButton;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

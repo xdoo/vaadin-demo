@@ -8,7 +8,7 @@ import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Grid;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
-import static de.muenchen.vaadin.ui.util.I18nPaths.*;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.*;
 import de.muenchen.vaadin.ui.util.VaadinUtil;
 
 /**

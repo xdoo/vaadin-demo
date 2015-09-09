@@ -1,9 +1,9 @@
-package de.muenchen.vaadin.ui.components.buttons;
+package de.muenchen.vaadin.demo.i18nservice.buttons;
 
 import com.vaadin.server.FontAwesome;
 import de.muenchen.vaadin.demo.api.domain.BaseEntity;
-import de.muenchen.vaadin.ui.controller.ControllerContext;
-import de.muenchen.vaadin.ui.util.I18nPaths;
+import de.muenchen.vaadin.demo.i18nservice.ControllerContext;
+import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 
 import java.util.*;
 
