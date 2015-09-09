@@ -1,4 +1,4 @@
-package de.muenchen.demo.service.auditing;
+package de.muenchen.auditing;
 
 import de.muenchen.eventbus.events.ServiceEvent;
 import de.muenchen.eventbus.types.EventType;

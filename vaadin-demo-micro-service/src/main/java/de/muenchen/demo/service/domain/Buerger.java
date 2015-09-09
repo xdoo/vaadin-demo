@@ -2,7 +2,7 @@ package de.muenchen.demo.service.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import de.muenchen.demo.service.auditing.MUCAudited;
+import de.muenchen.auditing.MUCAudited;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 

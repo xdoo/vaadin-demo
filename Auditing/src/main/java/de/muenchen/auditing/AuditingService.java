@@ -1,14 +1,12 @@
-package de.muenchen.demo.service.auditing;
+package de.muenchen.auditing;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.eventbus.EventBus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
 import reactor.bus.Event;
 
 import java.util.Date;
@@ -19,17 +17,15 @@ import static reactor.bus.selector.Selectors.T;
 /**
  * Created by fabian.holtkoetter on 07.09.15.
  */
-@Service
 public class AuditingService {
 
     private static final Logger LOG = LoggerFactory.getLogger(AuditingService.class);
 
-    @Autowired
     AuditingUserRepository repo;
     EventBus eventbus;
 
-    @Autowired
-    public AuditingService(EventBus eventbus) {
+    public AuditingService(EventBus eventbus, AuditingUserRepository repo) {
+        this.repo = repo;
         this.eventbus = eventbus;
         this.eventbus.on(T(AuditingEvent.class), this::eventHandler);
     }

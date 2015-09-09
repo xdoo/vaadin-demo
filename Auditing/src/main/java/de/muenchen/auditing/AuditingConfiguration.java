@@ -1,4 +1,4 @@
-package de.muenchen.demo.service.auditing;
+package de.muenchen.auditing;
 
 import de.muenchen.eventbus.EventBus;
 import org.hibernate.event.service.spi.EventListenerRegistry;
@@ -8,11 +8,8 @@ import org.hibernate.jpa.HibernateEntityManagerFactory;
 import org.hibernate.persister.entity.EntityPersister;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import reactor.bus.Event;
 
-import javax.annotation.PostConstruct;
 import javax.persistence.EntityManagerFactory;
 import java.util.stream.Stream;
 
@@ -21,18 +18,18 @@ import static de.muenchen.eventbus.types.EventType.*;
 /**
  * Created by fabian.holtkoetter on 08.09.15.
  */
-@Configuration
 public class AuditingConfiguration {
 
     private static final Logger LOG = LoggerFactory.getLogger(AuditingConfiguration.class);
 
-    @Autowired
     private EntityManagerFactory entityManagerFactory;
-
-    @Autowired
     EventBus eventbus;
 
-    @PostConstruct
+    public AuditingConfiguration(EntityManagerFactory entityManagerFactory, EventBus eventbus) {
+        this.entityManagerFactory = entityManagerFactory;
+        this.eventbus = eventbus;
+    }
+
     public void registerListeners() {
         HibernateEntityManagerFactory hibernateEntityManagerFactory = (HibernateEntityManagerFactory) this.entityManagerFactory;
         SessionFactoryImpl sessionFactoryImpl = (SessionFactoryImpl) hibernateEntityManagerFactory.getSessionFactory();
