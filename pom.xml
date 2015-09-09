@@ -13,6 +13,7 @@
         <module>vaadin-demo-configcloud</module>
         <module>I18nService</module>
         <module>Eventbus</module>
+        <module>GUI-Lib</module>
     </modules>
     <properties>
         <main.basedir>${basedir}/../..</main.basedir>
