@@ -66,7 +66,7 @@ public class Buerger extends BaseEntity {
         this.wohnungen.addAll(buerger.wohnungen);
         this.staatsangehoerigkeiten.addAll(buerger.staatsangehoerigkeiten);
         this.kinder.addAll(buerger.kinder);
-        this.partner =buerger.partner;
+        this.partner.addAll(buerger.partner);
     }
 
     public String getVorname() {
@@ -141,9 +141,15 @@ public class Buerger extends BaseEntity {
         this.pass = Pass;
     }
 
-    public Set<Buerger> getBeziehungsPartner(){return this.partner;}
+    public Set<Buerger> getPartner() {
+        return partner;
+    }
 
-    public void setBeziehungsPartner(Buerger partner){ this.partner.add(partner); }
+    public void setPartner(Set<Buerger> partner) {
+        this.partner = partner;
+    }
+
+
 
     @Override
     public String toString() {
