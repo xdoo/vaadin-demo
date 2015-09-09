@@ -5,32 +5,51 @@
  */
 package de.muenchen.demo.service.domain;
 
-import java.util.List;
+import de.muenchen.demo.service.domain.permissions.Perm;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.security.access.annotation.Secured;
+
+import java.util.List;
 
 /**
  *
  * @author praktikant.tmar
  */
+@Secured({Perm.READ + "Pass"})
 public interface PassRepository extends CrudRepository<Pass, Long> {
 
-    public final static String Pass_CACHE = "PASS_CACHE";
-
-    @Cacheable(value = Pass_CACHE, key = "#p0 + #p1")
-        public Pass findFirstByOidAndMandantOid(String oid, String mid);
+    String Pass_CACHE = "PASS_CACHE";
 
 
     @Override
     @CachePut(value = Pass_CACHE, key = "#p0.oid + #p0.mandant.oid")
-    public Pass save(Pass entity);
+    @Secured({Perm.WRITE + "Pass"})
+    Pass save(Pass entity);
 
     @Override
+    @Secured({Perm.DELETE + "Pass"})
+    void delete(Long aLong);
+
+    @Override
+    @Secured({Perm.DELETE + "Pass"})
+    void delete(Iterable<? extends Pass> iterable);
+
+    @Override
+    @Secured({Perm.DELETE + "Pass"})
     @CacheEvict(value = Pass_CACHE, key = "#p0.oid + #p0.mandant.oid")
-    public void delete(Pass entity);
-    
+    void delete(Pass authorityPermission);
+
+    @Override
+    @Secured({Perm.DELETE + "Pass"})
+    void deleteAll();
+
+    @Cacheable(value = Pass_CACHE, key = "#p0 + #p1")
+    Pass findFirstByOidAndMandantOid(String oid, String mid);
+
+
     public List<Pass> findByMandantOid(String mid);
 
     List<Pass> findByOid(String oid);

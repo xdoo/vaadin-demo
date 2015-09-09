@@ -8,29 +8,29 @@ import org.springframework.security.access.annotation.Secured;
  *
  * @author claus.straube
  */
-@Secured(Perm.READ + "AdresseExterne")
+@Secured({Perm.READ + "AdresseExterne"})
 public interface AdresseExterneRepository extends CrudRepository<AdresseExterne, Long> {
 
     //public List<AdresseExterne> findByOid(String oid);
 
 
     @Override
-    @Secured(Perm.WRITE + "AdresseExterne")
-    Buerger save(AdresseExterne entity);
+    @Secured({Perm.WRITE + "AdresseExterne"})
+    AdresseExterne save(AdresseExterne entity);
 
     @Override
-    @Secured(Perm.DELETE + "AdresseExterne")
+    @Secured({Perm.DELETE + "AdresseExterne"})
     void delete(Long aLong);
 
     @Override
-    @Secured(Perm.DELETE + "AdresseExterne")
+    @Secured({Perm.DELETE + "AdresseExterne"})
     void delete(AdresseExterne adresseExterne);
 
     @Override
-    @Secured(Perm.DELETE + "AdresseExterne")
+    @Secured({Perm.DELETE + "AdresseExterne"})
     void delete(Iterable<? extends AdresseExterne> iterable);
 
     @Override
-    @Secured(Perm.DELETE + "AdresseExterne")
+    @Secured({Perm.DELETE + "AdresseExterne"})
     void deleteAll();
 }

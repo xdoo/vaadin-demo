@@ -9,7 +9,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.List;
 
@@ -17,31 +17,26 @@ import java.util.List;
  *
  * @author praktikant.tmar
  */
-@Secured("PERM_READ_AuthorityPermission")
+@RepositoryRestResource(exported = false)
 public interface AuthorityPermissionRepository extends CrudRepository<AuthorityPermission, Long> {
 
     public final static String AuthorityPermission_CACHE = "PERMISSION_CACHE";
 
     @Override
-    @Secured({"PERM_WRITE_AuthorityPermission"})
     @CachePut(value = AuthorityPermission_CACHE, key = "#p0.id")
-    Buerger save(AuthorityPermission entity);
+    AuthorityPermission save(AuthorityPermission entity);
 
     @Override
-    @Secured({"PERM_DELETE_AuthorityPermission"})
     @CacheEvict(value = AuthorityPermission_CACHE, key = "#p0.id")
     void delete(Long aLong);
 
     @Override
-    @Secured({"PERM_DELETE_AuthorityPermission"})
     void delete(Iterable<? extends AuthorityPermission> iterable);
 
     @Override
-    @Secured({"PERM_DELETE_AuthorityPermission"})
     void delete(AuthorityPermission authorityPermission);
 
     @Override
-    @Secured({"PERM_DELETE_AdresseReference"})
     void deleteAll();
 
     @Cacheable(value = AuthorityPermission_CACHE, key = "#p0")

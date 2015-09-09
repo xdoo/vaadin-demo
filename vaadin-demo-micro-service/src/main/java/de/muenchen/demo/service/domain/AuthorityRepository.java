@@ -9,7 +9,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import java.util.List;
  *
  * @author praktikant.tmar
  */
-@Secured("PERM_Authority")
+@RepositoryRestResource(exported = false)
 public interface AuthorityRepository  extends CrudRepository<Authority, Long> {
 
     public final static String Authority_CACHE = "AUTHORITYPERMISSION_CACHE";

@@ -5,9 +5,8 @@
  */
 package de.muenchen.demo.service.domain;
 
-import de.muenchen.demo.service.domain.permissions.Perm;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.List;
 
@@ -15,32 +14,10 @@ import java.util.List;
  *
  * @author praktikant.tmar
  */
-@Secured({Perm.READ + "Account"})
+@RepositoryRestResource(exported = false)
 public interface AccountRepository  extends CrudRepository<Account, Long>  {
 
     public List<Authority> findByOid(String oid);
-
-    @Override
-    @Secured({Perm.WRITE + "Account"})
-    Buerger save(Account entity);
-
-    @Override
-    @Secured({Perm.DELETE + "Account"})
-    void delete(Long aLong);
-
-    @Override
-    @Secured({Perm.DELETE + "Account"})
-    void delete(Account account);
-
-    @Override
-    @Secured({Perm.DELETE + "Account"})
-    void delete(Iterable<? extends Account> iterable);
-
-    @Override
-    @Secured({Perm.DELETE + "Account"})
-    void deleteAll();
-
-
 
 }
 

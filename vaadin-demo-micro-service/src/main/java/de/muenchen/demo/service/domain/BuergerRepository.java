@@ -1,5 +1,6 @@
 package de.muenchen.demo.service.domain;
 
+import de.muenchen.demo.service.domain.permissions.Perm;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -12,26 +13,26 @@ import java.util.List;
  *
  * @author claus.straube
  */
-@Secured({"PERM_READ_Buerger"})
+@Secured({"ROLE_PERM_READ_Buerger"})
 public interface BuergerRepository extends CrudRepository<Buerger, Long> {
 
     public final static String BUERGER_CACHE = "BUERGER_CACHE";
 
     @Override
     @CachePut(value = BUERGER_CACHE, key = "#p0.oid + #p0.mandant.oid")
-    @Secured({"PERM_WRITE_Buerger"})
+    @Secured({Perm.WRITE + "Buerger"})
     Buerger save(Buerger entity);
 
     @Override
-    @Secured({"PERM_DELETE_Buerger"})
+    @Secured({Perm.DELETE + "Buerger"})
     void delete(Long aLong);
 
     @Override
-    @Secured({"PERM_DELETE_Buerger"})
+    @Secured({Perm.DELETE + "Buerger"})
     void delete(Iterable<? extends Buerger> iterable);
 
     @Override
-    @Secured({"PERM_DELETE_Buerger"})
+    @Secured({Perm.DELETE + "Buerger"})
     void deleteAll();
     
     @Cacheable(value = BUERGER_CACHE, key = "#p0 + #p1")
@@ -40,6 +41,7 @@ public interface BuergerRepository extends CrudRepository<Buerger, Long> {
 
     @Override
     @CacheEvict(value = BUERGER_CACHE, key = "#p0.oid + #p0.mandant.oid")
+    @Secured({Perm.DELETE + "Buerger"})
     public void delete(Buerger entity);
   
     // Unterläuft das Mandanten Konzept. Sollte deshalb erst einmal nicht verwendet werden.
