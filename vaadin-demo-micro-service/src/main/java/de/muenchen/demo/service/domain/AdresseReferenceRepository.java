@@ -5,32 +5,32 @@
  */
 package de.muenchen.demo.service.domain;
 
-import de.muenchen.demo.service.domain.permissions.Perm;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.security.access.annotation.Secured;
 /**
  *
  * @author praktikant.tmar
  */
-@Secured(Perm.READ + "AdresseReference")
-public interface AdresseReferenceRepository extends BaseRepository<AdresseReference>{
+@Secured("hasRole('PERM_READ_AdresseReference')")
+public interface AdresseReferenceRepository extends CrudRepository<AdresseReference, Long> {
 
     @Override
-    @Secured({Perm.WRITE + "AdresseReference"})
+    @Secured("hasRole('PERM_WRITE_AdresseReference')")
     AdresseReference save(AdresseReference entity);
 
     @Override
-    @Secured({Perm.DELETE + "AdresseReference"})
+    @Secured("hasRole('PERM_DELETE_AdresseReference')")
     void delete(Long aLong);
 
     @Override
-    @Secured({Perm.DELETE + "AdresseReference"})
+    @Secured("hasRole('PERM_DELETE_AdresseReference')")
     void delete(AdresseReference adresseReference);
 
     @Override
-    @Secured({Perm.DELETE + "AdresseReference"})
+    @Secured("hasRole('PERM_DELETE_AdresseReference')")
     void delete(Iterable<? extends AdresseReference> iterable);
 
     @Override
-    @Secured({Perm.DELETE + "AdresseReference"})
+    @Secured("hasRole('PERM_DELETE_AdresseReference')")
     void deleteAll();
 }

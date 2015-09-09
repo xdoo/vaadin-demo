@@ -5,9 +5,8 @@
  */
 package de.muenchen.demo.service.domain;
 
-import de.muenchen.demo.service.domain.permissions.Perm;
 import org.springframework.data.repository.PagingAndSortingRepository;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
 
@@ -15,29 +14,29 @@ import java.util.List;
  *
  * @author praktikant.tmar
  */
-@Secured({Perm.READ + "Mandant"})
+@PreAuthorize("hasRole('PERM_READ_Mandant')")
 public interface MandantRepository extends PagingAndSortingRepository<Mandant, Long> {
     
     List<Mandant> findByOid(String oid);
 
     @Override
-    @Secured({Perm.WRITE + "Mandant"})
+    @PreAuthorize("hasRole('PERM_WRITE_Mandant')")
     Mandant save(Mandant s);
 
     @Override
-    @Secured({Perm.DELETE + "Mandant"})
+    @PreAuthorize("hasRole('PERM_DELETE_Mandant')")
     void delete(Long aLong);
 
     @Override
-    @Secured({Perm.DELETE + "Mandant"})
+    @PreAuthorize("hasRole('PERM_DELETE_Mandant')")
     void delete(Iterable<? extends Mandant> iterable);
 
     @Override
-    @Secured({Perm.DELETE + "Mandant"})
+    @PreAuthorize("hasRole('PERM_DELETE_Mandant')")
     void delete(Mandant authorityPermission);
 
     @Override
-    @Secured({Perm.DELETE + "Mandant"})
+    @PreAuthorize("hasRole('PERM_DELETE_Mandant')")
     void deleteAll();
     
 }

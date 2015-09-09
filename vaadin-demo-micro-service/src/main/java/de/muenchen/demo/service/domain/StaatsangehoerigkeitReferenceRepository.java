@@ -1,11 +1,7 @@
 package de.muenchen.demo.service.domain;
 
-import de.muenchen.demo.service.domain.permissions.Perm;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.repository.PagingAndSortingRepository;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
 
@@ -13,7 +9,7 @@ import java.util.List;
  *
  * @author claus.straube
  */
-@Secured({Perm.READ + "StaatsangehoerigkeitReference"})
+@PreAuthorize("hasRole('PERM_READ_StaatsangehoerigkeitReference')")
 public interface StaatsangehoerigkeitReferenceRepository extends PagingAndSortingRepository<StaatsangehoerigkeitReference, Long>{
         
 public final static String StaatsangehoerigkeitReference_CACHE = "STAATSANGEHOERIGKEITREFERENCE_CACHE";
@@ -22,28 +18,25 @@ public final static String StaatsangehoerigkeitReference_CACHE = "STAATSANGEHOER
 
 
     @Override
-    @CachePut(value = StaatsangehoerigkeitReference_CACHE, key = "#p0.referencedOid + #p0.mandant.oid")
-    @Secured({Perm.WRITE + "StaatsangehoerigkeitReference"})
+    @PreAuthorize("hasRole('PERM_READ_StaatsangehoerigkeitReference')")
     StaatsangehoerigkeitReference save(StaatsangehoerigkeitReference entity);
 
     @Override
-    @CacheEvict(value = StaatsangehoerigkeitReference_CACHE, key = "#p0.referencedOid + #p0.mandant.oid")
-    @Secured({Perm.DELETE + "StaatsangehoerigkeitReference"})
+    @PreAuthorize("hasRole('PERM_READ_StaatsangehoerigkeitReference')")
     void delete(StaatsangehoerigkeitReference entity);
 
     @Override
-    @Secured({Perm.DELETE + "StaatsangehoerigkeitReference"})
+    @PreAuthorize("hasRole('PERM_READ_StaatsangehoerigkeitReference')")
     void delete(Long aLong);
 
     @Override
-    @Secured({Perm.DELETE + "StaatsangehoerigkeitReference"})
+    @PreAuthorize("hasRole('PERM_READ_StaatsangehoerigkeitReference')")
     void delete(Iterable<? extends StaatsangehoerigkeitReference> iterable);
 
     @Override
-    @Secured({Perm.DELETE + "StaatsangehoerigkeitReference"})
+    @PreAuthorize("hasRole('PERM_READ_StaatsangehoerigkeitReference')")
     void deleteAll();
 
-    @Cacheable(value = StaatsangehoerigkeitReference_CACHE, key = "#p0 + #p1")
     public StaatsangehoerigkeitReference findFirstByReferencedOidAndMandantOid(String referencedOid, String mid);
 
 

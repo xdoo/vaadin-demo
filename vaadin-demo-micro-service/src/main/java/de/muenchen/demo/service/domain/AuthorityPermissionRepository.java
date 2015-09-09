@@ -5,9 +5,6 @@
  */
 package de.muenchen.demo.service.domain;
 
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
@@ -23,11 +20,9 @@ public interface AuthorityPermissionRepository extends CrudRepository<AuthorityP
     public final static String AuthorityPermission_CACHE = "PERMISSION_CACHE";
 
     @Override
-    @CachePut(value = AuthorityPermission_CACHE, key = "#p0.id")
     AuthorityPermission save(AuthorityPermission entity);
 
     @Override
-    @CacheEvict(value = AuthorityPermission_CACHE, key = "#p0.id")
     void delete(Long aLong);
 
     @Override
@@ -39,7 +34,6 @@ public interface AuthorityPermissionRepository extends CrudRepository<AuthorityP
     @Override
     void deleteAll();
 
-    @Cacheable(value = AuthorityPermission_CACHE, key = "#p0")
     public AuthorityPermission findFirstById(AuthPermId id);
 
 

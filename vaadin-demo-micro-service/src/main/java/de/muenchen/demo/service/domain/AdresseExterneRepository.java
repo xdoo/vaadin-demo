@@ -1,36 +1,35 @@
 package de.muenchen.demo.service.domain;
 
-import de.muenchen.demo.service.domain.permissions.Perm;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 /**
  *
  * @author claus.straube
  */
-@Secured({Perm.READ + "AdresseExterne"})
+@PreAuthorize("hasRole('PERM_READ_AdresseExterne'")
 public interface AdresseExterneRepository extends CrudRepository<AdresseExterne, Long> {
 
     //public List<AdresseExterne> findByOid(String oid);
 
 
     @Override
-    @Secured({Perm.WRITE + "AdresseExterne"})
+    @PreAuthorize("hasRole('PERM_WRITE_AdresseExterne'")
     AdresseExterne save(AdresseExterne entity);
 
     @Override
-    @Secured({Perm.DELETE + "AdresseExterne"})
+    @PreAuthorize("hasRole('PERM_DELETE_AdresseExterne'")
     void delete(Long aLong);
 
     @Override
-    @Secured({Perm.DELETE + "AdresseExterne"})
+    @PreAuthorize("hasRole('PERM_DELETE_AdresseExterne'")
     void delete(AdresseExterne adresseExterne);
 
     @Override
-    @Secured({Perm.DELETE + "AdresseExterne"})
+    @PreAuthorize("hasRole('PERM_DELETE_AdresseExterne'")
     void delete(Iterable<? extends AdresseExterne> iterable);
 
     @Override
-    @Secured({Perm.DELETE + "AdresseExterne"})
+    @PreAuthorize("hasRole('PERM_DELETE_AdresseExterne'")
     void deleteAll();
 }
