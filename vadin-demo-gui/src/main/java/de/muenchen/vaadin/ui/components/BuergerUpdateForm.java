@@ -17,8 +17,8 @@ import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.events.ComponentEvent;
 import de.muenchen.eventbus.types.EventType;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
-import de.muenchen.vaadin.ui.components.buttons.ActionButton;
-import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
+import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
+import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.ValidatorFactory;
 import org.slf4j.Logger;
@@ -28,10 +28,10 @@ import reactor.fn.Consumer;
 
 import java.util.Optional;
 
-import static de.muenchen.vaadin.ui.util.I18nPaths.Component;
-import static de.muenchen.vaadin.ui.util.I18nPaths.Type;
-import static de.muenchen.vaadin.ui.util.I18nPaths.getEntityFieldPath;
-import static de.muenchen.vaadin.ui.util.I18nPaths.getFormPath;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Component;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Type;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getEntityFieldPath;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getFormPath;
 
 /**
  *

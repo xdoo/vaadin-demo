@@ -11,13 +11,14 @@ import de.muenchen.eventbus.events.AppEvent;
 import de.muenchen.eventbus.events.ComponentEvent;
 import de.muenchen.eventbus.types.EventType;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
+import de.muenchen.vaadin.demo.i18nservice.ControllerContext;
 import de.muenchen.vaadin.services.BuergerService;
 import de.muenchen.vaadin.services.MessageService;
 import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.app.views.BuergerTableView;
 import de.muenchen.vaadin.ui.app.views.TableSelectWindow;
 import de.muenchen.vaadin.ui.components.GenericSuccessNotification;
-import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
+import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.controller.factorys.BuergerViewFactory;
 import de.muenchen.vaadin.ui.util.VaadinUtil;
 import org.slf4j.Logger;
@@ -32,9 +33,9 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static de.muenchen.vaadin.ui.util.I18nPaths.NotificationType;
-import static de.muenchen.vaadin.ui.util.I18nPaths.Type;
-import static de.muenchen.vaadin.ui.util.I18nPaths.getNotificationPath;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.NotificationType;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Type;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getNotificationPath;
 import static reactor.bus.selector.Selectors.object;
 
 /**

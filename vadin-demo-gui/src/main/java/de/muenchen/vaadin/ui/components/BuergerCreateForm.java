@@ -18,17 +18,17 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.types.EventType;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
-import de.muenchen.vaadin.ui.components.buttons.ActionButton;
-import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
+import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
+import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import de.muenchen.vaadin.ui.util.ValidatorFactory;
 
-import static de.muenchen.vaadin.ui.util.I18nPaths.Component;
-import static de.muenchen.vaadin.ui.util.I18nPaths.NotificationType;
-import static de.muenchen.vaadin.ui.util.I18nPaths.Type;
-import static de.muenchen.vaadin.ui.util.I18nPaths.getEntityFieldPath;
-import static de.muenchen.vaadin.ui.util.I18nPaths.getFormPath;
-import static de.muenchen.vaadin.ui.util.I18nPaths.getNotificationPath;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Component;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.NotificationType;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Type;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getEntityFieldPath;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getFormPath;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getNotificationPath;
 
 /**
  * Formular zum Erstellen eines {@link Buerger}s.

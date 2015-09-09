@@ -1,8 +1,8 @@
-package de.muenchen.vaadin.ui.components.buttons;
+package de.muenchen.vaadin.demo.i18nservice.buttons;
 
 import com.vaadin.data.util.BeanItemContainer;
 import de.muenchen.vaadin.demo.api.domain.BaseEntity;
-import de.muenchen.vaadin.ui.controller.ControllerContext;
+import de.muenchen.vaadin.demo.i18nservice.ControllerContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +54,7 @@ public class TableActionButton<T extends BaseEntity> extends ActionButton {
      * <p>
      * This can be used to write the functionality of the button before the specific item id and container are assigned.
      * <p>
-     * The {@link de.muenchen.vaadin.ui.components.buttons.TableActionButton.Builder#build(BeanItemContainer, Object)} method
+     * The {@link de.muenchen.vaadin.demo.i18nservice.buttons.TableActionButton.Builder#build(BeanItemContainer, Object)} method
      * is used to finally set the id and container and get the desired button.
      */
     public static class Builder<T extends BaseEntity> {

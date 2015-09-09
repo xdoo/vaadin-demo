@@ -11,8 +11,8 @@ import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
 import javax.annotation.PostConstruct;
 
-import static de.muenchen.vaadin.ui.util.I18nPaths.Type;
-import static de.muenchen.vaadin.ui.util.I18nPaths.getPagePath;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Type;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getPagePath;
 
 
 /**

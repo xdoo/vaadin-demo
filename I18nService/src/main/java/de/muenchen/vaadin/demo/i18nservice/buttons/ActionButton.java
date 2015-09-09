@@ -1,10 +1,11 @@
-package de.muenchen.vaadin.ui.components.buttons;
+package de.muenchen.vaadin.demo.i18nservice.buttons;
 
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CustomComponent;
-import de.muenchen.vaadin.ui.controller.ControllerContext;
+import com.vaadin.shared.Connector;
+import de.muenchen.vaadin.demo.i18nservice.ControllerContext;
 
-import static de.muenchen.vaadin.ui.util.I18nPaths.*;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.*;
 
 /**
  * Provides a styled Button that represents a specific action.

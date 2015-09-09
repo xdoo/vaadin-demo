@@ -11,12 +11,12 @@ import de.muenchen.vaadin.ui.components.BuergerChildTab;
 import de.muenchen.vaadin.ui.components.BuergerPartnerTab;
 import de.muenchen.vaadin.ui.components.BuergerReadForm;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
-import de.muenchen.vaadin.ui.util.I18nPaths;
+import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static de.muenchen.vaadin.ui.util.I18nPaths.getEntityFieldPath;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getEntityFieldPath;
 
 /**
  *
