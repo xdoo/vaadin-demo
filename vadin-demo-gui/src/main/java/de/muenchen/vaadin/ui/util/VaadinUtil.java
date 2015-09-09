@@ -7,7 +7,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import de.muenchen.vaadin.services.MessageService;
 import org.springframework.stereotype.Component;
-import static de.muenchen.vaadin.ui.util.I18nPaths.*;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.*;
 
 /**
  *
