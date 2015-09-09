@@ -14,7 +14,6 @@
         <module>I18nService</module>
         <module>Eventbus</module>
         <module>Auditing</module>
-        <module>BaseEntity</module>
     </modules>
     <properties>
         <main.basedir>${basedir}/../..</main.basedir>

@@ -5,13 +5,13 @@
  */
 package de.muenchen.vaadin.demo.i18nservice;
 
-import com.vaadin.spring.annotation.SpringComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Locale;
@@ -25,7 +25,7 @@ import java.util.stream.Stream;
  *
  * @author maximilian.zollbrecht p.mueller
  */
-@SpringComponent
+@Component
 @Primary
 @RefreshScope
 public class I18nServiceConfigImpl implements I18nService {

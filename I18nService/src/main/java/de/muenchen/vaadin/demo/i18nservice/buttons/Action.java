@@ -1,11 +1,12 @@
 package de.muenchen.vaadin.demo.i18nservice.buttons;
 
 import com.vaadin.server.FontAwesome;
-import de.muenchen.vaadin.demo.api.domain.BaseEntity;
 import de.muenchen.vaadin.demo.i18nservice.ControllerContext;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * A simple enum declaring all actions and providing all required values/settings that depend on a action.
