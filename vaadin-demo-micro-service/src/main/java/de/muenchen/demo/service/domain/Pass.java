@@ -5,25 +5,14 @@
  */
 package de.muenchen.demo.service.domain;
 
-import org.hibernate.envers.Audited;
-
+import javax.persistence.*;
 import java.util.Date;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 
 /**
  *
  * @author praktikant.tmar
  */
 @Entity
-@Audited
 @Table(name = "PASS")
 public class Pass extends BaseEntity {
 

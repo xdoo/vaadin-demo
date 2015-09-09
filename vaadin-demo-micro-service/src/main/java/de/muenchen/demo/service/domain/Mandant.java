@@ -5,23 +5,16 @@
  */
 package de.muenchen.demo.service.domain;
 
-import java.io.Serializable;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-import org.hibernate.envers.Audited;
 import org.hibernate.search.annotations.Field;
+
+import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  *
  * @author praktikant.tmar
  */
 @Entity
-@Audited
 @Table(name = "MANDANT")
 public class Mandant implements Serializable {
 

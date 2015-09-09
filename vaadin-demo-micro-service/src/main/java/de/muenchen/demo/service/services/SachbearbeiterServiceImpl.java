@@ -7,33 +7,27 @@ package de.muenchen.demo.service.services;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import com.google.common.eventbus.EventBus;
-import com.google.common.eventbus.Subscribe;
-import de.muenchen.demo.service.domain.Buerger;
-import de.muenchen.demo.service.domain.Mandant;
-import de.muenchen.demo.service.domain.User;
-import de.muenchen.demo.service.domain.Sachbearbeiter;
-import de.muenchen.demo.service.domain.SachbearbeiterRepository;
+import de.muenchen.demo.service.domain.*;
 import de.muenchen.demo.service.util.IdService;
 import de.muenchen.demo.service.util.QueryService;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import javax.persistence.EntityManager;
-
 import de.muenchen.demo.service.util.events.BuergerEvent;
 import de.muenchen.demo.service.util.events.SachbearbeiterEvent;
 import de.muenchen.demo.service.util.events.UserEvent;
-import de.muenchen.vaadin.demo.api.util.EventType;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import de.muenchen.eventbus.EventBus;
+import de.muenchen.eventbus.types.EventType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import reactor.bus.Event;
+
+import javax.persistence.EntityManager;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static reactor.bus.selector.Selectors.T;
 
 /**
  *
@@ -51,15 +45,17 @@ public class SachbearbeiterServiceImpl implements SachbearbeiterService {
     private UserService userService;
     @Autowired
     MandantService mandantService;
-
+    @Autowired
     EventBus eventbus;
 
     @Autowired
-    public SachbearbeiterServiceImpl(SachbearbeiterRepository repo, UserService userService, EntityManager em, EventBus eventBus) {
+    public SachbearbeiterServiceImpl(SachbearbeiterRepository repo, UserService userService, EntityManager em, EventBus eventbus) {
         this.repo = repo;
         this.search = new QueryService<>(userService, em, Sachbearbeiter.class, "adresseOid", "ausrichtung", "stock");
-        this.eventbus = eventBus;
-        eventBus.register(this);
+        this.eventbus = eventbus;
+        eventbus.on(T(SachbearbeiterEvent.class), this::sachbearbeiterEventHandler);
+        eventbus.on(T(UserEvent.class), this::userEventHandler);
+
     }
 
     @Override
@@ -162,7 +158,7 @@ public class SachbearbeiterServiceImpl implements SachbearbeiterService {
         this.update(sachbearbeiter);
 
         //this.buergerService.update(buerger);
-        eventbus.post(new BuergerEvent(EventType.UPDATE, buerger));
+        eventbus.notify(BuergerEvent.class, Event.wrap(new BuergerEvent(EventType.UPDATE, buerger)));
     }
 
     @Override
@@ -174,7 +170,7 @@ public class SachbearbeiterServiceImpl implements SachbearbeiterService {
         buergerList.stream().forEach((buerger) -> {
             buerger.getSachbearbeiter().remove(sachbearbeiter);
             //this.buergerService.update(buerger);
-            eventbus.post(new BuergerEvent(EventType.UPDATE, buerger));
+            eventbus.notify(BuergerEvent.class, Event.wrap(new BuergerEvent(EventType.UPDATE, buerger)));
             removeBuerger.add(buerger);
         });
 
@@ -217,8 +213,8 @@ public class SachbearbeiterServiceImpl implements SachbearbeiterService {
 
     }
 
-    @Subscribe
-    public void sachbearbeiterEventHandler(SachbearbeiterEvent event) {
+    public void sachbearbeiterEventHandler(Event<SachbearbeiterEvent> eventWrapper) {
+        SachbearbeiterEvent event = eventWrapper.getData();
         switch (event.getEventType()) {
             case UPDATE:
                 update(event.getEntity());
@@ -226,8 +222,8 @@ public class SachbearbeiterServiceImpl implements SachbearbeiterService {
         }
     }
 
-    @Subscribe
-    public void userEventHandler(UserEvent event) {
+    public void userEventHandler(Event<UserEvent> eventWrapper) {
+        UserEvent event = eventWrapper.getData();
         switch (event.getEventType()) {
             case RELEASE:
                 readUserSachbearbeiter(event.getEntity().getOid());

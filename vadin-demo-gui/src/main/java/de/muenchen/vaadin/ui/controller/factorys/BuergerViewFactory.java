@@ -2,24 +2,12 @@ package de.muenchen.vaadin.ui.controller.factorys;
 
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.TabSheet;
+import de.muenchen.eventbus.EventBus;
+import de.muenchen.eventbus.events.RefreshEvent;
+import de.muenchen.eventbus.types.EventType;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
-import de.muenchen.vaadin.demo.api.util.EventType;
-import de.muenchen.vaadin.ui.app.views.events.AppEvent;
-import de.muenchen.vaadin.ui.app.views.events.RefreshEvent;
-import de.muenchen.vaadin.ui.components.BuergerChildTab;
-import de.muenchen.vaadin.ui.components.BuergerCreateForm;
-import de.muenchen.vaadin.ui.components.BuergerPartnerTab;
-import de.muenchen.vaadin.ui.components.BuergerReadForm;
-import de.muenchen.vaadin.ui.components.BuergerSearchTable;
-import de.muenchen.vaadin.ui.components.BuergerSelectTable;
-import de.muenchen.vaadin.ui.components.BuergerTable;
-import de.muenchen.vaadin.ui.components.BuergerUpdateForm;
-import de.muenchen.vaadin.ui.components.ChildTable;
-import de.muenchen.vaadin.ui.components.GenericConfirmationWindow;
-import de.muenchen.vaadin.ui.components.GenericTable;
-import de.muenchen.vaadin.ui.components.PartnerTable;
+import de.muenchen.vaadin.ui.components.*;
 import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.components.buttons.TableAction;
 import de.muenchen.vaadin.ui.components.buttons.TableActionButton;
@@ -29,7 +17,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.bus.Event;
-import reactor.bus.EventBus;
 import reactor.fn.Consumer;
 
 import javax.annotation.PostConstruct;
@@ -44,7 +31,7 @@ import static reactor.bus.selector.Selectors.T;
  */
 @Component
 @UIScope
-public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshEvent>>{
+public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshEvent>> {
 
     /**
      * Logger
@@ -69,7 +56,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
 
     @PostConstruct
     public void init(){
-        eventBus.on(T(RefreshEvent.class),this);
+        eventBus.on(T(RefreshEvent.class), this);
     }
 
 
@@ -175,7 +162,6 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
                         win.focus();
                     }
             );
-
             searchTable=Optional.of(new BuergerSearchTable(
                     controller,
                     navigateForCreate,

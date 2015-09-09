@@ -16,21 +16,13 @@ import java.util.List;
 public interface AdresseService {
 
     public Adresse create();
-
-    public Adresse save(Adresse adresse);
-
+               
     public Adresse read(String oid);
     
     public AdresseReference readReference(String oid);
 
     public List<Adresse> query();
-
-    public void delete(String oid);
-
-    public Adresse copy(String oid);
     
-    public Adresse update(Adresse adresse);
-    
-    public Adresse[] suche(String query);
+    public List<Adresse> suche(Adresse adresse);
 
 }

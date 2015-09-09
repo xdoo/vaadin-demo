@@ -2,10 +2,8 @@ package de.muenchen.demo.service.rest;
 
 import com.google.common.collect.Lists;
 import de.muenchen.demo.service.domain.Adresse;
-import de.muenchen.demo.service.domain.AdresseReference;
 import de.muenchen.demo.service.domain.Buerger;
 import de.muenchen.demo.service.domain.Wohnung;
-import de.muenchen.vaadin.demo.api.rest.AdresseResource;
 import de.muenchen.demo.service.rest.api.AdresseResourceAssembler;
 import de.muenchen.vaadin.demo.api.rest.BuergerResource;
 import de.muenchen.demo.service.rest.api.BuergerResourceAssembler;
@@ -17,6 +15,7 @@ import de.muenchen.demo.service.services.BuergerService;
 import de.muenchen.demo.service.services.MandantService;
 import de.muenchen.demo.service.services.WohnungService;
 import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
+import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,7 +72,7 @@ public class WohnungController {
         }
         SearchResultResource<WohnungResource> resource;
         resource = this.assembler.toResource(this.service.query());
-        resource.add(linkTo(methodOn(BuergerController.class).queryBuerger()).withSelfRel()); // add self link
+        resource.add(linkTo(methodOn(WohnungController.class).queryWohnung()).withSelfRel()); // add self link
         return ResponseEntity.ok(resource);
     }
 
@@ -108,7 +107,7 @@ public class WohnungController {
             LOG.debug("copy wohnung");
         }
         Wohnung entity = this.service.copy(oid);
-        WohnungResource resource = this.assembler.toResource(entity, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY);
+        WohnungResource resource = this.assembler.assembleWithAllLinks(entity);
         return ResponseEntity.ok(resource);
     }
 
@@ -143,12 +142,12 @@ public class WohnungController {
             LOG.debug("update wohnung");
         }
         Wohnung entity = service.read(request.getOid());
-        Adresse adresse = service.readAdresse(request.getOid());
+        Adresse adresse = adresseService.read(entity.getAdresse().getOid());
 
         LOG.info("davor > " + entity.toString());
         this.assembler.fromResource(request, entity, adresse);
         LOG.info("danach > " + entity.toString());
-        this.service.update(entity,adresse);
+        this.service.update(entity, adresse);
         WohnungResource resource = this.assembler.assembleWithAllLinks(entity);
         return ResponseEntity.ok(resource);
     }
@@ -167,8 +166,8 @@ public class WohnungController {
         }
         Wohnung entity = new Wohnung();
         Adresse adresse = new Adresse();
-        this.assembler.fromResource(request, entity,adresse);
-        this.service.save(entity,adresse);
+        this.assembler.fromResource(request, entity, adresse);
+        this.service.save(entity, adresse);
 
         WohnungResource resource = this.assembler.assembleWithAllLinks(entity);
         return ResponseEntity.ok(resource);
@@ -189,48 +188,6 @@ public class WohnungController {
         this.service.delete(oid);
         return ResponseEntity.ok().build();
     }
-
-    /**
-     * Liest die Adresse eine Wohnung.
-     *
-     * @param oid
-     * @return
-     */
-    @Secured({"PERM_readWohnungAdresse"})
-    @RequestMapping(value = "/adresse/{oid}", method = {RequestMethod.GET})
-    public ResponseEntity readWohnungAdresse(@PathVariable("oid") String oid) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("read Wohunung Adresse");
-        }
-        Adresse adresse = adresseService.read(this.service.read(oid).getAdresse().getOid());
-
-        AdresseResource resources = adresseAssembler.toResource(adresse, HateoasUtil.REL_SELF, HateoasUtil.REL_NEW, HateoasUtil.REL_DELETE, HateoasUtil.REL_UPDATE, HateoasUtil.REL_COPY, WohnungResource.ADRESSEN);
-        return ResponseEntity.ok(resources);
-    }
-
-//    /**
-//     * Assoziiert eine Adresse mit einer Wonunug .
-//     *
-//     * @param wOid
-//     * @param aOid
-//     * @return
-//     */
-//    @Secured({"PERM_addAdresseWohnung"})
-//    @RequestMapping(value = "add/adresse/{wOid}", method = {RequestMethod.POST})
-//    public ResponseEntity addAdresseWohnung(@PathVariable("wOid") String wOid, @RequestBody String aOid) {
-//        if (LOG.isDebugEnabled()) {
-//            LOG.debug("Add Adresse to wohnung");
-//        }
-//
-//        AdresseReference adresse = adresseService.readReference(aOid);
-//        Wohnung entity = service.read(wOid);
-//
-//        entity.setAdresse(adresse);
-//        this.service.update(entity);
-//
-//        WohnungResource resource = this.assembler.assembleWithAllLinks(entity);
-//        return ResponseEntity.ok(resource);
-//    }
 
     /**
      * Liest die Buerger einer Wohnung.
@@ -268,21 +225,36 @@ public class WohnungController {
     }
 
     /**
-     * Entfernt die Beziehung zwischen eine Wohnung und ein Buerger.
+     * Löscht mehrere Wohnungen.
      *
-     * @param wohnungOid
-     * @param buergerOid
+     * @param oids
      * @return
      */
-    @Secured({"PERM_releaseWohnungBuerger"})
-    @RequestMapping(value = "/release/buerger/{wohnungOid}/{buergerOid}", method = {RequestMethod.GET})
-    public ResponseEntity releaseWohnungBuerger(@PathVariable("wohnungOid") String wohnungOid, @PathVariable("buergerOid") String buergerOid) {
+    //@Secured({"PERM_deleteListWohnung"})
+    @RequestMapping(method = {RequestMethod.POST})
+    public ResponseEntity deleteListWohnung(@RequestBody ArrayList<String> oids) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("delete Wohnung Buerger");
+            LOG.debug("delete Wohnung");
         }
-        this.buergerService.releaseWohnungBuerger(wohnungOid, buergerOid);
+        this.service.delete(oids);
         return ResponseEntity.ok().build();
+    }
 
+    /**
+     * Macht eine Kopie mehrere Wohnungnen. Diese Kopie wird bei Erstellung in
+     * der DB gespeichert.
+     *
+     * @param oids
+     * @return
+     */
+    //@Secured({"PERM_copyListWohnung"})
+    @RequestMapping(value = "/copy", method = {RequestMethod.POST})
+    public ResponseEntity copyListWohnung(@RequestBody ArrayList<String> oids) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("copy Wohnung");
+        }
+        this.service.copy(oids);
+        return ResponseEntity.ok().build();
     }
 
 }

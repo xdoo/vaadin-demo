@@ -108,6 +108,8 @@ public interface DomainConstants {
     public final static String M3_P008 = "OIDM3_PASS016";
     public final static String M3_P009 = "OIDM3_PASS017";
     public final static String M3_P010 = "M2_PASS018";
+    public final static String M2_P042 = "OIDM2_PASS042";
+
 
     //Wohnungen
     public final static String M2_W001 = "OIDM2_WOHNUNG001";
@@ -140,6 +142,36 @@ public interface DomainConstants {
     public final static String M3_W008 = "OIDM3_WOHNUNG008";
     public final static String M3_W009 = "OIDM3_WOHNUNG009";
     public final static String M3_W010 = "OIDM3_WOHNUNG010";
+    public final static String M2_W021 = "OIDM2_WOHNUNG021";
+    public final static String M2_W022 = "OIDM2_WOHNUNG022";
+    public final static String M2_W023 = "OIDM2_WOHNUNG023";
+    public final static String M2_W024 = "OIDM2_WOHNUNG024";
+    public final static String M2_W025 = "OIDM2_WOHNUNG025";
+    public final static String M2_W026 = "OIDM2_WOHNUNG026";
+    public final static String M2_W027 = "OIDM2_WOHNUNG027";
+    public final static String M2_W028 = "OIDM2_WOHNUNG028";
+    public final static String M2_W029 = "OIDM2_WOHNUNG029";
+    public final static String M2_W030 = "OIDM2_WOHNUNG030";
+    public final static String M2_W031 = "OIDM2_WOHNUNG031";
+    public final static String M2_W032 = "OIDM2_WOHNUNG032";
+    public final static String M2_W033 = "OIDM2_WOHNUNG033";
+    public final static String M2_W034 = "OIDM2_WOHNUNG034";
+    public final static String M2_W035 = "OIDM2_WOHNUNG035";
+    public final static String M2_W036 = "OIDM2_WOHNUNG036";
+    public final static String M2_W037 = "OIDM2_WOHNUNG037";
+    public final static String M2_W038 = "OIDM2_WOHNUNG038";
+    public final static String M2_W039 = "OIDM2_WOHNUNG039";
+    public final static String M2_W040 = "OIDM2_WOHNUNG040";
+    public final static String M2_W041 = "OIDM2_WOHNUNG041";
+    public final static String M2_W042 = "OIDM2_WOHNUNG042";
+    public final static String M2_W043 = "OIDM2_WOHNUNG043";
+    public final static String M2_W044 = "OIDM2_WOHNUNG044";
+    public final static String M2_W045 = "OIDM2_WOHNUNG045";
+    public final static String M2_W046 = "OIDM2_WOHNUNG046";
+    public final static String M2_W047 = "OIDM2_WOHNUNG047";
+    public final static String M2_W048 = "OIDM2_WOHNUNG048";
+    public final static String M2_W049 = "OIDM2_WOHNUNG049";
+    public final static String M2_W050 = "OIDM2_WOHNUNG050";
 
     //Staatsangehoerigkeiten
     public final static String M2_S001 = "OIDM2_STAATS001";
@@ -267,16 +299,81 @@ public interface DomainConstants {
     public final static String M2_AR004 = "OIDM2_ADREF004";
     public final static String M2_AR005 = "OIDM2_ADREF005";
     public final static String M2_AR006 = "OIDM2_ADREF006";
+    public final static String M2_AR007 = "OIDM2_ADREF007";
+    public final static String M2_AR008 = "OIDM2_ADREF008";
+    public final static String M2_AR009 = "OIDM2_ADREF009";
+    public final static String M2_AR010 = "OIDM2_ADREF010";
+    public final static String M2_AR011 = "OIDM2_ADREF011";
+    public final static String M2_AR012 = "OIDM2_ADREF012";
+    public final static String M2_AR013 = "OIDM2_ADREF013";
+    public final static String M2_AR014 = "OIDM2_ADREF014";
+    public final static String M2_AR015 = "OIDM2_ADREF015";
+    public final static String M2_AR016 = "OIDM2_ADREF016";
+    public final static String M2_AR017 = "OIDM2_ADREF017";
+    public final static String M2_AR018 = "OIDM2_ADREF018";
+    public final static String M2_AR019 = "OIDM2_ADREF019";
+    public final static String M2_AR020 = "OIDM2_ADREF020";
+    public final static String M2_AR021 = "OIDM2_ADREF021";
+    public final static String M2_AR022 = "OIDM2_ADREF022";
+    public final static String M2_AR023 = "OIDM2_ADREF023";
+    public final static String M2_AR024 = "OIDM2_ADREF024";
+    public final static String M2_AR025 = "OIDM2_ADREF025";
+    public final static String M2_AR026 = "OIDM2_ADREF026";
+    public final static String M2_AR027 = "OIDM2_ADREF027";
+    public final static String M2_AR028 = "OIDM2_ADREF028";
+    public final static String M2_AR029 = "OIDM2_ADREF029";
+    public final static String M2_AR030 = "OIDM2_ADREF030";
+    public final static String M2_AR031 = "OIDM2_ADREF031";
+    public final static String M2_AR032 = "OIDM2_ADREF032";
+    public final static String M2_AR033 = "OIDM2_ADREF033";
+    public final static String M2_AR034 = "OIDM2_ADREF034";
+    public final static String M2_AR035 = "OIDM2_ADREF035";
+    public final static String M2_AR036 = "OIDM2_ADREF036";
+    public final static String M2_AR037 = "OIDM2_ADREF037";
+    public final static String M2_AR038 = "OIDM2_ADREF038";
+    public final static String M2_AR039 = "OIDM2_ADREF039";
 
 //Adresse Interne 
     public final static String M2_AI001 = "OIDM2_ADIN001";
     public final static String M2_AI002 = "OIDM2_ADIN002";
     public final static String M2_AI003 = "OIDM2_ADIN003";
     public final static String M2_AI004 = "OIDM2_ADIN004";
+    public final static String M2_AI005 = "OIDM2_ADIN005";
+    public final static String M2_AI006 = "OIDM2_ADIN006";
+    public final static String M2_AI007 = "OIDM2_ADIN007";
+    public final static String M2_AI008 = "OIDM2_ADIN008";
+    public final static String M2_AI009 = "OIDM2_ADIN009";
+    public final static String M2_AI010 = "OIDM2_ADIN010";
+    public final static String M2_AI011 = "OIDM2_ADIN011";
+    public final static String M2_AI012 = "OIDM2_ADIN012";
+    public final static String M2_AI013 = "OIDM2_ADIN013";
+    public final static String M2_AI014 = "OIDM2_ADIN014";
+    public final static String M2_AI015 = "OIDM2_ADIN015";
+    public final static String M2_AI016 = "OIDM2_ADIN016";
+    public final static String M2_AI017 = "OIDM2_ADIN017";
+    public final static String M2_AI018 = "OIDM2_ADIN018";
+    public final static String M2_AI019 = "OIDM2_ADIN019";
 
 //Adresse Externe
     public final static String M2_AE001 = "OIDM2_ADEN001";
     public final static String M2_AE002 = "OIDM2_ADEN002";
     public final static String M2_AE003 = "OIDM2_ADEN003";
+    public final static String M2_AE004 = "OIDM2_ADEN004";
+    public final static String M2_AE005 = "OIDM2_ADEN005";
+    public final static String M2_AE006 = "OIDM2_ADEN006";
+    public final static String M2_AE007 = "OIDM2_ADEN007";
+    public final static String M2_AE008 = "OIDM2_ADEN008";
+    public final static String M2_AE009 = "OIDM2_ADEN009";
+    public final static String M2_AE010 = "OIDM2_ADEN010";
+    public final static String M2_AE011 = "OIDM2_ADEN011";
+    public final static String M2_AE012 = "OIDM2_ADEN012";
+    public final static String M2_AE013 = "OIDM2_ADEN013";
+    public final static String M2_AE014 = "OIDM2_ADEN014";
+    public final static String M2_AE015 = "OIDM2_ADEN015";
+    public final static String M2_AE016 = "OIDM2_ADEN016";
+    public final static String M2_AE017 = "OIDM2_ADEN017";
+    public final static String M2_AE018 = "OIDM2_ADEN018";
+    public final static String M2_AE019 = "OIDM2_ADEN019";
+    public final static String M2_AE020 = "OIDM2_ADEN020";
 
 }

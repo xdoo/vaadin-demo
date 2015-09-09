@@ -11,15 +11,16 @@ import de.muenchen.demo.service.domain.User;
 import de.muenchen.demo.service.domain.UserAuthority;
 import de.muenchen.demo.service.domain.UserAuthorityRepository;
 import de.muenchen.demo.service.domain.UserRepository;
-import de.muenchen.demo.service.util.Eventbus;
 import de.muenchen.demo.service.util.IdService;
 import de.muenchen.demo.service.util.QueryService;
 import de.muenchen.demo.service.util.events.UserEvent;
-import de.muenchen.vaadin.demo.api.util.EventType;
+import de.muenchen.eventbus.EventBus;
+import de.muenchen.eventbus.types.EventType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.bus.Event;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -38,14 +39,13 @@ public class UserServiceImpl implements UserService {
     QueryService<User> search;
     @Autowired
     UserAuthorityRepository userAuthorityRepository;
-    Eventbus eventbus;
+    EventBus eventbus;
 
     @Autowired
-    public UserServiceImpl(UserRepository repo, EntityManager em, Eventbus eventBus) {
+    public UserServiceImpl(UserRepository repo, EntityManager em, EventBus eventbus) {
         this.repo = repo;
         this.search = new QueryService<>(this, em, User.class, "userName", "email");
-        this.eventbus = eventBus;
-        eventBus.register(this);
+        this.eventbus = eventbus;
     }
 
     @Override
@@ -85,7 +85,7 @@ public class UserServiceImpl implements UserService {
 
         //this.sachbearbeiterService.releaseUserSachbearbeiter(oid);
         this.deleteUser(item.getUsername());
-        eventbus.post(new UserEvent(EventType.RELEASE, item));
+        eventbus.notify(UserEvent.class, Event.wrap(new UserEvent(EventType.RELEASE, item)));
 
         this.repo.delete(item);
     }

@@ -1,6 +1,8 @@
 package de.muenchen.demo.service.domain;
 
-import java.util.List;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 
 /**
  *
@@ -8,7 +10,17 @@ import java.util.List;
  */
 public interface AdresseExterneRepository extends BaseRepository<AdresseExterne> {
 
-    //public List<AdresseExterne> findByOid(String oid);
+    public final static String ADRESSEEXTERNE_CACHE = "ADRESSEEXTERNE_CACHE";
 
+    @Cacheable(value = ADRESSEEXTERNE_CACHE, key = "#p0 + #p1")
+    public AdresseExterne findFirstByOidAndMandantOid(String oid, String mid);
+
+    @Override
+    @CachePut(value = ADRESSEEXTERNE_CACHE, key = "#p0.oid + #p0.mandant.oid")
+    public AdresseExterne save(AdresseExterne entity);
+
+    @Override
+    @CacheEvict(value = ADRESSEEXTERNE_CACHE, key = "#p0.oid + #p0.mandant.oid")
+    public void delete(AdresseExterne entity);
 
 }

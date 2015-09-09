@@ -2,14 +2,13 @@ package de.muenchen.demo.service.services;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import com.google.common.eventbus.EventBus;
-import com.google.common.eventbus.Subscribe;
 import de.muenchen.demo.service.domain.*;
 import de.muenchen.demo.service.util.IdService;
 import de.muenchen.demo.service.util.QueryService;
 import de.muenchen.demo.service.util.events.BuergerEvent;
 import de.muenchen.demo.service.util.events.SachbearbeiterEvent;
-import de.muenchen.vaadin.demo.api.util.EventType;
+import de.muenchen.eventbus.EventBus;
+import de.muenchen.eventbus.types.EventType;
 import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
 import org.slf4j.Logger;
@@ -18,10 +17,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import reactor.bus.Event;
 
 import javax.persistence.EntityManager;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static reactor.bus.selector.Selectors.T;
 
 /**
  *
@@ -39,15 +41,15 @@ public class BuergerServiceImpl implements BuergerService {
     MandantService mandantService;
     @Autowired
     EntityManager entityManager;
-
+    @Autowired
     EventBus eventbus;
 
     @Autowired
-    public BuergerServiceImpl(BuergerRepository repo, EntityManager em, UserService userService, EventBus eventBus) {
+    public BuergerServiceImpl(BuergerRepository repo, EntityManager em, UserService userService, EventBus eventbus) {
         this.repo = repo;
         this.search = new QueryService<>(userService, em, Buerger.class, "vorname", "nachname");
-        this.eventbus = eventBus;
-        eventBus.register(this);
+        this.eventbus = eventbus;
+        this.eventbus.on(T(BuergerEvent.class), this::eventHandler);
     }
 
     @Override
@@ -156,8 +158,7 @@ public class BuergerServiceImpl implements BuergerService {
                 buergerList.removeAll(removeBuerger);
 
                 //this.sachbearbeiterService.update(sachbearbeiter);
-                eventbus.post(new SachbearbeiterEvent(EventType.UPDATE, sachbearbeiter));
-
+                eventbus.notify(SachbearbeiterEvent.class, Event.wrap(new SachbearbeiterEvent(EventType.UPDATE, sachbearbeiter)));
             }
 
             list.removeAll(removeSachbearbeiter);
@@ -431,8 +432,8 @@ public class BuergerServiceImpl implements BuergerService {
     }
 
 
-    @Subscribe
-    public void evnetHandler(BuergerEvent event) {
+    public void eventHandler(Event<BuergerEvent> eventWrapper) {
+        BuergerEvent event = eventWrapper.getData();
         switch (event.getEventType()) {
             case UPDATE:
                 update(event.getEntity());

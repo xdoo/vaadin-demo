@@ -1,6 +1,7 @@
 package de.muenchen.demo.service;
 
 import de.muenchen.demo.service.security.AuthenticationConfiguratorAdapter;
+import de.muenchen.eventbus.EventBus;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 import org.slf4j.Logger;
@@ -30,6 +31,11 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
 
+    @Bean
+    public EventBus eventBus() {
+        return new EventBus();
+    }
+
 
 //    Dozer
     @Bean
@@ -48,5 +54,4 @@ public class Application {
     public GlobalAuthenticationConfigurerAdapter configurationAdapter2(){
         return AuthenticationConfiguratorAdapter.findAdapter("LDAP_Authentication");
     }
-
 }

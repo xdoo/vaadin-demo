@@ -3,7 +3,7 @@ package de.muenchen.vaadin.ui.components;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
-import de.muenchen.vaadin.demo.api.util.EventType;
+import de.muenchen.eventbus.types.EventType;
 import de.muenchen.vaadin.ui.components.buttons.ActionButton;
 import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.components.buttons.TableActionButton;

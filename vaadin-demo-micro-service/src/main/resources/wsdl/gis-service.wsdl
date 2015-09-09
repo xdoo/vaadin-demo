@@ -1,0 +1,511 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsp="http://www.w3.org/ns/ws-policy" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://muenchen.de/gis-service/1.0.0" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="GisService" targetNamespace="http://muenchen.de/gis-service/1.0.0">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://muenchen.de/gis-service/1.0.0" elementFormDefault="unqualified" targetNamespace="http://muenchen.de/gis-service/1.0.0" version="1.0">
+
+  <xs:element name="GisFault" type="tns:gisFault"/>
+
+  <xs:element name="adressauskunft" type="tns:adressauskunft"/>
+
+  <xs:element name="adresse" type="tns:adresse"/>
+
+  <xs:element name="aenderung" type="tns:aenderung"/>
+
+  <xs:element name="aenderungenZumDatum" type="tns:aenderungenZumDatum"/>
+
+  <xs:element name="aenderungenZumDatumResponse" type="tns:aenderungenZumDatumResponse"/>
+
+  <xs:element name="gebiet" type="tns:gebiet"/>
+
+  <xs:element name="gisAenderung" type="tns:gisAenderung"/>
+
+  <xs:element name="leseGebietsdatenZurAdresse" type="tns:leseGebietsdatenZurAdresse"/>
+
+  <xs:element name="leseGebietsdatenZurAdresseResponse" type="tns:leseGebietsdatenZurAdresseResponse"/>
+
+  <xs:element name="leseStrassenname" type="tns:leseStrassenname"/>
+
+  <xs:element name="leseStrassennameKurz" type="tns:leseStrassennameKurz"/>
+
+  <xs:element name="leseStrassennameKurzResponse" type="tns:leseStrassennameKurzResponse"/>
+
+  <xs:element name="leseStrassennameResponse" type="tns:leseStrassennameResponse"/>
+
+  <xs:element name="sucheAdressen" type="tns:sucheAdressen"/>
+
+  <xs:element name="sucheAdressenAntwort" type="tns:sucheAdressenAntwort"/>
+
+  <xs:element name="sucheAdressenAuskunft" type="tns:sucheAdressenAuskunft"/>
+
+  <xs:element name="sucheAdressenResponse" type="tns:sucheAdressenResponse"/>
+
+  <xs:element name="sucheAenderungenAntwort" type="tns:sucheAenderungenAntwort"/>
+
+  <xs:element name="sucheStrasse" type="tns:sucheStrasse"/>
+
+  <xs:element name="sucheStrasseResponse" type="tns:sucheStrasseResponse"/>
+
+  <xs:complexType name="leseStrassennameKurz">
+    <xs:sequence>
+      <xs:element name="strassenschluessel" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="leseStrassennameKurzResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="strassenname" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="leseGebietsdatenZurAdresse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="auskunft" type="tns:adressauskunft"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="adressauskunft">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="strasse" type="xs:string"/>
+      <xs:element name="hausnummer" type="xs:int"/>
+      <xs:element minOccurs="0" name="buchstabe" type="xs:string"/>
+      <xs:element minOccurs="0" name="teilnummer" type="xs:string"/>
+      <xs:element minOccurs="0" name="zusatz" type="xs:string"/>
+      <xs:element minOccurs="0" name="strassenschluessel" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="leseGebietsdatenZurAdresseResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ergebnis" type="tns:adresse"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="adresse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="buchstabe" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="gebiete" nillable="true" type="tns:gebiet"/>
+      <xs:element minOccurs="0" name="gemeindeschluessel" type="xs:string"/>
+      <xs:element minOccurs="0" name="hausnummer" type="xs:int"/>
+      <xs:element minOccurs="0" name="ort" type="xs:string"/>
+      <xs:element minOccurs="0" name="ortsteil" type="xs:string"/>
+      <xs:element name="plz" type="xs:int"/>
+      <xs:element minOccurs="0" name="status" type="xs:string"/>
+      <xs:element minOccurs="0" name="strasse" type="xs:string"/>
+      <xs:element minOccurs="0" name="strasseKurz" type="xs:string"/>
+      <xs:element minOccurs="0" name="strassenschluessel" type="xs:int"/>
+      <xs:element minOccurs="0" name="teilnummer" type="xs:string"/>
+      <xs:element minOccurs="0" name="zusatz" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="gebiet">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="bezeichnung" type="xs:string"/>
+      <xs:element minOccurs="0" name="gebietsnummer" type="xs:int"/>
+      <xs:element minOccurs="0" name="gebietstyp" type="tns:gebietstypen"/>
+      <xs:element minOccurs="0" name="gemeindeschluessel" type="xs:string"/>
+      <xs:element minOccurs="0" name="hausnummer" type="xs:int"/>
+      <xs:element minOccurs="0" name="ort" type="xs:string"/>
+      <xs:element minOccurs="0" name="ortsteil" type="xs:string"/>
+      <xs:element minOccurs="0" name="plz" type="xs:string"/>
+      <xs:element minOccurs="0" name="strasse" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="aenderungenZumDatum">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="anfrage" type="xs:dateTime"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="aenderungenZumDatumResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ergebnis" type="tns:sucheAenderungenAntwort"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="sucheAenderungenAntwort">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="aenderungen" nillable="true" type="tns:gisAenderung"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="gisAenderung">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="aenderung" type="tns:aenderung"/>
+      <xs:element minOccurs="0" name="date" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="loeschen" type="tns:adresse"/>
+      <xs:element minOccurs="0" name="neuanlage" type="tns:adresse"/>
+      <xs:element minOccurs="0" name="wirksamAb" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="zuordnung" type="tns:zuordnung"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="aenderung">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="alt" type="tns:adresse"/>
+      <xs:element minOccurs="0" name="neu" type="tns:adresse"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="zuordnung">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="alleUngeraden" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="anfang" type="tns:adresse"/>
+      <xs:element minOccurs="0" name="ende" type="tns:adresse"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="neuzuordnung" nillable="true" type="tns:gebiet"/>
+      <xs:element minOccurs="0" name="plzNeu" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="sucheAdressen">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="suche" type="tns:sucheAdressenAuskunft"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="sucheAdressenAuskunft">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="adresssuche" type="tns:adresssuche"/>
+      <xs:element minOccurs="0" name="gebietssuche" type="tns:gebietssuche"/>
+      <xs:element minOccurs="0" name="strassensuche" type="tns:strassensuche"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="adresssuche">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="status" type="tns:gebaeudeNutzung"/>
+      <xs:element minOccurs="0" name="strasse" type="xs:string"/>
+      <xs:element minOccurs="0" name="strassenschluessel" type="xs:int"/>
+      <xs:element minOccurs="0" name="hausnummerVon" type="xs:int"/>
+      <xs:element minOccurs="0" name="hausnummerBis" type="xs:int"/>
+      <xs:element minOccurs="0" name="buchstabeVon" type="xs:string"/>
+      <xs:element minOccurs="0" name="buchstabeBis" type="xs:string"/>
+      <xs:element minOccurs="0" name="plz" type="xs:int"/>
+      <xs:element minOccurs="0" name="ortsteil" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="gebietssuche">
+    <xs:sequence>
+      <xs:element name="gebietsnummer" type="xs:int"/>
+      <xs:element minOccurs="0" name="gebietstyp" type="tns:gebietstypen"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="strassensuche">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="strasse" type="xs:string"/>
+      <xs:element minOccurs="0" name="strassenschluessel" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="sucheAdressenResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ergebnis" type="tns:sucheAdressenAntwort"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="sucheAdressenAntwort">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="adressen" nillable="true" type="tns:adresse"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="sucheStrasse">
+    <xs:sequence>
+      <xs:element name="strassenname" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="sucheStrasseResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="strassen" type="tns:strasse"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="strasse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="strasse" type="xs:string"/>
+      <xs:element minOccurs="0" name="strasseKurz" type="xs:string"/>
+      <xs:element minOccurs="0" name="strassenschluessel" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="leseStrassenname">
+    <xs:sequence>
+      <xs:element name="strassenschluessel" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="leseStrassennameResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="strassenname" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="gisFault">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="faultCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="faultString" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="gebietstypen">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="GRUNDSCHULSPRENGEL"/>
+      <xs:enumeration value="HAUPTSCHULSPRENGEL"/>
+      <xs:enumeration value="MITTELSCHULSPRENGEL"/>
+      <xs:enumeration value="BRIEFWAHLBEZRIK"/>
+      <xs:enumeration value="LANDTAGSWAHLKREIS"/>
+      <xs:enumeration value="WAHLBEZIK_ALLGEMEIN"/>
+      <xs:enumeration value="BUNDESTAGSWAHLKREIS"/>
+      <xs:enumeration value="STADTBEZIRK"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="gebaeudeNutzung">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="AB"/>
+      <xs:enumeration value="AF"/>
+      <xs:enumeration value="AH"/>
+      <xs:enumeration value="AP"/>
+      <xs:enumeration value="BA"/>
+      <xs:enumeration value="BB"/>
+      <xs:enumeration value="BD"/>
+      <xs:enumeration value="BE"/>
+      <xs:enumeration value="BF"/>
+      <xs:enumeration value="BG"/>
+      <xs:enumeration value="BH"/>
+      <xs:enumeration value="BI"/>
+      <xs:enumeration value="BL"/>
+      <xs:enumeration value="BU"/>
+      <xs:enumeration value="CP"/>
+      <xs:enumeration value="DH"/>
+      <xs:enumeration value="EH"/>
+      <xs:enumeration value="EW"/>
+      <xs:enumeration value="FA"/>
+      <xs:enumeration value="FG"/>
+      <xs:enumeration value="FH"/>
+      <xs:enumeration value="FW"/>
+      <xs:enumeration value="FZ"/>
+      <xs:enumeration value="GA"/>
+      <xs:enumeration value="GE"/>
+      <xs:enumeration value="GG"/>
+      <xs:enumeration value="GH"/>
+      <xs:enumeration value="GI"/>
+      <xs:enumeration value="GR"/>
+      <xs:enumeration value="GS"/>
+      <xs:enumeration value="HA"/>
+      <xs:enumeration value="HM"/>
+      <xs:enumeration value="HO"/>
+      <xs:enumeration value="HS"/>
+      <xs:enumeration value="IA"/>
+      <xs:enumeration value="IG"/>
+      <xs:enumeration value="JH"/>
+      <xs:enumeration value="KA"/>
+      <xs:enumeration value="KG"/>
+      <xs:enumeration value="KH"/>
+      <xs:enumeration value="KI"/>
+      <xs:enumeration value="KO"/>
+      <xs:enumeration value="KU"/>
+      <xs:enumeration value="LB"/>
+      <xs:enumeration value="LG"/>
+      <xs:enumeration value="LP"/>
+      <xs:enumeration value="LR"/>
+      <xs:enumeration value="MH"/>
+      <xs:enumeration value="NO"/>
+      <xs:enumeration value="PH"/>
+      <xs:enumeration value="PI"/>
+      <xs:enumeration value="PO"/>
+      <xs:enumeration value="RA"/>
+      <xs:enumeration value="RH"/>
+      <xs:enumeration value="SC"/>
+      <xs:enumeration value="SD"/>
+      <xs:enumeration value="SO"/>
+      <xs:enumeration value="SP"/>
+      <xs:enumeration value="ST"/>
+      <xs:enumeration value="SU"/>
+      <xs:enumeration value="TA"/>
+      <xs:enumeration value="TG"/>
+      <xs:enumeration value="TH"/>
+      <xs:enumeration value="TS"/>
+      <xs:enumeration value="TU"/>
+      <xs:enumeration value="UW"/>
+      <xs:enumeration value="VE"/>
+      <xs:enumeration value="VG"/>
+      <xs:enumeration value="W"/>
+      <xs:enumeration value="WA"/>
+      <xs:enumeration value="WC"/>
+      <xs:enumeration value="WE"/>
+      <xs:enumeration value="WG"/>
+      <xs:enumeration value="WH"/>
+      <xs:enumeration value="ZH"/>
+      <xs:enumeration value="ZO"/>
+      <xs:enumeration value="GÄ"/>
+      <xs:enumeration value="MI"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="sucheAdressenResponse">
+    <wsdl:part element="tns:sucheAdressenResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="sucheAdressen">
+    <wsdl:part element="tns:sucheAdressen" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="leseStrassenname">
+    <wsdl:part element="tns:leseStrassenname" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="leseGebietsdatenZurAdresseResponse">
+    <wsdl:part element="tns:leseGebietsdatenZurAdresseResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="sucheStrasse">
+    <wsdl:part element="tns:sucheStrasse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="leseStrassennameKurzResponse">
+    <wsdl:part element="tns:leseStrassennameKurzResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="leseStrassennameKurz">
+    <wsdl:part element="tns:leseStrassennameKurz" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="sucheStrasseResponse">
+    <wsdl:part element="tns:sucheStrasseResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="aenderungenZumDatum">
+    <wsdl:part element="tns:aenderungenZumDatum" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="aenderungenZumDatumResponse">
+    <wsdl:part element="tns:aenderungenZumDatumResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="leseStrassennameResponse">
+    <wsdl:part element="tns:leseStrassennameResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="leseGebietsdatenZurAdresse">
+    <wsdl:part element="tns:leseGebietsdatenZurAdresse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="GisService">
+    <wsdl:operation name="leseStrassennameKurz">
+      <wsdl:input message="tns:leseStrassennameKurz" name="leseStrassennameKurz">
+    </wsdl:input>
+      <wsdl:output message="tns:leseStrassennameKurzResponse" name="leseStrassennameKurzResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="leseGebietsdatenZurAdresse">
+      <wsdl:input message="tns:leseGebietsdatenZurAdresse" name="leseGebietsdatenZurAdresse">
+    </wsdl:input>
+      <wsdl:output message="tns:leseGebietsdatenZurAdresseResponse" name="leseGebietsdatenZurAdresseResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="aenderungenZumDatum">
+      <wsdl:input message="tns:aenderungenZumDatum" name="aenderungenZumDatum">
+    </wsdl:input>
+      <wsdl:output message="tns:aenderungenZumDatumResponse" name="aenderungenZumDatumResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sucheAdressen">
+      <wsdl:input message="tns:sucheAdressen" name="sucheAdressen">
+    </wsdl:input>
+      <wsdl:output message="tns:sucheAdressenResponse" name="sucheAdressenResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sucheStrasse">
+      <wsdl:input message="tns:sucheStrasse" name="sucheStrasse">
+    </wsdl:input>
+      <wsdl:output message="tns:sucheStrasseResponse" name="sucheStrasseResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="leseStrassenname">
+      <wsdl:input message="tns:leseStrassenname" name="leseStrassenname">
+    </wsdl:input>
+      <wsdl:output message="tns:leseStrassennameResponse" name="leseStrassennameResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="GisServiceSoapBinding" type="tns:GisService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsp:PolicyReference URI="#PlaintextPolicy"/>
+    <wsdl:operation name="aenderungenZumDatum">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="aenderungenZumDatum">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="aenderungenZumDatumResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="leseGebietsdatenZurAdresse">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="leseGebietsdatenZurAdresse">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="leseGebietsdatenZurAdresseResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="leseStrassennameKurz">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="leseStrassennameKurz">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="leseStrassennameKurzResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sucheAdressen">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="sucheAdressen">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sucheAdressenResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="leseStrassenname">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="leseStrassenname">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="leseStrassennameResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sucheStrasse">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="sucheStrasse">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sucheStrasseResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="GisService">
+    <wsdl:port binding="tns:GisServiceSoapBinding" name="GisServicePort">
+      <soap:address location="http://eaiallk001.srv.ha3.dir.muenchen.de:8185/cxf/1.0.0/gis-service/"/>
+    </wsdl:port>
+    <wsp:PolicyReference URI="#PlaintextPolicy"/>
+  </wsdl:service>
+    <wsp:Policy xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsp="http://www.w3.org/ns/ws-policy" wsu:Id="PlaintextPolicy">
+	<sp:SupportingTokens xmlns:sp="http://docs.oasis-open.org/ws-sx/ws-securitypolicy/200702">
+		<wsp:Policy>
+			<sp:UsernameToken sp:IncludeToken="http://docs.oasis-open.org/ws-sx/ws-securitypolicy/200702/IncludeToken/AlwaysToRecipient">
+				<wsp:Policy/>
+			</sp:UsernameToken>
+		</wsp:Policy>
+	</sp:SupportingTokens>
+</wsp:Policy>
+</wsdl:definitions>

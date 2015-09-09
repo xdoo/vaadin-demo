@@ -24,8 +24,6 @@ public interface WohnungService {
     public Wohnung save(Wohnung wohnung, Adresse adresse);
 
     public Wohnung read(String oid);
-    
-    public Adresse readAdresse(String oid);
 
     public Wohnung update(Wohnung whonung, Adresse adresse);
 
@@ -33,7 +31,7 @@ public interface WohnungService {
 
     public Wohnung copy(String oid);
 
-  //  public Wohnung readAdresse(String oid);
+    public void copy(List<String> oids);
 
-   // public void deleteWohnungAdresse(String adresseOid);
+    public void delete(List<String> oids);
 }

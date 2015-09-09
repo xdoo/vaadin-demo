@@ -1,10 +1,7 @@
 package de.muenchen.demo.service.domain;
 
-import org.hibernate.envers.Audited;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,13 +10,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
  * @author claus.straube
  */
 @Entity
-@Audited
 @Table(name = "SACHBEARBEITER")
 public class Sachbearbeiter extends BaseEntity {
 
@@ -39,6 +37,7 @@ public class Sachbearbeiter extends BaseEntity {
     @JoinColumn(name = "User_Id", referencedColumnName = "Id")
     private User user;
 
+    @JsonBackReference
     @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
     private Set<Buerger> buerger = new HashSet<>();
 
