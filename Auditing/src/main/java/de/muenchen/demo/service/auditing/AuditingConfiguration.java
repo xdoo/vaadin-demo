@@ -1,8 +1,5 @@
-package de.muenchen.demo.service.config;
+package de.muenchen.demo.service.auditing;
 
-import de.muenchen.demo.service.domain.BaseEntity;
-import de.muenchen.demo.service.util.MUCAudited;
-import de.muenchen.demo.service.util.events.AuditingEvent;
 import de.muenchen.eventbus.EventBus;
 import org.hibernate.event.service.spi.EventListenerRegistry;
 import org.hibernate.event.spi.*;
@@ -37,6 +34,7 @@ public class AuditingConfiguration {
 
     @PostConstruct
     public void registerListeners() {
+        LOG.error("Register Listeners aufgerufen!");
         HibernateEntityManagerFactory hibernateEntityManagerFactory = (HibernateEntityManagerFactory) this.entityManagerFactory;
         SessionFactoryImpl sessionFactoryImpl = (SessionFactoryImpl) hibernateEntityManagerFactory.getSessionFactory();
         EventListenerRegistry registry = sessionFactoryImpl.getServiceRegistry().getService(EventListenerRegistry.class);
@@ -51,8 +49,7 @@ public class AuditingConfiguration {
                     Object eventEntity = postLoadEvent.getEntity();
                     MUCAudited annotation = eventEntity.getClass().getAnnotation(MUCAudited.class);
                     if (shouldBeAudited(MUCAudited.READ, annotation)) {
-                        BaseEntity entity = (BaseEntity) eventEntity;
-                        eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(AUDIT_READ, entity)));
+                        eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(AUDIT_READ, eventEntity)));
                     }
                 });
         registry.getEventListenerGroup(EventType.POST_DELETE)
@@ -66,8 +63,7 @@ public class AuditingConfiguration {
                         Object eventEntity = postDeleteEvent.getEntity();
                         MUCAudited annotation = eventEntity.getClass().getAnnotation(MUCAudited.class);
                         if (shouldBeAudited(MUCAudited.DELETE, annotation)) {
-                            BaseEntity entity = (BaseEntity) eventEntity;
-                            eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(AUDIT_DELETE, entity)));
+                            eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(AUDIT_DELETE, eventEntity)));
                         }
                     }
 
@@ -87,8 +83,7 @@ public class AuditingConfiguration {
                         Object eventEntity = postInsertEvent.getEntity();
                         MUCAudited annotation = eventEntity.getClass().getAnnotation(MUCAudited.class);
                         if (shouldBeAudited(MUCAudited.CREATE, annotation)) {
-                            BaseEntity entity = (BaseEntity) eventEntity;
-                            eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(AUDIT_CREATE, entity)));
+                            eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(AUDIT_CREATE, eventEntity)));
                         }
                     }
 
@@ -108,8 +103,7 @@ public class AuditingConfiguration {
                         Object eventEntity = postUpdateEvent.getEntity();
                         MUCAudited annotation = eventEntity.getClass().getAnnotation(MUCAudited.class);
                         if (shouldBeAudited(MUCAudited.UPDATE, annotation)) {
-                            BaseEntity entity = (BaseEntity) eventEntity;
-                            eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(AUDIT_UPDATE, entity)));
+                            eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(AUDIT_UPDATE, eventEntity)));
                         }
                     }
 

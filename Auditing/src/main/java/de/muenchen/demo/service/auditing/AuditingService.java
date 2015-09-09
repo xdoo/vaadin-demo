@@ -1,10 +1,7 @@
-package de.muenchen.demo.service.services;
+package de.muenchen.demo.service.auditing;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.muenchen.demo.service.domain.AuditingUserEntity;
-import de.muenchen.demo.service.domain.AuditingUserRepository;
-import de.muenchen.demo.service.util.events.AuditingEvent;
 import de.muenchen.eventbus.EventBus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,11 +30,13 @@ public class AuditingService {
 
     @Autowired
     public AuditingService(EventBus eventbus) {
+        LOG.error("AUditingService läuft!");
         this.eventbus = eventbus;
         this.eventbus.on(T(AuditingEvent.class), this::eventHandler);
     }
 
     public void eventHandler(Event<AuditingEvent> eventWrapper) {
+        LOG.error("Event Handler aufgerufen!");
         //new Thread(() -> {
         AuditingUserEntity entity = createAuditingUserEntity(eventWrapper.getData());
         repo.save(entity);

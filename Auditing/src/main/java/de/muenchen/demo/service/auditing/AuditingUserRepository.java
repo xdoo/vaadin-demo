@@ -1,4 +1,4 @@
-package de.muenchen.demo.service.domain;
+package de.muenchen.demo.service.auditing;
 
 import org.springframework.data.repository.CrudRepository;
 

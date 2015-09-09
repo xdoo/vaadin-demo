@@ -1,6 +1,7 @@
 package de.muenchen.demo.service.util.events;
 
 import de.muenchen.demo.service.domain.Sachbearbeiter;
+import de.muenchen.eventbus.events.ServiceEvent;
 import de.muenchen.eventbus.types.EventType;
 
 /**
