@@ -20,8 +20,9 @@ import de.muenchen.eventbus.types.EventType;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
+import de.muenchen.vaadin.guilib.components.GenericErrorNotification;
+import de.muenchen.vaadin.guilib.util.ValidatorFactory;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
-import de.muenchen.vaadin.ui.util.ValidatorFactory;
 
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Component;
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.NotificationType;

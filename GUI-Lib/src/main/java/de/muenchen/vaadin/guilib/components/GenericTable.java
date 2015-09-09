@@ -1,4 +1,4 @@
-package de.muenchen.vaadin.ui.components;
+package de.muenchen.vaadin.guilib.components;
 
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.CustomComponent;
@@ -8,8 +8,8 @@ import de.muenchen.eventbus.events.ComponentEvent;
 import de.muenchen.eventbus.types.EventType;
 import de.muenchen.vaadin.demo.api.domain.BaseEntity;
 import de.muenchen.vaadin.demo.api.util.FieldIdentifier;
+import de.muenchen.vaadin.demo.i18nservice.ControllerContext;
 import de.muenchen.vaadin.demo.i18nservice.buttons.TableActionButton;
-import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.bus.Event;
@@ -40,7 +40,6 @@ public class GenericTable<T extends BaseEntity> extends CustomComponent implemen
      * The Button builders.
      */
     List<TableActionButton.Builder> buttonBuilders;
-    private BuergerViewController controller;
     private Table table;
 
     /**
@@ -50,9 +49,8 @@ public class GenericTable<T extends BaseEntity> extends CustomComponent implemen
      * @param entityClass the entity class
      * @param buttonBuilders the button builders
      */
-    public GenericTable(final BuergerViewController controller, Class<T> entityClass, final TableActionButton.Builder... buttonBuilders) {
+    public GenericTable(final ControllerContext controller, Class<T> entityClass, final TableActionButton.Builder... buttonBuilders) {
 
-        this.controller = controller;
         this.buttonBuilders = Arrays.asList(buttonBuilders);
 
         // Have a container of some type to contain the data

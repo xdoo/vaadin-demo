@@ -1,19 +1,17 @@
 package de.muenchen.vaadin.ui.util;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
+import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
-import de.muenchen.vaadin.services.MessageService;
-import org.springframework.stereotype.Component;
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.*;
 
 /**
  *
  * @author claus.straube
  */
-@Component
+@SpringComponent
 public class VaadinUtil {
     
     public static final String TABLE_COLUMN_ACTIONS = "actions";

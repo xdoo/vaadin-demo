@@ -1,4 +1,4 @@
-package de.muenchen.vaadin.ui.components;
+package de.muenchen.vaadin.guilib.components;
 
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.server.FontAwesome;
@@ -9,11 +9,9 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.vaadin.demo.i18nservice.buttons.Action;
 import de.muenchen.vaadin.demo.i18nservice.ControllerContext;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
-
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getConfirmationPath;
+import de.muenchen.vaadin.demo.i18nservice.buttons.Action;
 
 /**
  * Generisches Bestätigungsfenster mit einer "ok" und 
@@ -51,9 +49,9 @@ public class GenericConfirmationWindow extends Window {
      * @param action Art des Fensters
      */
     public GenericConfirmationWindow(Object event, ControllerContext<?> controller, Action action){
-        this.okButton = controller.resolve(getConfirmationPath(action, I18nPaths.Type.confirm));
-        this.cancelButton = controller.resolve(getConfirmationPath(action, I18nPaths.Type.cancel));
-        this.message = controller.resolve(getConfirmationPath(action, I18nPaths.Type.text));
+        this.okButton = controller.resolve(I18nPaths.getConfirmationPath(action, I18nPaths.Type.confirm));
+        this.cancelButton = controller.resolve(I18nPaths.getConfirmationPath(action, I18nPaths.Type.cancel));
+        this.message = controller.resolve(I18nPaths.getConfirmationPath(action, I18nPaths.Type.text));
 
         Panel content = new Panel();
         VerticalLayout l = new VerticalLayout(new Label(this.message));

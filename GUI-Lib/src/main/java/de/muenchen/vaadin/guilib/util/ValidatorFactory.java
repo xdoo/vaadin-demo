@@ -1,4 +1,4 @@
-package de.muenchen.vaadin.ui.util;
+package de.muenchen.vaadin.guilib.util;
 
 import com.vaadin.data.Validator;
 import com.vaadin.data.validator.DateRangeValidator;
@@ -7,6 +7,7 @@ import com.vaadin.data.validator.NullValidator;
 import com.vaadin.data.validator.RegexpValidator;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.shared.ui.datefield.Resolution;
+
 import java.util.Date;
 
 /**

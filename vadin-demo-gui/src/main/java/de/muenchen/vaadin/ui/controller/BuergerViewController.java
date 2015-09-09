@@ -12,13 +12,12 @@ import de.muenchen.eventbus.events.ComponentEvent;
 import de.muenchen.eventbus.types.EventType;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.ControllerContext;
+import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
+import de.muenchen.vaadin.guilib.components.GenericSuccessNotification;
 import de.muenchen.vaadin.services.BuergerService;
 import de.muenchen.vaadin.services.MessageService;
 import de.muenchen.vaadin.ui.app.MainUI;
-import de.muenchen.vaadin.ui.app.views.BuergerTableView;
 import de.muenchen.vaadin.ui.app.views.TableSelectWindow;
-import de.muenchen.vaadin.ui.components.GenericSuccessNotification;
-import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.controller.factorys.BuergerViewFactory;
 import de.muenchen.vaadin.ui.util.VaadinUtil;
 import org.slf4j.Logger;
@@ -199,6 +198,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
      * @param relativePath the path to add to the base path.
      * @return the resolved String.
      */
+    @Override
     public FontAwesome resolveIcon(String relativePath) {
         return msg.getFontAwesome(I18N_BASE_PATH + "." + relativePath + ".icon");
     }

@@ -9,6 +9,7 @@ import de.muenchen.eventbus.types.EventType;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
+import de.muenchen.vaadin.guilib.components.GenericTable;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import reactor.bus.Event;
 import reactor.fn.Consumer;

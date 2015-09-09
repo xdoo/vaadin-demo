@@ -33,13 +33,13 @@ import de.muenchen.eventbus.events.RefreshEvent;
 import de.muenchen.eventbus.types.EventType;
 import de.muenchen.vaadin.demo.api.domain.BaseEntity;
 import de.muenchen.vaadin.demo.api.services.SecurityService;
+import de.muenchen.vaadin.demo.i18nservice.ControllerContext;
+import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
+import de.muenchen.vaadin.guilib.components.GenericConfirmationWindow;
 import de.muenchen.vaadin.services.MessageService;
 import de.muenchen.vaadin.ui.app.views.BuergerTableView;
 import de.muenchen.vaadin.ui.app.views.LoginView;
 import de.muenchen.vaadin.ui.app.views.MainView;
-import de.muenchen.vaadin.ui.components.GenericConfirmationWindow;
-import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
-import de.muenchen.vaadin.demo.i18nservice.ControllerContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -288,6 +288,11 @@ public class MainUI extends UI implements ControllerContext{
     @Override
     public String resolveRelative(String relativePath) {
         return i18n.get(relativePath);
+    }
+
+    @Override
+    public FontAwesome resolveIcon(String relativePath) {
+        return null;
     }
 
     @Override

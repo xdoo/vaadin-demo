@@ -11,5 +11,33 @@
 
     <artifactId>GUI-Lib</artifactId>
 
+    <dependencies>
+
+        <dependency>
+            <groupId>de.muenchen</groupId>
+            <artifactId>I18nService</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+
+        <dependency>
+        <groupId>com.vaadin</groupId>
+        <artifactId>vaadin-spring-boot</artifactId>
+        <version>1.0.0.beta3</version>
+        <exclusions>
+            <exclusion>
+                <groupId>com.vaadin</groupId>
+                <artifactId>vaadin-server</artifactId>
+            </exclusion>
+        </exclusions>
+    </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-client-compiled</artifactId>
+            <version>${vaadin.version}</version>
+        </dependency>
+
+    </dependencies>
+
 
 </project>

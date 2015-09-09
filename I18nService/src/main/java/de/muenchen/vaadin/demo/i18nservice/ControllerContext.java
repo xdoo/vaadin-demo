@@ -1,5 +1,6 @@
 package de.muenchen.vaadin.demo.i18nservice;
 
+import com.vaadin.server.FontAwesome;
 import de.muenchen.eventbus.events.AppEvent;
 import de.muenchen.eventbus.events.ComponentEvent;
 import de.muenchen.eventbus.types.EventType;
@@ -24,6 +25,8 @@ public interface ControllerContext<E extends BaseEntity> {
      * @return
      */
     String resolveRelative(String relativePath);
+
+    FontAwesome resolveIcon(String relativePath);
 
     /**
      * Tell the controller to post this Event on the EventBus.
