@@ -1,6 +1,6 @@
 package de.muenchen.demo.service.rest;
 
-import de.muenchen.vaadin.demo.api.rest.ServiceInfoResource;
+import de.muenchen.vaadin.demo.apilib.rest.ServiceInfoResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

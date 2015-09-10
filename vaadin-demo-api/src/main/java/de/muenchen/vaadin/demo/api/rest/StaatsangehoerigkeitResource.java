@@ -5,11 +5,13 @@
  */
 package de.muenchen.vaadin.demo.api.rest;
 
+import de.muenchen.vaadin.demo.apilib.rest.BaseResource;
+
 /**
  *
  * @author praktikant.tmar
  */
-public class StaatsangehoerigkeitResource extends BaseResource{
+public class StaatsangehoerigkeitResource extends BaseResource {
 
     private String reference;
     private String code;

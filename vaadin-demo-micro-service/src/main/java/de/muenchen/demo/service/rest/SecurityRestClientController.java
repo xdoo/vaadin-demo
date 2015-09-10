@@ -5,8 +5,8 @@
  */
 package de.muenchen.demo.service.rest;
 
-import de.muenchen.vaadin.demo.api.domain.Principal;
-import de.muenchen.vaadin.demo.api.rest.SecurityRestClient;
+import de.muenchen.vaadin.demo.apilib.domain.Principal;
+import de.muenchen.vaadin.demo.apilib.rest.SecurityRestClient;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

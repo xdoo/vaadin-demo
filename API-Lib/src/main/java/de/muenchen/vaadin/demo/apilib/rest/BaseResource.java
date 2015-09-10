@@ -1,4 +1,4 @@
-package de.muenchen.vaadin.demo.api.rest;
+package de.muenchen.vaadin.demo.apilib.rest;
 
 import org.springframework.hateoas.ResourceSupport;
 /**

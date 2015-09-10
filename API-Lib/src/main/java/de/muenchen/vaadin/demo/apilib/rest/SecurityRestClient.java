@@ -1,7 +1,8 @@
-package de.muenchen.vaadin.demo.api.rest;
+package de.muenchen.vaadin.demo.apilib.rest;
 
-import de.muenchen.vaadin.demo.api.domain.Principal;
 import java.util.Optional;
+
+import de.muenchen.vaadin.demo.apilib.domain.Principal;
 import org.springframework.web.client.RestTemplate;
 
 /**

@@ -6,8 +6,8 @@
 package de.muenchen.demo.service.services;
 
 import de.muenchen.demo.service.domain.UserAuthority;
-import de.muenchen.vaadin.demo.api.domain.Principal;
-import de.muenchen.vaadin.demo.api.rest.SecurityRestClient;
+import de.muenchen.vaadin.demo.apilib.domain.Principal;
+import de.muenchen.vaadin.demo.apilib.rest.SecurityRestClient;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

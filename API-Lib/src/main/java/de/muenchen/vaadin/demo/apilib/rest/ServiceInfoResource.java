@@ -1,4 +1,4 @@
-package de.muenchen.vaadin.demo.api.domain;
+package de.muenchen.vaadin.demo.apilib.rest;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,11 +8,22 @@ import org.springframework.hateoas.Link;
  *
  * @author claus.straube
  */
-public class ServiceInfo extends BaseEntity {
+public class ServiceInfoResource extends BaseResource {
     
     private String name;
     private String version;
     private Map<String, Link> entityLinks = new HashMap<>();
+
+    public ServiceInfoResource() {
+    }
+
+    public ServiceInfoResource(String name, String version, String oid) {
+        this.name = name;
+        this.version = version;
+        this.setOid(oid);
+    }
+    
+    
 
     public String getName() {
         return name;
@@ -36,6 +47,10 @@ public class ServiceInfo extends BaseEntity {
 
     public void setEntityLinks(Map<String, Link> entityLinks) {
         this.entityLinks = entityLinks;
+    }
+    
+    public void addEntityLink(Link link) {
+        this.entityLinks.put(link.getRel(), link);
     }
     
 }

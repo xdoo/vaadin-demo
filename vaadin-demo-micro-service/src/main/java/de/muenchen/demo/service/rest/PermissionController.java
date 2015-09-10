@@ -1,11 +1,11 @@
 package de.muenchen.demo.service.rest;
 
 import de.muenchen.demo.service.domain.Permission;
-import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
-import de.muenchen.vaadin.demo.api.rest.PermissionResource;
+import de.muenchen.vaadin.demo.apilib.rest.SearchResultResource;
+import de.muenchen.vaadin.demo.apilib.rest.PermissionResource;
 import de.muenchen.demo.service.rest.api.PermissionResourceAssembler;
 import de.muenchen.demo.service.services.PermissionService;
-import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
+import de.muenchen.vaadin.demo.apilib.hateoas.HateoasUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

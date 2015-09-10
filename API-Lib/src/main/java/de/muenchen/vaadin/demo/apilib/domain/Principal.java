@@ -1,4 +1,4 @@
-package de.muenchen.vaadin.demo.api.domain;
+package de.muenchen.vaadin.demo.apilib.domain;
 
 import java.util.List;
 

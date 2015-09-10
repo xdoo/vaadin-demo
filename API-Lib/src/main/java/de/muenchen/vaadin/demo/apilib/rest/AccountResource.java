@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.muenchen.vaadin.demo.api.rest;
+package de.muenchen.vaadin.demo.apilib.rest;
 /**
  *
  * @author praktikant.tmar

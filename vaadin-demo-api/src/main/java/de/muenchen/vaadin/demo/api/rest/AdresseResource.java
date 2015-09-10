@@ -5,11 +5,13 @@
  */
 package de.muenchen.vaadin.demo.api.rest;
 
+import de.muenchen.vaadin.demo.apilib.rest.BaseResource;
+
 /**
  *
  * @author praktikant.tmar
  */
-public class AdresseResource extends BaseResource{
+public class AdresseResource extends BaseResource {
     
     public static final String SUCHE = "suche";
 

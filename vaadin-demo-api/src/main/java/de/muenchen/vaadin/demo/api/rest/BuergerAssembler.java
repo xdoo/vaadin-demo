@@ -3,6 +3,8 @@ package de.muenchen.vaadin.demo.api.rest;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import de.muenchen.vaadin.demo.apilib.rest.SearchResultResource;
 import org.springframework.hateoas.Resource;
 
 /**

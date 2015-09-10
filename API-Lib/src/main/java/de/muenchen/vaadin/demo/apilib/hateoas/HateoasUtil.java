@@ -1,4 +1,4 @@
-package de.muenchen.vaadin.demo.api.hateoas;
+package de.muenchen.vaadin.demo.apilib.hateoas;
 
 import java.util.List;
 import java.util.Map;

@@ -3,7 +3,7 @@ package de.muenchen.vaadin.demo.i18nservice.buttons;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.vaadin.demo.api.domain.BaseEntity;
+import de.muenchen.vaadin.demo.apilib.domain.BaseEntity;
 import de.muenchen.vaadin.demo.i18nservice.ControllerContext;
 
 import java.util.Optional;

@@ -1,7 +1,7 @@
 package de.muenchen.vaadin.demo.i18nservice.buttons;
 
 import com.vaadin.data.util.BeanItemContainer;
-import de.muenchen.vaadin.demo.api.domain.BaseEntity;
+import de.muenchen.vaadin.demo.apilib.domain.BaseEntity;
 import de.muenchen.vaadin.demo.i18nservice.ControllerContext;
 
 import java.util.ArrayList;

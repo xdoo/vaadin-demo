@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 import de.muenchen.demo.service.domain.Account;
 import de.muenchen.demo.service.rest.AccountController;
 import de.muenchen.demo.service.services.AccountService;
-import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
+import de.muenchen.vaadin.demo.apilib.hateoas.HateoasUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -16,9 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityLinks;
 import org.springframework.stereotype.Service;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
-import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
-import de.muenchen.vaadin.demo.api.rest.SecurityResource;
-import de.muenchen.vaadin.demo.api.rest.AccountResource;
+import de.muenchen.vaadin.demo.apilib.rest.SearchResultResource;
+import de.muenchen.vaadin.demo.apilib.rest.SecurityResource;
+import de.muenchen.vaadin.demo.apilib.rest.AccountResource;
 
 /**
  *

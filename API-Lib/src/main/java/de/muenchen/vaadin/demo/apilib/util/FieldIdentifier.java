@@ -1,4 +1,4 @@
-package de.muenchen.vaadin.demo.api.util;
+package de.muenchen.vaadin.demo.apilib.util;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

@@ -5,8 +5,8 @@ import com.google.common.collect.Lists;
 import de.muenchen.demo.service.domain.Permission;
 import de.muenchen.demo.service.rest.PermissionController;
 import de.muenchen.demo.service.services.PermissionService;
-import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
-import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
+import de.muenchen.vaadin.demo.apilib.hateoas.HateoasUtil;
+import de.muenchen.vaadin.demo.apilib.rest.SearchResultResource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityLinks;
 import org.springframework.stereotype.Service;
-import de.muenchen.vaadin.demo.api.rest.PermissionResource;
+import de.muenchen.vaadin.demo.apilib.rest.PermissionResource;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 
 /**

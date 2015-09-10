@@ -1,9 +1,9 @@
-package de.muenchen.vaadin.demo.api.services;
+package de.muenchen.vaadin.demo.apilib.services;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.muenchen.vaadin.demo.api.domain.Principal;
-import de.muenchen.vaadin.demo.api.rest.SecurityRestClient;
+import de.muenchen.vaadin.demo.apilib.domain.Principal;
+import de.muenchen.vaadin.demo.apilib.rest.SecurityRestClient;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;

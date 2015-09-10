@@ -2,12 +2,12 @@ package de.muenchen.demo.service.rest;
 
 import de.muenchen.demo.service.domain.Mandant;
 import de.muenchen.demo.service.domain.User;
-import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
+import de.muenchen.vaadin.demo.apilib.rest.SearchResultResource;
 import de.muenchen.demo.service.rest.api.UserResource;
 import de.muenchen.demo.service.rest.api.UserResourceAssembler;
 import de.muenchen.demo.service.services.MandantService;
 import de.muenchen.demo.service.services.UserService;
-import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
+import de.muenchen.vaadin.demo.apilib.hateoas.HateoasUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

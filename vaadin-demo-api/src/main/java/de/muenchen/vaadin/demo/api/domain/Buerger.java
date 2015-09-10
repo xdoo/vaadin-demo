@@ -1,6 +1,7 @@
 package de.muenchen.vaadin.demo.api.domain;
 
-import de.muenchen.vaadin.demo.api.util.FieldIdentifier;
+import de.muenchen.vaadin.demo.apilib.domain.BaseEntity;
+import de.muenchen.vaadin.demo.apilib.util.FieldIdentifier;
 
 import java.util.Date;
 

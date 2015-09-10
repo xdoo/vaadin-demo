@@ -1,7 +1,8 @@
 package de.muenchen.vaadin.demo.api.rest;
 
 import de.muenchen.vaadin.demo.api.domain.Buerger;
-import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
+import de.muenchen.vaadin.demo.apilib.hateoas.HateoasUtil;
+import de.muenchen.vaadin.demo.apilib.rest.SearchResultResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;

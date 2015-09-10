@@ -1,5 +1,7 @@
 package de.muenchen.vaadin.demo.api.rest;
 
+import de.muenchen.vaadin.demo.apilib.rest.BaseResource;
+
 import java.util.Date;
 
 /**

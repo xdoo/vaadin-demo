@@ -1,4 +1,4 @@
-package de.muenchen.vaadin.demo.api.services;
+package de.muenchen.vaadin.demo.apilib.services;
 
 import java.util.Optional;
 import org.springframework.web.client.RestTemplate;

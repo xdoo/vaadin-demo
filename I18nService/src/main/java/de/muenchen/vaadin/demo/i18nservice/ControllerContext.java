@@ -4,7 +4,7 @@ import com.vaadin.server.FontAwesome;
 import de.muenchen.eventbus.events.AppEvent;
 import de.muenchen.eventbus.events.ComponentEvent;
 import de.muenchen.eventbus.types.EventType;
-import de.muenchen.vaadin.demo.api.domain.BaseEntity;
+import de.muenchen.vaadin.demo.apilib.domain.BaseEntity;
 
 /**
  * Interface to open up most important functionality of a Controller.

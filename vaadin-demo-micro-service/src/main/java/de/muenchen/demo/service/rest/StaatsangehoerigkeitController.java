@@ -8,12 +8,12 @@ import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
 import de.muenchen.vaadin.demo.api.rest.BuergerResource;
 import de.muenchen.demo.service.rest.api.BuergerResourceAssembler;
 
-import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
+import de.muenchen.vaadin.demo.apilib.rest.SearchResultResource;
 import de.muenchen.vaadin.demo.api.rest.StaatsangehoerigkeitResource;
 import de.muenchen.demo.service.services.BuergerService;
 
 import de.muenchen.demo.service.services.StaatsangehoerigkeitService;
-import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
+import de.muenchen.vaadin.demo.apilib.hateoas.HateoasUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
-package de.muenchen.vaadin.demo.api.rest;
+package de.muenchen.vaadin.demo.apilib.rest;
 
-import de.muenchen.vaadin.demo.api.domain.ServiceInfo;
+import de.muenchen.vaadin.demo.apilib.domain.ServiceInfo;
 
 /**
  *

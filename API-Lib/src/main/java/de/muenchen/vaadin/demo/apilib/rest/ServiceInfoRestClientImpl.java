@@ -1,7 +1,7 @@
-package de.muenchen.vaadin.demo.api.rest;
+package de.muenchen.vaadin.demo.apilib.rest;
 
 import com.netflix.discovery.DiscoveryClient;
-import de.muenchen.vaadin.demo.api.domain.ServiceInfo;
+import de.muenchen.vaadin.demo.apilib.domain.ServiceInfo;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;

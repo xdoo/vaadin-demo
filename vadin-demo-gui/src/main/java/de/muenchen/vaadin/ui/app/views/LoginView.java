@@ -23,7 +23,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.events.LoginEvent;
-import de.muenchen.vaadin.demo.api.services.SecurityService;
+import de.muenchen.vaadin.demo.apilib.services.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import reactor.bus.EventBus;
 

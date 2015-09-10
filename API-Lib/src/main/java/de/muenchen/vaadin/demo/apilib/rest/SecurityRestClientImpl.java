@@ -1,9 +1,9 @@
-package de.muenchen.vaadin.demo.api.rest;
+package de.muenchen.vaadin.demo.apilib.rest;
 
-import de.muenchen.vaadin.demo.api.domain.Principal;
-import de.muenchen.vaadin.demo.api.domain.ServiceInfo;
 import java.util.Optional;
 
+import de.muenchen.vaadin.demo.apilib.domain.Principal;
+import de.muenchen.vaadin.demo.apilib.domain.ServiceInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

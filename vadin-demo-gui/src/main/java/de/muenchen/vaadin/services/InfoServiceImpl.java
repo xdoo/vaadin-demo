@@ -1,7 +1,7 @@
 package de.muenchen.vaadin.services;
 
-import de.muenchen.vaadin.demo.api.hateoas.HateoasUtil;
-import de.muenchen.vaadin.demo.api.rest.ServiceInfoRestClient;
+import de.muenchen.vaadin.demo.apilib.hateoas.HateoasUtil;
+import de.muenchen.vaadin.demo.apilib.rest.ServiceInfoRestClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
