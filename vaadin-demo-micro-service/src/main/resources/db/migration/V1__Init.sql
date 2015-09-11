@@ -60,6 +60,8 @@ alter table users_accounts add constraint FK_users_accounts_TO_users foreign key
 alter table users_authoritys add constraint FK_users_authoritys_TO_users foreign key (user_id) references users;
 alter table users_authoritys add constraint FK_users_authoritys_TO_authoritys foreign key (authority_id) references authoritys;
 alter table wohnungen add constraint FK_wohnungen_TO_adresse_reference foreign key (adresse_id) references adresse_reference;
+
+insert into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (1,'hans2@test.de',TRUE,'oid','test2','hans2','default');
 insert into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (2,'hans@test.de',TRUE,'oid1','test','hans','test');
 insert into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (3,'franz@test.de',TRUE,'oid2','test','franz','default');
 insert into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (4,'rene.zarwel@muenchen.de',TRUE,'oid3',null,'rene.zarwel','default');
@@ -110,30 +112,30 @@ insert into authoritys (id, oid, auth_authority) values ('9016','OIDM2_AUTHORITY
 insert into authoritys (id, oid, auth_authority) values ('9017','OIDM2_AUTHORITY018','USER18');
 insert into authoritys (id, oid, auth_authority) values ('9018','OIDM2_AUTHORITY019','USER19');
 insert into authoritys (id, oid, auth_authority) values ('9019','OIDM2_AUTHORITY020','USER20');
-insert into permissions (id,perm_permission,oid) values ('1000','PERM_READ_Wohnung','1000');
-insert into permissions (id,perm_permission,oid) values ('1001','PERM_READ_StaatsangehoerigkeitReference','1001');
-insert into permissions (id,perm_permission,oid) values ('1002','PERM_READ_Sachbearbeiter','1002');
-insert into permissions (id,perm_permission,oid) values ('1003','PERM_READ_Pass','1003');
-insert into permissions (id,perm_permission,oid) values ('1005','PERM_READ_Buerger','1005');
-insert into permissions (id,perm_permission,oid) values ('1006','PERM_READ_AdresseReference','1006');
-insert into permissions (id,perm_permission,oid) values ('1007','PERM_READ_AdresseInterne','1007');
-insert into permissions (id,perm_permission,oid) values ('1008','PERM_READ_AdresseExterne','1008');
-insert into permissions (id,perm_permission,oid) values ('2000','PERM_WRITE_Wohnung','2000');
-insert into permissions (id,perm_permission,oid) values ('2001','PERM_WRITE_StaatsangehoerigkeitReference','2001');
-insert into permissions (id,perm_permission,oid) values ('2002','PERM_WRITE_Sachbearbeiter','2002');
-insert into permissions (id,perm_permission,oid) values ('2003','PERM_WRITE_Pass','2003');
-insert into permissions (id,perm_permission,oid) values ('2005','PERM_WRITE_Buerger','2005');
-insert into permissions (id,perm_permission,oid) values ('2006','PERM_WRITE_AdresseReference','2006');
-insert into permissions (id,perm_permission,oid) values ('2007','PERM_WRITE_AdresseInterne','2007');
-insert into permissions (id,perm_permission,oid) values ('2008','PERM_WRITE_AdresseExterne','2008');
-insert into permissions (id,perm_permission,oid) values ('3000','PERM_DELETE_Wohnung','3000');
-insert into permissions (id,perm_permission,oid) values ('3001','PERM_DELETE_StaatsangehoerigkeitReference','3001');
-insert into permissions (id,perm_permission,oid) values ('3002','PERM_DELETE_Sachbearbeiter','3002');
-insert into permissions (id,perm_permission,oid) values ('3003','PERM_DELETE_Pass','3003');
-insert into permissions (id,perm_permission,oid) values ('3005','PERM_DELETE_Buerger','3005');
-insert into permissions (id,perm_permission,oid) values ('3006','PERM_DELETE_AdresseReference','3006');
-insert into permissions (id,perm_permission,oid) values ('3007','PERM_DELETE_AdresseInterne','3007');
-insert into permissions (id,perm_permission,oid) values ('3008','PERM_DELETE_AdresseExterne','3008');
+insert into permissions (id,perm_permission,oid) values ('1000','ROLE_READ_Wohnung','1000');
+insert into permissions (id,perm_permission,oid) values ('1001','ROLE_READ_StaatsangehoerigkeitReference','1001');
+insert into permissions (id,perm_permission,oid) values ('1002','ROLE_READ_Sachbearbeiter','1002');
+insert into permissions (id,perm_permission,oid) values ('1003','ROLE_READ_Pass','1003');
+insert into permissions (id,perm_permission,oid) values ('1005','ROLE_READ_Buerger','1005');
+insert into permissions (id,perm_permission,oid) values ('1006','ROLE_READ_AdresseReference','1006');
+insert into permissions (id,perm_permission,oid) values ('1007','ROLE_READ_AdresseInterne','1007');
+insert into permissions (id,perm_permission,oid) values ('1008','ROLE_READ_AdresseExterne','1008');
+insert into permissions (id,perm_permission,oid) values ('2000','ROLE_WRITE_Wohnung','2000');
+insert into permissions (id,perm_permission,oid) values ('2001','ROLE_WRITE_StaatsangehoerigkeitReference','2001');
+insert into permissions (id,perm_permission,oid) values ('2002','ROLE_WRITE_Sachbearbeiter','2002');
+insert into permissions (id,perm_permission,oid) values ('2003','ROLE_WRITE_Pass','2003');
+insert into permissions (id,perm_permission,oid) values ('2005','ROLE_WRITE_Buerger','2005');
+insert into permissions (id,perm_permission,oid) values ('2006','ROLE_WRITE_AdresseReference','2006');
+insert into permissions (id,perm_permission,oid) values ('2007','ROLE_WRITE_AdresseInterne','2007');
+insert into permissions (id,perm_permission,oid) values ('2008','ROLE_WRITE_AdresseExterne','2008');
+insert into permissions (id,perm_permission,oid) values ('3000','ROLE_DELETE_Wohnung','3000');
+insert into permissions (id,perm_permission,oid) values ('3001','ROLE_DELETE_StaatsangehoerigkeitReference','3001');
+insert into permissions (id,perm_permission,oid) values ('3002','ROLE_DELETE_Sachbearbeiter','3002');
+insert into permissions (id,perm_permission,oid) values ('3003','ROLE_DELETE_Pass','3003');
+insert into permissions (id,perm_permission,oid) values ('3005','ROLE_DELETE_Buerger','3005');
+insert into permissions (id,perm_permission,oid) values ('3006','ROLE_DELETE_AdresseReference','3006');
+insert into permissions (id,perm_permission,oid) values ('3007','ROLE_DELETE_AdresseInterne','3007');
+insert into permissions (id,perm_permission,oid) values ('3008','ROLE_DELETE_AdresseExterne','3008');
 --Permission Test
 insert into permissions (id,perm_permission,oid) values ('500','PERM1','OIDM_PERMISSION001');
 insert into permissions (id,perm_permission,oid) values ('501','PERM2','OIDM_PERMISSION002');
@@ -190,6 +192,7 @@ insert into authoritys_permissions (authority_id, permission_id) values ('9001',
 insert into authoritys_permissions (authority_id, permission_id) values ('9001','508');
 insert into authoritys_permissions (authority_id, permission_id) values ('9001','509');
 insert into authoritys_permissions (authority_id, permission_id) values ('9001','510');
+insert into users_authoritys (authority_id, user_id) values (2, 1);
 insert into users_authoritys (authority_id, user_id) values (2, 2);
 insert into users_authoritys (authority_id, user_id) values (2, 3);
 insert into users_authoritys (authority_id, user_id) values (2, 4);
@@ -218,15 +221,18 @@ insert into users_authoritys (authority_id, user_id) values ('9002','26');
 insert into users_authoritys (authority_id, user_id) values ('9001','27');
 insert into users_authoritys (authority_id, user_id) values ('9003','28');
 insert into users_authoritys (authority_id, user_id) values ('9005','29');
-insert into buerger (id, oid, buer_nachname, buer_vorname, mandant) values (2, '2','test','franz',3);
-insert into buerger (id, oid, buer_nachname, buer_vorname, mandant) values (3, '3','test','hans',3);
-insert into buerger (id, oid, buer_nachname, buer_vorname, mandant, buer_geburtsdatum) values (4, 'OID1','hans','peter',2, '1966-12-24');
-insert into buerger (id, oid, buer_nachname, buer_vorname, mandant, buer_geburtsdatum) values (5, 'OID2','hans','peter',2, '1966-12-24');
-insert into buerger (id, oid, buer_nachname, buer_vorname, mandant, buer_geburtsdatum) values (6, 'OID3','hans','peter',2, '1966-12-24');
-insert into buerger (id, oid, buer_nachname, buer_vorname, mandant, buer_geburtsdatum) values (7, 'OID4','hans','peter',2, '1966-12-24');
-insert into buerger (id, oid, buer_nachname, buer_vorname, mandant, buer_geburtsdatum) values (8, 'OID5','hans','peter',2, '1966-12-24');
-insert into buerger (id, oid, buer_nachname, buer_vorname, mandant, buer_geburtsdatum) values (9, 'OID6','hans','peter',2, '1966-12-24');
-insert into buerger (id, oid, buer_nachname, buer_vorname, mandant, buer_geburtsdatum) values (1, '1','Zarwel','Rene',2, '1987-10-21');
+
+
+
+insert into buerger (id, oid, buer_nachname, buer_vorname, mandant) values (2, '2','test','franz','test');
+insert into buerger (id, oid, buer_nachname, buer_vorname, mandant) values (3, '3','test','hans','test');
+insert into buerger (id, oid, buer_nachname, buer_vorname, mandant, buer_geburtsdatum) values (4, 'OID1','hans','peter','test', '1966-12-24');
+insert into buerger (id, oid, buer_nachname, buer_vorname, mandant, buer_geburtsdatum) values (5, 'OID2','hans','peter','test', '1966-12-24');
+insert into buerger (id, oid, buer_nachname, buer_vorname, mandant, buer_geburtsdatum) values (6, 'OID3','hans','peter','test', '1966-12-24');
+insert into buerger (id, oid, buer_nachname, buer_vorname, mandant, buer_geburtsdatum) values (7, 'OID4','hans','peter','test', '1966-12-24');
+insert into buerger (id, oid, buer_nachname, buer_vorname, mandant, buer_geburtsdatum) values (8, 'OID5','hans','peter','test', '1966-12-24');
+insert into buerger (id, oid, buer_nachname, buer_vorname, mandant, buer_geburtsdatum) values (9, 'OID6','hans','peter','test', '1966-12-24');
+insert into buerger (id, oid, buer_nachname, buer_vorname, mandant, buer_geburtsdatum) values (1, '1','Zarwel','Rene','test', '1987-10-21');
 -- ############
 -- Testdaten
 -- ############

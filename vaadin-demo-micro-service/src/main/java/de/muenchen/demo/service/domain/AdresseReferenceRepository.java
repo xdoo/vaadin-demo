@@ -1,36 +1,48 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package de.muenchen.demo.service.domain;
 
+import de.muenchen.demo.service.security.TenantService;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.security.access.annotation.Secured;
-/**
- *
- * @author praktikant.tmar
- */
-@Secured("hasRole('PERM_READ_AdresseReference')")
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PostFilter;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.access.prepost.PreFilter;
+
+@RepositoryRestResource(exported = true)
+@PreAuthorize("hasRole('ROLE_READ_AdresseReference')")
 public interface AdresseReferenceRepository extends CrudRepository<AdresseReference, Long> {
 
-    @Override
-    @Secured("hasRole('PERM_WRITE_AdresseReference')")
-    AdresseReference save(AdresseReference entity);
+	@Override
+	@PostFilter(TenantService.IS_TENANT_FILTER)
+	Iterable<AdresseReference> findAll();
 
-    @Override
-    @Secured("hasRole('PERM_DELETE_AdresseReference')")
-    void delete(Long aLong);
+	@Override
+	@PreAuthorize("hasRole('ROLE_READ_AdresseReference')")
+	@PostAuthorize(TenantService.IS_TENANT_AUTH)
+	AdresseReference findOne(Long aLong);
 
-    @Override
-    @Secured("hasRole('PERM_DELETE_AdresseReference')")
-    void delete(AdresseReference adresseReference);
+	@Override
+	@PreAuthorize("hasRole('ROLE_WRITE_AdresseReference')")
+	AdresseReference save(AdresseReference AdresseReference);
 
-    @Override
-    @Secured("hasRole('PERM_DELETE_AdresseReference')")
-    void delete(Iterable<? extends AdresseReference> iterable);
+	@Override
+	@PreAuthorize("hasRole('ROLE_DELETE_AdresseReference')")
+	@PostAuthorize(TenantService.IS_TENANT_AUTH)
+	void delete(Long aLong);
 
-    @Override
-    @Secured("hasRole('PERM_DELETE_AdresseReference')")
-    void deleteAll();
+	@Override
+	@PreAuthorize("hasRole('ROLE_DELETE_AdresseReference')")
+	@PreFilter(TenantService.IS_TENANT_FILTER)
+	void delete(Iterable<? extends AdresseReference> iterable);
+
+	@Override
+	@PreAuthorize("hasRole('ROLE_DELETE_AdresseReference')")
+	@PreFilter(TenantService.IS_TENANT_FILTER)
+	void deleteAll();
+
+	@Override
+	@PreAuthorize("hasRole('ROLE_DELETE_AdresseReference')")
+	@PostAuthorize(TenantService.IS_TENANT_AUTH)
+	void delete(AdresseReference entity);
+	
 }
