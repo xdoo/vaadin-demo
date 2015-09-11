@@ -1,5 +1,6 @@
 package de.muenchen.demo.service.security;
 
+import de.muenchen.demo.service.domain.BaseEntity;
 import de.muenchen.demo.service.domain.User;
 import de.muenchen.demo.service.domain.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,8 @@ public class TenantPermissionEvaluator {
     @Autowired
     UserRepository userRepository;
 
-    public boolean isTenant(Authentication authentication, String tenant) {
-        return tenant.equals(getCurrentTenantId(authentication.getName()));
+    public boolean isTenant(Authentication authentication, Object o) {
+        return o == null || ((BaseEntity) o).getMandant().equals(getCurrentTenantId(authentication.getName()));
     }
 
 
