@@ -10,7 +10,7 @@ import org.springframework.security.access.prepost.PreFilter;
 
 
 @RepositoryRestResource(exported = true)
-@PreAuthorize("hasRole('PERM_READ_Pass')")
+@PreAuthorize("hasRole('ROLE_READ_Pass')")
 public interface PassRepository extends CrudRepository<Pass, Long> {
 
 	@Override
@@ -18,31 +18,31 @@ public interface PassRepository extends CrudRepository<Pass, Long> {
 	Iterable<Pass> findAll();
 
 	@Override
-	@PreAuthorize("hasRole('PERM_READ_Pass')")
+	@PreAuthorize("hasRole('ROLE_READ_Pass')")
 	@PostAuthorize(TenantService.IS_TENANT_AUTH)
 	Pass findOne(Long aLong);
 
 	@Override
-	@PreAuthorize("hasRole('PERM_WRITE_Pass')")
+	@PreAuthorize("hasRole('ROLE_WRITE_Pass')")
 	Pass save(Pass Pass);
 
 	@Override
-	@PreAuthorize("hasRole('PERM_DELETE_Pass')")
+	@PreAuthorize("hasRole('ROLE_DELETE_Pass')")
 	@PostAuthorize(TenantService.IS_TENANT_AUTH)
 	void delete(Long aLong);
 
 	@Override
-	@PreAuthorize("hasRole('PERM_DELETE_Pass')")
+	@PreAuthorize("hasRole('ROLE_DELETE_Pass')")
 	@PreFilter(TenantService.IS_TENANT_FILTER)
 	void delete(Iterable<? extends Pass> iterable);
 
 	@Override
-	@PreAuthorize("hasRole('PERM_DELETE_Pass')")
+	@PreAuthorize("hasRole('ROLE_DELETE_Pass')")
 	@PreFilter(TenantService.IS_TENANT_FILTER)
 	void deleteAll();
 
 	@Override
-	@PreAuthorize("hasRole('PERM_DELETE_Pass')")
+	@PreAuthorize("hasRole('ROLE_DELETE_Pass')")
 	@PostAuthorize(TenantService.IS_TENANT_AUTH)
 	void delete(Pass entity);
 	

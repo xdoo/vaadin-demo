@@ -9,7 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.access.prepost.PreFilter;
 
 @RepositoryRestResource(exported = true)
-@PreAuthorize("hasRole('PERM_READ_Wohnung')")
+@PreAuthorize("hasRole('ROLE_READ_Wohnung')")
 public interface WohnungRepository extends CrudRepository<Wohnung, Long> {
 
 	@Override
@@ -17,31 +17,31 @@ public interface WohnungRepository extends CrudRepository<Wohnung, Long> {
 	Iterable<Wohnung> findAll();
 
 	@Override
-	@PreAuthorize("hasRole('PERM_READ_Wohnung')")
+	@PreAuthorize("hasRole('ROLE_READ_Wohnung')")
 	@PostAuthorize(TenantService.IS_TENANT_AUTH)
 	Wohnung findOne(Long aLong);
 
 	@Override
-	@PreAuthorize("hasRole('PERM_WRITE_Wohnung')")
+	@PreAuthorize("hasRole('ROLE_WRITE_Wohnung')")
 	Wohnung save(Wohnung Wohnung);
 
 	@Override
-	@PreAuthorize("hasRole('PERM_DELETE_Wohnung')")
+	@PreAuthorize("hasRole('ROLE_DELETE_Wohnung')")
 	@PostAuthorize(TenantService.IS_TENANT_AUTH)
 	void delete(Long aLong);
 
 	@Override
-	@PreAuthorize("hasRole('PERM_DELETE_Wohnung')")
+	@PreAuthorize("hasRole('ROLE_DELETE_Wohnung')")
 	@PreFilter(TenantService.IS_TENANT_FILTER)
 	void delete(Iterable<? extends Wohnung> iterable);
 
 	@Override
-	@PreAuthorize("hasRole('PERM_DELETE_Wohnung')")
+	@PreAuthorize("hasRole('ROLE_DELETE_Wohnung')")
 	@PreFilter(TenantService.IS_TENANT_FILTER)
 	void deleteAll();
 
 	@Override
-	@PreAuthorize("hasRole('PERM_DELETE_Wohnung')")
+	@PreAuthorize("hasRole('ROLE_DELETE_Wohnung')")
 	@PostAuthorize(TenantService.IS_TENANT_AUTH)
 	void delete(Wohnung entity);
 	
