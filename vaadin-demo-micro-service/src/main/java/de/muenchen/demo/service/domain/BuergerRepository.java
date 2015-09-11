@@ -1,6 +1,6 @@
 package de.muenchen.demo.service.domain;
 
-import de.muenchen.demo.service.security.TenantPermissionEvaluator;
+import de.muenchen.demo.service.security.TenantService;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PostFilter;
@@ -17,12 +17,12 @@ public interface BuergerRepository extends CrudRepository<Buerger, Long> {
     String BUERGER_CACHE = "BUERGER_CACHE";
 
     @Override
-    @PostFilter(TenantPermissionEvaluator.IS_TENANT_FILTER)
+    @PostFilter(TenantService.IS_TENANT_FILTER)
     Iterable<Buerger> findAll();
 
     @Override
     @PreAuthorize("hasRole('PERM_READ_Buerger')")
-    @PostAuthorize(TenantPermissionEvaluator.IS_TENANT_AUTH)
+    @PostAuthorize(TenantService.IS_TENANT_AUTH)
     Buerger findOne(Long aLong);
 
     @Override
@@ -31,22 +31,22 @@ public interface BuergerRepository extends CrudRepository<Buerger, Long> {
 
     @Override
     @PreAuthorize("hasRole('PERM_DELETE_Buerger')")
-    @PostAuthorize(TenantPermissionEvaluator.IS_TENANT_AUTH)
+    @PostAuthorize(TenantService.IS_TENANT_AUTH)
     void delete(Long aLong);
 
     @Override
     @PreAuthorize("hasRole('PERM_DELETE_Buerger')")
-    @PreFilter(TenantPermissionEvaluator.IS_TENANT_FILTER)
+    @PreFilter(TenantService.IS_TENANT_FILTER)
     void delete(Iterable<? extends Buerger> iterable);
 
     @Override
     @PreAuthorize("hasRole('PERM_DELETE_Buerger')")
-    @PreFilter(TenantPermissionEvaluator.IS_TENANT_FILTER)
+    @PreFilter(TenantService.IS_TENANT_FILTER)
     void deleteAll();
 
     @Override
     @PreAuthorize("hasRole('PERM_DELETE_Buerger')")
-    @PostAuthorize(TenantPermissionEvaluator.IS_TENANT_AUTH)
+    @PostAuthorize(TenantService.IS_TENANT_AUTH)
     public void delete(Buerger entity);
 
 }

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  * Created by p.mueller on 11.09.15.
  */
 @Component("tenantPermissionEvaluator")
-public class TenantPermissionEvaluator {
+public class TenantService {
 
     public static final String IS_TENANT_FILTER = "@tenantPermissionEvaluator.isTenant(authentication,filterObject)";
     public static final String IS_TENANT_AUTH = "@tenantPermissionEvaluator.isTenant(authentication,returnObject)";
