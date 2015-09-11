@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.ldap.core.DirContextOperations;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.ldap.userdetails.LdapAuthoritiesPopulator;
@@ -26,6 +27,7 @@ import java.util.List;
  */
 @Configuration
 @ComponentScan
+@EnableWebSecurity
 public class CustomLdapAuthoritiesPopulator implements LdapAuthoritiesPopulator {
 
     private static final Logger LOG = LoggerFactory.getLogger(CustomLdapAuthoritiesPopulator.class);

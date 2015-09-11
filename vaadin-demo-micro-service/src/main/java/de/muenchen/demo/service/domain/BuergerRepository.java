@@ -8,8 +8,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
  *
  * @author claus.straube
  */
-@PreAuthorize("hasRole('PERM_READ_Buerger')")
-@PostFilter("hasPermission(filterObject.mandant, 'tenant')")
+//@PreAuthorize("hasRole('PERM_READ_Buerger')")
+@PostFilter("@tenantPermissionEvaluator.isTenant(authentication,filterObject.mandant)")
 public interface BuergerRepository extends CrudRepository<Buerger, Long> {
 
     public final static String BUERGER_CACHE = "BUERGER_CACHE";
