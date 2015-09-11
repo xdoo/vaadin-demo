@@ -38,6 +38,6 @@
         </dependency>
 
     </dependencies>
-
+    <name>gaia :: gui-lib</name>
 
 </project>

@@ -39,5 +39,5 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
     </dependencies>
-
+    <name>gaia :: auditing</name>
 </project>
