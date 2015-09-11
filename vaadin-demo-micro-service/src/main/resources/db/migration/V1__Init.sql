@@ -60,6 +60,8 @@ alter table users_accounts add constraint FK_users_accounts_TO_users foreign key
 alter table users_authoritys add constraint FK_users_authoritys_TO_users foreign key (user_id) references users;
 alter table users_authoritys add constraint FK_users_authoritys_TO_authoritys foreign key (authority_id) references authoritys;
 alter table wohnungen add constraint FK_wohnungen_TO_adresse_reference foreign key (adresse_id) references adresse_reference;
+
+insert into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (1,'hans2@test.de',TRUE,'oid','test2','hans2','default');
 insert into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (2,'hans@test.de',TRUE,'oid1','test','hans','test');
 insert into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (3,'franz@test.de',TRUE,'oid2','test','franz','default');
 insert into users ( ID,user_email, user_enabled, oid, user_password, user_username,mandant) values (4,'rene.zarwel@muenchen.de',TRUE,'oid3',null,'rene.zarwel','default');
@@ -190,6 +192,7 @@ insert into authoritys_permissions (authority_id, permission_id) values ('9001',
 insert into authoritys_permissions (authority_id, permission_id) values ('9001','508');
 insert into authoritys_permissions (authority_id, permission_id) values ('9001','509');
 insert into authoritys_permissions (authority_id, permission_id) values ('9001','510');
+insert into users_authoritys (authority_id, user_id) values (2, 1);
 insert into users_authoritys (authority_id, user_id) values (2, 2);
 insert into users_authoritys (authority_id, user_id) values (2, 3);
 insert into users_authoritys (authority_id, user_id) values (2, 4);
@@ -218,15 +221,18 @@ insert into users_authoritys (authority_id, user_id) values ('9002','26');
 insert into users_authoritys (authority_id, user_id) values ('9001','27');
 insert into users_authoritys (authority_id, user_id) values ('9003','28');
 insert into users_authoritys (authority_id, user_id) values ('9005','29');
-insert into buerger (id, oid, buer_nachname, buer_vorname, mandant) values (2, '2','test','franz',3);
-insert into buerger (id, oid, buer_nachname, buer_vorname, mandant) values (3, '3','test','hans',3);
-insert into buerger (id, oid, buer_nachname, buer_vorname, mandant, buer_geburtsdatum) values (4, 'OID1','hans','peter',2, '1966-12-24');
-insert into buerger (id, oid, buer_nachname, buer_vorname, mandant, buer_geburtsdatum) values (5, 'OID2','hans','peter',2, '1966-12-24');
-insert into buerger (id, oid, buer_nachname, buer_vorname, mandant, buer_geburtsdatum) values (6, 'OID3','hans','peter',2, '1966-12-24');
-insert into buerger (id, oid, buer_nachname, buer_vorname, mandant, buer_geburtsdatum) values (7, 'OID4','hans','peter',2, '1966-12-24');
-insert into buerger (id, oid, buer_nachname, buer_vorname, mandant, buer_geburtsdatum) values (8, 'OID5','hans','peter',2, '1966-12-24');
-insert into buerger (id, oid, buer_nachname, buer_vorname, mandant, buer_geburtsdatum) values (9, 'OID6','hans','peter',2, '1966-12-24');
-insert into buerger (id, oid, buer_nachname, buer_vorname, mandant, buer_geburtsdatum) values (1, '1','Zarwel','Rene',2, '1987-10-21');
+
+
+
+insert into buerger (id, oid, buer_nachname, buer_vorname, mandant) values (2, '2','test','franz','test');
+insert into buerger (id, oid, buer_nachname, buer_vorname, mandant) values (3, '3','test','hans','test');
+insert into buerger (id, oid, buer_nachname, buer_vorname, mandant, buer_geburtsdatum) values (4, 'OID1','hans','peter','test', '1966-12-24');
+insert into buerger (id, oid, buer_nachname, buer_vorname, mandant, buer_geburtsdatum) values (5, 'OID2','hans','peter','test', '1966-12-24');
+insert into buerger (id, oid, buer_nachname, buer_vorname, mandant, buer_geburtsdatum) values (6, 'OID3','hans','peter','test', '1966-12-24');
+insert into buerger (id, oid, buer_nachname, buer_vorname, mandant, buer_geburtsdatum) values (7, 'OID4','hans','peter','test', '1966-12-24');
+insert into buerger (id, oid, buer_nachname, buer_vorname, mandant, buer_geburtsdatum) values (8, 'OID5','hans','peter','test', '1966-12-24');
+insert into buerger (id, oid, buer_nachname, buer_vorname, mandant, buer_geburtsdatum) values (9, 'OID6','hans','peter','test', '1966-12-24');
+insert into buerger (id, oid, buer_nachname, buer_vorname, mandant, buer_geburtsdatum) values (1, '1','Zarwel','Rene','test', '1987-10-21');
 -- ############
 -- Testdaten
 -- ############

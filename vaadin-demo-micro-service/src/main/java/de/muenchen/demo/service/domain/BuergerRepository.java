@@ -2,6 +2,7 @@ package de.muenchen.demo.service.domain;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.access.prepost.PreFilter;
 
@@ -15,7 +16,7 @@ public interface BuergerRepository extends CrudRepository<Buerger, Long> {
     public final static String BUERGER_CACHE = "BUERGER_CACHE";
 
     @Override
-    @PreFilter("@tenantPermissionEvaluator.isTenant(authentication,filterObject)")
+    @PostFilter("@tenantPermissionEvaluator.isTenant(authentication,filterObject)")
     Iterable<Buerger> findAll();
 
     @Override

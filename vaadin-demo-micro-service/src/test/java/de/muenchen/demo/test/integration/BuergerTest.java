@@ -7,11 +7,11 @@ package de.muenchen.demo.test.integration;
  */
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import com.google.common.collect.Lists;
 import de.muenchen.demo.service.Application;
 import de.muenchen.demo.service.domain.Buerger;
 import de.muenchen.demo.service.domain.BuergerRepository;
-import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
+import de.muenchen.demo.test.service.DomainConstants;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;
@@ -36,26 +36,13 @@ import org.springframework.web.client.RestTemplate;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
-
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static com.github.tomakehurst.wiremock.client.WireMock.get;
-import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
-import com.sun.jndi.toolkit.url.Uri;
-import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
+import java.util.stream.Collectors;
 import static org.hamcrest.CoreMatchers.equalTo;
-import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -63,20 +50,19 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.Resource;
-import org.springframework.hateoas.ResourceSupport;
 import org.springframework.hateoas.Resources;
-import org.springframework.hateoas.UriTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.context.request.WebRequest;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.support.WithMockUser;
 
 /**
  *
@@ -92,9 +78,13 @@ public class BuergerTest {
     @Autowired
     BuergerRepository repo;
     private RestTemplate restTemplate;
+    private RestTemplate restTemplate2;
     @Value("${local.server.port}")
     private int port;
     private String url;
+    @Autowired
+//@Qualifier("authenticationManager")
+    AuthenticationManager authenticationManager;
 
     @Before
     public void setUp() throws JsonProcessingException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
@@ -108,20 +98,39 @@ public class BuergerTest {
         ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
         restTemplate = new RestTemplate(requestFactory);
 
+        MappingJackson2HttpMessageConverter halConverter = new MappingJackson2HttpMessageConverter();
+
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new Jackson2HalModule());
 
-        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-        converter.setSupportedMediaTypes(Arrays.asList(MediaType.APPLICATION_JSON));
-        converter.setObjectMapper(objectMapper);
+        halConverter.setObjectMapper(objectMapper);
+        halConverter.setSupportedMediaTypes(Arrays.asList(MediaTypes.HAL_JSON));
 
-        restTemplate.setMessageConverters(Arrays.asList(converter));
+        restTemplate.setMessageConverters(Arrays.asList(
+                halConverter,
+                new StringHttpMessageConverter()
+        ));
+        BasicCredentialsProvider credentialsProvider2 = new BasicCredentialsProvider();
+        credentialsProvider2.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials("hans2", "test2"));
+
+        HttpClient httpClient2 = HttpClientBuilder.create()
+                .setDefaultCredentialsProvider(credentialsProvider2)
+                .build();
+
+        ClientHttpRequestFactory requestFactory2 = new HttpComponentsClientHttpRequestFactory(httpClient2);
+        restTemplate2 = new RestTemplate(requestFactory2);
+
+        restTemplate2.setMessageConverters(Arrays.asList(
+                halConverter,
+                new StringHttpMessageConverter()
+        ));
 
     }
 
     @Test
-    public void getBuergersTest() throws JsonProcessingException {
-        System.out.println("========== get Alle Bürger Test ==========");
+    public void getBuergersM1Test() throws JsonProcessingException {
+        System.out.println("========== get Alle Bürger Mandant 'test' Test ==========");
+        int x = this.count("test","hans","test");
         url = "http://localhost:" + port + "/buergers";
         ResponseEntity<Resources<BuergerResource>> result = restTemplate.exchange(
                 url,
@@ -130,11 +139,48 @@ public class BuergerTest {
                 BuergerResource.LIST
         );
         assertEquals(HttpStatus.OK, result.getStatusCode());
-        assertNotNull(result.getBody().getLink("search"));
+        assertEquals(x,result.getBody().getContent().size());
         assertFalse(result.getBody().getContent().isEmpty());
-        System.out.println("Alle Bürger wurde von der DB gelesen.");
+        System.out.println(String.format("Suche wurde erfolgreich durchgeführt. Einträge Mandant 'test': %s | Ergebnis der Suche: %s", x, result.getBody().getContent().size()));
     }
 
+    @Test
+    public void getBuergersM2Test() throws JsonProcessingException {
+        System.out.println("========== get Alle Bürger Mandant 'default' Test ==========");
+                int x = this.count("default","hans2","test2");
+        url = "http://localhost:" + port + "/buergers";
+        ResponseEntity<Resources<BuergerResource>> result = restTemplate2.exchange(
+                url,
+                HttpMethod.GET,
+                null,
+                BuergerResource.LIST
+        );
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals(x,result.getBody().getContent().size());
+        System.out.println(String.format("Suche wurde erfolgreich durchgeführt. Einträge Mandant 'default': %s | Ergebnis der Suche: %s", x, result.getBody().getContent().size()));
+    }
+
+    private int count(String mid,String name, String password) {
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(name, password);
+        Authentication auth = authenticationManager.authenticate(token);
+        SecurityContextHolder.getContext().setAuthentication(auth);
+        ArrayList<Buerger> all = Lists.newArrayList(repo.findAll());
+        return all.stream().filter(b -> b.getMandant().equals(mid)).collect(Collectors.counting()).intValue();
+    }
+    
+
+
+    @Test
+    public void postBuergerTest() throws JsonProcessingException {
+        System.out.println("========== save Bürger Test ==========");
+        String oid = "OIDTEST";
+        url = "http://localhost:" + port + "/buergers";
+        ResponseEntity<BuergerResource> response2 = restTemplate.exchange(url, HttpMethod.POST, new HttpEntity<>(this.createBuerger(oid)), BuergerResource.class);
+
+        assertEquals(HttpStatus.CREATED, response2.getStatusCode());
+        System.out.println(String.format("Bürger wurde in der DB gespeichert."));
+    }
+    
     private Buerger createBuerger(String oid) {
         Buerger buerger = new Buerger();
         buerger.setOid(oid);
@@ -142,19 +188,6 @@ public class BuergerTest {
         buerger.setVorname("peter");
         return buerger;
     }
-
-    @Test
-    public void postBuergerTest() throws JsonProcessingException {
-        System.out.println("========== save Bürger Test ==========");
-        String oid = "OIDTEST";
-        url = "http://localhost:" + port + "/buergers";
-        //ResponseEntity<Buerger> response2 = restTemplate.postForEntity(url, this.createBuerger(oid), Buerger.class);
-        ResponseEntity<BuergerResource> response2 = restTemplate.exchange(url, HttpMethod.POST, new HttpEntity<>(this.createBuerger(oid)), BuergerResource.class);
-
-        assertEquals(HttpStatus.CREATED, response2.getStatusCode());
-        System.out.println(String.format("Bürger wurde in der DB gespeichert."));
-    }
-
     @Test
     public void getBuergerTest() throws JsonProcessingException {
         System.out.println("========== get Bürger Test ==========");
@@ -163,7 +196,6 @@ public class BuergerTest {
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertNotNull(result.getBody().getLink("kinder"));
         assertNotNull(result.getBody().getLink("sachbearbeiter"));
-        assertNotNull(result.getBody().getLink("mandant"));
         assertNotNull(result.getBody().getLink("partner"));
         assertNotNull(result.getBody().getLink("staatsangehoerigkeitReferences"));
         assertNotNull(result.getBody().getLink("wohnungen"));
@@ -192,9 +224,18 @@ public class BuergerTest {
         BuergerResource response2 = restTemplate.getForEntity(url, BuergerResource.class).getBody();
         Buerger buerger = response2.getContent();
         buerger.setVorname("peter");
+   //     buerger.setMandant("default");
         restTemplate.put(url, buerger);
         BuergerResource response3 = restTemplate.getForEntity(url, BuergerResource.class).getBody();
         assertEquals("peter", response3.getContent().getVorname());
+        
+        BuergerResource response4 = restTemplate.getForEntity(url, BuergerResource.class).getBody();
+        Buerger buerger4 = response4.getContent();
+        buerger4.setVorname("hans");
+   //     buerger.setMandant("default");
+        restTemplate2.put(url, buerger4);
+        BuergerResource response5 = restTemplate2.getForEntity(url, BuergerResource.class).getBody();
+        assertEquals("peter", response5.getContent().getVorname());
         System.out.println("Bürger wurde mit neuem Vornamen in der DB gespeichert.");
     }
 
@@ -215,15 +256,17 @@ public class BuergerTest {
     }
 
     @Test
-    public void putBuergerKinderTest() throws URISyntaxException, MalformedURLException {
+    public void putBuergerKinderTest() {
         System.out.println("========== put Bürger Kinder Test ==========");
-        url = "http://localhost:" + port + "/buergers/1/kinder";
-
-        Uri uri = new Uri("http://localhost:" + port + "/buergers/2");
+        url = "http://localhost:" + port + "/buergers/3/kinder";
+        String uri = "http://localhost:" + port + "/buergers/1";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("text", "uri-list"));
+        restTemplate.put(url, new HttpEntity<>(uri, headers));
         //String uri = "http://localhost:" + port + "/buergers/1";
         //UriTemplate expanded = new UriTemplate("http://localhost:" + port + "/buergers/1");
 
-        restTemplate.put(url, uri);
+//        restTemplate.put(url, uri);
         //restTemplate.exchange(url,HttpMethod.PUT, new HttpEntity(uri), );
         ResponseEntity<Resources<BuergerResource>> result2 = restTemplate.exchange(
                 url,
@@ -234,7 +277,7 @@ public class BuergerTest {
 
         System.out.println(result2.getBody().getContent().size());
         assertEquals(HttpStatus.OK, result2.getStatusCode());
-        //assertEquals(1, result2.getBody().getContent().size());
+        assertEquals(1, result2.getBody().getContent().size());
         System.out.println("Bürger wurde mit neuem Vornamen in der DB gespeichert.");
     }
 
