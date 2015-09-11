@@ -29,7 +29,7 @@
         </dependency>
 
     </dependencies>
-
+    <name>gaia :: i18nservice</name>
 
 
 </project>

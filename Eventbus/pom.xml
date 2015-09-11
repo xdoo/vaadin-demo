@@ -35,5 +35,5 @@
         </dependency>
 
     </dependencies>
-
+    <name>gaia :: eventbus</name>
 </project>
