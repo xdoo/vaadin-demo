@@ -26,7 +26,7 @@ public interface BuergerRepository extends CrudRepository<Buerger, Long> {
     Buerger findOne(Long aLong);
 
     @Override
-    @PreAuthorize("hasRole('PERM_WRITE_Buerger')")
+    @PreAuthorize("hasRole('PERM_WRITE_Buerger') and " + TenantService.IS_TENANT_AUTH)
     Buerger save(Buerger buerger);
 
     @Override
