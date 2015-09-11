@@ -9,7 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.access.prepost.PreFilter;
 
 @RepositoryRestResource(exported = true)
-@PreAuthorize("hasRole('PERM_READ_AdresseInterne')")
+@PreAuthorize("hasRole('ROLE_READ_AdresseInterne')")
 public interface AdresseInterneRepository extends CrudRepository<AdresseInterne, Long> {
 
 	@Override
@@ -17,31 +17,31 @@ public interface AdresseInterneRepository extends CrudRepository<AdresseInterne,
 	Iterable<AdresseInterne> findAll();
 
 	@Override
-	@PreAuthorize("hasRole('PERM_READ_AdresseInterne')")
+	@PreAuthorize("hasRole('ROLE_READ_AdresseInterne')")
 	@PostAuthorize(TenantService.IS_TENANT_AUTH)
 	AdresseInterne findOne(Long aLong);
 
 	@Override
-	@PreAuthorize("hasRole('PERM_WRITE_AdresseInterne')")
+	@PreAuthorize("hasRole('ROLE_WRITE_AdresseInterne')")
 	AdresseInterne save(AdresseInterne AdresseInterne);
 
 	@Override
-	@PreAuthorize("hasRole('PERM_DELETE_AdresseInterne')")
+	@PreAuthorize("hasRole('ROLE_DELETE_AdresseInterne')")
 	@PostAuthorize(TenantService.IS_TENANT_AUTH)
 	void delete(Long aLong);
 
 	@Override
-	@PreAuthorize("hasRole('PERM_DELETE_AdresseInterne')")
+	@PreAuthorize("hasRole('ROLE_DELETE_AdresseInterne')")
 	@PreFilter(TenantService.IS_TENANT_FILTER)
 	void delete(Iterable<? extends AdresseInterne> iterable);
 
 	@Override
-	@PreAuthorize("hasRole('PERM_DELETE_AdresseInterne')")
+	@PreAuthorize("hasRole('ROLE_DELETE_AdresseInterne')")
 	@PreFilter(TenantService.IS_TENANT_FILTER)
 	void deleteAll();
 
 	@Override
-	@PreAuthorize("hasRole('PERM_DELETE_AdresseInterne')")
+	@PreAuthorize("hasRole('ROLE_DELETE_AdresseInterne')")
 	@PostAuthorize(TenantService.IS_TENANT_AUTH)
 	void delete(AdresseInterne entity);
 	
