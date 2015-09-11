@@ -41,10 +41,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
@@ -61,6 +61,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.client.HttpClientErrorException;
 
 /**
  *
@@ -127,7 +128,7 @@ public class BuergerTest {
     @Test
     public void getBuergersM1Test() throws JsonProcessingException {
         System.out.println("========== get Alle Bürger Mandant 'test' Test ==========");
-        int x = this.count("test","hans","test");
+        int x = this.count("test", "hans", "test");
         url = "http://localhost:" + port + "/buergers";
         ResponseEntity<Resources<BuergerResource>> result = restTemplate.exchange(
                 url,
@@ -136,7 +137,7 @@ public class BuergerTest {
                 BuergerResource.LIST
         );
         assertEquals(HttpStatus.OK, result.getStatusCode());
-        assertEquals(x,result.getBody().getContent().size());
+        assertEquals(x, result.getBody().getContent().size());
         assertFalse(result.getBody().getContent().isEmpty());
         System.out.println(String.format("Suche wurde erfolgreich durchgeführt. Einträge Mandant 'test': %s | Ergebnis der Suche: %s", x, result.getBody().getContent().size()));
     }
@@ -144,7 +145,7 @@ public class BuergerTest {
     @Test
     public void getBuergersM2Test() throws JsonProcessingException {
         System.out.println("========== get Alle Bürger Mandant 'default' Test ==========");
-                int x = this.count("default","hans2","test2");
+        int x = this.count("default", "hans2", "test2");
         url = "http://localhost:" + port + "/buergers";
         ResponseEntity<Resources<BuergerResource>> result = restTemplate2.exchange(
                 url,
@@ -153,23 +154,21 @@ public class BuergerTest {
                 BuergerResource.LIST
         );
         assertEquals(HttpStatus.OK, result.getStatusCode());
-        assertEquals(x,result.getBody().getContent().size());
+        assertEquals(x, result.getBody().getContent().size());
         System.out.println(String.format("Suche wurde erfolgreich durchgeführt. Einträge Mandant 'default': %s | Ergebnis der Suche: %s", x, result.getBody().getContent().size()));
     }
 
-    private int count(String mid,String name, String password) {
+    private int count(String mid, String name, String password) {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(name, password);
         Authentication auth = authenticationManager.authenticate(token);
         SecurityContextHolder.getContext().setAuthentication(auth);
         ArrayList<Buerger> all = Lists.newArrayList(repo.findAll());
         return all.stream().filter(b -> b.getMandant().equals(mid)).collect(Collectors.counting()).intValue();
     }
-    
-
 
     @Test
-    public void postBuergerTest() throws JsonProcessingException {
-        System.out.println("========== save Bürger Test ==========");
+    public void postBuergerM1Test() throws JsonProcessingException {
+        System.out.println("========== save Bürger M1 Test ==========");
         String oid = "OIDTEST";
         url = "http://localhost:" + port + "/buergers";
         ResponseEntity<BuergerResource> response2 = restTemplate.exchange(url, HttpMethod.POST, new HttpEntity<>(this.createBuerger(oid)), BuergerResource.class);
@@ -177,7 +176,7 @@ public class BuergerTest {
         assertEquals(HttpStatus.CREATED, response2.getStatusCode());
         System.out.println(String.format("Bürger wurde in der DB gespeichert."));
     }
-    
+
     private Buerger createBuerger(String oid) {
         Buerger buerger = new Buerger();
         buerger.setOid(oid);
@@ -185,8 +184,9 @@ public class BuergerTest {
         buerger.setVorname("peter");
         return buerger;
     }
+
     @Test
-    public void getBuergerTest() throws JsonProcessingException {
+    public void getBuergerM1Test() throws JsonProcessingException {
         System.out.println("========== get Bürger Test ==========");
         url = "http://localhost:" + port + "/buergers/1";
         ResponseEntity<BuergerResource> result = restTemplate.getForEntity(url, BuergerResource.class);
@@ -198,29 +198,54 @@ public class BuergerTest {
         assertNotNull(result.getBody().getLink("wohnungen"));
         assertNotNull(result.getBody().getLink("pass"));
         assertNotNull(result.getBody().getLink("self"));
-        thrown.expect(org.springframework.web.client.HttpClientErrorException.class);
-        thrown.expectMessage(equalTo("403 Forbidden"));
-        ResponseEntity<BuergerResource> result2 = restTemplate2.getForEntity(url, BuergerResource.class);
-        assertEquals(HttpStatus.OK, result2.getStatusCode());
-        assertNotNull(result2.getBody().getLink("kinder"));
+        System.out.println(String.format("Bürger mit Mandant 'test' wurde von der DB gelesen."));
 
-        System.out.println(String.format("Bürger wurde von der DB gelesen."));
     }
 
     @Test
-    public void deleteBuergerTest() throws JsonProcessingException {
+    public void getBuergerM2Test() throws JsonProcessingException {
+        System.out.println("========== get Bürger Test ==========");
+        url = "http://localhost:" + port + "/buergers/1";
+        try {
+            restTemplate2.getForEntity(url, BuergerResource.class);
+            assertNull(1);
+
+        } catch (HttpClientErrorException e) {
+            assertNotNull(e);
+            System.out.println(String.format("User mit Mandant 'default' könnte nicht der Buerger mit OID : 5 und Mandant 'test' von der DB lesen."));
+        }
+    }
+
+    @Test
+    public void deleteBuergerM1Test() throws JsonProcessingException {
         System.out.println("========== delete Bürger Test ==========");
         url = "http://localhost:" + port + "/buergers/2";
         restTemplate.delete(url);
-        thrown.expect(org.springframework.web.client.HttpClientErrorException.class);
-        thrown.expectMessage(equalTo("404 Not Found"));
-        ResponseEntity<Buerger> response2 = restTemplate.getForEntity(url, Buerger.class);
-        assertEquals(HttpStatus.NOT_FOUND, response2.getStatusCode());
-        System.out.println(String.format("Bürger wurde in der DB gelöscht."));
+        try {
+            restTemplate.getForEntity(url, Buerger.class);
+            assertNull(1);
+
+        } catch (HttpClientErrorException e) {
+            assertNotNull(e);
+            System.out.println(String.format("Bürger mit OID : 5 und Mandant 'test' wurde nicht von der DB gelöscht."));
+        }
     }
 
     @Test
-    public void putBuergerTest() throws JsonProcessingException {
+    public void deleteBuergerM2Test() throws JsonProcessingException {
+        System.out.println("========== delete Bürger Test ==========");
+        try {
+            url = "http://localhost:" + port + "/buergers/5";
+            restTemplate2.delete(url);
+            assertNull(1);
+        } catch (HttpClientErrorException e) {
+            assertNotNull(e);
+            System.out.println(String.format("User mit mandant 'default' könnte nicht den Bürger mit OID : 5 und Mandant 'test'  nicht von der DB löschen."));
+        }
+    }
+
+    @Test
+    public void putBuergerM1Test() throws JsonProcessingException {
         System.out.println("========== put Bürger Test ==========");
         url = "http://localhost:" + port + "/buergers/3";
         BuergerResource response2 = restTemplate.getForEntity(url, BuergerResource.class).getBody();
@@ -229,21 +254,58 @@ public class BuergerTest {
         restTemplate.put(url, buerger);
         BuergerResource response3 = restTemplate.getForEntity(url, BuergerResource.class).getBody();
         assertEquals("peter", response3.getContent().getVorname());
-        
+        System.out.println("Bürger wurde mit neuem Vornamen in der DB gespeichert.");
+
+    }
+
+    @Test
+    public void putBuergerM2Test() throws JsonProcessingException {
+        System.out.println("========== put Bürger Test ==========");
+        url = "http://localhost:" + port + "/buergers/4";
         BuergerResource response4 = restTemplate.getForEntity(url, BuergerResource.class).getBody();
         Buerger buerger4 = response4.getContent();
         buerger4.setVorname("hans");
-        thrown.expect(org.springframework.web.client.HttpClientErrorException.class);
-        thrown.expectMessage(equalTo("403 Forbidden"));
-        restTemplate2.put(url, buerger4);
-        
-        BuergerResource response5 = restTemplate2.getForEntity(url, BuergerResource.class).getBody();
-        assertEquals("peter", response5.getContent().getVorname());
+        try {
+            restTemplate2.put(url, buerger4);
+            assertNull(1);
+
+        } catch (HttpClientErrorException e) {
+            assertNotNull(e);
+            System.out.println(String.format("User mit Mandant 'default' könnte nicht der Bürger mit OID : 4 und  Mandant 'test'  von der DB ändern."));
+        }
+    }
+
+    @Test
+    public void patchBuergerM1Test() throws JsonProcessingException, MalformedURLException {
+        System.out.println("========== patch Bürger M1 Test ==========");
+        url = "http://localhost:" + port + "/buergers/1";
+        Map m = new HashMap();
+        m.put("vorname", "peter");
+        restTemplate.exchange(url, HttpMethod.PATCH, new HttpEntity(m), Buerger.class);
+        ResponseEntity<BuergerResource> response2 = restTemplate.getForEntity(url, BuergerResource.class);
+        assertEquals("peter", response2.getBody().getContent().getVorname());
+
         System.out.println("Bürger wurde mit neuem Vornamen in der DB gespeichert.");
     }
 
     @Test
-    public void getBuergerKinderTest() throws JsonProcessingException {
+    public void patchBuergerM2Test() throws JsonProcessingException, MalformedURLException {
+        System.out.println("========== patch Bürger Test ==========");
+        Map m = new HashMap();
+        m.put("vorname", "peter");
+        try {
+            url = "http://localhost:" + port + "/buergers/4";
+            restTemplate2.exchange(url, HttpMethod.PATCH, new HttpEntity(m), Buerger.class);
+            assertNull(1);
+
+        } catch (HttpClientErrorException e) {
+            assertNotNull(e);
+            System.out.println(String.format("User mit Mandant 'default' könnte nicht das Kind mit oid 1 zu dem Buerger mit Oid 6 hinzufügen."));
+        }
+    }
+
+    @Test
+    public void getBuergerKinderM1Test() throws JsonProcessingException {
         System.out.println("========== get Bürger Kinder Test ==========");
         url = "http://localhost:" + port + "/buergers/2002/kinder";
         ResponseEntity<Resources<BuergerResource>> result = restTemplate.exchange(
@@ -259,18 +321,32 @@ public class BuergerTest {
     }
 
     @Test
-    public void putBuergerKinderTest() {
+    public void getBuergerKinderM2Test() throws JsonProcessingException {
+        System.out.println("========== get Bürger Kinder Test ==========");
+        url = "http://localhost:" + port + "/buergers/2002/kinder";
+        try {
+            restTemplate2.exchange(
+                    url,
+                    HttpMethod.GET,
+                    null,
+                    BuergerResource.LIST
+            );
+            assertNull(1);
+
+        } catch (HttpClientErrorException e) {
+            assertNotNull(e);
+            System.out.println(String.format("User mit Mandant 'default' könnte nicht die Kinder von den Bürger mit OID : 2001 wurden von in der DB lesen."));
+        }
+    }
+
+    @Test
+    public void putBuergerKinderM1Test() {
         System.out.println("========== put Bürger Kinder Test ==========");
         url = "http://localhost:" + port + "/buergers/3/kinder";
         String uri = "http://localhost:" + port + "/buergers/1";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("text", "uri-list"));
         restTemplate.put(url, new HttpEntity<>(uri, headers));
-        //String uri = "http://localhost:" + port + "/buergers/1";
-        //UriTemplate expanded = new UriTemplate("http://localhost:" + port + "/buergers/1");
-
-//        restTemplate.put(url, uri);
-        //restTemplate.exchange(url,HttpMethod.PUT, new HttpEntity(uri), );
         ResponseEntity<Resources<BuergerResource>> result2 = restTemplate.exchange(
                 url,
                 HttpMethod.GET,
@@ -278,25 +354,27 @@ public class BuergerTest {
                 BuergerResource.LIST
         );
 
-        System.out.println(result2.getBody().getContent().size());
         assertEquals(HttpStatus.OK, result2.getStatusCode());
         assertEquals(1, result2.getBody().getContent().size());
-        System.out.println("Bürger wurde mit neuem Vornamen in der DB gespeichert.");
+        System.out.println("Kind mit oid 2 wurde zu dem Buerger mit Oid 1 hinzufügt.");
     }
 
     @Test
-    public void patchBuergerKinderTest() throws JsonProcessingException, MalformedURLException {
-        System.out.println("========== put Bürger Kinder Test ==========");
-        url = "http://localhost:" + port + "/buergers/1";
-        Map m = new HashMap();
-        m.put("vorname", "peter");
-        restTemplate.exchange(url, HttpMethod.PATCH, new HttpEntity(m), Buerger.class);
-        ResponseEntity<BuergerResource> response2 = restTemplate.getForEntity(url, BuergerResource.class);
-        assertEquals("peter", response2.getBody().getContent().getVorname());
+    public void putBuergerKinderM2Test() {
+        System.out.println("========== put Bürger Kinder M2 Test ==========");
+        url = "http://localhost:" + port + "/buergers/3/kinder";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("text", "uri-list"));
+        try {
+            String uri2 = "http://localhost:" + port + "/buergers/6";
+            restTemplate2.put(url, new HttpEntity<>(uri2, headers));
+            assertNull(1);
 
-        System.out.println("Bürger wurde mit neuem Vornamen in der DB gespeichert.");
+        } catch (HttpClientErrorException e) {
+            assertNotNull(e);
+            System.out.println(String.format("User mit Mandant 'default' könnte nicht das Kind mit oid 1 zu dem Buerger mit Oid 6 hinzufügen."));
+        }
     }
-
 }
 
 class BuergerResource extends Resource<Buerger> {
