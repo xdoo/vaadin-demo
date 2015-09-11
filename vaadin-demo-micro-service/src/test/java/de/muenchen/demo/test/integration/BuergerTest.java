@@ -11,7 +11,6 @@ import com.google.common.collect.Lists;
 import de.muenchen.demo.service.Application;
 import de.muenchen.demo.service.domain.Buerger;
 import de.muenchen.demo.service.domain.BuergerRepository;
-import de.muenchen.demo.test.service.DomainConstants;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;
@@ -62,7 +61,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.test.context.support.WithMockUser;
 
 /**
  *
@@ -83,7 +81,6 @@ public class BuergerTest {
     private int port;
     private String url;
     @Autowired
-//@Qualifier("authenticationManager")
     AuthenticationManager authenticationManager;
 
     @Before
@@ -201,6 +198,11 @@ public class BuergerTest {
         assertNotNull(result.getBody().getLink("wohnungen"));
         assertNotNull(result.getBody().getLink("pass"));
         assertNotNull(result.getBody().getLink("self"));
+        thrown.expect(org.springframework.web.client.HttpClientErrorException.class);
+        thrown.expectMessage(equalTo("403 Forbidden"));
+        ResponseEntity<BuergerResource> result2 = restTemplate2.getForEntity(url, BuergerResource.class);
+        assertEquals(HttpStatus.OK, result2.getStatusCode());
+        assertNotNull(result2.getBody().getLink("kinder"));
 
         System.out.println(String.format("Bürger wurde von der DB gelesen."));
     }
@@ -224,7 +226,6 @@ public class BuergerTest {
         BuergerResource response2 = restTemplate.getForEntity(url, BuergerResource.class).getBody();
         Buerger buerger = response2.getContent();
         buerger.setVorname("peter");
-   //     buerger.setMandant("default");
         restTemplate.put(url, buerger);
         BuergerResource response3 = restTemplate.getForEntity(url, BuergerResource.class).getBody();
         assertEquals("peter", response3.getContent().getVorname());
@@ -232,8 +233,10 @@ public class BuergerTest {
         BuergerResource response4 = restTemplate.getForEntity(url, BuergerResource.class).getBody();
         Buerger buerger4 = response4.getContent();
         buerger4.setVorname("hans");
-   //     buerger.setMandant("default");
+        thrown.expect(org.springframework.web.client.HttpClientErrorException.class);
+        thrown.expectMessage(equalTo("403 Forbidden"));
         restTemplate2.put(url, buerger4);
+        
         BuergerResource response5 = restTemplate2.getForEntity(url, BuergerResource.class).getBody();
         assertEquals("peter", response5.getContent().getVorname());
         System.out.println("Bürger wurde mit neuem Vornamen in der DB gespeichert.");
