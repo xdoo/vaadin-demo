@@ -1,7 +1,9 @@
 package de.muenchen.demo.service.domain;
 
+import de.muenchen.demo.service.security.TenantPermissionEvaluator;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.access.prepost.PreFilter;
 
@@ -12,15 +14,15 @@ import org.springframework.security.access.prepost.PreFilter;
 @PreAuthorize("hasRole('PERM_READ_Buerger')")
 public interface BuergerRepository extends CrudRepository<Buerger, Long> {
 
-    public final static String BUERGER_CACHE = "BUERGER_CACHE";
+    String BUERGER_CACHE = "BUERGER_CACHE";
 
     @Override
-    @PreFilter("@tenantPermissionEvaluator.isTenant(authentication,filterObject)")
+    @PostFilter(TenantPermissionEvaluator.IS_TENANT_FILTER)
     Iterable<Buerger> findAll();
 
     @Override
     @PreAuthorize("hasRole('PERM_READ_Buerger')")
-    @PostAuthorize("@tenantPermissionEvaluator.isTenant(authentication,returnObject)")
+    @PostAuthorize(TenantPermissionEvaluator.IS_TENANT_AUTH)
     Buerger findOne(Long aLong);
 
     @Override
@@ -29,22 +31,22 @@ public interface BuergerRepository extends CrudRepository<Buerger, Long> {
 
     @Override
     @PreAuthorize("hasRole('PERM_DELETE_Buerger')")
-    @PostAuthorize("@tenantPermissionEvaluator.isTenant(authentication,returnObject)")
+    @PostAuthorize(TenantPermissionEvaluator.IS_TENANT_AUTH)
     void delete(Long aLong);
 
     @Override
     @PreAuthorize("hasRole('PERM_DELETE_Buerger')")
-    @PreFilter("@tenantPermissionEvaluator.isTenant(authentication,filterObject)")
+    @PreFilter(TenantPermissionEvaluator.IS_TENANT_FILTER)
     void delete(Iterable<? extends Buerger> iterable);
 
     @Override
     @PreAuthorize("hasRole('PERM_DELETE_Buerger')")
-    @PreFilter("@tenantPermissionEvaluator.isTenant(authentication,filterObject)")
+    @PreFilter(TenantPermissionEvaluator.IS_TENANT_FILTER)
     void deleteAll();
 
     @Override
     @PreAuthorize("hasRole('PERM_DELETE_Buerger')")
-    @PostAuthorize("@tenantPermissionEvaluator.isTenant(authentication,returnObject)")
+    @PostAuthorize(TenantPermissionEvaluator.IS_TENANT_AUTH)
     public void delete(Buerger entity);
 
 }
