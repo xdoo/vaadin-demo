@@ -9,6 +9,7 @@
 
     <groupId>de.muenchen</groupId>
     <artifactId>vaadin-demo-api</artifactId>
+    <name>vaadin demo :: api</name>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
@@ -46,5 +47,4 @@
 
 
     </dependencies>
-    <name>vaadin demo :: api</name>
 </project>
