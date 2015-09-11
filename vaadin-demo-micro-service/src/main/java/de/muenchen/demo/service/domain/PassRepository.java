@@ -8,8 +8,6 @@ package de.muenchen.demo.service.domain;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.security.access.prepost.PreAuthorize;
 
-import java.util.List;
-
 /**
  *
  * @author praktikant.tmar
@@ -39,14 +37,5 @@ public interface PassRepository extends CrudRepository<Pass, Long> {
     @Override
     @PreAuthorize("hasRole('PERM_READ_Pass')")
     void deleteAll();
-
-    Pass findFirstByOidAndMandantOid(String oid, String mid);
-
-
-    public List<Pass> findByMandantOid(String mid);
-
-    List<Pass> findByOid(String oid);
-
-    public Pass findFirstByStaatsangehoerigkeitReferenceReferencedOidAndMandantOid(String oid, String mid);
 
 }

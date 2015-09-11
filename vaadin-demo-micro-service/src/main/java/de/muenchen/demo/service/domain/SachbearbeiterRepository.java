@@ -3,8 +3,6 @@ package de.muenchen.demo.service.domain;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.security.access.prepost.PreAuthorize;
 
-import java.util.List;
-
 /**
  *
  * @author claus.straube
@@ -35,11 +33,4 @@ public interface SachbearbeiterRepository extends CrudRepository<Sachbearbeiter,
     void deleteAll();
 
 
-    Sachbearbeiter findFirstByOidAndMandantOid(String oid, String mid);
-    
-    List<Sachbearbeiter> findByMandantOid(String oid);
-
-    List<Sachbearbeiter> findByBuergerOidAndMandantOid(String oid, String mid);
-
-    Sachbearbeiter findByUserOidAndMandantOid(String oid, String mid);
 }

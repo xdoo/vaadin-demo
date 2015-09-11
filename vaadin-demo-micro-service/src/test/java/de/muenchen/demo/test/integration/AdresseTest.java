@@ -5,14 +5,9 @@
  */
 package de.muenchen.demo.test.integration;
 
-import aj.org.objectweb.asm.TypeReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static com.github.tomakehurst.wiremock.client.WireMock.get;
-import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import de.muenchen.demo.service.Application;
 import de.muenchen.demo.service.domain.Adresse;
@@ -22,7 +17,6 @@ import de.muenchen.demo.service.domain.AdresseReferenceRepository;
 import de.muenchen.demo.service.domain.AuthorityPermissionRepository;
 import de.muenchen.demo.service.domain.AuthorityRepository;
 import de.muenchen.demo.service.domain.BuergerRepository;
-import de.muenchen.demo.service.domain.MandantRepository;
 import de.muenchen.demo.service.domain.PassRepository;
 import de.muenchen.demo.service.domain.PermissionRepository;
 import de.muenchen.demo.service.domain.StaatsangehoerigkeitReferenceRepository;
@@ -32,28 +26,11 @@ import de.muenchen.demo.service.domain.WohnungRepository;
 import de.muenchen.vaadin.demo.api.rest.AdresseResource;
 import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
 import de.muenchen.vaadin.demo.api.rest.WohnungResource;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import javax.net.ssl.SSLContext;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;
-import org.apache.http.conn.ssl.AllowAllHostnameVerifier;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.conn.ssl.SSLContexts;
-import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.junit.After;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -62,20 +39,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.hateoas.hal.Jackson2HalModule;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
+
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 /**
  *
@@ -86,20 +70,13 @@ import org.springframework.web.client.RestTemplate;
 @WebIntegrationTest({"server.port=0", "management.port=0"})
 public class AdresseTest {
 
-    private RestTemplate restTemplate;
-    @Value("${local.server.port}")
-    private int port;
     private final Adresse adresse2 = new Adresse();
     private final Adresse adresse = new Adresse();
     private final Adresse adresse3 = new Adresse();
     private final Adresse adresse4 = new Adresse();
     private final Adresse adresse5 = new Adresse();
-
-    @JsonProperty("result")
-    private SearchResultResource<AdresseResource> responseQuery;
     @Rule
     public WireMockRule wireMockRule = new WireMockRule(8089);
-
     @Autowired
     UserRepository usersRepo;
     @Autowired
@@ -124,14 +101,17 @@ public class AdresseTest {
     AdresseExterneRepository externeRepo;
     @Autowired
     AdresseReferenceRepository referenceRepo;
-    @Autowired
-    MandantRepository mandantRepo;
+    ObjectMapper mapper = new ObjectMapper(); // can reuse, share globally
+    private RestTemplate restTemplate;
+    @Value("${local.server.port}")
+    private int port;
+    @JsonProperty("result")
+    private SearchResultResource<AdresseResource> responseQuery;
     private String urlSave;
     private String urlNew;
     private String urlRead1;
     private String urlRead0;
     private AdresseResource response;
-    ObjectMapper mapper = new ObjectMapper(); // can reuse, share globally
 
     @Before
     public void setUp() throws JsonProcessingException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {

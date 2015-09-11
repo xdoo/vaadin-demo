@@ -20,8 +20,8 @@ public class Adresse {
     private String strasse;
 
     private String hausnummer;
-    
-    private Mandant mandant;
+
+    private String mandant;
 
     private String stadt;
 
@@ -67,16 +67,16 @@ public class Adresse {
         return stadt;
     }
 
-    public Mandant getMandant() {
+    public void setStadt(String stadt) {
+        this.stadt = stadt;
+    }
+
+    public String getMandant() {
         return mandant;
     }
 
-    public void setMandant(Mandant mandant) {
+    public void setMandant(String mandant) {
         this.mandant = mandant;
-    }
-
-    public void setStadt(String stadt) {
-        this.stadt = stadt;
     }
 
     public int getPlz() {

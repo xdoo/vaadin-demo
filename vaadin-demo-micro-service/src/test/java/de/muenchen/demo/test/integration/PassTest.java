@@ -9,14 +9,12 @@ package de.muenchen.demo.test.integration;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
-import com.google.common.collect.Lists;
 import de.muenchen.demo.service.Application;
 import de.muenchen.demo.service.domain.Pass;
 import de.muenchen.demo.service.domain.PassRepository;
 import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
 import de.muenchen.demo.test.service.DomainConstants;
 import de.muenchen.vaadin.demo.api.rest.BuergerResource;
-import de.muenchen.vaadin.demo.api.rest.SearchResultResource;
 import de.muenchen.vaadin.demo.api.rest.StaatsangehoerigkeitResource;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -46,14 +44,12 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.stream.Collectors;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -251,7 +247,7 @@ public class PassTest {
 
     }
 
-    @Test
+    /*@Test
     public void copyListPassTest() {
         System.out.println("========== copy Liste Pass Test ==========");
         int x = this.count(DomainConstants.M2);
@@ -266,7 +262,7 @@ public class PassTest {
 //        assertEquals(x + 2, queryResponse.getResult().size());
 //        System.out.println(String.format("Objekte mit der OID '%s' und der OID '%s' konnte erfolgreich in Objekt  kopiert (und in DB gespeichert) werden", DomainConstants.M2_P025, DomainConstants.M2_P026));
 
-    }
+    }*/
 
     @Test
     @WithMockUser(username = DomainConstants.M2_U001_NAME)
@@ -304,7 +300,7 @@ public class PassTest {
 
     }
 
-    @Test
+    /*@Test
     public void queryPassTest() throws JsonProcessingException {
 
         System.out.println("========== query Pass Test Mandant 2 ==========");
@@ -316,12 +312,12 @@ public class PassTest {
         assertNotNull(null, queryResponse.getLink("query"));
         System.out.println(String.format("Suche wurde erfolgreich durchgeführt. Einträge Mandant %s: %s | Ergebnis der Suche: %s", DomainConstants.M2, x, queryResponse.getResult().size()));
 
-    }
+    }*/
 
-    private int count(String mid) {
+    /*private int count(String mid) {
         ArrayList<Pass> all = Lists.newArrayList(repo.findAll());
         return all.stream().filter(b -> b.getMandant().getOid().equals(mid)).collect(Collectors.counting()).intValue();
-    }
+    }*/
 
     @Test
     public void readPassStaatsangehoerigkeitTest() {

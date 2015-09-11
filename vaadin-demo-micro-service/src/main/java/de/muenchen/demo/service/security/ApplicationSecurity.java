@@ -3,8 +3,6 @@ package de.muenchen.demo.service.security;
 import org.springframework.boot.actuate.autoconfigure.ManagementServerProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
@@ -12,7 +10,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  * Created by rene.zarwel on 02.09.15.
  */
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = false)
 @Order(ManagementServerProperties.ACCESS_OVERRIDE_ORDER)
 public class ApplicationSecurity extends
         WebSecurityConfigurerAdapter {
