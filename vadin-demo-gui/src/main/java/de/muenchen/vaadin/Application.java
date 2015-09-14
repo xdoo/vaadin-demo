@@ -34,7 +34,6 @@ import org.springframework.web.filter.HiddenHttpMethodFilter;
 @Configuration
 @ComponentScan
 @EnableAutoConfiguration
-//@EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)
 public class Application {
     
     public static void main(String[] args) throws Exception {
@@ -43,6 +42,7 @@ public class Application {
 
     @Bean
     public FilterRegistrationBean hiddenHttpMethodFilter() {
+
         HiddenHttpMethodFilter hiddenHttpMethodFilter = new HiddenHttpMethodFilter();
         FilterRegistrationBean registrationBean = new FilterRegistrationBean();
         registrationBean.setFilter(hiddenHttpMethodFilter);
