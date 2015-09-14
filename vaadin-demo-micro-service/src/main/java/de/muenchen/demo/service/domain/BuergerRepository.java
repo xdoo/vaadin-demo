@@ -27,10 +27,10 @@ public interface BuergerRepository extends CrudRepository<Buerger, Long> {
     @Cacheable(value = BUERGER_CACHE, key = "#p0")
     @PreAuthorize("hasRole('ROLE_READ_Buerger')")
     @PostAuthorize(TenantService.IS_TENANT_AUTH)
-    Buerger findOne(Long aLong);
+    Buerger findOne(Long id);
 
     @Override
-    @CachePut(value = BUERGER_CACHE, key = "#p0.oid")
+    @CachePut(value = BUERGER_CACHE, key = "#p0.id")
     @PreAuthorize("hasRole('ROLE_WRITE_Buerger') and " + TenantService.IS_TENANT_AUTH)
     Buerger save(Buerger buerger);
 
@@ -38,7 +38,7 @@ public interface BuergerRepository extends CrudRepository<Buerger, Long> {
     @CacheEvict(value = BUERGER_CACHE, key = "#p0")
     @PreAuthorize("hasRole('ROLE_DELETE_Buerger')")
     @PostAuthorize(TenantService.IS_TENANT_AUTH)
-    void delete(Long aLong);
+    void delete(Long id);
 
     @Override
     @CacheEvict(value = BUERGER_CACHE, allEntries = true)
@@ -53,7 +53,7 @@ public interface BuergerRepository extends CrudRepository<Buerger, Long> {
     void deleteAll();
 
     @Override
-    @CacheEvict(value = BUERGER_CACHE, key = "#p0.oid")
+    @CacheEvict(value = BUERGER_CACHE, key = "#p0.id")
     @PreAuthorize("hasRole('ROLE_DELETE_Buerger')")
     @PostAuthorize(TenantService.IS_TENANT_AUTH)
     public void delete(Buerger entity);

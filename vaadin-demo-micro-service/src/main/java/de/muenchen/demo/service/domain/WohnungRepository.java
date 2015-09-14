@@ -25,10 +25,10 @@ public interface WohnungRepository extends CrudRepository<Wohnung, Long> {
 	@Cacheable(value = Wohnung_CACHE, key = "#p0")
 	@PreAuthorize("hasRole('ROLE_READ_Wohnung')")
 	@PostAuthorize(TenantService.IS_TENANT_AUTH)
-	Wohnung findOne(Long aLong);
+	Wohnung findOne(Long id);
 
 	@Override
-	@CachePut(value = Wohnung_CACHE, key = "#p0.oid")
+	@CachePut(value = Wohnung_CACHE, key = "#p0.id")
 	@PreAuthorize("hasRole('ROLE_WRITE_Wohnung')")
 	Wohnung save(Wohnung Wohnung);
 
@@ -51,7 +51,7 @@ public interface WohnungRepository extends CrudRepository<Wohnung, Long> {
 	void deleteAll();
 
 	@Override
-	@CacheEvict(value = Wohnung_CACHE, key = "#p0.oid")
+	@CacheEvict(value = Wohnung_CACHE, key = "#p0.id")
 	@PreAuthorize("hasRole('ROLE_DELETE_Wohnung')")
 	@PostAuthorize(TenantService.IS_TENANT_AUTH)
 	void delete(Wohnung entity);

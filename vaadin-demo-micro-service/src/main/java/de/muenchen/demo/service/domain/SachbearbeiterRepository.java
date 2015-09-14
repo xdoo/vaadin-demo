@@ -25,10 +25,10 @@ public interface SachbearbeiterRepository extends CrudRepository<Sachbearbeiter,
 	@Cacheable(value = Sachbearbeiter_CACHE, key = "#p0")
 	@PreAuthorize("hasRole('ROLE_READ_Sachbearbeiter')")
 	@PostAuthorize(TenantService.IS_TENANT_AUTH)
-	Sachbearbeiter findOne(Long aLong);
+	Sachbearbeiter findOne(Long id);
 
 	@Override
-	@CachePut(value = Sachbearbeiter_CACHE, key = "#p0.oid")
+	@CachePut(value = Sachbearbeiter_CACHE, key = "#p0.id")
 	@PreAuthorize("hasRole('ROLE_WRITE_Sachbearbeiter')")
 	Sachbearbeiter save(Sachbearbeiter Sachbearbeiter);
 
@@ -36,7 +36,7 @@ public interface SachbearbeiterRepository extends CrudRepository<Sachbearbeiter,
 	@CacheEvict(value = Sachbearbeiter_CACHE, key = "#p0")
 	@PreAuthorize("hasRole('ROLE_DELETE_Sachbearbeiter')")
 	@PostAuthorize(TenantService.IS_TENANT_AUTH)
-	void delete(Long aLong);
+	void delete(Long id);
 
 	@Override
 	@CacheEvict(value = Sachbearbeiter_CACHE, allEntries = true)

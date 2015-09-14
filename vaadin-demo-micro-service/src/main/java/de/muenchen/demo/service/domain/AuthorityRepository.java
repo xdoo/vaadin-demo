@@ -23,18 +23,18 @@ public interface AuthorityRepository  extends CrudRepository<Authority, Long> {
     public final static String Authority_CACHE = "AUTHORITYPERMISSION_CACHE";
 
     @Cacheable(value = Authority_CACHE, key = "#p0")
-    public Authority findFirstByOid(String oid);
+    public Authority findFirstByOid(String id);
 
     @Override
-    @CachePut(value = Authority_CACHE, key = "#p0.oid")
+    @CachePut(value = Authority_CACHE, key = "#p0.id")
     public Authority save(Authority entity);
 
 
     @Override
-    @CacheEvict(value = Authority_CACHE, key = "#p0.oid")
+    @CacheEvict(value = Authority_CACHE, key = "#p0.id")
     public void delete(Authority entity);
 
-    public List<Authority> findByOid(String oid);
+    public List<Authority> findByOid(String id);
 
 }
 

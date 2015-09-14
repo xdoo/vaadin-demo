@@ -25,10 +25,10 @@ public interface StaatsangehoerigkeitReferenceRepository extends CrudRepository<
 	@Cacheable(value = StaatsangehoerigkeitReference_CACHE, key = "#p0")
 	@PreAuthorize("hasRole('ROLE_READ_StaatsangehoerigkeitReference')")
 	@PostAuthorize(TenantService.IS_TENANT_AUTH)
-	StaatsangehoerigkeitReference findOne(Long aLong);
+	StaatsangehoerigkeitReference findOne(Long id);
 
 	@Override
-	@CachePut(value = StaatsangehoerigkeitReference_CACHE, key = "#p0.referencedOid")
+	@CachePut(value = StaatsangehoerigkeitReference_CACHE, key = "#p0.getId")
 	@PreAuthorize("hasRole('ROLE_WRITE_StaatsangehoerigkeitReference')")
 	StaatsangehoerigkeitReference save(StaatsangehoerigkeitReference StaatsangehoerigkeitReference);
 
@@ -36,7 +36,7 @@ public interface StaatsangehoerigkeitReferenceRepository extends CrudRepository<
 	@CacheEvict(value = StaatsangehoerigkeitReference_CACHE, key = "#p0")
 	@PreAuthorize("hasRole('ROLE_DELETE_StaatsangehoerigkeitReference')")
 	@PostAuthorize(TenantService.IS_TENANT_AUTH)
-	void delete(Long aLong);
+	void delete(Long id);
 
 	@Override
 	@CacheEvict(value = StaatsangehoerigkeitReference_CACHE, allEntries = true)
@@ -51,7 +51,7 @@ public interface StaatsangehoerigkeitReferenceRepository extends CrudRepository<
 	void deleteAll();
 
 	@Override
-	@CacheEvict(value = StaatsangehoerigkeitReference_CACHE, key = "#p0.referencedOid")
+	@CacheEvict(value = StaatsangehoerigkeitReference_CACHE, key = "#p0.getId")
 	@PreAuthorize("hasRole('ROLE_DELETE_StaatsangehoerigkeitReference')")
 	@PostAuthorize(TenantService.IS_TENANT_AUTH)
 	void delete(StaatsangehoerigkeitReference entity);
