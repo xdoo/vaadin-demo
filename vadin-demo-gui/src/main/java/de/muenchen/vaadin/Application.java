@@ -42,6 +42,7 @@ public class Application {
 
     @Bean
     public FilterRegistrationBean hiddenHttpMethodFilter() {
+
         HiddenHttpMethodFilter hiddenHttpMethodFilter = new HiddenHttpMethodFilter();
         FilterRegistrationBean registrationBean = new FilterRegistrationBean();
         registrationBean.setFilter(hiddenHttpMethodFilter);
