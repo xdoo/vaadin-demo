@@ -5,6 +5,9 @@
  */
 package de.muenchen.demo.service.domain;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
@@ -19,12 +22,15 @@ public interface UserAuthorityRepository extends CrudRepository<UserAuthority, L
 
     public final static String UserAuthority_CACHE = "USERAUTHORITY_CACHE";
 
+    @Cacheable(value = UserAuthority_CACHE, key = "#p0")
     public UserAuthority findFirstById(UserAuthId id);
 
     @Override
+    @CachePut(value = UserAuthority_CACHE, key = "#p0.id")
     public UserAuthority save(UserAuthority entity);
 
     @Override
+    @CacheEvict(value = UserAuthority_CACHE, key = "#p0.id")
     public void delete(UserAuthority entity);
 
     public List<UserAuthority> findByIdAuthorityAuthority(String authority);
