@@ -36,7 +36,7 @@ public class Wohnung extends BaseEntity implements Serializable  {
 
     @NotAudited
     @OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)   
-    @JoinColumn(name = "Adresse_Id", referencedColumnName = "Id")
+    @JoinColumn(name = "Adresse_Oid", referencedColumnName = "OID")
     private AdresseReference adresse;
     
     public Wohnung() {
@@ -75,7 +75,7 @@ public class Wohnung extends BaseEntity implements Serializable  {
 
     @Override
     public String toString() {
-        return String.format("id > %s | oid > %s  | ausrichtung > %s | stock > %s", this.getId(), this.getOid(), this.ausrichtung, this.stock);
+        return String.format("oid > %s  | ausrichtung > %s | stock > %s", this.getOid(), this.ausrichtung, this.stock);
     }
 
 

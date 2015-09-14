@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -33,13 +34,11 @@ import java.util.Set;
 @Table(name = "USERS")
 public class User implements Serializable {
 
+    @Column(name = "OID")
+    @Size(max = 32)
     @Id
-    @GeneratedValue
-    @Column(name = "ID")
-    private Long id;
-
-    @Column(length = 30, unique = true, nullable = false, name = "OID")
     private String oid;
+
     @Column(name = "USER_USERNAME", nullable = false)
     private String username;
 
@@ -98,14 +97,6 @@ public class User implements Serializable {
         this.lastModBy = user.lastModBy;
         this.lastModDate = user.lastModDate;
         this.mandant = user.mandant;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getOid() {

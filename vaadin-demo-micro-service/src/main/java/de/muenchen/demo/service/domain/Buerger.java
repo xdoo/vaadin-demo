@@ -153,7 +153,7 @@ public class Buerger extends BaseEntity {
 
     @Override
     public String toString() {
-        return String.format("id > %s | oid > %s | vorname > %s | nachname > %s | geburtsdatum > %s", this.getId(), this.getOid(), this.vorname, this.nachname, this.geburtsdatum);
+        return String.format("oid > %s | vorname > %s | nachname > %s | geburtsdatum > %s", this.getOid(), this.vorname, this.nachname, this.geburtsdatum);
     }
 
 }

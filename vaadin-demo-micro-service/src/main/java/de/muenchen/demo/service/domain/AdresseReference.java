@@ -24,12 +24,12 @@ public class AdresseReference extends BaseEntity implements Serializable{
     
     @NotAudited
     @OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
-    @JoinColumn(name="ADR_EXTERNE_ID",referencedColumnName="ID")
+    @JoinColumn(name="ADR_EXTERNE_OID",referencedColumnName="OID")
     private AdresseExterne adresseExterne;
     
     @NotAudited
     @OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)   
-    @JoinColumn(name="ADR_INTERNE_ID",referencedColumnName="ID")
+    @JoinColumn(name="ADR_INTERNE_OID",referencedColumnName="OID")
     private AdresseInterne adresseInterne;
 
     public AdresseExterne getAdresseExterne() {

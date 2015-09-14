@@ -8,25 +8,23 @@ package de.muenchen.demo.service.domain;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
+import javax.validation.constraints.Size;
 
 /**
  *
  * @author praktikant.tmar
  */
 @MappedSuperclass
-public abstract class SecurityEntity  implements Serializable {
+public abstract class SecurityEntity implements Serializable {
 
+    @Column(name = "OID")
+    @Size(max = 32)
     @Id
-    @GeneratedValue
-    @Column(name = "ID")
-    private Long id;
-
-    @Column(length = 30, unique = true, nullable = false, name = "OID")
     private String oid;
+
     @Column(length = 255, name = "CREATED_BY")
     private String createdBy;
     @Column(name = "CREATED_DATE")
@@ -37,14 +35,6 @@ public abstract class SecurityEntity  implements Serializable {
     @Column(name = "LAST_MOD_DATE")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date lastModDate;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getOid() {
         return oid;

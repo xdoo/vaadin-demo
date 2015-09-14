@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -15,14 +16,14 @@ import java.io.Serializable;
 @MappedSuperclass
 public abstract class ReferenceEntity implements Serializable {
 
+    @Column(name = "OID")
+    @Size(max = 32)
     @Id
-    @GeneratedValue
-    @Column(name = "ID")
-    private Long id;
+    private String oid;
 
     @Column(length = 100, nullable = false, name = "REF_OID")
     private String referencedOid;
-    
+
     @NotAudited
     @Column(length = 30, unique = true, nullable = true, name = "mandant")
     private String mandant;
@@ -35,12 +36,12 @@ public abstract class ReferenceEntity implements Serializable {
         this.mandant = mandant;
     }
 
-    public Long getId() {
-        return id;
+    public String getOid() {
+        return oid;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setOid(String oid) {
+        this.oid = oid;
     }
 
     public String getReferencedOid() {

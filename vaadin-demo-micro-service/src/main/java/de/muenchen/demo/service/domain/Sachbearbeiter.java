@@ -36,7 +36,7 @@ public class Sachbearbeiter extends BaseEntity {
     String organisationseinheit;
 
     @OneToOne
-    @JoinColumn(name = "User_Id", referencedColumnName = "Id")
+    @JoinColumn(name = "User_Oid", referencedColumnName = "OID")
     private User user;
 
     @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
@@ -105,6 +105,6 @@ public class Sachbearbeiter extends BaseEntity {
 
     @Override
     public String toString() {
-        return String.format("id > %s | oid > %s | fax > %s | funktion > %s| organisationseinheit > %s | telephone > %s", this.getId(), this.getOid(), this.fax, this.funktion, this.organisationseinheit, this.telephone);
+        return String.format("oid > %s | fax > %s | funktion > %s| organisationseinheit > %s | telephone > %s",  this.getOid(), this.fax, this.funktion, this.organisationseinheit, this.telephone);
     }
 }

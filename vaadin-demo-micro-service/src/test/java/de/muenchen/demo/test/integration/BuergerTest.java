@@ -41,6 +41,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -83,6 +84,9 @@ public class BuergerTest {
     private String url;
     @Autowired
     AuthenticationManager authenticationManager;
+    Boolean lock = false;
+//    @AfterClass
+//    public 
 
     @Before
     public void setUp() throws JsonProcessingException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
@@ -122,13 +126,84 @@ public class BuergerTest {
                 halConverter,
                 new StringHttpMessageConverter()
         ));
-
+        
+         if (lock == false) {
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken("hans", "test");
+        Authentication auth = authenticationManager.authenticate(token);
+        SecurityContextHolder.getContext().setAuthentication(auth);
+        Buerger b1M1 = new Buerger();
+        b1M1.setOid("1");
+        b1M1.setNachname("name1");
+        b1M1.setVorname("vorname1");
+        b1M1.setMandant("test");
+        repo.save(b1M1);
+        Buerger b2M1 = new Buerger();
+        b2M1.setOid("2");
+        b2M1.setNachname("name2");
+        b2M1.setVorname("vorname2");
+        b2M1.setMandant("test");
+        repo.save(b2M1);
+        Buerger b3M1 = new Buerger();
+        b3M1.setOid("3");
+        b3M1.setNachname("name3");
+        b3M1.setVorname("vorname3");
+        b3M1.setMandant("test");
+        repo.save(b3M1);
+        Buerger b4M1 = new Buerger();
+        b4M1.setOid("4");
+        b4M1.setNachname("name4");
+        b4M1.setVorname("vorname4");
+        b4M1.setMandant("test");
+        b4M1.getKinder().add(b3M1);
+        repo.save(b4M1);
+        Buerger b5M1 = new Buerger();
+        b5M1.setOid("5");
+        b5M1.setNachname("name5");
+        b5M1.setVorname("vorname5");
+        b5M1.setMandant("test");
+        repo.save(b5M1);
+        UsernamePasswordAuthenticationToken token2 = new UsernamePasswordAuthenticationToken("hans2", "test2");
+        Authentication auth2 = authenticationManager.authenticate(token2);
+        SecurityContextHolder.getContext().setAuthentication(auth2);
+        Buerger b1M2 = new Buerger();
+        b1M2.setOid("6");
+        b1M2.setNachname("name1");
+        b1M2.setVorname("vorname1");
+        b1M2.setMandant("default");
+        repo.save(b1M2);
+        Buerger b2M2 = new Buerger();
+        b2M2.setOid("7");
+        b2M2.setNachname("name2");
+        b2M2.setVorname("vorname2");
+        b2M2.setMandant("default");
+        repo.save(b2M2);
+        Buerger b3M2 = new Buerger();
+        b3M2.setOid("8");
+        b3M2.setNachname("name3");
+        b3M2.setVorname("vorname3");
+        b3M2.setMandant("default");
+        repo.save(b3M2);
+        Buerger b4M2 = new Buerger();
+        b4M2.setOid("9");
+        b4M2.setNachname("name4");
+        b4M2.setVorname("vorname4");
+        b4M2.setMandant("default");
+        repo.save(b4M2);
+        Buerger b5M2 = new Buerger();
+        b5M2.setOid("10");
+        b5M2.setNachname("name5");
+        b5M2.setVorname("vorname5");
+        b5M2.setMandant("default");
+        repo.save(b5M2);
+        lock = true;
+        }
     }
 
     @Test
     public void getBuergersM1Test() throws JsonProcessingException {
         System.out.println("========== get Alle Bürger Mandant 'test' Test ==========");
-        int x = this.count("test", "hans", "test");
+         int x = this.count("test", "hans", "test");
+        //int x = 5;
         url = "http://localhost:" + port + "/buergers";
         ResponseEntity<Resources<BuergerResource>> result = restTemplate.exchange(
                 url,
@@ -169,17 +244,16 @@ public class BuergerTest {
     @Test
     public void postBuergerM1Test() throws JsonProcessingException {
         System.out.println("========== save Bürger M1 Test ==========");
-        String oid = "OIDTEST";
         url = "http://localhost:" + port + "/buergers";
-        ResponseEntity<BuergerResource> response2 = restTemplate.exchange(url, HttpMethod.POST, new HttpEntity<>(this.createBuerger(oid)), BuergerResource.class);
+        ResponseEntity<BuergerResource> response2 = restTemplate.exchange(url, HttpMethod.POST, new HttpEntity<>(this.createBuerger()), BuergerResource.class);
 
         assertEquals(HttpStatus.CREATED, response2.getStatusCode());
         System.out.println(String.format("Bürger wurde in der DB gespeichert."));
     }
 
-    private Buerger createBuerger(String oid) {
+    private Buerger createBuerger() {
         Buerger buerger = new Buerger();
-        buerger.setOid(oid);
+        buerger.setOid("14");
         buerger.setNachname("hans");
         buerger.setVorname("peter");
         return buerger;
@@ -307,7 +381,7 @@ public class BuergerTest {
     @Test
     public void getBuergerKinderM1Test() throws JsonProcessingException {
         System.out.println("========== get Bürger Kinder Test ==========");
-        url = "http://localhost:" + port + "/buergers/2002/kinder";
+        url = "http://localhost:" + port + "/buergers/4/kinder";
         ResponseEntity<Resources<BuergerResource>> result = restTemplate.exchange(
                 url,
                 HttpMethod.GET,
@@ -323,7 +397,7 @@ public class BuergerTest {
     @Test
     public void getBuergerKinderM2Test() throws JsonProcessingException {
         System.out.println("========== get Bürger Kinder Test ==========");
-        url = "http://localhost:" + port + "/buergers/2002/kinder";
+        url = "http://localhost:" + port + "/buergers/2/kinder";
         try {
             restTemplate2.exchange(
                     url,

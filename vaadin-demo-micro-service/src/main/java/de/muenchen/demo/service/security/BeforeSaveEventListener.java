@@ -2,6 +2,7 @@ package de.muenchen.demo.service.security;
 
 import de.muenchen.demo.service.domain.BaseEntity;
 import de.muenchen.demo.service.domain.UserRepository;
+import de.muenchen.demo.service.util.IdService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.core.event.AbstractRepositoryEventListener;
 import org.springframework.security.core.Authentication;
@@ -13,17 +14,14 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class BeforeSaveEventListener extends AbstractRepositoryEventListener<BaseEntity> {
+
     @Autowired
     UserRepository userRepository;
 
     @Override
     protected void onBeforeCreate(BaseEntity entity) {
         entity.setMandant(getCurrentMandant());
-    }
-
-    @Override
-    protected void onBeforeSave(BaseEntity entity) {
-        entity.setMandant(getCurrentMandant());
+        //entity.setOid(IdService.next());
     }
 
     public String getCurrentMandant() {
