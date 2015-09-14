@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -25,15 +26,22 @@ public abstract class SecurityEntity  implements Serializable {
     @Column(name = "ID")
     private Long id;
 
-    @Column(length = 30, unique = true, nullable = false, name = "OID")
+    @Column(unique = true, nullable = false, name = "OID")
+    @Size(max = 30)
     private String oid;
-    @Column(length = 255, name = "CREATED_BY")
+
+    @Column(name = "CREATED_BY")
+    @Size(max = 255)
     private String createdBy;
+
     @Column(name = "CREATED_DATE")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date createdDate;
-    @Column(length = 255, name = "LAST_MOD_BY")
+
+    @Column(name = "LAST_MOD_BY")
+    @Size(max = 255)
     private String lastModBy;
+
     @Column(name = "LAST_MOD_DATE")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date lastModDate;
