@@ -5,6 +5,8 @@ import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -20,11 +22,14 @@ import java.util.Set;
 public class Buerger extends BaseEntity {
 
     @Field
-    @Column(length = 70, nullable = true, name = "BUER_VORNAME")
+    @Column(nullable = true, name = "BUER_VORNAME")
+    @Size(max = 70)
     private String vorname;
 
     @Field
-    @Column(length = 70, nullable = false, name = "BUER_NACHNAME")
+    @Column(name = "BUER_NACHNAME")
+    @NotNull
+    @Size(max = 70)
     private String nachname;
 
 //    @Field(index = Index.YES, store = Store.YES)

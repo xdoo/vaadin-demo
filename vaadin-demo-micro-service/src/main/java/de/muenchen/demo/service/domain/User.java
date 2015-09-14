@@ -18,6 +18,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
@@ -38,9 +40,13 @@ public class User implements Serializable {
     @Column(name = "ID")
     private Long id;
 
-    @Column(length = 30, unique = true, nullable = false, name = "OID")
+    @Column(unique = true, name = "OID")
+    @NotNull
+    @Size(max = 30)
     private String oid;
-    @Column(name = "USER_USERNAME", nullable = false)
+
+    @Column(name = "USER_USERNAME")
+    @NotNull
     private String username;
 
     @Column(name = "USER_PASSWORD")
@@ -62,14 +68,16 @@ public class User implements Serializable {
     @Column(name = "USER_EMAIL")
     private String email;
 
-    @Column(length = 255, name = "CREATED_BY")
+    @Column(name = "CREATED_BY")
+    @Size(max = 255)
     private String createdBy;
 
     @Column(name = "CREATED_DATE")
     @Temporal(javax.persistence.TemporalType.DATE)
     private java.util.Date createdDate;
 
-    @Column(length = 255, name = "LAST_MOD_BY")
+    @Column(name = "LAST_MOD_BY")
+    @Size(max = 255)
     private String lastModBy;
 
     @Column(name = "LAST_MOD_DATE")
