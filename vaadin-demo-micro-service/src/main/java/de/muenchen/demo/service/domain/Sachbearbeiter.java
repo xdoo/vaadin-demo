@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -23,16 +24,20 @@ import javax.persistence.Table;
 @Table(name = "SACHBEARBEITER")
 public class Sachbearbeiter extends BaseEntity {
 
-    @Column(length = 50, name = "SACH_TELEPHONE")
+    @Column(name = "SACH_TELEPHONE")
+    @Size(max = 50)
     String telephone;
 
-    @Column(length = 50, name = "SACH_FUNKTION")
+    @Column(name = "SACH_FUNKTION")
+    @Size(max = 50)
     String funktion;
 
-    @Column(length = 50, name = "SACH_FAX")
+    @Column(name = "SACH_FAX")
+    @Size(max = 50)
     String fax;
 
-    @Column(length = 50, name = "SACH_ORGANISATIONSEINHEIT")
+    @Column(name = "SACH_ORGANISATIONSEINHEIT")
+    @Size(max = 50)
     String organisationseinheit;
 
     @OneToOne

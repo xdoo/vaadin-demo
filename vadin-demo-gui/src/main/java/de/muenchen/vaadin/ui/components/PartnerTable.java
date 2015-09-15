@@ -10,6 +10,7 @@ import de.muenchen.vaadin.demo.api.util.EventType;
 import de.muenchen.vaadin.ui.app.views.events.ComponentEvent;
 import de.muenchen.vaadin.ui.components.buttons.TableActionButton;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
+import org.springframework.hateoas.Resource;
 
 /**
  *
@@ -22,23 +23,24 @@ public class PartnerTable extends GenericTable<Buerger> {
     }
 
     @Override
-    public void accept(reactor.bus.Event<ComponentEvent<Buerger>> eventWrapper) {
+    public void accept(reactor.bus.Event<ComponentEvent<Resource<Buerger>>> eventWrapper) {
         //super.accept(eventWrapper);
 
-        ComponentEvent event = eventWrapper.getData();
+        ComponentEvent<Resource<Buerger>> event = eventWrapper.getData();
 
         if(event.getEventType().equals(EventType.SAVE_AS_PARTNER)) {
-            this.add(event.getEntity());
+            event.getEntity().ifPresent(this::add);
         }
         if(event.getEventType().equals(EventType.SAVE_PARTNER)) {
-            this.add(event.getEntity());
+            event.getEntity().ifPresent(this::add);
         }
         if(event.getEventType().equals(EventType.DELETE)) {
-            this.delete(event.getItemID());
+            event.getEntity().ifPresent(this::delete);
+
         }
 
         if (event.getEventType().equals(EventType.UPDATE_PARTNER)) {
-            this.add(event.getEntity());
+            event.getEntity().ifPresent(this::add);
         }
 
        if(event.getEventType().equals(EventType.QUERY_PARTNER)) {

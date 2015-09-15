@@ -15,6 +15,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
+import de.muenchen.vaadin.demo.api.rest.BuergerResource;
 import de.muenchen.vaadin.demo.api.util.EventType;
 import de.muenchen.vaadin.ui.app.views.events.ComponentEvent;
 import de.muenchen.vaadin.ui.components.buttons.ActionButton;
@@ -44,7 +45,7 @@ public class BuergerUpdateForm extends CustomComponent implements Consumer<Event
      */
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerUpdateForm.class);
 
-    private final BeanFieldGroup<Buerger> binder = new BeanFieldGroup<Buerger>(Buerger.class);
+    private final BeanFieldGroup<BuergerResource> binder = new BeanFieldGroup<>(BuergerResource.class);
     private final BuergerViewController controller;
 
     private final String navigateTo;
@@ -134,7 +135,7 @@ public class BuergerUpdateForm extends CustomComponent implements Consumer<Event
         updateButton.addClickListener(clickEvent1 -> {
             try {
                 binder.commit();
-                Buerger buerger = binder.getItemDataSource().getBean();
+                BuergerResource buerger = binder.getItemDataSource().getBean();
                 controller.postEvent(controller.buildAppEvent(EventType.UPDATE).setEntity(buerger));
                 getNavigator().navigateTo(getNavigateTo());
             } catch (FieldGroup.CommitException e) {

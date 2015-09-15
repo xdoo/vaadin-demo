@@ -19,7 +19,7 @@ public interface CompanyBaseInfoRepository extends CrudRepository<CompanyBaseInf
 	@Override
 	@PreAuthorize("hasRole('ROLE_READ_CompanyBaseInfo')")
 	@PostAuthorize(TenantService.IS_TENANT_AUTH)
-	CompanyBaseInfo findOne(Long aLong);
+	CompanyBaseInfo findOne(Long id);
 
 	@Override
 	@PreAuthorize("hasRole('ROLE_WRITE_CompanyBaseInfo')")

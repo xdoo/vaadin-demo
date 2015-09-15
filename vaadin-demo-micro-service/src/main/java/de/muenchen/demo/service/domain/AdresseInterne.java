@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -14,10 +15,12 @@ import javax.persistence.Table;
 @Table(name = "ADRESSE_INTERNE")
 public class AdresseInterne extends BaseEntity implements Serializable {
     
-    @Column(length = 70, nullable = true, name = "ADR_HAUSNUMMER")
+    @Column(nullable = true, name = "ADR_HAUSNUMMER")
+    @Size(max = 70)
     private String hausnummer;
     
-    @Column(length = 70, nullable = true, name = "ADR_STRASSE")
+    @Column(nullable = true, name = "ADR_STRASSE")
+    @Size(max = 70)
     private String strasseReference;
     
     

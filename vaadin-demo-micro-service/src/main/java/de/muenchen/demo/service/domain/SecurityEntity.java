@@ -25,13 +25,18 @@ public abstract class SecurityEntity implements Serializable {
     @Id
     private String oid;
 
-    @Column(length = 255, name = "CREATED_BY")
+    @Column(name = "CREATED_BY")
+    @Size(max = 255)
     private String createdBy;
+
     @Column(name = "CREATED_DATE")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date createdDate;
-    @Column(length = 255, name = "LAST_MOD_BY")
+
+    @Column(name = "LAST_MOD_BY")
+    @Size(max = 255)
     private String lastModBy;
+
     @Column(name = "LAST_MOD_DATE")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date lastModDate;

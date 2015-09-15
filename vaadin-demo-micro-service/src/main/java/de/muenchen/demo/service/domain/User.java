@@ -18,6 +18,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
@@ -61,14 +63,16 @@ public class User implements Serializable {
     @Column(name = "USER_EMAIL")
     private String email;
 
-    @Column(length = 255, name = "CREATED_BY")
+    @Column(name = "CREATED_BY")
+    @Size(max = 255)
     private String createdBy;
 
     @Column(name = "CREATED_DATE")
     @Temporal(javax.persistence.TemporalType.DATE)
     private java.util.Date createdDate;
 
-    @Column(length = 255, name = "LAST_MOD_BY")
+    @Column(name = "LAST_MOD_BY")
+    @Size(max = 255)
     private String lastModBy;
 
     @Column(name = "LAST_MOD_DATE")

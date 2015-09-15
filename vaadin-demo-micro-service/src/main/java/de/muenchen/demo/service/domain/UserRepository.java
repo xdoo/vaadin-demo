@@ -21,14 +21,14 @@ public interface UserRepository extends CrudRepository<User, Long> {
     public final static String User_CACHE = "USER_CACHE";
 
     @Cacheable(value = User_CACHE, key = "#p0")
-    public User findFirstByOid(String oid);
+    public User findFirstByOid(String id);
 
     @Override
-    @CachePut(value = User_CACHE, key = "#p0.oid")
+    @CachePut(value = User_CACHE, key = "#p0.id")
     public User save(User entity);
 
     @Override
-    @CacheEvict(value = User_CACHE, key = "#p0.oid")
+    @CacheEvict(value = User_CACHE, key = "#p0.id")
     public void delete(User entity);
 
     public User findFirstByUsername(String username);

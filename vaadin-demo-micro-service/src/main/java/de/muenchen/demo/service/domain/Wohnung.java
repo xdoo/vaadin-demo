@@ -13,6 +13,8 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
+
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 
@@ -29,7 +31,8 @@ public class Wohnung extends BaseEntity implements Serializable  {
     @Column(name = "WOHN_STOCK")
     private String stock;
 
-    @Column(length = 20, name = "WOHN_AUSRICHTUNG")
+    @Column(name = "WOHN_AUSRICHTUNG")
+    @Size(max = 20)
     private String ausrichtung;
     
     
