@@ -38,7 +38,7 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
         this.securityService=securityService;
 
         //TODO
-        this.client = new BuergerRestClientImpl(getTemplate(), URI.create("localhost:8080"));
+        this.client = new BuergerRestClientImpl(getTemplate(), URI.create("http://localhost:8080"));
     }
 
     @Override

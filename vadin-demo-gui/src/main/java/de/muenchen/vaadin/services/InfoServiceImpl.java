@@ -57,7 +57,7 @@ public class InfoServiceImpl implements InfoService {
      */
     public void loadLinks() {
 //        TODO > fix in service
-        this.links = client.getServiceInfo().getEntityLinks();
+//        this.links = client.getServiceInfo().getEntityLinks();
 //        this.links = new HashMap<>();
     }
     

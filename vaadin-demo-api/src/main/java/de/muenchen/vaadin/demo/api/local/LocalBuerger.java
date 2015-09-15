@@ -10,7 +10,6 @@ import java.util.Date;
  */
 public class LocalBuerger extends ResourceSupport {
     @FieldIdentifier
-    private int asdf;
     private String vorname;
     @FieldIdentifier
     private String nachname;
