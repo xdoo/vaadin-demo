@@ -15,7 +15,7 @@ import org.springframework.security.access.prepost.PreFilter;
  * @author claus.straube
  */
 @PreAuthorize("hasRole('ROLE_READ_Buerger')")
-public interface BuergerRepository extends CrudRepository<Buerger, String> {
+public interface BuergerRepository extends CrudRepository<Buerger, Long> {
 
     String BUERGER_CACHE = "BUERGER_CACHE";
 
@@ -27,7 +27,7 @@ public interface BuergerRepository extends CrudRepository<Buerger, String> {
     @Cacheable(value = BUERGER_CACHE, key = "#p0")
     @PreAuthorize("hasRole('ROLE_READ_Buerger')")
     @PostAuthorize(TenantService.IS_TENANT_AUTH)
-    Buerger findOne(String aLong);
+    Buerger findOne(Long aLong);
 
     @Override
     @CachePut(value = BUERGER_CACHE, key = "#p0.oid")
@@ -38,7 +38,7 @@ public interface BuergerRepository extends CrudRepository<Buerger, String> {
     @CacheEvict(value = BUERGER_CACHE, key = "#p0")
     @PreAuthorize("hasRole('ROLE_DELETE_Buerger')")
     @PostAuthorize(TenantService.IS_TENANT_AUTH)
-    void delete(String aLong);
+    void delete(Long aLong);
 
     @Override
     @CacheEvict(value = BUERGER_CACHE, allEntries = true)

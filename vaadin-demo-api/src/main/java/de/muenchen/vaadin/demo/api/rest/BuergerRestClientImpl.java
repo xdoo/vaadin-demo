@@ -106,6 +106,7 @@ public class BuergerRestClientImpl implements BuergerRestClient {
     @Override
     public void delete(Link id) {
         URI uri = URI.create(id.getHref());
+        System.out.println(id.getHref() + "asdfASDF");
         restTemplate.exchange(uri, HttpMethod.DELETE, null, Void.class);
     }
 }

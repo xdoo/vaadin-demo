@@ -6,13 +6,13 @@ package de.muenchen.vaadin.demo.api.domain;
  */
 public class BaseEntity {
 
-    private String oid;
+    private Long oid;
 
-    public String getOid() {
+    public Long getOid() {
         return oid;
     }
 
-    public void setOid(String oid) {
+    public void setOid(Long oid) {
         this.oid = oid;
     }
 }

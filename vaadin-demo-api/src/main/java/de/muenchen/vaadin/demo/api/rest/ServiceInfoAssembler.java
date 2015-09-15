@@ -11,7 +11,7 @@ public class ServiceInfoAssembler {
     public static ServiceInfo fromResource(ServiceInfoResource resource) {
         ServiceInfo entity = new ServiceInfo();
         // start mapping
-        entity.setOid(resource.getOid());
+        //entity.setOid(resource.getOid());
         entity.setName(resource.getName());
         entity.setVersion(resource.getVersion());
         entity.setEntityLinks(resource.getEntityLinks());
