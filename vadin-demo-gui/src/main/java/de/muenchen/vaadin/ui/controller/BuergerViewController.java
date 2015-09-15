@@ -277,7 +277,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 
                 .collect(Collectors.toList());
 
-        service.setRelations(entity.getId(), kinder);
+        service.setRelations(link, kinder);
     }
     
     /**
@@ -296,7 +296,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 
                 .collect(Collectors.toList());
 
-        service.setRelations(entity.getId(), kinder);
+        service.setRelations(link, kinder);
     }
 
     /**

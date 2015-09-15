@@ -7,7 +7,9 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.client.Traverson;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
@@ -73,8 +75,10 @@ public class BuergerRestClientImpl implements BuergerRestClient {
     @Override
     public void setRelations(Link link, Collection<Link> links) {
         String relations = links.stream().map(Link::getHref).collect(Collectors.joining("\n"));
-
-        restTemplate.exchange(URI.create(link.getHref()), HttpMethod.PUT, new HttpEntity<Object>(relations), Void.class);
+        System.out.println("ASDFASDF:" + link);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("text", "uri-list"));
+        restTemplate.exchange(URI.create(link.getHref()), HttpMethod.PUT, new HttpEntity<>(relations, headers), Void.class);
     }
 
     @Override

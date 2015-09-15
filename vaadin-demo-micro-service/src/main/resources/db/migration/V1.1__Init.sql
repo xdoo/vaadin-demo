@@ -44,6 +44,8 @@ insert into permissions (oid,perm_permission) values ('3206','ROLE_DELETE_Adress
 insert into permissions (oid,perm_permission) values ('3207','ROLE_DELETE_AdresseInterne');
 insert into permissions (oid,perm_permission) values ('3208','ROLE_DELETE_AdresseExterne');
 
+insert into permissions (oid,perm_permission) values ('9000','ROLE_READ_Principal');
+
 --Authority-Permission
 
 insert into authoritys_permissions (authority_oid, permission_oid) values ('2','1000');
@@ -72,6 +74,8 @@ insert into authoritys_permissions (authority_oid, permission_oid) values ('2','
 insert into authoritys_permissions (authority_oid, permission_oid) values ('2','3206');
 insert into authoritys_permissions (authority_oid, permission_oid) values ('2','3207');
 insert into authoritys_permissions (authority_oid, permission_oid) values ('2','3208');
+
+insert into authoritys_permissions (authority_oid, permission_oid) values ('2','9000');
 
 --User-Authority
 
