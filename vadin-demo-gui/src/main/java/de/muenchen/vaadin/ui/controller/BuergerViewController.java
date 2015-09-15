@@ -33,7 +33,6 @@ import reactor.fn.Consumer;
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -218,10 +217,8 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
      * 
      * @param id Buerger der kopiert werden soll
      */
-    //TODO
     public LocalBuerger copyBuerger(Link id) {
-        service.copy(id);
-        return new LocalBuerger("to fix", "", new Date());
+        return service.copy(id);
     }
     
     /**
@@ -230,9 +227,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
      * @param buerger Buerger der gespeichert werden soll
      */
     public LocalBuerger save(LocalBuerger buerger) {
-        //TODO
-        service.create(buerger);
-        return new LocalBuerger("bitte save im controller fixen", "1", new Date());
+        return service.create(buerger);
     }
     
     /**
@@ -310,8 +305,8 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
      * @param entity Buerger
      * @return Buerger
      */
-    public void updateBuerger(LocalBuerger entity) {
-        service.update(entity);
+    public LocalBuerger updateBuerger(LocalBuerger entity) {
+        return service.update(entity);
     }
     
     /**
