@@ -20,9 +20,9 @@ public interface BuergerRestClient {
 
     void setRelations(Link link, Collection<Link> links);
 
-    void create(LocalBuerger buerger);
+    LocalBuerger create(LocalBuerger buerger);
 
-    void update(LocalBuerger buerger);
+    LocalBuerger update(LocalBuerger buerger);
 
     void delete(Link id);
 

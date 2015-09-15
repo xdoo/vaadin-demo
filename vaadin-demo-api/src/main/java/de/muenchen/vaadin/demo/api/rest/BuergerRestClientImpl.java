@@ -78,26 +78,29 @@ public class BuergerRestClientImpl implements BuergerRestClient {
     }
 
     @Override
-    public void create(LocalBuerger localBuerger) {
+    public LocalBuerger create(LocalBuerger localBuerger) {
         URI uri = URI.create(
                 traverson.follow("buergers")
                         .asLink().getHref()
         );
 
-        //TODO
         Buerger buerger = localBuergerAssembler.toResource(localBuerger).getContent();
 
-        restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(buerger), BuergerResource.class);
+        BuergerResource resource = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(buerger), BuergerResource.class).getBody();
+
+        return localBuergerAssembler.toBean(resource);
     }
 
 
     @Override
-    public void update(LocalBuerger localBuerger) {
+    public LocalBuerger update(LocalBuerger localBuerger) {
         URI uri = URI.create(localBuerger.getId().getHref());
 
         Buerger buerger = localBuergerAssembler.toResource(localBuerger).getContent();
 
-        restTemplate.exchange(uri, HttpMethod.PUT, new HttpEntity<>(buerger), BuergerResource.class);
+        BuergerResource resource = restTemplate.exchange(uri, HttpMethod.PUT, new HttpEntity<>(buerger), BuergerResource.class).getBody();
+
+        return localBuergerAssembler.toBean(resource);
     }
 
     @Override

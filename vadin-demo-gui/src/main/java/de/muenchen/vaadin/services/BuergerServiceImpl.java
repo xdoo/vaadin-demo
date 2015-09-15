@@ -42,13 +42,13 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
     }
 
     @Override
-    public void create(LocalBuerger buerger) {
-        client.create(buerger);
+    public LocalBuerger create(LocalBuerger buerger) {
+        return client.create(buerger);
     }
 
     @Override
-    public void update(LocalBuerger buerger) {
-        client.update(buerger);
+    public LocalBuerger update(LocalBuerger buerger) {
+        return client.update(buerger);
     }
 
     @Override
@@ -57,8 +57,12 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
     }
 
     @Override
-    public void copy(Link link) {
-        findOne(link).ifPresent(localBuerger -> create(localBuerger));
+    public LocalBuerger copy(Link link) {
+        Optional<LocalBuerger> original = findOne(link);
+        if (!original.isPresent())
+            return null;
+
+        return create(original.get());
     }
 
     @Override

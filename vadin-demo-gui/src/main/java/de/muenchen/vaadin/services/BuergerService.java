@@ -13,13 +13,13 @@ import java.util.Optional;
  */
 public interface BuergerService {
 
-    void create(LocalBuerger buerger);
+    LocalBuerger create(LocalBuerger buerger);
 
-    void update(LocalBuerger buerger);
+    LocalBuerger update(LocalBuerger buerger);
 
     void delete(Link link);
 
-    void copy(Link link);
+    LocalBuerger copy(Link link);
 
     List<LocalBuerger> findAll();
 
