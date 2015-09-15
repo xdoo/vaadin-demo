@@ -24,11 +24,11 @@ public interface UserRepository extends CrudRepository<User, Long> {
     public User findFirstByOid(String id);
 
     @Override
-    @CachePut(value = User_CACHE, key = "#p0.id")
+    @CachePut(value = User_CACHE, key = "#p0.oid")
     public User save(User entity);
 
     @Override
-    @CacheEvict(value = User_CACHE, key = "#p0.id")
+    @CacheEvict(value = User_CACHE, key = "#p0.oid")
     public void delete(User entity);
 
     public User findFirstByUsername(String username);

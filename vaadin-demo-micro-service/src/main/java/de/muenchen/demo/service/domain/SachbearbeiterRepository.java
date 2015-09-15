@@ -28,7 +28,7 @@ public interface SachbearbeiterRepository extends CrudRepository<Sachbearbeiter,
 	Sachbearbeiter findOne(Long id);
 
 	@Override
-	@CachePut(value = Sachbearbeiter_CACHE, key = "#p0.id")
+	@CachePut(value = Sachbearbeiter_CACHE, key = "#p0.oid")
 	@PreAuthorize("hasRole('ROLE_WRITE_Sachbearbeiter')")
 	Sachbearbeiter save(Sachbearbeiter Sachbearbeiter);
 

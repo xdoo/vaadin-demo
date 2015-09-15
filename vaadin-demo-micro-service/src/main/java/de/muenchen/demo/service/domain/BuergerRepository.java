@@ -30,7 +30,7 @@ public interface BuergerRepository extends CrudRepository<Buerger, String> {
     Buerger findOne(String aLong);
 
     @Override
-    @CachePut(value = BUERGER_CACHE, key = "#p0.id")
+    @CachePut(value = BUERGER_CACHE, key = "#p0.oid")
     @PreAuthorize("hasRole('ROLE_WRITE_Buerger') and " + TenantService.IS_TENANT_AUTH)
     Buerger save(Buerger buerger);
 
@@ -53,7 +53,7 @@ public interface BuergerRepository extends CrudRepository<Buerger, String> {
     void deleteAll();
 
     @Override
-    @CacheEvict(value = BUERGER_CACHE, key = "#p0.id")
+    @CacheEvict(value = BUERGER_CACHE, key = "#p0.oid")
     @PreAuthorize("hasRole('ROLE_DELETE_Buerger')")
     @PostAuthorize(TenantService.IS_TENANT_AUTH)
     public void delete(Buerger entity);

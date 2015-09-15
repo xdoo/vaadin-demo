@@ -29,7 +29,7 @@ public interface PassRepository extends CrudRepository<Pass, Long> {
 	Pass findOne(Long id);
 
 	@Override
-	@CachePut(value = Pass_CACHE, key = "#p0.id")
+	@CachePut(value = Pass_CACHE, key = "#p0.oid")
 	@PreAuthorize("hasRole('ROLE_WRITE_Pass')")
 	Pass save(Pass Pass);
 
@@ -52,7 +52,7 @@ public interface PassRepository extends CrudRepository<Pass, Long> {
 	void deleteAll();
 
 	@Override
-	@CacheEvict(value = Pass_CACHE, key = "#p0.id")
+	@CacheEvict(value = Pass_CACHE, key = "#p0.oid")
 	@PreAuthorize("hasRole('ROLE_DELETE_Pass')")
 	@PostAuthorize(TenantService.IS_TENANT_AUTH)
 	void delete(Pass entity);

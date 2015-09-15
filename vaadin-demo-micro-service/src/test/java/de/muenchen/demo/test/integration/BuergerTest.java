@@ -355,8 +355,8 @@ public class BuergerTest {
         url = "http://localhost:" + port + "/buergers/1";
         Map m = new HashMap();
         m.put("vorname", "peter");
-        restTemplate.exchange(url, HttpMethod.PATCH, new HttpEntity(m), Buerger.class);
-        ResponseEntity<BuergerResource> response2 = restTemplate.getForEntity(url, BuergerResource.class);
+        ResponseEntity<BuergerResource> response2 = restTemplate.exchange(url, HttpMethod.PATCH, new HttpEntity(m), BuergerResource.class);
+        //restTemplate.getForEntity(url, BuergerResource.class);
         assertEquals("peter", response2.getBody().getContent().getVorname());
 
         System.out.println("Bürger wurde mit neuem Vornamen in der DB gespeichert.");
@@ -369,7 +369,7 @@ public class BuergerTest {
         m.put("vorname", "peter");
         try {
             url = "http://localhost:" + port + "/buergers/4";
-            restTemplate2.exchange(url, HttpMethod.PATCH, new HttpEntity(m), Buerger.class);
+            restTemplate2.exchange(url, HttpMethod.PATCH, new HttpEntity(m), BuergerResource.class);
             assertNull(1);
 
         } catch (HttpClientErrorException e) {

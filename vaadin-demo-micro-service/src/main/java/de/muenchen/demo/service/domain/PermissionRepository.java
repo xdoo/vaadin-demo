@@ -23,16 +23,16 @@ public interface PermissionRepository  extends CrudRepository<Permission, Long> 
     public final static String Permission_CACHE = "PERMISSION_CACHE";
 
     @Cacheable(value = Permission_CACHE, key = "#p0")
-    public Permission findFirstByOid(String id);
+    public Permission findFirstByOid(String oid);
 
     @Override
-    @CachePut(value = Permission_CACHE, key = "#p0.id")
+    @CachePut(value = Permission_CACHE, key = "#p0.oid")
     public Permission save(Permission entity);
 
     @Override
-    @CacheEvict(value = Permission_CACHE, key = "#p0.id")
+    @CacheEvict(value = Permission_CACHE, key = "#p0.oid")
     public void delete(Permission entity);
 
-    public List<Permission> findByOid(String id);
+    public List<Permission> findByOid(String oid);
 }
 
