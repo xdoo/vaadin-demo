@@ -17,6 +17,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
+import de.muenchen.vaadin.demo.api.rest.BuergerResource;
 import de.muenchen.vaadin.demo.api.util.EventType;
 import de.muenchen.vaadin.ui.components.buttons.ActionButton;
 import de.muenchen.vaadin.ui.components.buttons.SimpleAction;
@@ -97,7 +98,7 @@ public class BuergerCreateForm extends CustomComponent {
 
         // Now use a binder to bind the members
         final BeanFieldGroup<Buerger> binder = new BeanFieldGroup<>(Buerger.class);
-        binder.setItemDataSource(controller.createBuerger());
+        binder.setItemDataSource(new Buerger());
         
         // Fokus auf das erste Feld setzen
         TextField firstField = controller.getUtil().createFormTextField(binder,
@@ -159,14 +160,14 @@ public class BuergerCreateForm extends CustomComponent {
                 birthdayfield.validate();
                 
                 binder.commit();
-                controller.postEvent(controller.buildAppEvent(this.type).setEntity(binder.getItemDataSource().getBean()));
+                controller.postEvent(controller.buildAppEvent(this.type).setEntity(new BuergerResource(binder.getItemDataSource().getBean())));
                 getNavigator().navigateTo(getNavigateTo());
 
                 //reset
                 firstField.removeValidator(val);
                 secField.removeValidator(val);
                 birthdayfield.removeValidator(val);
-                binder.setItemDataSource(controller.createBuerger());
+                binder.setItemDataSource(new Buerger());
             } catch (CommitException | Validator.InvalidValueException e) {
                 GenericErrorNotification error = new GenericErrorNotification(controller.resolveRelative(getNotificationPath(NotificationType.failure, SimpleAction.save, Type.label)),
                         controller.resolveRelative(getNotificationPath(NotificationType.failure,SimpleAction.save,Type.text)));
