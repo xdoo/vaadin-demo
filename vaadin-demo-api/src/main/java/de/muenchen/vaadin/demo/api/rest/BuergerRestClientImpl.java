@@ -37,6 +37,10 @@ public class BuergerRestClientImpl implements BuergerRestClient {
     }
 
     @Override
+    /**
+     * My awesome comment 1.0
+     * @author p.mueller
+     */
     public List<LocalBuerger> findAll() {
         return traverson
                 .follow(BUERGERS)
