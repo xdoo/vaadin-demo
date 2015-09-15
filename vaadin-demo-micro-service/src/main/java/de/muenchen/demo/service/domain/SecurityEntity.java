@@ -21,9 +21,8 @@ import javax.validation.constraints.Size;
 public abstract class SecurityEntity implements Serializable {
 
     @Column(name = "OID")
-    @Size(max = 32)
     @Id
-    private String oid;
+    private Long oid;
 
     @Column(name = "CREATED_BY")
     @Size(max = 255)
@@ -41,11 +40,11 @@ public abstract class SecurityEntity implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date lastModDate;
 
-    public String getOid() {
+    public Long getOid() {
         return oid;
     }
 
-    public void setOid(String oid) {
+    public void setOid(Long oid) {
         this.oid = oid;
     }
 

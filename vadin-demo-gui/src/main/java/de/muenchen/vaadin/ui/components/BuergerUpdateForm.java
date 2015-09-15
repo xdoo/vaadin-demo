@@ -29,10 +29,8 @@ import reactor.fn.Consumer;
 
 import java.util.Optional;
 
-import static de.muenchen.vaadin.ui.util.I18nPaths.Component;
-import static de.muenchen.vaadin.ui.util.I18nPaths.Type;
-import static de.muenchen.vaadin.ui.util.I18nPaths.getEntityFieldPath;
-import static de.muenchen.vaadin.ui.util.I18nPaths.getFormPath;
+import static de.muenchen.vaadin.ui.util.I18nPaths.*;
+import static de.muenchen.vaadin.ui.util.I18nPaths.getNotificationPath;
 
 /**
  *
@@ -88,19 +86,8 @@ public class BuergerUpdateForm extends CustomComponent implements Consumer<Event
         Label headline = new Label(controller.resolveRelative(getFormPath(SimpleAction.create, Component.headline, Type.label)));
         headline.addStyleName(ValoTheme.LABEL_H3);
         layout.addComponent(headline);
-
-        String abc = "";
-        for(char c = 'a';c <= 'z'; c++)
-            abc+=c;
-        for(char c = 'A';c <= 'Z'; c++)
-            abc+=c;
-        for(int i =192;i<=382;i++)
-            abc+=Character.toString((char)i);
-        for(int i =7682;i<=7807;i++)
-            abc+=Character.toString((char)i);
-        abc+="-";
     
-        Validator val0 = ValidatorFactory.getValidator("Regexp",controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.validationstring)),"true","["+abc+"]*");
+        Validator val0 = ValidatorFactory.getValidator(ValidatorFactory.Type.DIAKRITISCH,controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.validationstring)),"true");
         
         TextField firstField = controller.getUtil().createFormTextField(binder,
                 controller.resolveRelative(getEntityFieldPath(Buerger.VORNAME, Type.label)),
@@ -123,8 +110,8 @@ public class BuergerUpdateForm extends CustomComponent implements Consumer<Event
                 controller.resolveRelative(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.label)),
                 Buerger.GEBURTSDATUM, BuergerViewController.I18N_BASE_PATH);
         String errorMsg = controller.resolveRelative(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.validation));
-        birthdayfield.addValidator(ValidatorFactory.getValidator("DateRange",errorMsg, "start",null));
-        birthdayfield.addValidator(ValidatorFactory.getValidator("Null",controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.validation)),"false"));
+        birthdayfield.addValidator(ValidatorFactory.getValidator(ValidatorFactory.Type.DATE_RANGE,errorMsg, "start",null));
+        birthdayfield.addValidator(ValidatorFactory.getValidator(ValidatorFactory.Type.NULL,controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.validation)),"false"));
         layout.addComponent(birthdayfield); 
         
         
@@ -139,8 +126,9 @@ public class BuergerUpdateForm extends CustomComponent implements Consumer<Event
                 controller.postEvent(controller.buildAppEvent(EventType.UPDATE).setEntity(buerger));
                 getNavigator().navigateTo(getNavigateTo());
             } catch (FieldGroup.CommitException e) {
-                GenericErrorNotification errorNotification = new GenericErrorNotification("Fehler", "Beim erstellen der Person ist ein Fehler aufgetreten. Bitte füllen Sie alle Felder mit gültigen Werten aus.");
-                errorNotification.show(Page.getCurrent());
+                GenericErrorNotification error = new GenericErrorNotification(controller.resolveRelative(getNotificationPath(NotificationType.failure, SimpleAction.save, Type.label)),
+                        controller.resolveRelative(getNotificationPath(NotificationType.failure,SimpleAction.save,Type.text)));
+                error.show(Page.getCurrent());
             }
         });
         buttonLayout.addComponent(updateButton);

@@ -82,7 +82,7 @@ public class BuergerCreateForm extends CustomComponent {
      * Erzeugt das eigentliche Formular.
      */
     private void createForm() {
-        Validator val = ValidatorFactory.getValidator("Null",controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.validation)),"false");
+        Validator val = ValidatorFactory.getValidator(ValidatorFactory.Type.NULL,controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.validation)),"false");
         FormLayout layout = new FormLayout();
         HorizontalLayout buttonLayout = new HorizontalLayout();
         buttonLayout.setSpacing(true);
@@ -117,9 +117,9 @@ public class BuergerCreateForm extends CustomComponent {
             abc+=Character.toString((char)i);
         abc+="-";
     
-        Validator val0 = ValidatorFactory.getValidator("Regexp",controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.validationstring)),"true","["+abc+"]*");
+        Validator val0 = ValidatorFactory.getValidator(ValidatorFactory.Type.REGEXP,controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.validationstring)),"true","["+abc+"]*");
         
-        Validator val1 = ValidatorFactory.getValidator("StringLength", controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.validation)), 1 + "", "" + Integer.MAX_VALUE, "true");
+        Validator val1 = ValidatorFactory.getValidator(ValidatorFactory.Type.STRING_LENGTH, controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.validation)), 1 + "", "" + Integer.MAX_VALUE, "true");
         firstField.addValidator(val0);
         firstField.addValidator(val1);
         layout.addComponent(firstField);
@@ -136,7 +136,7 @@ public class BuergerCreateForm extends CustomComponent {
                 controller.resolveRelative(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.label)),
                 Buerger.GEBURTSDATUM, BuergerViewController.I18N_BASE_PATH);
         String errorMsg = controller.resolveRelative(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.validation));
-        Validator val3 = ValidatorFactory.getValidator("DateRange",errorMsg, "start",null);
+        Validator val3 = ValidatorFactory.getValidator(ValidatorFactory.Type.DATE_RANGE,errorMsg, "start",null);
         birthdayfield.addValidator(val3);
         layout.addComponent(birthdayfield);    
 
@@ -171,7 +171,7 @@ public class BuergerCreateForm extends CustomComponent {
             } catch (CommitException | Validator.InvalidValueException e) {
                 GenericErrorNotification error = new GenericErrorNotification(controller.resolveRelative(getNotificationPath(NotificationType.failure, SimpleAction.save, Type.label)),
                         controller.resolveRelative(getNotificationPath(NotificationType.failure,SimpleAction.save,Type.text)));
-                        error.show(Page.getCurrent());
+                error.show(Page.getCurrent());
             }
         });
         createButton.addStyleName(ValoTheme.BUTTON_FRIENDLY);
