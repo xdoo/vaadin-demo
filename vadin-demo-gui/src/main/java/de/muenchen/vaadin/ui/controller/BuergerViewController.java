@@ -232,24 +232,24 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
     
     /**
      * Speichert ein Kind zu einem {@link Buerger} Objekt in der Datenbank.
-     * 
-     * @param entity Zu speicherndes Kind
+     *
+     * @param kind Zu speicherndes Kind
      * @return Buerger
      */
-    public void saveBuergerKind(LocalBuerger entity) {
-        save(entity);
-        addBuergerKind(entity);
+    public void saveBuergerKind(LocalBuerger kind) {
+        LocalBuerger child = save(kind);
+        addBuergerKind(child);
     }
 
     /**
-     * Speichert ein Kind zu einem {@link Buerger} Objekt in der Datenbank.
+     * Speichert einen partner zu einem {@link Buerger} Objekt in der Datenbank.
      *
-     * @param entity Zu speicherndes Kind
+     * @param entity Zu speichernder partner
      * @return Buerger
      */
     public void saveBuergerPartner(LocalBuerger entity) {
-        save(entity);
-        addBuergerPartner(entity);
+        LocalBuerger newBuerger = save(entity);
+        addBuergerPartner(newBuerger);
     }
 
     /**
@@ -263,17 +263,17 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 
     /**
      * Speichert eine Kindbeziehung zu einem {@link Buerger} Objekt in der Datenbank.
-     * 
-     * @param entity Kind
+     *
+     * @param kindEntity Kind
      * @return Buerger
      */
-    public void addBuergerKind(LocalBuerger entity) {
-        Link link = entity.getLink(BuergerResource.Rel.kinder.name());
+    public void addBuergerKind(LocalBuerger kindEntity) {
+        Link link = current.getBean().getLink(BuergerResource.Rel.kinder.name());
         List<Link> kinder = Stream.concat(
                 service.findAll(link)
                         .stream()
                         .map(LocalBuerger::getId),
-                Stream.of(entity.getId()))
+                Stream.of(kindEntity.getId()))
 
                 .collect(Collectors.toList());
 
@@ -283,20 +283,20 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
     /**
      * Speichert eine Partnerschaftesbeziehung zu einem {@link Buerger} Objekt in der Datenbank.
      *
-     * @param entity Kind
+     * @param partnerEntity Partner
      * @return Buerger
      */
-    public void addBuergerPartner(LocalBuerger entity) {
-        Link link = entity.getLink(BuergerResource.Rel.kinder.name());
-        List<Link> kinder = Stream.concat(
+    public void addBuergerPartner(LocalBuerger partnerEntity) {
+        Link link = current.getBean().getLink(BuergerResource.Rel.partner.name());
+        List<Link> partner = Stream.concat(
                 service.findAll(link)
                         .stream()
                         .map(LocalBuerger::getId),
-                Stream.of(entity.getId()))
+                Stream.of(partnerEntity.getId()))
 
                 .collect(Collectors.toList());
 
-        service.setRelations(link, kinder);
+        service.setRelations(link, partner);
     }
 
     /**
@@ -331,7 +331,6 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
     }
 
     public List<LocalBuerger> queryPartner(LocalBuerger entity) {
-
         return service.findAll(entity.getLink(BuergerResource.Rel.partner.name())).stream().collect(Collectors.toList());
     }
 

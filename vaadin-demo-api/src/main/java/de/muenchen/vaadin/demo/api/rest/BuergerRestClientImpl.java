@@ -75,7 +75,6 @@ public class BuergerRestClientImpl implements BuergerRestClient {
     @Override
     public void setRelations(Link link, Collection<Link> links) {
         String relations = links.stream().map(Link::getHref).collect(Collectors.joining("\n"));
-        System.out.println("ASDFASDF:" + link);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("text", "uri-list"));
         restTemplate.exchange(URI.create(link.getHref()), HttpMethod.PUT, new HttpEntity<>(relations, headers), Void.class);
