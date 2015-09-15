@@ -87,7 +87,7 @@ public class BuergerRestClientImpl implements BuergerRestClient {
         //TODO
         Buerger buerger = localBuergerAssembler.toResource(localBuerger).getContent();
 
-        restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(buerger), Void.class);
+        restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(buerger), BuergerResource.class);
     }
 
 
@@ -97,7 +97,7 @@ public class BuergerRestClientImpl implements BuergerRestClient {
 
         Buerger buerger = localBuergerAssembler.toResource(localBuerger).getContent();
 
-        restTemplate.exchange(uri, HttpMethod.PUT, new HttpEntity<>(buerger), Void.class);
+        restTemplate.exchange(uri, HttpMethod.PUT, new HttpEntity<>(buerger), BuergerResource.class);
     }
 
     @Override
