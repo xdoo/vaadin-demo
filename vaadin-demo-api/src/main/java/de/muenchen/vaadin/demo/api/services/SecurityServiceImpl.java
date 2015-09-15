@@ -86,10 +86,10 @@ public class SecurityServiceImpl implements SecurityService, Serializable {
             this.restTemplate = template;
             this.principal = p.get();
             LOG.info("Successfully logged in!");
-            return Boolean.TRUE;
         } else {
-            return Boolean.FALSE;
+            this.login = Boolean.FALSE;
         }
+        return login;
     }
     
     @Override
