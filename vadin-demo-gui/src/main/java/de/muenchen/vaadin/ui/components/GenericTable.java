@@ -4,7 +4,6 @@ import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Table;
-import de.muenchen.vaadin.demo.api.domain.BaseEntity;
 import de.muenchen.vaadin.demo.api.util.EventType;
 import de.muenchen.vaadin.demo.api.util.FieldIdentifier;
 import de.muenchen.vaadin.ui.app.views.events.ComponentEvent;
@@ -29,7 +28,7 @@ import static de.muenchen.vaadin.ui.util.I18nPaths.getEntityFieldPath;
  * @param <T>  the type of Entity
  * @author rene.zarwel
  */
-public class GenericTable<T extends BaseEntity> extends CustomComponent implements Consumer<Event<ComponentEvent<T>>> {
+public class GenericTable<T> extends CustomComponent implements Consumer<Event<ComponentEvent<T>>> {
 
     /**
      * The constant LOG.
