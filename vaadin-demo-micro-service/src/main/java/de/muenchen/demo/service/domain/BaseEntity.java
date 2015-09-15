@@ -6,12 +6,9 @@ import org.hibernate.envers.NotAudited;
 import org.hibernate.search.annotations.IndexedEmbedded;
 
 import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
-import javax.validation.constraints.Size;
 
 /**
  *
@@ -22,9 +19,8 @@ import javax.validation.constraints.Size;
 public abstract class BaseEntity implements Cloneable, Serializable {
 
     @Column(name = "OID")
-    @Size(max = 32)
     @Id
-    private String oid;
+    private Long oid;
 
     @IndexedEmbedded(depth = 1, prefix = "mandant")
 
@@ -41,11 +37,11 @@ public abstract class BaseEntity implements Cloneable, Serializable {
         this.mandant = mandant;
     }
 
-    public String getOid() {
+    public Long getOid() {
         return oid;
     }
 
-    public void setOid(String oid) {
+    public void setOid(Long oid) {
         this.oid = oid;
     }
 

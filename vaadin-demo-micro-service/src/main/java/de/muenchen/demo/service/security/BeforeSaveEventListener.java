@@ -21,7 +21,7 @@ public class BeforeSaveEventListener extends AbstractRepositoryEventListener<Bas
     @Override
     protected void onBeforeCreate(BaseEntity entity) {
         entity.setMandant(getCurrentMandant());
-        //entity.setOid(IdService.next());
+        entity.setOid(IdService.next());
     }
 
     public String getCurrentMandant() {

@@ -5,6 +5,7 @@ package de.muenchen.demo.test.integration;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
@@ -25,44 +26,44 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
-import org.springframework.hateoas.hal.Jackson2HalModule;
-import org.springframework.http.client.ClientHttpRequestFactory;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.web.client.RestTemplate;
-
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
-import org.junit.AfterClass;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
+import org.springframework.hateoas.hal.Jackson2HalModule;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
+
+import java.net.MalformedURLException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 /**
  *
@@ -77,14 +78,14 @@ public class BuergerTest {
     public ExpectedException thrown = ExpectedException.none();
     @Autowired
     BuergerRepository repo;
+    @Autowired
+    AuthenticationManager authenticationManager;
+    Boolean lock = false;
     private RestTemplate restTemplate;
     private RestTemplate restTemplate2;
     @Value("${local.server.port}")
     private int port;
     private String url;
-    @Autowired
-    AuthenticationManager authenticationManager;
-    Boolean lock = false;
 //    @AfterClass
 //    public 
 
@@ -132,32 +133,27 @@ public class BuergerTest {
         Authentication auth = authenticationManager.authenticate(token);
         SecurityContextHolder.getContext().setAuthentication(auth);
         Buerger b1M1 = new Buerger();
-        b1M1.setOid("1");
         b1M1.setNachname("name1");
         b1M1.setVorname("vorname1");
         b1M1.setMandant("test");
         repo.save(b1M1);
         Buerger b2M1 = new Buerger();
-        b2M1.setOid("2");
         b2M1.setNachname("name2");
         b2M1.setVorname("vorname2");
         b2M1.setMandant("test");
         repo.save(b2M1);
         Buerger b3M1 = new Buerger();
-        b3M1.setOid("3");
         b3M1.setNachname("name3");
         b3M1.setVorname("vorname3");
         b3M1.setMandant("test");
         repo.save(b3M1);
         Buerger b4M1 = new Buerger();
-        b4M1.setOid("4");
         b4M1.setNachname("name4");
         b4M1.setVorname("vorname4");
         b4M1.setMandant("test");
         b4M1.getKinder().add(b3M1);
         repo.save(b4M1);
         Buerger b5M1 = new Buerger();
-        b5M1.setOid("5");
         b5M1.setNachname("name5");
         b5M1.setVorname("vorname5");
         b5M1.setMandant("test");
@@ -166,31 +162,26 @@ public class BuergerTest {
         Authentication auth2 = authenticationManager.authenticate(token2);
         SecurityContextHolder.getContext().setAuthentication(auth2);
         Buerger b1M2 = new Buerger();
-        b1M2.setOid("6");
         b1M2.setNachname("name1");
         b1M2.setVorname("vorname1");
         b1M2.setMandant("default");
         repo.save(b1M2);
         Buerger b2M2 = new Buerger();
-        b2M2.setOid("7");
         b2M2.setNachname("name2");
         b2M2.setVorname("vorname2");
         b2M2.setMandant("default");
         repo.save(b2M2);
         Buerger b3M2 = new Buerger();
-        b3M2.setOid("8");
         b3M2.setNachname("name3");
         b3M2.setVorname("vorname3");
         b3M2.setMandant("default");
         repo.save(b3M2);
         Buerger b4M2 = new Buerger();
-        b4M2.setOid("9");
         b4M2.setNachname("name4");
         b4M2.setVorname("vorname4");
         b4M2.setMandant("default");
         repo.save(b4M2);
         Buerger b5M2 = new Buerger();
-        b5M2.setOid("10");
         b5M2.setNachname("name5");
         b5M2.setVorname("vorname5");
         b5M2.setMandant("default");
@@ -253,7 +244,6 @@ public class BuergerTest {
 
     private Buerger createBuerger() {
         Buerger buerger = new Buerger();
-        buerger.setOid("14");
         buerger.setNachname("hans");
         buerger.setVorname("peter");
         return buerger;
