@@ -1,31 +1,59 @@
 package de.muenchen.demo.service.domain;
 
-import java.util.List;
+import de.muenchen.demo.service.security.TenantService;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PostFilter;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.access.prepost.PreFilter;
 
-/**
- *
- * @author claus.straube
- */
-public interface StaatsangehoerigkeitReferenceRepository extends PagingAndSortingRepository<StaatsangehoerigkeitReference, Long>{
-        
-public final static String StaatsangehoerigkeitReference_CACHE = "STAATSANGEHOERIGKEITREFERENCE_CACHE";
+@RepositoryRestResource(exported = true)
+@PreAuthorize("hasRole('ROLE_READ_StaatsangehoerigkeitReference')")
+public interface StaatsangehoerigkeitReferenceRepository extends CrudRepository<StaatsangehoerigkeitReference, Long> {
 
-    @Cacheable(value = StaatsangehoerigkeitReference_CACHE, key = "#p0 + #p1")
-        public StaatsangehoerigkeitReference findFirstByReferencedOidAndMandantOid(String referencedOid, String mid);
+	public final static String StaatsangehoerigkeitReference_CACHE = "STAATSANGEHOERIGKEITREFERENCE_CACHE";
 
+	@Override
+	@PostFilter(TenantService.IS_TENANT_FILTER)
+	Iterable<StaatsangehoerigkeitReference> findAll();
 
-    @Override
-    @CachePut(value = StaatsangehoerigkeitReference_CACHE, key = "#p0.referencedOid + #p0.mandant.oid")
-    public StaatsangehoerigkeitReference save(StaatsangehoerigkeitReference entity);
+	@Override
+	@Cacheable(value = StaatsangehoerigkeitReference_CACHE, key = "#p0")
+	@PreAuthorize("hasRole('ROLE_READ_StaatsangehoerigkeitReference')")
+	@PostAuthorize(TenantService.IS_TENANT_AUTH)
+	StaatsangehoerigkeitReference findOne(Long id);
 
-    @Override
-    @CacheEvict(value = StaatsangehoerigkeitReference_CACHE, key = "#p0.referencedOid + #p0.mandant.oid")
-    public void delete(StaatsangehoerigkeitReference entity);
-    public List<StaatsangehoerigkeitReference> findByMandantOid(String mid);
-   // public List<StaatsangehoerigkeitReference> findByReferencedOidAndMandantOid(String referencedOid, String mid);
-    
+	@Override
+	@CachePut(value = StaatsangehoerigkeitReference_CACHE, key = "#p0.getOid")
+	@PreAuthorize("hasRole('ROLE_WRITE_StaatsangehoerigkeitReference')")
+	StaatsangehoerigkeitReference save(StaatsangehoerigkeitReference StaatsangehoerigkeitReference);
+
+	@Override
+	@CacheEvict(value = StaatsangehoerigkeitReference_CACHE, key = "#p0")
+	@PreAuthorize("hasRole('ROLE_DELETE_StaatsangehoerigkeitReference')")
+	@PostAuthorize(TenantService.IS_TENANT_AUTH)
+	void delete(Long id);
+
+	@Override
+	@CacheEvict(value = StaatsangehoerigkeitReference_CACHE, allEntries = true)
+	@PreAuthorize("hasRole('ROLE_DELETE_StaatsangehoerigkeitReference')")
+	@PreFilter(TenantService.IS_TENANT_FILTER)
+	void delete(Iterable<? extends StaatsangehoerigkeitReference> iterable);
+
+	@Override
+	@CacheEvict(value = StaatsangehoerigkeitReference_CACHE, allEntries = true)
+	@PreAuthorize("hasRole('ROLE_DELETE_StaatsangehoerigkeitReference')")
+	@PreFilter(TenantService.IS_TENANT_FILTER)
+	void deleteAll();
+
+	@Override
+	@CacheEvict(value = StaatsangehoerigkeitReference_CACHE, key = "#p0.getOid")
+	@PreAuthorize("hasRole('ROLE_DELETE_StaatsangehoerigkeitReference')")
+	@PostAuthorize(TenantService.IS_TENANT_AUTH)
+	void delete(StaatsangehoerigkeitReference entity);
+	
 }

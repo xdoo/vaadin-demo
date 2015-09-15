@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package de.muenchen.demo.service.rest;
+package de.muenchen.demo.service.security;
 
 import de.muenchen.vaadin.demo.apilib.domain.Principal;
 import de.muenchen.vaadin.demo.apilib.rest.SecurityRestClient;
@@ -13,26 +8,27 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Optional;
+
 /**
- *
  * @author praktikant.tmar
  */
 @Controller
 @ExposesResourceFor(SecurityRestClientController.class)
 @RequestMapping("/principal")
 public class SecurityRestClientController {
-
     private static final Logger LOG = LoggerFactory.getLogger(SecurityRestClientController.class);
+
     @Autowired
     SecurityRestClient service;
 
-    @Secured({"PERM_getPrincipal"})
+    @PreAuthorize("hasRole('ROLE_READ_Principal')")
     @RequestMapping(method = {RequestMethod.GET})
     public ResponseEntity getPrincipal() {
         if (LOG.isDebugEnabled()) {
@@ -44,7 +40,5 @@ public class SecurityRestClientController {
             return ResponseEntity.ok(resource.get());
         }
         return null;
-
     }
-
 }

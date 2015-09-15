@@ -12,6 +12,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -21,20 +22,24 @@ import java.util.Set;
 @Table(name = "SACHBEARBEITER")
 public class Sachbearbeiter extends BaseEntity {
 
-    @Column(length = 50, name = "SACH_TELEPHONE")
+    @Column(name = "SACH_TELEPHONE")
+    @Size(max = 50)
     String telephone;
 
-    @Column(length = 50, name = "SACH_FUNKTION")
+    @Column(name = "SACH_FUNKTION")
+    @Size(max = 50)
     String funktion;
 
-    @Column(length = 50, name = "SACH_FAX")
+    @Column(name = "SACH_FAX")
+    @Size(max = 50)
     String fax;
 
-    @Column(length = 50, name = "SACH_ORGANISATIONSEINHEIT")
+    @Column(name = "SACH_ORGANISATIONSEINHEIT")
+    @Size(max = 50)
     String organisationseinheit;
 
     @OneToOne
-    @JoinColumn(name = "User_Id", referencedColumnName = "Id")
+    @JoinColumn(name = "User_Oid", referencedColumnName = "OID")
     private User user;
 
     @JsonBackReference
@@ -104,6 +109,6 @@ public class Sachbearbeiter extends BaseEntity {
 
     @Override
     public String toString() {
-        return String.format("id > %s | oid > %s | fax > %s | funktion > %s| organisationseinheit > %s | telephone > %s", this.getId(), this.getOid(), this.fax, this.funktion, this.organisationseinheit, this.telephone);
+        return String.format("oid > %s | fax > %s | funktion > %s| organisationseinheit > %s | telephone > %s",  this.getOid(), this.fax, this.funktion, this.organisationseinheit, this.telephone);
     }
 }

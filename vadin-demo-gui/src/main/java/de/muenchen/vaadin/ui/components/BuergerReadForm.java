@@ -10,6 +10,7 @@ import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.events.ComponentEvent;
 import de.muenchen.eventbus.types.EventType;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
+import de.muenchen.vaadin.demo.api.local.LocalBuerger;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
@@ -35,8 +36,8 @@ public class BuergerReadForm extends CustomComponent implements Consumer<Event<C
      * Logger
      */
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerReadForm.class);
-    
-    final BeanFieldGroup<Buerger> binder = new BeanFieldGroup<Buerger>(Buerger.class);
+
+    final BeanFieldGroup<LocalBuerger> binder = new BeanFieldGroup<LocalBuerger>(LocalBuerger.class);
     final BuergerViewController controller;
     
     private final String navigateToUpdate;

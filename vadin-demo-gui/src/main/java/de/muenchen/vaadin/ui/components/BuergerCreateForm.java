@@ -22,6 +22,7 @@ import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.GenericErrorNotification;
 import de.muenchen.vaadin.guilib.util.ValidatorFactory;
+import de.muenchen.vaadin.demo.api.local.LocalBuerger;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Component;
@@ -82,7 +83,7 @@ public class BuergerCreateForm extends CustomComponent {
      * Erzeugt das eigentliche Formular.
      */
     private void createForm() {
-        Validator val = ValidatorFactory.getValidator("Null",controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.validation)),"false");
+        Validator val = ValidatorFactory.getValidator(ValidatorFactory.Type.NULL,controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.validation)),"false");
         FormLayout layout = new FormLayout();
         HorizontalLayout buttonLayout = new HorizontalLayout();
         buttonLayout.setSpacing(true);
@@ -97,8 +98,8 @@ public class BuergerCreateForm extends CustomComponent {
         layout.addComponent(headline);
 
         // Now use a binder to bind the members
-        final BeanFieldGroup<Buerger> binder = new BeanFieldGroup<>(Buerger.class);
-        binder.setItemDataSource(controller.createBuerger());
+        final BeanFieldGroup<LocalBuerger> binder = new BeanFieldGroup<>(LocalBuerger.class);
+        binder.setItemDataSource(new LocalBuerger());
         
         // Fokus auf das erste Feld setzen
         TextField firstField = controller.getUtil().createFormTextField(binder,
@@ -117,9 +118,9 @@ public class BuergerCreateForm extends CustomComponent {
             abc+=Character.toString((char)i);
         abc+="-";
     
-        Validator val0 = ValidatorFactory.getValidator("Regexp",controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.validationstring)),"true","["+abc+"]*");
+        Validator val0 = ValidatorFactory.getValidator(ValidatorFactory.Type.REGEXP,controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.validationstring)),"true","["+abc+"]*");
         
-        Validator val1 = ValidatorFactory.getValidator("StringLength", controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.validation)), 1 + "", "" + Integer.MAX_VALUE, "true");
+        Validator val1 = ValidatorFactory.getValidator(ValidatorFactory.Type.STRING_LENGTH, controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.validation)), 1 + "", "" + Integer.MAX_VALUE, "true");
         firstField.addValidator(val0);
         firstField.addValidator(val1);
         layout.addComponent(firstField);
@@ -136,7 +137,7 @@ public class BuergerCreateForm extends CustomComponent {
                 controller.resolveRelative(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.label)),
                 Buerger.GEBURTSDATUM, BuergerViewController.I18N_BASE_PATH);
         String errorMsg = controller.resolveRelative(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.validation));
-        Validator val3 = ValidatorFactory.getValidator("DateRange",errorMsg, "start",null);
+        Validator val3 = ValidatorFactory.getValidator(ValidatorFactory.Type.DATE_RANGE,errorMsg, "start",null);
         birthdayfield.addValidator(val3);
         layout.addComponent(birthdayfield);    
 
@@ -167,11 +168,11 @@ public class BuergerCreateForm extends CustomComponent {
                 firstField.removeValidator(val);
                 secField.removeValidator(val);
                 birthdayfield.removeValidator(val);
-                binder.setItemDataSource(controller.createBuerger());
+                binder.setItemDataSource(new LocalBuerger());
             } catch (CommitException | Validator.InvalidValueException e) {
                 GenericErrorNotification error = new GenericErrorNotification(controller.resolveRelative(getNotificationPath(NotificationType.failure, SimpleAction.save, Type.label)),
                         controller.resolveRelative(getNotificationPath(NotificationType.failure,SimpleAction.save,Type.text)));
-                        error.show(Page.getCurrent());
+                error.show(Page.getCurrent());
             }
         });
         createButton.addStyleName(ValoTheme.BUTTON_FRIENDLY);

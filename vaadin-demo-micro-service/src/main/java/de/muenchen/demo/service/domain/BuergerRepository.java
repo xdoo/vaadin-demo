@@ -1,38 +1,61 @@
 package de.muenchen.demo.service.domain;
 
-import java.util.List;
+import de.muenchen.demo.service.security.TenantService;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PostFilter;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.access.prepost.PreFilter;
 
 /**
  *
  * @author claus.straube
  */
-public interface BuergerRepository extends BaseRepository<Buerger> {
-    
-    public final static String BUERGER_CACHE = "BUERGER_CACHE";
-    
-    @Cacheable(value = BUERGER_CACHE, key = "#p0 + #p1")
-    public Buerger findFirstByOidAndMandantOid(String oid, String mid);
+@PreAuthorize("hasRole('ROLE_READ_Buerger')")
+public interface BuergerRepository extends CrudRepository<Buerger, Long> {
+
+    String BUERGER_CACHE = "BUERGER_CACHE";
 
     @Override
-    @CachePut(value = BUERGER_CACHE, key = "#p0.oid + #p0.mandant.oid")
-    public Buerger save(Buerger entity);
+    @PostFilter(TenantService.IS_TENANT_FILTER)
+    Iterable<Buerger> findAll();
 
     @Override
-    @CacheEvict(value = BUERGER_CACHE, key = "#p0.oid + #p0.mandant.oid")
+    @Cacheable(value = BUERGER_CACHE, key = "#p0")
+    @PreAuthorize("hasRole('ROLE_READ_Buerger')")
+    @PostAuthorize(TenantService.IS_TENANT_AUTH)
+    Buerger findOne(Long aLong);
+
+    @Override
+    @CachePut(value = BUERGER_CACHE, key = "#p0.oid")
+    @PreAuthorize("hasRole('ROLE_WRITE_Buerger') and " + TenantService.IS_TENANT_AUTH)
+    Buerger save(Buerger buerger);
+
+    @Override
+    @CacheEvict(value = BUERGER_CACHE, key = "#p0")
+    @PreAuthorize("hasRole('ROLE_DELETE_Buerger')")
+    @PostAuthorize(TenantService.IS_TENANT_AUTH)
+    void delete(Long aLong);
+
+    @Override
+    @CacheEvict(value = BUERGER_CACHE, allEntries = true)
+    @PreAuthorize("hasRole('ROLE_DELETE_Buerger')")
+    @PreFilter(TenantService.IS_TENANT_FILTER)
+    void delete(Iterable<? extends Buerger> iterable);
+
+    @Override
+    @CacheEvict(value = BUERGER_CACHE, allEntries = true)
+    @PreAuthorize("hasRole('ROLE_DELETE_Buerger')")
+    @PreFilter(TenantService.IS_TENANT_FILTER)
+    void deleteAll();
+
+    @Override
+    @CacheEvict(value = BUERGER_CACHE, key = "#p0.oid")
+    @PreAuthorize("hasRole('ROLE_DELETE_Buerger')")
+    @PostAuthorize(TenantService.IS_TENANT_AUTH)
     public void delete(Buerger entity);
-  
-    // Unterläuft das Mandanten Konzept. Sollte deshalb erst einmal nicht verwendet werden.
-//    List<Buerger> findByOid(String oid);
-
-    List<Buerger> findByKinderOidAndMandantOid(String oid, String mid);
-
-    List<Buerger> findByWohnungenOidAndMandantOid(String oid, String mid);
-
-    List<Buerger> findByPassOidAndMandantOid(String oid, String mid);
-
-    List<Buerger> findByStaatsangehoerigkeitReferencesReferencedOidAndMandantOid(String oid, String mid);
 
 }

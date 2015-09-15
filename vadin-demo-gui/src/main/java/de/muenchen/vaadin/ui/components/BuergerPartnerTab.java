@@ -7,6 +7,7 @@ import com.vaadin.ui.VerticalLayout;
 import de.muenchen.eventbus.events.ComponentEvent;
 import de.muenchen.eventbus.types.EventType;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
+import de.muenchen.vaadin.demo.api.local.LocalBuerger;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
@@ -68,10 +69,10 @@ public class BuergerPartnerTab extends CustomComponent implements Consumer<Event
         ComponentEvent event = eventWrapper.getData();
 
         if (event.getEventType().equals(EventType.SELECT2READ)) {
-            LOG.debug("seleted buerger to show partner.");
-            Optional<BeanItem<Buerger>> opt = event.getItem();
+            LOG.debug("seleted buerger to show childs.");
+            Optional<BeanItem<LocalBuerger>> opt = event.getItem();
             if (opt.isPresent()) {
-                Buerger entity = opt.get().getBean();
+                LocalBuerger entity = opt.get().getBean();
                 this.controller.postEvent(controller.buildAppEvent(EventType.QUERY_CHILD).setEntity(entity));
             } else {
                 LOG.warn("No item present.");

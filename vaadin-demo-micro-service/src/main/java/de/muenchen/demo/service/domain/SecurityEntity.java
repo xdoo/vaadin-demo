@@ -8,49 +8,43 @@ package de.muenchen.demo.service.domain;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
+import javax.validation.constraints.Size;
 
 /**
  *
  * @author praktikant.tmar
  */
 @MappedSuperclass
-public abstract class SecurityEntity  implements Serializable {
+public abstract class SecurityEntity implements Serializable {
 
+    @Column(name = "OID")
     @Id
-    @GeneratedValue
-    @Column(name = "ID")
-    private Long id;
+    private Long oid;
 
-    @Column(length = 30, unique = true, nullable = false, name = "OID")
-    private String oid;
-    @Column(length = 255, name = "CREATED_BY")
+    @Column(name = "CREATED_BY")
+    @Size(max = 255)
     private String createdBy;
+
     @Column(name = "CREATED_DATE")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date createdDate;
-    @Column(length = 255, name = "LAST_MOD_BY")
+
+    @Column(name = "LAST_MOD_BY")
+    @Size(max = 255)
     private String lastModBy;
+
     @Column(name = "LAST_MOD_DATE")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date lastModDate;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getOid() {
+    public Long getOid() {
         return oid;
     }
 
-    public void setOid(String oid) {
+    public void setOid(Long oid) {
         this.oid = oid;
     }
 

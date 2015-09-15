@@ -1,32 +1,59 @@
 package de.muenchen.demo.service.domain;
 
-import java.util.List;
+import de.muenchen.demo.service.security.TenantService;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PostFilter;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.access.prepost.PreFilter;
 
-/**
- *
- * @author claus.straube
- */
+@RepositoryRestResource(exported = true)
+@PreAuthorize("hasRole('ROLE_READ_Wohnung')")
 public interface WohnungRepository extends CrudRepository<Wohnung, Long> {
 
-    public final static String Wohnung_CACHE = "WOHNUNG_CACHE";
+	public final static String Wohnung_CACHE = "WOHNUNG_CACHE";
 
-    @Cacheable(value = Wohnung_CACHE, key = "#p0 + #p1")
-    public Wohnung findFirstByOidAndMandantOid(String oid, String mid);
+	@Override
+	@PostFilter(TenantService.IS_TENANT_FILTER)
+	Iterable<Wohnung> findAll();
 
-    @Override
-    @CachePut(value = Wohnung_CACHE, key = "#p0.oid + #p0.mandant.oid")
-    public Wohnung save(Wohnung entity);
+	@Override
+	@Cacheable(value = Wohnung_CACHE, key = "#p0")
+	@PreAuthorize("hasRole('ROLE_READ_Wohnung')")
+	@PostAuthorize(TenantService.IS_TENANT_AUTH)
+	Wohnung findOne(Long id);
 
-    @Override
-    @CacheEvict(value = Wohnung_CACHE, key = "#p0.oid + #p0.mandant.oid")
-    public void delete(Wohnung entity);
+	@Override
+	@CachePut(value = Wohnung_CACHE, key = "#p0.oid")
+	@PreAuthorize("hasRole('ROLE_WRITE_Wohnung')")
+	Wohnung save(Wohnung Wohnung);
 
-    public Wohnung findByAdresseOidAndMandantOid(String oid, String mid);
+	@Override
+	@CacheEvict(value = Wohnung_CACHE, key = "#p0")
+	@PreAuthorize("hasRole('ROLE_DELETE_Wohnung')")
+	@PostAuthorize(TenantService.IS_TENANT_AUTH)
+	void delete(Long aLong);
 
-    List<Wohnung> findByMandantOid(String oid);
+	@Override
+	@CacheEvict(value = Wohnung_CACHE, allEntries = true)
+	@PreAuthorize("hasRole('ROLE_DELETE_Wohnung')")
+	@PreFilter(TenantService.IS_TENANT_FILTER)
+	void delete(Iterable<? extends Wohnung> iterable);
 
+	@Override
+	@CacheEvict(value = Wohnung_CACHE, allEntries = true)
+	@PreAuthorize("hasRole('ROLE_DELETE_Wohnung')")
+	@PreFilter(TenantService.IS_TENANT_FILTER)
+	void deleteAll();
+
+	@Override
+	@CacheEvict(value = Wohnung_CACHE, key = "#p0.oid")
+	@PreAuthorize("hasRole('ROLE_DELETE_Wohnung')")
+	@PostAuthorize(TenantService.IS_TENANT_AUTH)
+	void delete(Wohnung entity);
+	
 }

@@ -5,22 +5,23 @@
  */
 package de.muenchen.demo.service.domain;
 
-import java.util.List;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 /**
  *
  * @author praktikant.tmar
  */
+@RepositoryRestResource(exported = false)
 public interface UserRepository extends CrudRepository<User, Long> {
 
     public final static String User_CACHE = "USER_CACHE";
 
     @Cacheable(value = User_CACHE, key = "#p0")
-    public User findFirstByOid(String oid);
+    public User findFirstByOid(String id);
 
     @Override
     @CachePut(value = User_CACHE, key = "#p0.oid")

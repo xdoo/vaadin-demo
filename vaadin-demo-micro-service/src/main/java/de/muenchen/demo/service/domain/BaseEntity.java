@@ -1,9 +1,12 @@
 package de.muenchen.demo.service.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.search.annotations.IndexedEmbedded;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 
 /**
@@ -13,46 +16,35 @@ import java.io.Serializable;
 @MappedSuperclass
 public abstract class BaseEntity implements Cloneable, Serializable {
 
-	@Id
-	@GeneratedValue
-	@Column(name = "ID")
-	private Long id;
+    @Column(name = "OID")
+    @Id
+    private Long oid;
 
-	@Column(length = 30, unique = true, nullable = false, name = "OID")
-	private String oid;
+    @IndexedEmbedded(depth = 1, prefix = "mandant")
 
-	@IndexedEmbedded(depth = 1, prefix = "mandant")
+    @NotAudited
+    @Column(length = 30, unique = true, nullable = true, name = "mandant")
+    @JsonIgnore
+    private String mandant;
 
-	@OneToOne
-	@NotAudited
-	private Mandant mandant;
+    public String getMandant() {
+        return mandant;
+    }
 
-	public Mandant getMandant() {
-		return mandant;
-	}
+    public void setMandant(String mandant) {
+        this.mandant = mandant;
+    }
 
-	public void setMandant(Mandant mandant) {
-		this.mandant = mandant;
-	}
+    public Long getOid() {
+        return oid;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public void setOid(Long oid) {
+        this.oid = oid;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public void setOid(String oid) {
-		this.oid = oid;
-	}
-
-	public String getOid() {
-		return oid;
-	}
-
-	@Override
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
-	}
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }

@@ -5,23 +5,18 @@
  */
 package de.muenchen.vaadin.demo.api.rest;
 
-import de.muenchen.vaadin.demo.apilib.rest.BaseResource;
-
 /**
  *
  * @author praktikant.tmar
  */
-public class AdresseResource extends BaseResource {
+public class AdresseResource extends BaseResource{
     
-    public static final String SUCHE = "suche";
 
     private String strasseReference;
     private String strasse;
-    private Integer hausnummer;
-    private String buchstabe;
+    private String hausnummer;
     private String stadt;
     private int plz;
-   
 
     public String getStrasseReference() {
         return strasseReference;
@@ -40,20 +35,14 @@ public class AdresseResource extends BaseResource {
         this.strasse = strasse;
     }
 
-    public Integer getHausnummer() {
+    
+
+    public String getHausnummer() {
         return hausnummer;
     }
 
-    public void setHausnummer(Integer hausnummer) {
+    public void setHausnummer(String hausnummer) {
         this.hausnummer = hausnummer;
-    }
-
-    public String getBuchstabe() {
-        return buchstabe;
-    }
-
-    public void setBuchstabe(String buchstabe) {
-        this.buchstabe = buchstabe;
     }
 
     public String getStadt() {

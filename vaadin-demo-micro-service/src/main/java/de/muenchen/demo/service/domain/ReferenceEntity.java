@@ -1,12 +1,15 @@
 package de.muenchen.demo.service.domain;
 
-import java.io.Serializable;
+import org.hibernate.envers.NotAudited;
+
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.OneToOne;
-import org.hibernate.envers.NotAudited;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.io.Serializable;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -15,32 +18,35 @@ import org.hibernate.envers.NotAudited;
 @MappedSuperclass
 public abstract class ReferenceEntity implements Serializable {
 
+    @Column(name = "OID")
+    @Size(max = 32)
     @Id
-    @GeneratedValue
-    @Column(name = "ID")
-    private Long id;
+    private Long oid;
 
-    @Column(length = 100, nullable = false, name = "REF_OID")
+    @Column(name = "REF_OID")
+    @NotNull
+    @Size(max = 100)
     private String referencedOid;
-    
-    @NotAudited
-    @OneToOne
-    private Mandant mandant;
 
-    public Mandant getMandant() {
+    @NotAudited
+    @Column(unique = true, nullable = true, name = "mandant")
+    @Size(max = 30)
+    private String mandant;
+
+    public String getMandant() {
         return mandant;
     }
 
-    public void setMandant(Mandant mandant) {
+    public void setMandant(String mandant) {
         this.mandant = mandant;
     }
 
-    public Long getId() {
-        return id;
+    public Long getOid() {
+        return oid;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setOid(Long oid) {
+        this.oid = oid;
     }
 
     public String getReferencedOid() {

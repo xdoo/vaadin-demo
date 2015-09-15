@@ -1,6 +1,5 @@
 package de.muenchen.vaadin.demo.apilib.services;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.vaadin.demo.apilib.domain.Principal;
 import de.muenchen.vaadin.demo.apilib.rest.SecurityRestClient;
@@ -12,17 +11,18 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.hal.Jackson2HalModule;
-import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.Serializable;
-import java.util.Collections;
+import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.Optional;
 
 /**
@@ -54,15 +54,7 @@ public class SecurityServiceImpl implements SecurityService, Serializable {
 
     @Override
     public boolean login(String username, String password) {
-        
-        // HATEOAS
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        mapper.registerModule(new Jackson2HalModule());
 
-        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-        converter.setSupportedMediaTypes(MediaType.parseMediaTypes("application/hal+json"));
-        converter.setObjectMapper(mapper);
         
         // Security 
         BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
@@ -74,17 +66,30 @@ public class SecurityServiceImpl implements SecurityService, Serializable {
                 .build();
         ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
         RestTemplate template = new RestTemplate(requestFactory);
-        template.setMessageConverters(Collections.<HttpMessageConverter<?>> singletonList(converter));
+
+        MappingJackson2HttpMessageConverter halConverter = new MappingJackson2HttpMessageConverter();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new Jackson2HalModule());
+
+        halConverter.setObjectMapper(objectMapper);
+        halConverter.setSupportedMediaTypes(Arrays.asList(MediaTypes.HAL_JSON));
+
+        template.setMessageConverters(Arrays.asList(
+                new StringHttpMessageConverter(Charset.forName("UTF-8")),
+                halConverter
+        ));
+
         Optional<Principal> p = this.restClient.getPrincipal(template);
         if(p.isPresent()) {
             this.login = Boolean.TRUE;
             this.restTemplate = template;
             this.principal = p.get();
             LOG.info("Successfully logged in!");
-            return Boolean.TRUE;
         } else {
-            return Boolean.FALSE;
+            this.login = Boolean.FALSE;
         }
+        return login;
     }
     
     @Override

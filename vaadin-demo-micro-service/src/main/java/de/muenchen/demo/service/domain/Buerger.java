@@ -7,6 +7,8 @@ import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,11 +24,14 @@ import java.util.Set;
 public class Buerger extends BaseEntity {
 
     @Field
-    @Column(length = 70, nullable = true, name = "BUER_VORNAME")
+    @Column(nullable = true, name = "BUER_VORNAME")
+    @Size(max = 70)
     private String vorname;
 
     @Field
-    @Column(length = 70, nullable = false, name = "BUER_NACHNAME")
+    @Column(name = "BUER_NACHNAME")
+    @NotNull
+    @Size(max = 70)
     private String nachname;
 
 //    @Field(index = Index.YES, store = Store.YES)
@@ -148,17 +153,19 @@ public class Buerger extends BaseEntity {
         this.pass = Pass;
     }
 
-    public Set<Buerger> getBeziehungsPartner() {
-        return this.partner;
+    public Set<Buerger> getPartner() {
+        return partner;
     }
 
-    public void setBeziehungsPartner(Buerger partner) {
-        this.partner.add(partner);
+    public void setPartner(Set<Buerger> partner) {
+        this.partner = partner;
     }
+
+
 
     @Override
     public String toString() {
-        return String.format("id > %s | oid > %s | vorname > %s | nachname > %s | geburtsdatum > %s", this.getId(), this.getOid(), this.vorname, this.nachname, this.geburtsdatum);
+        return String.format("oid > %s | vorname > %s | nachname > %s | geburtsdatum > %s", this.getOid(), this.vorname, this.nachname, this.geburtsdatum);
     }
 
 }
