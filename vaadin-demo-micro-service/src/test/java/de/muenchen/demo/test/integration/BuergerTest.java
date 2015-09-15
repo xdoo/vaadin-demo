@@ -5,7 +5,6 @@ package de.muenchen.demo.test.integration;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
@@ -127,74 +126,83 @@ public class BuergerTest {
                 halConverter,
                 new StringHttpMessageConverter()
         ));
-        
-         if (lock == false) {
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken("hans", "test");
-        Authentication auth = authenticationManager.authenticate(token);
-        SecurityContextHolder.getContext().setAuthentication(auth);
-        Buerger b1M1 = new Buerger();
-        b1M1.setNachname("name1");
-        b1M1.setVorname("vorname1");
-        b1M1.setMandant("test");
-        repo.save(b1M1);
-        Buerger b2M1 = new Buerger();
-        b2M1.setNachname("name2");
-        b2M1.setVorname("vorname2");
-        b2M1.setMandant("test");
-        repo.save(b2M1);
-        Buerger b3M1 = new Buerger();
-        b3M1.setNachname("name3");
-        b3M1.setVorname("vorname3");
-        b3M1.setMandant("test");
-        repo.save(b3M1);
-        Buerger b4M1 = new Buerger();
-        b4M1.setNachname("name4");
-        b4M1.setVorname("vorname4");
-        b4M1.setMandant("test");
-        b4M1.getKinder().add(b3M1);
-        repo.save(b4M1);
-        Buerger b5M1 = new Buerger();
-        b5M1.setNachname("name5");
-        b5M1.setVorname("vorname5");
-        b5M1.setMandant("test");
-        repo.save(b5M1);
-        UsernamePasswordAuthenticationToken token2 = new UsernamePasswordAuthenticationToken("hans2", "test2");
-        Authentication auth2 = authenticationManager.authenticate(token2);
-        SecurityContextHolder.getContext().setAuthentication(auth2);
-        Buerger b1M2 = new Buerger();
-        b1M2.setNachname("name1");
-        b1M2.setVorname("vorname1");
-        b1M2.setMandant("default");
-        repo.save(b1M2);
-        Buerger b2M2 = new Buerger();
-        b2M2.setNachname("name2");
-        b2M2.setVorname("vorname2");
-        b2M2.setMandant("default");
-        repo.save(b2M2);
-        Buerger b3M2 = new Buerger();
-        b3M2.setNachname("name3");
-        b3M2.setVorname("vorname3");
-        b3M2.setMandant("default");
-        repo.save(b3M2);
-        Buerger b4M2 = new Buerger();
-        b4M2.setNachname("name4");
-        b4M2.setVorname("vorname4");
-        b4M2.setMandant("default");
-        repo.save(b4M2);
-        Buerger b5M2 = new Buerger();
-        b5M2.setNachname("name5");
-        b5M2.setVorname("vorname5");
-        b5M2.setMandant("default");
-        repo.save(b5M2);
-        lock = true;
+
+        if (lock == false) {
+            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken("hans", "test");
+            Authentication auth = authenticationManager.authenticate(token);
+            SecurityContextHolder.getContext().setAuthentication(auth);
+            Buerger b1M1 = new Buerger();
+            b1M1.setNachname("name1");
+            b1M1.setVorname("vorname1");
+            b1M1.setMandant("test");
+            b1M1.setOid(1L);
+            repo.save(b1M1);
+            Buerger b2M1 = new Buerger();
+            b2M1.setNachname("name2");
+            b2M1.setVorname("vorname2");
+            b2M1.setMandant("test");
+            b2M1.setOid(2L);
+            repo.save(b2M1);
+            Buerger b3M1 = new Buerger();
+            b3M1.setNachname("name3");
+            b3M1.setVorname("vorname3");
+            b3M1.setMandant("test");
+            b3M1.setOid(3L);
+            repo.save(b3M1);
+            Buerger b4M1 = new Buerger();
+            b4M1.setNachname("name4");
+            b4M1.setVorname("vorname4");
+            b4M1.setMandant("test");
+            b4M1.setOid(4L);
+            b4M1.getKinder().add(b3M1);
+            repo.save(b4M1);
+            Buerger b5M1 = new Buerger();
+            b5M1.setNachname("name5");
+            b5M1.setVorname("vorname5");
+            b5M1.setMandant("test");
+            b5M1.setOid(5L);
+            repo.save(b5M1);
+            UsernamePasswordAuthenticationToken token2 = new UsernamePasswordAuthenticationToken("hans2", "test2");
+            Authentication auth2 = authenticationManager.authenticate(token2);
+            SecurityContextHolder.getContext().setAuthentication(auth2);
+            Buerger b1M2 = new Buerger();
+            b1M2.setNachname("name1");
+            b1M2.setVorname("vorname1");
+            b1M2.setMandant("default");
+            b1M2.setOid(6L);
+            repo.save(b1M2);
+            Buerger b2M2 = new Buerger();
+            b2M2.setNachname("name2");
+            b2M2.setVorname("vorname2");
+            b2M2.setMandant("default");
+            b2M2.setOid(7L);
+            repo.save(b2M2);
+            Buerger b3M2 = new Buerger();
+            b3M2.setNachname("name3");
+            b3M2.setVorname("vorname3");
+            b3M2.setMandant("default");
+            b3M2.setOid(8L);
+            repo.save(b3M2);
+            Buerger b4M2 = new Buerger();
+            b4M2.setNachname("name4");
+            b4M2.setVorname("vorname4");
+            b4M2.setMandant("default");
+            b4M2.setOid(9L);
+            repo.save(b4M2);
+            Buerger b5M2 = new Buerger();
+            b5M2.setNachname("name5");
+            b5M2.setVorname("vorname5");
+            b5M2.setMandant("default");
+            b5M2.setOid(10L);
+            repo.save(b5M2);
+            lock = true;
         }
     }
 
     @Test
     public void getBuergersM1Test() throws JsonProcessingException {
         System.out.println("========== get Alle Bürger Mandant 'test' Test ==========");
-         int x = this.count("test", "hans", "test");
-        //int x = 5;
+        int x = this.count("test", "hans", "test");
         url = "http://localhost:" + port + "/buergers";
         ResponseEntity<Resources<BuergerResource>> result = restTemplate.exchange(
                 url,
@@ -237,8 +245,8 @@ public class BuergerTest {
         System.out.println("========== save Bürger M1 Test ==========");
         url = "http://localhost:" + port + "/buergers";
         ResponseEntity<BuergerResource> response2 = restTemplate.exchange(url, HttpMethod.POST, new HttpEntity<>(this.createBuerger()), BuergerResource.class);
-
         assertEquals(HttpStatus.CREATED, response2.getStatusCode());
+        assertNotNull(response2.getBody().getContent());
         System.out.println(String.format("Bürger wurde in der DB gespeichert."));
     }
 
@@ -346,9 +354,7 @@ public class BuergerTest {
         Map m = new HashMap();
         m.put("vorname", "peter");
         ResponseEntity<BuergerResource> response2 = restTemplate.exchange(url, HttpMethod.PATCH, new HttpEntity(m), BuergerResource.class);
-        //restTemplate.getForEntity(url, BuergerResource.class);
         assertEquals("peter", response2.getBody().getContent().getVorname());
-
         System.out.println("Bürger wurde mit neuem Vornamen in der DB gespeichert.");
     }
 
@@ -439,6 +445,7 @@ public class BuergerTest {
             System.out.println(String.format("User mit Mandant 'default' könnte nicht das Kind mit oid 1 zu dem Buerger mit Oid 6 hinzufügen."));
         }
     }
+    
 }
 
 class BuergerResource extends Resource<Buerger> {

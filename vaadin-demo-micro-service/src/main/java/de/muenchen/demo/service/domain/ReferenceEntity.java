@@ -21,7 +21,7 @@ public abstract class ReferenceEntity implements Serializable {
     @Column(name = "OID")
     @Size(max = 32)
     @Id
-    private String oid;
+    private Long oid;
 
     @Column(name = "REF_OID")
     @NotNull
@@ -41,11 +41,11 @@ public abstract class ReferenceEntity implements Serializable {
         this.mandant = mandant;
     }
 
-    public String getOid() {
+    public Long getOid() {
         return oid;
     }
 
-    public void setOid(String oid) {
+    public void setOid(Long oid) {
         this.oid = oid;
     }
 
