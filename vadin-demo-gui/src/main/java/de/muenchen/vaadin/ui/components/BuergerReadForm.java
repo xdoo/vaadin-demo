@@ -8,7 +8,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
-import de.muenchen.vaadin.demo.api.rest.BuergerResource;
+import de.muenchen.vaadin.demo.api.local.LocalBuerger;
 import de.muenchen.vaadin.demo.api.util.EventType;
 import de.muenchen.vaadin.ui.app.views.events.ComponentEvent;
 import de.muenchen.vaadin.ui.components.buttons.ActionButton;
@@ -37,7 +37,7 @@ public class BuergerReadForm extends CustomComponent implements Consumer<Event<C
      */
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerReadForm.class);
 
-    final BeanFieldGroup<BuergerResource> binder = new BeanFieldGroup<BuergerResource>(BuergerResource.class);
+    final BeanFieldGroup<LocalBuerger> binder = new BeanFieldGroup<LocalBuerger>(LocalBuerger.class);
     final BuergerViewController controller;
     
     private final String navigateToUpdate;

@@ -1,9 +1,10 @@
 package de.muenchen.vaadin.ui.components;
 
-import com.vaadin.data.util.BeanContainer;
+import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Table;
+import de.muenchen.vaadin.demo.api.domain.BaseEntity;
 import de.muenchen.vaadin.demo.api.util.EventType;
 import de.muenchen.vaadin.demo.api.util.FieldIdentifier;
 import de.muenchen.vaadin.ui.app.views.events.ComponentEvent;
@@ -11,13 +12,13 @@ import de.muenchen.vaadin.ui.components.buttons.TableActionButton;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.hateoas.Resource;
 import reactor.bus.Event;
 import reactor.fn.Consumer;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static de.muenchen.vaadin.ui.util.I18nPaths.Type;
@@ -28,17 +29,18 @@ import static de.muenchen.vaadin.ui.util.I18nPaths.getEntityFieldPath;
  * @param <T>  the type of Entity
  * @author rene.zarwel
  */
-public class GenericTable<T> extends CustomComponent implements Consumer<Event<ComponentEvent<Resource<T>>>> {
+public class GenericTable<T extends BaseEntity> extends CustomComponent implements Consumer<Event<ComponentEvent<T>>> {
 
     /**
      * The constant LOG.
      */
     protected static final Logger LOG = LoggerFactory.getLogger(GenericTable.class);
-    private final BeanContainer<Resource<T>, T> container;
+    private final BeanItemContainer<T> container;
     /**
      * The Button builders.
      */
     List<TableActionButton.Builder> buttonBuilders;
+    private BuergerViewController controller;
     private Table table;
 
     /**
@@ -50,10 +52,11 @@ public class GenericTable<T> extends CustomComponent implements Consumer<Event<C
      */
     public GenericTable(final BuergerViewController controller, Class<T> entityClass, final TableActionButton.Builder... buttonBuilders) {
 
+        this.controller = controller;
         this.buttonBuilders = Arrays.asList(buttonBuilders);
 
         // Have a container of some type to contain the data
-        this.container = new BeanContainer<>(entityClass);
+        this.container = new BeanItemContainer<>(entityClass);
 
         // create table
         this.table = new Table();
@@ -93,25 +96,26 @@ public class GenericTable<T> extends CustomComponent implements Consumer<Event<C
     }
 
     /**
-     * Adds a resource.
+     * Adds a entity.
      *
-     * @param resource the resource
+     * @param entity the entity
      */
-    public void add(Resource<T> resource) {
-        container.addItem(resource, resource.getContent());
-        LOG.debug("added entity to table.");
+    public void add(Optional<T> entity) {
+        if (entity.isPresent()) {
+            LOG.debug("added entity to table.");
+            this.container.addBean(entity.get());
+        }
     }
 
     /**
-     * Adds a list of resources.
+     * Adds a list of entities.
      *
-     * @param resources the resources
+     * @param entity the entity
      */
-    public void addAll(List<Resource<T>> resources) {
+    public void addAll(List<T> entity) {
         LOG.debug("added search result");
         this.container.removeAllItems();
-
-        resources.stream().forEach(this::add);
+        this.container.addAll(entity);
     }
 
     /**
@@ -119,7 +123,7 @@ public class GenericTable<T> extends CustomComponent implements Consumer<Event<C
      *
      * @param id the id
      */
-    public void delete(Resource<T> id) {
+    public void delete(Object id) {
         LOG.debug("deleted buerger from table.");
         this.container.removeItem(id);
     }
@@ -133,8 +137,9 @@ public class GenericTable<T> extends CustomComponent implements Consumer<Event<C
      */
     public HorizontalLayout addButtons(final Object id) {
         HorizontalLayout layout = new HorizontalLayout();
+
         this.buttonBuilders.stream()
-                .map((builder) -> builder.build(container, (Resource<T>) id))
+                .map((builder) -> builder.build(container, id))
                 .forEachOrdered(layout::addComponent);
 
         layout.setSpacing(true);
@@ -154,22 +159,23 @@ public class GenericTable<T> extends CustomComponent implements Consumer<Event<C
     }
 
     @Override
-    public void accept(reactor.bus.Event<ComponentEvent<Resource<T>>> eventWrapper) {
-        ComponentEvent<Resource<T>> event = eventWrapper.getData();
+    public void accept(reactor.bus.Event<ComponentEvent<T>> eventWrapper) {
+        ComponentEvent event = eventWrapper.getData();
 
         if(event.getEventType().equals(EventType.SAVE)) {
-            event.getEntity().ifPresent(this::add);
+            this.add(event.getEntity());
         }
+
         if(event.getEventType().equals(EventType.COPY)) {
-            event.getEntity().ifPresent(this::add);
+            this.add(event.getEntity());
         }
 
         if(event.getEventType().equals(EventType.DELETE)) {
-            event.getEntity().ifPresent(this::delete);
+            this.delete(event.getItemID());
         }
 
         if(event.getEventType().equals(EventType.UPDATE)) {
-            event.getEntity().ifPresent(this::add);
+            this.add(event.getEntity());
         }
 
         if(event.getEventType().equals(EventType.QUERY)) {

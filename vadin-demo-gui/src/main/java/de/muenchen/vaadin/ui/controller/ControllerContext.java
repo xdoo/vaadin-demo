@@ -1,7 +1,6 @@
 package de.muenchen.vaadin.ui.controller;
 
-import de.muenchen.vaadin.demo.api.domain.BaseEntity;
-import de.muenchen.vaadin.demo.api.rest.BuergerResource;
+import de.muenchen.vaadin.demo.api.local.LocalBuerger;
 import de.muenchen.vaadin.demo.api.util.EventType;
 import de.muenchen.vaadin.ui.app.views.events.AppEvent;
 import de.muenchen.vaadin.ui.app.views.events.ComponentEvent;
@@ -11,7 +10,7 @@ import de.muenchen.vaadin.ui.app.views.events.ComponentEvent;
  *
  * @author p.mueller
  */
-public interface ControllerContext<E extends BaseEntity> {
+public interface ControllerContext<E> {
     /**
      * Build the complete Path with the basePath and resolve the String from the properties.
      * @param path
@@ -40,7 +39,7 @@ public interface ControllerContext<E extends BaseEntity> {
      * @param eventType the type the event should be
      * @return an Controller-specific AppEvent.
      */
-    AppEvent<BuergerResource> buildAppEvent(EventType eventType);
+    AppEvent<LocalBuerger> buildAppEvent(EventType eventType);
 
     /**
      * Build an ComponentEvent like using the constructor, but using the right Entity/Controller specific Class.
@@ -49,7 +48,7 @@ public interface ControllerContext<E extends BaseEntity> {
      * @param eventType the type the event should be
      * @return an Controller-specific AppEvent.
      */
-    ComponentEvent<BuergerResource> buildComponentEvent(EventType eventType);
+    ComponentEvent<LocalBuerger> buildComponentEvent(EventType eventType);
 
     String getBasePath();
 }

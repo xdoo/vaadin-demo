@@ -10,7 +10,6 @@ import de.muenchen.vaadin.demo.api.util.EventType;
 import de.muenchen.vaadin.ui.app.views.events.ComponentEvent;
 import de.muenchen.vaadin.ui.components.buttons.TableActionButton;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
-import org.springframework.hateoas.Resource;
 
 /**
  *
@@ -23,18 +22,18 @@ public class ChildTable extends GenericTable<Buerger> {
     }
 
     @Override
-    public void accept(reactor.bus.Event<ComponentEvent<Resource<Buerger>>> eventWrapper) {
+    public void accept(reactor.bus.Event<ComponentEvent<Buerger>> eventWrapper) {
         //super.accept(eventWrapper);
-        ComponentEvent<Resource<Buerger>> event = eventWrapper.getData();
+        ComponentEvent event = eventWrapper.getData();
 
         if(event.getEventType().equals(EventType.SAVE_CHILD)) {
-            event.getEntity().ifPresent(this::add);
+            this.add(event.getEntity());
         }
         if(event.getEventType().equals(EventType.DELETE)) {
-            event.getEntity().ifPresent(this::delete);
+            this.delete(event.getItemID());
         }
         if(event.getEventType().equals(EventType.UPDATE_CHILD)) {
-            event.getEntity().ifPresent(this::add);
+            this.add(event.getEntity());
         }
         if(event.getEventType().equals(EventType.QUERY_CHILD)) {
             this.addAll(event.getEntities());
