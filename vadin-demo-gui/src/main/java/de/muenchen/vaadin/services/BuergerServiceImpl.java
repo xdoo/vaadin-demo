@@ -2,8 +2,7 @@ package de.muenchen.vaadin.services;
 
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
-import de.muenchen.vaadin.demo.api.domain.Buerger;
-import de.muenchen.vaadin.demo.api.rest.BuergerResource;
+import de.muenchen.vaadin.demo.api.local.LocalBuerger;
 import de.muenchen.vaadin.demo.api.rest.BuergerRestClient;
 import de.muenchen.vaadin.demo.api.rest.BuergerRestClientImpl;
 import de.muenchen.vaadin.demo.api.services.SecurityService;
@@ -11,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Resources;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.Serializable;
@@ -40,16 +38,16 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
         this.securityService=securityService;
 
         //TODO
-        this.client = new BuergerRestClientImpl(getTemplate(), URI.create("http://localhost:8080"));
+        this.client = new BuergerRestClientImpl(getTemplate(), URI.create("localhost:8080"));
     }
 
     @Override
-    public void create(Buerger buerger) {
+    public void create(LocalBuerger buerger) {
         client.create(buerger);
     }
 
     @Override
-    public void update(BuergerResource buerger) {
+    public void update(LocalBuerger buerger) {
         client.update(buerger);
     }
 
@@ -60,30 +58,30 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
 
     @Override
     public void copy(Link link) {
-        findOne(link).ifPresent(resource -> create(resource.getContent()));
+        findOne(link).ifPresent(localBuerger -> create(localBuerger));
     }
 
     @Override
-    public Resources<BuergerResource> findAll() {
+    public List<LocalBuerger> findAll() {
         return client.findAll();
     }
 
     @Override
-    public Resources<BuergerResource> findAll(Link relation) {
+    public List<LocalBuerger> findAll(Link relation) {
         return client.findAll(relation);
     }
 
     @Override
-    public Optional<BuergerResource> findOne(Link link) {
+    public Optional<LocalBuerger> findOne(Link link) {
         return client.findOne(link);
     }
 
     @Override
-    public Resources<BuergerResource> queryBuerger(String query) {
+    public List<LocalBuerger> queryBuerger(String query) {
         //    Link link = this.infoService.getUrl("buerger_query");
         //    ArrayList<Link> links = Lists.newArrayList(link.withRel(HateoasUtil.REL_QUERY));
         //    return client.queryBuerger(query, links, getTemplate());
-        return new Resources<>(new ArrayList<>());
+        return new ArrayList<>();
     }
 
     @Override
@@ -104,7 +102,6 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
         }
         LOG.warn("Cannot acquire rest template from security service.");
         return null;
-
     }
   
 }

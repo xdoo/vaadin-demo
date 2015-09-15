@@ -1,8 +1,7 @@
 package de.muenchen.vaadin.ui.components.buttons;
 
-import com.vaadin.data.util.BeanContainer;
+import com.vaadin.data.util.BeanItemContainer;
 import de.muenchen.vaadin.ui.controller.ControllerContext;
-import org.springframework.hateoas.Resource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,11 +17,11 @@ public class TableActionButton<T> extends ActionButton {
     /**
      * The id in the container
      */
-    private final Resource<T> id;
+    private final Object id;
     /**
      * This container contains :) all items.
      */
-    private final BeanContainer<Resource<T>, T> container;
+    private final BeanItemContainer<T> container;
 
     /**
      * Create a new TableActionButton with the specified context, action and //TODO navigateTo String.
@@ -34,7 +33,7 @@ public class TableActionButton<T> extends ActionButton {
      * @param action     Action the button should represent (is styled for).
      * @param navigateTo //TODO used to generate the id
      */
-    private TableActionButton(ControllerContext context, Action action, String navigateTo, Resource<T> id, BeanContainer<Resource<T>, T> container) {
+    private TableActionButton(ControllerContext context, Action action, String navigateTo, Object id, BeanItemContainer<T> container) {
         super("", context, action, navigateTo);
         this.id = id;
         this.container = container;
@@ -45,7 +44,7 @@ public class TableActionButton<T> extends ActionButton {
      *
      * @param itemClickListener The listener handles a click on the button, it can use the container and the id ( == Object) to figure out bound object/row.
      */
-    public void addItemClickListener(java.util.function.BiConsumer<BeanContainer<Resource<T>, T>, Resource<T>> itemClickListener) {
+    public void addItemClickListener(java.util.function.BiConsumer<BeanItemContainer<T>, Object> itemClickListener) {
         addClickListener(clickEvent -> itemClickListener.accept(container, id));
     }
 
@@ -54,16 +53,16 @@ public class TableActionButton<T> extends ActionButton {
      * <p>
      * This can be used to write the functionality of the button before the specific item id and container are assigned.
      * <p>
-     * The {@link de.muenchen.vaadin.ui.components.buttons.TableActionButton.Builder#build(BeanContainer, Resource)} method
+     * The {@link de.muenchen.vaadin.ui.components.buttons.TableActionButton.Builder#build(BeanItemContainer, Object)} method
      * is used to finally set the id and container and get the desired button.
      */
     public static class Builder<T> {
         private final ControllerContext context;
         private final Action action;
         private final String navigateTo;
-        private final List<BiConsumer<BeanContainer<Resource<T>, T>, Object>> itemClickListeners = new ArrayList<>();
+        private final List<BiConsumer<BeanItemContainer<T>, Object>> itemClickListeners = new ArrayList<>();
 
-        private Builder(ControllerContext context, Action action, String navigateTo, BiConsumer<BeanContainer<Resource<T>, T>, Object> itemClickListener) {
+        private Builder(ControllerContext context, Action action, String navigateTo, BiConsumer<BeanItemContainer<T>, Object> itemClickListener) {
             this.context = context;
             this.action = action;
             this.navigateTo = navigateTo;
@@ -82,12 +81,12 @@ public class TableActionButton<T> extends ActionButton {
          *                          with the container and the id.
          * @return An (almost ready) Builder for the Button.
          */
-        public static <T> Builder make(ControllerContext context, Action action, String navigateTo, BiConsumer<BeanContainer<Resource<T>, T>, Resource<T>> itemClickListener) {
+        public static <T> Builder make(ControllerContext context, Action action, String navigateTo, BiConsumer<BeanItemContainer<T>, Object> itemClickListener) {
             Builder builder = new Builder(context, action, navigateTo, itemClickListener);
             return builder;
         }
 
-        public TableActionButton build(BeanContainer<Resource<T>, T> container, Resource<T> id) {
+        public TableActionButton build(BeanItemContainer<T> container, Object id) {
             TableActionButton button = new TableActionButton(context, action, navigateTo, id, container);
             itemClickListeners.forEach(button::addItemClickListener);
             return button;

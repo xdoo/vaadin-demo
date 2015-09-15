@@ -35,7 +35,7 @@ public class InfoServiceImpl implements InfoService {
      */
     @PostConstruct
     public void init() {
-        //TODO this.loadLinks();
+        this.loadLinks();
     }
     
     @Override

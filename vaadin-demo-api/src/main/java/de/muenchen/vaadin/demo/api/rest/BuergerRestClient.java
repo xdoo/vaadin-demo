@@ -1,10 +1,10 @@
 package de.muenchen.vaadin.demo.api.rest;
 
-import de.muenchen.vaadin.demo.api.domain.Buerger;
+import de.muenchen.vaadin.demo.api.local.LocalBuerger;
 import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Resources;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -12,17 +12,17 @@ import java.util.Optional;
  * @author p.mueller
  */
 public interface BuergerRestClient {
-    Resources<BuergerResource> findAll();
+    List<LocalBuerger> findAll();
 
-    Resources<BuergerResource> findAll(Link relation);
+    List<LocalBuerger> findAll(Link relation);
 
-    Optional<BuergerResource> findOne(Link link);
+    Optional<LocalBuerger> findOne(Link link);
 
     void setRelations(Link link, Collection<Link> links);
 
-    void create(Buerger buerger);
+    void create(LocalBuerger buerger);
 
-    void update(BuergerResource buerger);
+    void update(LocalBuerger buerger);
 
     void delete(Link id);
 
