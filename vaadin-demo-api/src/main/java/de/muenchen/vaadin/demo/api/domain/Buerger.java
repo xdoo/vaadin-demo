@@ -64,5 +64,4 @@ public class Buerger extends BaseEntity {
         
         return clone;
     }
-    
 }

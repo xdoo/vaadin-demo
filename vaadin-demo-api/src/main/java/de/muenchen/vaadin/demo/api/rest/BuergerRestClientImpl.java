@@ -71,6 +71,9 @@ public class BuergerRestClientImpl implements BuergerRestClient {
                         .asLink().getHref()
         );
 
+
+        buerger.setOid("asdf");
+
         restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(buerger), Void.class);
     }
 

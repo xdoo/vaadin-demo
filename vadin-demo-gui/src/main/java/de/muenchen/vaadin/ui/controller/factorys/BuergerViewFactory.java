@@ -157,6 +157,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
         if(!searchTable.isPresent()){
             LOG.debug("new searchtabel");
             TableActionButton.Builder detail = TableActionButton.Builder.<BuergerResource>make(controller, TableAction.tabledetail, navigateToForDetail, (container, id) -> {
+
                 controller.postEvent(controller.buildAppEvent(EventType.SELECT2READ).setItem(container.getItem(id)).setItemId(id));
                 getController().getNavigator().navigateTo(navigateToForDetail);
             });
