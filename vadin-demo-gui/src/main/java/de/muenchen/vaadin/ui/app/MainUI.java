@@ -25,7 +25,7 @@ import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.vaadin.demo.api.local.LocalBuerger;
+import de.muenchen.vaadin.demo.api.domain.BaseEntity;
 import de.muenchen.vaadin.demo.api.services.SecurityService;
 import de.muenchen.vaadin.demo.api.util.EventType;
 import de.muenchen.vaadin.services.MessageService;
@@ -296,12 +296,12 @@ public class MainUI extends UI implements ControllerContext{
     }
 
     @Override
-    public AppEvent<LocalBuerger> buildAppEvent(EventType eventType) {
+    public AppEvent<? extends BaseEntity> buildAppEvent(EventType eventType) {
         return null;
     }
 
     @Override
-    public ComponentEvent<LocalBuerger> buildComponentEvent(EventType eventType) {
+    public ComponentEvent buildComponentEvent(EventType eventType) {
         return null;
     }
 
