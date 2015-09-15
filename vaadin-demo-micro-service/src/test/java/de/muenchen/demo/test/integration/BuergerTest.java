@@ -274,18 +274,11 @@ public class BuergerTest {
 
     }
 
-    @Test
+    @Test(expected = HttpClientErrorException.class)
     public void getBuergerM2Test() throws JsonProcessingException {
         System.out.println("========== get Bürger Test ==========");
         url = "http://localhost:" + port + "/buergers/1";
-        try {
             restTemplate2.getForEntity(url, BuergerResource.class);
-            assertNull(1);
-
-        } catch (HttpClientErrorException e) {
-            assertNotNull(e);
-            System.out.println(String.format("User mit Mandant 'default' könnte nicht der Buerger mit OID : 5 und Mandant 'test' von der DB lesen."));
-        }
     }
 
     @Test
@@ -303,17 +296,11 @@ public class BuergerTest {
         }
     }
 
-    @Test
+    @Test(expected = HttpClientErrorException.class)
     public void deleteBuergerM2Test() throws JsonProcessingException {
         System.out.println("========== delete Bürger Test ==========");
-        try {
             url = "http://localhost:" + port + "/buergers/5";
             restTemplate2.delete(url);
-            assertNull(1);
-        } catch (HttpClientErrorException e) {
-            assertNotNull(e);
-            System.out.println(String.format("User mit mandant 'default' könnte nicht den Bürger mit OID : 5 und Mandant 'test'  nicht von der DB löschen."));
-        }
     }
 
     @Test
@@ -330,21 +317,14 @@ public class BuergerTest {
 
     }
 
-    @Test
+    @Test(expected = HttpClientErrorException.class)
     public void putBuergerM2Test() throws JsonProcessingException {
         System.out.println("========== put Bürger Test ==========");
         url = "http://localhost:" + port + "/buergers/4";
         BuergerResource response4 = restTemplate.getForEntity(url, BuergerResource.class).getBody();
         Buerger buerger4 = response4.getContent();
         buerger4.setVorname("hans");
-        try {
             restTemplate2.put(url, buerger4);
-            assertNull(1);
-
-        } catch (HttpClientErrorException e) {
-            assertNotNull(e);
-            System.out.println(String.format("User mit Mandant 'default' könnte nicht der Bürger mit OID : 4 und  Mandant 'test'  von der DB ändern."));
-        }
     }
 
     @Test
@@ -358,20 +338,13 @@ public class BuergerTest {
         System.out.println("Bürger wurde mit neuem Vornamen in der DB gespeichert.");
     }
 
-    @Test
+    @Test(expected = HttpClientErrorException.class)
     public void patchBuergerM2Test() throws JsonProcessingException, MalformedURLException {
         System.out.println("========== patch Bürger Test ==========");
         Map m = new HashMap();
         m.put("vorname", "peter");
-        try {
             url = "http://localhost:" + port + "/buergers/4";
             restTemplate2.exchange(url, HttpMethod.PATCH, new HttpEntity(m), BuergerResource.class);
-            assertNull(1);
-
-        } catch (HttpClientErrorException e) {
-            assertNotNull(e);
-            System.out.println(String.format("User mit Mandant 'default' könnte nicht das Kind mit oid 1 zu dem Buerger mit Oid 6 hinzufügen."));
-        }
     }
 
     @Test
@@ -390,23 +363,16 @@ public class BuergerTest {
 
     }
 
-    @Test
+    @Test(expected = HttpClientErrorException.class)
     public void getBuergerKinderM2Test() throws JsonProcessingException {
         System.out.println("========== get Bürger Kinder Test ==========");
         url = "http://localhost:" + port + "/buergers/2/kinder";
-        try {
             restTemplate2.exchange(
                     url,
                     HttpMethod.GET,
                     null,
                     BuergerResource.LIST
             );
-            assertNull(1);
-
-        } catch (HttpClientErrorException e) {
-            assertNotNull(e);
-            System.out.println(String.format("User mit Mandant 'default' könnte nicht die Kinder von den Bürger mit OID : 2001 wurden von in der DB lesen."));
-        }
     }
 
     @Test
@@ -429,23 +395,16 @@ public class BuergerTest {
         System.out.println("Kind mit oid 2 wurde zu dem Buerger mit Oid 1 hinzufügt.");
     }
 
-    @Test
+    @Test(expected = HttpClientErrorException.class)
     public void putBuergerKinderM2Test() {
         System.out.println("========== put Bürger Kinder M2 Test ==========");
         url = "http://localhost:" + port + "/buergers/3/kinder";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("text", "uri-list"));
-        try {
             String uri2 = "http://localhost:" + port + "/buergers/6";
             restTemplate2.put(url, new HttpEntity<>(uri2, headers));
-            assertNull(1);
-
-        } catch (HttpClientErrorException e) {
-            assertNotNull(e);
-            System.out.println(String.format("User mit Mandant 'default' könnte nicht das Kind mit oid 1 zu dem Buerger mit Oid 6 hinzufügen."));
-        }
     }
-    
+
 }
 
 class BuergerResource extends Resource<Buerger> {

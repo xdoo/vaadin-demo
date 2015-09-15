@@ -18,11 +18,11 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.types.EventType;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
+import de.muenchen.vaadin.demo.api.local.LocalBuerger;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.GenericErrorNotification;
 import de.muenchen.vaadin.guilib.util.ValidatorFactory;
-import de.muenchen.vaadin.demo.api.local.LocalBuerger;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Component;
@@ -83,7 +83,7 @@ public class BuergerCreateForm extends CustomComponent {
      * Erzeugt das eigentliche Formular.
      */
     private void createForm() {
-        Validator val = ValidatorFactory.getValidator(ValidatorFactory.Type.NULL,controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.validation)),"false");
+        Validator val = ValidatorFactory.getValidator(ValidatorFactory.Type.NULL, controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.validation)), "false");
         FormLayout layout = new FormLayout();
         HorizontalLayout buttonLayout = new HorizontalLayout();
         buttonLayout.setSpacing(true);
@@ -117,9 +117,9 @@ public class BuergerCreateForm extends CustomComponent {
         for(int i =7682;i<=7807;i++)
             abc+=Character.toString((char)i);
         abc+="-";
-    
-        Validator val0 = ValidatorFactory.getValidator(ValidatorFactory.Type.REGEXP,controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.validationstring)),"true","["+abc+"]*");
-        
+
+        Validator val0 = ValidatorFactory.getValidator(ValidatorFactory.Type.REGEXP, controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.validationstring)), "true", "[" + abc + "]*");
+
         Validator val1 = ValidatorFactory.getValidator(ValidatorFactory.Type.STRING_LENGTH, controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.validation)), 1 + "", "" + Integer.MAX_VALUE, "true");
         firstField.addValidator(val0);
         firstField.addValidator(val1);
@@ -137,7 +137,7 @@ public class BuergerCreateForm extends CustomComponent {
                 controller.resolveRelative(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.label)),
                 Buerger.GEBURTSDATUM, BuergerViewController.I18N_BASE_PATH);
         String errorMsg = controller.resolveRelative(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.validation));
-        Validator val3 = ValidatorFactory.getValidator(ValidatorFactory.Type.DATE_RANGE,errorMsg, "start",null);
+        Validator val3 = ValidatorFactory.getValidator(ValidatorFactory.Type.DATE_RANGE, errorMsg, "start", null);
         birthdayfield.addValidator(val3);
         layout.addComponent(birthdayfield);    
 

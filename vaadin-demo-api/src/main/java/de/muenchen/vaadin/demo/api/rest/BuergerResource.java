@@ -1,8 +1,5 @@
 package de.muenchen.vaadin.demo.api.rest;
 
-import de.muenchen.vaadin.demo.apilib.rest.BaseResource;
-
-import java.util.Date;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.hateoas.Link;

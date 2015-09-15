@@ -1,6 +1,6 @@
 package de.muenchen.vaadin.demo.api.local;
 
-import de.muenchen.vaadin.demo.api.util.FieldIdentifier;
+import de.muenchen.vaadin.demo.apilib.util.FieldIdentifier;
 import org.springframework.hateoas.ResourceSupport;
 
 import java.util.Date;

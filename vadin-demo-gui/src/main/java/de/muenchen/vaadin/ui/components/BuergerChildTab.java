@@ -6,7 +6,6 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import de.muenchen.eventbus.events.ComponentEvent;
 import de.muenchen.eventbus.types.EventType;
-import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.demo.api.local.LocalBuerger;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
@@ -23,7 +22,7 @@ import static de.muenchen.vaadin.ui.components.BuergerReadForm.LOG;
  *
  * @author claus
  */
-public class BuergerChildTab extends CustomComponent implements Consumer<Event<ComponentEvent<Buerger>>> {
+public class BuergerChildTab extends CustomComponent implements Consumer<Event<ComponentEvent<LocalBuerger>>> {
 
     BuergerViewController controller;
     private GenericTable table;
@@ -66,7 +65,7 @@ public class BuergerChildTab extends CustomComponent implements Consumer<Event<C
     }
 
     @Override
-    public void accept(reactor.bus.Event<ComponentEvent<Buerger>> componentEventWrapper) {
+    public void accept(reactor.bus.Event<ComponentEvent<LocalBuerger>> componentEventWrapper) {
         ComponentEvent event = componentEventWrapper.getData();
         if (event.getEventType().equals(EventType.SELECT2READ)) {
             LOG.debug("seleted buerger to show childs.");

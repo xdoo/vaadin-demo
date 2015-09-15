@@ -6,7 +6,6 @@ import com.vaadin.ui.TabSheet;
 import de.muenchen.eventbus.EventBus;
 import de.muenchen.eventbus.events.RefreshEvent;
 import de.muenchen.eventbus.types.EventType;
-import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.demo.api.local.LocalBuerger;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.demo.i18nservice.buttons.TableAction;
@@ -258,9 +257,9 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
             controller.postEvent(controller.buildAppEvent(EventType.SELECT2READ).setItem(container.getItem(id)).setItemId(id));
             getController().getNavigator().navigateTo(navigateToForDetail);
         });
-        TableActionButton.Builder delete = TableActionButton.Builder.<Buerger>make(controller, TableAction.tabledelete, navigateToForDetail, (container, id) ->
+        TableActionButton.Builder delete = TableActionButton.Builder.<LocalBuerger>make(controller, TableAction.tabledelete, navigateToForDetail, (container, id) ->
                 {
-                    BeanItem<Buerger> item = container.getItem(id);
+                    BeanItem<LocalBuerger> item = container.getItem(id);
                     GenericConfirmationWindow win = new GenericConfirmationWindow(
                             controller.buildAppEvent(EventType.RELEASE_PARTNER).setItem(container.getItem(id)).setItemId(id),
                             controller, SimpleAction.release);
@@ -271,7 +270,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
         );
         LOG.debug("creating table for partner");
         PartnerTable table = new PartnerTable(controller, detail, delete);
-        List<Buerger> entities = controller.queryPartner(controller.getCurrent().getBean());
+        List<LocalBuerger> entities = controller.queryPartner(controller.getCurrent().getBean());
         controller.registerToAllComponentEvents(table);
 
         controller.postEvent(controller.buildComponentEvent(EventType.QUERY_PARTNER).addEntities(entities));

@@ -10,9 +10,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
-import javax.validation.constraints.Size;
 
 /**
  *
@@ -48,14 +48,6 @@ public class Sachbearbeiter extends BaseEntity {
 
     ;
 
-    public Set<Buerger> getBuerger() {
-        return buerger;
-    }
-
-    public void setBuerger(Set<Buerger> buerger) {
-        this.buerger = buerger;
-    }
-
     public Sachbearbeiter() {
     }
 
@@ -65,6 +57,14 @@ public class Sachbearbeiter extends BaseEntity {
         this.funktion = sachbearbeiter.funktion;
         this.organisationseinheit = sachbearbeiter.organisationseinheit;
         this.buerger.addAll(sachbearbeiter.buerger);
+    }
+
+    public Set<Buerger> getBuerger() {
+        return buerger;
+    }
+
+    public void setBuerger(Set<Buerger> buerger) {
+        this.buerger = buerger;
     }
 
     public String getTelephone() {
@@ -109,6 +109,6 @@ public class Sachbearbeiter extends BaseEntity {
 
     @Override
     public String toString() {
-        return String.format("oid > %s | fax > %s | funktion > %s| organisationseinheit > %s | telephone > %s",  this.getOid(), this.fax, this.funktion, this.organisationseinheit, this.telephone);
+        return String.format("oid > %s | fax > %s | funktion > %s| organisationseinheit > %s | telephone > %s", this.getOid(), this.fax, this.funktion, this.organisationseinheit, this.telephone);
     }
 }

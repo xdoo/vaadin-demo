@@ -32,7 +32,6 @@ import reactor.fn.Consumer;
 
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -48,7 +47,7 @@ import static reactor.bus.selector.Selectors.object;
  * @author claus.straube
  */
 @SpringComponent @UIScope
-public class BuergerViewController implements Serializable, ControllerContext<Buerger>, Consumer<Event<AppEvent<LocalBuerger>>> {
+public class BuergerViewController implements Serializable, ControllerContext<LocalBuerger> {
 
 
     // TODO entweder hier oder im I18nServiceConfigImpl angeben
@@ -165,19 +164,19 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
         getEventbus().notify(event, Event.wrap(event));
     }
 
-    public void registerToAppEvent(EventType type,Consumer<Event<AppEvent<Buerger>>> consumer) {
+    public void registerToAppEvent(EventType type, Consumer<Event<AppEvent<LocalBuerger>>> consumer) {
         getEventbus().on(object(buildAppEvent(type)), consumer);
     }
 
-    public void registerToAllAppEvents(Consumer<Event<AppEvent<Buerger>>> consumer) {
+    public void registerToAllAppEvents(Consumer<Event<AppEvent<LocalBuerger>>> consumer) {
         Stream.of(EventType.values()).forEach(type -> registerToAppEvent(type, consumer));
     }
 
-    public void registerToComponentEvent(EventType type,Consumer<Event<ComponentEvent<Buerger>>> consumer) {
+    public void registerToComponentEvent(EventType type, Consumer<Event<ComponentEvent<LocalBuerger>>> consumer) {
         getEventbus().on(object(buildComponentEvent(type)), consumer);
     }
 
-    public void registerToAllComponentEvents(Consumer<Event<ComponentEvent<Buerger>>> consumer) {
+    public void registerToAllComponentEvents(Consumer<Event<ComponentEvent<LocalBuerger>>> consumer) {
         Stream.of(EventType.values()).forEach(type -> registerToComponentEvent(type, consumer));
     }
 
@@ -215,7 +214,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
     /**
      * Kopiert eine vorhandene Instanz eines {@link Buerger} Objektes in eine
      * neue Instanz. Die Kopie wird gleich in der DB gespeichert.
-     * 
+     *
      * @param id Buerger der kopiert werden soll
      */
     public LocalBuerger copyBuerger(Link id) {
@@ -258,7 +257,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
      *
      * @param event
      */
-    private void releaseParent(AppEvent<LocalBuerger> event) {
+    private void releaseParent(LocalBuerger event) {
         //service.releaseElternteil(getCurrent().getBean(), event.getEntity());
     }
 
@@ -267,8 +266,8 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
      *
      * @param event
      */
-    private void releasePartner(AppEvent<Buerger> event) {
-        service.releasePartner(getCurrent().getBean(), event.getEntity());
+    private void releasePartner(LocalBuerger event) {
+        service.delete(event.getLink(BuergerResource.Rel.partner.name()));
     }
 
 
@@ -352,7 +351,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 
     public void initEventhandlers() {
 
-        registerToAppEvent(EventType.UPDATE,this::updateEventHandler);
+        registerToAppEvent(EventType.UPDATE, this::updateEventHandler);
         registerToAppEvent(EventType.SAVE,this::saveEventHandler);
         registerToAppEvent(EventType.DELETE,this::deleteEventHandler);
         registerToAppEvent(EventType.SELECT2UPDATE,this::select2UpdateEventHandler);
@@ -372,9 +371,9 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 
     }
 
-    private void releasePartnerHandler(Event<AppEvent<Buerger>> eventWrapper) {
-        AppEvent<Buerger> event = eventWrapper.getData();
-        this.releasePartner(event);
+    private void releasePartnerHandler(Event<AppEvent<LocalBuerger>> eventWrapper) {
+        AppEvent<LocalBuerger> event = eventWrapper.getData();
+        this.releasePartner(event.getEntity());
         // UI Komponenten aktualisieren
 
         GenericSuccessNotification succes = new GenericSuccessNotification(
@@ -385,14 +384,13 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
         postEvent(buildComponentEvent(EventType.DELETE).setItemID(event.getItemId()));
     }
 
-    private void addPartnerEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
-        AppEvent<Buerger> event = eventWrapper.getData();
+    private void addPartnerEventHandler(Event<AppEvent<LocalBuerger>> eventWrapper) {
         navigator.getUI().addWindow(new TableSelectWindow(this, getViewFactory().generateBuergerPartnerSearchTable()));
         postEvent(buildAppEvent(EventType.QUERY));
     }
 
-    private void saveAsPartnerEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
-        AppEvent<Buerger> event = eventWrapper.getData();
+    private void saveAsPartnerEventHandler(Event<AppEvent<LocalBuerger>> eventWrapper) {
+        AppEvent<LocalBuerger> event = eventWrapper.getData();
         this.addBuergerPartner(event.getEntity());
         GenericSuccessNotification succes = new GenericSuccessNotification(
                 resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.add, Type.label,"partner")),
@@ -401,10 +399,10 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
         postEvent(buildComponentEvent(EventType.UPDATE_PARTNER).addEntity(event.getEntity()));
     }
 
-    private void releaseParentHandler(Event<AppEvent<Buerger>> eventWrapper) {
-        AppEvent<Buerger> event = eventWrapper.getData();
+    private void releaseParentHandler(Event<AppEvent<LocalBuerger>> eventWrapper) {
+        AppEvent<LocalBuerger> event = eventWrapper.getData();
         // Service Operationen ausführen
-        this.releaseParent(event);
+        this.releaseParent(event.getEntity());
         // UI Komponenten aktualisieren
 
         GenericSuccessNotification succes = new GenericSuccessNotification(
@@ -416,15 +414,13 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 
     }
 
-    private void addSearchedChildEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
-        AppEvent<Buerger> event = eventWrapper.getData();
-
+    private void addSearchedChildEventHandler(Event<AppEvent<LocalBuerger>> eventWrapper) {
         navigator.getUI().addWindow(new TableSelectWindow(this, getViewFactory().generateChildSearchTable()));
         postEvent(buildAppEvent(EventType.QUERY));
     }
 
-    private void saveAsChildEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
-        AppEvent<Buerger> event = eventWrapper.getData();
+    private void saveAsChildEventHandler(Event<AppEvent<LocalBuerger>> eventWrapper) {
+        AppEvent<LocalBuerger> event = eventWrapper.getData();
 
         this.addBuergerKind(event.getEntity());
         GenericSuccessNotification succes = new GenericSuccessNotification(
@@ -434,15 +430,15 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
         postEvent(buildComponentEvent(EventType.UPDATE_CHILD).addEntity(event.getEntity()));
     }
 
-    private void queryChildEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
-        AppEvent<Buerger> event = eventWrapper.getData();
+    private void queryChildEventHandler(Event<AppEvent<LocalBuerger>> eventWrapper) {
+        AppEvent<LocalBuerger> event = eventWrapper.getData();
 
         // UI Komponenten aktualisieren
         postEvent(buildComponentEvent(EventType.QUERY_CHILD).addEntities(this.queryKinder(event.getEntity())));
     }
 
-    private void queryEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
-        AppEvent<Buerger> event = eventWrapper.getData();
+    private void queryEventHandler(Event<AppEvent<LocalBuerger>> eventWrapper) {
+        AppEvent<LocalBuerger> event = eventWrapper.getData();
 
         List<LocalBuerger> currentEntities;
         if(event.getQuery().isPresent()) {
@@ -455,8 +451,8 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
         postEvent(buildComponentEvent(EventType.QUERY).addEntities(currentEntities));
     }
 
-    private void select2ReadEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
-        AppEvent<Buerger> event = eventWrapper.getData();
+    private void select2ReadEventHandler(Event<AppEvent<LocalBuerger>> eventWrapper) {
+        AppEvent<LocalBuerger> event = eventWrapper.getData();
 
         this.current = event.getItem();
 
@@ -466,8 +462,8 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 
     }
 
-    private void select2UpdateEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
-        AppEvent<Buerger> event = eventWrapper.getData();
+    private void select2UpdateEventHandler(Event<AppEvent<LocalBuerger>> eventWrapper) {
+        AppEvent<LocalBuerger> event = eventWrapper.getData();
 
         // Das ist notwendig, weil beim ersten Aufruf der UPDATE
         // Funktion erst die Komponente erstellt wird. Das Event
@@ -480,8 +476,8 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 
     }
 
-    private void copyEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
-        AppEvent<Buerger> event = eventWrapper.getData();
+    private void copyEventHandler(Event<AppEvent<LocalBuerger>> eventWrapper) {
+        AppEvent<LocalBuerger> event = eventWrapper.getData();
 
         // Service Operationen ausführen
         LocalBuerger copy = this.copyBuerger(event.getEntity().getId());
@@ -495,8 +491,8 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
         succes.show(Page.getCurrent());
     }
 
-    private void deleteEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
-        AppEvent<Buerger> event = eventWrapper.getData();
+    private void deleteEventHandler(Event<AppEvent<LocalBuerger>> eventWrapper) {
+        AppEvent<LocalBuerger> event = eventWrapper.getData();
 
         // Service Operationen ausführen
         this.deleteBuerger(event.getEntity());
@@ -512,8 +508,8 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
         succes.show(Page.getCurrent());
     }
 
-    private void saveChildEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
-        AppEvent<Buerger> event = eventWrapper.getData();
+    private void saveChildEventHandler(Event<AppEvent<LocalBuerger>> eventWrapper) {
+        AppEvent<LocalBuerger> event = eventWrapper.getData();
 
         // Service Operation ausführen
         this.saveBuergerKind(event.getEntity());
@@ -526,8 +522,8 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
         succes.show(Page.getCurrent());
     }
 
-    private void savePartnerEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
-        AppEvent<Buerger> event = eventWrapper.getData();
+    private void savePartnerEventHandler(Event<AppEvent<LocalBuerger>> eventWrapper) {
+        AppEvent<LocalBuerger> event = eventWrapper.getData();
 
         // Service Operation ausführen
         this.saveBuergerPartner(event.getEntity());
@@ -540,8 +536,8 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
         succes.show(Page.getCurrent());
     }
 
-    private void saveEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
-        AppEvent<Buerger> event = eventWrapper.getData();
+    private void saveEventHandler(Event<AppEvent<LocalBuerger>> eventWrapper) {
+        AppEvent<LocalBuerger> event = eventWrapper.getData();
 
         // Service Operationen ausführen
         LocalBuerger newBuerger = this.save(event.getEntity());
@@ -556,8 +552,8 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 
     }
 
-    private void updateEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
-        AppEvent<Buerger> event = eventWrapper.getData();
+    private void updateEventHandler(Event<AppEvent<LocalBuerger>> eventWrapper) {
+        AppEvent<LocalBuerger> event = eventWrapper.getData();
 
         // Service Operationen ausführen
         this.updateBuerger(event.getEntity());
@@ -573,8 +569,8 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 
     }
 
-    private void queryPartnerEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
-        AppEvent<Buerger> event = eventWrapper.getData();
+    private void queryPartnerEventHandler(Event<AppEvent<LocalBuerger>> eventWrapper) {
+        AppEvent<LocalBuerger> event = eventWrapper.getData();
         queryPartner(event.getEntity());
     }
 

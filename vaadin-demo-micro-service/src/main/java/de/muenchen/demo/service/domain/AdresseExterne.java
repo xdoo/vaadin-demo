@@ -5,11 +5,11 @@
  */
 package de.muenchen.demo.service.domain;
 
-import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 
 /**
  *
@@ -25,7 +25,11 @@ public class AdresseExterne extends BaseEntity implements Serializable {
 
     @Column(nullable = true, name = "ADR_HAUSNUMMER")
     @Size(max = 70)
-    private String hausnummer;
+    private Integer hausnummer;
+
+    @Column(name = "ADR_BUCHSTABE")
+    @Size(max = 10)
+    private String buchstabe;
 
     @Column(nullable = true, name = "ADR_STADT")
     @Size(max = 20)

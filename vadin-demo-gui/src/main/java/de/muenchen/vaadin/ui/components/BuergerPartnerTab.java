@@ -6,7 +6,6 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import de.muenchen.eventbus.events.ComponentEvent;
 import de.muenchen.eventbus.types.EventType;
-import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.demo.api.local.LocalBuerger;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
@@ -22,7 +21,7 @@ import static de.muenchen.vaadin.ui.components.BuergerReadForm.LOG;
  *
  * @author Maximilian Schug
  */
-public class BuergerPartnerTab extends CustomComponent implements Consumer<Event<ComponentEvent<Buerger>>> {
+public class BuergerPartnerTab extends CustomComponent implements Consumer<Event<ComponentEvent<LocalBuerger>>> {
 
     BuergerViewController controller;
     private PartnerTable table;
@@ -65,7 +64,7 @@ public class BuergerPartnerTab extends CustomComponent implements Consumer<Event
     }
 
     @Override
-    public void accept(reactor.bus.Event<ComponentEvent<Buerger>> eventWrapper) {
+    public void accept(reactor.bus.Event<ComponentEvent<LocalBuerger>> eventWrapper) {
         ComponentEvent event = eventWrapper.getData();
 
         if (event.getEventType().equals(EventType.SELECT2READ)) {

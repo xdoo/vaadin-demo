@@ -5,7 +5,9 @@
  */
 package de.muenchen.demo.service.domain;
 
-import java.io.Serializable;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,12 +15,8 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.Size;
-
-import org.hibernate.envers.Audited;
-import org.hibernate.envers.NotAudited;
-
-import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -33,20 +31,17 @@ public class Wohnung extends BaseEntity implements Serializable {
 //    @Autowired
 //    AdresseService adresseService;
 
+    @Transient
+    Adresse adr;
     @Column(name = "WOHN_STOCK")
     private String stock;
-
     @Column(name = "WOHN_AUSRICHTUNG")
     @Size(max = 20)
     private String ausrichtung;
-
     @NotAudited
-    @OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)   
+    @OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinColumn(name = "Adresse_Oid", referencedColumnName = "OID")
     private AdresseReference adresse;
-
-    @Transient
-    Adresse adr;
 
     public Wohnung() {
     }

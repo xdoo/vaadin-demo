@@ -5,14 +5,15 @@
  */
 package de.muenchen.demo.service.domain;
 
-import java.io.Serializable;
+import org.hibernate.envers.NotAudited;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import org.hibernate.envers.NotAudited;
+import java.io.Serializable;
 
 /**
  *
@@ -24,12 +25,12 @@ public class AdresseReference extends BaseEntity implements Serializable{
     
     @NotAudited
     @OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
-    @JoinColumn(name="ADR_EXTERNE_OID",referencedColumnName="OID")
+    @JoinColumn(name = "ADR_EXTERNE_OID", referencedColumnName = "OID")
     private AdresseExterne adresseExterne;
     
     @NotAudited
-    @OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)   
-    @JoinColumn(name="ADR_INTERNE_OID",referencedColumnName="OID")
+    @OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "ADR_INTERNE_OID", referencedColumnName = "OID")
     private AdresseInterne adresseInterne;
 
     public AdresseExterne getAdresseExterne() {

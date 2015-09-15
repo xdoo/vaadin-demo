@@ -18,6 +18,7 @@ import de.muenchen.eventbus.events.ComponentEvent;
 import de.muenchen.eventbus.types.EventType;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.demo.api.local.LocalBuerger;
+import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.GenericErrorNotification;
@@ -29,16 +30,18 @@ import reactor.bus.Event;
 import reactor.fn.Consumer;
 
 import java.util.Optional;
+
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Component;
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Type;
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getEntityFieldPath;
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getFormPath;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getNotificationPath;
 
 /**
  *
  * @author claus
  */
-public class BuergerUpdateForm extends CustomComponent implements Consumer<Event<ComponentEvent<Buerger>>> {
+public class BuergerUpdateForm extends CustomComponent implements Consumer<Event<ComponentEvent<LocalBuerger>>> {
 
     /**
      * Logger
@@ -88,8 +91,8 @@ public class BuergerUpdateForm extends CustomComponent implements Consumer<Event
         Label headline = new Label(controller.resolveRelative(getFormPath(SimpleAction.create, Component.headline, Type.label)));
         headline.addStyleName(ValoTheme.LABEL_H3);
         layout.addComponent(headline);
-    
-        Validator val0 = ValidatorFactory.getValidator(ValidatorFactory.Type.DIAKRITISCH,controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.validationstring)),"true");
+
+        Validator val0 = ValidatorFactory.getValidator(ValidatorFactory.Type.DIAKRITISCH, controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.validationstring)), "true");
         
         TextField firstField = controller.getUtil().createFormTextField(binder,
                 controller.resolveRelative(getEntityFieldPath(Buerger.VORNAME, Type.label)),
@@ -112,8 +115,8 @@ public class BuergerUpdateForm extends CustomComponent implements Consumer<Event
                 controller.resolveRelative(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.label)),
                 Buerger.GEBURTSDATUM, BuergerViewController.I18N_BASE_PATH);
         String errorMsg = controller.resolveRelative(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.validation));
-        birthdayfield.addValidator(ValidatorFactory.getValidator(ValidatorFactory.Type.DATE_RANGE,errorMsg, "start",null));
-        birthdayfield.addValidator(ValidatorFactory.getValidator(ValidatorFactory.Type.NULL,controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.validation)),"false"));
+        birthdayfield.addValidator(ValidatorFactory.getValidator(ValidatorFactory.Type.DATE_RANGE, errorMsg, "start", null));
+        birthdayfield.addValidator(ValidatorFactory.getValidator(ValidatorFactory.Type.NULL, controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.validation)), "false"));
         layout.addComponent(birthdayfield); 
         
         
@@ -128,8 +131,8 @@ public class BuergerUpdateForm extends CustomComponent implements Consumer<Event
                 controller.postEvent(controller.buildAppEvent(EventType.UPDATE).setEntity(buerger));
                 getNavigator().navigateTo(getNavigateTo());
             } catch (FieldGroup.CommitException e) {
-                GenericErrorNotification error = new GenericErrorNotification(controller.resolveRelative(getNotificationPath(NotificationType.failure, SimpleAction.save, Type.label)),
-                        controller.resolveRelative(getNotificationPath(NotificationType.failure,SimpleAction.save,Type.text)));
+                GenericErrorNotification error = new GenericErrorNotification(controller.resolveRelative(getNotificationPath(I18nPaths.NotificationType.failure, SimpleAction.save, Type.label)),
+                        controller.resolveRelative(getNotificationPath(I18nPaths.NotificationType.failure, SimpleAction.save, Type.text)));
                 error.show(Page.getCurrent());
             }
         });
@@ -144,7 +147,7 @@ public class BuergerUpdateForm extends CustomComponent implements Consumer<Event
     }
 
     @Override
-    public void accept(reactor.bus.Event<ComponentEvent<Buerger>> eventWrapper) {
+    public void accept(reactor.bus.Event<ComponentEvent<LocalBuerger>> eventWrapper) {
         ComponentEvent event = eventWrapper.getData();
 
         if (event.getEventType().equals(EventType.SELECT2UPDATE)) {

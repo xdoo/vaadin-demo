@@ -3,13 +3,11 @@ package de.muenchen.demo.service.domain;
 import org.hibernate.envers.NotAudited;
 
 import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import javax.validation.constraints.Size;
 
 /**
  *

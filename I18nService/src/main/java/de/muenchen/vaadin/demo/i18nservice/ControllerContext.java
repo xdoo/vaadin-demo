@@ -1,9 +1,9 @@
 package de.muenchen.vaadin.demo.i18nservice;
 
-import de.muenchen.vaadin.demo.api.local.LocalBuerger;
-import de.muenchen.vaadin.demo.api.util.EventType;
-import de.muenchen.vaadin.ui.app.views.events.AppEvent;
-import de.muenchen.vaadin.ui.app.views.events.ComponentEvent;
+import com.vaadin.server.FontAwesome;
+import de.muenchen.eventbus.events.AppEvent;
+import de.muenchen.eventbus.events.ComponentEvent;
+import de.muenchen.eventbus.types.EventType;
 
 /**
  * Interface to open up most important functionality of a Controller.
@@ -41,7 +41,7 @@ public interface ControllerContext<E> {
      * @param eventType the type the event should be
      * @return an Controller-specific AppEvent.
      */
-    AppEvent<LocalBuerger> buildAppEvent(EventType eventType);
+    AppEvent<E> buildAppEvent(EventType eventType);
 
     /**
      * Build an ComponentEvent like using the constructor, but using the right Entity/Controller specific Class.
@@ -50,7 +50,7 @@ public interface ControllerContext<E> {
      * @param eventType the type the event should be
      * @return an Controller-specific AppEvent.
      */
-    ComponentEvent<LocalBuerger> buildComponentEvent(EventType eventType);
+    ComponentEvent<E> buildComponentEvent(EventType eventType);
 
     String getBasePath();
 }
