@@ -16,7 +16,7 @@ import de.muenchen.vaadin.demo.api.local.LocalBuerger;
 import de.muenchen.vaadin.demo.api.rest.BuergerResource;
 import de.muenchen.vaadin.demo.i18nservice.ControllerContext;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
-import de.muenchen.vaadin.guilib.components.GenericErrorNotification;
+import de.muenchen.vaadin.guilib.components.GenericFailureNotification;
 import de.muenchen.vaadin.guilib.components.GenericSuccessNotification;
 import de.muenchen.vaadin.guilib.services.MessageService;
 import de.muenchen.vaadin.guilib.util.VaadinUtil;
@@ -517,13 +517,13 @@ public class BuergerViewController implements Serializable, ControllerContext<Lo
 					resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.delete, Type.label)),
 					resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.delete, Type.text)));
 		} catch (HttpClientErrorException e) {
-			LOG.warn(e.getMessage());
+			LOG.warn("Exception: " + e.getMessage());
 			if (e.getStatusCode().equals(HttpStatus.CONFLICT)) {
-				resultNotification = new GenericErrorNotification(
+				resultNotification = new GenericFailureNotification(
 						resolveRelative(getNotificationPath(NotificationType.failure, SimpleAction.delete, Type.label)),
 						resolveRelative(getNotificationPath(NotificationType.failure, SimpleAction.delete, Type.text)));
 			} else {
-				resultNotification = new GenericErrorNotification(
+				resultNotification = new GenericFailureNotification(
 						resolveRelative(getNotificationPath(NotificationType.failure, SimpleAction.delete, Type.label)),
 						e.getLocalizedMessage()
 				);
