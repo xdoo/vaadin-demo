@@ -11,51 +11,124 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.access.prepost.PreFilter;
 
 /**
+ * Provides a Repository for a {@link Buerger}. This Repository can be exported as a REST Resource.
+ * <p>
+ * The Repository handles CRUD Operations. Every Operation is secured and takes care of the tenancy.
+ * For specific Documentation on how the generated REST point behaves, please consider the Spring Data Rest Reference
+ * <a href="http://docs.spring.io/spring-data/rest/docs/current/reference/html/">here</a>.
+ * </p>
  *
- * @author claus.straube
+ * @author p.mueller
+ * @version 1.0
  */
+@SuppressWarnings("SpringElInspection")
 @PreAuthorize("hasRole('ROLE_READ_Buerger')")
 public interface BuergerRepository extends CrudRepository<Buerger, Long> {
 
+    /**
+     * Name for the specific cache.
+     */
     String BUERGER_CACHE = "BUERGER_CACHE";
 
+    /**
+     * Get all the Buergers that match the current tenancy.
+     * <p>
+     * The Buergers that belong to another tenant will get filtered out.
+     * </p>
+     *
+     * @return an Iterable of the Buergers with the same Tenancy.
+     */
     @Override
     @PostFilter(TenantService.IS_TENANT_FILTER)
     Iterable<Buerger> findAll();
 
+
+    /**
+     * Get one specific Buerger by its unique oid.
+     * <p>
+     * If the tenant id does not match, no Permission on this resource will be granted.
+     * </p>
+     *
+     * @param oid The identifier of the Buerger.
+     * @return The Buerger with the requested oid.
+     */
     @Override
     @Cacheable(value = BUERGER_CACHE, key = "#p0")
     @PreAuthorize("hasRole('ROLE_READ_Buerger')")
     @PostAuthorize(TenantService.IS_TENANT_AUTH)
-    Buerger findOne(Long aLong);
+    Buerger findOne(Long oid);
 
+
+    /**
+     * Create or update a Buerger.
+     * <p>
+     * If the oid already exists, the Buerger will be overridden, hence update.
+     * If the oid does no already exist, a new Buerger will be created, hence create.
+     * </p>
+     * <p>
+     * The Buerger can only be saved if the tenant matches the tenant of the current User.
+     * </p>
+     *
+     * @param buerger The Buerger that will be saved.
+     * @return the saved Buerger.
+     */
+    @SuppressWarnings("unchecked")
     @Override
     @CachePut(value = BUERGER_CACHE, key = "#p0.oid")
     @PreAuthorize("hasRole('ROLE_WRITE_Buerger') and " + TenantService.IS_TENANT_AUTH)
     Buerger save(Buerger buerger);
 
+    /**
+     * Delete the Buerger by a specified oid.
+     * <p>
+     * The Buerger can only be deleted if the tenant matches.
+     * </p>
+     *
+     * @param aLong the unique oid of the Buerger that will be deleted.
+     */
     @Override
     @CacheEvict(value = BUERGER_CACHE, key = "#p0")
     @PreAuthorize("hasRole('ROLE_DELETE_Buerger')")
     @PostAuthorize(TenantService.IS_TENANT_AUTH)
     void delete(Long aLong);
 
+    /**
+     * Delete multiple Buergers by their oid.
+     * <p>
+     * Only the Buergers with matching tenant will be deleted.
+     * </p>
+     *
+     * @param iterable The Iterable of Buergers that will be deleted.
+     */
     @Override
     @CacheEvict(value = BUERGER_CACHE, allEntries = true)
     @PreAuthorize("hasRole('ROLE_DELETE_Buerger')")
     @PreFilter(TenantService.IS_TENANT_FILTER)
     void delete(Iterable<? extends Buerger> iterable);
 
+    /**
+     * Delete all Buergers.
+     * <p>
+     * Only the Buergers with matching tenant will be deleted.
+     * </p>
+     */
     @Override
     @CacheEvict(value = BUERGER_CACHE, allEntries = true)
     @PreAuthorize("hasRole('ROLE_DELETE_Buerger')")
     @PreFilter(TenantService.IS_TENANT_FILTER)
     void deleteAll();
 
+    /**
+     * Delete a Buerger by entity.
+     * <p>
+     * The delete is only permitted if the tenant is matching.
+     * </p>
+     *
+     * @param entity The buerger that will be deleted.
+     */
     @Override
     @CacheEvict(value = BUERGER_CACHE, key = "#p0.oid")
     @PreAuthorize("hasRole('ROLE_DELETE_Buerger')")
     @PostAuthorize(TenantService.IS_TENANT_AUTH)
-    public void delete(Buerger entity);
-
+    void delete(Buerger entity);
 }
