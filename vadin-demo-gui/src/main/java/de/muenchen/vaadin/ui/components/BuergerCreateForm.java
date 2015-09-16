@@ -21,7 +21,7 @@ import de.muenchen.vaadin.demo.api.domain.Buerger;
 import de.muenchen.vaadin.demo.api.local.LocalBuerger;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
-import de.muenchen.vaadin.guilib.components.GenericErrorNotification;
+import de.muenchen.vaadin.guilib.components.GenericWarningNotification;
 import de.muenchen.vaadin.guilib.util.ValidatorFactory;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
@@ -170,9 +170,10 @@ public class BuergerCreateForm extends CustomComponent {
                 birthdayfield.removeValidator(val);
                 binder.setItemDataSource(new LocalBuerger());
             } catch (CommitException | Validator.InvalidValueException e) {
-                GenericErrorNotification error = new GenericErrorNotification(controller.resolveRelative(getNotificationPath(NotificationType.failure, SimpleAction.save, Type.label)),
-                        controller.resolveRelative(getNotificationPath(NotificationType.failure,SimpleAction.save,Type.text)));
-                error.show(Page.getCurrent());
+                GenericWarningNotification warn = new GenericWarningNotification(
+                        controller.resolveRelative(getNotificationPath(NotificationType.warning, SimpleAction.save, Type.label)),
+                        controller.resolveRelative(getNotificationPath(NotificationType.warning, SimpleAction.save, Type.text)));
+                warn.show(Page.getCurrent());
             }
         });
         createButton.addStyleName(ValoTheme.BUTTON_FRIENDLY);

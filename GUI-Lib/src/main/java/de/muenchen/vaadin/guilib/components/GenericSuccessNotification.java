@@ -1,23 +1,15 @@
 package de.muenchen.vaadin.guilib.components;
 
-import com.vaadin.shared.Position;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.themes.ValoTheme;
 
 /**
  *
  * @author claus.straube
  */
-public class GenericSuccessNotification extends Notification {
+public class GenericSuccessNotification extends GenericNotification {
 
     public GenericSuccessNotification(String caption, String description) {
-        super(caption, description);
-        super.setStyleName(ValoTheme.NOTIFICATION_SUCCESS);
-        super.setStyleName(ValoTheme.NOTIFICATION_CLOSABLE);
-        super.setStyleName(ValoTheme.NOTIFICATION_TRAY);
-        super.setStyleName(ValoTheme.NOTIFICATION_SMALL);
-        super.setDelayMsec(3000);
-        super.setPosition(Position.BOTTOM_RIGHT);
+        super(caption, description, ValoTheme.NOTIFICATION_SUCCESS);
     }
     
     
