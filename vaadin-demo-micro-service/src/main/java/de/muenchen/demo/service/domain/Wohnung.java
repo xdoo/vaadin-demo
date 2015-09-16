@@ -8,7 +8,15 @@ package de.muenchen.demo.service.domain;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
@@ -23,19 +31,17 @@ public class Wohnung extends BaseEntity implements Serializable {
 //    @Autowired
 //    AdresseService adresseService;
 
-    @Column(name = "WOHN_STOCK")
-    private String stock;
-
-    @Column(length = 20, name = "WOHN_AUSRICHTUNG")
-    private String ausrichtung;
-
-    @NotAudited
-    @OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
-    @JoinColumn(name = "Adresse_Id", referencedColumnName = "Id")
-    private AdresseReference adresse;
-
     @Transient
     Adresse adr;
+    @Column(name = "WOHN_STOCK")
+    private String stock;
+    @Column(name = "WOHN_AUSRICHTUNG")
+    @Size(max = 20)
+    private String ausrichtung;
+    @NotAudited
+    @OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "Adresse_Oid", referencedColumnName = "OID")
+    private AdresseReference adresse;
 
     public Wohnung() {
     }
@@ -73,7 +79,7 @@ public class Wohnung extends BaseEntity implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("id > %s | oid > %s  | ausrichtung > %s | stock > %s", this.getId(), this.getOid(), this.ausrichtung, this.stock);
+        return String.format("oid > %s  | ausrichtung > %s | stock > %s", this.getOid(), this.ausrichtung, this.stock);
     }
 
     public Adresse getAdr() {

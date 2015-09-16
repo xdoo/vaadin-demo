@@ -1,9 +1,9 @@
 package de.muenchen.demo.service.security;
 
 import de.muenchen.demo.service.domain.AuthorityPermission;
+import de.muenchen.demo.service.domain.AuthorityPermissionRepository;
 import de.muenchen.demo.service.domain.UserAuthority;
-import de.muenchen.demo.service.services.AuthorityPermissionService;
-import de.muenchen.demo.service.services.UserAuthorityService;
+import de.muenchen.demo.service.domain.UserAuthorityRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,10 +33,10 @@ public class CustomLdapAuthoritiesPopulator implements LdapAuthoritiesPopulator 
     private static final Logger LOG = LoggerFactory.getLogger(CustomLdapAuthoritiesPopulator.class);
 
     @Autowired
-    private UserAuthorityService userAuthService;
+    private UserAuthorityRepository userAuthRepository;
 
     @Autowired
-    private AuthorityPermissionService authorityPermissionService;
+    private AuthorityPermissionRepository authorityPermissionRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -50,13 +50,14 @@ public class CustomLdapAuthoritiesPopulator implements LdapAuthoritiesPopulator 
 
         Afterwards returns a list of all permissions of this user.
          */
-        List<UserAuthority> authorities = userAuthService.readByUsername(username);
+
+        List<UserAuthority> authorities = userAuthRepository.findByIdUserUsername(username);
 
         authorities.stream().forEach(userAuthority -> {
 
             String authorityName = userAuthority.getId().getAuthority().getAuthority();
 
-            List<AuthorityPermission> authorityPermissionsList = authorityPermissionService.readByAuthority(authorityName);
+            List<AuthorityPermission> authorityPermissionsList = authorityPermissionRepository.findByIdAuthorityAuthority(authorityName);
 
             authorityPermissionsList.stream().forEach(authorityPermission -> {
 

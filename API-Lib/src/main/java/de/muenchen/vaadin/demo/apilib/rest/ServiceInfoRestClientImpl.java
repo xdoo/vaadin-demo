@@ -9,7 +9,6 @@ import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
@@ -23,15 +22,12 @@ import org.springframework.web.client.RestTemplate;
 public class ServiceInfoRestClientImpl implements ServiceInfoRestClient {
 
     RestTemplate restTemplate = new RestTemplate();
-
-    @Value(value = "${service.info.url}")
-    private String url;
-
-    @Value(value = "${service.info.id.eureka}")
-    private String eurekaId;
-
     @Autowired
     DiscoveryClient discoveryClient;
+    @Value(value = "${service.info.url}")
+    private String url;
+    @Value(value = "${service.info.id.eureka}")
+    private String eurekaId;
 
     @Override
     public ServiceInfo getServiceInfo() {
@@ -62,8 +58,8 @@ public class ServiceInfoRestClientImpl implements ServiceInfoRestClient {
             // service.info.url will be used
         }
 
-        ResponseEntity<ServiceInfoResource> resource = this.restTemplate.getForEntity(this.url, ServiceInfoResource.class);
-        return ServiceInfoAssembler.fromResource(resource.getBody());
+        //ResponseEntity<ServiceInfoResource> resource = this.restTemplate.getForEntity(this.url, ServiceInfoResource.class);
+        return null; //TODO ServiceInfoAssembler.fromResource(resource.getBody());
 
     }
 

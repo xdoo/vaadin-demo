@@ -28,6 +28,7 @@ public class SecurityRestClientImpl implements SecurityRestClient {
     
     @Override
     public Optional<Principal> getPrincipal(RestTemplate template) {
+
         ServiceInfo serviceInfo = serviceInfoClient.getServiceInfo();
 
         Principal principal = null;

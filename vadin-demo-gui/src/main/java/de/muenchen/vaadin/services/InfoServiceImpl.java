@@ -21,15 +21,14 @@ public class InfoServiceImpl implements InfoService {
     private static final Logger LOG = LoggerFactory.getLogger(InfoService.class);
     
     private final ServiceInfoRestClient client;
-
+    private Map<String, Link> links;
+    
+    
+    
     @Autowired
     public InfoServiceImpl(ServiceInfoRestClient client) {
         this.client = client;
     }
-    
-    
-    
-    private Map<String, Link> links;
     
     /**
      * Lädt die Liste der Service Links initial.
@@ -58,7 +57,7 @@ public class InfoServiceImpl implements InfoService {
      */
     public void loadLinks() {
 //        TODO > fix in service
-        this.links = client.getServiceInfo().getEntityLinks();
+//        this.links = client.getServiceInfo().getEntityLinks();
 //        this.links = new HashMap<>();
     }
     

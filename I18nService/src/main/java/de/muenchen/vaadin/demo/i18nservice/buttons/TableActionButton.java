@@ -1,7 +1,6 @@
 package de.muenchen.vaadin.demo.i18nservice.buttons;
 
 import com.vaadin.data.util.BeanItemContainer;
-import de.muenchen.vaadin.demo.apilib.domain.BaseEntity;
 import de.muenchen.vaadin.demo.i18nservice.ControllerContext;
 
 import java.util.ArrayList;
@@ -13,7 +12,7 @@ import java.util.function.BiConsumer;
  * <p>
  * It has no text label. {@see TableAction}
  */
-public class TableActionButton<T extends BaseEntity> extends ActionButton {
+public class TableActionButton<T> extends ActionButton {
 
     /**
      * The id in the container
@@ -57,7 +56,7 @@ public class TableActionButton<T extends BaseEntity> extends ActionButton {
      * The {@link de.muenchen.vaadin.demo.i18nservice.buttons.TableActionButton.Builder#build(BeanItemContainer, Object)} method
      * is used to finally set the id and container and get the desired button.
      */
-    public static class Builder<T extends BaseEntity> {
+    public static class Builder<T> {
         private final ControllerContext context;
         private final Action action;
         private final String navigateTo;
@@ -82,7 +81,7 @@ public class TableActionButton<T extends BaseEntity> extends ActionButton {
          *                          with the container and the id.
          * @return An (almost ready) Builder for the Button.
          */
-        public static <T extends BaseEntity> Builder make(ControllerContext context, Action action, String navigateTo, BiConsumer<BeanItemContainer<T>, Object> itemClickListener) {
+        public static <T> Builder make(ControllerContext context, Action action, String navigateTo, BiConsumer<BeanItemContainer<T>, Object> itemClickListener) {
             Builder builder = new Builder(context, action, navigateTo, itemClickListener);
             return builder;
         }

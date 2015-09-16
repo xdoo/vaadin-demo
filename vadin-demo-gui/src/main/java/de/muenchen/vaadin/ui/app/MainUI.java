@@ -67,14 +67,14 @@ public class MainUI extends UI implements ControllerContext{
     private final SpringViewProvider viewProvider;
     private final SecurityService security;
     private final MessageService i18n;
-    @Autowired
-    private EventBus eventBus;
     private final boolean testMode = false;
     private final LinkedHashMap<String, String> menuItems = new LinkedHashMap<String, String>();
     protected ValoMenuLayout root = new ValoMenuLayout();
     protected ComponentContainer viewDisplay = root.getContentContainer();
     protected CssLayout menu = new CssLayout();
     protected CssLayout menuItemsLayout = new CssLayout();
+    @Autowired
+    private EventBus eventBus;
     private Navigator navigator;
 
     @Autowired

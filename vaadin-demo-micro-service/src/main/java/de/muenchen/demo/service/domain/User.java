@@ -5,9 +5,18 @@
  */
 package de.muenchen.demo.service.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.search.annotations.Indexed;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
@@ -22,13 +31,11 @@ import java.util.Set;
 @Table(name = "USERS")
 public class User implements Serializable {
 
+    @Column(name = "OID")
+    @Size(max = 32)
     @Id
-    @GeneratedValue
-    @Column(name = "ID")
-    private Long id;
-
-    @Column(length = 30, unique = true, nullable = false, name = "OID")
     private String oid;
+
     @Column(name = "USER_USERNAME", nullable = false)
     private String username;
 
@@ -51,14 +58,16 @@ public class User implements Serializable {
     @Column(name = "USER_EMAIL")
     private String email;
 
-    @Column(length = 255, name = "CREATED_BY")
+    @Column(name = "CREATED_BY")
+    @Size(max = 255)
     private String createdBy;
 
     @Column(name = "CREATED_DATE")
     @Temporal(javax.persistence.TemporalType.DATE)
     private java.util.Date createdDate;
 
-    @Column(length = 255, name = "LAST_MOD_BY")
+    @Column(name = "LAST_MOD_BY")
+    @Size(max = 255)
     private String lastModBy;
 
     @Column(name = "LAST_MOD_DATE")
@@ -68,8 +77,8 @@ public class User implements Serializable {
     @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
     private Set<Account> accounts = new HashSet<>();
 
-    @ManyToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
-    private Mandant mandant;
+    @JsonIgnore
+    private String mandant;
 
     public User() {
     }
@@ -87,14 +96,6 @@ public class User implements Serializable {
         this.lastModBy = user.lastModBy;
         this.lastModDate = user.lastModDate;
         this.mandant = user.mandant;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getOid() {
@@ -137,12 +138,12 @@ public class User implements Serializable {
         this.lastModDate = lastModDate;
     }
 
-    public Mandant getMandant() {
+    public String getMandant() {
         return mandant;
     }
 
-    public void setMandant(Mandant mandant) {
-        this.mandant = mandant;
+    public void setMandant(String tenantId) {
+        this.mandant = tenantId;
     }
 
     public Set<Account> getAccounts() {

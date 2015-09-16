@@ -33,7 +33,7 @@ public class AuditingService {
     public void eventHandler(Event<AuditingEvent> eventWrapper) {
         //new Thread(() -> {
         AuditingUserEntity entity = createAuditingUserEntity(eventWrapper.getData());
-        repo.save(entity);
+        //repo.save(entity);
         //}).start();
     }
 

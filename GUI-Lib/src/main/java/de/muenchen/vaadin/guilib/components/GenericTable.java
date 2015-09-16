@@ -6,7 +6,6 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Table;
 import de.muenchen.eventbus.events.ComponentEvent;
 import de.muenchen.eventbus.types.EventType;
-import de.muenchen.vaadin.demo.apilib.domain.BaseEntity;
 import de.muenchen.vaadin.demo.apilib.util.FieldIdentifier;
 import de.muenchen.vaadin.demo.i18nservice.ControllerContext;
 import de.muenchen.vaadin.demo.i18nservice.buttons.TableActionButton;
@@ -29,7 +28,7 @@ import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getEntityFieldPath;
  * @param <T>  the type of Entity
  * @author rene.zarwel
  */
-public class GenericTable<T extends BaseEntity> extends CustomComponent implements Consumer<Event<ComponentEvent<T>>> {
+public class GenericTable<T> extends CustomComponent implements Consumer<Event<ComponentEvent<T>>> {
 
     /**
      * The constant LOG.
@@ -100,7 +99,7 @@ public class GenericTable<T extends BaseEntity> extends CustomComponent implemen
      * @param entity the entity
      */
     public void add(Optional<T> entity) {
-        if(entity.isPresent()) {
+        if (entity.isPresent()) {
             LOG.debug("added entity to table.");
             this.container.addBean(entity.get());
         }
@@ -138,7 +137,7 @@ public class GenericTable<T extends BaseEntity> extends CustomComponent implemen
         HorizontalLayout layout = new HorizontalLayout();
         if (buttonBuilders!=null)
         this.buttonBuilders.stream()
-                .map((builder) -> builder.build(container,id))
+                .map((builder) -> builder.build(container, id))
                 .forEachOrdered(layout::addComponent);
 
         layout.setSpacing(true);

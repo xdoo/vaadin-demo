@@ -11,16 +11,14 @@ import java.util.Date;
 /**
  * Created by fabian.holtkoetter on 02.09.15.
  */
-@Entity
+@Entity(name = "AUDITING_USER_ENTITY")
 public class AuditingUserEntity {
-    @Id
-    @GeneratedValue
-    private long id;
-
     @Lob
     @Field
     String entity;
-
+    @Id
+    @GeneratedValue
+    private long oid;
     @Field
     private String username;
 
@@ -62,18 +60,18 @@ public class AuditingUserEntity {
         this.changeType = changeType;
     }
 
-    public long getId() {
-        return id;
+    public long getOid() {
+        return oid;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setOid(long oid) {
+        this.oid = oid;
     }
 
     @Override
     public String toString() {
         return "AuditingUserEntity{" +
-                "id=" + id +
+                "oid=" + oid +
                 ", username='" + username + '\'' +
                 ", date=" + date +
                 ", changeType=" + changeType +

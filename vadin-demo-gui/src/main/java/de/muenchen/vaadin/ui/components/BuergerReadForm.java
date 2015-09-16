@@ -10,10 +10,11 @@ import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.events.ComponentEvent;
 import de.muenchen.eventbus.types.EventType;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
+import de.muenchen.vaadin.demo.api.local.LocalBuerger;
+import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
-import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.bus.Event;
@@ -29,14 +30,14 @@ import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getFormPath;
  *
  * @author claus
  */
-public class BuergerReadForm extends CustomComponent implements Consumer<Event<ComponentEvent<Buerger>>> {
+public class BuergerReadForm extends CustomComponent implements Consumer<Event<ComponentEvent<LocalBuerger>>> {
     
     /**
      * Logger
      */
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerReadForm.class);
-    
-    final BeanFieldGroup<Buerger> binder = new BeanFieldGroup<Buerger>(Buerger.class);
+
+    final BeanFieldGroup<LocalBuerger> binder = new BeanFieldGroup<LocalBuerger>(LocalBuerger.class);
     final BuergerViewController controller;
     
     private final String navigateToUpdate;
@@ -115,7 +116,7 @@ public class BuergerReadForm extends CustomComponent implements Consumer<Event<C
     }
 
     @Override
-    public void accept(reactor.bus.Event<ComponentEvent<Buerger>> eventWrapper) {
+    public void accept(reactor.bus.Event<ComponentEvent<LocalBuerger>> eventWrapper) {
         ComponentEvent event = eventWrapper.getData();
 
         if (event.getEventType().equals(EventType.SELECT2READ)) {

@@ -1,9 +1,10 @@
 package de.muenchen.demo.service.domain;
 
-import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
+import java.io.Serializable;
 
 /**
  *
@@ -14,12 +15,18 @@ import javax.persistence.Table;
 public class AdresseInterne extends BaseEntity implements Serializable {
 
     @Column(nullable = true, name = "ADR_HAUSNUMMER")
+    @Size(max = 70)
     private Integer hausnummer;
-    @Column(length = 10, nullable = true, name = "ADR_BUCHSTABE")
+
+    @Column(name = "ADR_BUCHSTABE")
+    @Size(max = 10)
     private String buchstabe;
 
-    @Column(length = 70, nullable = true, name = "ADR_STRASSE")
-    private Integer strasseReference;
+
+    @Column(nullable = true, name = "ADR_STRASSE")
+    @Size(max = 70)
+    private Long strasseReference;
+
 
     public Integer getHausnummer() {
         return hausnummer;
@@ -37,11 +44,11 @@ public class AdresseInterne extends BaseEntity implements Serializable {
         this.buchstabe = buchstabe;
     }
 
-    public Integer getStrasseReference() {
+    public Long getStrasseReference() {
         return strasseReference;
     }
 
-    public void setStrasseReference(Integer strasseReference) {
+    public void setStrasseReference(Long strasseReference) {
         this.strasseReference = strasseReference;
     }
 

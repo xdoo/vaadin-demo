@@ -1,193 +1,114 @@
 package de.muenchen.vaadin.demo.api.rest;
 
 import de.muenchen.vaadin.demo.api.domain.Buerger;
-import de.muenchen.vaadin.demo.apilib.hateoas.HateoasUtil;
-import de.muenchen.vaadin.demo.apilib.rest.SearchResultResource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.core.ParameterizedTypeReference;
+import de.muenchen.vaadin.demo.api.hateoas.LocalBuergerAssembler;
+import de.muenchen.vaadin.demo.api.local.LocalBuerger;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.MediaTypes;
+import org.springframework.hateoas.client.Traverson;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
+import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
- *
- * @author claus
+ * @author p.mueller
  */
-@Service
 public class BuergerRestClientImpl implements BuergerRestClient {
-    
-    protected static final Logger LOG = LoggerFactory.getLogger(BuergerRestClientImpl.class);
-    
-    @Override
-    public Buerger newBuerger(List<Link> links, RestTemplate restTemplate) {
-        return this.readSingleSource(HateoasUtil.REL_NEW, links, restTemplate);
-    }
-    
-    @Override
-    public Buerger readBuerger(List<Link> links, RestTemplate restTemplate) {
-        return this.readSingleSource(Link.REL_SELF, links, restTemplate);
-    }
-    
-    @Override
-    public Buerger copyBuerger(List<Link> links, RestTemplate restTemplate) {
-        return this.readSingleSource(HateoasUtil.REL_COPY, links, restTemplate);
-    }
-    
-    @Override
-    public List<Buerger> queryBuerger(List<Link> links, RestTemplate restTemplate) {
-        return this.requestMultiSource(HttpMethod.GET, HateoasUtil.REL_QUERY, links, restTemplate);
-    }
-    
-    @Override
-    public List<Buerger> queryBuerger(String query, List<Link> links, RestTemplate restTemplate) {
-        return this.requestMultiSource(HttpMethod.POST, HateoasUtil.REL_QUERY, links, restTemplate, new HttpEntity(query));
-    }
-    
-    @Override
-    public Buerger updateBuerger(Buerger buerger, RestTemplate restTemplate) {
-        return this.updateSingleSource(HateoasUtil.REL_UPDATE, buerger, restTemplate);
-    }
-    
-    @Override
-    public Buerger saveBuerger(Buerger buerger, RestTemplate restTemplate) {
-        return this.writeSingleSource(HateoasUtil.REL_SAVE, buerger, restTemplate);
-    }
-    
-    @Override
-    public void deleteBuerger(List<Link> links, RestTemplate restTemplate) {
-        Optional<Link> link = HateoasUtil.findLinkForRel(HateoasUtil.REL_DELETE, links);
-        if (link.isPresent()) {
-            ResponseEntity<BuergerResource> exchange = restTemplate.exchange(link.get().getHref(), HttpMethod.DELETE, null, new ParameterizedTypeReference<BuergerResource>() {});
-            LOG.debug(exchange.toString());
-        }
-    }
-    
-    @Override
-    public List<Buerger> queryKinder(List<Link> links, RestTemplate restTemplate) {
-        return this.requestMultiSource(HttpMethod.GET, "kinder", links, restTemplate);
+
+    public static final String BUERGERS = "buergers";
+    private final Traverson traverson;
+    private final RestTemplate restTemplate;
+
+    private final LocalBuergerAssembler localBuergerAssembler = new LocalBuergerAssembler();
+
+    public BuergerRestClientImpl(RestTemplate restTemplate, URI baseUri) {
+        this.restTemplate = restTemplate;
+
+        traverson = new Traverson(baseUri, MediaTypes.HAL_JSON);
+        traverson.setRestOperations(restTemplate);
     }
 
     @Override
-    public List<Buerger> queryHistory(List<Link> links, RestTemplate restTemplate) {
-        return this.requestMultiSource(HttpMethod.GET, "history", links, restTemplate);
+    public List<LocalBuerger> findAll() {
+        return traverson
+                .follow(BUERGERS)
+                .toObject(BuergerResource.LIST).getContent()
+
+                .stream()
+                .map(localBuergerAssembler::toBean)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public List<Buerger> queryPartner(List<Link> links, RestTemplate restTemplate) {
-        return this.requestMultiSource(HttpMethod.GET, "partner", links, restTemplate);
-    }
-    
-    @Override
-    public Buerger saveBuergerKind(Buerger buerger, Buerger kind, RestTemplate restTemplate) {
-        Optional<Link> link = HateoasUtil.findLinkForRel(BuergerResource.SAVE_KIND, buerger.getLinks());
-        LOG.warn("used Link: "+link.get().toString());
-        return this.writeSingleSource(link, kind, restTemplate);
+    public List<LocalBuerger> findAll(Link relation) {
+        URI uri = URI.create(relation.getHref());
+
+        return restTemplate
+                .exchange(uri, HttpMethod.GET, null, BuergerResource.LIST)
+                .getBody()
+                .getContent()
+
+                .stream()
+                .map(localBuergerAssembler::toBean)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Buerger saveBuergerPartner(Buerger buerger, Buerger partner, RestTemplate restTemplate) {
-        Optional<Link> link = HateoasUtil.findLinkForRel(BuergerResource.SAVE_PARTNER, buerger.getLinks());
-        LOG.warn("used Link: "+link.get().toString());
-        return this.writeSingleSource(link, partner, restTemplate);
-    }
-    
-    
-    @Override
-    public Buerger addBuergerKind(Buerger buerger, Buerger kind, RestTemplate restTemplate) {
-        Optional<Link> link = HateoasUtil.findLinkForRel(BuergerResource.ADD_KIND, buerger.getLinks());
-        LOG.warn("used Link: "+link.get().toString());
-        return this.writeSingleSource(link, kind.getOid(), restTemplate);
-    }
-    @Override
-    public Buerger addBuergerPartner(Buerger buerger, Buerger partner, RestTemplate restTemplate) {
-        Optional<Link> link =
-                HateoasUtil.findLinkForRel(BuergerResource.ADD_PARTNER, buerger.getLinks());
-        LOG.warn("used Link: "+link.get().toString());
-        return this.writeSingleSource(link, partner.getOid(), restTemplate);
+    public Optional<LocalBuerger> findOne(Link link) {
+        URI uri = URI.create(link.getHref());
+
+        BuergerResource resource = restTemplate
+                .exchange(uri, HttpMethod.GET, null, BuergerResource.class)
+                .getBody();
+
+        return Optional.of(localBuergerAssembler.toBean(resource));
     }
 
     @Override
-    public Buerger releaseBuergerElternteil(Buerger elternteil, Buerger kind, RestTemplate restTemplate) {
-        Optional<Link> link = HateoasUtil.findLinkForRel(BuergerResource.RELEASE_ELTERNTEIL, kind.getLinks());
-        if(link.isPresent()) {
-            LOG.warn("used Link: " + link.get().toString());
-            return this.writeSingleSource(link, elternteil.getOid(), restTemplate);
-        }else
-        return null;
+    public void setRelations(Link link, Collection<Link> links) {
+        String relations = links.stream().map(Link::getHref).collect(Collectors.joining("\n"));
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("text", "uri-list"));
+        restTemplate.exchange(URI.create(link.getHref()), HttpMethod.PUT, new HttpEntity<>(relations, headers), Void.class);
     }
 
     @Override
-    public Buerger releaseBuergerPartner(Buerger buerger, Buerger partner, RestTemplate restTemplate) {
-        Optional<Link> link = HateoasUtil.findLinkForRel(BuergerResource.RELEASE_PARTNER,partner.getLinks());
-        LOG.error(link.toString());
-        if(link.isPresent()) {
-            LOG.warn("used Link: " + link.get().toString());
-            return this.writeSingleSource(link, buerger.getOid(), restTemplate);
-        }else
-            return null;
+    public LocalBuerger create(LocalBuerger localBuerger) {
+        URI uri = URI.create(
+                traverson.follow("buergers")
+                        .asLink().getHref()
+        );
+
+        Buerger buerger = localBuergerAssembler.toResource(localBuerger).getContent();
+
+        BuergerResource resource = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(buerger), BuergerResource.class).getBody();
+
+        return localBuergerAssembler.toBean(resource);
     }
 
-    public Buerger writeSingleSource(String rel, Buerger buerger, RestTemplate restTemplate) {
-        Optional<Link> link = HateoasUtil.findLinkForRel(rel, buerger.getLinks());
-        return this.writeSingleSource(link, buerger, restTemplate);
-    }
-    
-    public Buerger writeSingleSource(Optional<Link> link, Object buerger, RestTemplate restTemplate) {
-        if(link.isPresent()) {
-            ResponseEntity<BuergerResource> resource = restTemplate.postForEntity(link.get().getHref(), buerger, BuergerResource.class);
-            return BuergerAssembler.fromResource(resource.getBody());
-        }
-        LOG.warn("Found no link to self.");
-        return null;
+
+    @Override
+    public LocalBuerger update(LocalBuerger localBuerger) {
+        URI uri = URI.create(localBuerger.getId().getHref());
+
+        Buerger buerger = localBuergerAssembler.toResource(localBuerger).getContent();
+
+        BuergerResource resource = restTemplate.exchange(uri, HttpMethod.PUT, new HttpEntity<>(buerger), BuergerResource.class).getBody();
+
+        return localBuergerAssembler.toBean(resource);
     }
 
-    public Buerger updateSingleSource(String rel, Buerger buerger, RestTemplate restTemplate) {
-        Optional<Link> link = HateoasUtil.findLinkForRel(rel, buerger.getLinks());
-        return this.updateSingleSource(link, buerger, restTemplate);
+    @Override
+    public void delete(Link id) {
+        URI uri = URI.create(id.getHref());
+        restTemplate.exchange(uri, HttpMethod.DELETE, null, Void.class);
     }
-
-    public Buerger updateSingleSource(Optional<Link> link, Buerger buerger, RestTemplate restTemplate) {
-        if(link.isPresent()) {
-            restTemplate.put(link.get().getHref(), buerger, BuergerResource.class);
-            return buerger;
-        }
-        LOG.warn("Found no link to self.");
-        return null;
-    }
-    
-    public Buerger readSingleSource(String rel, List<Link> links, RestTemplate restTemplate) {
-        Optional<Link> link = HateoasUtil.findLinkForRel(rel, links);
-        if (link.isPresent()) {
-            ResponseEntity<BuergerResource> exchange = restTemplate.exchange(link.get().getHref(), HttpMethod.GET, null, new ParameterizedTypeReference<BuergerResource>() {});
-            LOG.debug(exchange.toString());
-            return BuergerAssembler.fromResource(exchange.getBody());
-        }
-        LOG.warn("Found no link.");
-        return null;
-    }
-    
-    
-    
-    public List<Buerger> requestMultiSource(HttpMethod httpMethod, String rel, List<Link> links, RestTemplate restTemplate) {
-        return this.requestMultiSource(httpMethod, rel, links, restTemplate, HttpEntity.EMPTY);
-    }
-    
-    public List<Buerger> requestMultiSource(HttpMethod httpMethod, String rel, List<Link> links, RestTemplate restTemplate, HttpEntity payload) {
-        Optional<Link> link = HateoasUtil.findLinkForRel(rel, links);
-        if (link.isPresent()) {
-            ResponseEntity<SearchResultResource<BuergerResource>> exchange = restTemplate.exchange(link.get().getHref(), httpMethod, payload, new ParameterizedTypeReference<SearchResultResource<BuergerResource>>() {});
-            LOG.debug(exchange.toString());
-            return BuergerAssembler.fromResources(exchange.getBody());
-        }
-        LOG.warn("Found no link. Link: " + link.toString());
-        return null;
-    }
-    
 }

@@ -7,55 +7,62 @@ package de.muenchen.demo.test.integration;
  */
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static com.github.tomakehurst.wiremock.client.WireMock.get;
-import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import com.google.common.collect.Lists;
 import de.muenchen.demo.service.Application;
 import de.muenchen.demo.service.domain.Buerger;
 import de.muenchen.demo.service.domain.BuergerRepository;
-import de.muenchen.demo.service.domain.Pass;
-import de.muenchen.demo.service.domain.Sachbearbeiter;
-import de.muenchen.demo.service.domain.Staatsangehoerigkeit;
-import de.muenchen.demo.service.domain.Wohnung;
-import de.muenchen.vaadin.demo.api.rest.BuergerResource;
-import de.muenchen.demo.service.services.BuergerService;
-import de.muenchen.demo.test.service.DomainConstants;
-import de.muenchen.vaadin.demo.apilib.rest.SearchResultResource;
-import de.muenchen.vaadin.demo.apilib.hateoas.HateoasUtil;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
-import static org.hamcrest.CoreMatchers.equalTo;
-import org.junit.Test;
-import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Rule;
+import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.MediaTypes;
+import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.Resources;
 import org.springframework.hateoas.hal.Jackson2HalModule;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+
+import java.net.MalformedURLException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 /**
  *
@@ -66,22 +73,20 @@ import org.springframework.web.client.RestTemplate;
 @WebIntegrationTest({"server.port=0", "management.port=0"})
 public class BuergerTest {
 
-    private RestTemplate restTemplate;
-    @Value("${local.server.port}")
-    private int port;
-
-    private BuergerResource response;
-    private List responseList;
-    private String urlSave;
-    private String urlNew;
-    @Autowired
-    private BuergerService service;
-    @Autowired
-    BuergerRepository repo;
     @Rule
     public ExpectedException thrown = ExpectedException.none();
-    @Rule
-    public WireMockRule wireMockRule = new WireMockRule(8089);
+    @Autowired
+    BuergerRepository repo;
+    @Autowired
+    AuthenticationManager authenticationManager;
+    Boolean lock = false;
+    private RestTemplate restTemplate;
+    private RestTemplate restTemplate2;
+    @Value("${local.server.port}")
+    private int port;
+    private String url;
+//    @AfterClass
+//    public 
 
     @Before
     public void setUp() throws JsonProcessingException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
@@ -95,570 +100,327 @@ public class BuergerTest {
         ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
         restTemplate = new RestTemplate(requestFactory);
 
+        MappingJackson2HttpMessageConverter halConverter = new MappingJackson2HttpMessageConverter();
+
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new Jackson2HalModule());
 
-        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-        converter.setObjectMapper(objectMapper);
-        restTemplate.setMessageConverters(Collections.<HttpMessageConverter<?>>singletonList(converter));
+        halConverter.setObjectMapper(objectMapper);
+        halConverter.setSupportedMediaTypes(Arrays.asList(MediaTypes.HAL_JSON));
 
-        ObjectMapper mapper = new ObjectMapper(); // can reuse, share globally
+        restTemplate.setMessageConverters(Arrays.asList(
+                halConverter,
+                new StringHttpMessageConverter()
+        ));
+        BasicCredentialsProvider credentialsProvider2 = new BasicCredentialsProvider();
+        credentialsProvider2.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials("hans2", "test2"));
 
-        Staatsangehoerigkeit staat = new Staatsangehoerigkeit();
-        staat.setCode("it");
-        staat.setLand("Italien");
-        staat.setSprache("Italienisch");
-        staat.setReference("OIDM2_STAATS007");
+        HttpClient httpClient2 = HttpClientBuilder.create()
+                .setDefaultCredentialsProvider(credentialsProvider2)
+                .build();
 
-        String json = mapper.writeValueAsString(staat);
+        ClientHttpRequestFactory requestFactory2 = new HttpComponentsClientHttpRequestFactory(httpClient2);
+        restTemplate2 = new RestTemplate(requestFactory2);
 
-        stubFor(get(urlEqualTo("/staat/OIDM2_STAATS007")).willReturn(
-                aResponse().withHeader("Content-Type", "application/json")
-                .withBody(json)
+        restTemplate2.setMessageConverters(Arrays.asList(
+                halConverter,
+                new StringHttpMessageConverter()
         ));
 
-        Staatsangehoerigkeit staat2 = new Staatsangehoerigkeit();
-        staat2.setCode("fr");
-        staat2.setLand("Frankreich");
-        staat2.setSprache("französisch");
-        staat2.setReference("OIDM2_STAATS008");
-
-        String json2 = mapper.writeValueAsString(staat2);
-
-        stubFor(get(urlEqualTo("/staat/OIDM2_STAATS008")).willReturn(
-                aResponse().withHeader("Content-Type", "application/json")
-                .withBody(json2)
-        ));
-
-        Staatsangehoerigkeit staat3 = new Staatsangehoerigkeit();
-        staat3.setCode("tn");
-        staat3.setLand("Tunesien");
-        staat3.setSprache("Arabisch");
-        staat3.setReference("OIDM2_STAATS015");
-
-        String json3 = mapper.writeValueAsString(staat3);
-
-        stubFor(get(urlEqualTo("/staat/OIDM2_STAATS015")).willReturn(
-                aResponse().withHeader("Content-Type", "application/json")
-                .withBody(json3)
-        ));
-
-        Staatsangehoerigkeit staat4 = new Staatsangehoerigkeit();
-        staat4.setCode("de");
-        staat4.setLand("Deutschland");
-        staat4.setSprache("Deutsch");
-        staat4.setReference("OIDM2_STAATS017");
-
-        String json4 = mapper.writeValueAsString(staat4);
-
-        stubFor(get(urlEqualTo("/staat/OIDM2_STAATS017")).willReturn(
-                aResponse().withHeader("Content-Type", "application/json")
-                .withBody(json4)
-        ));
-
-        urlSave = "http://localhost:" + port + "/buerger/save";
-        urlNew = "http://localhost:" + port + "/buerger/new";
-
+        if (lock == false) {
+            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken("hans", "test");
+            Authentication auth = authenticationManager.authenticate(token);
+            SecurityContextHolder.getContext().setAuthentication(auth);
+            Buerger b1M1 = new Buerger();
+            b1M1.setNachname("name1");
+            b1M1.setVorname("vorname1");
+            b1M1.setMandant("test");
+            b1M1.setOid(1L);
+            repo.save(b1M1);
+            Buerger b2M1 = new Buerger();
+            b2M1.setNachname("name2");
+            b2M1.setVorname("vorname2");
+            b2M1.setMandant("test");
+            b2M1.setOid(2L);
+            repo.save(b2M1);
+            Buerger b3M1 = new Buerger();
+            b3M1.setNachname("name3");
+            b3M1.setVorname("vorname3");
+            b3M1.setMandant("test");
+            b3M1.setOid(3L);
+            repo.save(b3M1);
+            Buerger b4M1 = new Buerger();
+            b4M1.setNachname("name4");
+            b4M1.setVorname("vorname4");
+            b4M1.setMandant("test");
+            b4M1.setOid(4L);
+            b4M1.getKinder().add(b3M1);
+            repo.save(b4M1);
+            Buerger b5M1 = new Buerger();
+            b5M1.setNachname("name5");
+            b5M1.setVorname("vorname5");
+            b5M1.setMandant("test");
+            b5M1.setOid(5L);
+            repo.save(b5M1);
+            UsernamePasswordAuthenticationToken token2 = new UsernamePasswordAuthenticationToken("hans2", "test2");
+            Authentication auth2 = authenticationManager.authenticate(token2);
+            SecurityContextHolder.getContext().setAuthentication(auth2);
+            Buerger b1M2 = new Buerger();
+            b1M2.setNachname("name1");
+            b1M2.setVorname("vorname1");
+            b1M2.setMandant("default");
+            b1M2.setOid(6L);
+            repo.save(b1M2);
+            Buerger b2M2 = new Buerger();
+            b2M2.setNachname("name2");
+            b2M2.setVorname("vorname2");
+            b2M2.setMandant("default");
+            b2M2.setOid(7L);
+            repo.save(b2M2);
+            Buerger b3M2 = new Buerger();
+            b3M2.setNachname("name3");
+            b3M2.setVorname("vorname3");
+            b3M2.setMandant("default");
+            b3M2.setOid(8L);
+            repo.save(b3M2);
+            Buerger b4M2 = new Buerger();
+            b4M2.setNachname("name4");
+            b4M2.setVorname("vorname4");
+            b4M2.setMandant("default");
+            b4M2.setOid(9L);
+            repo.save(b4M2);
+            Buerger b5M2 = new Buerger();
+            b5M2.setNachname("name5");
+            b5M2.setVorname("vorname5");
+            b5M2.setMandant("default");
+            b5M2.setOid(10L);
+            repo.save(b5M2);
+            lock = true;
+        }
     }
 
     @Test
-    @WithMockUser(username = DomainConstants.M2_U001_NAME)
-
-    public void newBuergerTest() throws JsonProcessingException {
-        System.out.println("========== create Bürger Test ==========");
-
-        response = restTemplate.getForEntity(urlNew, BuergerResource.class).getBody();
-        assertNotNull(response.getLink("new"));
-        assertNotNull(response.getLink("save"));
-        assertNotNull(response.getOid());
-        assertNull(repo.findFirstByOidAndMandantOid(response.getOid(), DomainConstants.M2));
-        System.out.println(String.format("Bürger wurde mit neuer OID '%s' erstellt (und nicht in der DB gespeichert)", response.getOid()));
-
+    public void getBuergersM1Test() throws JsonProcessingException {
+        System.out.println("========== get Alle Bürger Mandant 'test' Test ==========");
+        int x = this.count("test", "hans", "test");
+        url = "http://localhost:" + port + "/buergers";
+        ResponseEntity<Resources<BuergerResource>> result = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                null,
+                BuergerResource.LIST
+        );
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals(x, result.getBody().getContent().size());
+        assertFalse(result.getBody().getContent().isEmpty());
+        System.out.println(String.format("Suche wurde erfolgreich durchgeführt. Einträge Mandant 'test': %s | Ergebnis der Suche: %s", x, result.getBody().getContent().size()));
     }
 
-    private Buerger createBuerger(String oid) {
+    @Test
+    public void getBuergersM2Test() throws JsonProcessingException {
+        System.out.println("========== get Alle Bürger Mandant 'default' Test ==========");
+        int x = this.count("default", "hans2", "test2");
+        url = "http://localhost:" + port + "/buergers";
+        ResponseEntity<Resources<BuergerResource>> result = restTemplate2.exchange(
+                url,
+                HttpMethod.GET,
+                null,
+                BuergerResource.LIST
+        );
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals(x, result.getBody().getContent().size());
+        System.out.println(String.format("Suche wurde erfolgreich durchgeführt. Einträge Mandant 'default': %s | Ergebnis der Suche: %s", x, result.getBody().getContent().size()));
+    }
+
+    private int count(String mid, String name, String password) {
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(name, password);
+        Authentication auth = authenticationManager.authenticate(token);
+        SecurityContextHolder.getContext().setAuthentication(auth);
+        ArrayList<Buerger> all = Lists.newArrayList(repo.findAll());
+        return all.stream().filter(b -> b.getMandant().equals(mid)).collect(Collectors.counting()).intValue();
+    }
+
+    @Test
+    public void postBuergerM1Test() throws JsonProcessingException {
+        System.out.println("========== save Bürger M1 Test ==========");
+        url = "http://localhost:" + port + "/buergers";
+        ResponseEntity<BuergerResource> response2 = restTemplate.exchange(url, HttpMethod.POST, new HttpEntity<>(this.createBuerger()), BuergerResource.class);
+        assertEquals(HttpStatus.CREATED, response2.getStatusCode());
+        assertNotNull(response2.getBody().getContent());
+        System.out.println(String.format("Bürger wurde in der DB gespeichert."));
+    }
+
+    private Buerger createBuerger() {
         Buerger buerger = new Buerger();
-        buerger.setOid(oid);
         buerger.setNachname("hans");
         buerger.setVorname("peter");
         return buerger;
     }
 
     @Test
-    public void saveBuergerTest() throws JsonProcessingException {
-        System.out.println("========== save Bürger Test ==========");
-        String oid = "OIDTEST";
-        response = restTemplate.postForEntity(urlSave, this.createBuerger(oid), BuergerResource.class).getBody();
-        assertEquals(response.getNachname(), "hans");
-        assertEquals(DomainConstants.M2, response.getMandant().getOid());
-        assertNotNull(response.getLink(HateoasUtil.REL_NEW));
-        assertNotNull(response.getLink(HateoasUtil.REL_UPDATE));
-        assertNotNull(response.getLink(HateoasUtil.REL_COPY));
-        assertNotNull(response.getLink(HateoasUtil.REL_SELF));
-        assertNotNull(response.getLink(HateoasUtil.REL_DELETE));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.PAESSE));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.WOHNUNGEN));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.KINDER));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_WOHNUNG));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.ELTERN));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_ELTERN));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.STAATSANGEHOERIGKEITEN));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_KIND));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_PASS));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SACHBEARBEITER));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_SACHBEARBEITER));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_ELTERNTEIL));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_KINDER));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_PAESSE));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_SACHBEARBEITER));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_WOHNUNG));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_WOHNUNGEN));
+    public void getBuergerM1Test() throws JsonProcessingException {
+        System.out.println("========== get Bürger Test ==========");
+        url = "http://localhost:" + port + "/buergers/1";
+        ResponseEntity<BuergerResource> result = restTemplate.getForEntity(url, BuergerResource.class);
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertNotNull(result.getBody().getLink("kinder"));
+        assertNotNull(result.getBody().getLink("sachbearbeiter"));
+        assertNotNull(result.getBody().getLink("partner"));
+        assertNotNull(result.getBody().getLink("staatsangehoerigkeitReferences"));
+        assertNotNull(result.getBody().getLink("wohnungen"));
+        assertNotNull(result.getBody().getLink("pass"));
+        assertNotNull(result.getBody().getLink("self"));
+        System.out.println(String.format("Bürger mit Mandant 'test' wurde von der DB gelesen."));
 
-        System.out.println(String.format("Bürger wurde mit Mandant '%s' in der DB gespeichert.", response.getMandant().getOid()));
+    }
+
+    @Test(expected = HttpClientErrorException.class)
+    public void getBuergerM2Test() throws JsonProcessingException {
+        System.out.println("========== get Bürger Test ==========");
+        url = "http://localhost:" + port + "/buergers/1";
+            restTemplate2.getForEntity(url, BuergerResource.class);
     }
 
     @Test
-    public void updateBuergerTest() throws JsonProcessingException {
-        System.out.println("========== update Bürger Test ==========");
-        String oid = "OIDUPDATE";
-        Buerger b1 = this.createBuerger(oid);
-        response = restTemplate.postForEntity(urlSave, b1, BuergerResource.class).getBody();
-        b1.setVorname("philip");
-        String urlUpdate = "http://localhost:" + port + "/buerger/" + oid;
-        restTemplate.put(urlUpdate, b1);
-        String URL11 = "http://localhost:" + port + "/buerger/" + oid;
-        response = restTemplate.getForEntity(URL11, BuergerResource.class).getBody();
-        assertEquals(response.getVorname(), "philip");
-        assertEquals(DomainConstants.M2, response.getMandant().getOid());
+    public void deleteBuergerM1Test() throws JsonProcessingException {
+        System.out.println("========== delete Bürger Test ==========");
+        url = "http://localhost:" + port + "/buergers/2";
+        restTemplate.delete(url);
+        try {
+            restTemplate.getForEntity(url, Buerger.class);
+            assertNull(1);
 
+        } catch (HttpClientErrorException e) {
+            assertNotNull(e);
+            System.out.println(String.format("Bürger mit OID : 5 und Mandant 'test' wurde nicht von der DB gelöscht."));
+        }
+    }
+
+    @Test(expected = HttpClientErrorException.class)
+    public void deleteBuergerM2Test() throws JsonProcessingException {
+        System.out.println("========== delete Bürger Test ==========");
+            url = "http://localhost:" + port + "/buergers/5";
+            restTemplate2.delete(url);
+    }
+
+    @Test
+    public void putBuergerM1Test() throws JsonProcessingException {
+        System.out.println("========== put Bürger Test ==========");
+        url = "http://localhost:" + port + "/buergers/3";
+        BuergerResource response2 = restTemplate.getForEntity(url, BuergerResource.class).getBody();
+        Buerger buerger = response2.getContent();
+        buerger.setVorname("peter");
+        restTemplate.put(url, buerger);
+        BuergerResource response3 = restTemplate.getForEntity(url, BuergerResource.class).getBody();
+        assertEquals("peter", response3.getContent().getVorname());
+        System.out.println("Bürger wurde mit neuem Vornamen in der DB gespeichert.");
+
+    }
+
+    @Test(expected = HttpClientErrorException.class)
+    public void putBuergerM2Test() throws JsonProcessingException {
+        System.out.println("========== put Bürger Test ==========");
+        url = "http://localhost:" + port + "/buergers/4";
+        BuergerResource response4 = restTemplate.getForEntity(url, BuergerResource.class).getBody();
+        Buerger buerger4 = response4.getContent();
+        buerger4.setVorname("hans");
+            restTemplate2.put(url, buerger4);
+    }
+
+    @Test
+    public void patchBuergerM1Test() throws JsonProcessingException, MalformedURLException {
+        System.out.println("========== patch Bürger M1 Test ==========");
+        url = "http://localhost:" + port + "/buergers/1";
+        Map m = new HashMap();
+        m.put("vorname", "peter");
+        ResponseEntity<BuergerResource> response2 = restTemplate.exchange(url, HttpMethod.PATCH, new HttpEntity(m), BuergerResource.class);
+        assertEquals("peter", response2.getBody().getContent().getVorname());
         System.out.println("Bürger wurde mit neuem Vornamen in der DB gespeichert.");
     }
 
-    @Test
-    public void readBuergerTest() throws JsonProcessingException {
-
-        System.out.println("========== read Bürger Test ==========");
-        String URL11 = "http://localhost:" + port + "/buerger/" + DomainConstants.M2_B003;
-        response = restTemplate.getForEntity(URL11, BuergerResource.class).getBody();
-        assertNotNull(response);
-        assertNotNull(response.getLink(HateoasUtil.REL_NEW));
-        assertNotNull(response.getLink(HateoasUtil.REL_UPDATE));
-        assertNotNull(response.getLink(HateoasUtil.REL_COPY));
-        assertNotNull(response.getLink(HateoasUtil.REL_SELF));
-        assertNotNull(response.getLink(HateoasUtil.REL_DELETE));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.PAESSE));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.WOHNUNGEN));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.KINDER));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_WOHNUNG));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.ELTERN));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_ELTERN));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.STAATSANGEHOERIGKEITEN));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_KIND));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_PASS));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SACHBEARBEITER));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_SACHBEARBEITER));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_ELTERNTEIL));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_KINDER));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_PAESSE));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_SACHBEARBEITER));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_WOHNUNG));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_WOHNUNGEN));
-
-        System.out.println(String.format("Bürger konnte mit OID '%s' aus der DB gelesen werden.", response.getOid()));
+    @Test(expected = HttpClientErrorException.class)
+    public void patchBuergerM2Test() throws JsonProcessingException, MalformedURLException {
+        System.out.println("========== patch Bürger Test ==========");
+        Map m = new HashMap();
+        m.put("vorname", "peter");
+            url = "http://localhost:" + port + "/buergers/4";
+            restTemplate2.exchange(url, HttpMethod.PATCH, new HttpEntity(m), BuergerResource.class);
     }
 
     @Test
-    public void copyBuergerTest() {
-        System.out.println("========== copy Bürger Test ==========");
+    public void getBuergerKinderM1Test() throws JsonProcessingException {
+        System.out.println("========== get Bürger Kinder Test ==========");
+        url = "http://localhost:" + port + "/buergers/4/kinder";
+        ResponseEntity<Resources<BuergerResource>> result = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                null,
+                BuergerResource.LIST
+        );
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertFalse(result.getBody().getContent().isEmpty());
+        System.out.println("Kinder von den Bürger mit OID : 2001 wurden von in der DB gelesen.");
 
-        String URL2 = "http://localhost:" + port + "/buerger/copy/" + DomainConstants.M2_B005;
-        response = restTemplate.getForEntity(URL2, BuergerResource.class).getBody();
+    }
 
-        assertNotNull(response);
-        assertNotNull(response.getLink(HateoasUtil.REL_NEW));
-        assertNotNull(response.getLink(HateoasUtil.REL_UPDATE));
-        assertNotNull(response.getLink(HateoasUtil.REL_COPY));
-        assertNotNull(response.getLink(HateoasUtil.REL_SELF));
-        assertNotNull(response.getLink(HateoasUtil.REL_DELETE));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.PAESSE));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.WOHNUNGEN));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.KINDER));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_WOHNUNG));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.ELTERN));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_ELTERN));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.STAATSANGEHOERIGKEITEN));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_KIND));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_PASS));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SACHBEARBEITER));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.SAVE_SACHBEARBEITER));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_ELTERNTEIL));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_KINDER));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_PAESSE));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_SACHBEARBEITER));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_WOHNUNG));
-        assertNotNull(response.getLink(de.muenchen.vaadin.demo.api.rest.BuergerResource.RELEASE_WOHNUNGEN));
-
-        System.out.println(String.format("Objekt mit der OID '%s' konnte erfolgreich in Objekt '%s' kopiert (und in DB gespeichert) werden", DomainConstants.M2_B005, response.getOid()));
-
+    @Test(expected = HttpClientErrorException.class)
+    public void getBuergerKinderM2Test() throws JsonProcessingException {
+        System.out.println("========== get Bürger Kinder Test ==========");
+        url = "http://localhost:" + port + "/buergers/2/kinder";
+            restTemplate2.exchange(
+                    url,
+                    HttpMethod.GET,
+                    null,
+                    BuergerResource.LIST
+            );
     }
 
     @Test
-    public void copyListBuergerTest() {
-        System.out.println("========== copy Liste Bürger Test ==========");
-        int x = this.count(DomainConstants.M2);
-        String URL2 = "http://localhost:" + port + "/buerger/copy";
-        ArrayList<String> oids = new ArrayList();
-        oids.add(DomainConstants.M2_B027);
-        oids.add(DomainConstants.M2_B028);
-        restTemplate.postForEntity(URL2, oids, BuergerResource.class);
-        String URL11 = "http://localhost:" + port + "/buerger/query";
-        SearchResultResource queryResponse = restTemplate.getForEntity(URL11, SearchResultResource.class).getBody();
-        assertEquals(x + 2, queryResponse.getResult().size());
-        System.out.println(String.format("Objekte mit der OID '%s' und der OID '%s' konnte erfolgreich in Objekt  kopiert (und in DB gespeichert) werden", DomainConstants.M2_B025, DomainConstants.M2_B026));
+    public void putBuergerKinderM1Test() {
+        System.out.println("========== put Bürger Kinder Test ==========");
+        url = "http://localhost:" + port + "/buergers/3/kinder";
+        String uri = "http://localhost:" + port + "/buergers/1";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("text", "uri-list"));
+        restTemplate.put(url, new HttpEntity<>(uri, headers));
+        ResponseEntity<Resources<BuergerResource>> result2 = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                null,
+                BuergerResource.LIST
+        );
 
+        assertEquals(HttpStatus.OK, result2.getStatusCode());
+        assertEquals(1, result2.getBody().getContent().size());
+        System.out.println("Kind mit oid 2 wurde zu dem Buerger mit Oid 1 hinzufügt.");
     }
 
-    @Test
-    @WithMockUser(username = DomainConstants.M2_U001_NAME)
-    public void buergerDeleteTest() {
-        System.out.println("========== delete Bürger Test ==========");
-        String URL11 = "http://localhost:" + port + "/buerger/" + DomainConstants.M2_B013;
-        response = restTemplate.getForEntity(URL11, BuergerResource.class).getBody();
-        assertNotNull(response);
-        restTemplate.delete(URL11);
-        thrown.expect(org.springframework.web.client.HttpServerErrorException.class);
-        thrown.expectMessage(equalTo("500 Internal Server Error"));
-        response = restTemplate.getForEntity(URL11, BuergerResource.class).getBody();
-
-        System.out.println(String.format("Bürger konnte mit OID '%s' aus der DB (und dem Cache) gelöscht werden.", DomainConstants.M2_B004));
-
+    @Test(expected = HttpClientErrorException.class)
+    public void putBuergerKinderM2Test() {
+        System.out.println("========== put Bürger Kinder M2 Test ==========");
+        url = "http://localhost:" + port + "/buergers/3/kinder";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("text", "uri-list"));
+            String uri2 = "http://localhost:" + port + "/buergers/6";
+            restTemplate2.put(url, new HttpEntity<>(uri2, headers));
     }
 
-    @Test
-    public void buergerDeleteListTest() {
-        System.out.println("========== delete Bürger Test ==========");
+}
 
-        String URL2 = "http://localhost:" + port + "/buerger";
-        ArrayList<String> oids = new ArrayList();
-        oids.add(DomainConstants.M2_B020);
-        oids.add(DomainConstants.M2_B021);
-        restTemplate.postForEntity(URL2, oids, BuergerResource.class);
-        String URL11 = "http://localhost:" + port + "/buerger/" + DomainConstants.M2_B020;
-        thrown.expect(org.springframework.web.client.HttpServerErrorException.class);
-        thrown.expectMessage(equalTo("500 Internal Server Error"));
-        response = restTemplate.getForEntity(URL11, BuergerResource.class).getBody();
-        assertNull(response);
-        System.out.println(String.format("Bürger  mit OID '%s'und OID '%s' konnte aus der DB (und dem Cache) gelöscht werden.", DomainConstants.M2_B020, DomainConstants.M2_B021));
+class BuergerResource extends Resource<Buerger> {
 
+    public static final ParameterizedTypeReference<Resources<BuergerResource>> LIST = new ParameterizedTypeReference<Resources<BuergerResource>>() {
+    };
+
+    public BuergerResource() {
+        super(new Buerger());
     }
 
-    @Test
-    public void queryBuergerTest() throws JsonProcessingException {
-
-        System.out.println("========== query Bürger Test Mandant 2 ==========");
-        int x = this.count(DomainConstants.M2);
-        String URL11 = "http://localhost:" + port + "/buerger/query";
-        SearchResultResource queryResponse = restTemplate.getForEntity(URL11, SearchResultResource.class).getBody();
-        assertEquals(x, queryResponse.getResult().size());
-        assertNotNull(null, queryResponse.getLink("self"));
-        assertNotNull(null, queryResponse.getLink("query"));
-        System.out.println(String.format("Suche wurde erfolgreich durchgeführt. Einträge Mandant %s: %s | Ergebnis der Suche: %s", DomainConstants.M2, x, queryResponse.getResult().size()));
-
+    public BuergerResource(Buerger entity) {
+        super(entity);
     }
 
-    private int count(String mid) {
-        ArrayList<Buerger> all = Lists.newArrayList(repo.findAll());
-        return all.stream().filter(b -> b.getMandant().getOid().equals(mid)).collect(Collectors.counting()).intValue();
+    public BuergerResource(Buerger entity, Link... links) {
+        super(entity, links);
     }
-
-    @Test
-    public void readElternTest() {
-        System.out.println("========== read Eltern Test ==========");
-        String urlEltern = "http://localhost:" + port + "/buerger/eltern/" + DomainConstants.M2_B003;
-        SearchResultResource responseListEltern = restTemplate.getForEntity(urlEltern, SearchResultResource.class).getBody();
-        assertNotEquals(0, responseListEltern.getResult().size());
-        System.out.println(String.format("die Eltern von dem Bürger mit OID '%s' konnten aus der DB gelesen werden.", DomainConstants.M2_B003));
-
-    }
-
-    @Test
-    public void releaseBuergerElternTest() {
-        System.out.println("========== release Bürger Eltern Test ==========");
-        String urlEltern = "http://localhost:" + port + "/buerger/eltern/" + DomainConstants.M2_B014;
-        SearchResultResource responseListEltern = restTemplate.getForEntity(urlEltern, SearchResultResource.class).getBody();
-        assertFalse(responseListEltern.getResult().isEmpty());
-        String urlReleaseEltern = "http://localhost:" + port + "/buerger/release/eltern/" + DomainConstants.M2_B014;
-        restTemplate.getForEntity(urlReleaseEltern, BuergerResource.class);
-        SearchResultResource responseListEltern2 = restTemplate.getForEntity(urlEltern, SearchResultResource.class).getBody();
-        assertTrue(responseListEltern2.getResult().isEmpty());
-        System.out.println(String.format("release operation für den Eltern eines Bürgers mit OID '%s' konnte aus der DB erfolgreich durchgeführt.", DomainConstants.M2_B012));
-    }
-
-    @Test
-    @WithMockUser(username = DomainConstants.M2_U001_NAME)
-    public void releaseBuergerElternteilTest() {
-        System.out.println("========== release Bürger Elternteil Test ==========");
-
-        assertEquals(1, this.checkChild(DomainConstants.M2_B015, DomainConstants.M2_B010));
-        String urlReleasevater = "http://localhost:" + port + "/buerger/release/elternteil/" + DomainConstants.M2_B015;
-        restTemplate.postForEntity(urlReleasevater, DomainConstants.M2_B010, BuergerResource.class);
-        assertEquals(0, this.checkChild(DomainConstants.M2_B015, DomainConstants.M2_B010));
-        System.out.println(String.format("release operation für den Bürger mit OID '%s' und den elternteil mit OID '%s' konnte aus der DB erfolgreich durchgeführt.", DomainConstants.M2_B011, DomainConstants.M2_B001));
-    }
-
-    private long checkChild(String kindOid, String elternOid) {
-        return service.read(elternOid).getKinder().stream().filter(k -> k.getOid().equals(kindOid)).count();
-    }
-
-    @Test
-    public void readBuergerKinderTest() {
-        System.out.println("========== release Bürger Kinder Test ==========");
-        String URL1 = "http://localhost:" + port + "/buerger/kinder/" + DomainConstants.M2_B007;
-        SearchResultResource responseList2 = restTemplate.getForEntity(URL1, SearchResultResource.class).getBody();
-        assertFalse(responseList2.getResult().isEmpty());
-        System.out.println(String.format("die Kinder von dem Bürger mit OID '%s' konnten aus der DB gelesen werden.", DomainConstants.M2_B007));
-
-    }
-
-    @Test
-    @WithMockUser(username = DomainConstants.M2_U001_NAME)
-    public void AddBuergerKindTest() {
-        System.out.println("========== Add Bürger Kind Test ==========");
-        String URL2 = "http://localhost:" + port + "/buerger/add/" + DomainConstants.M2_B007 + "/kind";
-        restTemplate.postForEntity(URL2, DomainConstants.M2_B008, BuergerResource.class);
-        assertEquals(1, this.checkChild(DomainConstants.M2_B008, DomainConstants.M2_B007));
-        System.out.println(String.format("das Kind mit OID '%s' könnte zu dem Bürger mit OID '%s' hinzufügt werden.", DomainConstants.M2_B008, DomainConstants.M2_B007));
-
-    }
-
-    @Test
-    @WithMockUser(username = DomainConstants.M2_U001_NAME)
-    public void CreateBuergerKindTest() {
-        System.out.println("========== Save Bürger Kind Test ==========");
-        String URL1 = "http://localhost:" + port + "/buerger/create/kind/" + DomainConstants.M2_B007;
-        String oid = "oidkind";
-        restTemplate.postForEntity(URL1, this.createBuerger(oid), BuergerResource.class).getBody();
-        assertEquals(1, this.checkChild("oidkind", DomainConstants.M2_B007));
-        System.out.println(String.format("ein Kind könnte erstellt und zu dem Bürger mit OID '%s' hinzufügt werden.", DomainConstants.M2_B007));
-
-    }
-
-    @Test
-    public void readBuergerWohnungenTest() {
-        System.out.println("========== read Bürger Wohnungen Test ==========");
-        String URL1 = "http://localhost:" + port + "/buerger/wohnungen/" + DomainConstants.M2_B007;
-        responseList = restTemplate.getForEntity(URL1, List.class).getBody();
-        assertFalse(responseList.isEmpty());
-        System.out.println(String.format("die Wohnungen von dem Bürger mit OID '%s' konnten aus der DB gelesen werden.", DomainConstants.M2_B007));
-
-    }
-
-    @Test
-    @WithMockUser(username = DomainConstants.M2_U001_NAME)
-    public void releaseBuergerWohnungenTest() {
-        System.out.println("========== release Bürger Wohnung Test ==========");
-        String urlWohnung = "http://localhost:" + port + "/buerger/wohnungen/" + DomainConstants.M2_B015;
-        responseList = restTemplate.getForEntity(urlWohnung, List.class).getBody();
-        assertFalse(responseList.isEmpty());
-        String urlReleaseWohnung = "http://localhost:" + port + "/buerger/release/wohnungen/" + DomainConstants.M2_B015;
-        restTemplate.getForEntity(urlReleaseWohnung, BuergerResource.class);
-        responseList = restTemplate.getForEntity(urlWohnung, List.class).getBody();
-        assertTrue(responseList.isEmpty());
-        System.out.println(String.format("release operation für den Wohnung eines Bürgers mit OID '%s' konnte aus der DB erfolgreich durchgeführt.", DomainConstants.M2_B015));
-    }
-
-    @Test
-    @WithMockUser(username = DomainConstants.M2_U001_NAME)
-    public void releaseBuergerWohnungTest() {
-        System.out.println("========== release Wohnung Bürger Test ==========");
-
-        assertEquals(1, this.checkWohnung(DomainConstants.M2_B015, DomainConstants.M2_W015));
-        String urlReleasevater = "http://localhost:" + port + "/buerger/release/wohnung/" + DomainConstants.M2_B015;
-        restTemplate.postForEntity(urlReleasevater, DomainConstants.M2_W015, BuergerResource.class);
-        assertEquals(0, this.checkWohnung(DomainConstants.M2_B015, DomainConstants.M2_W015));
-        System.out.println(String.format("release operation für den Bürger mit OID '%s' und den Wohnung mit OID '%s' konnte aus der DB erfolgreich durchgeführt.", DomainConstants.M2_B015, DomainConstants.M2_W015));
-    }
-
-    private long checkWohnung(String buergerOid, String wohnungOid) {
-        return service.read(buergerOid).getWohnungen().stream().filter(k -> k.getOid().equals(wohnungOid)).count();
-    }
-
-    @Test
-    @WithMockUser(username = DomainConstants.M2_U001_NAME)
-    public void AddBuergerWohnungTest() {
-        System.out.println("========== Add Bürger Wohnung Test ==========");
-        assertEquals(0, this.checkWohnung(DomainConstants.M2_B007, DomainConstants.M2_W008));
-        String URL2 = "http://localhost:" + port + "/buerger/add/" + DomainConstants.M2_B007 + "/wohnung/";
-        String oid = DomainConstants.M2_W008;
-        restTemplate.postForEntity(URL2, "OIDM2_WOHNUNG008" , BuergerResource.class);
-        assertEquals(1, this.checkWohnung(DomainConstants.M2_B007, DomainConstants.M2_W008));
-        System.out.println(String.format("die Wohnung mit OID '%s' könnte zu dem Bürger mit OID '%s' hinzufügt werden.", DomainConstants.M2_W008, DomainConstants.M2_B007));
-
-    }
-
-    private Wohnung createWohnung(String oid) {
-        Wohnung wohnung = new Wohnung();
-        wohnung.setOid(oid);
-        wohnung.setAusrichtung("nord");
-        wohnung.setStock("4");
-        return wohnung;
-    }
-//
-//    @Test
-//    @WithMockUser(username = DomainConstants.M2_U001_NAME)
-//    public void CreateBuergerWohnungTest() {
-//        System.out.println("========== Save Bürger Wohnung Test ==========");
-//        String URL1 = "http://localhost:" + port + "/buerger/create/wohnung/" + DomainConstants.M2_B007;
-//        String oid = "oidWohnung";
-//        Wohnung w= this.createWohnung(oid);
-//        restTemplate.postForEntity(URL1, w, BuergerResource.class);
-//        assertEquals(1, this.checkWohnung(DomainConstants.M2_B007, "oidWohnung"));
-//        System.out.println(String.format("eine Wohnung könnte erstellt und zu dem Bürger mit OID '%s' hinzufügt werden.", DomainConstants.M2_B007));
-//
-//    }
-
-    @Test
-    public void readBuergerPaesseTest() {
-        System.out.println("========== read Bürger Paesse Test ==========");
-        String URL1 = "http://localhost:" + port + "/buerger/pass/" + DomainConstants.M2_B007;
-        responseList = restTemplate.getForEntity(URL1, List.class).getBody();
-        assertFalse(responseList.isEmpty());
-        System.out.println(String.format("die Paesse von dem Bürger mit OID '%s' konnten aus der DB gelesen werden.", DomainConstants.M2_B007));
-
-    }
-
-    @Test
-    @WithMockUser(username = DomainConstants.M2_U001_NAME)
-    public void releaseBuergerPassTest() {
-        System.out.println("========== release Pass Bürger Test ==========");
-
-        assertEquals(1, this.checkPass(DomainConstants.M2_B015, DomainConstants.M2_P015));
-        String urlReleasevater = "http://localhost:" + port + "/buerger/release/paesse/" + DomainConstants.M2_B015;
-        restTemplate.getForEntity(urlReleasevater, BuergerResource.class);
-        assertEquals(0, this.checkPass(DomainConstants.M2_B015, DomainConstants.M2_P015));
-        System.out.println(String.format("release operation für den Bürger mit OID '%s' und den Wohnung mit OID '%s' konnte aus der DB erfolgreich durchgeführt.", DomainConstants.M2_B015, DomainConstants.M2_P015));
-    }
-
-    private long checkPass(String buergerOid, String passOid) {
-        return service.read(buergerOid).getPass().stream().filter(k -> k.getOid().equals(passOid)).count();
-    }
-
-    @Test
-    @WithMockUser(username = DomainConstants.M2_U001_NAME)
-    public void AddBuergerPassTest() {
-        System.out.println("========== Add Bürger Pass Test ==========");
-        assertEquals(0, this.checkPass(DomainConstants.M2_B008, DomainConstants.M2_P042));
-        String URL2 = "http://localhost:" + port + "/buerger/add/" + DomainConstants.M2_B008 + "/pass";
-        restTemplate.postForEntity(URL2, DomainConstants.M2_P042, BuergerResource.class).getBody();
-        assertEquals(1, this.checkPass(DomainConstants.M2_B008, DomainConstants.M2_P042));
-        System.out.println(String.format("der Pass mit OID '%s' könnte zu dem Bürger mit OID '%s' hinzufügt werden.", DomainConstants.M2_P042, DomainConstants.M2_B008));
-
-    }
-
-    private Pass createPass(String oid) {
-        Pass pass = new Pass();
-        pass.setOid(oid);
-        pass.setPassNummer("9000");
-        pass.setBehoerde("M0021");
-        return pass;
-    }
-
-    @Test
-    @WithMockUser(username = DomainConstants.M2_U001_NAME)
-    public void CreateBuergerPassTest() {
-        System.out.println("========== Save Bürger Pass Test ==========");
-        String URL1 = "http://localhost:" + port + "/buerger/create/pass/" + DomainConstants.M2_B007;
-        String oid = "oidPass";
-        restTemplate.postForEntity(URL1, this.createPass(oid), BuergerResource.class).getBody();
-        assertEquals(1, this.checkPass(DomainConstants.M2_B007, "oidPass"));
-        System.out.println(String.format("ein Pass könnte erstellt und zu dem Bürger mit OID '%s' hinzufügt werden.", DomainConstants.M2_B007));
-
-    }
-
-    @Test
-    public void readBuergerStaatsangehoerigkeitTest() {
-        System.out.println("========== read Bürger Staatsangehoerigkeit Test ==========");
-        String URL1 = "http://localhost:" + port + "/buerger/staats/" + DomainConstants.M2_B007;
-        responseList = restTemplate.getForEntity(URL1, List.class).getBody();
-        assertFalse(responseList.isEmpty());
-        System.out.println(String.format("die Staatsangehoerigkeit von dem Bürger mit OID '%s' konnten aus der DB gelesen werden.", DomainConstants.M2_B007));
-
-    }
-
-    private long checkStaatsangehoerigkeit(String buergerOid, String StaatsangehoerigkeitOid) {
-        return service.read(buergerOid).getStaatsangehoerigkeitReferences().stream().filter(k -> k.getReferencedOid().equals(StaatsangehoerigkeitOid)).count();
-    }
-
-    @Test
-    @WithMockUser(username = DomainConstants.M2_U001_NAME)
-    public void AddBuergerStaatsangehoerigkeitTest() {
-        System.out.println("========== Add Bürger Staatsanghörigkeit Test ==========");
-        assertEquals(0, this.checkStaatsangehoerigkeit(DomainConstants.M2_B007, DomainConstants.M2_S008));
-        String URL2 = "http://localhost:" + port + "/buerger/add/" + DomainConstants.M2_B007 + "/staats";
-        restTemplate.postForEntity(URL2, DomainConstants.M2_S008, BuergerResource.class).getBody();
-        assertEquals(1, this.checkStaatsangehoerigkeit(DomainConstants.M2_B007, DomainConstants.M2_S008));
-        System.out.println(String.format("die Staatsangehoerigkeit mit OID '%s' könnte zu dem Bürger mit OID '%s' hinzufügt werden.", DomainConstants.M2_S008, DomainConstants.M2_B007));
-
-    }
-
-    @Test
-    public void readBuergerSachbearbeiterTest() {
-        System.out.println("========== read Bürger Sachbearbeiter Test ==========");
-        String URL1 = "http://localhost:" + port + "/buerger/sachbearbeiter/" + DomainConstants.M2_B007;
-        responseList = restTemplate.getForEntity(URL1, List.class).getBody();
-        assertFalse(responseList.isEmpty());
-        System.out.println(String.format("die Sachbearbeiter von dem Bürger mit OID '%s' konnten aus der DB gelesen werden.", DomainConstants.M2_B007));
-
-    }
-
-    @Test
-    @WithMockUser(username = DomainConstants.M2_U001_NAME)
-    public void releaseBuergerSachbearbeiterTest() {
-        System.out.println("========== release Bürger Sachbearbeiter Test ==========");
-        String urlSachbearbeiter = "http://localhost:" + port + "/buerger/sachbearbeiter/" + DomainConstants.M2_B015;
-        responseList = restTemplate.getForEntity(urlSachbearbeiter, List.class).getBody();
-        assertFalse(responseList.isEmpty());
-        String urlReleaseSachbearbeiter = "http://localhost:" + port + "/buerger/release/sachbearbeiter/" + DomainConstants.M2_B015;
-        restTemplate.getForEntity(urlReleaseSachbearbeiter, BuergerResource.class);
-        responseList = restTemplate.getForEntity(urlSachbearbeiter, List.class).getBody();
-        assertTrue(responseList.isEmpty());
-        System.out.println(String.format("release operation für den Sachbearbeiter eines Bürgers mit OID '%s' konnte aus der DB erfolgreich durchgeführt.", DomainConstants.M2_B015));
-    }
-
-    private long checkSachbearbeiter(String buergerOid, String sachbearbeiterOid) {
-        return service.read(buergerOid).getSachbearbeiter().stream().filter(k -> k.getOid().equals(sachbearbeiterOid)).count();
-    }
-
-    @Test
-    @WithMockUser(username = DomainConstants.M2_U001_NAME)
-    public void AddBuergerSachbearbeiterTest() {
-        System.out.println("========== Add Bürger Sachbearbeiter Test ==========");
-        assertEquals(0, this.checkSachbearbeiter(DomainConstants.M2_B007, DomainConstants.M2_SA008));
-        String URL2 = "http://localhost:" + port + "/buerger/add/" + DomainConstants.M2_B007 + "/Sachbearbeiter";
-        restTemplate.postForEntity(URL2, DomainConstants.M2_SA008, BuergerResource.class).getBody();
-        assertEquals(1, this.checkSachbearbeiter(DomainConstants.M2_B007, DomainConstants.M2_SA008));
-        System.out.println(String.format("der Sachbearbeiter mit OID '%s' könnte zu dem Bürger mit OID '%s' hinzufügt werden.", DomainConstants.M2_SA008, DomainConstants.M2_B007));
-
-    }
-
-    private Sachbearbeiter createSachbearbeiter(String oid) {
-        Sachbearbeiter sachbearbeiter = new Sachbearbeiter();
-        sachbearbeiter.setOid(oid);
-        sachbearbeiter.setFunktion("beamte");
-        sachbearbeiter.setTelephone("415248523");
-        return sachbearbeiter;
-    }
-
-    @Test
-    @WithMockUser(username = DomainConstants.M2_U001_NAME)
-    public void CreateBuergerSachbearbeiterTest() {
-        System.out.println("========== Save Bürger SAchbearbeiter Test ==========");
-        String URL1 = "http://localhost:" + port + "/buerger/create/sachbearbeiter/" + DomainConstants.M2_B007;
-        String oid = "oidSachbearbeiter";
-        restTemplate.postForEntity(URL1, this.createSachbearbeiter(oid), BuergerResource.class).getBody();
-        assertEquals(1, this.checkSachbearbeiter(DomainConstants.M2_B007, "oidSachbearbeiter"));
-        System.out.println(String.format("ein Sachbearbeiter  könnte erstellt und zu dem Bürger mit OID '%s' hinzufügt werden.", DomainConstants.M2_B007));
-
-    }
-
 }
