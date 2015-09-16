@@ -35,7 +35,7 @@ public class GenericTable<T extends BaseEntity> extends CustomComponent implemen
      * The constant LOG.
      */
     protected static final Logger LOG = LoggerFactory.getLogger(GenericTable.class);
-    private final BeanItemContainer<T> container;
+    public final BeanItemContainer<T> container;
     /**
      * The Button builders.
      */
@@ -51,6 +51,7 @@ public class GenericTable<T extends BaseEntity> extends CustomComponent implemen
      */
     public GenericTable(final ControllerContext controller, Class<T> entityClass, final TableActionButton.Builder... buttonBuilders) {
 
+        if (buttonBuilders!=null)
         this.buttonBuilders = Arrays.asList(buttonBuilders);
 
         // Have a container of some type to contain the data
@@ -135,7 +136,7 @@ public class GenericTable<T extends BaseEntity> extends CustomComponent implemen
      */
     public HorizontalLayout addButtons(final Object id) {
         HorizontalLayout layout = new HorizontalLayout();
-
+        if (buttonBuilders!=null)
         this.buttonBuilders.stream()
                 .map((builder) -> builder.build(container,id))
                 .forEachOrdered(layout::addComponent);
