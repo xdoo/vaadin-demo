@@ -1,6 +1,5 @@
 package de.muenchen.demo.service;
 
-import de.muenchen.auditing.AuditingConfiguration;
 import de.muenchen.auditing.AuditingService;
 import de.muenchen.demo.service.domain.AuditingUserRepositoryImpl;
 import de.muenchen.eventbus.EventBus;
@@ -36,8 +35,8 @@ public class ApplicationStartup implements ApplicationListener<ContextRefreshedE
 	@Override
 	public void onApplicationEvent(final ContextRefreshedEvent event) {
 
-		new AuditingConfiguration(entityManager.getEntityManagerFactory(), eventBus).registerListeners();
-		new AuditingService(eventBus, repo);
+		// Initialize AuditingService
+		new AuditingService(entityManager.getEntityManagerFactory(), eventBus, repo).init();
 
 		FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
 		try {
