@@ -8,6 +8,9 @@ install: mvn clean
 
 ##script: mvn install -DskipTests=true
 script: mvn install
+# command to install dependencies
+install:
+- travis_wait ./install.sh
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
