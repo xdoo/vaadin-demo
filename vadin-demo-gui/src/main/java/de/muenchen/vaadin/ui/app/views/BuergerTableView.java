@@ -24,7 +24,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  *
@@ -42,6 +44,9 @@ public class BuergerTableView extends DefaultBuergerView {
     private GenericTable table;
     private Button search;
     private Button reset;
+    ActionButton edit;
+    ActionButton copy;
+    ActionButton delete;
 
     @Autowired
     public BuergerTableView(BuergerViewController controller, MainUI ui) {
@@ -66,6 +71,7 @@ public class BuergerTableView extends DefaultBuergerView {
             controller.postEvent(controller.buildAppEvent(EventType.QUERY));
             filter.setValue("");
         });
+
         reset.setId(String.format("%s_RESET_BUTTON", BuergerViewController.I18N_BASE_PATH));
         // Suche Schaltfläche
         search = new Button(FontAwesome.SEARCH);
@@ -75,14 +81,11 @@ public class BuergerTableView extends DefaultBuergerView {
             LOG.debug("search clicked: " + filter.getValue());
             if (filter.getValue() != null && filter.getValue().length() > 0)
                 controller.postEvent(controller.buildAppEvent(EventType.QUERY).query(filter.getValue()));
-//                    refresh(filter.getValue());
             else
                 reset.click();
             refresh();
         });
         search.setId(String.format("%s_SEARCH_BUTTON", BuergerViewController.I18N_BASE_PATH));
-
-//        group.addComponents(query, search, reset);
 
         table = controller.getViewFactory().generateTable(null);
 
@@ -98,6 +101,8 @@ public class BuergerTableView extends DefaultBuergerView {
         CssLayout filterLayout = new CssLayout();
         filterLayout.addStyleName("v-component-group");
         CssLayout buttonlayout = new CssLayout();
+
+        buttonlayout.addStyleName("v-component-group");
         HorizontalLayout horizon = new HorizontalLayout();
 
         ActionButton create = new ActionButton(controller, SimpleAction.create,BuergerCreateView.NAME);
@@ -107,9 +112,9 @@ public class BuergerTableView extends DefaultBuergerView {
         });
         create.setVisible(Boolean.TRUE);
 
-        ActionButton edit = new ActionButton(controller, SimpleAction.update,BuergerUpdateView.NAME);
+         edit = new ActionButton(controller, SimpleAction.update,BuergerUpdateView.NAME);
         edit.addClickListener(clickEvent -> {
-            if (grid.getSelectedRows().size()!=1)
+            if (grid.getSelectedRows().size() != 1)
                 return;
             LOG.debug("update selected");
             AppEvent<LocalBuerger> event = controller.buildAppEvent(EventType.SELECT2UPDATE).setItem(table.container.getItem(grid.getSelectedRows().toArray()[0]));
@@ -118,7 +123,7 @@ public class BuergerTableView extends DefaultBuergerView {
         });
 
 
-        ActionButton delete = new ActionButton(controller, SimpleAction.delete, null);
+        delete = new ActionButton(controller, SimpleAction.delete, null);
         delete.addClickListener(clickEvent -> {
             LOG.debug("deleting selected items");
             if (grid.getSelectedRows() != null) {
@@ -128,19 +133,12 @@ public class BuergerTableView extends DefaultBuergerView {
                     controller.postEvent(event);
                     grid.deselect(next);
                     LOG.debug("item deleted");
-            /*GenericConfirmationWindow win = new GenericConfirmationWindow(*//*
-                    controller.buildAppEvent(EventType.DELETE).setItem(item).setItemId(id),
-                    controller, SimpleAction.delete);
-            controller.getNavigator().getUI().addWindow(win);
-            win.center();
-            win.focus();*/
-
                 }
                 refresh();
             }
         });
 
-        ActionButton copy = new ActionButton(controller, SimpleAction.copy, null);
+        copy = new ActionButton(controller, SimpleAction.copy, null);
         copy.addClickListener(clickEvent -> {
             LOG.debug("copying selected items");
             if (grid.getSelectedRows() != null) {
@@ -156,50 +154,31 @@ public class BuergerTableView extends DefaultBuergerView {
         });
 
         grid.addItemClickListener(itemClickEvent -> {
-            if (itemClickEvent.isDoubleClick()) {
-                controller.postEvent(controller.buildAppEvent(EventType.SELECT2READ).setItem((BeanItem<LocalBuerger>) itemClickEvent.getItem()));
-                controller.getNavigator().navigateTo(BuergerDetailView.NAME);
+            if (itemClickEvent.getPropertyId() != null) {
+                if (itemClickEvent.isDoubleClick()) {
+                    controller.postEvent(controller.buildAppEvent(EventType.SELECT2READ).setItem((BeanItem<LocalBuerger>) itemClickEvent.getItem()));
+                    controller.getNavigator().navigateTo(BuergerDetailView.NAME);
 
-            }
-            boolean isClicked = grid.isSelected(itemClickEvent.getItemId());
-            if (!itemClickEvent.isCtrlKey()) {
-                grid.getSelectedRows().stream().forEach(row -> grid.deselect(row));
-            }
-            if (!isClicked)
-                grid.select(itemClickEvent.getItemId());
-            else
-                grid.deselect(itemClickEvent.getItemId());
-            int size = grid.getSelectedRows().size();
-            if (size == 0) {
-                edit.setVisible(Boolean.FALSE);
-                copy.setVisible(Boolean.FALSE);
-                delete.setVisible(Boolean.FALSE);
-            } else if (size == 1) {
-                edit.setVisible(Boolean.TRUE);
-                copy.setVisible(Boolean.TRUE);
-                delete.setVisible(Boolean.TRUE);
-            } else if (size > 1) {
-                edit.setVisible(Boolean.FALSE);
-                copy.setVisible(Boolean.TRUE);
-                delete.setVisible(Boolean.TRUE);
+                }
+                boolean isClicked = grid.isSelected(itemClickEvent.getItemId());
+                if (!itemClickEvent.isCtrlKey()) {
+                    grid.getSelectedRows().stream().forEach(row -> grid.deselect(row));
+                }
+                if (!isClicked)
+                    grid.select(itemClickEvent.getItemId());
+                else
+                    grid.deselect(itemClickEvent.getItemId());
             }
         });
 
-
-
-
-        //TODO heute den Selection Listener
-        grid.addSelectionListener(selectionEvent -> {
-            ;
-        });
-
-
-
+        grid.addSelectionListener(selectionEvent -> setButtonVisability());
 
         filterLayout.addComponents(filter, search, reset);
-//        buttonlayout.addComponents(edit, copy, delete);
-//        buttonlayout.setSpacing(true);
-        horizon.addComponents(create, filterLayout, buttonlayout, edit, copy, delete);
+        buttonlayout.addComponents(edit, copy, delete);
+            buttonlayout.setSizeFull();
+        filterLayout.setSizeFull();
+        horizon.addComponents(create, filterLayout, buttonlayout);
+
         horizon.setSpacing(true);
 
         edit.setVisible(Boolean.FALSE);
@@ -208,11 +187,27 @@ public class BuergerTableView extends DefaultBuergerView {
 
         grid.setVisible(Boolean.TRUE);
 
-//        horizon.addComponent(buttonlayout);
         addComponent(horizon);
         setSpacing(true);
         addComponent(grid);
         refresh();
+    }
+
+    private void setButtonVisability() {
+        int size = grid.getSelectedRows().size();
+        if (size == 0) {
+            edit.setVisible(Boolean.FALSE);
+            copy.setVisible(Boolean.FALSE);
+            delete.setVisible(Boolean.FALSE);
+        } else if (size == 1) {
+            edit.setVisible(Boolean.TRUE);
+            copy.setVisible(Boolean.TRUE);
+            delete.setVisible(Boolean.TRUE);
+        } else if (size > 1) {
+            edit.setVisible(Boolean.FALSE);
+            copy.setVisible(Boolean.TRUE);
+            delete.setVisible(Boolean.TRUE);
+        }
     }
 
     void refresh() {

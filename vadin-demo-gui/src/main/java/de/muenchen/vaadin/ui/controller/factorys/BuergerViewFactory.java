@@ -147,43 +147,6 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
         return readForm.get();
     }
 
-    public BuergerSearchTable generateSearchTable(String navigateToForEdit, String navigateToForDetail, String navigateForCreate, String navigateFrom) {
-        LOG.debug("creating 'search' table for buerger");
-        if(!searchTable.isPresent()){
-            LOG.debug("new searchtabel");
-            TableActionButton.Builder detail = TableActionButton.Builder.<LocalBuerger>make(controller, TableAction.tabledetail, navigateToForDetail, (container, id) -> {
-                controller.postEvent(controller.buildAppEvent(EventType.SELECT2READ).setItem(container.getItem(id)).setItemId(id));
-                getController().getNavigator().navigateTo(navigateToForDetail);
-            });
-            TableActionButton.Builder edit = TableActionButton.Builder.<LocalBuerger>make(controller, TableAction.tableedit, navigateToForEdit, (container, id) -> {
-                controller.postEvent(controller.buildAppEvent(EventType.SELECT2UPDATE).setItem(container.getItem(id)).setItemId(id));
-                getController().getNavigator().navigateTo(navigateToForEdit);
-            });
-            TableActionButton.Builder copy = TableActionButton.Builder.<LocalBuerger>make(controller, TableAction.tablecopy, null, (container, id) ->
-                    controller.postEvent(controller.buildAppEvent(EventType.COPY).setItem(container.getItem(id)).setItemId(id))
-            );
-            TableActionButton.Builder delete = TableActionButton.Builder.<LocalBuerger>make(controller, TableAction.tabledelete, navigateToForEdit, (container, id) ->
-                    {
-                        BeanItem<LocalBuerger> item = container.getItem(id);
-                        GenericConfirmationWindow win = new GenericConfirmationWindow(
-                                controller.buildAppEvent(EventType.DELETE).setItem(item).setItemId(id),
-                                controller, SimpleAction.delete);
-                        controller.getNavigator().getUI().addWindow(win);
-                        win.center();
-                        win.focus();
-                    }
-            );
-            searchTable=Optional.of(new BuergerSearchTable(
-                    controller,
-                    navigateForCreate,
-                    // Schaltflächen
-                    detail,
-                    edit,
-                    copy,
-                    delete
-            ));}
-        return searchTable.get();}
-
     public BuergerSelectTable generateChildSearchTable() {
 
 
