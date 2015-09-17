@@ -101,8 +101,7 @@ public class BuergerTableView extends DefaultBuergerView {
         CssLayout filterLayout = new CssLayout();
         filterLayout.addStyleName("v-component-group");
         CssLayout buttonlayout = new CssLayout();
-
-        buttonlayout.addStyleName("v-component-group");
+        buttonlayout.addStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
         HorizontalLayout horizon = new HorizontalLayout();
 
         ActionButton create = new ActionButton(controller, SimpleAction.create,BuergerCreateView.NAME);
@@ -112,7 +111,7 @@ public class BuergerTableView extends DefaultBuergerView {
         });
         create.setVisible(Boolean.TRUE);
 
-         edit = new ActionButton(controller, SimpleAction.update,BuergerUpdateView.NAME);
+        edit = new ActionButton(controller, SimpleAction.update,BuergerUpdateView.NAME);
         edit.addClickListener(clickEvent -> {
             if (grid.getSelectedRows().size() != 1)
                 return;
@@ -174,8 +173,10 @@ public class BuergerTableView extends DefaultBuergerView {
         grid.addSelectionListener(selectionEvent -> setButtonVisability());
 
         filterLayout.addComponents(filter, search, reset);
-        buttonlayout.addComponents(edit, copy, delete);
-            buttonlayout.setSizeFull();
+        buttonlayout.addComponent(edit);
+        buttonlayout.addComponent(copy);
+        buttonlayout.addComponent(delete);
+        buttonlayout.setSizeFull();
         filterLayout.setSizeFull();
         horizon.addComponents(create, filterLayout, buttonlayout);
 
