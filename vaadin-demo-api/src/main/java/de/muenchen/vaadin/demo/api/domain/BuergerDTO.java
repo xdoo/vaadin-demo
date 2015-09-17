@@ -1,29 +1,19 @@
 package de.muenchen.vaadin.demo.api.domain;
 
 import de.muenchen.vaadin.demo.apilib.domain.BaseEntity;
-import de.muenchen.vaadin.demo.apilib.util.FieldIdentifier;
 
 import java.util.Date;
 
 /**
- *
- * @author claus.straube
+ * Provides a simple DTO for a BuergerDTO
+ * @author p.mueller
  */
-public class Buerger extends BaseEntity {
-    
-    public static final String VORNAME = "vorname";
-    public static final String NACHNAME = "nachname";
-    public static final String GEBURTSDATUM = "geburtsdatum";
+public class BuergerDTO extends BaseEntity {
 
-    public static final String PARTNER = "partner";
-    public static final String KINDER = "kinder";
-
-    @FieldIdentifier
     private String vorname;
-    @FieldIdentifier
     private String nachname;
-    @FieldIdentifier
     private Date geburtsdatum;
+
 
     public String getVorname() {
         return vorname;
@@ -55,8 +45,8 @@ public class Buerger extends BaseEntity {
     }
 
     @Override
-    public Buerger clone() {
-        Buerger clone = new Buerger();
+    public BuergerDTO clone() {
+        BuergerDTO clone = new BuergerDTO();
         
         clone.setOid(this.getOid());
         clone.setVorname(this.getVorname());

@@ -1,7 +1,7 @@
 package de.muenchen.vaadin.demo.api.hateoas;
 
-import de.muenchen.vaadin.demo.api.domain.Buerger;
-import de.muenchen.vaadin.demo.api.local.LocalBuerger;
+import de.muenchen.vaadin.demo.api.domain.BuergerDTO;
+import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.api.rest.BuergerResource;
 import org.springframework.hateoas.Resource;
 
@@ -9,13 +9,13 @@ import org.springframework.hateoas.Resource;
  * Created by p.mueller on 15.09.15.
  */
 public class LocalBuergerAssembler {
-    public LocalBuerger toBean(Resource<Buerger> resource) {
-        Buerger buerger = resource.getContent();
+    public Buerger toBean(Resource<BuergerDTO> resource) {
+        BuergerDTO buergerDTO = resource.getContent();
 
-        LocalBuerger bean = new LocalBuerger(
-                buerger.getVorname(),
-                buerger.getNachname(),
-                buerger.getGeburtsdatum()
+        Buerger bean = new Buerger(
+                buergerDTO.getVorname(),
+                buergerDTO.getNachname(),
+                buergerDTO.getGeburtsdatum()
         );
         bean.add(resource.getLinks());
 
@@ -23,13 +23,13 @@ public class LocalBuergerAssembler {
     }
 
 
-    public BuergerResource toResource(LocalBuerger bean) {
-        Buerger buerger = new Buerger();
-        buerger.setVorname(bean.getVorname());
-        buerger.setNachname(bean.getNachname());
-        buerger.setGeburtsdatum(bean.getGeburtsdatum());
+    public BuergerResource toResource(Buerger bean) {
+        BuergerDTO buergerDTO = new BuergerDTO();
+        buergerDTO.setVorname(bean.getVorname());
+        buergerDTO.setNachname(bean.getNachname());
+        buergerDTO.setGeburtsdatum(bean.getGeburtsdatum());
 
 
-        return new BuergerResource(buerger, bean.getLinks());
+        return new BuergerResource(buergerDTO, bean.getLinks());
     }
 }

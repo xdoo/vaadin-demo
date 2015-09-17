@@ -8,7 +8,7 @@ import java.util.Date;
 /**
  * Created by p.mueller on 15.09.15.
  */
-public class LocalBuerger extends ResourceSupport {
+public class Buerger extends ResourceSupport {
     @FieldIdentifier
     private String vorname;
     @FieldIdentifier
@@ -16,13 +16,13 @@ public class LocalBuerger extends ResourceSupport {
     @FieldIdentifier
     private Date geburtsdatum;
 
-    public LocalBuerger(String vorname, String nachname, Date geburtsdatum) {
+    public Buerger(String vorname, String nachname, Date geburtsdatum) {
         this.vorname = vorname;
         this.nachname = nachname;
         this.geburtsdatum = geburtsdatum;
     }
 
-    public LocalBuerger() {
+    public Buerger() {
 
     }
 
@@ -48,5 +48,14 @@ public class LocalBuerger extends ResourceSupport {
 
     public void setGeburtsdatum(Date geburtsdatum) {
         this.geburtsdatum = geburtsdatum;
+    }
+
+    public enum Field {
+        vorname, nachname, geburtsdatum;
+    }
+
+    public enum Rel {
+        kinder, partner;
+
     }
 }
