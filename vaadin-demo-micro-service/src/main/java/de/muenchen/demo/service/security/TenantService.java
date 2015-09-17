@@ -20,7 +20,14 @@ public class TenantService {
     UserRepository userRepository;
 
     public boolean isTenant(Authentication authentication, Object o) {
-        return o == null || ((BaseEntity) o).getMandant().equals(getCurrentTenantId(authentication.getName()));
+
+        if (o == null)
+            return true;
+
+        final String mandant = ((BaseEntity) o).getMandant();
+        final String currentTenantId = getCurrentTenantId(authentication.getName());
+
+        return mandant.equals(currentTenantId);
     }
 
 
