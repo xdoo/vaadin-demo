@@ -19,16 +19,27 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
+ * Provides a simple (and Spring specific) implementation for a {@link BuergerRestClient}.
+ *
  * @author p.mueller
+ * @version 1.0
  */
 public class BuergerRestClientImpl implements BuergerRestClient {
 
-    public static final String BUERGERS = "buergers";
+    /**
+     * Used to follow HATEOAS relations.
+     */
     private final Traverson traverson;
+    /** The restTemplate used for the HTTP Requests. */
     private final RestTemplate restTemplate;
-
+    /** Assembler to switch from BuergerDTO Resource to Buerger and vice versa. */
     private final BuergerAssembler buergerAssembler = new BuergerAssembler();
 
+    /**
+     * Create a new BuergerRestClient by RestTemplate and baseUri of the server.
+     * @param restTemplate The restTemplate for the HTTP Requests.
+     * @param baseUri The base URI of the REST Server.
+     */
     public BuergerRestClientImpl(RestTemplate restTemplate, URI baseUri) {
         this.restTemplate = restTemplate;
 
@@ -73,11 +84,11 @@ public class BuergerRestClientImpl implements BuergerRestClient {
     }
 
     @Override
-    public void setRelations(Link link, Collection<Link> links) {
+    public void setRelations(Link endpoint, Collection<Link> links) {
         String relations = links.stream().map(Link::getHref).collect(Collectors.joining("\n"));
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("text", "uri-list"));
-        restTemplate.exchange(URI.create(link.getHref()), HttpMethod.PUT, new HttpEntity<>(relations, headers), Void.class);
+        restTemplate.exchange(URI.create(endpoint.getHref()), HttpMethod.PUT, new HttpEntity<>(relations, headers), Void.class);
     }
 
     @Override
