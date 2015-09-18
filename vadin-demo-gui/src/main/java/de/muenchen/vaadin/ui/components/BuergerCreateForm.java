@@ -7,14 +7,8 @@ import com.vaadin.event.ShortcutAction;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
-import com.vaadin.ui.Button;
+import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.DateField;
-import com.vaadin.ui.FormLayout;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.types.EventType;
 import de.muenchen.vaadin.demo.api.domain.Buerger;
@@ -25,12 +19,7 @@ import de.muenchen.vaadin.guilib.components.GenericWarningNotification;
 import de.muenchen.vaadin.guilib.util.ValidatorFactory;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Component;
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.NotificationType;
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Type;
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getEntityFieldPath;
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getFormPath;
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getNotificationPath;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.*;
 
 /**
  * Formular zum Erstellen eines {@link Buerger}s.
@@ -133,6 +122,11 @@ public class BuergerCreateForm extends CustomComponent {
         secField.addValidator(val1);
         secField.addValidator(val0);
         layout.addComponent(secField);
+        ComboBox eyecolorBox = controller.getUtil().createFormComboField(binder,
+                controller.resolveRelative(getEntityFieldPath(Buerger.AUGENFARBE, Type.label)),
+                controller.resolveRelative(getEntityFieldPath(Buerger.AUGENFARBE, Type.input_prompt)),
+                Buerger.AUGENFARBE, BuergerViewController.I18N_BASE_PATH);
+        layout.addComponent(eyecolorBox);
         DateField birthdayfield = controller.getUtil().createFormDateField(binder,
                 controller.resolveRelative(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.label)),
                 Buerger.GEBURTSDATUM, BuergerViewController.I18N_BASE_PATH);

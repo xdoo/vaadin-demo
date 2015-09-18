@@ -2,10 +2,10 @@ package de.muenchen.vaadin.guilib.util;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.spring.annotation.SpringComponent;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.DateField;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.UI;
+import com.vaadin.ui.*;
+import de.muenchen.vaadin.demo.api.domain.Augenfarbe;
+
+import java.util.EnumSet;
 
 /**
  *
@@ -36,6 +36,13 @@ public class VaadinUtil {
         tf.setId(String.format("%s_%s_FIELD", basePath, property).toUpperCase());
         return tf;
     }
+
+    public ComboBox createFormComboField(BeanFieldGroup binder, String label, String prompt, String property, String basePath) {
+        ComboBox cb = (ComboBox) binder.buildAndBind(label, property);
+        cb.setTextInputAllowed(false);
+        cb.addItems(EnumSet.allOf(Augenfarbe.class));
+        return cb;
+    }
     
     public TextField createReadOnlyFormTextField(BeanFieldGroup binder, String label, String prompt, String property, String basePath) {
         TextField tf = this.createFormTextField(binder, label, prompt, property, basePath);
@@ -54,5 +61,6 @@ public class VaadinUtil {
         df.setReadOnly(Boolean.TRUE);
         return df;
     }
-    
+
+
 }

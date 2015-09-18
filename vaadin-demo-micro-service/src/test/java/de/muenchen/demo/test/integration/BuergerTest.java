@@ -5,10 +5,12 @@ package de.muenchen.demo.test.integration;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import de.muenchen.demo.service.Application;
+import de.muenchen.demo.service.domain.Augenfarbe;
 import de.muenchen.demo.service.domain.Buerger;
 import de.muenchen.demo.service.domain.BuergerRepository;
 import org.apache.http.auth.AuthScope;
@@ -31,12 +33,7 @@ import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.hateoas.hal.Jackson2HalModule;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -59,10 +56,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -135,24 +129,28 @@ public class BuergerTest {
             b1M1.setNachname("name1");
             b1M1.setVorname("vorname1");
             b1M1.setMandant("test");
+            b1M1.setAugenfarbe(Augenfarbe.Blau);
             b1M1.setOid(1L);
             repo.save(b1M1);
             Buerger b2M1 = new Buerger();
             b2M1.setNachname("name2");
             b2M1.setVorname("vorname2");
             b2M1.setMandant("test");
+            b2M1.setAugenfarbe(Augenfarbe.Grün);
             b2M1.setOid(2L);
             repo.save(b2M1);
             Buerger b3M1 = new Buerger();
             b3M1.setNachname("name3");
             b3M1.setVorname("vorname3");
             b3M1.setMandant("test");
+            b3M1.setAugenfarbe(Augenfarbe.Lila);
             b3M1.setOid(3L);
             repo.save(b3M1);
             Buerger b4M1 = new Buerger();
             b4M1.setNachname("name4");
             b4M1.setVorname("vorname4");
             b4M1.setMandant("test");
+            b4M1.setAugenfarbe(Augenfarbe.Rot);
             b4M1.setOid(4L);
             b4M1.getKinder().add(b3M1);
             repo.save(b4M1);
@@ -160,6 +158,7 @@ public class BuergerTest {
             b5M1.setNachname("name5");
             b5M1.setVorname("vorname5");
             b5M1.setMandant("test");
+            b5M1.setAugenfarbe(Augenfarbe.Braun);
             b5M1.setOid(5L);
             repo.save(b5M1);
             UsernamePasswordAuthenticationToken token2 = new UsernamePasswordAuthenticationToken("hans2", "test2");
@@ -169,30 +168,35 @@ public class BuergerTest {
             b1M2.setNachname("name1");
             b1M2.setVorname("vorname1");
             b1M2.setMandant("default");
+            b1M2.setAugenfarbe(Augenfarbe.Hellblau);
             b1M2.setOid(6L);
             repo.save(b1M2);
             Buerger b2M2 = new Buerger();
             b2M2.setNachname("name2");
             b2M2.setVorname("vorname2");
             b2M2.setMandant("default");
+            b2M2.setAugenfarbe(Augenfarbe.Hellbraun);
             b2M2.setOid(7L);
             repo.save(b2M2);
             Buerger b3M2 = new Buerger();
             b3M2.setNachname("name3");
             b3M2.setVorname("vorname3");
             b3M2.setMandant("default");
+            b3M2.setAugenfarbe(Augenfarbe.Hellgrün);
             b3M2.setOid(8L);
             repo.save(b3M2);
             Buerger b4M2 = new Buerger();
             b4M2.setNachname("name4");
             b4M2.setVorname("vorname4");
             b4M2.setMandant("default");
+            b4M2.setAugenfarbe(Augenfarbe.Dunkelblau);
             b4M2.setOid(9L);
             repo.save(b4M2);
             Buerger b5M2 = new Buerger();
             b5M2.setNachname("name5");
             b5M2.setVorname("vorname5");
             b5M2.setMandant("default");
+            b5M2.setAugenfarbe(Augenfarbe.Dunkelbraun);
             b5M2.setOid(10L);
             repo.save(b5M2);
             lock = true;
@@ -254,6 +258,7 @@ public class BuergerTest {
         Buerger buerger = new Buerger();
         buerger.setNachname("hans");
         buerger.setVorname("peter");
+        buerger.setAugenfarbe(Augenfarbe.Blau);
         return buerger;
     }
 

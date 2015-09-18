@@ -4,15 +4,7 @@ import de.muenchen.auditing.MUCAudited;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
@@ -39,6 +31,12 @@ public class Buerger extends BaseEntity {
     @NotNull
     @Size(max = 70)
     private String nachname;
+
+    @Field
+    @Column(name = "BUER_AUGENFARBE")
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    private Augenfarbe augenfarbe;
 
 //    @Field(index = Index.YES, store = Store.YES)
 //    @DateBridge(resolution = Resolution.DAY, encoding = EncodingType.STRING)
@@ -168,10 +166,17 @@ public class Buerger extends BaseEntity {
         this.partner = partner;
     }
 
+    public Augenfarbe getAugenfarbe() {
+        return augenfarbe;
+    }
+
+    public void setAugenfarbe(Augenfarbe augenfarbe) {
+        this.augenfarbe = augenfarbe;
+    }
 
     @Override
     public String toString() {
-        return String.format("oid > %s | vorname > %s | nachname > %s | geburtsdatum > %s", this.getOid(), this.vorname, this.nachname, this.geburtsdatum);
+        return String.format("oid > %s | vorname > %s | nachname > %s | geburtsdatum > %s | augenfarbe > %s", this.getOid(), this.vorname, this.nachname, this.geburtsdatum, this.augenfarbe);
     }
 
 }
