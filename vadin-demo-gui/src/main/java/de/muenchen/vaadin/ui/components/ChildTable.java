@@ -9,6 +9,7 @@ import de.muenchen.eventbus.events.ComponentEvent;
 import de.muenchen.eventbus.types.EventType;
 import de.muenchen.vaadin.demo.api.local.LocalBuerger;
 import de.muenchen.vaadin.demo.i18nservice.buttons.TableActionButton;
+import de.muenchen.vaadin.guilib.components.GenericGrid;
 import de.muenchen.vaadin.guilib.components.GenericTable;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
@@ -16,10 +17,10 @@ import de.muenchen.vaadin.ui.controller.BuergerViewController;
  *
  * @author maximilian.schug
  */
-public class ChildTable extends GenericTable<LocalBuerger> {
+public class ChildTable extends GenericGrid<LocalBuerger> {
 
-    public ChildTable(BuergerViewController controller, TableActionButton.Builder... buttonBuilders) {
-        super(controller, LocalBuerger.class, buttonBuilders);
+    public ChildTable(BuergerViewController controller) {
+        super(controller, LocalBuerger.class);
     }
 
     @Override

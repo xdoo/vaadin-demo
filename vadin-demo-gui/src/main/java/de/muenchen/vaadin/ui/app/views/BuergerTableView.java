@@ -15,6 +15,7 @@ import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.demo.i18nservice.buttons.TableAction;
 import de.muenchen.vaadin.demo.i18nservice.buttons.TableActionButton;
+import de.muenchen.vaadin.guilib.components.GenericGrid;
 import de.muenchen.vaadin.guilib.components.GenericTable;
 import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.components.BuergerSearchTable;
@@ -39,14 +40,14 @@ public class BuergerTableView extends DefaultBuergerView {
     public static final String NAME = "buerger_table_view";
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerCreateView.class);
 
-    Grid grid;
+    private GenericGrid<LocalBuerger> grid;
     private TextField filter = new TextField();
-    private GenericTable table;
+//    private GenericTable table;
     private Button search;
     private Button reset;
-    ActionButton edit;
-    ActionButton copy;
-    ActionButton delete;
+    private ActionButton edit;
+    private ActionButton copy;
+    private ActionButton delete;
 
     @Autowired
     public BuergerTableView(BuergerViewController controller, MainUI ui) {
@@ -57,7 +58,8 @@ public class BuergerTableView extends DefaultBuergerView {
 
     @Override
     protected void site() {
-        grid = new Grid();
+//        grid = new GenericGrid(controller,LocalBuerger.class);
+        grid = controller.getViewFactory().generateGrid();
 
         filter.setId(String.format("%s_QUERY_FIELD", BuergerViewController.I18N_BASE_PATH));
         filter.focus();
@@ -86,10 +88,11 @@ public class BuergerTableView extends DefaultBuergerView {
             refresh();
         });
         search.setId(String.format("%s_SEARCH_BUTTON", BuergerViewController.I18N_BASE_PATH));
-
-        table = controller.getViewFactory().generateTable(null);
-
-        grid.setContainerDataSource(table.container);
+//
+//        table = controller.getViewFactory().generateTable(null);
+//
+//
+//        grid.setContainerDataSource(table.container);
         grid.setColumnOrder("vorname", "nachname", "geburtsdatum");
         grid.removeColumn("id");
         grid.removeColumn("links");
@@ -116,7 +119,7 @@ public class BuergerTableView extends DefaultBuergerView {
             if (grid.getSelectedRows().size() != 1)
                 return;
             LOG.debug("update selected");
-            AppEvent<LocalBuerger> event = controller.buildAppEvent(EventType.SELECT2UPDATE).setItem(table.container.getItem(grid.getSelectedRows().toArray()[0]));
+            AppEvent<LocalBuerger> event = controller.buildAppEvent(EventType.SELECT2UPDATE).setItem((BeanItem<LocalBuerger>) grid.getContainerDataSource().getItem(grid.getSelectedRows().toArray()[0]));
             controller.postEvent(event);
             controller.getNavigator().navigateTo(BuergerUpdateView.NAME);
         });
@@ -127,7 +130,7 @@ public class BuergerTableView extends DefaultBuergerView {
             LOG.debug("deleting selected items");
             if (grid.getSelectedRows() != null) {
                 for (Object next : grid.getSelectedRows()) {
-                    BeanItem<LocalBuerger> item = table.container.getItem(next);
+                    BeanItem<LocalBuerger> item = (BeanItem<LocalBuerger>) grid.getContainerDataSource().getItem(next);
                     AppEvent event = controller.buildAppEvent(EventType.DELETE).setItem(item);
                     controller.postEvent(event);
                     grid.deselect(next);
@@ -142,7 +145,7 @@ public class BuergerTableView extends DefaultBuergerView {
             LOG.debug("copying selected items");
             if (grid.getSelectedRows() != null) {
                 for (Object next : grid.getSelectedRows()) {
-                    BeanItem<LocalBuerger> item = table.container.getItem(next);
+                    BeanItem<LocalBuerger> item = (BeanItem<LocalBuerger>) grid.getContainerDataSource().getItem(next);
                     AppEvent event = controller.buildAppEvent(EventType.COPY).setItem(item);
                     controller.postEvent(event);
 
@@ -217,9 +220,5 @@ public class BuergerTableView extends DefaultBuergerView {
 
     private void refresh(String stringFilter) {
         controller.postEvent(controller.buildAppEvent(EventType.QUERY).query((stringFilter == null) ? null : stringFilter));
-        grid.setContainerDataSource(table.container);
-        List o = table.container.getItemIds();
-        if(o!=null)
-        LOG.info("Refresh brought you: " + o.toString());
     }
 }

@@ -4,6 +4,7 @@ import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import de.muenchen.vaadin.demo.i18nservice.buttons.TableActionButton;
+import de.muenchen.vaadin.guilib.components.GenericGrid;
 import de.muenchen.vaadin.guilib.components.GenericTable;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.slf4j.Logger;
@@ -18,11 +19,11 @@ public class BuergerSelectTable extends CustomComponent {
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerSearchTable.class);
 
     BuergerSearchForm search;
-    private GenericTable table;
+    private GenericGrid table;
 
-    public BuergerSelectTable(final BuergerViewController controller, final TableActionButton.Builder... buttonfactory) {
+    public BuergerSelectTable(final BuergerViewController controller) {
 
-        table = controller.getViewFactory().generateTable(buttonfactory);
+        table = controller.getViewFactory().generateGrid();
         table.setSizeUndefined();
 
         search = new BuergerSearchForm(controller);
@@ -39,10 +40,10 @@ public class BuergerSelectTable extends CustomComponent {
 
         setCompositionRoot(vlayout);
     }
-    public GenericTable getTable(){
+    public GenericGrid getTable(){
         return table;
     }
-    public void setTable(GenericTable table){
+    public void setTable(GenericGrid table){
         this.table = table;
     }
 
