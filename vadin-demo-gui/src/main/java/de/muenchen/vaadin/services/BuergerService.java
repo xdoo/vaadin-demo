@@ -1,6 +1,6 @@
 package de.muenchen.vaadin.services;
 
-import de.muenchen.vaadin.demo.api.local.LocalBuerger;
+import de.muenchen.vaadin.demo.api.local.Buerger;
 import org.springframework.hateoas.Link;
 
 import java.util.List;
@@ -13,21 +13,21 @@ import java.util.Optional;
  */
 public interface BuergerService {
 
-    LocalBuerger create(LocalBuerger buerger);
+    Buerger create(Buerger buerger);
 
-    LocalBuerger update(LocalBuerger buerger);
+    Buerger update(Buerger buerger);
 
     void delete(Link link);
 
-    LocalBuerger copy(Link link);
+    Buerger copy(Link link);
 
-    List<LocalBuerger> findAll();
+    List<Buerger> findAll();
 
-    List<LocalBuerger> findAll(Link relation);
+    List<Buerger> findAll(Link relation);
 
-    Optional<LocalBuerger> findOne(Link link);
+    Optional<Buerger> findOne(Link link);
 
-    List<LocalBuerger> queryBuerger(String query);
+    List<Buerger> queryBuerger(String query);
 
     void setRelations(Link link, List<Link> relations);
 }

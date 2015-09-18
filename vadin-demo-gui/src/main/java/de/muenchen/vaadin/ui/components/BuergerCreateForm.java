@@ -17,8 +17,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.types.EventType;
-import de.muenchen.vaadin.demo.api.domain.Buerger;
-import de.muenchen.vaadin.demo.api.local.LocalBuerger;
+import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.GenericWarningNotification;
@@ -83,7 +82,7 @@ public class BuergerCreateForm extends CustomComponent {
      * Erzeugt das eigentliche Formular.
      */
     private void createForm() {
-        Validator val = ValidatorFactory.getValidator(ValidatorFactory.Type.NULL, controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.validation)), "false");
+        Validator val = ValidatorFactory.getValidator(ValidatorFactory.Type.NULL, controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.validation)), "false");
         FormLayout layout = new FormLayout();
         HorizontalLayout buttonLayout = new HorizontalLayout();
         buttonLayout.setSpacing(true);
@@ -98,14 +97,14 @@ public class BuergerCreateForm extends CustomComponent {
         layout.addComponent(headline);
 
         // Now use a binder to bind the members
-        final BeanFieldGroup<LocalBuerger> binder = new BeanFieldGroup<>(LocalBuerger.class);
-        binder.setItemDataSource(new LocalBuerger());
+        final BeanFieldGroup<Buerger> binder = new BeanFieldGroup<>(Buerger.class);
+        binder.setItemDataSource(new Buerger());
         
         // Fokus auf das erste Feld setzen
         TextField firstField = controller.getUtil().createFormTextField(binder,
-                controller.resolveRelative(getEntityFieldPath(Buerger.VORNAME, Type.label)),
-                controller.resolveRelative(getEntityFieldPath(Buerger.VORNAME, Type.input_prompt)),
-                Buerger.VORNAME, BuergerViewController.I18N_BASE_PATH);
+                controller.resolveRelative(getEntityFieldPath(Buerger.Field.vorname.name(), Type.label)),
+                controller.resolveRelative(getEntityFieldPath(Buerger.Field.vorname.name(), Type.input_prompt)),
+                Buerger.Field.vorname.name(), BuergerViewController.I18N_BASE_PATH);
         firstField.focus();
         String abc = "";
         for(char c = 'a';c <= 'z'; c++)
@@ -118,25 +117,25 @@ public class BuergerCreateForm extends CustomComponent {
             abc+=Character.toString((char)i);
         abc+="-";
 
-        Validator val0 = ValidatorFactory.getValidator(ValidatorFactory.Type.REGEXP, controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.validationstring)), "true", "[" + abc + "]*");
+        Validator val0 = ValidatorFactory.getValidator(ValidatorFactory.Type.REGEXP, controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.validationstring)), "true", "[" + abc + "]*");
 
-        Validator val1 = ValidatorFactory.getValidator(ValidatorFactory.Type.STRING_LENGTH, controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.validation)), 1 + "", "" + Integer.MAX_VALUE, "true");
+        Validator val1 = ValidatorFactory.getValidator(ValidatorFactory.Type.STRING_LENGTH, controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.validation)), 1 + "", "" + Integer.MAX_VALUE, "true");
         firstField.addValidator(val0);
         firstField.addValidator(val1);
         layout.addComponent(firstField);
         
         // alle anderen Felder
         TextField secField = controller.getUtil().createFormTextField(binder,
-                controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.label)),
-                controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.input_prompt)),
-                Buerger.NACHNAME, BuergerViewController.I18N_BASE_PATH);
+                controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.label)),
+                controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.input_prompt)),
+                Buerger.Field.nachname.name(), BuergerViewController.I18N_BASE_PATH);
         secField.addValidator(val1);
         secField.addValidator(val0);
         layout.addComponent(secField);
         DateField birthdayfield = controller.getUtil().createFormDateField(binder,
-                controller.resolveRelative(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.label)),
-                Buerger.GEBURTSDATUM, BuergerViewController.I18N_BASE_PATH);
-        String errorMsg = controller.resolveRelative(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.validation));
+                controller.resolveRelative(getEntityFieldPath(Buerger.Field.geburtsdatum.name(), Type.label)),
+                Buerger.Field.geburtsdatum.name(), BuergerViewController.I18N_BASE_PATH);
+        String errorMsg = controller.resolveRelative(getEntityFieldPath(Buerger.Field.geburtsdatum.name(), Type.validation));
         Validator val3 = ValidatorFactory.getValidator(ValidatorFactory.Type.DATE_RANGE, errorMsg, "start", null);
         birthdayfield.addValidator(val3);
         layout.addComponent(birthdayfield);    
@@ -168,7 +167,7 @@ public class BuergerCreateForm extends CustomComponent {
                 firstField.removeValidator(val);
                 secField.removeValidator(val);
                 birthdayfield.removeValidator(val);
-                binder.setItemDataSource(new LocalBuerger());
+                binder.setItemDataSource(new Buerger());
             } catch (CommitException | Validator.InvalidValueException e) {
                 GenericWarningNotification warn = new GenericWarningNotification(
                         controller.resolveRelative(getNotificationPath(NotificationType.warning, SimpleAction.save, Type.label)),
