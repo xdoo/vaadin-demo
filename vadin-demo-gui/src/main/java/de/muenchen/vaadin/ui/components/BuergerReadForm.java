@@ -9,8 +9,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.events.ComponentEvent;
 import de.muenchen.eventbus.types.EventType;
-import de.muenchen.vaadin.demo.api.domain.Buerger;
-import de.muenchen.vaadin.demo.api.local.LocalBuerger;
+import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
@@ -30,14 +29,14 @@ import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getFormPath;
  *
  * @author claus
  */
-public class BuergerReadForm extends CustomComponent implements Consumer<Event<ComponentEvent<LocalBuerger>>> {
+public class BuergerReadForm extends CustomComponent implements Consumer<Event<ComponentEvent<Buerger>>> {
     
     /**
      * Logger
      */
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerReadForm.class);
 
-    final BeanFieldGroup<LocalBuerger> binder = new BeanFieldGroup<LocalBuerger>(LocalBuerger.class);
+    final BeanFieldGroup<Buerger> binder = new BeanFieldGroup<Buerger>(Buerger.class);
     final BuergerViewController controller;
     
     private final String navigateToUpdate;
@@ -80,22 +79,22 @@ public class BuergerReadForm extends CustomComponent implements Consumer<Event<C
         layout.addComponent(headline);
 
         layout.addComponent(controller.getUtil().createFormTextField(binder,
-                controller.resolveRelative(getEntityFieldPath(Buerger.VORNAME, Type.label)),
-                controller.resolveRelative(getEntityFieldPath(Buerger.VORNAME, Type.input_prompt)),
-                Buerger.VORNAME, BuergerViewController.I18N_BASE_PATH));
+                controller.resolveRelative(getEntityFieldPath(Buerger.Field.vorname.name(), Type.label)),
+                controller.resolveRelative(getEntityFieldPath(Buerger.Field.vorname.name(), Type.input_prompt)),
+                Buerger.Field.vorname.name(), BuergerViewController.I18N_BASE_PATH));
         layout.addComponent(controller.getUtil().createFormTextField(binder,
-                controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.label)),
-                controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.input_prompt)),
-                Buerger.NACHNAME, BuergerViewController.I18N_BASE_PATH));
+                controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.label)),
+                controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.input_prompt)),
+                Buerger.Field.nachname.name(), BuergerViewController.I18N_BASE_PATH));
 /*
         layout.addComponent(controller.getUtil().createFormTextField(binder,
-                controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.label)),
-                controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.input_prompt)),
-                Buerger.NACHNAME, BuergerViewController.I18N_BASE_PATH));
+                controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.label)),
+                controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.input_prompt)),
+                Buerger.Field.nachname.name(), BuergerViewController.I18N_BASE_PATH));
         */
         layout.addComponent(controller.getUtil().createFormDateField(
-                binder, controller.resolveRelative(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.label)),
-                Buerger.GEBURTSDATUM, BuergerViewController.I18N_BASE_PATH));
+                binder, controller.resolveRelative(getEntityFieldPath(Buerger.Field.geburtsdatum.name(), Type.label)),
+                Buerger.Field.geburtsdatum.name(), BuergerViewController.I18N_BASE_PATH));
         
         // auf 'read only setzen
         this.binder.setReadOnly(true);
@@ -116,7 +115,7 @@ public class BuergerReadForm extends CustomComponent implements Consumer<Event<C
     }
 
     @Override
-    public void accept(reactor.bus.Event<ComponentEvent<LocalBuerger>> eventWrapper) {
+    public void accept(reactor.bus.Event<ComponentEvent<Buerger>> eventWrapper) {
         ComponentEvent event = eventWrapper.getData();
 
         if (event.getEventType().equals(EventType.SELECT2READ)) {

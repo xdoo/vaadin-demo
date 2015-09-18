@@ -6,7 +6,7 @@ import com.vaadin.data.util.GeneratedPropertyContainer;
 import com.vaadin.data.util.PropertyValueGenerator;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Grid;
-import de.muenchen.vaadin.demo.api.domain.Buerger;
+import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.guilib.util.VaadinUtil;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
@@ -55,12 +55,12 @@ public class BuergerGrid extends CustomComponent {
         this.grid.setWidth("100%");
         this.grid.setHeightByRows(10);
         this.grid.getColumns().stream().forEach(c -> {c.setHidable(true);});
-        this.grid.setColumnOrder(Buerger.VORNAME, Buerger.NACHNAME, Buerger.GEBURTSDATUM, VaadinUtil.TABLE_COLUMN_ACTIONS);
+        this.grid.setColumnOrder(Buerger.Field.vorname.name(), Buerger.Field.nachname.name(), Buerger.Field.geburtsdatum.name(), VaadinUtil.TABLE_COLUMN_ACTIONS);
         
         // set headers
-        this.grid.getColumn(Buerger.VORNAME).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.VORNAME, Type.column_header)));
-        this.grid.getColumn(Buerger.GEBURTSDATUM).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.column_header)));
-        this.grid.getColumn(Buerger.NACHNAME).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.column_header)));
+        this.grid.getColumn(Buerger.Field.vorname.name()).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.Field.vorname.name(), Type.column_header)));
+        this.grid.getColumn(Buerger.Field.geburtsdatum.name()).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.Field.geburtsdatum.name(), Type.column_header)));
+        this.grid.getColumn(Buerger.Field.nachname.name()).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.column_header)));
         this.grid.getColumn(VaadinUtil.TABLE_COLUMN_ACTIONS).setHeaderCaption("");
         
         setCompositionRoot(this.grid);

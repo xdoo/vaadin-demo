@@ -1,8 +1,8 @@
 package de.muenchen.vaadin.demo.api.rest;
 
-import de.muenchen.vaadin.demo.api.domain.Buerger;
-import de.muenchen.vaadin.demo.api.hateoas.LocalBuergerAssembler;
-import de.muenchen.vaadin.demo.api.local.LocalBuerger;
+import de.muenchen.vaadin.demo.api.domain.BuergerDTO;
+import de.muenchen.vaadin.demo.api.hateoas.BuergerAssembler;
+import de.muenchen.vaadin.demo.api.local.Buerger;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.client.Traverson;
@@ -19,16 +19,27 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
+ * Provides a simple (and Spring specific) implementation for a {@link BuergerRestClient}.
+ *
  * @author p.mueller
+ * @version 1.0
  */
 public class BuergerRestClientImpl implements BuergerRestClient {
 
-    public static final String BUERGERS = "buergers";
+    /**
+     * Used to follow HATEOAS relations.
+     */
     private final Traverson traverson;
+    /** The restTemplate used for the HTTP Requests. */
     private final RestTemplate restTemplate;
+    /** Assembler to switch from BuergerDTO Resource to Buerger and vice versa. */
+    private final BuergerAssembler buergerAssembler = new BuergerAssembler();
 
-    private final LocalBuergerAssembler localBuergerAssembler = new LocalBuergerAssembler();
-
+    /**
+     * Create a new BuergerRestClient by RestTemplate and baseUri of the server.
+     * @param restTemplate The restTemplate for the HTTP Requests.
+     * @param baseUri The base URI of the REST Server.
+     */
     public BuergerRestClientImpl(RestTemplate restTemplate, URI baseUri) {
         this.restTemplate = restTemplate;
 
@@ -37,18 +48,18 @@ public class BuergerRestClientImpl implements BuergerRestClient {
     }
 
     @Override
-    public List<LocalBuerger> findAll() {
+    public List<Buerger> findAll() {
         return traverson
                 .follow(BUERGERS)
                 .toObject(BuergerResource.LIST).getContent()
 
                 .stream()
-                .map(localBuergerAssembler::toBean)
+                .map(buergerAssembler::toBean)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<LocalBuerger> findAll(Link relation) {
+    public List<Buerger> findAll(Link relation) {
         URI uri = URI.create(relation.getHref());
 
         return restTemplate
@@ -57,53 +68,53 @@ public class BuergerRestClientImpl implements BuergerRestClient {
                 .getContent()
 
                 .stream()
-                .map(localBuergerAssembler::toBean)
+                .map(buergerAssembler::toBean)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Optional<LocalBuerger> findOne(Link link) {
+    public Optional<Buerger> findOne(Link link) {
         URI uri = URI.create(link.getHref());
 
         BuergerResource resource = restTemplate
                 .exchange(uri, HttpMethod.GET, null, BuergerResource.class)
                 .getBody();
 
-        return Optional.of(localBuergerAssembler.toBean(resource));
+        return Optional.of(buergerAssembler.toBean(resource));
     }
 
     @Override
-    public void setRelations(Link link, Collection<Link> links) {
+    public void setRelations(Link endpoint, Collection<Link> links) {
         String relations = links.stream().map(Link::getHref).collect(Collectors.joining("\n"));
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("text", "uri-list"));
-        restTemplate.exchange(URI.create(link.getHref()), HttpMethod.PUT, new HttpEntity<>(relations, headers), Void.class);
+        restTemplate.exchange(URI.create(endpoint.getHref()), HttpMethod.PUT, new HttpEntity<>(relations, headers), Void.class);
     }
 
     @Override
-    public LocalBuerger create(LocalBuerger localBuerger) {
+    public Buerger create(Buerger buerger) {
         URI uri = URI.create(
                 traverson.follow("buergers")
                         .asLink().getHref()
         );
 
-        Buerger buerger = localBuergerAssembler.toResource(localBuerger).getContent();
+        BuergerDTO buergerDTO = buergerAssembler.toResource(buerger).getContent();
 
-        BuergerResource resource = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(buerger), BuergerResource.class).getBody();
+        BuergerResource resource = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(buergerDTO), BuergerResource.class).getBody();
 
-        return localBuergerAssembler.toBean(resource);
+        return buergerAssembler.toBean(resource);
     }
 
 
     @Override
-    public LocalBuerger update(LocalBuerger localBuerger) {
-        URI uri = URI.create(localBuerger.getId().getHref());
+    public Buerger update(Buerger buerger) {
+        URI uri = URI.create(buerger.getId().getHref());
 
-        Buerger buerger = localBuergerAssembler.toResource(localBuerger).getContent();
+        BuergerDTO buergerDTO = buergerAssembler.toResource(buerger).getContent();
 
-        BuergerResource resource = restTemplate.exchange(uri, HttpMethod.PUT, new HttpEntity<>(buerger), BuergerResource.class).getBody();
+        BuergerResource resource = restTemplate.exchange(uri, HttpMethod.PUT, new HttpEntity<>(buergerDTO), BuergerResource.class).getBody();
 
-        return localBuergerAssembler.toBean(resource);
+        return buergerAssembler.toBean(resource);
     }
 
     @Override
