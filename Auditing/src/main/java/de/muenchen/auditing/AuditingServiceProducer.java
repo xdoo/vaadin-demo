@@ -10,8 +10,10 @@ import org.hibernate.jpa.HibernateEntityManagerFactory;
 import org.hibernate.persister.entity.EntityPersister;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import reactor.bus.Event;
 
 import javax.persistence.EntityManagerFactory;
@@ -25,6 +27,7 @@ import static reactor.bus.selector.Selectors.T;
 /**
  * Created by fabian.holtkoetter on 07.09.15.
  */
+@Component
 public class AuditingServiceProducer {
 
     private static final Logger LOG = LoggerFactory.getLogger(AuditingServiceProducer.class);
@@ -33,12 +36,14 @@ public class AuditingServiceProducer {
     private EventBus eventbus;
     private EntityManagerFactory entityManagerFactory;
 
-
-    public AuditingServiceProducer(EntityManagerFactory entityManagerFactory, EventBus eventbus, AuditingUserRepository repo) {
+    @Autowired
+    public AuditingServiceProducer(EntityManagerFactory entityManagerFactory, EventBus eventbus, AuditingUserRepository auditingUserRepository) {
+        LOG.error("I got created!");
         this.entityManagerFactory = entityManagerFactory;
         this.eventbus = eventbus;
         queue = new EntitySaveQueue();
-        new Thread(new AuditingServiceConsumer(repo, queue)).start();
+        this.init();
+        new Thread(new AuditingServiceConsumer(auditingUserRepository, queue)).start();
     }
 
     public void eventHandler(Event<AuditingEvent> eventWrapper) {
@@ -50,7 +55,6 @@ public class AuditingServiceProducer {
         entity.setChangeType(event.getEventType().name());
         entity.setEntity(marshallEntityToJSON(event));
 
-        //TODO Consumer-Producer einbauen. Hier liste befüllen, consumer macht datenbankeintrag.
         queue.put(entity);
     }
 
