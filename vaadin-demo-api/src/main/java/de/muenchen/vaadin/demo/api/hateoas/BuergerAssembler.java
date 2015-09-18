@@ -8,7 +8,7 @@ import org.springframework.hateoas.Resource;
 /**
  * Created by p.mueller on 15.09.15.
  */
-public class LocalBuergerAssembler {
+public class BuergerAssembler {
     public Buerger toBean(Resource<BuergerDTO> resource) {
         BuergerDTO buergerDTO = resource.getContent();
 
