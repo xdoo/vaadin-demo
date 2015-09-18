@@ -84,16 +84,4 @@ public class BuergerDTO extends BaseEntity {
                 this.nachname,
                 this.geburtsdatum);
     }
-
-    @Override
-    public BuergerDTO clone() {
-        BuergerDTO clone = new BuergerDTO();
-        
-        clone.setOid(this.getOid());
-        clone.setVorname(this.getVorname());
-        clone.setNachname(this.getNachname());
-        clone.setGeburtsdatum(this.getGeburtsdatum());
-        
-        return clone;
-    }
 }
