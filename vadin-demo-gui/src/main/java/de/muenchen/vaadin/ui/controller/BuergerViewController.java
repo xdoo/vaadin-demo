@@ -39,9 +39,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.NotificationType;
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Type;
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getNotificationPath;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.*;
 import static reactor.bus.selector.Selectors.object;
 
 /**
@@ -595,7 +593,8 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 
 	private void queryPartnerEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
 		AppEvent<Buerger> event = eventWrapper.getData();
-		queryPartner(event.getEntity());
+		// UI Komponenten aktualisieren
+		postEvent(buildComponentEvent(EventType.QUERY_PARTNER).addEntities(this.queryPartner(event.getEntity())));
 	}
 
 	public EventBus getBus() {
