@@ -3,7 +3,7 @@ package de.muenchen.vaadin.ui.app.views;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import de.muenchen.vaadin.ui.app.MainUI;
-import de.muenchen.vaadin.ui.components.BuergerSearchTable;
+import de.muenchen.vaadin.ui.components.BuergerGrid;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +19,9 @@ public class BuergerTableView extends DefaultBuergerView {
     
     public static final String NAME = "buerger_table_view";
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerCreateView.class);
-    private BuergerSearchTable table;
+
+    private BuergerGrid grid;
+
     @Autowired
     public BuergerTableView(BuergerViewController controller, MainUI ui) {
         super(controller, ui);
@@ -29,12 +31,7 @@ public class BuergerTableView extends DefaultBuergerView {
 
     @Override
     protected void site() {
-
-        table= this.controller.getViewFactory().generateSearchTable(BuergerUpdateView.NAME, BuergerDetailView.NAME, BuergerCreateView.NAME, BuergerTableView.NAME);
-        addComponent(table);
-        table.refresh();
+        grid = controller.getViewFactory().generateBuergerGrid();
+        addComponent(grid);
     }
-    
-
-    
 }

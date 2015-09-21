@@ -1,6 +1,7 @@
 package de.muenchen.vaadin.ui.app.views;
 
 import com.vaadin.spring.annotation.UIScope;
+import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Window;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
@@ -18,7 +19,7 @@ public class TableSelectWindow extends Window {
     protected static final Logger LOG = LoggerFactory.getLogger(TableSelectWindow.class);
 
 
-    public TableSelectWindow(BuergerViewController controller,CustomComponent table) {
+    public TableSelectWindow(BuergerViewController controller,AbstractComponent table) {
 
         super(controller.resolveRelative("form.add.headline.label"), table);
 
