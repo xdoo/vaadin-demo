@@ -2,7 +2,7 @@ package de.muenchen.vaadin.services;
 
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
-import de.muenchen.vaadin.demo.api.local.LocalBuerger;
+import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.api.rest.BuergerRestClient;
 import de.muenchen.vaadin.demo.api.rest.BuergerRestClientImpl;
 import de.muenchen.vaadin.demo.apilib.services.SecurityService;
@@ -42,12 +42,12 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
     }
 
     @Override
-    public LocalBuerger create(LocalBuerger buerger) {
+    public Buerger create(Buerger buerger) {
         return client.create(buerger);
     }
 
     @Override
-    public LocalBuerger update(LocalBuerger buerger) {
+    public Buerger update(Buerger buerger) {
         return client.update(buerger);
     }
 
@@ -57,8 +57,8 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
     }
 
     @Override
-    public LocalBuerger copy(Link link) {
-        Optional<LocalBuerger> original = findOne(link);
+    public Buerger copy(Link link) {
+        Optional<Buerger> original = findOne(link);
         if (!original.isPresent())
             return null;
 
@@ -66,22 +66,22 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
     }
 
     @Override
-    public List<LocalBuerger> findAll() {
+    public List<Buerger> findAll() {
         return client.findAll();
     }
 
     @Override
-    public List<LocalBuerger> findAll(Link relation) {
+    public List<Buerger> findAll(Link relation) {
         return client.findAll(relation);
     }
 
     @Override
-    public Optional<LocalBuerger> findOne(Link link) {
+    public Optional<Buerger> findOne(Link link) {
         return client.findOne(link);
     }
 
     @Override
-    public List<LocalBuerger> queryBuerger(String query) {
+    public List<Buerger> queryBuerger(String query) {
         //    Link link = this.infoService.getUrl("buerger_query");
         //    ArrayList<Link> links = Lists.newArrayList(link.withRel(HateoasUtil.REL_QUERY));
         //    return client.queryBuerger(query, links, getTemplate());

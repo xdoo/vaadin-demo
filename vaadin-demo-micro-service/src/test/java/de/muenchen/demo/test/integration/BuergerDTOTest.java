@@ -65,7 +65,7 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebIntegrationTest({"server.port=0", "management.port=0"})
-public class BuergerTest {
+public class BuergerDTOTest {
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -397,7 +397,7 @@ public class BuergerTest {
 
         assertEquals(HttpStatus.OK, result2.getStatusCode());
         assertEquals(1, result2.getBody().getContent().size());
-        System.out.println("Kind mit oid 2 wurde zu dem Buerger mit Oid 1 hinzufügt.");
+        System.out.println("Kind mit oid 2 wurde zu dem BuergerDTO mit Oid 1 hinzufügt.");
     }
 
     @Test(expected = HttpClientErrorException.class)

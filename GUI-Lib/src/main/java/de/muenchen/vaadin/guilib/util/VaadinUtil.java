@@ -36,13 +36,6 @@ public class VaadinUtil {
         tf.setId(String.format("%s_%s_FIELD", basePath, property).toUpperCase());
         return tf;
     }
-
-    public ComboBox createFormComboField(BeanFieldGroup binder, String label, String prompt, String property, String basePath) {
-        ComboBox cb = (ComboBox) binder.buildAndBind(label, property);
-        cb.setTextInputAllowed(false);
-        cb.addItems(EnumSet.allOf(Augenfarbe.class));
-        return cb;
-    }
     
     public TextField createReadOnlyFormTextField(BeanFieldGroup binder, String label, String prompt, String property, String basePath) {
         TextField tf = this.createFormTextField(binder, label, prompt, property, basePath);
@@ -62,5 +55,15 @@ public class VaadinUtil {
         return df;
     }
 
+    public ListSelect createFormComboBox(BeanFieldGroup binder, String label, String prompt, String property, String basePath) {
+        ListSelect ls = (ListSelect) binder.buildAndBind(label, property);
+        ls.addItems(EnumSet.allOf(Augenfarbe.class));
+        return ls;
+    }
 
+    public ListSelect createReadOnlyComboBox(BeanFieldGroup binder, String label, String prompt, String property, String basePath) {
+        ListSelect ls = createFormComboBox(binder, label, prompt, property, basePath);
+        ls.setReadOnly(true);
+        return ls;
+    }
 }
