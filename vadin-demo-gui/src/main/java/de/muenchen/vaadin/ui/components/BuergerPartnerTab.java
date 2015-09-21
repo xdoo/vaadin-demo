@@ -50,9 +50,7 @@ public class BuergerPartnerTab extends CustomComponent implements Consumer<Event
             if (grid.getSelectedRows() != null) {
                 for (Object next : grid.getSelectedRows()) {
                     BeanItem<LocalBuerger> item = (BeanItem<LocalBuerger>) grid.getContainerDataSource().getItem(next);
-
-                    AppEvent event = controller.buildAppEvent(EventType.RELEASE_PARENT).setItem(controller.getCurrent()).setItemId(controller.getCurrent());
-//                            setItem(item).setItemId(item);
+                    AppEvent event = controller.buildAppEvent(EventType.RELEASE_PARENT).setItem(item).setItemId(item);
                     controller.postEvent(event);
                     grid.deselect(next);
                     LOG.debug("item deleted");

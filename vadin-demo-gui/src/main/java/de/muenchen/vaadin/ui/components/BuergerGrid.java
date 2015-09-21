@@ -173,7 +173,7 @@ public class BuergerGrid extends CustomComponent {
         layout.addComponent(grid);
         layout.setSpacing(true);
         refresh();
-        
+
         // configure
         this.grid.setWidth("100%");
         this.grid.setHeightByRows(10);

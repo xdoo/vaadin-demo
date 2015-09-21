@@ -11,7 +11,6 @@ import de.muenchen.vaadin.demo.api.local.LocalBuerger;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.GenericGrid;
-import de.muenchen.vaadin.guilib.components.GenericTable;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import reactor.bus.Event;
 import reactor.fn.Consumer;
@@ -51,8 +50,7 @@ public class BuergerChildTab extends CustomComponent implements Consumer<Event<C
                 for (Object next : grid.getSelectedRows()) {
                     BeanItem<LocalBuerger> item = (BeanItem<LocalBuerger>) grid.getContainerDataSource().getItem(next);
 
-                    AppEvent event = controller.buildAppEvent(EventType.RELEASE_PARENT).setItem(controller.getCurrent()).setItemId(controller.getCurrent());
-//                            setItem(item).setItemId(item);
+                    AppEvent event = controller.buildAppEvent(EventType.RELEASE_PARENT).setItem(item).setItemId(controller.getCurrent());
                     controller.postEvent(event);
                     grid.deselect(next);
                     LOG.debug("item deleted");
