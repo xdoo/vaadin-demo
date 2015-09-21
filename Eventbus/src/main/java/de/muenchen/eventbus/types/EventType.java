@@ -19,7 +19,7 @@ public enum EventType {
     QUERY_CHILD,
     SAVE_CHILD,
     RELEASE,
-    RELEASE_PARENT,
+    RELEASE_KIND,
     RELEASE_PARTNER,
     SAVE_AS_CHILD,
     ADD_SEARCHED_CHILD,

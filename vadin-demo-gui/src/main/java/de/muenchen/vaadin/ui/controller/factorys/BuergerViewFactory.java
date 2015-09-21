@@ -12,16 +12,7 @@ import de.muenchen.vaadin.demo.i18nservice.buttons.TableAction;
 import de.muenchen.vaadin.demo.i18nservice.buttons.TableActionButton;
 import de.muenchen.vaadin.guilib.components.GenericConfirmationWindow;
 import de.muenchen.vaadin.guilib.components.GenericTable;
-import de.muenchen.vaadin.ui.components.BuergerChildTab;
-import de.muenchen.vaadin.ui.components.BuergerCreateForm;
-import de.muenchen.vaadin.ui.components.BuergerPartnerTab;
-import de.muenchen.vaadin.ui.components.BuergerReadForm;
-import de.muenchen.vaadin.ui.components.BuergerSearchTable;
-import de.muenchen.vaadin.ui.components.BuergerSelectTable;
-import de.muenchen.vaadin.ui.components.BuergerTable;
-import de.muenchen.vaadin.ui.components.BuergerUpdateForm;
-import de.muenchen.vaadin.ui.components.ChildTable;
-import de.muenchen.vaadin.ui.components.PartnerTable;
+import de.muenchen.vaadin.ui.components.*;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -232,7 +223,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
                 {
                     BeanItem<Buerger> item = container.getItem(id);
                     GenericConfirmationWindow win = new GenericConfirmationWindow(
-                            controller.buildAppEvent(EventType.RELEASE_PARENT).setItem(container.getItem(id)).setItemId(id),
+                            controller.buildAppEvent(EventType.RELEASE_KIND).setItem(container.getItem(id)).setItemId(id),
                             controller, SimpleAction.release);
                     controller.getNavigator().getUI().addWindow(win);
                     win.center();

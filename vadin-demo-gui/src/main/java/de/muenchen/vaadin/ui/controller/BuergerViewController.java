@@ -264,8 +264,15 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 	 *
 	 * @param event
 	 */
-	private void releaseParent(Buerger event) {
-		//service.releaseElternteil(getCurrent().getBean(), event.getEntity());
+	private void releaseKind(Buerger event) {
+		Link link = current.getBean().getLink(Buerger.Rel.kinder.name());
+		List<Link> kinder = service.findAll(link)
+				.stream()
+				.map(Buerger::getId)
+				.filter(id -> !id.equals(event.getId()))
+				.collect(Collectors.toList());
+
+		service.setRelations(link, kinder);
 	}
 
 	/**
@@ -274,7 +281,14 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 	 * @param event
 	 */
 	private void releasePartner(Buerger event) {
-		service.delete(event.getLink(Buerger.Rel.partner.name()));
+		Link link = current.getBean().getLink(Buerger.Rel.partner.name());
+		List<Link> partner = service.findAll(link)
+				.stream()
+				.map(Buerger::getId)
+				.filter(id -> !id.equals(event.getId()))
+				.collect(Collectors.toList());
+
+		service.setRelations(link, partner);
 	}
 
 
@@ -370,7 +384,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 		registerToAppEvent(EventType.SAVE_PARTNER, this::savePartnerEventHandler);
 		registerToAppEvent(EventType.SAVE_AS_CHILD, this::saveAsChildEventHandler);
 		registerToAppEvent(EventType.ADD_SEARCHED_CHILD, this::addSearchedChildEventHandler);
-		registerToAppEvent(EventType.RELEASE_PARENT, this::releaseParentHandler);
+		registerToAppEvent(EventType.RELEASE_KIND, this::releaseKindHandler);
 		registerToAppEvent(EventType.RELEASE_PARTNER, this::releasePartnerHandler);
 		registerToAppEvent(EventType.SAVE_AS_PARTNER, this::saveAsPartnerEventHandler);
 		registerToAppEvent(EventType.ADD_PARTNER, this::addPartnerEventHandler);
@@ -406,10 +420,10 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 		postEvent(buildComponentEvent(EventType.UPDATE_PARTNER).addEntity(event.getEntity()));
 	}
 
-	private void releaseParentHandler(Event<AppEvent<Buerger>> eventWrapper) {
+	private void releaseKindHandler(Event<AppEvent<Buerger>> eventWrapper) {
 		AppEvent<Buerger> event = eventWrapper.getData();
 		// Service Operationen ausführen
-		this.releaseParent(event.getEntity());
+		this.releaseKind(event.getEntity());
 		// UI Komponenten aktualisieren
 
 		GenericSuccessNotification succes = new GenericSuccessNotification(
