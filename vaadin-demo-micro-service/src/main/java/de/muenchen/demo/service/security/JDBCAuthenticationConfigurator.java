@@ -11,7 +11,7 @@ import javax.sql.DataSource;
  * Created by rene.zarwel on 21.08.15.
  */
 @MetaInfServices
-@Order(1)
+@Order(2)
 public class JDBCAuthenticationConfigurator extends
         AuthenticationConfiguratorAdapter {
 

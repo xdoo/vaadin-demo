@@ -11,7 +11,7 @@ import org.springframework.security.ldap.DefaultSpringSecurityContextSource;
  * Created by rene.zarwel on 21.08.15.
  */
 @MetaInfServices
-@Order(2)
+@Order(1)
 public class LDAPAuthenticationConfigurator extends
         AuthenticationConfiguratorAdapter {
 
