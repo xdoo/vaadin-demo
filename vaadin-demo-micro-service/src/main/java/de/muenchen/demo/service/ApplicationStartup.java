@@ -1,8 +1,5 @@
 package de.muenchen.demo.service;
 
-import de.muenchen.auditing.AuditingConfiguration;
-import de.muenchen.auditing.AuditingService;
-import de.muenchen.demo.service.domain.AuditingUserRepositoryImpl;
 import de.muenchen.eventbus.EventBus;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.Search;
@@ -24,8 +21,6 @@ public class ApplicationStartup implements ApplicationListener<ContextRefreshedE
 	private EntityManager entityManager;
 	@Autowired
 	private EventBus eventBus;
-	@Autowired
-	AuditingUserRepositoryImpl repo;
 
 	/*
 	 * This method is called during Spring's startup.
@@ -35,9 +30,6 @@ public class ApplicationStartup implements ApplicationListener<ContextRefreshedE
 	 */
 	@Override
 	public void onApplicationEvent(final ContextRefreshedEvent event) {
-
-		new AuditingConfiguration(entityManager.getEntityManagerFactory(), eventBus).registerListeners();
-		new AuditingService(eventBus, repo);
 
 		FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
 		try {

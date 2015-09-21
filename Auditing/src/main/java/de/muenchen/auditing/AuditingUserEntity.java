@@ -11,7 +11,7 @@ import java.util.Date;
 /**
  * Created by fabian.holtkoetter on 02.09.15.
  */
-@Entity(name = "AUDITING_USER_ENTITY")
+@Entity
 public class AuditingUserEntity {
     @Lob
     @Field
