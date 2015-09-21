@@ -21,9 +21,7 @@ import reactor.fn.Consumer;
 
 import java.util.Optional;
 
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Type;
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getEntityFieldPath;
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getFormPath;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.*;
 
 /**
  *
@@ -86,12 +84,10 @@ public class BuergerReadForm extends CustomComponent implements Consumer<Event<C
                 controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.label)),
                 controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.input_prompt)),
                 Buerger.Field.nachname.name(), BuergerViewController.I18N_BASE_PATH));
-/*
-        layout.addComponent(controller.getUtil().createFormTextField(binder,
-                controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.label)),
-                controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.input_prompt)),
-                Buerger.Field.nachname.name(), BuergerViewController.I18N_BASE_PATH));
-        */
+        layout.addComponent(controller.getUtil().createFormComboBox(binder,
+                controller.resolveRelative(getEntityFieldPath(Buerger.Field.augenfarbe.name(), Type.label)),
+                controller.resolveRelative(getEntityFieldPath(Buerger.Field.augenfarbe.name(), Type.input_prompt)),
+                Buerger.Field.augenfarbe.name(), BuergerViewController.I18N_BASE_PATH));
         layout.addComponent(controller.getUtil().createFormDateField(
                 binder, controller.resolveRelative(getEntityFieldPath(Buerger.Field.geburtsdatum.name(), Type.label)),
                 Buerger.Field.geburtsdatum.name(), BuergerViewController.I18N_BASE_PATH));
