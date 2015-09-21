@@ -9,6 +9,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.events.ComponentEvent;
 import de.muenchen.eventbus.types.EventType;
+import de.muenchen.vaadin.demo.api.domain.Augenfarbe;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
@@ -86,8 +87,8 @@ public class BuergerReadForm extends CustomComponent implements Consumer<Event<C
                 Buerger.Field.nachname.name(), BuergerViewController.I18N_BASE_PATH));
         layout.addComponent(controller.getUtil().createFormComboBox(binder,
                 controller.resolveRelative(getEntityFieldPath(Buerger.Field.augenfarbe.name(), Type.label)),
-                controller.resolveRelative(getEntityFieldPath(Buerger.Field.augenfarbe.name(), Type.input_prompt)),
-                Buerger.Field.augenfarbe.name(), BuergerViewController.I18N_BASE_PATH));
+                Buerger.Field.augenfarbe.name(),
+                Augenfarbe.class));
         layout.addComponent(controller.getUtil().createFormDateField(
                 binder, controller.resolveRelative(getEntityFieldPath(Buerger.Field.geburtsdatum.name(), Type.label)),
                 Buerger.Field.geburtsdatum.name(), BuergerViewController.I18N_BASE_PATH));

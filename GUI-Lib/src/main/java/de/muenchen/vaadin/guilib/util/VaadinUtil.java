@@ -3,7 +3,6 @@ package de.muenchen.vaadin.guilib.util;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.ui.*;
-import de.muenchen.vaadin.demo.api.domain.Augenfarbe;
 
 import java.util.EnumSet;
 
@@ -55,15 +54,12 @@ public class VaadinUtil {
         return df;
     }
 
-    public ListSelect createFormComboBox(BeanFieldGroup binder, String label, String prompt, String property, String basePath) {
-        ListSelect ls = (ListSelect) binder.buildAndBind(label, property);
-        ls.addItems(EnumSet.allOf(Augenfarbe.class));
-        return ls;
-    }
-
-    public ListSelect createReadOnlyComboBox(BeanFieldGroup binder, String label, String prompt, String property, String basePath) {
-        ListSelect ls = createFormComboBox(binder, label, prompt, property, basePath);
-        ls.setReadOnly(true);
-        return ls;
+    public ComboBox createFormComboBox(BeanFieldGroup binder, String label, String property, Class enumeration) {
+        ComboBox cb = new ComboBox(label);
+        cb.setTextInputAllowed(false);
+        cb.setNullSelectionAllowed(false);
+        cb.addItems(EnumSet.allOf(enumeration));
+        binder.bind(cb, property);
+        return cb;
     }
 }

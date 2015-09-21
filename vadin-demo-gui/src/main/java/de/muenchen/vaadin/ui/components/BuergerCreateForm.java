@@ -11,6 +11,7 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.types.EventType;
+import de.muenchen.vaadin.demo.api.domain.Augenfarbe;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
@@ -122,10 +123,10 @@ public class BuergerCreateForm extends CustomComponent {
         secField.addValidator(val1);
         secField.addValidator(val0);
         layout.addComponent(secField);
-        ListSelect eyecolorSelector = controller.getUtil().createFormComboBox(binder,
+        ComboBox eyecolorSelector = controller.getUtil().createFormComboBox(binder,
                 controller.resolveRelative(getEntityFieldPath(Buerger.Field.augenfarbe.name(), Type.label)),
-                controller.resolveRelative(getEntityFieldPath(Buerger.Field.augenfarbe.name(), Type.input_prompt)),
-                Buerger.Field.augenfarbe.name(), BuergerViewController.I18N_BASE_PATH);
+                Buerger.Field.augenfarbe.name(),
+                Augenfarbe.class);
         layout.addComponent(eyecolorSelector);
         DateField birthdayfield = controller.getUtil().createFormDateField(binder,
                 controller.resolveRelative(getEntityFieldPath(Buerger.Field.geburtsdatum.name(), Type.label)),
