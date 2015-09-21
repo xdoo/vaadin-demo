@@ -9,6 +9,9 @@ install: mvn clean
 ##script: mvn install -DskipTests=true
 script: mvn install
 
+notifications:
+  email: false
+
 after_success:
   - bash <(curl -s https://codecov.io/bash)
 
