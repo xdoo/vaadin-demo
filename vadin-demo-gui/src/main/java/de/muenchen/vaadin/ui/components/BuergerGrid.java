@@ -38,48 +38,26 @@ public class BuergerGrid extends CustomComponent {
     private ActionButton edit;
     private ActionButton copy;
     private ActionButton delete;
+    private ActionButton create;
 
     public BuergerGrid(final BuergerViewController controller) {
 
         this.controller = controller;
 
         VerticalLayout layout = new VerticalLayout();
-//        layout.setMargin(true);
 
-        this.grid = controller.getViewFactory().generateGrid();
-//                new GenericGrid(controller,LocalBuerger.class);
-        filter.setId(String.format("%s_QUERY_FIELD", BuergerViewController.I18N_BASE_PATH));
-        filter.focus();
-        filter.setWidth("100%");
+        createFilter();
+        createReset();
+        createSearch();
+        createCreate();
+        createEdit();
+        createDelete();
+        createCopy();
 
-        // Reset Schaltfläche
-        reset = new Button(FontAwesome.TIMES);
-        reset.setStyleName(ValoTheme.BUTTON_ICON_ONLY);
-        reset.setClickShortcut(ShortcutAction.KeyCode.ESCAPE);
-        reset.addClickListener(e -> {
-            controller.postEvent(controller.buildAppEvent(EventType.QUERY));
-            filter.setValue("");
-        });
-
-        reset.setId(String.format("%s_RESET_BUTTON", BuergerViewController.I18N_BASE_PATH));
-        // Suche Schaltfläche
-        search = new Button(FontAwesome.SEARCH);
-        search.setStyleName(ValoTheme.BUTTON_ICON_ONLY);
-        search.setClickShortcut(ShortcutAction.KeyCode.ENTER);
-        search.addClickListener(e -> {
-            LOG.debug("search clicked: " + filter.getValue());
-            if (filter.getValue() != null && filter.getValue().length() > 0)
-                controller.postEvent(controller.buildAppEvent(EventType.QUERY).query(filter.getValue()));
-            else
-                reset.click();
-            refresh();
-        });
-        search.setId(String.format("%s_SEARCH_BUTTON", BuergerViewController.I18N_BASE_PATH));
         grid.setColumnOrder("vorname", "nachname", "geburtsdatum");
         grid.removeColumn("id");
         grid.removeColumn("links");
         grid.setSizeFull();
-
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
 
         CssLayout filterLayout = new CssLayout();
@@ -88,52 +66,7 @@ public class BuergerGrid extends CustomComponent {
         buttonlayout.addStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
         HorizontalLayout horizon = new HorizontalLayout();
 
-        ActionButton create = new ActionButton(controller, SimpleAction.create, BuergerCreateView.NAME);
-        create.addClickListener(clickEvent -> {
-            controller.postEvent(controller.buildAppEvent(EventType.CREATE));
-            controller.getNavigator().navigateTo(BuergerCreateView.NAME);
-        });
-        create.setVisible(Boolean.TRUE);
 
-        edit = new ActionButton(controller, SimpleAction.update, BuergerUpdateView.NAME);
-        edit.addClickListener(clickEvent -> {
-            if (grid.getSelectedRows().size() != 1)
-                return;
-            LOG.debug("update selected");
-            AppEvent<LocalBuerger> event = controller.buildAppEvent(EventType.SELECT2UPDATE).setItem((BeanItem<LocalBuerger>) grid.getContainerDataSource().getItem(grid.getSelectedRows().toArray()[0]));
-            controller.postEvent(event);
-            controller.getNavigator().navigateTo(BuergerUpdateView.NAME);
-        });
-
-        delete = new ActionButton(controller, SimpleAction.delete, null);
-        delete.addClickListener(clickEvent -> {
-            LOG.debug("deleting selected items");
-            if (grid.getSelectedRows() != null) {
-                for (Object next : grid.getSelectedRows()) {
-                    BeanItem<LocalBuerger> item = (BeanItem<LocalBuerger>) grid.getContainerDataSource().getItem(next);
-                    AppEvent event = controller.buildAppEvent(EventType.DELETE).setItem(item);
-                    controller.postEvent(event);
-                    grid.deselect(next);
-                    LOG.debug("item deleted");
-                }
-                refresh();
-            }
-        });
-
-        copy = new ActionButton(controller, SimpleAction.copy, null);
-        copy.addClickListener(clickEvent -> {
-            LOG.debug("copying selected items");
-            if (grid.getSelectedRows() != null) {
-                for (Object next : grid.getSelectedRows()) {
-                    BeanItem<LocalBuerger> item = (BeanItem<LocalBuerger>) grid.getContainerDataSource().getItem(next);
-                    AppEvent event = controller.buildAppEvent(EventType.COPY).setItem(item);
-                    controller.postEvent(event);
-
-                    LOG.debug("item copied");
-                }
-                refresh();
-            }
-        });
 
         grid.addItemClickListener(itemClickEvent -> {
             if (itemClickEvent.getPropertyId() != null) {
@@ -187,24 +120,101 @@ public class BuergerGrid extends CustomComponent {
         this.grid.getColumn(Buerger.NACHNAME).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.column_header)));
 
         setCompositionRoot(layout);
+    }
 
+    private void createCopy() {
+        copy = new ActionButton(controller, SimpleAction.copy, null);
+        copy.addClickListener(clickEvent -> {
+            LOG.debug("copying selected items");
+            if (grid.getSelectedRows() != null) {
+                for (Object next : grid.getSelectedRows()) {
+                    BeanItem<LocalBuerger> item = (BeanItem<LocalBuerger>) grid.getContainerDataSource().getItem(next);
+                    AppEvent event = controller.buildAppEvent(EventType.COPY).setItem(item);
+                    controller.postEvent(event);
+
+                    LOG.debug("item copied");
+                }
+                refresh();
+            }
+        });
+    }
+
+    private void createDelete() {
+        delete = new ActionButton(controller, SimpleAction.delete, null);
+        delete.addClickListener(clickEvent -> {
+            LOG.debug("deleting selected items");
+            if (grid.getSelectedRows() != null) {
+                for (Object next : grid.getSelectedRows()) {
+                    BeanItem<LocalBuerger> item = (BeanItem<LocalBuerger>) grid.getContainerDataSource().getItem(next);
+                    AppEvent event = controller.buildAppEvent(EventType.DELETE).setItem(item);
+                    controller.postEvent(event);
+                    grid.deselect(next);
+                    LOG.debug("item deleted");
+                }
+                refresh();
+            }
+        });
+    }
+
+    private void createEdit() {
+        edit = new ActionButton(controller, SimpleAction.update, BuergerUpdateView.NAME);
+        edit.addClickListener(clickEvent -> {
+            if (grid.getSelectedRows().size() != 1)
+                return;
+            LOG.debug("update selected");
+            AppEvent<LocalBuerger> event = controller.buildAppEvent(EventType.SELECT2UPDATE).setItem((BeanItem<LocalBuerger>) grid.getContainerDataSource().getItem(grid.getSelectedRows().toArray()[0]));
+            controller.postEvent(event);
+            controller.getNavigator().navigateTo(BuergerUpdateView.NAME);
+        });
+    }
+
+    private void createCreate() {
+        create = new ActionButton(controller, SimpleAction.create, BuergerCreateView.NAME);
+        create.addClickListener(clickEvent -> {
+            controller.postEvent(controller.buildAppEvent(EventType.CREATE));
+            controller.getNavigator().navigateTo(BuergerCreateView.NAME);
+        });
+        create.setVisible(Boolean.TRUE);
+    }
+
+    private void createSearch() {
+        search = new Button(FontAwesome.SEARCH);
+        search.setStyleName(ValoTheme.BUTTON_ICON_ONLY);
+        search.setClickShortcut(ShortcutAction.KeyCode.ENTER);
+        search.addClickListener(e -> {
+            LOG.debug("search clicked: " + filter.getValue());
+            if (filter.getValue() != null && filter.getValue().length() > 0)
+                controller.postEvent(controller.buildAppEvent(EventType.QUERY).query(filter.getValue()));
+            else
+                reset.click();
+            refresh();
+        });
+        search.setId(String.format("%s_SEARCH_BUTTON", BuergerViewController.I18N_BASE_PATH));
+    }
+
+    private void createFilter() {
+        this.grid = controller.getViewFactory().generateGrid();
+        filter.setId(String.format("%s_QUERY_FIELD", BuergerViewController.I18N_BASE_PATH));
+        filter.focus();
+        filter.setWidth("100%");
+    }
+
+    private void createReset() {
+        reset = new Button(FontAwesome.TIMES);
+        reset.setStyleName(ValoTheme.BUTTON_ICON_ONLY);
+        reset.setClickShortcut(ShortcutAction.KeyCode.ESCAPE);
+        reset.addClickListener(e -> {
+            controller.postEvent(controller.buildAppEvent(EventType.QUERY));
+            filter.setValue("");
+        });
+        reset.setId(String.format("%s_RESET_BUTTON", BuergerViewController.I18N_BASE_PATH));
     }
 
     private void setButtonVisability() {
         int size = grid.getSelectedRows().size();
-        if (size == 0) {
-            edit.setVisible(Boolean.FALSE);
-            copy.setVisible(Boolean.FALSE);
-            delete.setVisible(Boolean.FALSE);
-        } else if (size == 1) {
-            edit.setVisible(Boolean.TRUE);
-            copy.setVisible(Boolean.TRUE);
-            delete.setVisible(Boolean.TRUE);
-        } else if (size > 1) {
-            edit.setVisible(Boolean.FALSE);
-            copy.setVisible(Boolean.TRUE);
-            delete.setVisible(Boolean.TRUE);
-        }
+        edit.setVisible(size == 1);
+        copy.setVisible(size > 0);
+        delete.setVisible(size > 0);
     }
 
     void refresh() {

@@ -164,9 +164,9 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
         return partnerSearchTable.get();
     }
 
-    public ChildTable generateChildTable(String navigateToForDetail) {
+    public KindGrid generateChildTable(String navigateToForDetail) {
         LOG.debug("creating table for children");
-        ChildTable table = new ChildTable(controller);
+        KindGrid table = new KindGrid(controller);
         table.setSizeFull();
         table.setSelectionMode(Grid.SelectionMode.MULTI);
         table.removeColumn("id");
@@ -196,10 +196,10 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
         return table;
     }
 
-    public PartnerTable generatePartnerTable(String navigateToForDetail) {
+    public PartnerGrid generatePartnerTable(String navigateToForDetail) {
 
         LOG.debug("creating table for partner");
-        PartnerTable table = new PartnerTable(controller);
+        PartnerGrid table = new PartnerGrid(controller);
         table.setSizeFull();
         table.setSelectionMode(Grid.SelectionMode.MULTI);
         table.removeColumn("id");
@@ -243,7 +243,6 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
     public BuergerGrid generateBuergerGrid() {
         LOG.debug("creating buergerGrid");
         BuergerGrid buergerGrid = new BuergerGrid(controller);
-//        controller.registerToAllComponentEvents(buergerGrid.getGrid());
         return buergerGrid;
     }
 

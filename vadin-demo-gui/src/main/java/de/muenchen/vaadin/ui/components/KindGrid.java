@@ -15,33 +15,27 @@ import de.muenchen.vaadin.ui.controller.BuergerViewController;
  *
  * @author maximilian.schug
  */
-public class PartnerTable extends GenericGrid<LocalBuerger> {
+public class KindGrid extends GenericGrid<LocalBuerger> {
 
-    public PartnerTable(BuergerViewController controller) {
+    public KindGrid(BuergerViewController controller) {
         super(controller, LocalBuerger.class);
     }
 
     @Override
     public void accept(reactor.bus.Event<ComponentEvent<LocalBuerger>> eventWrapper) {
         //super.accept(eventWrapper);
-
         ComponentEvent event = eventWrapper.getData();
 
-        if(event.getEventType().equals(EventType.SAVE_AS_PARTNER)) {
-            this.add(event.getEntity());
-        }
-        if(event.getEventType().equals(EventType.SAVE_PARTNER)) {
+        if(event.getEventType().equals(EventType.SAVE_CHILD)) {
             this.add(event.getEntity());
         }
         if(event.getEventType().equals(EventType.DELETE)) {
             this.delete(event.getItemID());
         }
-
-        if (event.getEventType().equals(EventType.UPDATE_PARTNER)) {
+        if(event.getEventType().equals(EventType.UPDATE_CHILD)) {
             this.add(event.getEntity());
         }
-
-       if(event.getEventType().equals(EventType.QUERY_PARTNER)) {
+        if(event.getEventType().equals(EventType.QUERY_CHILD)) {
             this.addAll(event.getEntities());
         }
     }

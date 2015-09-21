@@ -31,17 +31,7 @@ public class GenericGrid<T> extends Grid implements Consumer<Event<ComponentEven
      * @param entityClass the entity class
      */
     public GenericGrid(final ControllerContext controller, Class<T> entityClass) {
-
         this.setContainerDataSource(new BeanItemContainer<>(entityClass));
-
-        // create table
-        Table table = new Table();
-        table.setContainerDataSource(this.getContainerDataSource());
-
-        //configure
-        table.setWidth("100%");
-        table.setPageLength(10);
-        table.setColumnCollapsingAllowed(true);
     }
 
     /**
@@ -50,10 +40,7 @@ public class GenericGrid<T> extends Grid implements Consumer<Event<ComponentEven
      * @param entity the entity
      */
     public void add(Optional<T> entity) {
-        if (entity.isPresent()) {
-            LOG.debug("added entity to table.");
-            this.getContainerDataSource().addItem(entity.get());
-        }
+        entity.ifPresent(getContainerDataSource()::addItem);
     }
 
     /**
@@ -62,9 +49,8 @@ public class GenericGrid<T> extends Grid implements Consumer<Event<ComponentEven
      * @param entity the entity
      */
     public void addAll(List<T> entity) {
-        LOG.debug("added search result");
-        this.getContainerDataSource().removeAllItems();
-        entity.stream().forEach(item -> this.getContainerDataSource().addItem(item));
+        getContainerDataSource().removeAllItems();
+        entity.forEach(getContainerDataSource()::addItem);
     }
 
     /**
@@ -73,8 +59,7 @@ public class GenericGrid<T> extends Grid implements Consumer<Event<ComponentEven
      * @param id the id
      */
     public void delete(Object id) {
-        LOG.debug("deleted buerger from table.");
-        this.getContainerDataSource().removeItem(id);
+        getContainerDataSource().removeItem(id);
     }
 
     /**
@@ -85,23 +70,23 @@ public class GenericGrid<T> extends Grid implements Consumer<Event<ComponentEven
     public void accept(reactor.bus.Event<ComponentEvent<T>> eventWrapper) {
         ComponentEvent event = eventWrapper.getData();
 
-        if(event.getEventType().equals(EventType.SAVE)) {
+        if(EventType.SAVE.equals(event.getEventType())) {
             this.add(event.getEntity());
         }
 
-        if(event.getEventType().equals(EventType.COPY)) {
+        if(EventType.COPY.equals(event.getEventType())) {
             this.add(event.getEntity());
         }
 
-        if(event.getEventType().equals(EventType.DELETE)) {
+        if(EventType.DELETE.equals(event.getEventType())) {
             this.delete(event.getItemID());
         }
 
-        if(event.getEventType().equals(EventType.UPDATE)) {
+        if(EventType.UPDATE.equals(event.getEventType())) {
             this.add(event.getEntity());
         }
 
-        if(event.getEventType().equals(EventType.QUERY)) {
+        if(EventType.QUERY.equals(event.getEventType())) {
             this.addAll(event.getEntities());
         }
     }
