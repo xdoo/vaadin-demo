@@ -58,7 +58,9 @@ public class VaadinUtil {
         ComboBox cb = new ComboBox(label);
         cb.setTextInputAllowed(false);
         cb.setNullSelectionAllowed(false);
-        cb.addItems(EnumSet.allOf(enumeration));
+        if (enumeration.isEnum()) {
+            cb.addItems(EnumSet.allOf(enumeration));
+        }
         binder.bind(cb, property);
         return cb;
     }
