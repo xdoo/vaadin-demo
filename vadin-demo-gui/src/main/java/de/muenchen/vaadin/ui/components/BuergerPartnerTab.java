@@ -49,14 +49,15 @@ public class BuergerPartnerTab extends CustomComponent implements Consumer<Event
             LOG.debug("deleting selected items");
             if (grid.getSelectedRows() != null) {
                 for (Object next : grid.getSelectedRows()) {
-                    BeanItem<LocalBuerger> item = (BeanItem<LocalBuerger>) grid.getContainerDataSource().getItem(next);
-                    AppEvent event = controller.buildAppEvent(EventType.RELEASE_PARENT).setItem(item).setItemId(item);
+                    BeanItem<Buerger> item = (BeanItem<Buerger>) grid.getContainerDataSource().getItem(next);
+                    AppEvent event = controller.buildAppEvent(EventType.RELEASE_PARTNER).setItem(item).setItemId(item);
                     controller.postEvent(event);
                     grid.deselect(next);
                     LOG.debug("item deleted");
                 }
             }
         });
+        delete.setVisible(false);
 
         grid = controller.getViewFactory().generatePartnerTable(navigateToForDetail);
 
@@ -75,17 +76,18 @@ public class BuergerPartnerTab extends CustomComponent implements Consumer<Event
     }
 
     private void setButtonVisability() {
-        if(grid.getSelectedRows().size()==0)
+        if (grid.getSelectedRows().size() == 0)
             delete.setVisible(Boolean.FALSE);
         else
             delete.setVisible(Boolean.TRUE);
     }
 
-    public GenericGrid getGrid(){
+    public GenericGrid getGrid() {
         return grid;
     }
-    public void setGrid(GenericGrid grid){
-        this.grid=grid;
+
+    public void setGrid(GenericGrid grid) {
+        this.grid = grid;
     }
 
     @Override

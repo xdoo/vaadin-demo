@@ -2,7 +2,6 @@ package de.muenchen.vaadin.guilib.components;
 
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.Grid;
-import com.vaadin.ui.Table;
 import de.muenchen.eventbus.events.ComponentEvent;
 import de.muenchen.eventbus.types.EventType;
 import de.muenchen.vaadin.demo.i18nservice.ControllerContext;
@@ -27,7 +26,7 @@ public class GenericGrid<T> extends Grid implements Consumer<Event<ComponentEven
     /**
      * Instantiates a new Generic table.
      *
-     * @param controller the controller
+     * @param controller  the controller
      * @param entityClass the entity class
      */
     public GenericGrid(final ControllerContext controller, Class<T> entityClass) {
@@ -59,34 +58,36 @@ public class GenericGrid<T> extends Grid implements Consumer<Event<ComponentEven
      * @param id the id
      */
     public void delete(Object id) {
+        LOG.error(id.toString());
         getContainerDataSource().removeItem(id);
     }
 
     /**
      * Accept method to register to receive AppEvents.
+     *
      * @param eventWrapper
      */
     @Override
     public void accept(reactor.bus.Event<ComponentEvent<T>> eventWrapper) {
         ComponentEvent event = eventWrapper.getData();
 
-        if(EventType.SAVE.equals(event.getEventType())) {
+        if (EventType.SAVE.equals(event.getEventType())) {
             this.add(event.getEntity());
         }
 
-        if(EventType.COPY.equals(event.getEventType())) {
+        if (EventType.COPY.equals(event.getEventType())) {
             this.add(event.getEntity());
         }
 
-        if(EventType.DELETE.equals(event.getEventType())) {
+        if (EventType.DELETE.equals(event.getEventType())) {
             this.delete(event.getItemID());
         }
 
-        if(EventType.UPDATE.equals(event.getEventType())) {
+        if (EventType.UPDATE.equals(event.getEventType())) {
             this.add(event.getEntity());
         }
 
-        if(EventType.QUERY.equals(event.getEventType())) {
+        if (EventType.QUERY.equals(event.getEventType())) {
             this.addAll(event.getEntities());
         }
     }

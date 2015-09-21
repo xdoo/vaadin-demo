@@ -7,26 +7,16 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.events.AppEvent;
 import de.muenchen.eventbus.types.EventType;
+import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.GenericGrid;
 import de.muenchen.vaadin.ui.app.views.BuergerCreateView;
 import de.muenchen.vaadin.ui.app.views.BuergerDetailView;
 import de.muenchen.vaadin.ui.app.views.BuergerUpdateView;
-import com.vaadin.data.Item;
-import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.data.util.GeneratedPropertyContainer;
-import com.vaadin.data.util.PropertyValueGenerator;
-import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.Grid;
-import de.muenchen.vaadin.demo.api.local.Buerger;
-import de.muenchen.vaadin.guilib.util.VaadinUtil;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Type;
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getEntityFieldPath;
 
 /**
  *
@@ -73,11 +63,10 @@ public class BuergerGrid extends CustomComponent {
         HorizontalLayout horizon = new HorizontalLayout();
 
 
-
         grid.addItemClickListener(itemClickEvent -> {
             if (itemClickEvent.getPropertyId() != null) {
                 if (itemClickEvent.isDoubleClick()) {
-                    controller.postEvent(controller.buildAppEvent(EventType.SELECT2READ).setItem((BeanItem<LocalBuerger>) itemClickEvent.getItem()));
+                    controller.postEvent(controller.buildAppEvent(EventType.SELECT2READ).setItem((BeanItem<Buerger>) itemClickEvent.getItem()));
                     controller.getNavigator().navigateTo(BuergerDetailView.NAME);
                     return;
                 }
@@ -120,11 +109,11 @@ public class BuergerGrid extends CustomComponent {
             c.setHidable(true);
         });
 
-        // set headers
-        this.grid.getColumn(Buerger.VORNAME).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.VORNAME, Type.column_header)));
-        this.grid.getColumn(Buerger.GEBURTSDATUM).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.GEBURTSDATUM, Type.column_header)));
-        this.grid.getColumn(Buerger.NACHNAME).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.NACHNAME, Type.column_header)));
-
+        /* set headers
+        this.grid.getColumn(Buerger.Field.vorname).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.Field.vorname.name(), Type.column_header)));
+        this.grid.getColumn(Buerger.Field.geburtsdatum).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.Field.geburtsdatum.name(), Type.column_header)));
+        this.grid.getColumn(Buerger.Field.nachname).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.column_header)));
+        */
         setCompositionRoot(layout);
     }
 
@@ -134,7 +123,7 @@ public class BuergerGrid extends CustomComponent {
             LOG.debug("copying selected items");
             if (grid.getSelectedRows() != null) {
                 for (Object next : grid.getSelectedRows()) {
-                    BeanItem<LocalBuerger> item = (BeanItem<LocalBuerger>) grid.getContainerDataSource().getItem(next);
+                    BeanItem<Buerger> item = (BeanItem<Buerger>) grid.getContainerDataSource().getItem(next);
                     AppEvent event = controller.buildAppEvent(EventType.COPY).setItem(item);
                     controller.postEvent(event);
 
@@ -151,7 +140,7 @@ public class BuergerGrid extends CustomComponent {
             LOG.debug("deleting selected items");
             if (grid.getSelectedRows() != null) {
                 for (Object next : grid.getSelectedRows()) {
-                    BeanItem<LocalBuerger> item = (BeanItem<LocalBuerger>) grid.getContainerDataSource().getItem(next);
+                    BeanItem<Buerger> item = (BeanItem<Buerger>) grid.getContainerDataSource().getItem(next);
                     AppEvent event = controller.buildAppEvent(EventType.DELETE).setItem(item);
                     controller.postEvent(event);
                     grid.deselect(next);
@@ -168,7 +157,7 @@ public class BuergerGrid extends CustomComponent {
             if (grid.getSelectedRows().size() != 1)
                 return;
             LOG.debug("update selected");
-            AppEvent<LocalBuerger> event = controller.buildAppEvent(EventType.SELECT2UPDATE).setItem((BeanItem<LocalBuerger>) grid.getContainerDataSource().getItem(grid.getSelectedRows().toArray()[0]));
+            AppEvent<Buerger> event = controller.buildAppEvent(EventType.SELECT2UPDATE).setItem((BeanItem<Buerger>) grid.getContainerDataSource().getItem(grid.getSelectedRows().toArray()[0]));
             controller.postEvent(event);
             controller.getNavigator().navigateTo(BuergerUpdateView.NAME);
         });

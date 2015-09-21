@@ -40,7 +40,8 @@ public class BuergerSearchTable extends CustomComponent {
         
         setCompositionRoot(vlayout);
     }
-    public GenericGrid getTable(){
+
+    public GenericGrid getTable() {
         return table;
     }
 

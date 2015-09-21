@@ -48,15 +48,16 @@ public class BuergerChildTab extends CustomComponent implements Consumer<Event<C
             LOG.debug("deleting selected items");
             if (grid.getSelectedRows() != null) {
                 for (Object next : grid.getSelectedRows()) {
-                    BeanItem<LocalBuerger> item = (BeanItem<LocalBuerger>) grid.getContainerDataSource().getItem(next);
+                    BeanItem<Buerger> item = (BeanItem<Buerger>) grid.getContainerDataSource().getItem(next);
 
-                    AppEvent event = controller.buildAppEvent(EventType.RELEASE_PARENT).setItem(item).setItemId(controller.getCurrent());
+                    AppEvent event = controller.buildAppEvent(EventType.RELEASE_KIND).setItem(item).setItemId(controller.getCurrent());
                     controller.postEvent(event);
                     grid.deselect(next);
                     LOG.debug("item deleted");
                 }
             }
         });
+        delete.setVisible(false);
 
         grid = controller.getViewFactory().generateChildTable(navigateToForDetail);
 
@@ -75,16 +76,17 @@ public class BuergerChildTab extends CustomComponent implements Consumer<Event<C
     }
 
     private void setButtonVisability() {
-        if(grid.getSelectedRows().size()==0)
+        if (grid.getSelectedRows().size() == 0)
             delete.setVisible(Boolean.FALSE);
         else
             delete.setVisible(Boolean.TRUE);
     }
 
-    public GenericGrid getGrid(){
+    public GenericGrid getGrid() {
         return grid;
     }
-    public void setGrid(GenericGrid grid){
+
+    public void setGrid(GenericGrid grid) {
         this.grid = grid;
     }
 
