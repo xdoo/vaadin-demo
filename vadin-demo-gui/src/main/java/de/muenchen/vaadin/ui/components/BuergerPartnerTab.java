@@ -68,11 +68,12 @@ public class BuergerPartnerTab extends CustomComponent implements Consumer<Event
         ComponentEvent event = eventWrapper.getData();
 
         if (event.getEventType().equals(EventType.SELECT2READ)) {
-            LOG.debug("seleted buerger to show childs.");
+            LOG.debug("seleted buerger to show partner.");
             Optional<BeanItem<Buerger>> opt = event.getItem();
             if (opt.isPresent()) {
+                LOG.error("Posting new QueryPartner");
                 Buerger entity = opt.get().getBean();
-                this.controller.postEvent(controller.buildAppEvent(EventType.QUERY_CHILD).setEntity(entity));
+                this.controller.postEvent(controller.buildAppEvent(EventType.QUERY_PARTNER).setEntity(entity));
             } else {
                 LOG.warn("No item present.");
             }
