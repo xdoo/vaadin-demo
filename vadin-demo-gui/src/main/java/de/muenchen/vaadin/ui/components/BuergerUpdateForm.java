@@ -78,7 +78,7 @@ public class BuergerUpdateForm extends CustomComponent implements Consumer<Event
         layout.setMargin(true);
 
         // headline
-        Label headline = new Label(controller.resolveRelative(getFormPath(SimpleAction.create, Component.headline, Type.label)));
+        Label headline = new Label(controller.resolveRelative(getFormPath(SimpleAction.create, I18nPaths.Component.headline, Type.label)));
         headline.addStyleName(ValoTheme.LABEL_H3);
         layout.addComponent(headline);
 

@@ -12,6 +12,7 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.types.EventType;
 import de.muenchen.vaadin.demo.api.local.Buerger;
+import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.GenericWarningNotification;
@@ -80,7 +81,7 @@ public class BuergerCreateForm extends CustomComponent {
         // headline
         Label headline = new Label(controller.resolveRelative(
                 getFormPath(SimpleAction.create,
-                        Component.headline,
+                        I18nPaths.Component.headline,
                         Type.label)));
         headline.addStyleName(ValoTheme.LABEL_H3);
         layout.addComponent(headline);
@@ -138,7 +139,7 @@ public class BuergerCreateForm extends CustomComponent {
         // die 'speichern' Schaltfläche
         String createLabel = controller.resolveRelative(
                 getFormPath(SimpleAction.create,
-                        Component.button,
+                        I18nPaths.Component.button,
                         Type.label));
         Button createButton = new Button(createLabel, (ClickEvent click) -> {
             try {
