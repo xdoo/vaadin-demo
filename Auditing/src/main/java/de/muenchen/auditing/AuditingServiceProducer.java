@@ -38,7 +38,6 @@ public class AuditingServiceProducer {
 
     @Autowired
     public AuditingServiceProducer(EntityManagerFactory entityManagerFactory, EventBus eventbus, AuditingUserRepository auditingUserRepository) {
-        LOG.error("I got created!");
         this.entityManagerFactory = entityManagerFactory;
         this.eventbus = eventbus;
         queue = new EntitySaveQueue();

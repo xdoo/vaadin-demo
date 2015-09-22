@@ -431,7 +431,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 				resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.release, Type.text, "child")));
 		succes.show(Page.getCurrent());
 
-		postEvent(buildComponentEvent(EventType.DELETE).setItemID(event.getItemId()));
+		postEvent(buildComponentEvent(EventType.DELETE).setItemID(event.getEntity()));
 
 	}
 
