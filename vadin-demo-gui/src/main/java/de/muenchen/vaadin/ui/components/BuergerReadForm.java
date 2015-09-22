@@ -9,6 +9,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.events.ComponentEvent;
 import de.muenchen.eventbus.types.EventType;
+import de.muenchen.vaadin.demo.api.domain.Augenfarbe;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
@@ -21,9 +22,7 @@ import reactor.fn.Consumer;
 
 import java.util.Optional;
 
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Type;
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getEntityFieldPath;
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getFormPath;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.*;
 
 /**
  *
@@ -86,12 +85,10 @@ public class BuergerReadForm extends CustomComponent implements Consumer<Event<C
                 controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.label)),
                 controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.input_prompt)),
                 Buerger.Field.nachname.name(), BuergerViewController.I18N_BASE_PATH));
-/*
-        layout.addComponent(controller.getUtil().createFormTextField(binder,
-                controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.label)),
-                controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.input_prompt)),
-                Buerger.Field.nachname.name(), BuergerViewController.I18N_BASE_PATH));
-        */
+        layout.addComponent(controller.getUtil().createFormComboBox(binder,
+                controller.resolveRelative(getEntityFieldPath(Buerger.Field.augenfarbe.name(), Type.label)),
+                Buerger.Field.augenfarbe.name(),
+                Augenfarbe.class));
         layout.addComponent(controller.getUtil().createFormDateField(
                 binder, controller.resolveRelative(getEntityFieldPath(Buerger.Field.geburtsdatum.name(), Type.label)),
                 Buerger.Field.geburtsdatum.name(), BuergerViewController.I18N_BASE_PATH));

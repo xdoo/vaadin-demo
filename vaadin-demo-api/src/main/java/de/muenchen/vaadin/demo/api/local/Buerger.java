@@ -1,5 +1,6 @@
 package de.muenchen.vaadin.demo.api.local;
 
+import de.muenchen.vaadin.demo.api.domain.Augenfarbe;
 import de.muenchen.vaadin.demo.apilib.util.FieldIdentifier;
 import org.springframework.hateoas.ResourceSupport;
 
@@ -28,6 +29,12 @@ public class Buerger extends ResourceSupport {
 
     /** A mapped Field from the DTO */
     @FieldIdentifier
+    private Augenfarbe augenfarbe;
+
+    /**
+     * A mapped Field from the DTO
+     */
+    @FieldIdentifier
     private Date geburtsdatum;
 
     /**
@@ -37,10 +44,11 @@ public class Buerger extends ResourceSupport {
      * @param nachname the nachname of the Buerger.
      * @param geburtsdatum the geburtsdatum of the Buerger.
      */
-    public Buerger(String vorname, String nachname, Date geburtsdatum) {
+    public Buerger(String vorname, String nachname, Date geburtsdatum, Augenfarbe augenfarbe) {
         this.vorname = vorname;
         this.nachname = nachname;
         this.geburtsdatum = geburtsdatum;
+        this.augenfarbe = augenfarbe;
     }
 
     /**
@@ -101,6 +109,14 @@ public class Buerger extends ResourceSupport {
         this.geburtsdatum = geburtsdatum;
     }
 
+    public Augenfarbe getAugenfarbe() {
+        return augenfarbe;
+    }
+
+    public void setAugenfarbe(Augenfarbe augenfarbe) {
+        this.augenfarbe = augenfarbe;
+    }
+
     /**
      * A simple Enum for all the Fields of this Buerger.
      * <p>
@@ -108,7 +124,7 @@ public class Buerger extends ResourceSupport {
      * </p>
      */
     public enum Field {
-        vorname, nachname, geburtsdatum;
+        vorname, nachname, geburtsdatum, augenfarbe;
     }
 
     /**

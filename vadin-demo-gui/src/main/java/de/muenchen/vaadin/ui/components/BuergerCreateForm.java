@@ -7,29 +7,20 @@ import com.vaadin.event.ShortcutAction;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
-import com.vaadin.ui.Button;
+import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.DateField;
-import com.vaadin.ui.FormLayout;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.types.EventType;
+import de.muenchen.vaadin.demo.api.domain.Augenfarbe;
 import de.muenchen.vaadin.demo.api.local.Buerger;
+import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.GenericWarningNotification;
 import de.muenchen.vaadin.guilib.util.ValidatorFactory;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Component;
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.NotificationType;
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Type;
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getEntityFieldPath;
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getFormPath;
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getNotificationPath;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.*;
 
 /**
  * Formular zum Erstellen eines {@link Buerger}s.
@@ -91,7 +82,7 @@ public class BuergerCreateForm extends CustomComponent {
         // headline
         Label headline = new Label(controller.resolveRelative(
                 getFormPath(SimpleAction.create,
-                        Component.headline,
+                        I18nPaths.Component.headline,
                         Type.label)));
         headline.addStyleName(ValoTheme.LABEL_H3);
         layout.addComponent(headline);
@@ -132,6 +123,11 @@ public class BuergerCreateForm extends CustomComponent {
         secField.addValidator(val1);
         secField.addValidator(val0);
         layout.addComponent(secField);
+        ComboBox eyecolorSelector = controller.getUtil().createFormComboBox(binder,
+                controller.resolveRelative(getEntityFieldPath(Buerger.Field.augenfarbe.name(), Type.label)),
+                Buerger.Field.augenfarbe.name(),
+                Augenfarbe.class);
+        layout.addComponent(eyecolorSelector);
         DateField birthdayfield = controller.getUtil().createFormDateField(binder,
                 controller.resolveRelative(getEntityFieldPath(Buerger.Field.geburtsdatum.name(), Type.label)),
                 Buerger.Field.geburtsdatum.name(), BuergerViewController.I18N_BASE_PATH);
@@ -144,19 +140,21 @@ public class BuergerCreateForm extends CustomComponent {
         // die 'speichern' Schaltfläche
         String createLabel = controller.resolveRelative(
                 getFormPath(SimpleAction.create,
-                        Component.button,
+                        I18nPaths.Component.button,
                         Type.label));
         Button createButton = new Button(createLabel, (ClickEvent click) -> {
             try {
                 //If no NullValidators are added to the Fields, they will be added.
                 if(!firstField.getValidators().contains(val)){
                     firstField.addValidator(val);
-                    secField.addValidator(val);                
+                    secField.addValidator(val);
+                    eyecolorSelector.addValidator(val);
                     birthdayfield.addValidator(val);
                 }
                 //Validation of the Fields before continuing
                 firstField.validate();                
                 secField.validate();
+                eyecolorSelector.validate();
                 birthdayfield.validate();
                 
                 binder.commit();
@@ -166,6 +164,7 @@ public class BuergerCreateForm extends CustomComponent {
                 //reset
                 firstField.removeValidator(val);
                 secField.removeValidator(val);
+                eyecolorSelector.removeValidator(val);
                 birthdayfield.removeValidator(val);
                 binder.setItemDataSource(new Buerger());
             } catch (CommitException | Validator.InvalidValueException e) {
