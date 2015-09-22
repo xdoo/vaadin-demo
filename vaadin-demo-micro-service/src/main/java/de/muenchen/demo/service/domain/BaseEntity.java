@@ -7,6 +7,7 @@ import org.hibernate.search.annotations.IndexedEmbedded;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Version;
 import java.io.Serializable;
 
 /**
@@ -15,6 +16,11 @@ import java.io.Serializable;
  */
 @MappedSuperclass
 public abstract class BaseEntity implements Cloneable, Serializable {
+
+    @Version
+    @Column(name = "version")
+    Long version;
+
 
     @Column(name = "OID")
     @Id
