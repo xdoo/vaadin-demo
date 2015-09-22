@@ -3,6 +3,7 @@ package de.muenchen.auditing;
 import java.util.Objects;
 
 /**
+ * AuditingServiceConsumer läuft im eigenen Thread und ist zum asynchronen SPeichern der Auditing-Daten in der Datenbank zuständig.
  * Created by fabian.holtkoetter on 17.09.15.
  */
 public class AuditingServiceConsumer implements Runnable {
