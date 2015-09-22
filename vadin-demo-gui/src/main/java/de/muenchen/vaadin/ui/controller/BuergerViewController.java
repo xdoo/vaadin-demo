@@ -402,7 +402,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 				resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.release, Type.text, "partner")));
 		succes.show(Page.getCurrent());
 
-		postEvent(buildComponentEvent(EventType.DELETE).setItemID(event.getItemId()));
+		postEvent(buildComponentEvent(EventType.DELETE).setItemID(event.getEntity()));
 	}
 
 	private void addPartnerEventHandler(Event<AppEvent<Buerger>> eventWrapper) {

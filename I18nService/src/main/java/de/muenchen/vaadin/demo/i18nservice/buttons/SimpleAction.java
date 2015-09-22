@@ -29,7 +29,6 @@ public enum SimpleAction implements Action {
     cancel,
     copy(FontAwesome.COPY, ShortcutAction.KeyCode.INSERT),
     add,
-    history(FontAwesome.ARCHIVE),
     release(FontAwesome.TRASH_O),
     logout(FontAwesome.SIGN_OUT);
     
