@@ -10,6 +10,7 @@ import de.muenchen.eventbus.types.EventType;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
+import de.muenchen.vaadin.guilib.components.GenericConfirmationWindow;
 import de.muenchen.vaadin.guilib.components.GenericGrid;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import reactor.bus.Event;
@@ -34,12 +35,26 @@ public class BuergerPartnerTab extends CustomComponent implements Consumer<Event
 
         ActionButton create = new ActionButton(controller, SimpleAction.create, navigateToForCreate);
         create.addClickListener(clickEvent -> {
-            controller.postEvent(controller.buildAppEvent(EventType.CREATE));
-            controller.getNavigator().navigateTo(navigateToForCreate);
+            if (grid.getContainerDataSource().size() == 0) {
+                controller.postEvent(controller.buildAppEvent(EventType.CREATE));
+                controller.getNavigator().navigateTo(navigateToForCreate);
+            } else {
+                GenericConfirmationWindow window = new GenericConfirmationWindow(null, controller, SimpleAction.override);
+                getUI().addWindow(window);
+                window.center();
+                window.focus();
+            }
         });
         ActionButton add = new ActionButton(controller, SimpleAction.add, navigateToForAdd);
         add.addClickListener(clickEvent -> {
-            controller.postEvent(controller.buildAppEvent(EventType.ADD_PARTNER));
+            if (grid.getContainerDataSource().size() == 0) {
+                controller.postEvent(controller.buildAppEvent(EventType.ADD_PARTNER));
+            } else {
+                GenericConfirmationWindow window = new GenericConfirmationWindow(controller.buildAppEvent(EventType.ADD_PARTNER), controller, SimpleAction.override);
+                getUI().addWindow(window);
+                window.center();
+                window.focus();
+            }
         });
 
 

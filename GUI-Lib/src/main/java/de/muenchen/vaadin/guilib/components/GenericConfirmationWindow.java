@@ -2,53 +2,47 @@ package de.muenchen.vaadin.guilib.components;
 
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.server.FontAwesome;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Panel;
-import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window;
+import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.i18nservice.ControllerContext;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.Action;
 
 /**
- * Generisches Bestätigungsfenster mit einer "ok" und 
- * einer "abbrechen" Schaltfläche. 
- * 
+ * Generisches Bestätigungsfenster mit einer "ok" und
+ * einer "abbrechen" Schaltfläche.
+ * <p/>
  * TODO -> sollte in einen generischen Artefakt übernommen werden.
- * 
+ *
  * @author claus.straube
  */
 public class GenericConfirmationWindow extends Window {
-    
+
     /**
      * Beschriftung "ok" Schaltfläche
      */
     private String okButton;
-    
+
     /**
      * Beschriftung "abbrechen" Schaltfläche
      */
     private String cancelButton;
-    
+
     /**
      * Fenster Nachricht
      */
     private String message;
 
 
-
     /**
      * Konfiguriert ein Bestätigungsfenster mit einer "ok" und
      * einer "abbrechen" Schaltfläche.
      *
-     * @param event Ereignis für Klick auf "ok" Schaltfläche
+     * @param event      Ereignis für Klick auf "ok" Schaltfläche. Null wenn kein ereigniss gesendet werden soll.
      * @param controller der Controller
-     * @param action Art des Fensters
+     * @param action     Art des Fensters
      */
-    public GenericConfirmationWindow(Object event, ControllerContext<?> controller, Action action){
+    public GenericConfirmationWindow(Object event, ControllerContext<?> controller, Action action) {
         this.okButton = controller.resolve(I18nPaths.getConfirmationPath(action, I18nPaths.Type.confirm));
         this.cancelButton = controller.resolve(I18nPaths.getConfirmationPath(action, I18nPaths.Type.cancel));
         this.message = controller.resolve(I18nPaths.getConfirmationPath(action, I18nPaths.Type.text));
@@ -84,9 +78,9 @@ public class GenericConfirmationWindow extends Window {
 
 
     /**
-     * Erstellt eine Schaltfläche, die das übergebene Event an 
+     * Erstellt eine Schaltfläche, die das übergebene Event an
      * den Eventbus schickt. Danach wird das Fenster geschlossen.
-     * 
+     *
      * @param event
      * @param controller
      * @return "ok" Schaltfläche
@@ -100,13 +94,13 @@ public class GenericConfirmationWindow extends Window {
             controller.postEvent(event);
             this.close();
         });
-        
+
         return ok;
     }
-    
+
     /**
      * Erstellt eine Schaltfläche, die ohne Aktion das Fenster schließt.
-     * 
+     *
      * @return "cancel" Schaltfläche
      */
     private Button addCancelButton() {
@@ -116,10 +110,10 @@ public class GenericConfirmationWindow extends Window {
         cancel.addClickListener(e -> {
             this.close();
         });
-        
+
         return cancel;
     }
-    
+
     // Default Werte überschreiben
 
     public String getOkButton() {
@@ -145,5 +139,4 @@ public class GenericConfirmationWindow extends Window {
     public void setMessage(String message) {
         this.message = message;
     }
-    
 }
