@@ -35,6 +35,7 @@ import reactor.fn.Consumer;
 
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -282,13 +283,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 	 */
 	private void releasePartner(Buerger event) {
 		Link link = current.getBean().getLink(Buerger.Rel.partner.name());
-		List<Link> partner = service.findAll(link)
-				.stream()
-				.map(Buerger::getId)
-				.filter(id -> !id.equals(event.getId()))
-				.collect(Collectors.toList());
-
-		service.setRelations(link, partner);
+		service.delete(link);
 	}
 
 
@@ -319,15 +314,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 	 */
 	public void addBuergerPartner(Buerger partnerEntity) {
 		Link link = current.getBean().getLink(Buerger.Rel.partner.name());
-		List<Link> partner = Stream.concat(
-				service.findAll(link)
-						.stream()
-						.map(Buerger::getId),
-				Stream.of(partnerEntity.getId()))
-
-				.collect(Collectors.toList());
-
-		service.setRelations(link, partner);
+		service.setRelation(link, partnerEntity.getId());
 	}
 
 	/**
@@ -361,8 +348,8 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 		return service.findAll(entity.getLink(Buerger.Rel.kinder.name())).stream().collect(Collectors.toList());
 	}
 
-	public List<Buerger> queryPartner(Buerger entity) {
-		return service.findAll(entity.getLink(Buerger.Rel.partner.name())).stream().collect(Collectors.toList());
+	public Buerger queryPartner(Buerger entity) {
+		return service.findOne(entity.getLink(Buerger.Rel.partner.name())).get();
 	}
 
 
@@ -608,7 +595,15 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 	private void queryPartnerEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
 		AppEvent<Buerger> event = eventWrapper.getData();
 		// UI Komponenten aktualisieren
-		postEvent(buildComponentEvent(EventType.QUERY_PARTNER).addEntities(this.queryPartner(event.getEntity())));
+		Buerger partner;
+		try {
+			partner = this.queryPartner(event.getEntity());
+			postEvent(buildComponentEvent(EventType.QUERY_PARTNER).addEntity(partner));
+		} catch (HttpClientErrorException e) {
+			if (e.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
+				postEvent(buildComponentEvent(EventType.QUERY_PARTNER).addEntities(new ArrayList<>()));
+			}
+		}
 	}
 
 	public EventBus getBus() {

@@ -20,7 +20,6 @@ import java.util.Optional;
 import static de.muenchen.vaadin.ui.components.BuergerReadForm.LOG;
 
 /**
- *
  * @author Maximilian Schug
  */
 public class BuergerPartnerTab extends CustomComponent implements Consumer<Event<ComponentEvent<Buerger>>> {
@@ -33,12 +32,12 @@ public class BuergerPartnerTab extends CustomComponent implements Consumer<Event
 
         this.controller = controller;
 
-        ActionButton create = new ActionButton(controller, SimpleAction.create,navigateToForCreate);
+        ActionButton create = new ActionButton(controller, SimpleAction.create, navigateToForCreate);
         create.addClickListener(clickEvent -> {
             controller.postEvent(controller.buildAppEvent(EventType.CREATE));
             controller.getNavigator().navigateTo(navigateToForCreate);
         });
-        ActionButton add = new ActionButton(controller, SimpleAction.add,navigateToForAdd);
+        ActionButton add = new ActionButton(controller, SimpleAction.add, navigateToForAdd);
         add.addClickListener(clickEvent -> {
             controller.postEvent(controller.buildAppEvent(EventType.ADD_PARTNER));
         });

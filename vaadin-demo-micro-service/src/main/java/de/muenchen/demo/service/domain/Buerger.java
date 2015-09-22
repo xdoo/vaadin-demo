@@ -68,8 +68,8 @@ public class Buerger extends BaseEntity {
 
     //    @JsonManagedReference("partner")
 //    @JsonBackReference("partner")
-    @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
-    private Set<Buerger> partner = new HashSet<>();
+    @OneToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    private Buerger partner;
 
     public Buerger() {
     }
@@ -83,7 +83,7 @@ public class Buerger extends BaseEntity {
         this.wohnungen.addAll(buerger.wohnungen);
         this.staatsangehoerigkeiten.addAll(buerger.staatsangehoerigkeiten);
         this.kinder.addAll(buerger.kinder);
-        this.partner.addAll(buerger.partner);
+        this.partner = buerger.partner;
     }
 
     public String getVorname() {
@@ -158,11 +158,11 @@ public class Buerger extends BaseEntity {
         this.pass = Pass;
     }
 
-    public Set<Buerger> getPartner() {
+    public Buerger getPartner() {
         return partner;
     }
 
-    public void setPartner(Set<Buerger> partner) {
+    public void setPartner(Buerger partner) {
         this.partner = partner;
     }
 

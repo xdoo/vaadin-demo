@@ -75,7 +75,6 @@ public class BuergerRestClientImpl implements BuergerRestClient {
     @Override
     public Optional<Buerger> findOne(Link link) {
         URI uri = URI.create(link.getHref());
-
         BuergerResource resource = restTemplate
                 .exchange(uri, HttpMethod.GET, null, BuergerResource.class)
                 .getBody();
@@ -89,6 +88,13 @@ public class BuergerRestClientImpl implements BuergerRestClient {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("text", "uri-list"));
         restTemplate.exchange(URI.create(endpoint.getHref()), HttpMethod.PUT, new HttpEntity<>(relations, headers), Void.class);
+    }
+
+    @Override
+    public void setRelation(Link endpoint, Link relation) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("text", "uri-list"));
+        restTemplate.exchange(URI.create(endpoint.getHref()), HttpMethod.PUT, new HttpEntity<>(relation.getHref(), headers), Void.class);
     }
 
     @Override
