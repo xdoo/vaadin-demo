@@ -2,26 +2,14 @@ package de.muenchen.vaadin.ui.controller.factorys;
 
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.spring.annotation.UIScope;
+import com.vaadin.ui.Grid;
 import com.vaadin.ui.TabSheet;
 import de.muenchen.eventbus.EventBus;
 import de.muenchen.eventbus.events.RefreshEvent;
 import de.muenchen.eventbus.types.EventType;
-import de.muenchen.vaadin.demo.api.local.LocalBuerger;
-import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
-import de.muenchen.vaadin.demo.i18nservice.buttons.TableAction;
-import de.muenchen.vaadin.demo.i18nservice.buttons.TableActionButton;
-import de.muenchen.vaadin.guilib.components.GenericConfirmationWindow;
-import de.muenchen.vaadin.guilib.components.GenericTable;
-import de.muenchen.vaadin.ui.components.BuergerChildTab;
-import de.muenchen.vaadin.ui.components.BuergerCreateForm;
-import de.muenchen.vaadin.ui.components.BuergerPartnerTab;
-import de.muenchen.vaadin.ui.components.BuergerReadForm;
-import de.muenchen.vaadin.ui.components.BuergerSearchTable;
-import de.muenchen.vaadin.ui.components.BuergerSelectTable;
-import de.muenchen.vaadin.ui.components.BuergerTable;
-import de.muenchen.vaadin.ui.components.BuergerUpdateForm;
-import de.muenchen.vaadin.ui.components.ChildTable;
-import de.muenchen.vaadin.ui.components.PartnerTable;
+import de.muenchen.vaadin.demo.api.local.Buerger;
+import de.muenchen.vaadin.guilib.components.GenericGrid;
+import de.muenchen.vaadin.ui.components.*;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,15 +42,14 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
     private BuergerViewController controller;
 
     /**Singeltons of Components. **/
-    private transient Optional<BuergerSearchTable> searchTable = Optional.<BuergerSearchTable>empty();
-    private transient Optional<BuergerSelectTable> childSearchTable = Optional.empty();
+    private transient Optional<GenericGrid> childSearchTable = Optional.empty();
     private transient Optional<BuergerChildTab> childTab = Optional.empty();
     private transient Optional<BuergerCreateForm> createForm = Optional.empty();
     private transient Optional<BuergerCreateForm> createChildForm = Optional.empty();
     private transient Optional<BuergerCreateForm> createPartnerForm = Optional.empty();
     private transient Optional<BuergerUpdateForm> updateForm = Optional.empty();
     private transient Optional<BuergerReadForm> readForm = Optional.empty();
-    private transient Optional<BuergerSelectTable> partnerSearchTable = Optional.empty();
+    private transient Optional<GenericGrid> partnerSearchTable = Optional.empty();
     private transient Optional<BuergerPartnerTab> partnerTab = Optional.empty();
 
     @PostConstruct
@@ -147,151 +134,117 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
         return readForm.get();
     }
 
-    public BuergerSearchTable generateSearchTable(String navigateToForEdit, String navigateToForDetail, String navigateForCreate, String navigateFrom) {
-        LOG.debug("creating 'search' table for buerger");
-        if(!searchTable.isPresent()){
-            LOG.debug("new searchtabel");
-            TableActionButton.Builder detail = TableActionButton.Builder.<LocalBuerger>make(controller, TableAction.tabledetail, navigateToForDetail, (container, id) -> {
-                controller.postEvent(controller.buildAppEvent(EventType.SELECT2READ).setItem(container.getItem(id)).setItemId(id));
-                getController().getNavigator().navigateTo(navigateToForDetail);
-            });
-            TableActionButton.Builder edit = TableActionButton.Builder.<LocalBuerger>make(controller, TableAction.tableedit, navigateToForEdit, (container, id) -> {
-                controller.postEvent(controller.buildAppEvent(EventType.SELECT2UPDATE).setItem(container.getItem(id)).setItemId(id));
-                getController().getNavigator().navigateTo(navigateToForEdit);
-            });
-            TableActionButton.Builder copy = TableActionButton.Builder.<LocalBuerger>make(controller, TableAction.tablecopy, null, (container, id) ->
-                    controller.postEvent(controller.buildAppEvent(EventType.COPY).setItem(container.getItem(id)).setItemId(id))
-            );
-            TableActionButton.Builder delete = TableActionButton.Builder.<LocalBuerger>make(controller, TableAction.tabledelete, navigateToForEdit, (container, id) ->
-                    {
-                        BeanItem<LocalBuerger> item = container.getItem(id);
-                        GenericConfirmationWindow win = new GenericConfirmationWindow(
-                                controller.buildAppEvent(EventType.DELETE).setItem(item).setItemId(id),
-                                controller, SimpleAction.delete);
-                        controller.getNavigator().getUI().addWindow(win);
-                        win.center();
-                        win.focus();
-                    }
-            );
-            searchTable=Optional.of(new BuergerSearchTable(
-                    controller,
-                    navigateForCreate,
-                    // Schaltflächen
-                    detail,
-                    edit,
-                    copy,
-                    delete
-            ));}
-        return searchTable.get();}
-
-    public BuergerSelectTable generateChildSearchTable() {
-
-
-        if(!childSearchTable.isPresent()){
-            //BuergerTableButtonFactory detail = BuergerTableButtonFactory.getFactory(navigateToForDetail, BuergerTableDetailButton.class);
-            TableActionButton.Builder select = TableActionButton.Builder.<LocalBuerger>make(controller, TableAction.tableadd, null, (container, id) ->
-                    controller.postEvent(controller.buildAppEvent(EventType.SAVE_AS_CHILD).setItem(container.getItem(id)).setItemId(id))
-            );
+    public GenericGrid generateChildSearchTable() {
+        if (!childSearchTable.isPresent()) {
             LOG.debug("creating 'search' table for buerger");
-            childSearchTable = Optional.of(new BuergerSelectTable(
-                    controller,
-                    // Schaltflächen
-                    select
-            ));}
+            childSearchTable = Optional.of(generateGrid());
+            childSearchTable.get().removeColumn("id");
+            childSearchTable.get().removeColumn("links");
+            childSearchTable.get().addItemClickListener(itemClickEvent -> {
+                if (itemClickEvent.isDoubleClick()) {
+                    controller.postEvent(controller.buildAppEvent(EventType.SAVE_AS_CHILD).setItem((BeanItem<Buerger>) itemClickEvent.getItem()));
+                }
+            });
+        }
         return childSearchTable.get();
-
     }
 
-    public BuergerSelectTable generateBuergerPartnerSearchTable() {
-
-
-        if(!partnerSearchTable.isPresent()){
-            //BuergerTableButtonFactory detail = BuergerTableButtonFactory.getFactory(navigateToForDetail, BuergerTableDetailButton.class);
-            TableActionButton.Builder select = TableActionButton.Builder.<LocalBuerger>make(controller, TableAction.tableadd, null, (container, id) ->
-                    controller.postEvent(controller.buildAppEvent(EventType.SAVE_AS_PARTNER).setItem(container.getItem(id)).setItemId(id))
-            );
-            LOG.debug("creating 'partnerSearch' table for buerger");
-            partnerSearchTable = Optional.of(new BuergerSelectTable(
-                    controller,
-
-                    // Schaltflächen
-                    select
-            ));}
+    public GenericGrid generateBuergerPartnerSearchTable() {
+        if (!partnerSearchTable.isPresent()) {
+            LOG.debug("creating 'search' table for buerger");
+            partnerSearchTable = Optional.of(generateGrid());
+            partnerSearchTable.get().removeColumn("id");
+            partnerSearchTable.get().removeColumn("links");
+            partnerSearchTable.get().addItemClickListener(itemClickEvent -> {
+                if (itemClickEvent.isDoubleClick()) {
+                    controller.postEvent(controller.buildAppEvent(EventType.SAVE_AS_PARTNER).setItem((BeanItem<Buerger>) itemClickEvent.getItem()));
+                }
+            });
+        }
         return partnerSearchTable.get();
-
     }
 
-    public ChildTable generateChildTable(String navigateToForDetail) {
-
-        TableActionButton.Builder detail = TableActionButton.Builder.<LocalBuerger>make(controller, TableAction.tabledetail, navigateToForDetail, (container, id) -> {
-            controller.postEvent(controller.buildAppEvent(EventType.SELECT2READ).setItem(container.getItem(id)).setItemId(id));
-            getController().getNavigator().navigateTo(navigateToForDetail);
+    public KindGrid generateChildTable(String navigateToForDetail) {
+        LOG.debug("creating table for children");
+        KindGrid table = new KindGrid(controller);
+        table.setSizeFull();
+        table.setSelectionMode(Grid.SelectionMode.MULTI);
+        table.removeColumn("id");
+        table.removeColumn("links");
+        table.addItemClickListener(itemClickEvent -> {
+            if (itemClickEvent.getPropertyId() != null) {
+                if (itemClickEvent.isDoubleClick()) {
+                    controller.postEvent(controller.buildAppEvent(EventType.SELECT2READ).setItem((BeanItem<Buerger>) itemClickEvent.getItem()));
+                    controller.getNavigator().navigateTo(navigateToForDetail);
+                    return;
+                }
+                boolean isClicked = table.isSelected(itemClickEvent.getItemId());
+                if (table.getSelectedRows().size() > 0 && !itemClickEvent.isCtrlKey()) {
+                    table.getSelectedRows().stream().forEach(row -> table.deselect(row));
+                }
+                if (!isClicked)
+                    table.select(itemClickEvent.getItemId());
+                else
+                    table.deselect(itemClickEvent.getItemId());
+            }
         });
 
-        TableActionButton.Builder delete = TableActionButton.Builder.<LocalBuerger>make(controller, TableAction.tabledelete, navigateToForDetail, (container, id) ->
-                {
-                    BeanItem<LocalBuerger> item = container.getItem(id);
-                    GenericConfirmationWindow win = new GenericConfirmationWindow(
-                            controller.buildAppEvent(EventType.RELEASE_PARENT).setItem(container.getItem(id)).setItemId(id),
-                            controller, SimpleAction.release);
-                    controller.getNavigator().getUI().addWindow(win);
-                    win.center();
-                    win.focus();
-                }
-        );
-
-        LOG.debug("creating table for childs");
-        ChildTable table = new ChildTable(controller, detail, delete);
-
-        List<LocalBuerger> entities = controller.queryKinder(controller.getCurrent().getBean());
+        List<Buerger> entities = controller.queryKinder(controller.getCurrent().getBean());
         controller.registerToAllComponentEvents(table);
-
         controller.postEvent(controller.buildComponentEvent(EventType.QUERY_CHILD).addEntities(entities));
 
         return table;
     }
 
-    public PartnerTable generatePartnerTable(String navigateToForDetail) {
+    public PartnerGrid generatePartnerTable(String navigateToForDetail) {
 
-        TableActionButton.Builder detail = TableActionButton.Builder.<LocalBuerger>make(controller, TableAction.tabledetail, navigateToForDetail, (container, id) -> {
-            controller.postEvent(controller.buildAppEvent(EventType.SELECT2READ).setItem(container.getItem(id)).setItemId(id));
-            getController().getNavigator().navigateTo(navigateToForDetail);
-        });
-        TableActionButton.Builder delete = TableActionButton.Builder.<LocalBuerger>make(controller, TableAction.tabledelete, navigateToForDetail, (container, id) ->
-                {
-                    BeanItem<LocalBuerger> item = container.getItem(id);
-                    GenericConfirmationWindow win = new GenericConfirmationWindow(
-                            controller.buildAppEvent(EventType.RELEASE_PARTNER).setItem(container.getItem(id)).setItemId(id),
-                            controller, SimpleAction.release);
-                    controller.getNavigator().getUI().addWindow(win);
-                    win.center();
-                    win.focus();
-                }
-        );
         LOG.debug("creating table for partner");
-        PartnerTable table = new PartnerTable(controller, detail, delete);
-        List<LocalBuerger> entities = controller.queryPartner(controller.getCurrent().getBean());
-        controller.registerToAllComponentEvents(table);
+        PartnerGrid table = new PartnerGrid(controller);
+        table.setSizeFull();
+        table.setSelectionMode(Grid.SelectionMode.MULTI);
+        table.removeColumn("id");
+        table.removeColumn("links");
+        table.addItemClickListener(itemClickEvent -> {
+            if (itemClickEvent.getPropertyId() != null) {
+                if (itemClickEvent.isDoubleClick()) {
+                    controller.postEvent(controller.buildAppEvent(EventType.SELECT2READ).setItem((BeanItem<Buerger>) itemClickEvent.getItem()));
+                    controller.getNavigator().navigateTo(navigateToForDetail);
+                    return;
+                }
+                boolean isClicked = table.isSelected(itemClickEvent.getItemId());
+                if (!itemClickEvent.isCtrlKey()) {
+                    table.getSelectedRows().stream().forEach(row -> table.deselect(row));
+                }
+                if (!isClicked)
+                    table.select(itemClickEvent.getItemId());
+                else
+                    table.deselect(itemClickEvent.getItemId());
+            }
+        });
 
+        List<Buerger> entities = controller.queryPartner(controller.getCurrent().getBean());
+        controller.registerToAllComponentEvents(table);
         controller.postEvent(controller.buildComponentEvent(EventType.QUERY_PARTNER).addEntities(entities));
 
         return table;
     }
 
-
-    public GenericTable generateTable(final TableActionButton.Builder... buttonBuilders) {
-        return this.createTable(buttonBuilders);
+    public GenericGrid generateGrid() {
+        return this.createGrid();
     }
 
-    private GenericTable createTable(final TableActionButton.Builder... buttonBuilders) {
+    private GenericGrid createGrid() {
         LOG.debug("creating table for buerger");
-        GenericTable table = new BuergerTable(controller, buttonBuilders);
-
-        controller.registerToAllComponentEvents(table);
-
-        return table;
+        GenericGrid grid = new GenericGrid(controller, Buerger.class);
+        controller.registerToAllComponentEvents(grid);
+        return grid;
     }
 
+    public BuergerGrid generateBuergerGrid() {
+        LOG.debug("creating buergerGrid");
+        BuergerGrid buergerGrid = new BuergerGrid(controller);
+        return buergerGrid;
+    }
 
     public BuergerViewController getController() {
         return controller;
@@ -304,7 +257,6 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
     @Override
     public void accept(reactor.bus.Event<RefreshEvent> eventWrapper){
         LOG.debug("RefreshEvent received");
-        searchTable = Optional.<BuergerSearchTable>empty();
         childSearchTable = Optional.empty();
         childTab = Optional.empty();
         createForm = Optional.empty();

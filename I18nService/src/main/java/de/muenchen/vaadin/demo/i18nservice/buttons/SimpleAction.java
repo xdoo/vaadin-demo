@@ -3,7 +3,6 @@ package de.muenchen.vaadin.demo.i18nservice.buttons;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.vaadin.demo.apilib.domain.BaseEntity;
 import de.muenchen.vaadin.demo.i18nservice.ControllerContext;
 
 import java.util.Optional;
@@ -26,9 +25,9 @@ public enum SimpleAction implements Action {
     update(FontAwesome.PENCIL),
     back(FontAwesome.ANGLE_LEFT, ShortcutAction.KeyCode.ARROW_LEFT),
     save(FontAwesome.FLOPPY_O, ValoTheme.BUTTON_FRIENDLY),
-    delete(FontAwesome.TRASH_O),
+    delete(FontAwesome.TRASH_O, ShortcutAction.KeyCode.DELETE, ValoTheme.BUTTON_DANGER),
     cancel,
-    copy,
+    copy(FontAwesome.COPY, ShortcutAction.KeyCode.INSERT),
     add,
     history(FontAwesome.ARCHIVE),
     release(FontAwesome.TRASH_O),

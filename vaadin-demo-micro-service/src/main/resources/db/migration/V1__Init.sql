@@ -63,18 +63,6 @@ buer_vorname varchar(70),
 mandant varchar(20), 
 primary key (oid));
 
---Buerger_Kinder Table
-create table buerger_kinder (
-buerger bigint not null, 
-kinder bigint not null, 
-primary key (buerger, kinder));
-
---Buerger_Partner Table
-create table buerger_partner (
-buerger bigint not null, 
-partner bigint not null, 
-primary key (buerger, partner));
-
 --Buerger_Pass Table
 create table buerger_pass (
 buerger bigint not null, 
@@ -237,15 +225,6 @@ add constraint FK_authoritys_permissions_TO_permissions
 foreign key (permission_oid) 
 references permissions;
 
-alter table buerger_kinder 
-add constraint FK_buerger_kinder_TO_kinder 
-foreign key (kinder) 
-references buerger;
-
-alter table buerger_kinder 
-add constraint FK_buerger_kinder_TO_buerger 
-foreign key (buerger) 
-references buerger;
 
 alter table buerger_pass 
 add constraint FK_buerger_pass_TO_pass 

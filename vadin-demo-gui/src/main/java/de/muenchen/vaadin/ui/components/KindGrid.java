@@ -7,23 +7,22 @@ package de.muenchen.vaadin.ui.components;
 
 import de.muenchen.eventbus.events.ComponentEvent;
 import de.muenchen.eventbus.types.EventType;
-import de.muenchen.vaadin.demo.api.local.LocalBuerger;
-import de.muenchen.vaadin.demo.i18nservice.buttons.TableActionButton;
-import de.muenchen.vaadin.guilib.components.GenericTable;
+import de.muenchen.vaadin.demo.api.local.Buerger;
+import de.muenchen.vaadin.guilib.components.GenericGrid;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
 /**
  *
  * @author maximilian.schug
  */
-public class ChildTable extends GenericTable<LocalBuerger> {
+public class KindGrid extends GenericGrid<Buerger> {
 
-    public ChildTable(BuergerViewController controller, TableActionButton.Builder... buttonBuilders) {
-        super(controller, LocalBuerger.class, buttonBuilders);
+    public KindGrid(BuergerViewController controller) {
+        super(controller, Buerger.class);
     }
 
     @Override
-    public void accept(reactor.bus.Event<ComponentEvent<LocalBuerger>> eventWrapper) {
+    public void accept(reactor.bus.Event<ComponentEvent<Buerger>> eventWrapper) {
         //super.accept(eventWrapper);
         ComponentEvent event = eventWrapper.getData();
 
