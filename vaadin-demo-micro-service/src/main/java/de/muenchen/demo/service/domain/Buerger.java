@@ -1,6 +1,7 @@
 package de.muenchen.demo.service.domain;
 
 import de.muenchen.auditing.MUCAudited;
+import de.muenchen.vaadin.demo.api.domain.Augenfarbe;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 
@@ -37,6 +38,11 @@ public class Buerger extends BaseEntity {
     @Column(name = "BUER_GEBURTSDATUM")
     @Temporal(TemporalType.DATE)
     private Date geburtsdatum;
+
+    @Field
+    @Column(nullable = false, name = "BUER_AUGENFARBE")
+    @Enumerated(EnumType.STRING)
+    private Augenfarbe augenfarbe;
 
     //    @JsonManagedReference("sachebarbeiter")
 //    @JsonBackReference("sachebarbeiter")
@@ -160,10 +166,18 @@ public class Buerger extends BaseEntity {
         this.partner = partner;
     }
 
+    public Augenfarbe getAugenfarbe() {
+        return augenfarbe;
+    }
+
+    public void setAugenfarbe(Augenfarbe augenfarbe) {
+        this.augenfarbe = augenfarbe;
+    }
 
     @Override
     public String toString() {
-        return String.format("oid > %s | vorname > %s | nachname > %s | geburtsdatum > %s", this.getOid(), this.vorname, this.nachname, this.geburtsdatum);
+        return String.format("oid > %s | vorname > %s | nachname > %s | geburtsdatum > %s | augenfarbe > %s",
+                this.getOid(), this.vorname, this.nachname, this.geburtsdatum, this.augenfarbe);
     }
 
 }

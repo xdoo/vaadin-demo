@@ -9,6 +9,7 @@ import javax.persistence.Lob;
 import java.util.Date;
 
 /**
+ * Entität die die Daten einer Änderung oder auch eines lesenden Zugriff beinhaltet.
  * Created by fabian.holtkoetter on 02.09.15.
  */
 @Entity

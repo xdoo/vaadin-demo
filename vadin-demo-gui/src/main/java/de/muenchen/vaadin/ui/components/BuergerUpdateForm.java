@@ -11,6 +11,7 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.events.ComponentEvent;
 import de.muenchen.eventbus.types.EventType;
+import de.muenchen.vaadin.demo.api.domain.Augenfarbe;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
@@ -87,7 +88,8 @@ public class BuergerUpdateForm extends CustomComponent implements Consumer<Event
         TextField firstField = controller.getUtil().createFormTextField(binder,
                 controller.resolveRelative(getEntityFieldPath(Buerger.Field.vorname.name(), Type.label)),
                 controller.resolveRelative(getEntityFieldPath(Buerger.Field.vorname.name(), Type.input_prompt)),
-                Buerger.Field.vorname.name(), BuergerViewController.I18N_BASE_PATH);
+                Buerger.Field.vorname.name(),
+                BuergerViewController.I18N_BASE_PATH);
         firstField.focus();
         firstField.addValidator(val0);
         firstField.addValidator(new StringLengthValidator(controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.validation)), 1, Integer.MAX_VALUE, false));
@@ -97,10 +99,16 @@ public class BuergerUpdateForm extends CustomComponent implements Consumer<Event
         TextField secField = controller.getUtil().createFormTextField(binder,
                 controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.label)),
                 controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.input_prompt)),
-                Buerger.Field.nachname.name(), BuergerViewController.I18N_BASE_PATH);
+                Buerger.Field.nachname.name(),
+                BuergerViewController.I18N_BASE_PATH);
         secField.addValidator(val0);
         secField.addValidator(new StringLengthValidator(controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.validation)), 1, Integer.MAX_VALUE, false));
         layout.addComponent(secField);
+        ComboBox cb = controller.getUtil().createFormComboBox(binder,
+                controller.resolveRelative(getEntityFieldPath(Buerger.Field.augenfarbe.name(), Type.label)),
+                Buerger.Field.augenfarbe.name(),
+                Augenfarbe.class);
+        layout.addComponent(cb);
         DateField birthdayfield = controller.getUtil().createFormDateField(binder,
                 controller.resolveRelative(getEntityFieldPath(Buerger.Field.geburtsdatum.name(), Type.label)),
                 Buerger.Field.geburtsdatum.name(), BuergerViewController.I18N_BASE_PATH);

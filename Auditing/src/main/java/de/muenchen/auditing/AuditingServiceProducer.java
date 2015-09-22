@@ -25,6 +25,7 @@ import static de.muenchen.eventbus.types.EventType.*;
 import static reactor.bus.selector.Selectors.T;
 
 /**
+ * AuditingServiceProducer registriert sich mit Listener auf Änderungen der Datenbank um bei Änderungenszugriffen Userdaten zu speichern.
  * Created by fabian.holtkoetter on 07.09.15.
  */
 @Component
@@ -60,25 +61,21 @@ public class AuditingServiceProducer {
 
     private String getCurrentUsername() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username;
-        if (Objects.nonNull(authentication) && authentication.isAuthenticated()) {
-            username = authentication.getName();
-        } else {
-            username = "Unauthenticated User";
-        }
-        return username;
+        return (Objects.nonNull(authentication) && authentication.isAuthenticated()) ? authentication.getName() : "Unauthenticated User";
     }
 
     private String marshallEntityToJSON(AuditingEvent event) {
         ObjectMapper mapper = new ObjectMapper();
-        String json = "";
+        String json;
 
         try {
             json = mapper.writeValueAsString(event.getEntity());
         } catch (StackOverflowError err) {
-            LOG.error("StackOverFlow occurred while Marshalling Entity. Make sure to use @JsonManagedReference and @JsonBackReference.");
+            LOG.error("StackOverFlow occurred while Marshalling Entity. Make sure to use @JsonManagedReference and @JsonBackReference on circular dependencies.");
+            json = event.getEntity().toString();
         } catch (JsonProcessingException e) {
             LOG.error("Fehler beim JSON erstellen. Event war <" + event.getEventType() + ">. Fehlermeldung: " + e.getMessage());
+            json = event.getEntity().toString();
         }
 
         return json;
@@ -104,6 +101,7 @@ public class AuditingServiceProducer {
                     Object eventEntity = postLoadEvent.getEntity();
                     MUCAudited annotation = eventEntity.getClass().getAnnotation(MUCAudited.class);
                     if (shouldBeAudited(MUCAudited.READ, annotation)) {
+                        //noinspection unchecked
                         eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(AUDIT_READ, eventEntity)));
                     }
                 });
@@ -118,6 +116,7 @@ public class AuditingServiceProducer {
                         Object eventEntity = postDeleteEvent.getEntity();
                         MUCAudited annotation = eventEntity.getClass().getAnnotation(MUCAudited.class);
                         if (shouldBeAudited(MUCAudited.DELETE, annotation)) {
+                            //noinspection unchecked
                             eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(AUDIT_DELETE, eventEntity)));
                         }
                     }
@@ -138,6 +137,7 @@ public class AuditingServiceProducer {
                         Object eventEntity = postInsertEvent.getEntity();
                         MUCAudited annotation = eventEntity.getClass().getAnnotation(MUCAudited.class);
                         if (shouldBeAudited(MUCAudited.CREATE, annotation)) {
+                            //noinspection unchecked
                             eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(AUDIT_CREATE, eventEntity)));
                         }
                     }
@@ -158,6 +158,7 @@ public class AuditingServiceProducer {
                         Object eventEntity = postUpdateEvent.getEntity();
                         MUCAudited annotation = eventEntity.getClass().getAnnotation(MUCAudited.class);
                         if (shouldBeAudited(MUCAudited.UPDATE, annotation)) {
+                            //noinspection unchecked
                             eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(AUDIT_UPDATE, eventEntity)));
                         }
                     }

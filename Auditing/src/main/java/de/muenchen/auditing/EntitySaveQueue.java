@@ -4,6 +4,7 @@ import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
+ * Queue zum Puffern von AuditingEvents
  * Created by fabian.holtkoetter on 17.09.15.
  */
 public class EntitySaveQueue {
@@ -16,6 +17,7 @@ public class EntitySaveQueue {
             try {
                 wait();
             } catch (InterruptedException e) {
+                throw new AssertionError("Can not happen.");
             }
         }
         available = !entities.isEmpty();
