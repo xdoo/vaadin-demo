@@ -11,6 +11,13 @@
 
     <artifactId>Auditing</artifactId>
     <version>1.0.0.Final</version>
+    <developers>
+        <developer>
+            <name>Fabian Holtkötter</name>
+            <email>fabian.holtkoetter@muenchen.de</email>
+        </developer>
+    </developers>
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
