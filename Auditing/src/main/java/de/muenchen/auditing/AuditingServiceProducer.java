@@ -60,13 +60,7 @@ public class AuditingServiceProducer {
 
     private String getCurrentUsername() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username;
-        if (Objects.nonNull(authentication) && authentication.isAuthenticated()) {
-            username = authentication.getName();
-        } else {
-            username = "Unauthenticated User";
-        }
-        return username;
+        return (Objects.nonNull(authentication) && authentication.isAuthenticated()) ? authentication.getName() : "Unauthenticated User";
     }
 
     private String marshallEntityToJSON(AuditingEvent event) {
@@ -76,9 +70,11 @@ public class AuditingServiceProducer {
         try {
             json = mapper.writeValueAsString(event.getEntity());
         } catch (StackOverflowError err) {
-            LOG.error("StackOverFlow occurred while Marshalling Entity. Make sure to use @JsonManagedReference and @JsonBackReference.");
+            LOG.error("StackOverFlow occurred while Marshalling Entity. Make sure to use @JsonManagedReference and @JsonBackReference on circular dependencies.");
+            json = event.getEntity().toString();
         } catch (JsonProcessingException e) {
             LOG.error("Fehler beim JSON erstellen. Event war <" + event.getEventType() + ">. Fehlermeldung: " + e.getMessage());
+            json = event.getEntity().toString();
         }
 
         return json;
