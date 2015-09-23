@@ -11,15 +11,18 @@ import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.guilib.components.GenericGrid;
 import de.muenchen.vaadin.ui.components.*;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
+import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 import reactor.bus.Event;
 import reactor.fn.Consumer;
 
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -222,9 +225,18 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
             }
         });
 
-        List<Buerger> entities = controller.queryPartner(controller.getCurrent().getBean());
+        Buerger entity = null;
         controller.registerToAllComponentEvents(table);
-        controller.postEvent(controller.buildComponentEvent(EventType.QUERY_PARTNER).addEntities(entities));
+        try {
+            entity = controller.queryPartner(controller.getCurrent().getBean());
+            controller.postEvent(controller.buildComponentEvent(EventType.QUERY_PARTNER).addEntity(entity));
+        } catch (HttpClientErrorException e) {
+            if (e.getStatusCode().equals(HttpStatus.SC_NOT_FOUND)) {
+                controller.postEvent(controller.buildComponentEvent(EventType.QUERY_PARTNER).addEntities(new ArrayList<>()));
+            } else {
+                LOG.error("HTTP Error: " + e.getLocalizedMessage());
+            }
+        }
 
         return table;
     }

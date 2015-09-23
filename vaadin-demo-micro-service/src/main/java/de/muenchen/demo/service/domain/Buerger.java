@@ -1,5 +1,8 @@
 package de.muenchen.demo.service.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import de.muenchen.auditing.MUCAudited;
 import de.muenchen.vaadin.demo.api.domain.Augenfarbe;
 import org.hibernate.search.annotations.Field;
@@ -44,8 +47,8 @@ public class Buerger extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Augenfarbe augenfarbe;
 
-    //    @JsonManagedReference("sachebarbeiter")
-//    @JsonBackReference("sachebarbeiter")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "oid")
+    @JsonIdentityReference(alwaysAsId = true)
     @OneToMany (cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
     private Set<Sachbearbeiter> sachbearbeiter= new HashSet<>();
 
@@ -58,18 +61,18 @@ public class Buerger extends BaseEntity {
     @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
     private Set<Pass> pass = new HashSet<>();
 
-    //    @JsonManagedReference("kind")
-//    @JsonBackReference("kind")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "oid")
+    @JsonIdentityReference(alwaysAsId = true)
     @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
     private Set<Buerger> kinder = new HashSet<>();
 
     @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
     private Set<Wohnung> wohnungen = new HashSet<>();
 
-    //    @JsonManagedReference("partner")
-//    @JsonBackReference("partner")
-    @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
-    private Set<Buerger> partner = new HashSet<>();
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "oid")
+    @JsonIdentityReference(alwaysAsId = true)
+    @OneToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    private Buerger partner;
 
     public Buerger() {
     }
@@ -83,7 +86,7 @@ public class Buerger extends BaseEntity {
         this.wohnungen.addAll(buerger.wohnungen);
         this.staatsangehoerigkeiten.addAll(buerger.staatsangehoerigkeiten);
         this.kinder.addAll(buerger.kinder);
-        this.partner.addAll(buerger.partner);
+        this.partner = buerger.partner;
     }
 
     public String getVorname() {
@@ -158,11 +161,11 @@ public class Buerger extends BaseEntity {
         this.pass = Pass;
     }
 
-    public Set<Buerger> getPartner() {
+    public Buerger getPartner() {
         return partner;
     }
 
-    public void setPartner(Set<Buerger> partner) {
+    public void setPartner(Buerger partner) {
         this.partner = partner;
     }
 

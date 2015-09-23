@@ -30,4 +30,6 @@ public interface BuergerService {
     List<Buerger> queryBuerger(String query);
 
     void setRelations(Link link, List<Link> relations);
+
+    void setRelation(Link link, Link relation);
 }

@@ -89,8 +89,13 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
     }
 
     @Override
-    public void setRelations(Link link, List<Link> kinder) {
-        client.setRelations(link, kinder);
+    public void setRelations(Link link, List<Link> links) {
+        client.setRelations(link, links);
+    }
+
+    @Override
+    public void setRelation(Link link, Link relation) {
+        client.setRelation(link, relation);
     }
 
     /**

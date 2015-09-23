@@ -28,9 +28,11 @@ public class PartnerGrid extends GenericGrid<Buerger> {
         ComponentEvent event = eventWrapper.getData();
 
         if(event.getEventType().equals(EventType.SAVE_AS_PARTNER)) {
+            getContainerDataSource().removeAllItems();
             this.add(event.getEntity());
         }
         if(event.getEventType().equals(EventType.SAVE_PARTNER)) {
+            getContainerDataSource().removeAllItems();
             this.add(event.getEntity());
         }
         if(event.getEventType().equals(EventType.DELETE)) {
@@ -38,10 +40,12 @@ public class PartnerGrid extends GenericGrid<Buerger> {
         }
 
         if (event.getEventType().equals(EventType.UPDATE_PARTNER)) {
+            getContainerDataSource().removeAllItems();
             this.add(event.getEntity());
         }
 
        if(event.getEventType().equals(EventType.QUERY_PARTNER)) {
+           getContainerDataSource().removeAllItems();
             this.addAll(event.getEntities());
         }
     }

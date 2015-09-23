@@ -61,6 +61,21 @@ public interface BuergerRestClient {
     void setRelations(Link endpoint, Collection<Link> links);
 
     /**
+     * Set the relation, specified by @relation, on a specific relation endpoint.
+     * <p>
+     * Example for an Endpoint: <code>http://localhost:80/buergers/1/kinder</code>
+     * </p>
+     * <p>
+     * This method will always (re-) set the association. The add or delete
+     * functionality is not provided at RestClient level.
+     * </p>
+     *
+     * @param endpoint The endpoint of the relation.
+     * @param relation    The link that is set to be related.
+     */
+    void setRelation(Link endpoint, Link relation);
+
+    /**
      * Create a new Buerger, the returned Buerger will have the Links and its ID.
      * @param buerger The Buerger to create, it must not contain any links.
      * @return the created Buerger (with ID).
