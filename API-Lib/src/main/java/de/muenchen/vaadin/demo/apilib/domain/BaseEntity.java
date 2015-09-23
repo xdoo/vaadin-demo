@@ -5,7 +5,6 @@ package de.muenchen.vaadin.demo.apilib.domain;
  * @author claus.straube
  */
 public class BaseEntity {
-
     private Long oid;
 
     public Long getOid() {

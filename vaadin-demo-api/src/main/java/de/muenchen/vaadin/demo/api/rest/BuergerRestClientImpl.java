@@ -10,6 +10,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
@@ -52,7 +53,6 @@ public class BuergerRestClientImpl implements BuergerRestClient {
         return traverson
                 .follow(BUERGERS)
                 .toObject(BuergerResource.LIST).getContent()
-
                 .stream()
                 .map(buergerAssembler::toBean)
                 .collect(Collectors.toList());
@@ -76,11 +76,9 @@ public class BuergerRestClientImpl implements BuergerRestClient {
     public Optional<Buerger> findOne(Link link) {
         URI uri = URI.create(link.getHref());
 
-        BuergerResource resource = restTemplate
-                .exchange(uri, HttpMethod.GET, null, BuergerResource.class)
-                .getBody();
-
-        return Optional.of(buergerAssembler.toBean(resource));
+        ResponseEntity<BuergerResource> exchange = restTemplate
+                .exchange(uri, HttpMethod.GET, null, BuergerResource.class);
+        return Optional.of(buergerAssembler.toBean(exchange.getBody(), exchange.getHeaders()));
     }
 
     @Override
@@ -100,9 +98,9 @@ public class BuergerRestClientImpl implements BuergerRestClient {
 
         BuergerDTO buergerDTO = buergerAssembler.toResource(buerger).getContent();
 
-        BuergerResource resource = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(buergerDTO), BuergerResource.class).getBody();
+        ResponseEntity<BuergerResource> exchange = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(buergerDTO), BuergerResource.class);
 
-        return buergerAssembler.toBean(resource);
+        return buergerAssembler.toBean(exchange.getBody(), exchange.getHeaders());
     }
 
 
@@ -112,14 +110,14 @@ public class BuergerRestClientImpl implements BuergerRestClient {
 
         BuergerDTO buergerDTO = buergerAssembler.toResource(buerger).getContent();
 
-        BuergerResource resource = restTemplate.exchange(uri, HttpMethod.PUT, new HttpEntity<>(buergerDTO), BuergerResource.class).getBody();
+        ResponseEntity<BuergerResource> exchange = restTemplate.exchange(uri, HttpMethod.PUT, new HttpEntity<>(buergerDTO), BuergerResource.class);
 
-        return buergerAssembler.toBean(resource);
+        return buergerAssembler.toBean(exchange.getBody(), exchange.getHeaders());
     }
 
     @Override
-    public void delete(Link id) {
-        URI uri = URI.create(id.getHref());
+    public void delete(Buerger buerger) {
+        URI uri = URI.create(buerger.getId().getHref());
         restTemplate.exchange(uri, HttpMethod.DELETE, null, Void.class);
     }
 }

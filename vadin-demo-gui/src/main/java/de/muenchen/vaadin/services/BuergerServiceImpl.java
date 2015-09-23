@@ -52,7 +52,7 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
     }
 
     @Override
-    public void delete(Link link) {
+    public void delete(Buerger link) {
         client.delete(link);
     }
 

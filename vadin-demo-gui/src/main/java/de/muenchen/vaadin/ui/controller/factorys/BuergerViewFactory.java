@@ -9,7 +9,14 @@ import de.muenchen.eventbus.events.RefreshEvent;
 import de.muenchen.eventbus.types.EventType;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.guilib.components.GenericGrid;
-import de.muenchen.vaadin.ui.components.*;
+import de.muenchen.vaadin.ui.components.BuergerChildTab;
+import de.muenchen.vaadin.ui.components.BuergerCreateForm;
+import de.muenchen.vaadin.ui.components.BuergerGrid;
+import de.muenchen.vaadin.ui.components.BuergerPartnerTab;
+import de.muenchen.vaadin.ui.components.BuergerReadForm;
+import de.muenchen.vaadin.ui.components.BuergerUpdateForm;
+import de.muenchen.vaadin.ui.components.KindGrid;
+import de.muenchen.vaadin.ui.components.PartnerGrid;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -118,7 +125,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
         if(!updateForm.isPresent()){
             BuergerUpdateForm form = new BuergerUpdateForm(controller, navigateTo, navigateBack);
             controller.registerToAllComponentEvents(form);
-            controller.postEvent(controller.buildComponentEvent(EventType.SELECT2UPDATE).addEntity(controller.getCurrent().getBean()));
+            controller.postEvent(controller.buildComponentEvent(EventType.SELECT2UPDATE).addEntity(controller.getCurrent()));
 
             updateForm=Optional.of(form);}
         return updateForm.get();
@@ -130,7 +137,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
             BuergerReadForm form = new BuergerReadForm(controller, navigateToUpdate, navigateBack);
             controller.registerToAllComponentEvents(form);
             readForm=Optional.of(form);}
-        controller.postEvent(controller.buildComponentEvent(EventType.SELECT2READ).addEntity(controller.getCurrent().getBean()));
+        controller.postEvent(controller.buildComponentEvent(EventType.SELECT2READ).addEntity(controller.getCurrent()));
         return readForm.get();
     }
 
@@ -189,7 +196,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
             }
         });
 
-        List<Buerger> entities = controller.queryKinder(controller.getCurrent().getBean());
+        List<Buerger> entities = controller.queryKinder(controller.getCurrent());
         controller.registerToAllComponentEvents(table);
         controller.postEvent(controller.buildComponentEvent(EventType.QUERY_CHILD).addEntities(entities));
 
@@ -222,7 +229,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
             }
         });
 
-        List<Buerger> entities = controller.queryPartner(controller.getCurrent().getBean());
+        List<Buerger> entities = controller.queryPartner(controller.getCurrent());
         controller.registerToAllComponentEvents(table);
         controller.postEvent(controller.buildComponentEvent(EventType.QUERY_PARTNER).addEntities(entities));
 

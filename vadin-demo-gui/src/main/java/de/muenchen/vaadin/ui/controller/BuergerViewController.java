@@ -1,6 +1,5 @@
 package de.muenchen.vaadin.ui.controller;
 
-import com.vaadin.data.util.BeanItem;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
@@ -36,10 +35,13 @@ import reactor.fn.Consumer;
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.*;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.NotificationType;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Type;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getNotificationPath;
 import static reactor.bus.selector.Selectors.object;
 
 /**
@@ -91,7 +93,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 	@Autowired
 	private BuergerViewFactory buergerViewFactory;
 	// item cache
-	private BeanItem<Buerger> current;
+	private Buerger current;
 
 	@Autowired
 	public BuergerViewController(BuergerService service, VaadinUtil util) {
@@ -132,7 +134,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 		return navigator;
 	}
 
-	public BeanItem<Buerger> getCurrent() {
+	public Buerger getCurrent() {
 		return current;
 	}
 
@@ -248,6 +250,13 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 		addBuergerKind(child);
 	}
 
+	public Buerger getBuerger(Link id) {
+		Optional<Buerger> one = service.findOne(id);
+		if (!one.isPresent())
+			throw new IllegalArgumentException("Id not found");
+		return one.get();
+	}
+
 	/**
 	 * Speichert einen partner zu einem {@link BuergerDTO} Objekt in der Datenbank.
 	 *
@@ -265,7 +274,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 	 * @param event
 	 */
 	private void releaseKind(Buerger event) {
-		Link link = current.getBean().getLink(Buerger.Rel.kinder.name());
+		Link link = getCurrent().getLink(Buerger.Rel.kinder.name());
 		List<Link> kinder = service.findAll(link)
 				.stream()
 				.map(Buerger::getId)
@@ -281,7 +290,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 	 * @param event
 	 */
 	private void releasePartner(Buerger event) {
-		Link link = current.getBean().getLink(Buerger.Rel.partner.name());
+		Link link = getCurrent().getLink(Buerger.Rel.partner.name());
 		List<Link> partner = service.findAll(link)
 				.stream()
 				.map(Buerger::getId)
@@ -299,7 +308,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 	 * @return BuergerDTO
 	 */
 	public void addBuergerKind(Buerger kindEntity) {
-		Link link = current.getBean().getLink(Buerger.Rel.kinder.name());
+		Link link = getCurrent().getLink(Buerger.Rel.kinder.name());
 		List<Link> kinder = Stream.concat(
 				service.findAll(link)
 						.stream()
@@ -318,7 +327,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 	 * @return BuergerDTO
 	 */
 	public void addBuergerPartner(Buerger partnerEntity) {
-		Link link = current.getBean().getLink(Buerger.Rel.partner.name());
+		Link link = getCurrent().getLink(Buerger.Rel.partner.name());
 		List<Link> partner = Stream.concat(
 				service.findAll(link)
 						.stream()
@@ -346,7 +355,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 	 * @param entity BuergerDTO
 	 */
 	public void deleteBuerger(Buerger entity) {
-		service.delete(entity.getId());
+		service.delete(entity);
 	}
 
 	public List<Buerger> queryBuerger() {
@@ -475,10 +484,10 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 	private void select2ReadEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
 		AppEvent<Buerger> event = eventWrapper.getData();
 
-		this.current = event.getItem();
+		this.current = getBuerger(event.getItem().getBean().getId());
 
 		// UI Komponente aktualisieren
-		postEvent(buildComponentEvent(EventType.SELECT2READ).addEntity(event.getItem().getBean()));
+		postEvent(buildComponentEvent(EventType.SELECT2READ).addEntity(current));
 
 
 	}
@@ -490,10 +499,10 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 		// Funktion erst die Komponente erstellt wird. Das Event
 		// läuft also zuerst ins Leere und muss deshalb nochmal
 		// wiederholt werden.
-		this.current = event.getItem();
+		this.current = getBuerger(event.getItem().getBean().getId());
 
 		// UI Komponenten aktualisieren
-		postEvent(buildComponentEvent(EventType.SELECT2UPDATE).addEntity(event.getItem().getBean()));
+		postEvent(buildComponentEvent(EventType.SELECT2UPDATE).addEntity(current));
 
 	}
 

@@ -4,6 +4,7 @@ import de.muenchen.vaadin.demo.api.domain.BuergerDTO;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.api.rest.BuergerResource;
 import org.springframework.hateoas.Resource;
+import org.springframework.http.HttpHeaders;
 
 /**
  * Provides a simple Assembler to transform the resource of an BuergerDTO to the Buerger of
@@ -21,16 +22,7 @@ public class BuergerAssembler {
      * @return the local Object Representation
      */
     public Buerger toBean(Resource<BuergerDTO> resource) {
-        BuergerDTO buergerDTO = resource.getContent();
-
-        Buerger bean = new Buerger(
-                buergerDTO.getVorname(),
-                buergerDTO.getNachname(),
-                buergerDTO.getGeburtsdatum()
-        );
-        bean.add(resource.getLinks());
-
-        return bean;
+        return toBean(resource, null);
     }
 
     /**
@@ -40,11 +32,37 @@ public class BuergerAssembler {
      * @return the REST DTO Resource
      */
     public BuergerResource toResource(Buerger bean) {
+        if (bean == null)
+            throw new IllegalArgumentException("The bean cannot be null!");
+
         BuergerDTO buergerDTO = new BuergerDTO();
         buergerDTO.setVorname(bean.getVorname());
         buergerDTO.setNachname(bean.getNachname());
         buergerDTO.setGeburtsdatum(bean.getGeburtsdatum());
 
         return new BuergerResource(buergerDTO, bean.getLinks());
+    }
+
+    public Buerger toBean(Resource<BuergerDTO> resource, HttpHeaders headers) {
+        if (resource == null)
+            throw new IllegalArgumentException("The Resource cannot be null!");
+        if (resource.getId() == null)
+            throw new IllegalArgumentException("The Resource must have an ID!");
+        if (resource.getContent() == null)
+            throw new IllegalArgumentException("The resource must have a content (is null)!");
+
+        BuergerDTO buergerDTO = resource.getContent();
+
+        Buerger bean = new Buerger(
+                buergerDTO.getVorname(),
+                buergerDTO.getNachname(),
+                buergerDTO.getGeburtsdatum()
+        );
+        bean.add(resource.getLinks());
+
+        // The headers are optional
+        bean.setHeaders(headers);
+
+        return bean;
     }
 }

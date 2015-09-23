@@ -79,5 +79,5 @@ public interface BuergerRestClient {
      * Try to delete an ID.
      * @param id The link to the id.
      */
-    void delete(Link id);
+    void delete(Buerger id);
 }

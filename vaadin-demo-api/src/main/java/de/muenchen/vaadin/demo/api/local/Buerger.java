@@ -1,7 +1,6 @@
 package de.muenchen.vaadin.demo.api.local;
 
 import de.muenchen.vaadin.demo.apilib.util.FieldIdentifier;
-import org.springframework.hateoas.ResourceSupport;
 
 import java.util.Date;
 
@@ -14,7 +13,7 @@ import java.util.Date;
  * @author p.mueller
  * @version 1.0
  */
-public class Buerger extends ResourceSupport {
+public class Buerger extends HeadersAwareResourceSupport {
 
     /**
      * A mapped Field from the DTO
@@ -101,6 +100,7 @@ public class Buerger extends ResourceSupport {
         this.geburtsdatum = geburtsdatum;
     }
 
+
     /**
      * A simple Enum for all the Fields of this Buerger.
      * <p>
@@ -108,7 +108,7 @@ public class Buerger extends ResourceSupport {
      * </p>
      */
     public enum Field {
-        vorname, nachname, geburtsdatum;
+        vorname, nachname, geburtsdatum
     }
 
     /**
@@ -118,7 +118,6 @@ public class Buerger extends ResourceSupport {
      * </p>
      */
     public enum Rel {
-        kinder, partner;
-
+        kinder, partner
     }
 }

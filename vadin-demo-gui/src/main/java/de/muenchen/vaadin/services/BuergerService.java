@@ -17,7 +17,7 @@ public interface BuergerService {
 
     Buerger update(Buerger buerger);
 
-    void delete(Link link);
+    void delete(Buerger link);
 
     Buerger copy(Link link);
 
