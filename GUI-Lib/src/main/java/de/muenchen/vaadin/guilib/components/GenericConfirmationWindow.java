@@ -42,7 +42,7 @@ public class GenericConfirmationWindow extends Window {
      * @param action              Art des Fensters
      * @param okButtonClickAction Aktion der bei klick auf den OK-Button ausgeführt werden soll
      */
-    public GenericConfirmationWindow(ControllerContext<?> controller, Action action, Runnable okButtonClickAction) {
+    public GenericConfirmationWindow(ControllerContext<?> controller, Action action, Button.ClickListener okButtonClickAction) {
         this.okButtonText = controller.resolve(I18nPaths.getConfirmationPath(action, I18nPaths.Type.confirm));
         this.cancelButtonText = controller.resolve(I18nPaths.getConfirmationPath(action, I18nPaths.Type.cancel));
         this.messageText = controller.resolve(I18nPaths.getConfirmationPath(action, I18nPaths.Type.text));
@@ -54,7 +54,7 @@ public class GenericConfirmationWindow extends Window {
         content.addStyleName(ValoTheme.PANEL_BORDERLESS);
         content.setContent(l);
 
-        HorizontalLayout footer = new HorizontalLayout(this.addOkButton(okButtonClickAction, controller, getIconFor(action)), this.addCancelButton());
+        HorizontalLayout footer = new HorizontalLayout(this.addOkButton(okButtonClickAction, getIconFor(action)), this.addCancelButton());
         footer.setWidth("100%");
         footer.setSpacing(true);
         footer.addStyleName(ValoTheme.WINDOW_BOTTOM_TOOLBAR);
@@ -82,18 +82,23 @@ public class GenericConfirmationWindow extends Window {
      * den Eventbus schickt. Danach wird das Fenster geschlossen.
      *
      * @param clickListener
-     * @param controller
      * @return "ok" Schaltfläche
      */
-    private Button addOkButton(Runnable clickListener, ControllerContext<?> controller, FontAwesome icon) {
-        Button ok = new Button();
+    private Button addOkButton(Button.ClickListener clickListener, FontAwesome icon) {
+        Button ok = new Button() {
+            @Override
+            public void addClickListener(Button.ClickListener listener) {
+                Button.ClickListener complete = event -> {
+                    listener.buttonClick(event);
+                    GenericConfirmationWindow.this.close();
+                };
+                super.addClickListener(complete);
+            }
+        };
         ok.setIcon(icon);
         ok.setCaption(this.okButtonText);
         ok.addStyleName(ValoTheme.BUTTON_DANGER);
-        ok.addClickListener(event -> {
-            clickListener.run();
-            this.close();
-        });
+        ok.addClickListener(clickListener);
         ok.setSizeFull();
         return ok;
     }

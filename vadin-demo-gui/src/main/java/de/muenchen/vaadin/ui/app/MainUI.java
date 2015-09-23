@@ -263,7 +263,7 @@ public class MainUI extends UI implements ControllerContext{
             GenericConfirmationWindow confirmationWindow =
                     new GenericConfirmationWindow(MainUI.this,
                             SimpleAction.logout,
-                            () -> {
+                            e -> {
                                 this.postEvent(new LogoutEvent());
                             });
             getUI().addWindow(confirmationWindow);

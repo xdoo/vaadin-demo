@@ -39,7 +39,7 @@ public class BuergerPartnerTab extends CustomComponent implements Consumer<Event
                 controller.postEvent(controller.buildAppEvent(EventType.CREATE));
                 controller.getNavigator().navigateTo(navigateToForCreate);
             } else {
-                GenericConfirmationWindow window = new GenericConfirmationWindow(controller, SimpleAction.override, () -> {
+                GenericConfirmationWindow window = new GenericConfirmationWindow(controller, SimpleAction.override, e -> {
                     controller.postEvent(controller.buildAppEvent(EventType.CREATE));
                     controller.getNavigator().navigateTo(navigateToForCreate);
                 });
@@ -53,7 +53,7 @@ public class BuergerPartnerTab extends CustomComponent implements Consumer<Event
             if (grid.getContainerDataSource().size() == 0) {
                 controller.postEvent(controller.buildAppEvent(EventType.ADD_PARTNER));
             } else {
-                GenericConfirmationWindow window = new GenericConfirmationWindow(controller, SimpleAction.override, () -> controller.postEvent(controller.buildAppEvent(EventType.ADD_PARTNER)));
+                GenericConfirmationWindow window = new GenericConfirmationWindow(controller, SimpleAction.override, e -> controller.postEvent(controller.buildAppEvent(EventType.ADD_PARTNER)));
                 getUI().addWindow(window);
                 window.center();
                 window.focus();
