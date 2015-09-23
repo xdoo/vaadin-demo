@@ -522,7 +522,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 			this.deleteBuerger(event.getEntity());
 			// UI Komponenten aktualisieren
 			ComponentEvent<Buerger> componentEvent = buildComponentEvent(EventType.DELETE);
-			componentEvent.setItemID(event.getItemId());
+			componentEvent.setItemID(event.getEntity());
 			postEvent(componentEvent);
 			resultNotification = new GenericSuccessNotification(
 					resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.delete, Type.label)),
