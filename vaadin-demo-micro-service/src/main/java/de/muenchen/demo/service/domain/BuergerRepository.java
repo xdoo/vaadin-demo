@@ -108,14 +108,10 @@ public interface BuergerRepository extends CrudRepository<Buerger, Long> {
 
     /**
      * Delete all Buergers.
-     * <p>
-     * Only the Buergers with matching tenant will be deleted.
-     * </p>
      */
     @Override
     @CacheEvict(value = BUERGER_CACHE, allEntries = true)
     @PreAuthorize("hasRole('ROLE_DELETE_Buerger')")
-    @PreFilter(TenantService.IS_TENANT_FILTER)
     void deleteAll();
 
     /**

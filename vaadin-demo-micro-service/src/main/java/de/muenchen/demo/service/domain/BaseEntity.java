@@ -19,7 +19,7 @@ public abstract class BaseEntity implements Cloneable, Serializable {
 
     @Version
     @Column(name = "version")
-    Long version;
+    private long version;
 
 
     @Column(name = "OID")

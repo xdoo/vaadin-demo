@@ -58,8 +58,8 @@ public class GenericGrid<T> extends Grid implements Consumer<Event<ComponentEven
      * @param id the id
      */
     public void delete(Object id) {
-        LOG.error(id.toString());
-        getContainerDataSource().removeItem(id);
+        //LOG.error(id.toString());
+        // getContainerDataSource().removeItem(id);
     }
 
     /**

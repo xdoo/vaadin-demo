@@ -4,7 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.eventbus.EventBus;
 import org.hibernate.event.service.spi.EventListenerRegistry;
-import org.hibernate.event.spi.*;
+import org.hibernate.event.spi.EventType;
+import org.hibernate.event.spi.PostCommitDeleteEventListener;
+import org.hibernate.event.spi.PostCommitInsertEventListener;
+import org.hibernate.event.spi.PostCommitUpdateEventListener;
+import org.hibernate.event.spi.PostDeleteEvent;
+import org.hibernate.event.spi.PostInsertEvent;
+import org.hibernate.event.spi.PostUpdateEvent;
 import org.hibernate.internal.SessionFactoryImpl;
 import org.hibernate.jpa.HibernateEntityManagerFactory;
 import org.hibernate.persister.entity.EntityPersister;
@@ -21,7 +27,10 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import static de.muenchen.eventbus.types.EventType.*;
+import static de.muenchen.eventbus.types.EventType.AUDIT_CREATE;
+import static de.muenchen.eventbus.types.EventType.AUDIT_DELETE;
+import static de.muenchen.eventbus.types.EventType.AUDIT_READ;
+import static de.muenchen.eventbus.types.EventType.AUDIT_UPDATE;
 import static reactor.bus.selector.Selectors.T;
 
 /**
@@ -118,7 +127,7 @@ public class AuditingServiceProducer {
                         Object eventEntity = postDeleteEvent.getEntity();
                         MUCAudited annotation = eventEntity.getClass().getAnnotation(MUCAudited.class);
                         if (shouldBeAudited(MUCAudited.DELETE, annotation)) {
-                            eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(AUDIT_DELETE, eventEntity)));
+                            eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent<>(AUDIT_DELETE, eventEntity)));
                         }
                     }
 

@@ -73,13 +73,13 @@ import static org.junit.Assert.assertNull;
 @WebIntegrationTest({"server.port=0", "management.port=0"})
 public class BuergerDTOTest {
 
+    static Boolean lock = false;
     @Rule
     public ExpectedException thrown = ExpectedException.none();
     @Autowired
     BuergerRepository repo;
     @Autowired
     AuthenticationManager authenticationManager;
-    Boolean lock = false;
     private RestTemplate restTemplate;
     private RestTemplate restTemplate2;
     @Value("${local.server.port}")
