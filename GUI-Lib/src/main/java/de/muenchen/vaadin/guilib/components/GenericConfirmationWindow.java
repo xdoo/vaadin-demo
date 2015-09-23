@@ -21,40 +21,40 @@ public class GenericConfirmationWindow extends Window {
     /**
      * Beschriftung "ok" Schaltfläche
      */
-    private String okButton;
+    private String okButtonText;
 
     /**
      * Beschriftung "abbrechen" Schaltfläche
      */
-    private String cancelButton;
+    private String cancelButtonText;
 
     /**
      * Fenster Nachricht
      */
-    private String message;
+    private String messageText;
 
 
     /**
      * Konfiguriert ein Bestätigungsfenster mit einer "ok" und
      * einer "abbrechen" Schaltfläche.
      *
-     * @param event      Ereignis für Klick auf "ok" Schaltfläche. Null wenn kein ereigniss gesendet werden soll.
-     * @param controller der Controller
-     * @param action     Art des Fensters
+     * @param controller          der Controller
+     * @param action              Art des Fensters
+     * @param okButtonClickAction Aktion der bei klick auf den OK-Button ausgeführt werden soll
      */
-    public GenericConfirmationWindow(Object event, ControllerContext<?> controller, Action action) {
-        this.okButton = controller.resolve(I18nPaths.getConfirmationPath(action, I18nPaths.Type.confirm));
-        this.cancelButton = controller.resolve(I18nPaths.getConfirmationPath(action, I18nPaths.Type.cancel));
-        this.message = controller.resolve(I18nPaths.getConfirmationPath(action, I18nPaths.Type.text));
+    public GenericConfirmationWindow(ControllerContext<?> controller, Action action, Button.ClickListener okButtonClickAction) {
+        this.okButtonText = controller.resolve(I18nPaths.getConfirmationPath(action, I18nPaths.Type.confirm));
+        this.cancelButtonText = controller.resolve(I18nPaths.getConfirmationPath(action, I18nPaths.Type.cancel));
+        this.messageText = controller.resolve(I18nPaths.getConfirmationPath(action, I18nPaths.Type.text));
 
         Panel content = new Panel();
-        VerticalLayout l = new VerticalLayout(new Label(this.message));
+        VerticalLayout l = new VerticalLayout(new Label(this.messageText));
         l.setMargin(true);
         content.setSizeFull();
         content.addStyleName(ValoTheme.PANEL_BORDERLESS);
         content.setContent(l);
 
-        HorizontalLayout footer = new HorizontalLayout(this.addOkButton(event, controller, getIconFor(action)), this.addCancelButton());
+        HorizontalLayout footer = new HorizontalLayout(this.addOkButton(okButtonClickAction, getIconFor(action)), this.addCancelButton());
         footer.setWidth("100%");
         footer.setSpacing(true);
         footer.addStyleName(ValoTheme.WINDOW_BOTTOM_TOOLBAR);
@@ -81,20 +81,25 @@ public class GenericConfirmationWindow extends Window {
      * Erstellt eine Schaltfläche, die das übergebene Event an
      * den Eventbus schickt. Danach wird das Fenster geschlossen.
      *
-     * @param event
-     * @param controller
+     * @param clickListener
      * @return "ok" Schaltfläche
      */
-    private Button addOkButton(Object event, ControllerContext<?> controller, FontAwesome icon) {
-        Button ok = new Button();
+    private Button addOkButton(Button.ClickListener clickListener, FontAwesome icon) {
+        Button ok = new Button() {
+            @Override
+            public void addClickListener(Button.ClickListener listener) {
+                Button.ClickListener complete = event -> {
+                    listener.buttonClick(event);
+                    GenericConfirmationWindow.this.close();
+                };
+                super.addClickListener(complete);
+            }
+        };
         ok.setIcon(icon);
-        ok.setCaption(this.okButton);
+        ok.setCaption(this.okButtonText);
         ok.addStyleName(ValoTheme.BUTTON_DANGER);
-        ok.addClickListener(e -> {
-            controller.postEvent(event);
-            this.close();
-        });
-
+        ok.addClickListener(clickListener);
+        ok.setSizeFull();
         return ok;
     }
 
@@ -106,37 +111,11 @@ public class GenericConfirmationWindow extends Window {
     private Button addCancelButton() {
         Button cancel = new Button();
         cancel.setIcon(FontAwesome.REORDER);
-        cancel.setCaption(this.cancelButton);
+        cancel.setCaption(this.cancelButtonText);
         cancel.addClickListener(e -> {
             this.close();
         });
-
+        cancel.setSizeFull();
         return cancel;
-    }
-
-    // Default Werte überschreiben
-
-    public String getOkButton() {
-        return okButton;
-    }
-
-    public void setOkButton(String okButton) {
-        this.okButton = okButton;
-    }
-
-    public String getCancelButton() {
-        return cancelButton;
-    }
-
-    public void setCancelButton(String cancelButton) {
-        this.cancelButton = cancelButton;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 }
