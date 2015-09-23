@@ -86,7 +86,10 @@ public class BuergerRestClientImpl implements BuergerRestClient {
         String relations = links.stream().map(Link::getHref).collect(Collectors.joining("\n"));
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("text", "uri-list"));
-        restTemplate.exchange(URI.create(endpoint.getHref()), HttpMethod.PUT, new HttpEntity<>(relations, headers), Void.class);
+        restTemplate.exchange(URI.create(endpoint.getHref()),
+                HttpMethod.PUT,
+                new HttpEntity<>(relations, headers),
+                Void.class);
     }
 
     @Override
@@ -98,7 +101,10 @@ public class BuergerRestClientImpl implements BuergerRestClient {
 
         BuergerDTO buergerDTO = buergerAssembler.toResource(buerger).getContent();
 
-        ResponseEntity<BuergerResource> exchange = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(buergerDTO), BuergerResource.class);
+        ResponseEntity<BuergerResource> exchange = restTemplate.exchange(uri,
+                HttpMethod.POST,
+                new HttpEntity<>(buergerDTO),
+                BuergerResource.class);
 
         return buergerAssembler.toBean(exchange.getBody(), exchange.getHeaders());
     }
@@ -110,7 +116,12 @@ public class BuergerRestClientImpl implements BuergerRestClient {
 
         BuergerDTO buergerDTO = buergerAssembler.toResource(buerger).getContent();
 
-        ResponseEntity<BuergerResource> exchange = restTemplate.exchange(uri, HttpMethod.PUT, new HttpEntity<>(buergerDTO), BuergerResource.class);
+
+        ResponseEntity<BuergerResource> exchange = restTemplate.exchange(
+                uri,
+                HttpMethod.PUT,
+                new HttpEntity<>(buergerDTO, getHttpHeaders(buerger)),
+                BuergerResource.class);
 
         return buergerAssembler.toBean(exchange.getBody(), exchange.getHeaders());
     }
@@ -118,6 +129,19 @@ public class BuergerRestClientImpl implements BuergerRestClient {
     @Override
     public void delete(Buerger buerger) {
         URI uri = URI.create(buerger.getId().getHref());
-        restTemplate.exchange(uri, HttpMethod.DELETE, null, Void.class);
+
+        restTemplate.exchange(
+                uri,
+                HttpMethod.DELETE,
+                new HttpEntity<>(getHttpHeaders(buerger)),
+                Void.class);
+    }
+
+    private HttpHeaders getHttpHeaders(Buerger buerger) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        buerger.getHeaders()
+                .ifPresent(headers -> httpHeaders.add(HttpHeaders.IF_MATCH, headers.getETag()));
+
+        return httpHeaders;
     }
 }
