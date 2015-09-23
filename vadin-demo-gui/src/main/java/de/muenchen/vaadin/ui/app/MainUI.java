@@ -12,24 +12,11 @@ import com.vaadin.server.VaadinService;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
+import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.ComponentContainer;
-import com.vaadin.ui.CssLayout;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.MenuBar;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.eventbus.events.AppEvent;
-import de.muenchen.eventbus.events.ComponentEvent;
-import de.muenchen.eventbus.events.LoginEvent;
-import de.muenchen.eventbus.events.LogoutEvent;
-import de.muenchen.eventbus.events.RefreshEvent;
+import de.muenchen.eventbus.events.*;
 import de.muenchen.eventbus.types.EventType;
 import de.muenchen.vaadin.demo.apilib.domain.BaseEntity;
 import de.muenchen.vaadin.demo.apilib.services.SecurityService;
@@ -273,7 +260,12 @@ public class MainUI extends UI implements ControllerContext{
 
         // creates and displays the logout button
         final Button logoutButton = new Button("Logout", event -> {
-            GenericConfirmationWindow confirmationWindow = new GenericConfirmationWindow(new LogoutEvent(), MainUI.this, SimpleAction.logout);
+            GenericConfirmationWindow confirmationWindow =
+                    new GenericConfirmationWindow(MainUI.this,
+                            SimpleAction.logout,
+                            () -> {
+                                this.postEvent(new LogoutEvent());
+                            });
             getUI().addWindow(confirmationWindow);
             confirmationWindow.center();
             confirmationWindow.focus();
