@@ -146,7 +146,6 @@ public class BuergerGrid extends CustomComponent {
                     grid.deselect(next);
                     LOG.debug("item deleted");
                 }
-                refresh();
             }
         });
     }
