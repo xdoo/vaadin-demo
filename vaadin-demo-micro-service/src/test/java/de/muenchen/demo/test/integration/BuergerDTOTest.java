@@ -12,6 +12,7 @@ import com.google.common.collect.Lists;
 import de.muenchen.demo.service.Application;
 import de.muenchen.demo.service.domain.Buerger;
 import de.muenchen.demo.service.domain.BuergerRepository;
+import de.muenchen.demo.service.util.QueryService;
 import de.muenchen.vaadin.demo.api.domain.Augenfarbe;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -33,7 +34,12 @@ import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.hateoas.hal.Jackson2HalModule;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -46,17 +52,23 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import javax.persistence.EntityManager;
 import java.net.MalformedURLException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 /**
  *
@@ -74,13 +86,17 @@ public class BuergerDTOTest {
     @Autowired
     AuthenticationManager authenticationManager;
     Boolean lock = false;
+    @Autowired
+    QueryService queryService;
     private RestTemplate restTemplate;
     private RestTemplate restTemplate2;
     @Value("${local.server.port}")
     private int port;
     private String url;
-//    @AfterClass
+    //    @AfterClass
 //    public 
+    @Autowired
+    private EntityManager entityMangager;
 
     @Before
     public void setUp() throws JsonProcessingException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
@@ -129,6 +145,7 @@ public class BuergerDTOTest {
             b1M1.setNachname("name1");
             b1M1.setVorname("vorname1");
             b1M1.setMandant("test");
+            b1M1.setGeburtsdatum(new Date(System.currentTimeMillis()));
             b1M1.setAugenfarbe(Augenfarbe.Blau);
             b1M1.setOid(1L);
             repo.save(b1M1);
@@ -200,13 +217,20 @@ public class BuergerDTOTest {
             b5M2.setOid(10L);
             repo.save(b5M2);
             lock = true;
+
         }
+    }
+
+    @Test
+    public void queryBuergsByFuzzySearch() {
+        List<Buerger> buergers = queryService.query("September", Buerger.class, new String[]{"vorname", "nachname", "augenfarbe", "geburtsdatum"});
+        System.out.println(buergers);
     }
 
     @Test
     public void getBuergersM1Test() throws JsonProcessingException {
         System.out.println("========== get Alle Bürger Mandant 'test' Test ==========");
-        int x = this.count("test", "hans", "test");
+        int x = this.count("test", "Braun", "test");
         url = "http://localhost:" + port + "/buergers";
         ResponseEntity<Resources<BuergerResource>> result = restTemplate.exchange(
                 url,

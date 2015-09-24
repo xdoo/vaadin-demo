@@ -6,9 +6,21 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import de.muenchen.auditing.MUCAudited;
 import de.muenchen.vaadin.demo.api.domain.Augenfarbe;
 import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.FieldBridge;
 import org.hibernate.search.annotations.Indexed;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
@@ -38,11 +50,14 @@ public class Buerger extends BaseEntity {
 
 //    @Field(index = Index.YES, store = Store.YES)
 //    @DateBridge(resolution = Resolution.DAY, encoding = EncodingType.STRING)
+@Field
     @Column(name = "BUER_GEBURTSDATUM")
+@FieldBridge(impl = PetersPerfectBridge.class)
     @Temporal(TemporalType.DATE)
     private Date geburtsdatum;
 
     @Field
+    @FieldBridge(impl = PetersPerfectBridge.class)
     @Column(nullable = false, name = "BUER_AUGENFARBE")
     @Enumerated(EnumType.STRING)
     private Augenfarbe augenfarbe;
@@ -184,3 +199,4 @@ public class Buerger extends BaseEntity {
     }
 
 }
+
