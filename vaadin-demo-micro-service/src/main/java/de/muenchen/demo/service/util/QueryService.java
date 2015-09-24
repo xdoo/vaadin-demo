@@ -64,7 +64,7 @@ public class QueryService {
                 = fullTextEntityManager.createFullTextQuery(query, entity);
 
 
-        //TODO
+        //TODO Mandant prüfen
         //jpaQuery.setFilter(getFilter(readTenantOid()));
 
 

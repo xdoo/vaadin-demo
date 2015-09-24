@@ -1,4 +1,4 @@
-package de.muenchen.demo.service.domain;
+package de.muenchen.demo.service.util;
 
 import org.hibernate.search.bridge.StringBridge;
 

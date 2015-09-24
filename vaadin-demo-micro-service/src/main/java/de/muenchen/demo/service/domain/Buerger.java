@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import de.muenchen.auditing.MUCAudited;
+import de.muenchen.demo.service.util.PetersPerfectBridge;
 import de.muenchen.vaadin.demo.api.domain.Augenfarbe;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.FieldBridge;
@@ -28,7 +29,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- *
  * @author claus.straube
  */
 @Entity
@@ -48,11 +48,9 @@ public class Buerger extends BaseEntity {
     @Size(max = 70)
     private String nachname;
 
-//    @Field(index = Index.YES, store = Store.YES)
-//    @DateBridge(resolution = Resolution.DAY, encoding = EncodingType.STRING)
-@Field
+    @Field
     @Column(name = "BUER_GEBURTSDATUM")
-@FieldBridge(impl = PetersPerfectBridge.class)
+    @FieldBridge(impl = PetersPerfectBridge.class)
     @Temporal(TemporalType.DATE)
     private Date geburtsdatum;
 
@@ -64,8 +62,8 @@ public class Buerger extends BaseEntity {
 
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "oid")
     @JsonIdentityReference(alwaysAsId = true)
-    @OneToMany (cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
-    private Set<Sachbearbeiter> sachbearbeiter= new HashSet<>();
+    @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    private Set<Sachbearbeiter> sachbearbeiter = new HashSet<>();
 
     @Transient
     private Set<Staatsangehoerigkeit> staatsangehoerigkeiten = new HashSet<>();
