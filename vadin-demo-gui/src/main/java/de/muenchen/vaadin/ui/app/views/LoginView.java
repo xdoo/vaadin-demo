@@ -6,25 +6,19 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
 import com.vaadin.server.Responsive;
-import com.vaadin.shared.Position;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
+import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.CssLayout;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.PasswordField;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.events.LoginEvent;
 import de.muenchen.vaadin.demo.apilib.services.SecurityService;
+import de.muenchen.vaadin.guilib.components.GenericNotification;
+import de.muenchen.vaadin.guilib.components.GenericWarningNotification;
+import org.apache.commons.lang.WordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import reactor.bus.EventBus;
 
 import static reactor.bus.Event.wrap;
@@ -34,6 +28,7 @@ import static reactor.bus.Event.wrap;
 public class LoginView extends VerticalLayout implements View {
     private static final long serialVersionUID = -4430276235082912377L;
     public static final String NAME = SecurityService.LOGIN_VIEW_NAME;
+    private String websiteName;
     // Services
     private SecurityService security;
     @Autowired
@@ -41,18 +36,22 @@ public class LoginView extends VerticalLayout implements View {
     // Vaadin Komponenten
     private TextField username;
     private PasswordField password;
+
     @Autowired
-    public LoginView(SecurityService security) {
+    public LoginView(SecurityService security, Environment env) {
+        websiteName = WordUtils.capitalize(env.getProperty("spring.application.name"));
         this.security = security;
         setSizeFull();
         Component loginForm = buildLoginForm();
         addComponent(loginForm);
         setComponentAlignment(loginForm, Alignment.MIDDLE_CENTER);
     }
+
     @Override
     public void enter(ViewChangeEvent event) {
         username.focus();
     }
+
     private Component buildLoginForm() {
         final VerticalLayout loginPanel = new VerticalLayout();
         loginPanel.setSizeUndefined();
@@ -64,6 +63,7 @@ public class LoginView extends VerticalLayout implements View {
         loginPanel.addComponent(buildFields());
         return loginPanel;
     }
+
     private Component buildFields() {
         HorizontalLayout fields = new HorizontalLayout();
         fields.setSpacing(true);
@@ -85,50 +85,42 @@ public class LoginView extends VerticalLayout implements View {
         fields.setComponentAlignment(signin, Alignment.BOTTOM_LEFT);
         signin.addClickListener(new ClickListener() {
             private static final long serialVersionUID = 1L;
+
             @Override
             public void buttonClick(final ClickEvent event) {
-                if(security.login(username.getValue(), password.getValue())) {
+                if (security.login(username.getValue(), password.getValue())) {
                     LoginEvent loginEvent = new LoginEvent();
-                    eventBus.notify(loginEvent,wrap(loginEvent));
+                    eventBus.notify(loginEvent, wrap(loginEvent));
                 } else {
-// Anmeldung fehlgeschlagen
-                    Notification notif = new Notification(
-                            "Anmeldung fehlgeschlagen",
-                            "Bei der Eingabe Ihrer Usernamens/Ihres Kennworts ist ein Fehler aufgetreten. Versuchen Sie es erneut.",
-                            Notification.Type.WARNING_MESSAGE);
-                    notif.setDelayMsec(5000);
-                    notif.setPosition(Position.BOTTOM_RIGHT);
+//                    Anmeldung fehlgeschlagen
+                    GenericNotification notif = new GenericWarningNotification("Anmeldung fehlgeschlagen",
+                            "Bei der Eingabe Ihrer Usernamens/Ihres Kennworts ist ein Fehler aufgetreten. Versuchen Sie es erneut.");
                     notif.show(Page.getCurrent());
                 }
-// try {
-// security.login(username.getValue(), password.getValue());
-// } catch (AuthenticationException e) {
-// e.printStackTrace();
-// } catch (Exception e) {
-// e.printStackTrace();
-// }
-// TODO Register Remember me Token
-/*
-* Redirect is handled by the VaadinRedirectStrategy
-* User is redirected to either always the default
-* or the URL the user request before authentication
-*
-* Strategy is configured within SecurityConfiguration
-* Defaults to User request URL.
-*/
+                // TODO Register Remember me Token
+            /*
+            * Redirect is handled by the VaadinRedirectStrategy
+            * User is redirected to either always the default
+            * or the URL the user request before authentication
+            *
+            * Strategy is configured within SecurityConfiguration
+            * Defaults to User request URL.
+            */
             }
         });
         return fields;
     }
+
     private Component buildLabels() {
-        CssLayout labels = new CssLayout();
+        HorizontalLayout labels = new HorizontalLayout();
+        labels.setSpacing(true);
         labels.addStyleName("labels");
-        Label welcome = new Label("Welcome");
+        Label welcome = new Label("Welcome to ");
         welcome.setSizeUndefined();
         welcome.addStyleName(ValoTheme.LABEL_H4);
         welcome.addStyleName(ValoTheme.LABEL_COLORED);
         labels.addComponent(welcome);
-        Label title = new Label("Security-Sample");
+        Label title = new Label(websiteName);
         title.setSizeUndefined();
         title.addStyleName(ValoTheme.LABEL_H3);
         title.addStyleName(ValoTheme.LABEL_LIGHT);
