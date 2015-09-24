@@ -5,6 +5,7 @@ import de.muenchen.vaadin.demo.apilib.util.FieldIdentifier;
 import org.springframework.hateoas.ResourceSupport;
 
 import java.util.Date;
+import java.util.stream.Stream;
 
 /**
  * Provides the local representation of a Buerger. This is not the DTO Resource!
@@ -125,6 +126,24 @@ public class Buerger extends ResourceSupport {
      */
     public enum Field {
         vorname, nachname, geburtsdatum, augenfarbe;
+
+        private final boolean field;
+
+        Field() {
+            this(true);
+        }
+
+        Field(boolean field) {
+            this.field = field;
+        }
+
+        public boolean isField() {
+            return field;
+        }
+
+        public static Object[] getProperties() {
+            return Stream.of(values()).filter(Field::isField).map(Field::name).toArray();
+        }
     }
 
     /**

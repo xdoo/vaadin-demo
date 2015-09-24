@@ -50,9 +50,7 @@ public class BuergerGrid extends CustomComponent {
         createDelete();
         createCopy();
 
-        grid.setColumnOrder("vorname", "nachname", "geburtsdatum");
-        grid.removeColumn("id");
-        grid.removeColumn("links");
+        grid.setColumns(Buerger.Field.getProperties());
         grid.setSizeFull();
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
 
