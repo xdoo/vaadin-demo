@@ -8,6 +8,7 @@ import de.muenchen.eventbus.events.AppEvent;
 import de.muenchen.eventbus.events.ComponentEvent;
 import de.muenchen.eventbus.types.EventType;
 import de.muenchen.vaadin.demo.api.local.Buerger;
+import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.GenericGrid;
@@ -17,6 +18,7 @@ import reactor.fn.Consumer;
 
 import java.util.Optional;
 
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getEntityFieldPath;
 import static de.muenchen.vaadin.ui.components.BuergerReadForm.LOG;
 
 /**
@@ -62,6 +64,12 @@ public class BuergerChildTab extends CustomComponent implements Consumer<Event<C
         grid = controller.getViewFactory().generateChildTable(navigateToForDetail);
         grid.setColumnOrder("vorname", "nachname", "geburtsdatum");
         grid.addSelectionListener(selectionEvent -> setButtonVisability());
+
+        // set headers
+        this.grid.getColumn(Buerger.Field.vorname.name()).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.Field.vorname.name(), I18nPaths.Type.column_header)));
+        this.grid.getColumn(Buerger.Field.geburtsdatum.name()).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.Field.geburtsdatum.name(), I18nPaths.Type.column_header)));
+        this.grid.getColumn(Buerger.Field.nachname.name()).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), I18nPaths.Type.column_header)));
+        this.grid.getColumn(Buerger.Field.augenfarbe.name()).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.Field.augenfarbe.name(), I18nPaths.Type.column_header)));
 
         // Layout für die Schaltflächen über der Tabelle
         HorizontalLayout hlayout = new HorizontalLayout(create, add, delete);
