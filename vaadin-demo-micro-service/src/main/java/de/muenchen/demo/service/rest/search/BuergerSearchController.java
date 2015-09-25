@@ -8,7 +8,11 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.data.rest.webmvc.PersistentEntityResource;
 import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
-import org.springframework.hateoas.*;
+import org.springframework.data.rest.webmvc.RepositorySearchesResource;
+import org.springframework.hateoas.EntityLinks;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.ResourceProcessor;
+import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,8 +29,8 @@ import java.util.stream.Stream;
  * Created by p.mueller on 24.09.15.
  */
 @BasePathAwareController
-@RequestMapping("/buergers/find")
-public class BuergerSearchController implements ResourceProcessor<Resources<Resource<Buerger>>> {
+@RequestMapping("/buergers")
+public class BuergerSearchController implements ResourceProcessor<RepositorySearchesResource> {
 
     @Autowired
     QueryService service;
@@ -34,7 +38,7 @@ public class BuergerSearchController implements ResourceProcessor<Resources<Reso
     @Autowired
     EntityLinks entityLinks;
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(path = "/find", method = RequestMethod.GET)
     public
     @ResponseBody
     ResponseEntity<?> find(PersistentEntityResourceAssembler assembler, @Param("s") String s) {
@@ -54,9 +58,9 @@ public class BuergerSearchController implements ResourceProcessor<Resources<Reso
     }
 
     @Override
-    public Resources<Resource<Buerger>> process(Resources<Resource<Buerger>> resource) {
+    public RepositorySearchesResource process(RepositorySearchesResource resource) {
         Link link = new Link(resource.getLink("self") + "/find", "find");
-        System.out.println("HALLO: " + link.getHref());
+        System.out.println("ASDF: " + link.getHref());
         resource.add(link);
         return resource;
     }
