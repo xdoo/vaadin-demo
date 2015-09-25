@@ -34,7 +34,7 @@ public class BuergerSearchController {
     @RequestMapping(value = "/find", method = RequestMethod.GET)
     public
     @ResponseBody
-    ResponseEntity<?> findBuergerFuzzy(PersistentEntityResourceAssembler assembler, @Param("s") String s) {
+    ResponseEntity<?> find(PersistentEntityResourceAssembler assembler, @Param("s") String s) {
         if (Objects.isNull(s) || s.length() < 3)
             throw new IllegalArgumentException("Search String must be at least 3 chars long.");
 
