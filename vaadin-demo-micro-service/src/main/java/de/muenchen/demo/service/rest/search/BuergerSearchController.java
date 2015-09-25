@@ -70,7 +70,7 @@ public class BuergerSearchController implements ResourceProcessor<Resources<Buer
     @Override
     public Resources<Buerger> process(Resources<Buerger> resource) {
         Link link = new Link(resource.getLink("self").getHref() + "/find", "find");
-        LOG.error("ASDF: " + link.getHref());
+        LOG.error("Resource processed. Link added: " + link.getHref());
         resource.add(link);
         return resource;
     }

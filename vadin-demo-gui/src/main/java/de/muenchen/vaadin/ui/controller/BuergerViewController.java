@@ -449,7 +449,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 		AppEvent<Buerger> event = eventWrapper.getData();
 
 		List<Buerger> currentEntities;
-		if (event.getQuery().isPresent()) {
+		if (event.getQuery().isPresent() && event.getQuery().get().length() > 0) {
 			currentEntities = this.queryBuerger(event.getQuery().get());
 		} else {
 			currentEntities = this.queryBuerger();
