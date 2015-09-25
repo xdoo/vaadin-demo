@@ -3,6 +3,7 @@ package de.muenchen.demo.service.rest.search;
 import de.muenchen.demo.service.domain.Buerger;
 import de.muenchen.demo.service.util.QueryService;
 import org.hibernate.search.annotations.IndexedEmbedded;
+import org.hibernate.search.exception.EmptyQueryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,8 +48,8 @@ public class BuergerSearchController implements ResourceProcessor<Resources<Buer
     public
     @ResponseBody
     ResponseEntity<?> find(PersistentEntityResourceAssembler assembler, @Param("s") String s) {
-        if (Objects.isNull(s) || s.length() < 3)
-            throw new IllegalArgumentException("Search String must be at least 3 chars long.");
+        if (Objects.isNull(s))
+            return new ResponseEntity<Object>("No Filter given", HttpStatus.BAD_REQUEST);
 
         String[] annotatedFields = Stream
                 .of(Buerger.class.getDeclaredFields())
@@ -57,14 +58,18 @@ public class BuergerSearchController implements ResourceProcessor<Resources<Buer
                 .collect(Collectors.toList())
                 .toArray(new String[0]);
 
-        List<Buerger> list = service.query(s, Buerger.class, annotatedFields);
-        final List<PersistentEntityResource> collect = list.stream().map(assembler::toResource).collect(Collectors.toList());
-        return new ResponseEntity<Object>(new Resources<>(collect), HttpStatus.OK);
+        try {
+            List<Buerger> list = service.query(s, Buerger.class, annotatedFields);
+            final List<PersistentEntityResource> collect = list.stream().map(assembler::toResource).collect(Collectors.toList());
+            return new ResponseEntity<Object>(new Resources<>(collect), HttpStatus.OK);
+        } catch (EmptyQueryException e) {
+            return new ResponseEntity<Object>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @Override
     public Resources<Buerger> process(Resources<Buerger> resource) {
-        Link link = new Link(resource.getLink("self") + "/find", "find");
+        Link link = new Link(resource.getLink("self").getHref() + "/find", "find");
         LOG.error("ASDF: " + link.getHref());
         resource.add(link);
         return resource;
