@@ -55,7 +55,7 @@ public class BuergerSearchController implements ResourceProcessor<Resources<Reso
 
     @Override
     public Resources<Resource<Buerger>> process(Resources<Resource<Buerger>> resource) {
-        Link link = new Link(resource.getLink("self") + "find", "find");
+        Link link = new Link(resource.getLink("self") + "/find", "find");
         System.out.println("HALLO: " + link.getHref());
         resource.add(link);
         return resource;
