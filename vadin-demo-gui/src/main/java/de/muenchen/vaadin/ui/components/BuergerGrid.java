@@ -8,6 +8,7 @@ import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.events.AppEvent;
 import de.muenchen.eventbus.types.EventType;
 import de.muenchen.vaadin.demo.api.local.Buerger;
+import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.GenericGrid;
@@ -17,6 +18,8 @@ import de.muenchen.vaadin.ui.app.views.BuergerUpdateView;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getEntityFieldPath;
 
 /**
  *
@@ -109,11 +112,12 @@ public class BuergerGrid extends CustomComponent {
             c.setHidable(true);
         });
 
-        /* set headers
-        this.grid.getColumn(Buerger.Field.vorname).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.Field.vorname.name(), Type.column_header)));
-        this.grid.getColumn(Buerger.Field.geburtsdatum).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.Field.geburtsdatum.name(), Type.column_header)));
-        this.grid.getColumn(Buerger.Field.nachname).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.column_header)));
-        */
+        // set headers
+        this.grid.getColumn(Buerger.Field.vorname.name()).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.Field.vorname.name(), I18nPaths.Type.column_header)));
+        this.grid.getColumn(Buerger.Field.geburtsdatum.name()).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.Field.geburtsdatum.name(), I18nPaths.Type.column_header)));
+        this.grid.getColumn(Buerger.Field.nachname.name()).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), I18nPaths.Type.column_header)));
+        this.grid.getColumn(Buerger.Field.augenfarbe.name()).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.Field.augenfarbe.name(), I18nPaths.Type.column_header)));
+
         setCompositionRoot(layout);
     }
 
