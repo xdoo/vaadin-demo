@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.data.rest.webmvc.PersistentEntityResource;
 import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
-import org.springframework.hateoas.Resources;
+import org.springframework.hateoas.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,13 +25,16 @@ import java.util.stream.Stream;
  * Created by p.mueller on 24.09.15.
  */
 @BasePathAwareController
-@RequestMapping("/buergers/search/")
-public class BuergerSearchController {
+@RequestMapping("/buergers/find")
+public class BuergerSearchController implements ResourceProcessor<Resources<Resource<Buerger>>> {
 
     @Autowired
     QueryService service;
 
-    @RequestMapping(value = "/find", method = RequestMethod.GET)
+    @Autowired
+    EntityLinks entityLinks;
+
+    @RequestMapping(method = RequestMethod.GET)
     public
     @ResponseBody
     ResponseEntity<?> find(PersistentEntityResourceAssembler assembler, @Param("s") String s) {
@@ -48,5 +51,13 @@ public class BuergerSearchController {
         List<Buerger> list = service.query(s, Buerger.class, annotatedFields);
         final List<PersistentEntityResource> collect = list.stream().map(assembler::toResource).collect(Collectors.toList());
         return new ResponseEntity<Object>(new Resources<>(collect), HttpStatus.OK);
+    }
+
+    @Override
+    public Resources<Resource<Buerger>> process(Resources<Resource<Buerger>> resource) {
+        Link link = new Link(resource.getLink("self") + "find", "find");
+        System.out.println("HALLO: " + link.getHref());
+        resource.add(link);
+        return resource;
     }
 }

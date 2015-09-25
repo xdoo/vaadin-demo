@@ -12,6 +12,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
 
+import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
 import java.util.Collection;
 import java.util.List;
@@ -30,15 +31,20 @@ public class BuergerRestClientImpl implements BuergerRestClient {
      * Used to follow HATEOAS relations.
      */
     private final Traverson traverson;
-    /** The restTemplate used for the HTTP Requests. */
+    /**
+     * The restTemplate used for the HTTP Requests.
+     */
     private final RestTemplate restTemplate;
-    /** Assembler to switch from BuergerDTO Resource to Buerger and vice versa. */
+    /**
+     * Assembler to switch from BuergerDTO Resource to Buerger and vice versa.
+     */
     private final BuergerAssembler buergerAssembler = new BuergerAssembler();
 
     /**
      * Create a new BuergerRestClient by RestTemplate and baseUri of the server.
+     *
      * @param restTemplate The restTemplate for the HTTP Requests.
-     * @param baseUri The base URI of the REST Server.
+     * @param baseUri      The base URI of the REST Server.
      */
     public BuergerRestClientImpl(RestTemplate restTemplate, URI baseUri) {
         this.restTemplate = restTemplate;
@@ -61,6 +67,26 @@ public class BuergerRestClientImpl implements BuergerRestClient {
     @Override
     public List<Buerger> findAll(Link relation) {
         URI uri = URI.create(relation.getHref());
+
+        return restTemplate
+                .exchange(uri, HttpMethod.GET, null, BuergerResource.LIST)
+                .getBody()
+                .getContent()
+
+                .stream()
+                .map(buergerAssembler::toBean)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Buerger> queryBuerger(String filter) {
+        URI uri = UriBuilder
+                .fromPath(traverson.follow("buergers")
+                        .follow("find")
+                        .asLink().getHref())
+                .queryParam("s", filter).build();
+
+        System.out.println("BuergerRestClientImpl uri sieht so aus: " + uri.toString());
 
         return restTemplate
                 .exchange(uri, HttpMethod.GET, null, BuergerResource.LIST)

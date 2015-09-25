@@ -341,7 +341,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 	}
 
 	public List<Buerger> queryBuerger(String query) {
-		return queryBuerger(); //TODO
+		return service.queryBuerger(query);
 	}
 
 	public List<Buerger> queryKinder(Buerger entity) {

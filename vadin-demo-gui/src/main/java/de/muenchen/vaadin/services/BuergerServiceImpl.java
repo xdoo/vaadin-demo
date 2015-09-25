@@ -14,19 +14,18 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.Serializable;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 /**
- *
  * @author claus.straube
  */
-@SpringComponent @UIScope
+@SpringComponent
+@UIScope
 public class BuergerServiceImpl implements BuergerService, Serializable {
 
     private static final Logger LOG = LoggerFactory.getLogger(BuergerService.class);
-    
+
     private BuergerRestClient client;
     private InfoService infoService;
     private RestTemplate template;
@@ -35,7 +34,7 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
     @Autowired
     public BuergerServiceImpl(InfoService infoService, SecurityService securityService) {
         this.infoService = infoService;
-        this.securityService=securityService;
+        this.securityService = securityService;
 
         //TODO
         this.client = new BuergerRestClientImpl(getTemplate(), URI.create("http://localhost:8080"));
@@ -82,10 +81,7 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
 
     @Override
     public List<Buerger> queryBuerger(String query) {
-        //    Link link = this.infoService.getUrl("buerger_query");
-        //    ArrayList<Link> links = Lists.newArrayList(link.withRel(HateoasUtil.REL_QUERY));
-        //    return client.queryBuerger(query, links, getTemplate());
-        return new ArrayList<>();
+        return client.queryBuerger(query);
     }
 
     @Override
@@ -100,6 +96,7 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
 
     /**
      * Gets the resttemplate from the security if not present
+     *
      * @return resttemplate of this session
      */
     public RestTemplate getTemplate() {
@@ -112,5 +109,5 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
         LOG.warn("Cannot acquire rest template from security service.");
         return null;
     }
-  
+
 }
