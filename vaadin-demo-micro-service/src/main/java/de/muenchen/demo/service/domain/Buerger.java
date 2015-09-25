@@ -9,19 +9,9 @@ import de.muenchen.vaadin.demo.api.domain.Augenfarbe;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.FieldBridge;
 import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.IndexedEmbedded;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
@@ -38,23 +28,27 @@ import java.util.Set;
 public class Buerger extends BaseEntity {
 
     @Field
+    @IndexedEmbedded
     @Column(nullable = true, name = "BUER_VORNAME")
     @Size(max = 70)
     private String vorname;
 
     @Field
+    @IndexedEmbedded
     @Column(name = "BUER_NACHNAME")
     @NotNull
     @Size(max = 70)
     private String nachname;
 
     @Field
+    @IndexedEmbedded
     @Column(name = "BUER_GEBURTSDATUM")
     @FieldBridge(impl = PetersPerfectBridge.class)
     @Temporal(TemporalType.DATE)
     private Date geburtsdatum;
 
     @Field
+    @IndexedEmbedded
     @FieldBridge(impl = PetersPerfectBridge.class)
     @Column(nullable = false, name = "BUER_AUGENFARBE")
     @Enumerated(EnumType.STRING)
