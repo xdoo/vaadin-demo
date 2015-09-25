@@ -81,7 +81,7 @@ public class BuergerRestClientImpl implements BuergerRestClient {
     @Override
     public List<Buerger> queryBuerger(String filter) {
         URI uri = UriBuilder
-                .fromPath(traverson.follow("buergers")
+                .fromPath(traverson.follow(BUERGERS)
                         .follow("find")
                         .asLink().getHref())
                 .queryParam("s", filter).build();
@@ -126,7 +126,7 @@ public class BuergerRestClientImpl implements BuergerRestClient {
     @Override
     public Buerger create(Buerger buerger) {
         URI uri = URI.create(
-                traverson.follow("buergers")
+                traverson.follow(BUERGERS)
                         .asLink().getHref()
         );
 
