@@ -17,6 +17,8 @@ import org.hibernate.search.filter.impl.CachingWrapperFilter;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.query.dsl.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostFilter;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
@@ -39,6 +41,8 @@ public class QueryService {
     TenantService tenantService;
 
     @SuppressWarnings("unchecked")
+    @PreAuthorize("hasRole('ROLE_READ_Buerger')")
+    @PostFilter(TenantService.IS_TENANT_FILTER)
     public <E extends BaseEntity> List<E> query(String text, Class<E> entity, String[] properties) {
         // get the full text entity manager
         FullTextEntityManager fullTextEntityManager
@@ -62,10 +66,6 @@ public class QueryService {
         // wrap Lucene query in an Hibernate Query object
         org.hibernate.search.jpa.FullTextQuery jpaQuery
                 = fullTextEntityManager.createFullTextQuery(query, entity);
-
-
-        //TODO Mandant prüfen
-        //jpaQuery.setFilter(getFilter(readTenantOid()));
 
 
         // execute search and return results (sorted by relevance as default)

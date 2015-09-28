@@ -81,7 +81,7 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
 
     @Override
     public List<Buerger> queryBuerger(String query) {
-        return client.queryBuerger(query);
+        return client.findFullTextFuzzy(query);
     }
 
     @Override

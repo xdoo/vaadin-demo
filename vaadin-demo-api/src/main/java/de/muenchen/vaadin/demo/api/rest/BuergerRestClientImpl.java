@@ -12,9 +12,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
 
-import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,6 +27,8 @@ import java.util.stream.Collectors;
  */
 public class BuergerRestClientImpl implements BuergerRestClient {
 
+    public static final String FIND_FULL_TEXT_FUZZY = "findFullTextFuzzy";
+    public static final String SEARCH = "search";
     /**
      * Used to follow HATEOAS relations.
      */
@@ -79,20 +81,10 @@ public class BuergerRestClientImpl implements BuergerRestClient {
     }
 
     @Override
-    public List<Buerger> queryBuerger(String filter) {
-        URI uri = UriBuilder
-                .fromPath(traverson.follow(BUERGERS)
-                        .follow("find")
-                        .asLink().getHref())
-                .queryParam("s", filter).build();
-
-        System.out.println("BuergerRestClientImpl uri sieht so aus: " + uri.toString());
-
-        return restTemplate
-                .exchange(uri, HttpMethod.GET, null, BuergerResource.LIST)
-                .getBody()
-                .getContent()
-
+    public List<Buerger> findFullTextFuzzy(String filter) {
+        return traverson.follow(BUERGERS, SEARCH, FIND_FULL_TEXT_FUZZY)
+                .withTemplateParameters(Collections.singletonMap("q", filter))
+                .toObject(BuergerResource.LIST).getContent()
                 .stream()
                 .map(buergerAssembler::toBean)
                 .collect(Collectors.toList());
