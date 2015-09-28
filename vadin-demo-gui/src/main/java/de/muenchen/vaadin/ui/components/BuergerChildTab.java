@@ -62,7 +62,7 @@ public class BuergerChildTab extends CustomComponent implements Consumer<Event<C
         delete.setVisible(false);
 
         grid = controller.getViewFactory().generateChildTable(navigateToForDetail);
-        grid.setColumnOrder("vorname", "nachname", "geburtsdatum");
+        grid.setColumns(Buerger.Field.getProperties());
         grid.addSelectionListener(selectionEvent -> setButtonVisability());
 
         // set headers

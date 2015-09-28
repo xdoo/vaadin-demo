@@ -79,7 +79,7 @@ public class BuergerPartnerTab extends CustomComponent implements Consumer<Event
         delete.setVisible(false);
 
         grid = controller.getViewFactory().generatePartnerTable(navigateToForDetail);
-        grid.setColumnOrder("vorname", "nachname", "geburtsdatum");
+        grid.setColumns(Buerger.Field.getProperties());
         grid.addSelectionListener(selectionEvent -> setButtonVisability());
 
         // set headers

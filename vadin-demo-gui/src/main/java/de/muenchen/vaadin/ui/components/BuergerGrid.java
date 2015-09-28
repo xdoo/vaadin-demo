@@ -53,9 +53,7 @@ public class BuergerGrid extends CustomComponent {
         createDelete();
         createCopy();
 
-        grid.setColumnOrder("vorname", "nachname", "geburtsdatum");
-        grid.removeColumn("id");
-        grid.removeColumn("links");
+        grid.setColumns(Buerger.Field.getProperties());
         grid.setSizeFull();
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
 
@@ -130,8 +128,6 @@ public class BuergerGrid extends CustomComponent {
                     BeanItem<Buerger> item = (BeanItem<Buerger>) grid.getContainerDataSource().getItem(next);
                     AppEvent event = controller.buildAppEvent(EventType.COPY).setItem(item);
                     controller.postEvent(event);
-
-                    LOG.debug("item copied");
                 }
                 refresh();
             }
@@ -145,10 +141,10 @@ public class BuergerGrid extends CustomComponent {
             if (grid.getSelectedRows() != null) {
                 for (Object next : grid.getSelectedRows()) {
                     BeanItem<Buerger> item = (BeanItem<Buerger>) grid.getContainerDataSource().getItem(next);
+
                     AppEvent event = controller.buildAppEvent(EventType.DELETE).setItem(item);
                     controller.postEvent(event);
                     grid.deselect(next);
-                    LOG.debug("item deleted");
                 }
             }
         });
