@@ -367,9 +367,9 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 		registerToAppEvent(EventType.COPY_BUERGER, this::copyEventHandler);
 		registerToAppEvent(EventType.QUERY_BUERGER, this::queryEventHandler);
 		registerToAppEvent(EventType.QUERY_CHILD, this::queryChildEventHandler);
-		registerToAppEvent(EventType.SAVE_CHILD, this::saveChildEventHandler);
+		registerToAppEvent(EventType.SAVE_AND_ADD_CHILD, this::saveChildEventHandler);
 		registerToAppEvent(EventType.SAVE_PARTNER, this::savePartnerEventHandler);
-		registerToAppEvent(EventType.SAVE_AS_CHILD, this::saveAsChildEventHandler);
+		registerToAppEvent(EventType.SAVE_CHILD, this::saveAsChildEventHandler);
 		registerToAppEvent(EventType.ADD_CHILD, this::addSearchedChildEventHandler);
 		registerToAppEvent(EventType.RELEASE_KIND, this::releaseKindHandler);
 		registerToAppEvent(EventType.RELEASE_PARTNER, this::releasePartnerHandler);
@@ -537,7 +537,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 		// Service Operation ausführen
 		this.saveBuergerKind(event.getEntity());
 
-		postEvent(buildComponentEvent(EventType.SAVE_CHILD).addEntity(event.getEntity()));
+		postEvent(buildComponentEvent(EventType.SAVE_AND_ADD_CHILD).addEntity(event.getEntity()));
 
 		GenericSuccessNotification succes = new GenericSuccessNotification(
 				resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.save, Type.label)),

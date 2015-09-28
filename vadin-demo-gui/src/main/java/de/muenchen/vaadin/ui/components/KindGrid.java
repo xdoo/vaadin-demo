@@ -26,7 +26,7 @@ public class KindGrid extends GenericGrid<Buerger> {
         //super.accept(eventWrapper);
         ComponentEvent event = eventWrapper.getData();
 
-        if(event.getEventType().equals(EventType.SAVE_CHILD)) {
+        if(event.getEventType().equals(EventType.SAVE_AND_ADD_CHILD)) {
             this.add(event.getEntity());
         }
         if(event.getEventType().equals(EventType.DELETE_BUERGER)) {

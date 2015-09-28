@@ -76,7 +76,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
     public BuergerCreateForm generateCreateChildForm(String navigateTo) {
         LOG.debug("creating 'create child' buerger form");
         if(!createChildForm.isPresent()){
-            BuergerCreateForm form = new BuergerCreateForm(controller, navigateTo, EventType.SAVE_CHILD);
+            BuergerCreateForm form = new BuergerCreateForm(controller, navigateTo, EventType.SAVE_AND_ADD_CHILD);
             createChildForm=Optional.of(form);}
         return createChildForm.get();
     }
@@ -145,7 +145,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
             childSearchTable.get().removeColumn("links");
             childSearchTable.get().addItemClickListener(itemClickEvent -> {
                 if (itemClickEvent.isDoubleClick()) {
-                    controller.postEvent(controller.buildAppEvent(EventType.SAVE_AS_CHILD).setItem((BeanItem<Buerger>) itemClickEvent.getItem()));
+                    controller.postEvent(controller.buildAppEvent(EventType.SAVE_CHILD).setItem((BeanItem<Buerger>) itemClickEvent.getItem()));
                 }
             });
         }

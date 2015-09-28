@@ -19,9 +19,9 @@ public enum EventType {
     COPY_BUERGER,
     QUERY_BUERGER,
 
-    SAVE_CHILD,
+    SAVE_AND_ADD_CHILD,
     UPDATE_CHILD,
-    SAVE_AS_CHILD,
+    SAVE_CHILD,
     RELEASE_KIND,
     ADD_CHILD,
     QUERY_CHILD,
