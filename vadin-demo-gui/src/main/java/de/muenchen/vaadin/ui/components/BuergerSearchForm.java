@@ -33,7 +33,7 @@ public class BuergerSearchForm extends CustomComponent {
         reset.setStyleName(ValoTheme.BUTTON_ICON_ONLY);
         reset.setClickShortcut(ShortcutAction.KeyCode.ESCAPE);
         reset.addClickListener(e -> {
-            controller.postEvent(controller.buildAppEvent(EventType.QUERY));
+            controller.postEvent(controller.buildAppEvent(EventType.QUERY_BUERGER));
             query.setValue("");
         });
         reset.setId(String.format("%s_RESET_BUTTON", BuergerViewController.I18N_BASE_PATH));
@@ -43,7 +43,7 @@ public class BuergerSearchForm extends CustomComponent {
         search.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         search.addClickListener(e -> {
             if(query.getValue()!=null&&query.getValue().length()>0)
-                controller.postEvent(controller.buildAppEvent(EventType.QUERY).query(query.getValue()));
+                controller.postEvent(controller.buildAppEvent(EventType.QUERY_BUERGER).query(query.getValue()));
             else
                 reset.click();
         });

@@ -104,7 +104,7 @@ public class BuergerReadForm extends CustomComponent implements Consumer<Event<C
         // die Schaltfläche zum Bearbeiten
         ActionButton updateButton = new ActionButton(controller, SimpleAction.update,this.navigateToUpdate);
         updateButton.addClickListener(clickEvent -> {
-            controller.postEvent(controller.buildAppEvent(EventType.SELECT2UPDATE).setEntity(this.binder.getItemDataSource().getBean()).setItem(binder.getItemDataSource()));
+            controller.postEvent(controller.buildAppEvent(EventType.SELECT_TO_EDIT).setEntity(this.binder.getItemDataSource().getBean()).setItem(binder.getItemDataSource()));
             controller.getNavigator().navigateTo(navigateToUpdate);
         });
         buttonLayout.addComponent(updateButton);
@@ -115,7 +115,7 @@ public class BuergerReadForm extends CustomComponent implements Consumer<Event<C
     public void accept(reactor.bus.Event<ComponentEvent<Buerger>> eventWrapper) {
         ComponentEvent event = eventWrapper.getData();
 
-        if (event.getEventType().equals(EventType.SELECT2READ)) {
+        if (event.getEventType().equals(EventType.SELECT_TO_READ)) {
             LOG.debug("seleted buerger to modify.");
             Optional<BeanItem<Buerger>> opt = event.getItem();
             if (opt.isPresent()) {

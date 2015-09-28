@@ -37,12 +37,12 @@ public class BuergerChildTab extends CustomComponent implements Consumer<Event<C
 
         ActionButton create = new ActionButton(controller, SimpleAction.create,navigateToForCreate);
         create.addClickListener(clickEvent -> {
-            controller.postEvent(controller.buildAppEvent(EventType.CREATE));
+            controller.postEvent(controller.buildAppEvent(EventType.CREATE_BUERGER));
             controller.getNavigator().navigateTo(navigateToForCreate);
         });
         ActionButton add = new ActionButton(controller, SimpleAction.add,"");
         add.addClickListener(clickEvent ->
-                        controller.postEvent(controller.buildAppEvent(EventType.ADD_SEARCHED_CHILD))
+                        controller.postEvent(controller.buildAppEvent(EventType.ADD_CHILD))
         );
 
         delete = new ActionButton(controller, SimpleAction.delete, null);
@@ -101,7 +101,7 @@ public class BuergerChildTab extends CustomComponent implements Consumer<Event<C
     @Override
     public void accept(reactor.bus.Event<ComponentEvent<Buerger>> componentEventWrapper) {
         ComponentEvent event = componentEventWrapper.getData();
-        if (event.getEventType().equals(EventType.SELECT2READ)) {
+        if (event.getEventType().equals(EventType.SELECT_TO_READ)) {
             LOG.debug("seleted buerger to show childs.");
             Optional<BeanItem<Buerger>> opt = event.getItem();
             if (opt.isPresent()) {

@@ -126,7 +126,7 @@ public class BuergerUpdateForm extends CustomComponent implements Consumer<Event
             try {
                 binder.commit();
                 Buerger buerger = binder.getItemDataSource().getBean();
-                controller.postEvent(controller.buildAppEvent(EventType.UPDATE).setEntity(buerger));
+                controller.postEvent(controller.buildAppEvent(EventType.UPDATE_BUERGER).setEntity(buerger));
                 getNavigator().navigateTo(getNavigateTo());
             } catch (FieldGroup.CommitException e) {
                 GenericErrorNotification error = new GenericErrorNotification(controller.resolveRelative(getNotificationPath(I18nPaths.NotificationType.failure, SimpleAction.save, Type.label)),
@@ -148,7 +148,7 @@ public class BuergerUpdateForm extends CustomComponent implements Consumer<Event
     public void accept(reactor.bus.Event<ComponentEvent<Buerger>> eventWrapper) {
         ComponentEvent event = eventWrapper.getData();
 
-        if (event.getEventType().equals(EventType.SELECT2UPDATE)) {
+        if (event.getEventType().equals(EventType.SELECT_TO_EDIT)) {
             LOG.debug("seleted buerger to modify.");
             Optional<BeanItem<Buerger>> opt = event.getItem();
             if (opt.isPresent()) {

@@ -29,7 +29,7 @@ public class KindGrid extends GenericGrid<Buerger> {
         if(event.getEventType().equals(EventType.SAVE_CHILD)) {
             this.add(event.getEntity());
         }
-        if(event.getEventType().equals(EventType.DELETE)) {
+        if(event.getEventType().equals(EventType.DELETE_BUERGER)) {
             this.delete(event.getItemID());
         }
         if(event.getEventType().equals(EventType.UPDATE_CHILD)) {

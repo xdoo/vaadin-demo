@@ -101,7 +101,7 @@ public class AuditingServiceProducer {
                     MUCAudited annotation = eventEntity.getClass().getAnnotation(MUCAudited.class);
                     if (shouldBeAudited(MUCAudited.READ, annotation)) {
                         //noinspection unchecked
-                        eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(AUDIT_READ, eventEntity)));
+                        eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(READ_AUDIT, eventEntity)));
                     }
                 });
         registry.getEventListenerGroup(EventType.POST_DELETE)
@@ -116,7 +116,7 @@ public class AuditingServiceProducer {
                         MUCAudited annotation = eventEntity.getClass().getAnnotation(MUCAudited.class);
                         if (shouldBeAudited(MUCAudited.DELETE, annotation)) {
                             //noinspection unchecked
-                            eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(AUDIT_DELETE, eventEntity)));
+                            eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(DELETE_AUDIT, eventEntity)));
                         }
                     }
 
@@ -137,7 +137,7 @@ public class AuditingServiceProducer {
                         MUCAudited annotation = eventEntity.getClass().getAnnotation(MUCAudited.class);
                         if (shouldBeAudited(MUCAudited.CREATE, annotation)) {
                             //noinspection unchecked
-                            eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(AUDIT_CREATE, eventEntity)));
+                            eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(CREATE_AUDIT, eventEntity)));
                         }
                     }
 
@@ -158,7 +158,7 @@ public class AuditingServiceProducer {
                         MUCAudited annotation = eventEntity.getClass().getAnnotation(MUCAudited.class);
                         if (shouldBeAudited(MUCAudited.UPDATE, annotation)) {
                             //noinspection unchecked
-                            eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(AUDIT_UPDATE, eventEntity)));
+                            eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(UPDATE_AUDIT, eventEntity)));
                         }
                     }
 

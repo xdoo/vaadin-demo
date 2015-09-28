@@ -70,23 +70,23 @@ public class GenericGrid<T> extends Grid implements Consumer<Event<ComponentEven
     public void accept(reactor.bus.Event<ComponentEvent<T>> eventWrapper) {
         ComponentEvent event = eventWrapper.getData();
 
-        if (EventType.SAVE.equals(event.getEventType())) {
+        if (EventType.SAVE_BUERGER.equals(event.getEventType())) {
             this.add(event.getEntity());
         }
 
-        if (EventType.COPY.equals(event.getEventType())) {
+        if (EventType.COPY_BUERGER.equals(event.getEventType())) {
             this.add(event.getEntity());
         }
 
-        if (EventType.DELETE.equals(event.getEventType())) {
+        if (EventType.DELETE_BUERGER.equals(event.getEventType())) {
             this.delete(event.getItemID());
         }
 
-        if (EventType.UPDATE.equals(event.getEventType())) {
+        if (EventType.UPDATE_BUERGER.equals(event.getEventType())) {
             this.add(event.getEntity());
         }
 
-        if (EventType.QUERY.equals(event.getEventType())) {
+        if (EventType.QUERY_BUERGER.equals(event.getEventType())) {
             this.addAll(event.getEntities());
         }
     }

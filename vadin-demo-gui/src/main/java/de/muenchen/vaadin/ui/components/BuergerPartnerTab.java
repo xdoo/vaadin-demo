@@ -38,11 +38,11 @@ public class BuergerPartnerTab extends CustomComponent implements Consumer<Event
         ActionButton create = new ActionButton(controller, SimpleAction.create, navigateToForCreate);
         create.addClickListener(clickEvent -> {
             if (grid.getContainerDataSource().size() == 0) {
-                controller.postEvent(controller.buildAppEvent(EventType.CREATE));
+                controller.postEvent(controller.buildAppEvent(EventType.CREATE_BUERGER));
                 controller.getNavigator().navigateTo(navigateToForCreate);
             } else {
                 GenericConfirmationWindow window = new GenericConfirmationWindow(controller, SimpleAction.override, e -> {
-                    controller.postEvent(controller.buildAppEvent(EventType.CREATE));
+                    controller.postEvent(controller.buildAppEvent(EventType.CREATE_BUERGER));
                     controller.getNavigator().navigateTo(navigateToForCreate);
                 });
                 getUI().addWindow(window);
@@ -118,7 +118,7 @@ public class BuergerPartnerTab extends CustomComponent implements Consumer<Event
     @Override
     public void accept(reactor.bus.Event<ComponentEvent<Buerger>> eventWrapper) {
         ComponentEvent event = eventWrapper.getData();
-        if (event.getEventType().equals(EventType.SELECT2READ)) {
+        if (event.getEventType().equals(EventType.SELECT_TO_READ)) {
             LOG.debug("seleted buerger to show partner.");
             Optional<BeanItem<Buerger>> opt = event.getItem();
             if (opt.isPresent()) {

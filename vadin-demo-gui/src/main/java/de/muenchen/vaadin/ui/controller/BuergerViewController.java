@@ -359,18 +359,18 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 
 	public void initEventhandlers() {
 
-		registerToAppEvent(EventType.UPDATE, this::updateEventHandler);
-		registerToAppEvent(EventType.SAVE, this::saveEventHandler);
-		registerToAppEvent(EventType.DELETE, this::deleteEventHandler);
-		registerToAppEvent(EventType.SELECT2UPDATE, this::select2UpdateEventHandler);
-		registerToAppEvent(EventType.SELECT2READ, this::select2ReadEventHandler);
-		registerToAppEvent(EventType.COPY, this::copyEventHandler);
-		registerToAppEvent(EventType.QUERY, this::queryEventHandler);
+		registerToAppEvent(EventType.UPDATE_BUERGER, this::updateEventHandler);
+		registerToAppEvent(EventType.SAVE_BUERGER, this::saveEventHandler);
+		registerToAppEvent(EventType.DELETE_BUERGER, this::deleteEventHandler);
+		registerToAppEvent(EventType.SELECT_TO_EDIT, this::select2UpdateEventHandler);
+		registerToAppEvent(EventType.SELECT_TO_READ, this::select2ReadEventHandler);
+		registerToAppEvent(EventType.COPY_BUERGER, this::copyEventHandler);
+		registerToAppEvent(EventType.QUERY_BUERGER, this::queryEventHandler);
 		registerToAppEvent(EventType.QUERY_CHILD, this::queryChildEventHandler);
 		registerToAppEvent(EventType.SAVE_CHILD, this::saveChildEventHandler);
 		registerToAppEvent(EventType.SAVE_PARTNER, this::savePartnerEventHandler);
 		registerToAppEvent(EventType.SAVE_AS_CHILD, this::saveAsChildEventHandler);
-		registerToAppEvent(EventType.ADD_SEARCHED_CHILD, this::addSearchedChildEventHandler);
+		registerToAppEvent(EventType.ADD_CHILD, this::addSearchedChildEventHandler);
 		registerToAppEvent(EventType.RELEASE_KIND, this::releaseKindHandler);
 		registerToAppEvent(EventType.RELEASE_PARTNER, this::releasePartnerHandler);
 		registerToAppEvent(EventType.SAVE_AS_PARTNER, this::saveAsPartnerEventHandler);
@@ -389,12 +389,12 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 				resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.release, Type.text, "partner")));
 		succes.show(Page.getCurrent());
 
-		postEvent(buildComponentEvent(EventType.DELETE).setItemID(event.getEntity()));
+		postEvent(buildComponentEvent(EventType.DELETE_BUERGER).setItemID(event.getEntity()));
 	}
 
 	private void addPartnerEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
 		navigator.getUI().addWindow(new TableSelectWindow(this, getViewFactory().generateBuergerPartnerSearchTable()));
-		postEvent(buildAppEvent(EventType.QUERY));
+		postEvent(buildAppEvent(EventType.QUERY_BUERGER));
 	}
 
 	private void saveAsPartnerEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
@@ -418,13 +418,13 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 				resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.release, Type.text, "child")));
 		succes.show(Page.getCurrent());
 
-		postEvent(buildComponentEvent(EventType.DELETE).setItemID(event.getEntity()));
+		postEvent(buildComponentEvent(EventType.DELETE_BUERGER).setItemID(event.getEntity()));
 
 	}
 
 	private void addSearchedChildEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
 		navigator.getUI().addWindow(new TableSelectWindow(this, getViewFactory().generateChildSearchTable()));
-		postEvent(buildAppEvent(EventType.QUERY));
+		postEvent(buildAppEvent(EventType.QUERY_BUERGER));
 	}
 
 	private void saveAsChildEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
@@ -456,7 +456,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 		}
 
 		// UI Komponenten aktualisieren
-		postEvent(buildComponentEvent(EventType.QUERY).addEntities(currentEntities));
+		postEvent(buildComponentEvent(EventType.QUERY_BUERGER).addEntities(currentEntities));
 	}
 
 	private void select2ReadEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
@@ -465,7 +465,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 		this.current = event.getItem();
 
 		// UI Komponente aktualisieren
-		postEvent(buildComponentEvent(EventType.SELECT2READ).addEntity(event.getItem().getBean()));
+		postEvent(buildComponentEvent(EventType.SELECT_TO_READ).addEntity(event.getItem().getBean()));
 
 
 	}
@@ -480,7 +480,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 		this.current = event.getItem();
 
 		// UI Komponenten aktualisieren
-		postEvent(buildComponentEvent(EventType.SELECT2UPDATE).addEntity(event.getItem().getBean()));
+		postEvent(buildComponentEvent(EventType.SELECT_TO_EDIT).addEntity(event.getItem().getBean()));
 
 	}
 
@@ -491,7 +491,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 		Buerger copy = this.copyBuerger(event.getEntity().getId());
 
 		// UI Komponenten aktualisieren
-		postEvent(buildComponentEvent(EventType.COPY).addEntity(copy));
+		postEvent(buildComponentEvent(EventType.COPY_BUERGER).addEntity(copy));
 
 		GenericSuccessNotification succes = new GenericSuccessNotification(
 				resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.copy, Type.label)),
@@ -508,7 +508,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 		try {
 			this.deleteBuerger(event.getEntity());
 			// UI Komponenten aktualisieren
-			ComponentEvent<Buerger> componentEvent = buildComponentEvent(EventType.DELETE);
+			ComponentEvent<Buerger> componentEvent = buildComponentEvent(EventType.DELETE_BUERGER);
 			componentEvent.setItemID(event.getEntity());
 			postEvent(componentEvent);
 			resultNotification = new GenericSuccessNotification(
@@ -566,7 +566,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 		Buerger newBuerger = this.save(event.getEntity());
 
 		// UI Komponenten aktualisieren
-		postEvent(buildComponentEvent(EventType.SAVE).addEntity(newBuerger));
+		postEvent(buildComponentEvent(EventType.SAVE_BUERGER).addEntity(newBuerger));
 
 		GenericSuccessNotification succes = new GenericSuccessNotification(
 				resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.save, Type.label)),
@@ -582,7 +582,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 		this.updateBuerger(event.getEntity());
 
 		// UI Komponenten aktualisieren
-		postEvent(buildComponentEvent(EventType.UPDATE).addEntity(event.getEntity()));
+		postEvent(buildComponentEvent(EventType.UPDATE_BUERGER).addEntity(event.getEntity()));
 
 
 		GenericSuccessNotification succes = new GenericSuccessNotification(

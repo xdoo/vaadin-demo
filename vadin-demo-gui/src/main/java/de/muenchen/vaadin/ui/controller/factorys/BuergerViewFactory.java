@@ -68,7 +68,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
     public BuergerCreateForm generateCreateForm(String navigateTo) {
         LOG.debug("creating 'create' buerger form");
         if(!createForm.isPresent()){
-            BuergerCreateForm form = new BuergerCreateForm(controller, navigateTo, EventType.SAVE);
+            BuergerCreateForm form = new BuergerCreateForm(controller, navigateTo, EventType.SAVE_BUERGER);
             createForm = Optional.of(form);}
         return createForm.get();
     }
@@ -121,7 +121,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
         if(!updateForm.isPresent()){
             BuergerUpdateForm form = new BuergerUpdateForm(controller, navigateTo, navigateBack);
             controller.registerToAllComponentEvents(form);
-            controller.postEvent(controller.buildComponentEvent(EventType.SELECT2UPDATE).addEntity(controller.getCurrent().getBean()));
+            controller.postEvent(controller.buildComponentEvent(EventType.SELECT_TO_EDIT).addEntity(controller.getCurrent().getBean()));
 
             updateForm=Optional.of(form);}
         return updateForm.get();
@@ -133,7 +133,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
             BuergerReadForm form = new BuergerReadForm(controller, navigateToUpdate, navigateBack);
             controller.registerToAllComponentEvents(form);
             readForm=Optional.of(form);}
-        controller.postEvent(controller.buildComponentEvent(EventType.SELECT2READ).addEntity(controller.getCurrent().getBean()));
+        controller.postEvent(controller.buildComponentEvent(EventType.SELECT_TO_READ).addEntity(controller.getCurrent().getBean()));
         return readForm.get();
     }
 
@@ -177,7 +177,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
         table.addItemClickListener(itemClickEvent -> {
             if (itemClickEvent.getPropertyId() != null) {
                 if (itemClickEvent.isDoubleClick()) {
-                    controller.postEvent(controller.buildAppEvent(EventType.SELECT2READ).setItem((BeanItem<Buerger>) itemClickEvent.getItem()));
+                    controller.postEvent(controller.buildAppEvent(EventType.SELECT_TO_READ).setItem((BeanItem<Buerger>) itemClickEvent.getItem()));
                     controller.getNavigator().navigateTo(navigateToForDetail);
                     return;
                 }
@@ -210,7 +210,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
         table.addItemClickListener(itemClickEvent -> {
             if (itemClickEvent.getPropertyId() != null) {
                 if (itemClickEvent.isDoubleClick()) {
-                    controller.postEvent(controller.buildAppEvent(EventType.SELECT2READ).setItem((BeanItem<Buerger>) itemClickEvent.getItem()));
+                    controller.postEvent(controller.buildAppEvent(EventType.SELECT_TO_READ).setItem((BeanItem<Buerger>) itemClickEvent.getItem()));
                     controller.getNavigator().navigateTo(navigateToForDetail);
                     return;
                 }
