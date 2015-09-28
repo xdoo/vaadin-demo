@@ -51,8 +51,7 @@ public class BuergerSearchController {
                 .of(Buerger.class.getDeclaredFields())
                 .filter(field -> field.isAnnotationPresent(org.hibernate.search.annotations.Field.class))
                 .map(Field::getName)
-                .collect(Collectors.toList())
-                .toArray(new String[1]);
+                .toArray(size -> new String[size]);
 
         Stream<Buerger> buergerStream;
         try {
