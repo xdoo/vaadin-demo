@@ -6,6 +6,7 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -146,5 +147,5 @@ public interface BuergerRepository extends CrudRepository<Buerger, Long> {
 
     @PreAuthorize("hasRole('ROLE_READ_Buerger')")
     @PostFilter(TenantService.IS_TENANT_FILTER)
-    List<Buerger> findBuergerByGeburtsdatum(@Param("geburtsdatum") Date geburtsdatum);
+    List<Buerger> findBuergerByGeburtsdatum(@Param("geburtsdatum") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date geburtsdatum);
 }
