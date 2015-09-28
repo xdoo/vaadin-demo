@@ -8,19 +8,11 @@ package de.muenchen.demo.service.util;
 
 import de.muenchen.demo.service.domain.BaseEntity;
 import de.muenchen.demo.service.security.TenantService;
-import org.apache.lucene.index.Term;
-import org.apache.lucene.search.Filter;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.QueryWrapperFilter;
-import org.apache.lucene.search.TermQuery;
-import org.hibernate.search.filter.impl.CachingWrapperFilter;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.query.dsl.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -70,16 +62,5 @@ public class QueryService {
 
         // execute search and return results (sorted by relevance as default)
         return jpaQuery.getResultList();
-    }
-
-    private String readTenantOid() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        final String currentTenantId = tenantService.getCurrentTenantId(authentication);
-        return currentTenantId;
-    }
-
-    public Filter getFilter(String tenant) {
-        Query query = new TermQuery(new Term("mandant", tenant));
-        return new CachingWrapperFilter(new QueryWrapperFilter(query));
     }
 }
