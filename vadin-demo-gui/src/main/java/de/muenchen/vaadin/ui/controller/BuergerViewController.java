@@ -263,14 +263,14 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 	/**
 	 * Zerstört die Verbindung zwischen einem Bürger und seinem Kind
 	 *
-	 * @param event
+	 * @param kind
 	 */
-	private void releaseKind(Buerger event) {
+	private void releaseKind(Buerger kind) {
 		Link link = current.getBean().getLink(Buerger.Rel.kinder.name());
 		List<Link> kinder = service.findAll(link)
 				.stream()
 				.map(Buerger::getId)
-				.filter(id -> !id.equals(event.getId()))
+				.filter(id -> !id.equals(kind.getId()))
 				.collect(Collectors.toList());
 
 		service.setRelations(link, kinder);
@@ -371,7 +371,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 		registerToAppEvent(EventType.SAVE_PARTNER, this::savePartnerEventHandler);
 		registerToAppEvent(EventType.SAVE_CHILD, this::saveAsChildEventHandler);
 		registerToAppEvent(EventType.ADD_CHILD, this::addSearchedChildEventHandler);
-		registerToAppEvent(EventType.RELEASE_KIND, this::releaseKindHandler);
+		registerToAppEvent(EventType.RELEASE_CHILD, this::releaseKindHandler);
 		registerToAppEvent(EventType.RELEASE_PARTNER, this::releasePartnerHandler);
 		registerToAppEvent(EventType.SAVE_AS_PARTNER, this::saveAsPartnerEventHandler);
 		registerToAppEvent(EventType.ADD_PARTNER, this::addPartnerEventHandler);
@@ -404,7 +404,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 				resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.add, Type.label, "partner")),
 				resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.add, Type.text, "partner")));
 		succes.show(Page.getCurrent());
-		postEvent(buildComponentEvent(EventType.UPDATE_PARTNER).addEntity(event.getEntity()));
+		postEvent(buildComponentEvent(EventType.SAVE_AS_PARTNER).addEntity(event.getEntity()));
 	}
 
 	private void releaseKindHandler(Event<AppEvent<Buerger>> eventWrapper) {
@@ -435,7 +435,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 				resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.add, Type.label, "child")),
 				resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.add, Type.text, "child")));
 		succes.show(Page.getCurrent());
-		postEvent(buildComponentEvent(EventType.UPDATE_CHILD).addEntity(event.getEntity()));
+		postEvent(buildComponentEvent(EventType.SAVE_CHILD).addEntity(event.getEntity()));
 	}
 
 	private void queryChildEventHandler(Event<AppEvent<Buerger>> eventWrapper) {

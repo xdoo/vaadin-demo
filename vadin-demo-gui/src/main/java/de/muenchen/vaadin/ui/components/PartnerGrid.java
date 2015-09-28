@@ -39,7 +39,7 @@ public class PartnerGrid extends GenericGrid<Buerger> {
             this.delete(event.getItemID());
         }
 
-        if (event.getEventType().equals(EventType.UPDATE_PARTNER)) {
+        if (event.getEventType().equals(EventType.SAVE_AS_PARTNER)) {
             getContainerDataSource().removeAllItems();
             this.add(event.getEntity());
         }

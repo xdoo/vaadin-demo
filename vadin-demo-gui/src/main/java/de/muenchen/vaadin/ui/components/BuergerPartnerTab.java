@@ -38,11 +38,9 @@ public class BuergerPartnerTab extends CustomComponent implements Consumer<Event
         ActionButton create = new ActionButton(controller, SimpleAction.create, navigateToForCreate);
         create.addClickListener(clickEvent -> {
             if (grid.getContainerDataSource().size() == 0) {
-                controller.postEvent(controller.buildAppEvent(EventType.CREATE_BUERGER));
                 controller.getNavigator().navigateTo(navigateToForCreate);
             } else {
                 GenericConfirmationWindow window = new GenericConfirmationWindow(controller, SimpleAction.override, e -> {
-                    controller.postEvent(controller.buildAppEvent(EventType.CREATE_BUERGER));
                     controller.getNavigator().navigateTo(navigateToForCreate);
                 });
                 getUI().addWindow(window);

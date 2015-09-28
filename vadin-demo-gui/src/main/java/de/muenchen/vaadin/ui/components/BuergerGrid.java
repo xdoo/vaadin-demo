@@ -165,7 +165,6 @@ public class BuergerGrid extends CustomComponent {
     private void createCreate() {
         create = new ActionButton(controller, SimpleAction.create, BuergerCreateView.NAME);
         create.addClickListener(clickEvent -> {
-            controller.postEvent(controller.buildAppEvent(EventType.CREATE_BUERGER));
             controller.getNavigator().navigateTo(BuergerCreateView.NAME);
         });
         create.setVisible(Boolean.TRUE);

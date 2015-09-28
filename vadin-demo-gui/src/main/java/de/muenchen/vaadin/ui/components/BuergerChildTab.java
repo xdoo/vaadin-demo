@@ -37,7 +37,6 @@ public class BuergerChildTab extends CustomComponent implements Consumer<Event<C
 
         ActionButton create = new ActionButton(controller, SimpleAction.create,navigateToForCreate);
         create.addClickListener(clickEvent -> {
-            controller.postEvent(controller.buildAppEvent(EventType.CREATE_BUERGER));
             controller.getNavigator().navigateTo(navigateToForCreate);
         });
         ActionButton add = new ActionButton(controller, SimpleAction.add,"");
@@ -52,7 +51,7 @@ public class BuergerChildTab extends CustomComponent implements Consumer<Event<C
                 for (Object next : grid.getSelectedRows()) {
                     BeanItem<Buerger> item = (BeanItem<Buerger>) grid.getContainerDataSource().getItem(next);
 
-                    AppEvent event = controller.buildAppEvent(EventType.RELEASE_KIND).setItem(item).setItemId(controller.getCurrent());
+                    AppEvent event = controller.buildAppEvent(EventType.RELEASE_CHILD).setItem(item).setItemId(controller.getCurrent());
                     controller.postEvent(event);
                     grid.deselect(next);
                     LOG.debug("item deleted");

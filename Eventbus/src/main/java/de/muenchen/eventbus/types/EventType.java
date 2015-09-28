@@ -6,13 +6,11 @@ package de.muenchen.eventbus.types;
  */
 public enum EventType {
     // GUI Specific Events
-    REFRESH,
     LOGIN,
     LOGOUT,
     ////
 
     // Buerger Events
-    CREATE_BUERGER,
     UPDATE_BUERGER,
     SAVE_BUERGER,
     DELETE_BUERGER,
@@ -20,14 +18,12 @@ public enum EventType {
     QUERY_BUERGER,
 
     SAVE_AND_ADD_CHILD,
-    UPDATE_CHILD,
     SAVE_CHILD,
-    RELEASE_KIND,
+    RELEASE_CHILD,
     ADD_CHILD,
     QUERY_CHILD,
 
     SAVE_AS_PARTNER,
-    UPDATE_PARTNER,
     SAVE_PARTNER,
     RELEASE_PARTNER,
     ADD_PARTNER,

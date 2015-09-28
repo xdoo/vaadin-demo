@@ -23,7 +23,6 @@ public class BuergerSearchTable extends CustomComponent {
     public BuergerSearchTable(final BuergerViewController controller, String navigateToForCreate) {
         ActionButton create = new ActionButton(controller, SimpleAction.create,navigateToForCreate);
         create.addClickListener(clickEvent -> {
-            controller.postEvent(controller.buildAppEvent(EventType.CREATE_BUERGER));
             controller.getNavigator().navigateTo(navigateToForCreate);
         });
 
