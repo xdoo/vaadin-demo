@@ -5,7 +5,7 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.TabSheet;
 import de.muenchen.eventbus.EventBus;
-import de.muenchen.eventbus.events.RefreshEvent;
+import de.muenchen.eventbus.oldEvents.RefreshEvent;
 import de.muenchen.eventbus.types.EventType;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.guilib.components.GenericGrid;

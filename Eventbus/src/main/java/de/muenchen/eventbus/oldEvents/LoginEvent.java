@@ -1,16 +1,18 @@
-package de.muenchen.eventbus.events;
+package de.muenchen.eventbus.oldEvents;
+
 
 /**
- * Created by fabian.holtkoetter on 01.09.15.
+ *
+ * @author claus
  */
-public class RefreshEvent extends Event {
+public class LoginEvent extends Event {
+
     @Override
     public boolean equals(Object o){
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
         return true;
-
     }
 
     @Override

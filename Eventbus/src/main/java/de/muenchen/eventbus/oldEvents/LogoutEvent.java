@@ -1,4 +1,4 @@
-package de.muenchen.eventbus.events;
+package de.muenchen.eventbus.oldEvents;
 
 /**
  * Created by maximilian.zollbrecht on 19.08.15.

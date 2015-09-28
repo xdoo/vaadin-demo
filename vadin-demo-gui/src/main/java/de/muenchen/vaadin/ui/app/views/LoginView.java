@@ -12,7 +12,7 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.eventbus.events.LoginEvent;
+import de.muenchen.eventbus.oldEvents.LoginEvent;
 import de.muenchen.vaadin.demo.apilib.services.SecurityService;
 import de.muenchen.vaadin.guilib.components.GenericNotification;
 import de.muenchen.vaadin.guilib.components.GenericWarningNotification;

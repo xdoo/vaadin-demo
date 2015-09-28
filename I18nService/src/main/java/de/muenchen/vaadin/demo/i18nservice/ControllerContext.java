@@ -1,8 +1,8 @@
 package de.muenchen.vaadin.demo.i18nservice;
 
 import com.vaadin.server.FontAwesome;
-import de.muenchen.eventbus.events.AppEvent;
-import de.muenchen.eventbus.events.ComponentEvent;
+import de.muenchen.eventbus.oldEvents.AppEvent;
+import de.muenchen.eventbus.oldEvents.ComponentEvent;
 import de.muenchen.eventbus.types.EventType;
 
 /**

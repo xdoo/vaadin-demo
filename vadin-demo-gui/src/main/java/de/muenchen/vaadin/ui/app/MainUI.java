@@ -16,7 +16,7 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.eventbus.events.*;
+import de.muenchen.eventbus.oldEvents.*;
 import de.muenchen.eventbus.types.EventType;
 import de.muenchen.vaadin.demo.apilib.domain.BaseEntity;
 import de.muenchen.vaadin.demo.apilib.services.SecurityService;

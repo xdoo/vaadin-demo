@@ -8,8 +8,8 @@ import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
-import de.muenchen.eventbus.events.AppEvent;
-import de.muenchen.eventbus.events.ComponentEvent;
+import de.muenchen.eventbus.oldEvents.AppEvent;
+import de.muenchen.eventbus.oldEvents.ComponentEvent;
 import de.muenchen.eventbus.types.EventType;
 import de.muenchen.vaadin.demo.api.domain.BuergerDTO;
 import de.muenchen.vaadin.demo.api.local.Buerger;
@@ -31,6 +31,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
 import reactor.bus.Event;
 import reactor.bus.EventBus;
+import reactor.bus.selector.Selectors;
 import reactor.fn.Consumer;
 
 import javax.annotation.PostConstruct;
@@ -41,7 +42,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.*;
-import static reactor.bus.selector.Selectors.object;
 
 /**
  * Der Controller ist die zentrale Klasse um die Logik im Kontext BuergerDTO abzubilden.
@@ -172,7 +172,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 	}
 
 	public void registerToAppEvent(EventType type, Consumer<Event<AppEvent<Buerger>>> consumer) {
-		getEventbus().on(object(buildAppEvent(type)), consumer);
+		getEventbus().on(Selectors.object(buildAppEvent(type)), consumer);
 	}
 
 	public void registerToAllAppEvents(Consumer<Event<AppEvent<Buerger>>> consumer) {
@@ -180,7 +180,7 @@ public class BuergerViewController implements Serializable, ControllerContext<Bu
 	}
 
 	public void registerToComponentEvent(EventType type, Consumer<Event<ComponentEvent<Buerger>>> consumer) {
-		getEventbus().on(object(buildComponentEvent(type)), consumer);
+		getEventbus().on(Selectors.object(buildComponentEvent(type)), consumer);
 	}
 
 	public void registerToAllComponentEvents(Consumer<Event<ComponentEvent<Buerger>>> consumer) {

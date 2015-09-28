@@ -1,7 +1,7 @@
 package de.muenchen.demo.service.util.events;
 
 import de.muenchen.demo.service.domain.User;
-import de.muenchen.eventbus.events.ServiceEvent;
+import de.muenchen.eventbus.oldEvents.ServiceEvent;
 import de.muenchen.eventbus.types.EventType;
 
 /**

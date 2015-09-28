@@ -2,7 +2,7 @@ package de.muenchen.vaadin.guilib.components;
 
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.Grid;
-import de.muenchen.eventbus.events.ComponentEvent;
+import de.muenchen.eventbus.oldEvents.ComponentEvent;
 import de.muenchen.eventbus.types.EventType;
 import de.muenchen.vaadin.demo.i18nservice.ControllerContext;
 import org.slf4j.Logger;

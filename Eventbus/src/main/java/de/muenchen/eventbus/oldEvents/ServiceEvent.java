@@ -1,4 +1,4 @@
-package de.muenchen.eventbus.events;
+package de.muenchen.eventbus.oldEvents;
 
 import de.muenchen.eventbus.types.EventType;
 

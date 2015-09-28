@@ -5,7 +5,7 @@
  */
 package de.muenchen.vaadin.ui.components;
 
-import de.muenchen.eventbus.events.ComponentEvent;
+import de.muenchen.eventbus.oldEvents.ComponentEvent;
 import de.muenchen.eventbus.types.EventType;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.guilib.components.GenericGrid;
