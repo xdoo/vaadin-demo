@@ -12,7 +12,11 @@ package de.muenchen.eventbus.selector;
 public class RequestKey extends BaseKey {
 
     public enum RequestEvent{
-        CREATE, UPDATE, DELETE, READ_CURRENT, READ_LIST
+        CREATE,
+        UPDATE,
+        DELETE,
+        READ_SELECTED,
+        READ_LIST
     }
 
     private final RequestEvent requestEvent;
