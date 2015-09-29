@@ -3,10 +3,15 @@ package de.muenchen.auditing;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.eventbus.EventBus;
-import de.muenchen.eventbus.selector.RequestKey;
 import de.muenchen.eventbus.types.RequestEvent;
 import org.hibernate.event.service.spi.EventListenerRegistry;
-import org.hibernate.event.spi.*;
+import org.hibernate.event.spi.EventType;
+import org.hibernate.event.spi.PostCommitDeleteEventListener;
+import org.hibernate.event.spi.PostCommitInsertEventListener;
+import org.hibernate.event.spi.PostCommitUpdateEventListener;
+import org.hibernate.event.spi.PostDeleteEvent;
+import org.hibernate.event.spi.PostInsertEvent;
+import org.hibernate.event.spi.PostUpdateEvent;
 import org.hibernate.internal.SessionFactoryImpl;
 import org.hibernate.jpa.HibernateEntityManagerFactory;
 import org.hibernate.persister.entity.EntityPersister;
@@ -23,9 +28,7 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import static de.muenchen.eventbus.types.EventType.*;
 import static reactor.bus.selector.Selectors.$;
-import static reactor.bus.selector.Selectors.T;
 
 /**
  * AuditingServiceProducer registriert sich mit Listener auf Änderungen der Datenbank um bei Änderungenszugriffen Userdaten zu speichern.

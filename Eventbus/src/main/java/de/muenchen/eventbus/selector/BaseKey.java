@@ -1,8 +1,5 @@
 package de.muenchen.eventbus.selector;
 
-import com.vaadin.data.util.BeanItem;
-import de.muenchen.eventbus.types.EventType;
-
 /**
  * Created by claus.straube on 28.09.15.
  * fabian.holtkoetter ist unschuldig.
