@@ -4,7 +4,7 @@ import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.Grid;
 import de.muenchen.eventbus.oldEvents.ComponentEvent;
 import de.muenchen.eventbus.types.EventType;
-import de.muenchen.vaadin.demo.i18nservice.ControllerContext;
+import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.bus.Event;
@@ -29,7 +29,7 @@ public class GenericGrid<T> extends Grid implements Consumer<Event<ComponentEven
      * @param controller  the controller
      * @param entityClass the entity class
      */
-    public GenericGrid(final ControllerContext controller, Class<T> entityClass) {
+    public GenericGrid(final I18nResolver controller, Class<T> entityClass) {
         this.setContainerDataSource(new BeanItemContainer<>(entityClass));
     }
 

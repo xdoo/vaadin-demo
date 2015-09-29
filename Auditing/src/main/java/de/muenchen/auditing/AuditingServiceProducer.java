@@ -3,6 +3,8 @@ package de.muenchen.auditing;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.eventbus.EventBus;
+import de.muenchen.eventbus.selector.RequestKey;
+import de.muenchen.eventbus.types.RequestEvent;
 import org.hibernate.event.service.spi.EventListenerRegistry;
 import org.hibernate.event.spi.*;
 import org.hibernate.internal.SessionFactoryImpl;
@@ -22,6 +24,7 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 import static de.muenchen.eventbus.types.EventType.*;
+import static reactor.bus.selector.Selectors.$;
 import static reactor.bus.selector.Selectors.T;
 
 /**
@@ -44,18 +47,6 @@ public class AuditingServiceProducer {
         queue = new EntitySaveQueue();
         this.init();
         new Thread(new AuditingServiceConsumer(auditingUserRepository, queue)).start();
-    }
-
-    public void eventHandler(Event<AuditingEvent> eventWrapper) {
-        AuditingEvent event = eventWrapper.getData();
-
-        AuditingUserEntity entity = new AuditingUserEntity();
-        entity.setUsername(getCurrentUsername());
-        entity.setDate(new Date(System.currentTimeMillis()));
-        entity.setChangeType(event.getEventType().name());
-        entity.setEntity(marshallEntityToJSON(event));
-
-        queue.put(entity);
     }
 
     private String getCurrentUsername() {
@@ -81,8 +72,20 @@ public class AuditingServiceProducer {
     }
 
     public void init() {
-        this.eventbus.on(T(AuditingEvent.class), this::eventHandler);
+        this.eventbus.on($(AuditingEvent.class), this::eventHandler);
         this.registerListeners();
+    }
+
+    private void eventHandler(Event<AuditingEvent> event) {
+        AuditingEvent audEvent = event.getData();
+
+        AuditingUserEntity entity = new AuditingUserEntity();
+        entity.setUsername(getCurrentUsername());
+        entity.setDate(new Date(System.currentTimeMillis()));
+        entity.setChangeType(audEvent.getEventType().name());
+        entity.setEntity(marshallEntityToJSON(audEvent));
+
+        queue.put(entity);
     }
 
     private void registerListeners() {
@@ -101,7 +104,7 @@ public class AuditingServiceProducer {
                     MUCAudited annotation = eventEntity.getClass().getAnnotation(MUCAudited.class);
                     if (shouldBeAudited(MUCAudited.READ, annotation)) {
                         //noinspection unchecked
-                        eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(READ_AUDIT, eventEntity)));
+                        eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(RequestEvent.READ_LIST, eventEntity)));
                     }
                 });
         registry.getEventListenerGroup(EventType.POST_DELETE)
@@ -116,7 +119,7 @@ public class AuditingServiceProducer {
                         MUCAudited annotation = eventEntity.getClass().getAnnotation(MUCAudited.class);
                         if (shouldBeAudited(MUCAudited.DELETE, annotation)) {
                             //noinspection unchecked
-                            eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(DELETE_AUDIT, eventEntity)));
+                            eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(RequestEvent.DELETE, eventEntity)));
                         }
                     }
 
@@ -137,7 +140,7 @@ public class AuditingServiceProducer {
                         MUCAudited annotation = eventEntity.getClass().getAnnotation(MUCAudited.class);
                         if (shouldBeAudited(MUCAudited.CREATE, annotation)) {
                             //noinspection unchecked
-                            eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(CREATE_AUDIT, eventEntity)));
+                            eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(RequestEvent.CREATE, eventEntity)));
                         }
                     }
 
@@ -158,7 +161,7 @@ public class AuditingServiceProducer {
                         MUCAudited annotation = eventEntity.getClass().getAnnotation(MUCAudited.class);
                         if (shouldBeAudited(MUCAudited.UPDATE, annotation)) {
                             //noinspection unchecked
-                            eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(UPDATE_AUDIT, eventEntity)));
+                            eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(RequestEvent.UPDATE, eventEntity)));
                         }
                     }
 

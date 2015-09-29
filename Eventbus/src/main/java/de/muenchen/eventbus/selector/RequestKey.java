@@ -1,4 +1,7 @@
 package de.muenchen.eventbus.selector;
+
+import de.muenchen.eventbus.types.RequestEvent;
+
 /**
  * Stellt einen Key bereit, der einen Produzenten darüber Benachrichtigt, dass Daten benötigt werden.
  *
@@ -10,14 +13,6 @@ package de.muenchen.eventbus.selector;
  * @version 0.00000001
  */
 public class RequestKey extends BaseKey {
-
-    public enum RequestEvent{
-        CREATE,
-        UPDATE,
-        DELETE,
-        READ_SELECTED,
-        READ_LIST
-    }
 
     private final RequestEvent requestEvent;
 

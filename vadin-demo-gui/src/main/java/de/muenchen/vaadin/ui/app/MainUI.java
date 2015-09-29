@@ -20,7 +20,7 @@ import de.muenchen.eventbus.oldEvents.*;
 import de.muenchen.eventbus.types.EventType;
 import de.muenchen.vaadin.demo.apilib.domain.BaseEntity;
 import de.muenchen.vaadin.demo.apilib.services.SecurityService;
-import de.muenchen.vaadin.demo.i18nservice.ControllerContext;
+import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.ValoMenuLayout;
 import de.muenchen.vaadin.guilib.components.GenericConfirmationWindow;
@@ -45,7 +45,7 @@ import static reactor.bus.selector.Selectors.object;
 @Theme("valo")
 @PreserveOnRefresh
 //@Widgetset("de.muenchen.vaadin.Widgetset")
-public class MainUI extends UI implements ControllerContext{
+public class MainUI extends UI implements I18nResolver {
 
     private static final Logger LOG = LoggerFactory.getLogger(MainUI.class);
 

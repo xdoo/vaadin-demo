@@ -4,6 +4,7 @@ import de.muenchen.vaadin.demo.api.local.Buerger;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Created by claus.straube on 29.09.15.
@@ -11,9 +12,11 @@ import java.util.Map;
  */
 public interface BuergerReadOnlyModel {
 
-    public Buerger getSelectedBuerger();
+    Optional<Buerger> getSelectedBuerger();
 
-    public Map<String, List<Buerger>> getSelectedBuergerAssociations();
+    Map<String, List<Buerger>> getSelectedBuergerAssociations();
 
-    public List<Buerger> getBuerger();
+    List<Buerger> getBuerger();
+
+    Optional<String> getQuery();
 }

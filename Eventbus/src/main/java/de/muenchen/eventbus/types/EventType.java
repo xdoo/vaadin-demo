@@ -32,11 +32,4 @@ public enum EventType {
     SELECT_TO_EDIT,
     SELECT_TO_READ,
     ////
-
-    // Auditing Events
-    READ_AUDIT,
-    CREATE_AUDIT,
-    UPDATE_AUDIT,
-    DELETE_AUDIT
-    ////
 }

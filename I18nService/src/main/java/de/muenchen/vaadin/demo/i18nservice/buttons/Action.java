@@ -1,7 +1,7 @@
 package de.muenchen.vaadin.demo.i18nservice.buttons;
 
 import com.vaadin.server.FontAwesome;
-import de.muenchen.vaadin.demo.i18nservice.ControllerContext;
+import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 
 import java.util.HashSet;
@@ -49,6 +49,6 @@ public interface Action extends I18nPaths.I18nPath {
      * @param context
      * @return the String identifier.
      */
-    String getID(String navigateTo, ControllerContext context);
+    String getID(String navigateTo, I18nResolver context);
 
 }
