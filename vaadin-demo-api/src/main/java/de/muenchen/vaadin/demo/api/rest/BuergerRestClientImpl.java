@@ -10,6 +10,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
@@ -75,11 +76,14 @@ public class BuergerRestClientImpl implements BuergerRestClient {
     @Override
     public Optional<Buerger> findOne(Link link) {
         URI uri = URI.create(link.getHref());
-        BuergerResource resource = restTemplate
-                .exchange(uri, HttpMethod.GET, null, BuergerResource.class)
-                .getBody();
-
-        return Optional.of(buergerAssembler.toBean(resource));
+        try {
+            BuergerResource resource = restTemplate
+                    .exchange(uri, HttpMethod.GET, null, BuergerResource.class)
+                    .getBody();
+            return Optional.of(buergerAssembler.toBean(resource));
+        } catch (HttpClientErrorException e){
+            return Optional.empty();
+        }
     }
 
     @Override

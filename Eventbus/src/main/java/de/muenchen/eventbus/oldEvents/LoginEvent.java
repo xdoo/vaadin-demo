@@ -5,7 +5,7 @@ package de.muenchen.eventbus.oldEvents;
  *
  * @author claus
  */
-public class LoginEvent extends Event {
+public class LoginEvent{
 
     @Override
     public boolean equals(Object o){

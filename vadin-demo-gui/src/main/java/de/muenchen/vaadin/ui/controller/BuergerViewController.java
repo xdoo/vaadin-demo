@@ -5,20 +5,14 @@ import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import de.muenchen.eventbus.Util.Association;
-import de.muenchen.eventbus.oldEvents.AppEvent;
-import de.muenchen.eventbus.oldEvents.ComponentEvent;
 import de.muenchen.eventbus.selector.RequestKey;
 import de.muenchen.eventbus.selector.ResponseKey;
-import de.muenchen.eventbus.types.EventType;
 import de.muenchen.eventbus.types.RequestEvent;
 import de.muenchen.vaadin.demo.api.local.Buerger;
-import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
-import de.muenchen.vaadin.guilib.components.GenericFailureNotification;
 import de.muenchen.vaadin.guilib.components.GenericSuccessNotification;
 import de.muenchen.vaadin.guilib.services.MessageService;
 import de.muenchen.vaadin.guilib.util.VaadinUtil;
@@ -26,14 +20,11 @@ import de.muenchen.vaadin.services.BuergerService;
 import de.muenchen.vaadin.services.model.BuergerModel;
 import de.muenchen.vaadin.services.model.BuergerReadOnlyModel;
 import de.muenchen.vaadin.ui.app.MainUI;
-import de.muenchen.vaadin.ui.app.views.TableSelectWindow;
 import de.muenchen.vaadin.ui.controller.factorys.BuergerViewFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.client.HttpClientErrorException;
 import reactor.bus.Event;
 import reactor.bus.EventBus;
 
@@ -123,7 +114,7 @@ public class BuergerViewController implements Serializable, I18nResolver {
         return eventbus;
     }
 
-    private BuergerReadOnlyModel getROModel() {
+    public BuergerReadOnlyModel getReadOnlyModel() {
         return model;
     }
 
@@ -182,7 +173,7 @@ public class BuergerViewController implements Serializable, I18nResolver {
     }
 
     public Buerger queryPartner(Buerger entity) {
-        return service.findOne(entity.getLink(Buerger.Rel.partner.name())).get();
+        return service.findOne(entity.getLink(Buerger.Rel.partner.name())).orElse(null);
     }
 
 
@@ -311,6 +302,9 @@ public class BuergerViewController implements Serializable, I18nResolver {
         if (data instanceof Buerger) {
             final Buerger buerger = (Buerger) event.getData();
             getModel().setSelectedBuerger(buerger);
+            refreshModelSelected();
+            refreshModelAssociations();
+        } else if(data==null){
             refreshModelSelected();
             refreshModelAssociations();
         } else {

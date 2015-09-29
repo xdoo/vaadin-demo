@@ -16,8 +16,10 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.eventbus.oldEvents.*;
-import de.muenchen.eventbus.types.EventType;
+import de.muenchen.eventbus.oldEvents.LoginEvent;
+import de.muenchen.eventbus.oldEvents.LogoutEvent;
+import de.muenchen.eventbus.selector.RequestKey;
+import de.muenchen.eventbus.types.RequestEvent;
 import de.muenchen.vaadin.demo.apilib.domain.BaseEntity;
 import de.muenchen.vaadin.demo.apilib.services.SecurityService;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
@@ -167,6 +169,7 @@ public class MainUI extends UI implements I18nResolver {
             }
         });
 
+        //TODO
         eventBus.on(object(new LoginEvent()), this::loginEventHandler);
         eventBus.on(object(new LogoutEvent()),this::logoutEventHandler);
 
@@ -223,7 +226,7 @@ public class MainUI extends UI implements I18nResolver {
         MenuBar.Command languageSelection = selectedItem -> i18n.getSupportedLocales().stream().forEach(locale -> {
             if (selectedItem.getText().equals(locale.getDisplayLanguage())) {
                 i18n.setLocale(locale);
-                postEvent(new RefreshEvent());
+                //postEvent(new RefreshEvent());
             }
         });
 
@@ -264,7 +267,7 @@ public class MainUI extends UI implements I18nResolver {
                     new GenericConfirmationWindow(MainUI.this,
                             SimpleAction.logout,
                             e -> {
-                                this.postEvent(new LogoutEvent());
+                                //this.postEvent(new LogoutEvent());
                             });
             getUI().addWindow(confirmationWindow);
             confirmationWindow.center();
@@ -288,19 +291,8 @@ public class MainUI extends UI implements I18nResolver {
         return null;
     }
 
-    @Override
     public void postEvent(Object event) {
         eventBus.notify(event, wrap(event));
-    }
-
-    @Override
-    public AppEvent<? extends BaseEntity> buildAppEvent(EventType eventType) {
-        return null;
-    }
-
-    @Override
-    public ComponentEvent buildComponentEvent(EventType eventType) {
-        return null;
     }
 
     @Override

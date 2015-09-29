@@ -5,38 +5,24 @@
  */
 package de.muenchen.vaadin.ui.components;
 
-import de.muenchen.eventbus.oldEvents.ComponentEvent;
-import de.muenchen.eventbus.types.EventType;
 import de.muenchen.vaadin.demo.api.local.Buerger;
-import de.muenchen.vaadin.guilib.components.GenericGrid;
+import de.muenchen.vaadin.services.model.BuergerReadOnlyModel;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
 /**
  *
  * @author maximilian.schug
  */
-public class KindGrid extends GenericGrid<Buerger> {
+public class KindGrid extends GenericGrid {
 
     public KindGrid(BuergerViewController controller) {
         super(controller, Buerger.class);
     }
 
     @Override
-    public void accept(reactor.bus.Event<ComponentEvent<Buerger>> eventWrapper) {
+    public void accept(reactor.bus.Event<BuergerReadOnlyModel> eventWrapper) {
         //super.accept(eventWrapper);
-        ComponentEvent event = eventWrapper.getData();
-
-        if(event.getEventType().equals(EventType.SAVE_AND_ADD_CHILD)) {
-            this.add(event.getEntity());
-        }
-        if(event.getEventType().equals(EventType.DELETE_BUERGER)) {
-            this.delete(event.getItemID());
-        }
-        if(event.getEventType().equals(EventType.SAVE_CHILD)) {
-            this.add(event.getEntity());
-        }
-        if(event.getEventType().equals(EventType.QUERY_CHILD)) {
-            this.addAll(event.getEntities());
-        }
+        BuergerReadOnlyModel event = eventWrapper.getData();
+        addAll(event.getSelectedBuergerAssociations().get(Buerger.Rel.kinder.name()));
     }
 }

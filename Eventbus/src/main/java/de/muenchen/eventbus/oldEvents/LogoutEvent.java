@@ -3,7 +3,7 @@ package de.muenchen.eventbus.oldEvents;
 /**
  * Created by maximilian.zollbrecht on 19.08.15.
  */
-public class LogoutEvent extends Event {
+public class LogoutEvent{
     @Override
     public boolean equals(Object o){
         if (this == o) return true;

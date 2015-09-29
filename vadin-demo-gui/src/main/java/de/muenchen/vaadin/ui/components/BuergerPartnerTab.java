@@ -4,28 +4,20 @@ import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
-import de.muenchen.eventbus.oldEvents.AppEvent;
-import de.muenchen.eventbus.oldEvents.ComponentEvent;
-import de.muenchen.eventbus.types.EventType;
+import de.muenchen.eventbus.types.RequestEvent;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.GenericConfirmationWindow;
-import de.muenchen.vaadin.guilib.components.GenericGrid;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
-import reactor.bus.Event;
-import reactor.fn.Consumer;
-
-import java.util.Optional;
 
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getEntityFieldPath;
-import static de.muenchen.vaadin.ui.components.BuergerReadForm.LOG;
 
 /**
  * @author Maximilian Schug
  */
-public class BuergerPartnerTab extends CustomComponent implements Consumer<Event<ComponentEvent<Buerger>>> {
+public class BuergerPartnerTab extends CustomComponent {
 
     private BuergerViewController controller;
     private GenericGrid grid;
@@ -51,26 +43,24 @@ public class BuergerPartnerTab extends CustomComponent implements Consumer<Event
         ActionButton add = new ActionButton(controller, SimpleAction.add, navigateToForAdd);
         add.addClickListener(clickEvent -> {
             if (grid.getContainerDataSource().size() == 0) {
-                controller.postEvent(controller.buildAppEvent(EventType.ADD_PARTNER));
+                //TODO navigator.getUI().addWindow(new TableSelectWindow(this, getViewFactory().generateBuergerPartnerSearchTable()));
+                //controller.postEvent(controller.buildAppEvent(EventType.ADD_PARTNER));
             } else {
-                GenericConfirmationWindow window = new GenericConfirmationWindow(controller, SimpleAction.override, e -> controller.postEvent(controller.buildAppEvent(EventType.ADD_PARTNER)));
-                getUI().addWindow(window);
-                window.center();
-                window.focus();
+//                GenericConfirmationWindow window = new GenericConfirmationWindow(controller, SimpleAction.override, e -> controller.postEvent(controller.buildAppEvent(EventType.ADD_PARTNER)));
+//                getUI().addWindow(window);
+//                window.center();
+//                window.focus();
             }
         });
 
 
         delete = new ActionButton(controller, SimpleAction.delete, null);
         delete.addClickListener(clickEvent -> {
-            LOG.debug("deleting selected items");
             if (grid.getSelectedRows() != null) {
                 for (Object next : grid.getSelectedRows()) {
                     BeanItem<Buerger> item = (BeanItem<Buerger>) grid.getContainerDataSource().getItem(next);
-                    AppEvent event = controller.buildAppEvent(EventType.RELEASE_PARTNER).setItem(item).setItemId(item);
-                    controller.postEvent(event);
+                    controller.getEventbus().notify(controller.getRequestKey(RequestEvent.DELETE), reactor.bus.Event.wrap(item.getBean()));
                     grid.deselect(next);
-                    LOG.debug("item deleted");
                 }
             }
         });
@@ -111,20 +101,5 @@ public class BuergerPartnerTab extends CustomComponent implements Consumer<Event
 
     public void setGrid(GenericGrid grid) {
         this.grid = grid;
-    }
-
-    @Override
-    public void accept(reactor.bus.Event<ComponentEvent<Buerger>> eventWrapper) {
-        ComponentEvent event = eventWrapper.getData();
-        if (event.getEventType().equals(EventType.SELECT_TO_READ)) {
-            LOG.debug("seleted buerger to show partner.");
-            Optional<BeanItem<Buerger>> opt = event.getItem();
-            if (opt.isPresent()) {
-                Buerger entity = opt.get().getBean();
-                this.controller.postEvent(controller.buildAppEvent(EventType.QUERY_PARTNER).setEntity(entity));
-            } else {
-                LOG.warn("No item present.");
-            }
-        }
     }
 }

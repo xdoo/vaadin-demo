@@ -1,10 +1,13 @@
-package de.muenchen.vaadin.guilib.components;
+package de.muenchen.vaadin.ui.components;
 
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.Grid;
 import de.muenchen.eventbus.oldEvents.ComponentEvent;
 import de.muenchen.eventbus.types.EventType;
+import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
+import de.muenchen.vaadin.services.model.BuergerModel;
+import de.muenchen.vaadin.services.model.BuergerReadOnlyModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.bus.Event;
@@ -16,7 +19,7 @@ import java.util.Optional;
 /**
  * Created by arne.schoentag on 18.09.15.
  */
-public class GenericGrid<T> extends Grid implements Consumer<Event<ComponentEvent<T>>> {
+public class GenericGrid extends Grid implements Consumer<Event<BuergerReadOnlyModel>> {
 
     /**
      * The constant LOG.
@@ -29,7 +32,7 @@ public class GenericGrid<T> extends Grid implements Consumer<Event<ComponentEven
      * @param controller  the controller
      * @param entityClass the entity class
      */
-    public GenericGrid(final I18nResolver controller, Class<T> entityClass) {
+    public GenericGrid(final I18nResolver controller, Class<Buerger> entityClass) {
         this.setContainerDataSource(new BeanItemContainer<>(entityClass));
     }
 
@@ -38,7 +41,7 @@ public class GenericGrid<T> extends Grid implements Consumer<Event<ComponentEven
      *
      * @param entity the entity
      */
-    public void add(Optional<T> entity) {
+    public void add(Optional<Buerger> entity) {
         entity.ifPresent(getContainerDataSource()::addItem);
     }
 
@@ -47,7 +50,7 @@ public class GenericGrid<T> extends Grid implements Consumer<Event<ComponentEven
      *
      * @param entity the entity
      */
-    public void addAll(List<T> entity) {
+    public void addAll(List<Buerger> entity) {
         getContainerDataSource().removeAllItems();
         entity.forEach(getContainerDataSource()::addItem);
     }
@@ -67,27 +70,9 @@ public class GenericGrid<T> extends Grid implements Consumer<Event<ComponentEven
      * @param eventWrapper
      */
     @Override
-    public void accept(reactor.bus.Event<ComponentEvent<T>> eventWrapper) {
-        ComponentEvent event = eventWrapper.getData();
+    public void accept(reactor.bus.Event<BuergerReadOnlyModel> eventWrapper) {
+        BuergerReadOnlyModel event = eventWrapper.getData();
 
-        if (EventType.SAVE_BUERGER.equals(event.getEventType())) {
-            this.add(event.getEntity());
-        }
-
-        if (EventType.COPY_BUERGER.equals(event.getEventType())) {
-            this.add(event.getEntity());
-        }
-
-        if (EventType.DELETE_BUERGER.equals(event.getEventType())) {
-            this.delete(event.getItemID());
-        }
-
-        if (EventType.UPDATE_BUERGER.equals(event.getEventType())) {
-            this.add(event.getEntity());
-        }
-
-        if (EventType.QUERY_BUERGER.equals(event.getEventType())) {
-            this.addAll(event.getEntities());
-        }
+        this.addAll(event.getBuerger());
     }
 }

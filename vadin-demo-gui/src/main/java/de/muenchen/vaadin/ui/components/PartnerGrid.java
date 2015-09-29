@@ -5,48 +5,26 @@
  */
 package de.muenchen.vaadin.ui.components;
 
-import de.muenchen.eventbus.oldEvents.ComponentEvent;
-import de.muenchen.eventbus.types.EventType;
 import de.muenchen.vaadin.demo.api.local.Buerger;
-import de.muenchen.vaadin.guilib.components.GenericGrid;
+import de.muenchen.vaadin.services.model.BuergerReadOnlyModel;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
 /**
  *
  * @author maximilian.schug
  */
-public class PartnerGrid extends GenericGrid<Buerger> {
+public class PartnerGrid extends GenericGrid {
 
     public PartnerGrid(BuergerViewController controller) {
         super(controller, Buerger.class);
     }
 
     @Override
-    public void accept(reactor.bus.Event<ComponentEvent<Buerger>> eventWrapper) {
+    public void accept(reactor.bus.Event<BuergerReadOnlyModel> eventWrapper) {
         //super.accept(eventWrapper);
 
-        ComponentEvent event = eventWrapper.getData();
+        BuergerReadOnlyModel event = eventWrapper.getData();
 
-        if(event.getEventType().equals(EventType.SAVE_AS_PARTNER)) {
-            getContainerDataSource().removeAllItems();
-            this.add(event.getEntity());
-        }
-        if(event.getEventType().equals(EventType.SAVE_PARTNER)) {
-            getContainerDataSource().removeAllItems();
-            this.add(event.getEntity());
-        }
-        if(event.getEventType().equals(EventType.DELETE_BUERGER)) {
-            this.delete(event.getItemID());
-        }
-
-        if (event.getEventType().equals(EventType.SAVE_AS_PARTNER)) {
-            getContainerDataSource().removeAllItems();
-            this.add(event.getEntity());
-        }
-
-       if(event.getEventType().equals(EventType.QUERY_PARTNER)) {
-           getContainerDataSource().removeAllItems();
-            this.addAll(event.getEntities());
-        }
+        addAll(event.getSelectedBuergerAssociations().get(Buerger.Rel.kinder.name()));
     }
 }

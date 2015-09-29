@@ -1,26 +1,23 @@
 package de.muenchen.vaadin.ui.components;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
-import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.eventbus.oldEvents.ComponentEvent;
-import de.muenchen.eventbus.types.EventType;
+import de.muenchen.eventbus.types.RequestEvent;
 import de.muenchen.vaadin.demo.api.domain.Augenfarbe;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
+import de.muenchen.vaadin.services.model.BuergerReadOnlyModel;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.bus.Event;
 import reactor.fn.Consumer;
-
-import java.util.Optional;
 
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.*;
 
@@ -28,7 +25,7 @@ import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.*;
  *
  * @author claus
  */
-public class BuergerReadForm extends CustomComponent implements Consumer<Event<ComponentEvent<Buerger>>> {
+public class BuergerReadForm extends CustomComponent implements Consumer<Event<BuergerReadOnlyModel>> {
     
     /**
      * Logger
@@ -104,7 +101,7 @@ public class BuergerReadForm extends CustomComponent implements Consumer<Event<C
         // die Schaltfläche zum Bearbeiten
         ActionButton updateButton = new ActionButton(controller, SimpleAction.update,this.navigateToUpdate);
         updateButton.addClickListener(clickEvent -> {
-            controller.postEvent(controller.buildAppEvent(EventType.SELECT_TO_EDIT).setEntity(this.binder.getItemDataSource().getBean()).setItem(binder.getItemDataSource()));
+            controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED), reactor.bus.Event.wrap(binder.getItemDataSource().getBean()));
             controller.getNavigator().navigateTo(navigateToUpdate);
         });
         buttonLayout.addComponent(updateButton);
@@ -112,18 +109,9 @@ public class BuergerReadForm extends CustomComponent implements Consumer<Event<C
     }
 
     @Override
-    public void accept(reactor.bus.Event<ComponentEvent<Buerger>> eventWrapper) {
-        ComponentEvent event = eventWrapper.getData();
-
-        if (event.getEventType().equals(EventType.SELECT_TO_READ)) {
-            LOG.debug("seleted buerger to modify.");
-            Optional<BeanItem<Buerger>> opt = event.getItem();
-            if (opt.isPresent()) {
-                this.binder.setItemDataSource(opt.get());
-            } else {
-                LOG.warn("No item present.");
-            }
-        }
+    public void accept(reactor.bus.Event<BuergerReadOnlyModel> eventWrapper) {
+        BuergerReadOnlyModel event = eventWrapper.getData();
+        event.getSelectedBuerger().ifPresent(binder::setItemDataSource);
     }
 
     public String getNavigateBack() {

@@ -3,7 +3,7 @@ package de.muenchen.eventbus.oldEvents;
 /**
  * Created by fabian.holtkoetter on 01.09.15.
  */
-public class RefreshEvent extends Event {
+public class RefreshEvent{
     @Override
     public boolean equals(Object o){
         if (this == o) return true;
