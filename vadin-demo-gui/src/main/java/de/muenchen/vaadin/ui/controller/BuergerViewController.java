@@ -30,11 +30,15 @@ import reactor.bus.EventBus;
 
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.*;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.NotificationType;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Type;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getNotificationPath;
 import static reactor.bus.selector.Selectors.$;
 
 /**
@@ -211,7 +215,8 @@ public class BuergerViewController implements Serializable, I18nResolver {
             getModel().getSelectedBuerger().ifPresent(selectedBuerger -> {
                 if (selectedBuerger.equals(buerger)) {
                     getModel().setSelectedBuerger(null);
-                    getModel().getSelectedBuergerAssociations().clear();
+                    getModel().getSelectedBuergerKinder().clear();
+                    getModel().getSelectedBuergerPartner().clear();
                 }
             });
 
@@ -269,10 +274,10 @@ public class BuergerViewController implements Serializable, I18nResolver {
 
     private void refreshModelAssociations() {
         getModel().getSelectedBuerger().ifPresent(buerger -> {
-            final Map<String, List<Buerger>> associations = new HashMap<>();
-            associations.put(Buerger.Rel.kinder.name(), queryKinder(buerger));
-            associations.put(Buerger.Rel.partner.name(), Collections.singletonList(queryPartner(buerger)));
-            getModel().setSelectedBuergerAssociations(associations);
+            final List<Buerger> kinder = queryKinder(buerger);
+            final List<Buerger> partner = Collections.singletonList(queryPartner(buerger));
+            getModel().setSelectedBuergerKinder(kinder);
+            getModel().setSelectedBuergerPartner(partner);
         });
     }
 

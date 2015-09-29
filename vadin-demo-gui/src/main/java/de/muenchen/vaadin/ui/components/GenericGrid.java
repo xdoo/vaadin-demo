@@ -2,11 +2,8 @@ package de.muenchen.vaadin.ui.components;
 
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.Grid;
-import de.muenchen.eventbus.oldEvents.ComponentEvent;
-import de.muenchen.eventbus.types.EventType;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
-import de.muenchen.vaadin.services.model.BuergerModel;
 import de.muenchen.vaadin.services.model.BuergerReadOnlyModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

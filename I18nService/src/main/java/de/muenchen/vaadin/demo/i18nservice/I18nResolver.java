@@ -1,9 +1,6 @@
 package de.muenchen.vaadin.demo.i18nservice;
 
 import com.vaadin.server.FontAwesome;
-import de.muenchen.eventbus.oldEvents.AppEvent;
-import de.muenchen.eventbus.oldEvents.ComponentEvent;
-import de.muenchen.eventbus.types.EventType;
 
 /**
  * Interface to open up most important functionality of a Controller.

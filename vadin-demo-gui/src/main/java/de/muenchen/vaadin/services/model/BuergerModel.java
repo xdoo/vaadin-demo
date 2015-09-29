@@ -2,8 +2,8 @@ package de.muenchen.vaadin.services.model;
 
 import de.muenchen.vaadin.demo.api.local.Buerger;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -13,7 +13,8 @@ import java.util.Optional;
 public class BuergerModel implements BuergerReadOnlyModel{
     private Optional<Buerger> selectedBuerger;
 
-    private Map<String, List<Buerger>> selectedBuergerAssociations;
+    private List<Buerger> selectedBuergerKinder = new ArrayList<>();
+    private List<Buerger> selectedBuergerPartner = new ArrayList<>();
 
     private List<Buerger> buerger;
 
@@ -28,14 +29,6 @@ public class BuergerModel implements BuergerReadOnlyModel{
         this.selectedBuerger = Optional.ofNullable(selectedBuerger);
     }
 
-    @Override
-    public Map<String, List<Buerger>> getSelectedBuergerAssociations() {
-        return selectedBuergerAssociations;
-    }
-
-    public void setSelectedBuergerAssociations(Map<String, List<Buerger>> selectedBuergerAssociations) {
-        this.selectedBuergerAssociations = selectedBuergerAssociations;
-    }
 
     @Override
     public List<Buerger> getBuerger() {
@@ -53,5 +46,23 @@ public class BuergerModel implements BuergerReadOnlyModel{
 
     public void setQuery(String query) {
         this.query = Optional.ofNullable(query);
+    }
+
+    @Override
+    public List<Buerger> getSelectedBuergerPartner() {
+        return selectedBuergerPartner;
+    }
+
+    public void setSelectedBuergerPartner(List<Buerger> selectedBuergerPartner) {
+        this.selectedBuergerPartner = selectedBuergerPartner;
+    }
+
+    @Override
+    public List<Buerger> getSelectedBuergerKinder() {
+        return selectedBuergerKinder;
+    }
+
+    public void setSelectedBuergerKinder(List<Buerger> selectedBuergerKinder) {
+        this.selectedBuergerKinder = selectedBuergerKinder;
     }
 }

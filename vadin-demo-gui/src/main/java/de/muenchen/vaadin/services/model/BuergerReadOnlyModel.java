@@ -3,7 +3,6 @@ package de.muenchen.vaadin.services.model;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -14,9 +13,11 @@ public interface BuergerReadOnlyModel {
 
     Optional<Buerger> getSelectedBuerger();
 
-    Map<String, List<Buerger>> getSelectedBuergerAssociations();
-
     List<Buerger> getBuerger();
 
     Optional<String> getQuery();
+
+    List<Buerger> getSelectedBuergerPartner();
+
+    List<Buerger> getSelectedBuergerKinder();
 }

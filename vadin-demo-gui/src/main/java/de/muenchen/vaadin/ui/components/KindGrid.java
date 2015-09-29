@@ -23,6 +23,6 @@ public class KindGrid extends GenericGrid {
     public void accept(reactor.bus.Event<BuergerReadOnlyModel> eventWrapper) {
         //super.accept(eventWrapper);
         BuergerReadOnlyModel event = eventWrapper.getData();
-        addAll(event.getSelectedBuergerAssociations().get(Buerger.Rel.kinder.name()));
+        addAll(event.getSelectedBuergerKinder());
     }
 }
