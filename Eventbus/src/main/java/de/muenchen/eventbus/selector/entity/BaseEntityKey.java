@@ -1,4 +1,6 @@
-package de.muenchen.eventbus.selector;
+package de.muenchen.eventbus.selector.entity;
+
+import de.muenchen.eventbus.selector.EventBusKey;
 
 /**
  * Provides a simple ABC for an Key that is specific to the class of an entity.
@@ -6,7 +8,7 @@ package de.muenchen.eventbus.selector;
  * @author fabian.holtoetter p.mueller
  * @version 1.0
  */
-public abstract class BaseKey {
+public abstract class BaseEntityKey implements EventBusKey {
     /**
      * The class of the entity the key is for.
      */
@@ -17,7 +19,7 @@ public abstract class BaseKey {
      * The class cannot be null.
      * @param entityClass The non-null class of an Entity.
      */
-    public BaseKey(Class entityClass) {
+    public BaseEntityKey(Class entityClass) {
         if(entityClass==null)
             throw new IllegalArgumentException("EntityClass can't be null.");
         this.entityClass = entityClass;
@@ -28,9 +30,9 @@ public abstract class BaseKey {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        BaseKey baseKey = (BaseKey) o;
+        BaseEntityKey baseEntityKey = (BaseEntityKey) o;
 
-        return entityClass.equals(baseKey.entityClass);
+        return entityClass.equals(baseEntityKey.entityClass);
 
     }
 

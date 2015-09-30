@@ -4,19 +4,11 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.TabSheet;
 import de.muenchen.eventbus.EventBus;
-import de.muenchen.eventbus.Util.Association;
-import de.muenchen.eventbus.oldEvents.RefreshEvent;
-import de.muenchen.eventbus.types.RequestEvent;
+import de.muenchen.eventbus.events.Association;
+import de.muenchen.eventbus.selector.Keys;
+import de.muenchen.eventbus.selector.entity.RequestEvent;
 import de.muenchen.vaadin.demo.api.local.Buerger;
-import de.muenchen.vaadin.ui.components.BuergerChildTab;
-import de.muenchen.vaadin.ui.components.BuergerCreateForm;
-import de.muenchen.vaadin.ui.components.BuergerGrid;
-import de.muenchen.vaadin.ui.components.BuergerPartnerTab;
-import de.muenchen.vaadin.ui.components.BuergerReadForm;
-import de.muenchen.vaadin.ui.components.BuergerUpdateForm;
-import de.muenchen.vaadin.ui.components.GenericGrid;
-import de.muenchen.vaadin.ui.components.KindGrid;
-import de.muenchen.vaadin.ui.components.PartnerGrid;
+import de.muenchen.vaadin.ui.components.*;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,14 +22,13 @@ import java.io.Serializable;
 import java.util.Optional;
 
 import static reactor.bus.selector.Selectors.$;
-import static reactor.bus.selector.Selectors.T;
 
 /**
  * Created by rene.zarwel on 26.08.15.
  */
 @Component
 @UIScope
-public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshEvent>> {
+public class BuergerViewFactory implements Serializable, Consumer<Event<?>> {
 
     /**
      * Logger
@@ -61,7 +52,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
 
     @PostConstruct
     public void init() {
-        eventBus.on(T(RefreshEvent.class), this);
+        eventBus.on($(Keys.REFRESH), this);
     }
 
 
@@ -151,7 +142,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
             childSearchTable.get().addItemClickListener(itemClickEvent -> {
                 if (itemClickEvent.isDoubleClick()) {
                     Association<Buerger> association = new Association<>((Buerger) itemClickEvent.getItemId(), Buerger.Rel.kinder.name());
-                    controller.getEventbus().notify(controller.getRequestKey(RequestEvent.ADD_ASSOCIATION), Event.wrap(association));
+                    controller.getEventbus().notify(controller.getRequestKey(RequestEvent.ADD_ASSOCIATION), association.asEvent());
                 }
             });
         }
@@ -168,7 +159,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
             partnerSearchTable.get().addItemClickListener(itemClickEvent -> {
                 if (itemClickEvent.isDoubleClick()) {
                     Association<Buerger> association = new Association<>((Buerger) itemClickEvent.getItemId(), Buerger.Rel.partner.name());
-                    controller.getEventbus().notify(controller.getRequestKey(RequestEvent.ADD_ASSOCIATION), Event.wrap(association));
+                    controller.getEventbus().notify(controller.getRequestKey(RequestEvent.ADD_ASSOCIATION), association.asEvent());
                 }
             });
         }
@@ -265,7 +256,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
     }
 
     @Override
-    public void accept(reactor.bus.Event<RefreshEvent> eventWrapper) {
+    public void accept(reactor.bus.Event<?> event) {
         LOG.debug("RefreshEvent received");
         childSearchTable = Optional.empty();
         childTab = Optional.empty();

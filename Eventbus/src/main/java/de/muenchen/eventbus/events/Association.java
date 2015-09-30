@@ -1,4 +1,6 @@
-package de.muenchen.eventbus.Util;
+package de.muenchen.eventbus.events;
+
+import reactor.bus.Event;
 
 /**
  * Provides a simple description for an Association of an Entity.
@@ -38,5 +40,14 @@ public class Association<T>{
      */
     public String getRel() {
         return rel;
+    }
+
+    /**
+     * Get the Assocation as an Event.
+     *
+     * @return The Event.
+     */
+    public Event<Association<T>> asEvent() {
+        return Event.wrap(this);
     }
 }

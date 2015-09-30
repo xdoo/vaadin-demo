@@ -14,9 +14,7 @@ import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.eventbus.oldEvents.LoginEvent;
-import de.muenchen.eventbus.oldEvents.LogoutEvent;
-import de.muenchen.eventbus.oldEvents.RefreshEvent;
+import de.muenchen.eventbus.selector.Keys;
 import de.muenchen.vaadin.demo.apilib.services.SecurityService;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
@@ -36,7 +34,7 @@ import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
 import static reactor.bus.Event.wrap;
-import static reactor.bus.selector.Selectors.object;
+import static reactor.bus.selector.Selectors.$;
 
 @SpringUI
 @Title("Vaadin Spring-Security Sample")
@@ -165,18 +163,16 @@ public class MainUI extends UI implements I18nResolver {
             }
         });
 
-        //TODO
-        eventBus.on(object(new LoginEvent()), this::loginEventHandler);
-        eventBus.on(object(new LogoutEvent()),this::logoutEventHandler);
-
+        eventBus.on($(Keys.LOGIN), this::loginEventHandler);
+        eventBus.on($(Keys.LOGOUT), this::logoutEventHandler);
     }
 
-    public void loginEventHandler(reactor.bus.Event<LoginEvent> eventWrapper) {
+    public void loginEventHandler(reactor.bus.Event<?> event) {
         this.root.switchOnMenu();
         getNavigator().navigateTo(MainView.NAME);
     }
 
-    public void logoutEventHandler(reactor.bus.Event<LogoutEvent> eventwrapper) {
+    public void logoutEventHandler(reactor.bus.Event<?> event) {
         this.root.switchOffMenu();
         security.logout();
 
@@ -222,7 +218,7 @@ public class MainUI extends UI implements I18nResolver {
         MenuBar.Command languageSelection = selectedItem -> i18n.getSupportedLocales().stream().forEach(locale -> {
             if (selectedItem.getText().equals(locale.getDisplayLanguage())) {
                 i18n.setLocale(locale);
-                postEvent(new RefreshEvent());
+                postEvent(Keys.REFRESH);
             }
         });
 
@@ -259,7 +255,7 @@ public class MainUI extends UI implements I18nResolver {
             GenericConfirmationWindow confirmationWindow =
                     new GenericConfirmationWindow(MainUI.this,
                             SimpleAction.logout,
-                            e -> this.postEvent(new LogoutEvent()));
+                            e -> this.postEvent(Keys.LOGOUT));
             getUI().addWindow(confirmationWindow);
             confirmationWindow.center();
             confirmationWindow.focus();

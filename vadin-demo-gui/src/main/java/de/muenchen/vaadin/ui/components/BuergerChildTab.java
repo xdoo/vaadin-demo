@@ -4,8 +4,8 @@ import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
-import de.muenchen.eventbus.Util.Association;
-import de.muenchen.eventbus.types.RequestEvent;
+import de.muenchen.eventbus.events.Association;
+import de.muenchen.eventbus.selector.entity.RequestEvent;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
@@ -46,7 +46,7 @@ public class BuergerChildTab extends CustomComponent {
                     BeanItem<Buerger> item = (BeanItem<Buerger>) grid.getContainerDataSource().getItem(next);
 
                     final Association<Buerger> association = new Association<>(item.getBean(), Buerger.Rel.kinder.name());
-                    controller.getEventbus().notify(controller.getRequestKey(RequestEvent.REMOVE_ASSOCIATION), reactor.bus.Event.wrap(association));
+                    controller.getEventbus().notify(controller.getRequestKey(RequestEvent.REMOVE_ASSOCIATION), association.asEvent());
                     grid.deselect(next);
                 }
             }

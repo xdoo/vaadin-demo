@@ -1,4 +1,4 @@
-package de.muenchen.eventbus.types;
+package de.muenchen.eventbus.selector.entity;
 
 /**
  * Provides a simple enum for all possible Events that can be requested on the Eventbus.

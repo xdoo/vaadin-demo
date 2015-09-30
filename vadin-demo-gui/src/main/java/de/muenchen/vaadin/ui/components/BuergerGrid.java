@@ -5,7 +5,7 @@ import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.eventbus.types.RequestEvent;
+import de.muenchen.eventbus.selector.entity.RequestEvent;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
@@ -16,7 +16,6 @@ import de.muenchen.vaadin.ui.app.views.BuergerUpdateView;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import reactor.bus.Event;
 
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getEntityFieldPath;
 

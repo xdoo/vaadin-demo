@@ -1,6 +1,4 @@
-package de.muenchen.eventbus.selector;
-
-import de.muenchen.eventbus.types.RequestEvent;
+package de.muenchen.eventbus.selector.entity;
 
 /**
  * Stellt einen Key bereit, der einen Produzenten darüber Benachrichtigt, dass Daten benötigt werden.
@@ -12,7 +10,7 @@ import de.muenchen.eventbus.types.RequestEvent;
  * @author fabian.holtkoetter
  * @version 1
  */
-public class RequestKey extends BaseKey {
+public class RequestEntityKey extends BaseEntityKey {
 
     /**
      * The specific Event that is requested.
@@ -20,12 +18,12 @@ public class RequestKey extends BaseKey {
     private final RequestEvent requestEvent;
 
     /**
-     * Create a new RequestKey with the desired RequestEvent and for the entity class.
+     * Create a new RequestEntityKey with the desired RequestEvent and for the entity class.
      *
      * @param requestEvent The requested Event.
      * @param entityClass The class of the entity the request is for.
      */
-    public RequestKey(RequestEvent requestEvent, Class entityClass) {
+    public RequestEntityKey(RequestEvent requestEvent, Class entityClass) {
         super(entityClass);
         if (requestEvent == null)
             throw new IllegalArgumentException("requestEvent can't be null.");
@@ -47,7 +45,7 @@ public class RequestKey extends BaseKey {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
 
-        RequestKey that = (RequestKey) o;
+        RequestEntityKey that = (RequestEntityKey) o;
 
         return getRequestEvent().equals(that.getRequestEvent());
 

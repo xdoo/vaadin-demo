@@ -1,6 +1,6 @@
 package de.muenchen.auditing;
 
-import de.muenchen.eventbus.types.RequestEvent;
+import de.muenchen.eventbus.selector.entity.RequestEvent;
 
 /**
  * Eigenes Event welches die Listener im Producer verschicken um die Sicherung der eingetroffenen Daten anzustoßen.

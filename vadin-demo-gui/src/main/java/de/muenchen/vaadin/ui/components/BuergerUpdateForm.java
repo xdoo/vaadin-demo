@@ -8,7 +8,7 @@ import com.vaadin.navigator.Navigator;
 import com.vaadin.server.Page;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.eventbus.types.RequestEvent;
+import de.muenchen.eventbus.selector.entity.RequestEvent;
 import de.muenchen.vaadin.demo.api.domain.Augenfarbe;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;

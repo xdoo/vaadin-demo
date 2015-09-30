@@ -1,4 +1,4 @@
-package de.muenchen.eventbus.selector;
+package de.muenchen.eventbus.selector.entity;
 
 /**
  * Stellt einen Schlüssel bereit, der einem Komsumenten die Möglichkeit gibt, bei bereitstehenden Daten benachrichtigt zu werden.
@@ -12,14 +12,14 @@ package de.muenchen.eventbus.selector;
  * @author fabian.holtkoetter
  * @version 1
  */
-public class ResponseKey extends BaseKey {
+public class ResponseEntityKey extends BaseEntityKey {
 
     /**
-     * Create a new ResponseKey on the class of an entity.
+     * Create a new ResponseEntityKey on the class of an entity.
      *
      * @param entityClass The class of the entity the key is for.
      */
-    public ResponseKey(Class entityClass) {
+    public ResponseEntityKey(Class entityClass) {
         super(entityClass);
     }
 }

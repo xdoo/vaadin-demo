@@ -6,10 +6,10 @@ import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.UI;
-import de.muenchen.eventbus.Util.Association;
-import de.muenchen.eventbus.selector.RequestKey;
-import de.muenchen.eventbus.selector.ResponseKey;
-import de.muenchen.eventbus.types.RequestEvent;
+import de.muenchen.eventbus.events.Association;
+import de.muenchen.eventbus.selector.entity.RequestEntityKey;
+import de.muenchen.eventbus.selector.entity.RequestEvent;
+import de.muenchen.eventbus.selector.entity.ResponseEntityKey;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
@@ -180,7 +180,7 @@ public class BuergerViewController implements Serializable, I18nResolver {
     /////////////////////
 
     /**
-     * Register all event handlers on the RequestKey.
+     * Register all event handlers on the RequestEntityKey.
      */
     public void initEventhandlers() {
         eventbus.on($(getRequestKey(RequestEvent.CREATE)), this::create);
@@ -194,7 +194,7 @@ public class BuergerViewController implements Serializable, I18nResolver {
 
     /**
      * Remove the specified Association from the specified Relation and update the DataStore.
-     * Update the Model and send it on the ResponseKey if necessary.
+     * Update the Model and send it on the ResponseEntityKey if necessary.
      *
      * @param event The event with an {@link Association} as {@link Event#getData()}.
      */
@@ -227,7 +227,7 @@ public class BuergerViewController implements Serializable, I18nResolver {
      * If the {@link Association#getAssociation()} has no {@link ResourceSupport#getId()} the Resouce will be created
      * on the DataStore first.
      * </p>
-     * Update the Model and send it on the ResponseKey if necessary.
+     * Update the Model and send it on the ResponseEntityKey if necessary.
      *
      * @param event The event with an {@link Association} as {@link Event#getData()}.
      */
@@ -255,7 +255,7 @@ public class BuergerViewController implements Serializable, I18nResolver {
 
     /**
      * Create a new Buerger on the DataStore.
-     * Update the Model and send it on the ResponseKey if necessary.
+     * Update the Model and send it on the ResponseEntityKey if necessary.
      *
      * @param event The event with an {@link Buerger} as {@link Event#getData()}.
      */
@@ -279,7 +279,7 @@ public class BuergerViewController implements Serializable, I18nResolver {
 
     /**
      * Delete the Buerger on the DataStore.
-     * Update the Model and send it on the ResponseKey if necessary.
+     * Update the Model and send it on the ResponseEntityKey if necessary.
      *
      * @param event The event with an {@link Buerger} as {@link Event#getData()}.
      */
@@ -313,7 +313,7 @@ public class BuergerViewController implements Serializable, I18nResolver {
 
     /**
      * Update the Buerger on the DataStore.
-     * Update the Model and send it on the ResponseKey if necessary.
+     * Update the Model and send it on the ResponseEntityKey if necessary.
      *
      * @param event The event with an {@link Buerger} as {@link Event#getData()}.
      */
@@ -374,7 +374,7 @@ public class BuergerViewController implements Serializable, I18nResolver {
 
     /**
      * Set the query based on the String sent in the Event.
-     * Update the Model and send it on the ResponseKey if necessary.
+     * Update the Model and send it on the ResponseEntityKey if necessary.
      *
      * @param event The event with a {@link String} query as {@link Event#getData()}.
      */
@@ -395,7 +395,7 @@ public class BuergerViewController implements Serializable, I18nResolver {
     /**
      * Read the Buerger in the Event from the DataStore and set it as the current selected Buerger.
      * If called with null, the current selected Buerger will only be refreshed from the DataStore.
-     * Update the Model and send it on the ResponseKey if necessary.
+     * Update the Model and send it on the ResponseEntityKey if necessary.
      *
      * @param event The event with an {@link Buerger} or *null* as {@link Event#getData()}.
      */
@@ -425,22 +425,22 @@ public class BuergerViewController implements Serializable, I18nResolver {
     }
 
     /**
-     * Get the RequestKey for this Entity.
+     * Get the RequestEntityKey for this Entity.
      *
      * @param event The disered event the Key will have.
-     * @return The RequestKey with the chosen RequestEvent.
+     * @return The RequestEntityKey with the chosen RequestEvent.
      */
-    public RequestKey getRequestKey(RequestEvent event) {
-        return new RequestKey(event, Buerger.class);
+    public RequestEntityKey getRequestKey(RequestEvent event) {
+        return new RequestEntityKey(event, Buerger.class);
     }
 
     /**
-     * Get the ResponseKey for this Entity.
+     * Get the ResponseEntityKey for this Entity.
      *
-     * @return The ResponseKey.
+     * @return The ResponseEntityKey.
      */
-    public ResponseKey getResponseKey() {
-        return new ResponseKey(Buerger.class);
+    public ResponseEntityKey getResponseKey() {
+        return new ResponseEntityKey(Buerger.class);
     }
 
     private void showNotification(NotificationType type, SimpleAction action, Buerger.Rel relation) {

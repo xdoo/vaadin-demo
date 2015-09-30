@@ -1,12 +1,12 @@
 package de.muenchen.demo.test.eventbus;
 
 import de.muenchen.eventbus.EventBus;
-import de.muenchen.eventbus.selector.RequestKey;
-import de.muenchen.eventbus.types.RequestEvent;
+import de.muenchen.eventbus.selector.entity.RequestEntityKey;
+import de.muenchen.eventbus.selector.entity.RequestEvent;
 import de.muenchen.vaadin.demo.api.local.Buerger;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.Assert;
 import org.springframework.hateoas.Link;
 import reactor.bus.Event;
 
@@ -22,7 +22,7 @@ public class EventBusTest {
 
     @Before
     public void before(){
-        eventBus.on($(new RequestKey(RequestEvent.CREATE, Buerger.class)), this::create);
+        eventBus.on($(new RequestEntityKey(RequestEvent.CREATE, Buerger.class)), this::create);
     }
 
     private void create(Event<?> event) {
@@ -42,13 +42,13 @@ public class EventBusTest {
     public void buergerTest(){
         Buerger b = new Buerger();
         b.setVorname("hans");
-        eventBus.notify(new RequestKey(RequestEvent.CREATE, Buerger.class), Event.wrap(b));
+        eventBus.notify(new RequestEntityKey(RequestEvent.CREATE, Buerger.class), Event.wrap(b));
     }
 
     @Test
     public void linkTest(){
         Link link = new Link("http://www.google.com");
-        eventBus.notify(new RequestKey(RequestEvent.CREATE, Buerger.class), Event.wrap(link));
+        eventBus.notify(new RequestEntityKey(RequestEvent.CREATE, Buerger.class), Event.wrap(link));
     }
 
 }

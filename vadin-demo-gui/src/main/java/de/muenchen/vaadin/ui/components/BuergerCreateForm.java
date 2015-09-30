@@ -7,18 +7,11 @@ import com.vaadin.event.ShortcutAction;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
-import com.vaadin.ui.Button;
+import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.DateField;
-import com.vaadin.ui.FormLayout;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.eventbus.Util.Association;
-import de.muenchen.eventbus.types.RequestEvent;
+import de.muenchen.eventbus.events.Association;
+import de.muenchen.eventbus.selector.entity.RequestEvent;
 import de.muenchen.vaadin.demo.api.domain.Augenfarbe;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
@@ -30,11 +23,7 @@ import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
 import java.util.Optional;
 
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.NotificationType;
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Type;
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getEntityFieldPath;
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getFormPath;
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getNotificationPath;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.*;
 
 /**
  * Formular zum Erstellen eines {@link Buerger}s.
@@ -172,7 +161,7 @@ public class BuergerCreateForm extends CustomComponent {
 
                 if (getRelation().isPresent()) {
                     final Association<Buerger> buergerAssociation = new Association<>(binder.getItemDataSource().getBean(), getRelation().get());
-                    controller.getEventbus().notify(controller.getRequestKey(RequestEvent.ADD_ASSOCIATION), reactor.bus.Event.wrap(buergerAssociation));
+                    controller.getEventbus().notify(controller.getRequestKey(RequestEvent.ADD_ASSOCIATION), buergerAssociation.asEvent());
                 } else {
                     controller.getEventbus().notify(controller.getRequestKey(RequestEvent.CREATE), reactor.bus.Event.wrap(binder.getItemDataSource().getBean()));
                 }
