@@ -369,9 +369,7 @@ public class BuergerViewController implements Serializable, I18nResolver {
      * Refresh the current selected Buerger, but *not* its associations.
      */
     private void refreshModelSelected() {
-        getModel().getSelectedBuerger().ifPresent(buerger -> {
-            getModel().setSelectedBuerger(service.findOne(buerger.getId()).orElse(null));
-        });
+        getModel().getSelectedBuerger().ifPresent(buerger -> getModel().setSelectedBuerger(service.findOne(buerger.getId()).orElse(null)));
     }
 
     /**

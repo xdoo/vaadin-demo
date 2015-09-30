@@ -13,14 +13,10 @@ import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.*;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.oldEvents.LoginEvent;
 import de.muenchen.eventbus.oldEvents.LogoutEvent;
-import de.muenchen.eventbus.selector.RequestKey;
-import de.muenchen.eventbus.types.RequestEvent;
-import de.muenchen.vaadin.demo.apilib.domain.BaseEntity;
+import de.muenchen.eventbus.oldEvents.RefreshEvent;
 import de.muenchen.vaadin.demo.apilib.services.SecurityService;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
@@ -226,7 +222,7 @@ public class MainUI extends UI implements I18nResolver {
         MenuBar.Command languageSelection = selectedItem -> i18n.getSupportedLocales().stream().forEach(locale -> {
             if (selectedItem.getText().equals(locale.getDisplayLanguage())) {
                 i18n.setLocale(locale);
-                //postEvent(new RefreshEvent());
+                postEvent(new RefreshEvent());
             }
         });
 
