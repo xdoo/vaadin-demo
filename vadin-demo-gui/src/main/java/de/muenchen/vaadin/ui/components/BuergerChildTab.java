@@ -46,7 +46,7 @@ public class BuergerChildTab extends CustomComponent {
                     BeanItem<Buerger> item = (BeanItem<Buerger>) grid.getContainerDataSource().getItem(next);
 
                     final Association<Buerger> association = new Association<>(item.getBean(), Buerger.Rel.kinder.name());
-                    controller.getEventbus().notify(controller.getRequestKey(RequestEvent.DELETE), reactor.bus.Event.wrap(association));
+                    controller.getEventbus().notify(controller.getRequestKey(RequestEvent.REMOVE_ASSOCIATION), reactor.bus.Event.wrap(association));
                     grid.deselect(next);
                 }
             }

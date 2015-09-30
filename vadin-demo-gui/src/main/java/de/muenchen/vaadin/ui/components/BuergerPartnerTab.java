@@ -63,7 +63,7 @@ public class BuergerPartnerTab extends CustomComponent {
                 for (Object next : grid.getSelectedRows()) {
                     BeanItem<Buerger> item = (BeanItem<Buerger>) grid.getContainerDataSource().getItem(next);
                     Association<Buerger> association = new Association<Buerger>(item.getBean(), Buerger.Rel.partner.name());
-                    controller.getEventbus().notify(controller.getRequestKey(RequestEvent.DELETE), reactor.bus.Event.wrap(association));
+                    controller.getEventbus().notify(controller.getRequestKey(RequestEvent.REMOVE_ASSOCIATION), reactor.bus.Event.wrap(association));
                     grid.deselect(next);
                 }
             }

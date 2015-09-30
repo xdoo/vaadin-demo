@@ -189,8 +189,46 @@ public class BuergerViewController implements Serializable, I18nResolver {
         eventbus.on($(getRequestKey(RequestEvent.CREATE)), this::create);
         eventbus.on($(getRequestKey(RequestEvent.DELETE)), this::delete);
         eventbus.on($(getRequestKey(RequestEvent.UPDATE)), this::update);
+        eventbus.on($(getRequestKey(RequestEvent.ADD_ASSOCIATION)), this::addAssociation);
+        eventbus.on($(getRequestKey(RequestEvent.REMOVE_ASSOCIATION)), this::removeAssociation);
         eventbus.on($(getRequestKey(RequestEvent.READ_LIST)), this::readList);
         eventbus.on($(getRequestKey(RequestEvent.READ_SELECTED)), this::readSelected);
+    }
+
+    private void removeAssociation(Event<?> event) {
+        final Object data = event.getData();
+
+        if (data instanceof Association) {
+            @SuppressWarnings("unchecked") final Association<Buerger> association = (Association<Buerger>) event.getData();
+            if (Buerger.Rel.kinder.name().equals(association.getRel()))
+                releaseKind(association.getAssociation());
+            if (Buerger.Rel.partner.name().equals(association.getRel()))
+                releasePartner(association.getAssociation());
+
+            refreshModelAssociations();
+        } else {
+            throw new IllegalArgumentException();
+        }
+
+        notifyComponents();
+    }
+
+    private void addAssociation(Event<?> event) {
+        final Object data = event.getData();
+
+        if (data instanceof Association) {
+            @SuppressWarnings("unchecked") final Association<Buerger> association = (Association<Buerger>) event.getData();
+            if (Buerger.Rel.kinder.name().equals(association.getRel()))
+                addBuergerKind(association.getAssociation());
+            if (Buerger.Rel.partner.name().equals(association.getRel()))
+                setBuergerPartner(association.getAssociation());
+
+            refreshModelAssociations();
+        } else {
+            throw new IllegalArgumentException();
+        }
+
+        notifyComponents();
     }
 
     private void create(Event<?> event) {
@@ -198,7 +236,7 @@ public class BuergerViewController implements Serializable, I18nResolver {
             final Buerger buerger = (Buerger) event.getData();
             service.create(buerger);
         } else {
-            throw new AssertionError();
+            throw new IllegalArgumentException();
         }
 
         refreshModelList();
@@ -222,16 +260,8 @@ public class BuergerViewController implements Serializable, I18nResolver {
 
             refreshModelList();
 
-        } else if (data instanceof Association) {
-            @SuppressWarnings("unchecked") final Association<Buerger> association = (Association<Buerger>) event.getData();
-            if (Buerger.Rel.kinder.name().equals(association.getRel()))
-                releaseKind(association.getAssociation());
-            if (Buerger.Rel.partner.name().equals(association.getRel()))
-                releasePartner(association.getAssociation());
-
-            refreshModelAssociations();
         } else {
-            throw new AssertionError();
+            throw new IllegalArgumentException();
         }
 
         notifyComponents();
@@ -247,16 +277,8 @@ public class BuergerViewController implements Serializable, I18nResolver {
             service.update(buerger);
 
             refreshModelSelected();
-        } else if (data instanceof Association) {
-            @SuppressWarnings("unchecked") final Association<Buerger> association = (Association<Buerger>) event.getData();
-            if (Buerger.Rel.kinder.name().equals(association.getRel()))
-                addBuergerKind(association.getAssociation());
-            if (Buerger.Rel.partner.name().equals(association.getRel()))
-                setBuergerPartner(association.getAssociation());
-
-            refreshModelAssociations();
         } else {
-            throw new AssertionError();
+            throw new IllegalArgumentException();
         }
 
         refreshModelList();
@@ -313,7 +335,7 @@ public class BuergerViewController implements Serializable, I18nResolver {
             refreshModelSelected();
             refreshModelAssociations();
         } else {
-            throw new AssertionError();
+            throw new IllegalArgumentException();
         }
 
         notifyComponents();

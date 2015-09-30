@@ -7,7 +7,8 @@ package de.muenchen.eventbus.types;
 public enum RequestEvent {
     CREATE,
     UPDATE,
-    COPY, //TODO noch einbauen
+    ADD_ASSOCIATION,
+    REMOVE_ASSOCIATION,
     READ_LIST,
     READ_SELECTED,
     DELETE
