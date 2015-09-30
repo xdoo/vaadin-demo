@@ -36,9 +36,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.NotificationType;
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Type;
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getNotificationPath;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.*;
 import static reactor.bus.selector.Selectors.$;
 
 /**
@@ -202,6 +200,7 @@ public class BuergerViewController implements Serializable, I18nResolver {
      */
     private void removeAssociation(Event<?> event) {
         final Object data = event.getData();
+        if (data == null) throw new NullPointerException("Event data must not be null!");
 
         if (data instanceof Association) {
             @SuppressWarnings("unchecked") final Association<Buerger> association = (Association<Buerger>) event.getData();
@@ -216,7 +215,7 @@ public class BuergerViewController implements Serializable, I18nResolver {
             showNotification(NotificationType.success, SimpleAction.release, rel);
 
         } else {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("The event cannot be of Class " + event.getData().getClass());
         }
 
         notifyComponents();
@@ -225,14 +224,16 @@ public class BuergerViewController implements Serializable, I18nResolver {
     /**
      * Add the specified Association to the specified Relation and update the DataStore.
      * <p>
-     *     If the {@link Association#getAssociation()} has no {@link ResourceSupport#getId()} the Resouce will be created
-     *     on the DataStore first.
+     * If the {@link Association#getAssociation()} has no {@link ResourceSupport#getId()} the Resouce will be created
+     * on the DataStore first.
      * </p>
      * Update the Model and send it on the ResponseKey if necessary.
+     *
      * @param event The event with an {@link Association} as {@link Event#getData()}.
      */
     private void addAssociation(Event<?> event) {
         final Object data = event.getData();
+        if (data == null) throw new NullPointerException("Event data must not be null!");
 
         if (data instanceof Association) {
             @SuppressWarnings("unchecked") final Association<Buerger> association = (Association<Buerger>) event.getData();
@@ -246,7 +247,7 @@ public class BuergerViewController implements Serializable, I18nResolver {
             refreshModelAssociations();
             showNotification(NotificationType.success, SimpleAction.add, rel);
         } else {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("The event cannot be of Class " + event.getData().getClass());
         }
 
         notifyComponents();
@@ -255,14 +256,19 @@ public class BuergerViewController implements Serializable, I18nResolver {
     /**
      * Create a new Buerger on the DataStore.
      * Update the Model and send it on the ResponseKey if necessary.
+     *
      * @param event The event with an {@link Buerger} as {@link Event#getData()}.
      */
     private void create(Event<?> event) {
+        final Object data = event.getData();
+        if (data == null) throw new NullPointerException("Event data must not be null!");
+
+
         if (event.getData() instanceof Buerger) {
             final Buerger buerger = (Buerger) event.getData();
             service.create(buerger);
         } else {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("The event must not be of Class " + event.getData().getClass());
         }
 
         refreshModelList();
@@ -274,10 +280,12 @@ public class BuergerViewController implements Serializable, I18nResolver {
     /**
      * Delete the Buerger on the DataStore.
      * Update the Model and send it on the ResponseKey if necessary.
+     *
      * @param event The event with an {@link Buerger} as {@link Event#getData()}.
      */
     private void delete(Event<?> event) {
         final Object data = event.getData();
+        if (data == null) throw new NullPointerException("Event data must not be null!");
 
         if (data instanceof Buerger) {
             final Buerger buerger = (Buerger) event.getData();
@@ -296,7 +304,7 @@ public class BuergerViewController implements Serializable, I18nResolver {
             refreshModelList();
 
         } else {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("The event cannot be of Class " + event.getData().getClass());
         }
 
         notifyComponents();
@@ -306,10 +314,12 @@ public class BuergerViewController implements Serializable, I18nResolver {
     /**
      * Update the Buerger on the DataStore.
      * Update the Model and send it on the ResponseKey if necessary.
+     *
      * @param event The event with an {@link Buerger} as {@link Event#getData()}.
      */
     private void update(Event<?> event) {
         final Object data = event.getData();
+        if (data == null) throw new NullPointerException("Event data must not be null!");
 
         if (data instanceof Buerger) {
             final Buerger buerger = (Buerger) event.getData();
@@ -320,7 +330,7 @@ public class BuergerViewController implements Serializable, I18nResolver {
             refreshModelSelected();
             refreshModelList();
         } else {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("The event cannot be of Class " + event.getData().getClass());
         }
 
         notifyComponents();
@@ -329,9 +339,9 @@ public class BuergerViewController implements Serializable, I18nResolver {
 
     /**
      * Refresh the {@link BuergerModel#buerger} list from the DataStore.
-     *
+     * <p/>
      * <p>
-     *     This method also filters by the query (ifPresent).
+     * This method also filters by the query (ifPresent).
      * </p>
      */
     private void refreshModelList() {
@@ -367,6 +377,7 @@ public class BuergerViewController implements Serializable, I18nResolver {
     /**
      * Set the query based on the String sent in the Event.
      * Update the Model and send it on the ResponseKey if necessary.
+     *
      * @param event The event with a {@link String} query as {@link Event#getData()}.
      */
     private void readList(Event<?> event) {
@@ -387,6 +398,7 @@ public class BuergerViewController implements Serializable, I18nResolver {
      * Read the Buerger in the Event from the DataStore and set it as the current selected Buerger.
      * If called with null, the current selected Buerger will only be refreshed from the DataStore.
      * Update the Model and send it on the ResponseKey if necessary.
+     *
      * @param event The event with an {@link Buerger} or *null* as {@link Event#getData()}.
      */
     private void readSelected(Event<?> event) {
@@ -397,11 +409,11 @@ public class BuergerViewController implements Serializable, I18nResolver {
             getModel().setSelectedBuerger(buerger);
             refreshModelSelected();
             refreshModelAssociations();
-        } else if(data==null){
+        } else if (data == null) {
             refreshModelSelected();
             refreshModelAssociations();
         } else {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("The event cannot be of Class " + event.getData().getClass());
         }
 
         notifyComponents();
@@ -416,6 +428,7 @@ public class BuergerViewController implements Serializable, I18nResolver {
 
     /**
      * Get the RequestKey for this Entity.
+     *
      * @param event The disered event the Key will have.
      * @return The RequestKey with the chosen RequestEvent.
      */
@@ -425,6 +438,7 @@ public class BuergerViewController implements Serializable, I18nResolver {
 
     /**
      * Get the ResponseKey for this Entity.
+     *
      * @return The ResponseKey.
      */
     public ResponseKey getResponseKey() {
@@ -462,7 +476,7 @@ public class BuergerViewController implements Serializable, I18nResolver {
 
     /**
      * Resolve the relative path (e.g. "asdf.label").
-     * <p>
+     * <p/>
      * The base path will be appended at start and then read from the properties.
      *
      * @param relativePath the path to add to the base path.
@@ -480,7 +494,7 @@ public class BuergerViewController implements Serializable, I18nResolver {
 
     /**
      * Resolve the relative path (e.g. ".asdf.label") to a icon.
-     * <p>
+     * <p/>
      * The base path will be appended at start and then read from the properties.
      *
      * @param relativePath the path to add to the base path.
