@@ -1,13 +1,22 @@
 package de.muenchen.eventbus.selector;
 
 /**
- * Created by claus.straube on 28.09.15.
- * fabian.holtkoetter ist unschuldig.
+ * Provides a simple ABC for an Key that is specific to the class of an entity.
+ *
+ * @author fabian.holtoetter p.mueller
+ * @version 1.0
  */
 public abstract class BaseKey {
-
+    /**
+     * The class of the entity the key is for.
+     */
     final Class entityClass;
 
+    /**
+     * Create a new Key for the entity by class.
+     * The class cannot be null.
+     * @param entityClass The non-null class of an Entity.
+     */
     public BaseKey(Class entityClass) {
         if(entityClass==null)
             throw new IllegalArgumentException("EntityClass can't be null.");

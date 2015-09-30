@@ -1,8 +1,10 @@
 package de.muenchen.eventbus.types;
 
 /**
- * Created by claus.straube on 29.09.15.
- * fabian.holtkoetter ist unschuldig.
+ * Provides a simple enum for all possible Events that can be requested on the Eventbus.
+ *
+ * @author fabian.holtkoetter
+ * @version 1.0
  */
 public enum RequestEvent {
     CREATE,

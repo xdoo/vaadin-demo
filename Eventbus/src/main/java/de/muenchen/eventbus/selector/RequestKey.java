@@ -10,12 +10,21 @@ import de.muenchen.eventbus.types.RequestEvent;
  * </p>
  *
  * @author fabian.holtkoetter
- * @version 0.00000001
+ * @version 1
  */
 public class RequestKey extends BaseKey {
 
+    /**
+     * The specific Event that is requested.
+     */
     private final RequestEvent requestEvent;
 
+    /**
+     * Create a new RequestKey with the desired RequestEvent and for the entity class.
+     *
+     * @param requestEvent The requested Event.
+     * @param entityClass The class of the entity the request is for.
+     */
     public RequestKey(RequestEvent requestEvent, Class entityClass) {
         super(entityClass);
         if (requestEvent == null)
@@ -24,6 +33,10 @@ public class RequestKey extends BaseKey {
 
     }
 
+    /**
+     * Get the requested Event by this key.
+     * @return
+     */
     public RequestEvent getRequestEvent() {
         return requestEvent;
     }

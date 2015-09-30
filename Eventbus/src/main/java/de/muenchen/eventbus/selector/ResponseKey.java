@@ -10,11 +10,15 @@ package de.muenchen.eventbus.selector;
  * "Also wenn du die Kindertab da hast - und dann holst du dir ein Wasser!"
  *
  * @author fabian.holtkoetter
- * @version 0.00000001
+ * @version 1
  */
 public class ResponseKey extends BaseKey {
 
-
+    /**
+     * Create a new ResponseKey on the class of an entity.
+     *
+     * @param entityClass The class of the entity the key is for.
+     */
     public ResponseKey(Class entityClass) {
         super(entityClass);
     }

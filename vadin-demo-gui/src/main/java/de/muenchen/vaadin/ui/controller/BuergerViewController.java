@@ -200,12 +200,16 @@ public class BuergerViewController implements Serializable, I18nResolver {
 
         if (data instanceof Association) {
             @SuppressWarnings("unchecked") final Association<Buerger> association = (Association<Buerger>) event.getData();
-            if (Buerger.Rel.kinder.name().equals(association.getRel()))
+
+            final Buerger.Rel rel = Buerger.Rel.valueOf(association.getRel());
+            if (Buerger.Rel.kinder == rel)
                 releaseKind(association.getAssociation());
-            if (Buerger.Rel.partner.name().equals(association.getRel()))
+            if (Buerger.Rel.partner == rel)
                 releasePartner(association.getAssociation());
 
             refreshModelAssociations();
+            showNotification(NotificationType.success, SimpleAction.release, rel);
+
         } else {
             throw new IllegalArgumentException();
         }
@@ -219,13 +223,14 @@ public class BuergerViewController implements Serializable, I18nResolver {
         if (data instanceof Association) {
             @SuppressWarnings("unchecked") final Association<Buerger> association = (Association<Buerger>) event.getData();
             final Buerger buerger = association.getAssociation().getId() == null ? service.create(association.getAssociation()) : association.getAssociation();
-
-            if (Buerger.Rel.kinder.name().equals(association.getRel()))
+            final Buerger.Rel rel = Buerger.Rel.valueOf(association.getRel());
+            if (Buerger.Rel.kinder == rel)
                 addBuergerKind(buerger);
-            if (Buerger.Rel.partner.name().equals(association.getRel()))
+            if (Buerger.Rel.partner == rel)
                 setBuergerPartner(buerger);
 
             refreshModelAssociations();
+            showNotification(NotificationType.success, SimpleAction.add, rel);
         } else {
             throw new IllegalArgumentException();
         }
@@ -243,6 +248,7 @@ public class BuergerViewController implements Serializable, I18nResolver {
 
         refreshModelList();
         notifyComponents();
+        showNotification(NotificationType.success, SimpleAction.create);
     }
 
     private void delete(Event<?> event) {
@@ -267,6 +273,7 @@ public class BuergerViewController implements Serializable, I18nResolver {
         }
 
         notifyComponents();
+        showNotification(NotificationType.success, SimpleAction.delete);
     }
 
     //TODO Assoziation nur hinzufügen können?
@@ -276,15 +283,17 @@ public class BuergerViewController implements Serializable, I18nResolver {
         if (data instanceof Buerger) {
             //TODO update Buerger
             final Buerger buerger = (Buerger) event.getData();
+
             service.update(buerger);
 
             refreshModelSelected();
+            refreshModelList();
         } else {
             throw new IllegalArgumentException();
         }
 
-        refreshModelList();
         notifyComponents();
+        showNotification(NotificationType.success, SimpleAction.update);
     }
 
     private void refreshModelList() {
@@ -361,6 +370,14 @@ public class BuergerViewController implements Serializable, I18nResolver {
                 resolveRelative(getNotificationPath(type, action, Type.text, relation.name())));
         succes.show(Page.getCurrent());
     }
+
+    private void showNotification(NotificationType type, SimpleAction action) {
+        GenericSuccessNotification succes = new GenericSuccessNotification(
+                resolveRelative(getNotificationPath(type, action, Type.label)),
+                resolveRelative(getNotificationPath(type, action, Type.text)));
+        succes.show(Page.getCurrent());
+    }
+
 
 /**
  private void releasePartnerHandler(Event<AppEvent<Buerger>> eventWrapper) {

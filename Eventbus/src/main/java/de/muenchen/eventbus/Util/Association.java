@@ -1,25 +1,41 @@
 package de.muenchen.eventbus.Util;
 
-import org.springframework.hateoas.Link;
-
 /**
- * Created by claus.straube on 29.09.15.
- * fabian.holtkoetter ist unschuldig.
+ * Provides a simple description for an Association of an Entity.
+ *
+ * @author fabian.holtkoetter p.mueller
+ * @version 1.0
  */
 public class Association<T>{
+    /**
+     * The entity that is the association.
+     */
     private final T association;
-
+    /** The String representation of the relation. */
     private final String rel;
 
+    /**
+     * Create a new Aoociation with the Entity and the relation it (should) belong(s) to.
+     * @param association The associated entity.
+     * @param rel The relation.
+     */
     public Association(T association, String rel) {
         this.association = association;
         this.rel = rel;
     }
 
+    /**
+     * Get the associated entity.
+     * @return The associated entity.
+     */
     public T getAssociation() {
         return association;
     }
 
+    /**
+     * Get the String representation of the relation.
+     * @return The relation.
+     */
     public String getRel() {
         return rel;
     }
