@@ -34,7 +34,6 @@ import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
 import static reactor.bus.Event.wrap;
-import static reactor.bus.selector.Selectors.$;
 
 @SpringUI
 @Title("Vaadin Spring-Security Sample")
@@ -163,8 +162,8 @@ public class MainUI extends UI implements I18nResolver {
             }
         });
 
-        eventBus.on($(Keys.LOGIN), this::loginEventHandler);
-        eventBus.on($(Keys.LOGOUT), this::logoutEventHandler);
+        eventBus.on(Keys.LOGIN.getSelector(), this::loginEventHandler);
+        eventBus.on(Keys.LOGOUT.getSelector(), this::logoutEventHandler);
     }
 
     public void loginEventHandler(reactor.bus.Event<?> event) {

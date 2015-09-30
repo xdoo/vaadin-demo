@@ -21,8 +21,6 @@ import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.util.Optional;
 
-import static reactor.bus.selector.Selectors.$;
-
 /**
  * Created by rene.zarwel on 26.08.15.
  */
@@ -52,7 +50,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<?>> {
 
     @PostConstruct
     public void init() {
-        eventBus.on($(Keys.REFRESH), this);
+        eventBus.on(Keys.REFRESH.getSelector(), this);
     }
 
 
@@ -115,7 +113,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<?>> {
         LOG.debug("creating 'update' buerger form");
         if (!updateForm.isPresent()) {
             BuergerUpdateForm form = new BuergerUpdateForm(controller, navigateTo, navigateBack);
-            controller.getEventbus().on($(controller.getResponseKey()), form);
+            controller.getEventbus().on(controller.getResponseKey().getSelector(), form);
             updateForm = Optional.of(form);
         }
         controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
@@ -126,7 +124,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<?>> {
         LOG.debug("creating 'read' buerger form");
         if (!readForm.isPresent()) {
             BuergerReadForm form = new BuergerReadForm(controller, navigateToUpdate, navigateBack);
-            controller.getEventbus().on($(controller.getResponseKey()), form);
+            controller.getEventbus().on(controller.getResponseKey().getSelector(), form);
             readForm = Optional.of(form);
         }
         controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
@@ -192,7 +190,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<?>> {
             }
         });
 
-        controller.getEventbus().on($(controller.getResponseKey()), grid);
+        controller.getEventbus().on(controller.getResponseKey().getSelector(), grid);
         controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
 
         return grid;
@@ -224,7 +222,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<?>> {
             }
         });
 
-        controller.getEventbus().on($(controller.getResponseKey()), table);
+        controller.getEventbus().on(controller.getResponseKey().getSelector(), table);
         controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
 
         return table;
@@ -237,7 +235,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<?>> {
     private GenericGrid createGrid() {
         LOG.debug("creating table for buerger");
         GenericGrid grid = new GenericGrid(controller, Buerger.class);
-        controller.getEventbus().on($(controller.getResponseKey()), grid);
+        controller.getEventbus().on(controller.getResponseKey().getSelector(), grid);
         return grid;
     }
 

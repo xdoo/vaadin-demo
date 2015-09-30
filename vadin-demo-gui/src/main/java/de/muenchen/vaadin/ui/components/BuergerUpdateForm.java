@@ -24,7 +24,6 @@ import reactor.bus.Event;
 import reactor.fn.Consumer;
 
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.*;
-import static reactor.bus.selector.Selectors.$;
 
 /**
  *
@@ -69,7 +68,7 @@ public class BuergerUpdateForm extends CustomComponent implements Consumer<Event
      */
     private void createForm() {
 
-        controller.getEventbus().on($(controller.getResponseKey()), this);
+        controller.getEventbus().on(controller.getResponseKey().getSelector(), this);
 
         FormLayout layout = new FormLayout();
         HorizontalLayout buttonLayout = new HorizontalLayout();

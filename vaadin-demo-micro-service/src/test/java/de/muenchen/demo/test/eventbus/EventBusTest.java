@@ -10,8 +10,6 @@ import org.junit.Test;
 import org.springframework.hateoas.Link;
 import reactor.bus.Event;
 
-import static reactor.bus.selector.Selectors.$;
-
 /**
  * Created by claus.straube on 29.09.15.
  * fabian.holtkoetter ist unschuldig.
@@ -22,7 +20,7 @@ public class EventBusTest {
 
     @Before
     public void before(){
-        eventBus.on($(new RequestEntityKey(RequestEvent.CREATE, Buerger.class)), this::create);
+        eventBus.on(new RequestEntityKey(RequestEvent.CREATE, Buerger.class).getSelector(), this::create);
     }
 
     private void create(Event<?> event) {

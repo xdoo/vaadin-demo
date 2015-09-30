@@ -37,7 +37,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.*;
-import static reactor.bus.selector.Selectors.$;
 
 /**
  * Der Controller ist die zentrale Klasse um die Logik im Kontext BuergerDTO abzubilden.
@@ -183,13 +182,13 @@ public class BuergerViewController implements Serializable, I18nResolver {
      * Register all event handlers on the RequestEntityKey.
      */
     public void initEventhandlers() {
-        eventbus.on($(getRequestKey(RequestEvent.CREATE)), this::create);
-        eventbus.on($(getRequestKey(RequestEvent.DELETE)), this::delete);
-        eventbus.on($(getRequestKey(RequestEvent.UPDATE)), this::update);
-        eventbus.on($(getRequestKey(RequestEvent.ADD_ASSOCIATION)), this::addAssociation);
-        eventbus.on($(getRequestKey(RequestEvent.REMOVE_ASSOCIATION)), this::removeAssociation);
-        eventbus.on($(getRequestKey(RequestEvent.READ_LIST)), this::readList);
-        eventbus.on($(getRequestKey(RequestEvent.READ_SELECTED)), this::readSelected);
+        eventbus.on(getRequestKey(RequestEvent.CREATE).getSelector(), this::create);
+        eventbus.on(getRequestKey(RequestEvent.DELETE).getSelector(), this::delete);
+        eventbus.on(getRequestKey(RequestEvent.UPDATE).getSelector(), this::update);
+        eventbus.on(getRequestKey(RequestEvent.ADD_ASSOCIATION).getSelector(), this::addAssociation);
+        eventbus.on(getRequestKey(RequestEvent.REMOVE_ASSOCIATION).getSelector(), this::removeAssociation);
+        eventbus.on(getRequestKey(RequestEvent.READ_LIST).getSelector(), this::readList);
+        eventbus.on(getRequestKey(RequestEvent.READ_SELECTED).getSelector(), this::readSelected);
     }
 
     /**
