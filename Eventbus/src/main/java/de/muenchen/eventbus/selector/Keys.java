@@ -6,6 +6,6 @@ package de.muenchen.eventbus.selector;
  * @author p.mueller
  * @version 1.0
  */
-public enum Keys implements EventBusKey {
-    LOGIN, LOGOUT, REFRESH //TODO Replace oldEvents + EventType enum.
+public enum Keys implements Keyable {
+    LOGIN, LOGOUT, REFRESH
 }

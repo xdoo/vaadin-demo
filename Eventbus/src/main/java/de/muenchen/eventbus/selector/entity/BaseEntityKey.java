@@ -1,6 +1,6 @@
 package de.muenchen.eventbus.selector.entity;
 
-import de.muenchen.eventbus.selector.EventBusKey;
+import de.muenchen.eventbus.selector.Keyable;
 
 /**
  * Provides a simple ABC for an Key that is specific to the class of an entity.
@@ -8,7 +8,7 @@ import de.muenchen.eventbus.selector.EventBusKey;
  * @author fabian.holtoetter p.mueller
  * @version 1.0
  */
-public abstract class BaseEntityKey implements EventBusKey {
+public abstract class BaseEntityKey implements Keyable {
     /**
      * The class of the entity the key is for.
      */

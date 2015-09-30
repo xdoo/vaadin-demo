@@ -1,14 +1,12 @@
 package de.muenchen.eventbus.events;
 
-import reactor.bus.Event;
-
 /**
  * Provides a simple description for an Association of an Entity.
  *
  * @author fabian.holtkoetter p.mueller
  * @version 1.0
  */
-public class Association<T>{
+public class Association<T> implements Eventable {
     /**
      * The entity that is the association.
      */
@@ -40,14 +38,5 @@ public class Association<T>{
      */
     public String getRel() {
         return rel;
-    }
-
-    /**
-     * Get the Assocation as an Event.
-     *
-     * @return The Event.
-     */
-    public Event<Association<T>> asEvent() {
-        return Event.wrap(this);
     }
 }
