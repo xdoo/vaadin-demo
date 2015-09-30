@@ -4,12 +4,14 @@ import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
+import de.muenchen.eventbus.Util.Association;
 import de.muenchen.eventbus.types.RequestEvent;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.GenericConfirmationWindow;
+import de.muenchen.vaadin.ui.app.views.TableSelectWindow;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getEntityFieldPath;
@@ -43,13 +45,14 @@ public class BuergerPartnerTab extends CustomComponent {
         ActionButton add = new ActionButton(controller, SimpleAction.add, navigateToForAdd);
         add.addClickListener(clickEvent -> {
             if (grid.getContainerDataSource().size() == 0) {
-                //TODO navigator.getUI().addWindow(new TableSelectWindow(this, getViewFactory().generateBuergerPartnerSearchTable()));
+                getUI().addWindow(new TableSelectWindow(controller, controller.getViewFactory().generateBuergerPartnerSearchTable()));
                 //controller.postEvent(controller.buildAppEvent(EventType.ADD_PARTNER));
             } else {
-//                GenericConfirmationWindow window = new GenericConfirmationWindow(controller, SimpleAction.override, e -> controller.postEvent(controller.buildAppEvent(EventType.ADD_PARTNER)));
-//                getUI().addWindow(window);
-//                window.center();
-//                window.focus();
+                GenericConfirmationWindow window =
+                        new GenericConfirmationWindow(controller, SimpleAction.override, e -> getUI().addWindow(new TableSelectWindow(controller, controller.getViewFactory().generateBuergerPartnerSearchTable())));
+                getUI().addWindow(window);
+                window.center();
+                window.focus();
             }
         });
 
@@ -59,7 +62,8 @@ public class BuergerPartnerTab extends CustomComponent {
             if (grid.getSelectedRows() != null) {
                 for (Object next : grid.getSelectedRows()) {
                     BeanItem<Buerger> item = (BeanItem<Buerger>) grid.getContainerDataSource().getItem(next);
-                    controller.getEventbus().notify(controller.getRequestKey(RequestEvent.DELETE), reactor.bus.Event.wrap(item.getBean()));
+                    Association<Buerger> association = new Association<Buerger>(item.getBean(), Buerger.Rel.partner.name());
+                    controller.getEventbus().notify(controller.getRequestKey(RequestEvent.DELETE), reactor.bus.Event.wrap(association));
                     grid.deselect(next);
                 }
             }

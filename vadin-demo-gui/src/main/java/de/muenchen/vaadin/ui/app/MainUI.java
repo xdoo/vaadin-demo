@@ -248,11 +248,8 @@ public class MainUI extends UI implements I18nResolver {
         menuItemsLayout.setPrimaryStyleName("valo-menuitems");
 
         for (final Entry<String, String> item : menuItems.entrySet()) {
-            final Button b = new Button(item.getValue(), new ClickListener() {
-                @Override
-                public void buttonClick(final ClickEvent event) {
-                    navigator.navigateTo(item.getKey());
-                }
+            final Button b = new Button(item.getValue(), event -> {
+                navigator.navigateTo(item.getKey());
             });
             b.setHtmlContentAllowed(true);
             b.setPrimaryStyleName("valo-menu-item");
@@ -267,7 +264,7 @@ public class MainUI extends UI implements I18nResolver {
                     new GenericConfirmationWindow(MainUI.this,
                             SimpleAction.logout,
                             e -> {
-                                //this.postEvent(new LogoutEvent());
+                                this.postEvent(new LogoutEvent());
                             });
             getUI().addWindow(confirmationWindow);
             confirmationWindow.center();

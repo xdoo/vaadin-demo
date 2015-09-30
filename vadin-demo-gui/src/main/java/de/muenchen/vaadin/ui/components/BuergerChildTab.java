@@ -10,6 +10,7 @@ import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
+import de.muenchen.vaadin.ui.app.views.TableSelectWindow;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getEntityFieldPath;
@@ -34,7 +35,7 @@ public class BuergerChildTab extends CustomComponent {
         });
         ActionButton add = new ActionButton(controller, SimpleAction.add, "");
         add.addClickListener(clickEvent -> {
-            //TODO navigator.getUI().addWindow(new TableSelectWindow(this, getViewFactory().generateBuergerPartnerSearchTable()));
+            getUI().addWindow(new TableSelectWindow(controller, controller.getViewFactory().generateChildSearchTable()));
             //controller.postEvent(controller.buildAppEvent(EventType.ADD_CHILD))
         });
 

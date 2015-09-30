@@ -118,10 +118,9 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
         if (!updateForm.isPresent()) {
             BuergerUpdateForm form = new BuergerUpdateForm(controller, navigateTo, navigateBack);
             controller.getEventbus().on($(controller.getResponseKey()), form);
-            //TODO controller.postEvent(controller.buildComponentEvent(EventType.SELECT_TO_EDIT).addEntity(controller.getCurrent().getBean()));
-
             updateForm = Optional.of(form);
         }
+        controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
         return updateForm.get();
     }
 
@@ -132,7 +131,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
             controller.getEventbus().on($(controller.getResponseKey()), form);
             readForm = Optional.of(form);
         }
-        //TODO controller.postEvent(controller.buildComponentEvent(EventType.SELECT_TO_READ).addEntity(controller.getCurrent().getBean()));
+        controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
         return readForm.get();
     }
 

@@ -25,6 +25,6 @@ public class PartnerGrid extends GenericGrid {
 
         BuergerReadOnlyModel event = eventWrapper.getData();
 
-        addAll(event.getSelectedBuergerKinder());
+        addAll(event.getSelectedBuergerPartner());
     }
 }
