@@ -18,13 +18,13 @@ import de.muenchen.vaadin.guilib.services.MessageService;
 import de.muenchen.vaadin.guilib.util.VaadinUtil;
 import de.muenchen.vaadin.services.BuergerService;
 import de.muenchen.vaadin.services.model.BuergerModel;
-import de.muenchen.vaadin.services.model.BuergerReadOnlyModel;
 import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.controller.factorys.BuergerViewFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.ResourceSupport;
 import reactor.bus.Event;
 import reactor.bus.EventBus;
 
@@ -118,10 +118,6 @@ public class BuergerViewController implements Serializable, I18nResolver {
         return eventbus;
     }
 
-    public BuergerReadOnlyModel getReadOnlyModel() {
-        return model;
-    }
-
     private BuergerModel getModel() {
         return model;
     }
@@ -146,7 +142,7 @@ public class BuergerViewController implements Serializable, I18nResolver {
         service.delete(link);
     }
 
-    public void addBuergerKind(Buerger kindEntity) {
+    private void addBuergerKind(Buerger kindEntity) {
         Link link = getModel().getSelectedBuerger().get().getLink(Buerger.Rel.kinder.name());
         List<Link> kinder = Stream.concat(
                 service.findAll(link)
@@ -159,24 +155,24 @@ public class BuergerViewController implements Serializable, I18nResolver {
         service.setRelations(link, kinder);
     }
 
-    public void setBuergerPartner(Buerger partnerEntity) {
+    private void setBuergerPartner(Buerger partnerEntity) {
         Link link = getModel().getSelectedBuerger().get().getLink(Buerger.Rel.partner.name());
         service.setRelation(link, partnerEntity.getId());
     }
 
-    public List<Buerger> queryBuerger() {
+    private List<Buerger> queryBuerger() {
         return service.findAll().stream().collect(Collectors.toList());
     }
 
-    public List<Buerger> queryBuerger(String query) {
+    private List<Buerger> queryBuerger(String query) {
         return queryBuerger(); //TODO
     }
 
-    public List<Buerger> queryKinder(Buerger entity) {
+    private List<Buerger> queryKinder(Buerger entity) {
         return service.findAll(entity.getLink(Buerger.Rel.kinder.name())).stream().collect(Collectors.toList());
     }
 
-    public Buerger queryPartner(Buerger entity) {
+    private Buerger queryPartner(Buerger entity) {
         return service.findOne(entity.getLink(Buerger.Rel.partner.name())).orElse(null);
     }
 
@@ -185,6 +181,9 @@ public class BuergerViewController implements Serializable, I18nResolver {
     // Event Steuerung //
     /////////////////////
 
+    /**
+     * Register all event handlers on the RequestKey.
+     */
     public void initEventhandlers() {
         eventbus.on($(getRequestKey(RequestEvent.CREATE)), this::create);
         eventbus.on($(getRequestKey(RequestEvent.DELETE)), this::delete);
@@ -195,6 +194,12 @@ public class BuergerViewController implements Serializable, I18nResolver {
         eventbus.on($(getRequestKey(RequestEvent.READ_SELECTED)), this::readSelected);
     }
 
+    /**
+     * Remove the specified Association from the specified Relation and update the DataStore.
+     * Update the Model and send it on the ResponseKey if necessary.
+     *
+     * @param event The event with an {@link Association} as {@link Event#getData()}.
+     */
     private void removeAssociation(Event<?> event) {
         final Object data = event.getData();
 
@@ -217,6 +222,15 @@ public class BuergerViewController implements Serializable, I18nResolver {
         notifyComponents();
     }
 
+    /**
+     * Add the specified Association to the specified Relation and update the DataStore.
+     * <p>
+     *     If the {@link Association#getAssociation()} has no {@link ResourceSupport#getId()} the Resouce will be created
+     *     on the DataStore first.
+     * </p>
+     * Update the Model and send it on the ResponseKey if necessary.
+     * @param event The event with an {@link Association} as {@link Event#getData()}.
+     */
     private void addAssociation(Event<?> event) {
         final Object data = event.getData();
 
@@ -238,6 +252,11 @@ public class BuergerViewController implements Serializable, I18nResolver {
         notifyComponents();
     }
 
+    /**
+     * Create a new Buerger on the DataStore.
+     * Update the Model and send it on the ResponseKey if necessary.
+     * @param event The event with an {@link Buerger} as {@link Event#getData()}.
+     */
     private void create(Event<?> event) {
         if (event.getData() instanceof Buerger) {
             final Buerger buerger = (Buerger) event.getData();
@@ -251,11 +270,19 @@ public class BuergerViewController implements Serializable, I18nResolver {
         showNotification(NotificationType.success, SimpleAction.create);
     }
 
+
+    /**
+     * Delete the Buerger on the DataStore.
+     * Update the Model and send it on the ResponseKey if necessary.
+     * @param event The event with an {@link Buerger} as {@link Event#getData()}.
+     */
     private void delete(Event<?> event) {
         final Object data = event.getData();
 
         if (data instanceof Buerger) {
             final Buerger buerger = (Buerger) event.getData();
+            if (buerger.getId() == null)
+                throw new IllegalArgumentException("The Buerger must have an ID.");
             service.delete(buerger.getId());
 
             getModel().getSelectedBuerger().ifPresent(selectedBuerger -> {
@@ -276,14 +303,18 @@ public class BuergerViewController implements Serializable, I18nResolver {
         showNotification(NotificationType.success, SimpleAction.delete);
     }
 
-    //TODO Assoziation nur hinzufügen können?
+    /**
+     * Update the Buerger on the DataStore.
+     * Update the Model and send it on the ResponseKey if necessary.
+     * @param event The event with an {@link Buerger} as {@link Event#getData()}.
+     */
     private void update(Event<?> event) {
         final Object data = event.getData();
 
         if (data instanceof Buerger) {
-            //TODO update Buerger
             final Buerger buerger = (Buerger) event.getData();
-
+            if (buerger.getId() == null)
+                throw new IllegalArgumentException("The Buerger must have an ID.");
             service.update(buerger);
 
             refreshModelSelected();
@@ -296,6 +327,13 @@ public class BuergerViewController implements Serializable, I18nResolver {
         showNotification(NotificationType.success, SimpleAction.update);
     }
 
+    /**
+     * Refresh the {@link BuergerModel#buerger} list from the DataStore.
+     *
+     * <p>
+     *     This method also filters by the query (ifPresent).
+     * </p>
+     */
     private void refreshModelList() {
         final Optional<String> query = getModel().getQuery();
         if (query.isPresent()) {
@@ -305,6 +343,9 @@ public class BuergerViewController implements Serializable, I18nResolver {
         }
     }
 
+    /**
+     * Refresh *all* the associations of the selected Buerger in the model.
+     */
     private void refreshModelAssociations() {
         getModel().getSelectedBuerger().ifPresent(buerger -> {
             final List<Buerger> kinder = queryKinder(buerger);
@@ -314,12 +355,20 @@ public class BuergerViewController implements Serializable, I18nResolver {
         });
     }
 
+    /**
+     * Refresh the current selected Buerger, but *not* its associations.
+     */
     private void refreshModelSelected() {
         getModel().getSelectedBuerger().ifPresent(buerger -> {
             getModel().setSelectedBuerger(service.findOne(buerger.getId()).orElse(null));
         });
     }
 
+    /**
+     * Set the query based on the String sent in the Event.
+     * Update the Model and send it on the ResponseKey if necessary.
+     * @param event The event with a {@link String} query as {@link Event#getData()}.
+     */
     private void readList(Event<?> event) {
         final Object data = event.getData();
 
@@ -334,6 +383,12 @@ public class BuergerViewController implements Serializable, I18nResolver {
         notifyComponents();
     }
 
+    /**
+     * Read the Buerger in the Event from the DataStore and set it as the current selected Buerger.
+     * If called with null, the current selected Buerger will only be refreshed from the DataStore.
+     * Update the Model and send it on the ResponseKey if necessary.
+     * @param event The event with an {@link Buerger} or *null* as {@link Event#getData()}.
+     */
     private void readSelected(Event<?> event) {
         final Object data = event.getData();
 
@@ -352,14 +407,26 @@ public class BuergerViewController implements Serializable, I18nResolver {
         notifyComponents();
     }
 
+    /**
+     * Notify all the Components.
+     */
     public void notifyComponents() {
         eventbus.notify(getResponseKey(), Event.wrap(getModel()));
     }
 
+    /**
+     * Get the RequestKey for this Entity.
+     * @param event The disered event the Key will have.
+     * @return The RequestKey with the chosen RequestEvent.
+     */
     public RequestKey getRequestKey(RequestEvent event) {
         return new RequestKey(event, Buerger.class);
     }
 
+    /**
+     * Get the ResponseKey for this Entity.
+     * @return The ResponseKey.
+     */
     public ResponseKey getResponseKey() {
         return new ResponseKey(Buerger.class);
     }
@@ -377,232 +444,6 @@ public class BuergerViewController implements Serializable, I18nResolver {
                 resolveRelative(getNotificationPath(type, action, Type.text)));
         succes.show(Page.getCurrent());
     }
-
-
-/**
- private void releasePartnerHandler(Event<AppEvent<Buerger>> eventWrapper) {
- AppEvent<Buerger> event = eventWrapper.getData();
- this.releasePartner(event.getEntity());
- // UI Komponenten aktualisieren
-
- showNotification(NotificationType.success, SimpleAction.release, Buerger.Rel.partner);
-
- postEvent(buildComponentEvent(EventType.DELETE_BUERGER).setItemID(event.getEntity()));
- }
-
- private void addPartnerEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
- navigator.getUI().addWindow(new TableSelectWindow(this, getViewFactory().generateBuergerPartnerSearchTable()));
- postEvent(buildAppEvent(EventType.QUERY_BUERGER));
- }
-
- private void saveAsPartnerEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
- AppEvent<Buerger> event = eventWrapper.getData();
- this.setBuergerPartner(event.getEntity());
- GenericSuccessNotification succes = new GenericSuccessNotification(
- resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.add, Type.label, "partner")),
- resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.add, Type.text, "partner")));
- succes.show(Page.getCurrent());
- postEvent(buildComponentEvent(EventType.SAVE_AS_PARTNER).addEntity(event.getEntity()));
- }
-
- private void releaseKindHandler(Event<AppEvent<Buerger>> eventWrapper) {
- AppEvent<Buerger> event = eventWrapper.getData();
- // Service Operationen ausführen
- this.releaseKind(event.getEntity());
- // UI Komponenten aktualisieren
-
- GenericSuccessNotification succes = new GenericSuccessNotification(
- resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.release, Type.label, "child")),
- resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.release, Type.text, "child")));
- succes.show(Page.getCurrent());
-
- postEvent(buildComponentEvent(EventType.DELETE_BUERGER).setItemID(event.getEntity()));
-
- }
-
- private void addSearchedChildEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
- navigator.getUI().addWindow(new TableSelectWindow(this, getViewFactory().generateChildSearchTable()));
- postEvent(buildAppEvent(EventType.QUERY_BUERGER));
- }
-
- private void saveAsChildEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
- AppEvent<Buerger> event = eventWrapper.getData();
-
- this.addBuergerKind(event.getEntity());
- GenericSuccessNotification succes = new GenericSuccessNotification(
- resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.add, Type.label, "child")),
- resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.add, Type.text, "child")));
- succes.show(Page.getCurrent());
- postEvent(buildComponentEvent(EventType.SAVE_CHILD).addEntity(event.getEntity()));
- }
-
- private void queryChildEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
- AppEvent<Buerger> event = eventWrapper.getData();
-
- // UI Komponenten aktualisieren
- postEvent(buildComponentEvent(EventType.QUERY_CHILD).addEntities(this.queryKinder(event.getEntity())));
- }
-
- private void queryEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
- AppEvent<Buerger> event = eventWrapper.getData();
-
- List<Buerger> currentEntities;
- if (event.getQuery().isPresent()) {
- currentEntities = this.queryBuerger(event.getQuery().get());
- } else {
- currentEntities = this.queryBuerger();
- }
-
- // UI Komponenten aktualisieren
- postEvent(buildComponentEvent(EventType.QUERY_BUERGER).addEntities(currentEntities));
- }
-
- private void select2ReadEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
- AppEvent<Buerger> event = eventWrapper.getData();
-
- this.current = event.getItem();
-
- // UI Komponente aktualisieren
- postEvent(buildComponentEvent(EventType.SELECT_TO_READ).addEntity(event.getItem().getBean()));
-
-
- }
-
- private void select2UpdateEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
- AppEvent<Buerger> event = eventWrapper.getData();
-
- // Das ist notwendig, weil beim ersten Aufruf der UPDATE
- // Funktion erst die Komponente erstellt wird. Das Event
- // läuft also zuerst ins Leere und muss deshalb nochmal
- // wiederholt werden.
- this.current = event.getItem();
-
- // UI Komponenten aktualisieren
- postEvent(buildComponentEvent(EventType.SELECT_TO_EDIT).addEntity(event.getItem().getBean()));
-
- }
-
- private void copyEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
- AppEvent<Buerger> event = eventWrapper.getData();
-
- // Service Operationen ausführen
- Buerger copy = this.copyBuerger(event.getEntity().getId());
-
- // UI Komponenten aktualisieren
- postEvent(buildComponentEvent(EventType.COPY_BUERGER).addEntity(copy));
-
- GenericSuccessNotification succes = new GenericSuccessNotification(
- resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.copy, Type.label)),
- resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.copy, Type.text)));
- succes.show(Page.getCurrent());
- }
-
- private void deleteEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
- AppEvent<Buerger> event = eventWrapper.getData();
-
- Notification resultNotification;
-
- // Service Operationen ausführen
- try {
- this.deleteBuerger(event.getEntity());
- // UI Komponenten aktualisieren
- ComponentEvent<Buerger> componentEvent = buildComponentEvent(EventType.DELETE_BUERGER);
- componentEvent.setItemID(event.getEntity());
- postEvent(componentEvent);
- resultNotification = new GenericSuccessNotification(
- resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.delete, Type.label)),
- resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.delete, Type.text)));
- } catch (HttpClientErrorException e) {
- LOG.warn("Exception: " + e.getMessage());
- if (e.getStatusCode().equals(HttpStatus.CONFLICT)) {
- resultNotification = new GenericFailureNotification(
- resolveRelative(getNotificationPath(NotificationType.failure, SimpleAction.delete, Type.label)),
- resolveRelative(getNotificationPath(NotificationType.failure, SimpleAction.delete, Type.text)));
- } else {
- resultNotification = new GenericFailureNotification(
- resolveRelative(getNotificationPath(NotificationType.failure, SimpleAction.delete, Type.label)),
- e.getLocalizedMessage()
- );
- }
- }
-
- resultNotification.show(Page.getCurrent());
- }
-
- private void saveChildEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
- AppEvent<Buerger> event = eventWrapper.getData();
-
- // Service Operation ausführen
- this.saveBuergerKind(event.getEntity());
-
- postEvent(buildComponentEvent(EventType.SAVE_AND_ADD_CHILD).addEntity(event.getEntity()));
-
- GenericSuccessNotification succes = new GenericSuccessNotification(
- resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.save, Type.label)),
- resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.save, Type.text)));
- succes.show(Page.getCurrent());
- }
-
- private void savePartnerEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
- AppEvent<Buerger> event = eventWrapper.getData();
-
- // Service Operation ausführen
- this.saveBuergerPartner(event.getEntity());
-
- postEvent(buildComponentEvent(EventType.SAVE_PARTNER).addEntity(event.getEntity()));
-
- GenericSuccessNotification succes = new GenericSuccessNotification(
- resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.save, Type.label)),
- resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.save, Type.text)));
- succes.show(Page.getCurrent());
- }
-
- private void saveEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
- AppEvent<Buerger> event = eventWrapper.getData();
-
- // Service Operationen ausführen
- Buerger newBuerger = this.save(event.getEntity());
-
- // UI Komponenten aktualisieren
- postEvent(buildComponentEvent(EventType.SAVE_BUERGER).addEntity(newBuerger));
-
- GenericSuccessNotification succes = new GenericSuccessNotification(
- resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.save, Type.label)),
- resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.save, Type.text)));
- succes.show(Page.getCurrent());
-
- }
-
- private void updateEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
- AppEvent<Buerger> event = eventWrapper.getData();
-
- // Service Operationen ausführen
- this.updateBuerger(event.getEntity());
-
- // UI Komponenten aktualisieren
- postEvent(buildComponentEvent(EventType.UPDATE_BUERGER).addEntity(event.getEntity()));
-
-
- GenericSuccessNotification succes = new GenericSuccessNotification(
- resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.update, Type.label)),
- resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.update, Type.text)));
- succes.show(Page.getCurrent());
-
- }
-
- private void queryPartnerEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
- AppEvent<Buerger> event = eventWrapper.getData();
- // UI Komponenten aktualisieren
- Buerger partner;
- try {
- partner = this.queryPartner(event.getEntity());
- postEvent(buildComponentEvent(EventType.QUERY_PARTNER).addEntity(partner));
- } catch (HttpClientErrorException e) {
- if (e.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
- postEvent(buildComponentEvent(EventType.QUERY_PARTNER).addEntities(new ArrayList<>()));
- }
- }
- }*/
 
     ////////////////////////
     // I18n Operations //
