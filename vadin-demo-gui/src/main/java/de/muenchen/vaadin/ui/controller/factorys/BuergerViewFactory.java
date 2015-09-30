@@ -148,6 +148,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
                 }
             });
         }
+        controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
         return childSearchTable.get();
     }
 
@@ -164,6 +165,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
                 }
             });
         }
+        controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
         return partnerSearchTable.get();
     }
 

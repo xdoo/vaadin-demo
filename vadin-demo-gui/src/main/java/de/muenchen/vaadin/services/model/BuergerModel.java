@@ -11,7 +11,7 @@ import java.util.Optional;
  * fabian.holtkoetter ist unschuldig.
  */
 public class BuergerModel implements BuergerReadOnlyModel{
-    private Optional<Buerger> selectedBuerger;
+    private Optional<Buerger> selectedBuerger = Optional.empty();
 
     private List<Buerger> selectedBuergerKinder = new ArrayList<>();
     private List<Buerger> selectedBuergerPartner = new ArrayList<>();
