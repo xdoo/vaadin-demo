@@ -218,10 +218,12 @@ public class BuergerViewController implements Serializable, I18nResolver {
 
         if (data instanceof Association) {
             @SuppressWarnings("unchecked") final Association<Buerger> association = (Association<Buerger>) event.getData();
+            final Buerger buerger = association.getAssociation().getId() == null ? service.create(association.getAssociation()) : association.getAssociation();
+
             if (Buerger.Rel.kinder.name().equals(association.getRel()))
-                addBuergerKind(association.getAssociation());
+                addBuergerKind(buerger);
             if (Buerger.Rel.partner.name().equals(association.getRel()))
-                setBuergerPartner(association.getAssociation());
+                setBuergerPartner(buerger);
 
             refreshModelAssociations();
         } else {

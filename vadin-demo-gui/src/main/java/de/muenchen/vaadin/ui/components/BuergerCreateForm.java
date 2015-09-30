@@ -169,11 +169,13 @@ public class BuergerCreateForm extends CustomComponent {
                 birthdayfield.validate();
                 
                 binder.commit();
-                controller.getEventbus().notify(controller.getRequestKey(RequestEvent.CREATE), reactor.bus.Event.wrap(binder.getItemDataSource().getBean()));
-                getRelation().ifPresent(rel -> {
-                    final Association<Buerger> buergerAssociation = new Association<>(binder.getItemDataSource().getBean(), rel);
-                    controller.getEventbus().notify(controller.getRequestKey(RequestEvent.UPDATE), reactor.bus.Event.wrap(buergerAssociation));
-                });
+
+                if (getRelation().isPresent()) {
+                    final Association<Buerger> buergerAssociation = new Association<>(binder.getItemDataSource().getBean(), getRelation().get());
+                    controller.getEventbus().notify(controller.getRequestKey(RequestEvent.ADD_ASSOCIATION), reactor.bus.Event.wrap(buergerAssociation));
+                } else {
+                    controller.getEventbus().notify(controller.getRequestKey(RequestEvent.CREATE), reactor.bus.Event.wrap(binder.getItemDataSource().getBean()));
+                }
                 getNavigator().navigateTo(getNavigateTo());
 
                 //reset
