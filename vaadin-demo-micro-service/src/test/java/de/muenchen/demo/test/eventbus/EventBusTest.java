@@ -20,7 +20,7 @@ public class EventBusTest {
 
     @Before
     public void before(){
-        eventBus.on(new RequestEntityKey(RequestEvent.CREATE, Buerger.class).getSelector(), this::create);
+        eventBus.on(new RequestEntityKey(RequestEvent.CREATE, Buerger.class).toSelector(), this::create);
     }
 
     private void create(Event<?> event) {

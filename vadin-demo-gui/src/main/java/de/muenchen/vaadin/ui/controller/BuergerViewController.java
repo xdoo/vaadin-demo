@@ -30,7 +30,7 @@ import reactor.bus.EventBus;
 
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -182,13 +182,13 @@ public class BuergerViewController implements Serializable, I18nResolver {
      * Register all event handlers on the RequestEntityKey.
      */
     public void initEventhandlers() {
-        eventbus.on(getRequestKey(RequestEvent.CREATE).getSelector(), this::create);
-        eventbus.on(getRequestKey(RequestEvent.DELETE).getSelector(), this::delete);
-        eventbus.on(getRequestKey(RequestEvent.UPDATE).getSelector(), this::update);
-        eventbus.on(getRequestKey(RequestEvent.ADD_ASSOCIATION).getSelector(), this::addAssociation);
-        eventbus.on(getRequestKey(RequestEvent.REMOVE_ASSOCIATION).getSelector(), this::removeAssociation);
-        eventbus.on(getRequestKey(RequestEvent.READ_LIST).getSelector(), this::readList);
-        eventbus.on(getRequestKey(RequestEvent.READ_SELECTED).getSelector(), this::readSelected);
+        eventbus.on(getRequestKey(RequestEvent.CREATE).toSelector(), this::create);
+        eventbus.on(getRequestKey(RequestEvent.DELETE).toSelector(), this::delete);
+        eventbus.on(getRequestKey(RequestEvent.UPDATE).toSelector(), this::update);
+        eventbus.on(getRequestKey(RequestEvent.ADD_ASSOCIATION).toSelector(), this::addAssociation);
+        eventbus.on(getRequestKey(RequestEvent.REMOVE_ASSOCIATION).toSelector(), this::removeAssociation);
+        eventbus.on(getRequestKey(RequestEvent.READ_LIST).toSelector(), this::readList);
+        eventbus.on(getRequestKey(RequestEvent.READ_SELECTED).toSelector(), this::readSelected);
     }
 
     /**
@@ -337,7 +337,7 @@ public class BuergerViewController implements Serializable, I18nResolver {
     }
 
     /**
-     * Refresh the {@link BuergerModel#buerger} list from the DataStore.
+     * Refresh the {@link BuergerModel#buergers} list from the DataStore.
      * <p/>
      * <p>
      * This method also filters by the query (ifPresent).
@@ -358,7 +358,8 @@ public class BuergerViewController implements Serializable, I18nResolver {
     private void refreshModelAssociations() {
         getModel().getSelectedBuerger().ifPresent(buerger -> {
             final List<Buerger> kinder = queryKinder(buerger);
-            final List<Buerger> partner = Collections.singletonList(queryPartner(buerger));
+            final List<Buerger> partner = new ArrayList<>();
+            partner.add(queryPartner(buerger));
             getModel().setSelectedBuergerKinder(kinder);
             getModel().setSelectedBuergerPartner(partner);
         });

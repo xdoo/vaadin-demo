@@ -162,8 +162,8 @@ public class MainUI extends UI implements I18nResolver {
             }
         });
 
-        eventBus.on(Keys.LOGIN.getSelector(), this::loginEventHandler);
-        eventBus.on(Keys.LOGOUT.getSelector(), this::logoutEventHandler);
+        eventBus.on(Keys.LOGIN.toSelector(), this::loginEventHandler);
+        eventBus.on(Keys.LOGOUT.toSelector(), this::logoutEventHandler);
     }
 
     public void loginEventHandler(reactor.bus.Event<?> event) {

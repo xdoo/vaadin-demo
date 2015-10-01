@@ -68,7 +68,7 @@ public class BuergerUpdateForm extends CustomComponent implements Consumer<Event
      */
     private void createForm() {
 
-        controller.getEventbus().on(controller.getResponseKey().getSelector(), this);
+        controller.getEventbus().on(controller.getResponseKey().toSelector(), this);
 
         FormLayout layout = new FormLayout();
         HorizontalLayout buttonLayout = new HorizontalLayout();

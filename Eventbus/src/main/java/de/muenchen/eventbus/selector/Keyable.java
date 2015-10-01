@@ -15,7 +15,7 @@ public interface Keyable {
      *
      * @return The Selector
      */
-    default Selector<?> getSelector() {
+    default Selector<?> toSelector() {
         return Selectors.$(this);
     }
 }
