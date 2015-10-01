@@ -8,10 +8,11 @@ import java.util.Optional;
 
 /**
  * Provides a simple Model for the Buergers in the GUI.
+ *
  * @author fabian.holtkoetter p.mueller
  * @version 1.0
  */
-public class BuergerModel implements BuergerReadOnlyModel{
+public class BuergerModel implements BuergerReadOnlyModel {
     /** The current (single or none) selected Buerger in the GUI. */
     private Optional<Buerger> selectedBuerger = Optional.empty();
     /** All the kinders of the selectedBuerger. */
@@ -58,6 +59,7 @@ public class BuergerModel implements BuergerReadOnlyModel{
 
     /**
      * Set the current query.
+     *
      * @param query The query.
      */
     public void setQuery(String query) {
@@ -71,6 +73,7 @@ public class BuergerModel implements BuergerReadOnlyModel{
 
     /**
      * Set the partners of the selected buerger.
+     *
      * @param selectedBuergerPartner A list of the partners.
      */
     public void setSelectedBuergerPartner(List<Buerger> selectedBuergerPartner) {
@@ -84,6 +87,7 @@ public class BuergerModel implements BuergerReadOnlyModel{
 
     /**
      * Set the kinders of the buerger.
+     *
      * @param selectedBuergerKinder A list of the kinders.
      */
     public void setSelectedBuergerKinder(List<Buerger> selectedBuergerKinder) {

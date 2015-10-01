@@ -7,6 +7,7 @@ import java.util.Optional;
 
 /**
  * Provides a simple read-only view on the {@link BuergerModel}.
+ *
  * @author fabian.holtkoetter
  * @version 1.0
  */
@@ -28,18 +29,21 @@ public interface BuergerReadOnlyModel {
 
     /**
      * Get the current query.
+     *
      * @return The current query.
      */
     Optional<String> getQuery();
 
     /**
      * Get all the partners of the selected buerger.
+     *
      * @return A list of the partners.
      */
     List<Buerger> getSelectedBuergerPartner();
 
     /**
      * Get all the kinders of the selected buerger.
+     *
      * @return A list of the kinders.
      */
     List<Buerger> getSelectedBuergerKinder();
