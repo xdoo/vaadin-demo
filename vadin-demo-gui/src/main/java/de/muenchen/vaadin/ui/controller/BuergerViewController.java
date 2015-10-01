@@ -200,23 +200,19 @@ public class BuergerViewController implements Serializable, I18nResolver {
     private void removeAssociation(Event<?> event) {
         final Object data = event.getData();
         if (data == null) throw new NullPointerException("Event data must not be null!");
+        if (data.getClass() != Association.class)
+            throw new IllegalArgumentException("The event must be of " + Association.class);
 
-        if (data instanceof Association) {
-            @SuppressWarnings("unchecked") final Association<Buerger> association = (Association<Buerger>) event.getData();
+        @SuppressWarnings("unchecked") final Association<Buerger> association = (Association<Buerger>) event.getData();
 
-            final Buerger.Rel rel = Buerger.Rel.valueOf(association.getRel());
-            if (Buerger.Rel.kinder == rel)
-                releaseKind(association.getAssociation());
-            if (Buerger.Rel.partner == rel)
-                releasePartner(association.getAssociation());
+        final Buerger.Rel rel = Buerger.Rel.valueOf(association.getRel());
+        if (Buerger.Rel.kinder == rel)
+            releaseKind(association.getAssociation());
+        if (Buerger.Rel.partner == rel)
+            releasePartner(association.getAssociation());
 
-            refreshModelAssociations();
-            showNotification(NotificationType.success, SimpleAction.release, rel);
-
-        } else {
-            throw new IllegalArgumentException("The event cannot be of Class " + event.getData().getClass());
-        }
-
+        refreshModelAssociations();
+        showNotification(NotificationType.success, SimpleAction.release, rel);
         notifyComponents();
     }
 
@@ -233,22 +229,25 @@ public class BuergerViewController implements Serializable, I18nResolver {
     private void addAssociation(Event<?> event) {
         final Object data = event.getData();
         if (data == null) throw new NullPointerException("Event data must not be null!");
+        if (data.getClass() != Association.class)
+            throw new IllegalArgumentException("The event must be of " + Association.class);
 
-        if (data instanceof Association) {
-            @SuppressWarnings("unchecked") final Association<Buerger> association = (Association<Buerger>) event.getData();
-            final Buerger buerger = association.getAssociation().getId() == null ? service.create(association.getAssociation()) : association.getAssociation();
-            final Buerger.Rel rel = Buerger.Rel.valueOf(association.getRel());
-            if (Buerger.Rel.kinder == rel)
-                addBuergerKind(buerger);
-            if (Buerger.Rel.partner == rel)
-                setBuergerPartner(buerger);
-
-            refreshModelAssociations();
-            showNotification(NotificationType.success, SimpleAction.add, rel);
+        @SuppressWarnings("unchecked") final Association<Buerger> association = (Association<Buerger>) event.getData();
+        final Buerger buerger;
+        if (association.getAssociation().getId() == null) {
+            buerger = service.create(association.getAssociation());
         } else {
-            throw new IllegalArgumentException("The event cannot be of Class " + event.getData().getClass());
+            buerger = association.getAssociation();
         }
 
+        final Buerger.Rel rel = Buerger.Rel.valueOf(association.getRel());
+        if (Buerger.Rel.kinder == rel)
+            addBuergerKind(buerger);
+        if (Buerger.Rel.partner == rel)
+            setBuergerPartner(buerger);
+
+        refreshModelAssociations();
+        showNotification(NotificationType.success, SimpleAction.add, rel);
         notifyComponents();
     }
 
@@ -261,14 +260,11 @@ public class BuergerViewController implements Serializable, I18nResolver {
     private void create(Event<?> event) {
         final Object data = event.getData();
         if (data == null) throw new NullPointerException("Event data must not be null!");
+        if (data.getClass() != Buerger.class)
+            throw new IllegalArgumentException("The event must be of " + Buerger.class);
 
-
-        if (event.getData() instanceof Buerger) {
-            final Buerger buerger = (Buerger) event.getData();
-            service.create(buerger);
-        } else {
-            throw new IllegalArgumentException("The event must not be of Class " + event.getData().getClass());
-        }
+        final Buerger buerger = (Buerger) event.getData();
+        service.create(buerger);
 
         refreshModelList();
         notifyComponents();
@@ -285,27 +281,23 @@ public class BuergerViewController implements Serializable, I18nResolver {
     private void delete(Event<?> event) {
         final Object data = event.getData();
         if (data == null) throw new NullPointerException("Event data must not be null!");
+        if (data.getClass() != Buerger.class)
+            throw new IllegalArgumentException("The event must be of " + Buerger.class);
 
-        if (data instanceof Buerger) {
-            final Buerger buerger = (Buerger) event.getData();
-            if (buerger.getId() == null)
-                throw new IllegalArgumentException("The Buerger must have an ID.");
-            service.delete(buerger.getId());
+        final Buerger buerger = (Buerger) event.getData();
+        if (buerger.getId() == null)
+            throw new IllegalArgumentException("The Buerger must have an ID.");
+        service.delete(buerger.getId());
 
-            getModel().getSelectedBuerger().ifPresent(selectedBuerger -> {
-                if (selectedBuerger.equals(buerger)) {
-                    getModel().setSelectedBuerger(null);
-                    getModel().getSelectedBuergerKinder().clear();
-                    getModel().getSelectedBuergerPartner().clear();
-                }
-            });
+        getModel().getSelectedBuerger().ifPresent(selectedBuerger -> {
+            if (selectedBuerger.equals(buerger)) {
+                getModel().setSelectedBuerger(null);
+                getModel().getSelectedBuergerKinder().clear();
+                getModel().getSelectedBuergerPartner().clear();
+            }
+        });
 
-            refreshModelList();
-
-        } else {
-            throw new IllegalArgumentException("The event cannot be of Class " + event.getData().getClass());
-        }
-
+        refreshModelList();
         notifyComponents();
         showNotification(NotificationType.success, SimpleAction.delete);
     }
@@ -319,19 +311,16 @@ public class BuergerViewController implements Serializable, I18nResolver {
     private void update(Event<?> event) {
         final Object data = event.getData();
         if (data == null) throw new NullPointerException("Event data must not be null!");
+        if (data.getClass() != Buerger.class)
+            throw new IllegalArgumentException("The event must be of " + Buerger.class);
 
-        if (data instanceof Buerger) {
-            final Buerger buerger = (Buerger) event.getData();
-            if (buerger.getId() == null)
-                throw new IllegalArgumentException("The Buerger must have an ID.");
-            service.update(buerger);
+        final Buerger buerger = (Buerger) event.getData();
+        if (buerger.getId() == null)
+            throw new IllegalArgumentException("The Buerger must have an ID.");
+        service.update(buerger);
 
-            refreshModelSelected();
-            refreshModelList();
-        } else {
-            throw new IllegalArgumentException("The event cannot be of Class " + event.getData().getClass());
-        }
-
+        refreshModelSelected();
+        refreshModelList();
         notifyComponents();
         showNotification(NotificationType.success, SimpleAction.update);
     }
