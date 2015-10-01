@@ -7,10 +7,8 @@ package de.muenchen.eventbus.selector.entity;
  *     Komponenten können nur Requests versenden. Controller fressen nur requests. Controller versenden nur Responses. Komponenten empfangen nur responses.
  * </p>
  *
- * "Also wenn du die Kindertab da hast - und dann holst du dir ein Wasser!"
- *
  * @author fabian.holtkoetter
- * @version 1
+ * @version 1.0
  */
 public class ResponseEntityKey extends BaseEntityKey {
 

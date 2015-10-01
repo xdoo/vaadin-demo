@@ -8,7 +8,7 @@ package de.muenchen.eventbus.selector.entity;
  * </p>
  *
  * @author fabian.holtkoetter
- * @version 1
+ * @version 1.0
  */
 public class RequestEntityKey extends BaseEntityKey {
 

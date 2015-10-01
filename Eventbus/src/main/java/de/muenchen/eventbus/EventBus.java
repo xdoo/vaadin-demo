@@ -5,7 +5,8 @@ import reactor.core.dispatch.SynchronousDispatcher;
 import java.io.Serializable;
 
 /**
- * Created by rene.zarwel on 04.09.15.
+ * Provides a simple EventBus.
+ * @author rene.zarwel
  */
 public class EventBus extends reactor.bus.EventBus implements Serializable {
 

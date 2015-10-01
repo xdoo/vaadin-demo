@@ -346,9 +346,9 @@ public class BuergerViewController implements Serializable, I18nResolver {
     private void refreshModelList() {
         final Optional<String> query = getModel().getQuery();
         if (query.isPresent()) {
-            getModel().setBuerger(queryBuerger(query.get()));
+            getModel().setBuergers(queryBuerger(query.get()));
         } else {
-            getModel().setBuerger(queryBuerger());
+            getModel().setBuergers(queryBuerger());
         }
     }
 

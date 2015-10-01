@@ -70,6 +70,6 @@ public class GenericGrid extends Grid implements Consumer<Event<BuergerReadOnlyM
     public void accept(reactor.bus.Event<BuergerReadOnlyModel> eventWrapper) {
         BuergerReadOnlyModel event = eventWrapper.getData();
 
-        this.addAll(event.getBuerger());
+        this.addAll(event.getBuergers());
     }
 }
