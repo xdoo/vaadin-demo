@@ -18,10 +18,9 @@ import org.springframework.hateoas.config.EnableHypermediaSupport;
 import org.springframework.security.config.annotation.authentication.configurers.GlobalAuthenticationConfigurerAdapter;
 
 @Configuration
-@ComponentScan
-//@ComponentScan(basePackages = {"de.muenchen.demo.service", "de.muenchen.auditing"})
-//@EntityScan(basePackages = {"de.muenchen.demo.service", "de.muenchen.auditing"})
-//@EnableJpaRepositories(basePackages = {"de.muenchen.demo.service", "de.muenchen.auditing"})
+@ComponentScan(basePackages = {"de.muenchen.demo.service", "de.muenchen.auditing"})
+@EntityScan(basePackages = {"de.muenchen.demo.service", "de.muenchen.auditing"})
+@EnableJpaRepositories(basePackages = {"de.muenchen.demo.service", "de.muenchen.auditing"})
 @EnableAutoConfiguration
 @EnableEurekaClient
 @EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)

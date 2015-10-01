@@ -11,6 +11,7 @@ public enum RequestEvent {
     UPDATE,
     ADD_ASSOCIATION,
     REMOVE_ASSOCIATION,
+    READ,
     READ_LIST,
     READ_SELECTED,
     DELETE
