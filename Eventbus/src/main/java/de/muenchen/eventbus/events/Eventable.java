@@ -11,6 +11,7 @@ import reactor.bus.Event;
 public interface Eventable {
     /**
      * Get the Assocation as an Event.
+     *
      * @return The Event.
      */
     default Event<?> asEvent() {

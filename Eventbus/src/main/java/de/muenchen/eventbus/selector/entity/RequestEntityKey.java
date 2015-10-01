@@ -2,9 +2,9 @@ package de.muenchen.eventbus.selector.entity;
 
 /**
  * Stellt einen Key bereit, der einen Produzenten darüber Benachrichtigt, dass Daten benötigt werden.
- *
+ * <p/>
  * <p>
- *     Komponenten können nur Requests versenden. Controller fressen nur requests. Controller versenden nur Responses. Komponenten empfangen nur responses.
+ * Komponenten können nur Requests versenden. Controller fressen nur requests. Controller versenden nur Responses. Komponenten empfangen nur responses.
  * </p>
  *
  * @author fabian.holtkoetter
@@ -21,18 +21,18 @@ public class RequestEntityKey extends BaseEntityKey {
      * Create a new RequestEntityKey with the desired RequestEvent and for the entity class.
      *
      * @param requestEvent The requested Event.
-     * @param entityClass The class of the entity the request is for.
+     * @param entityClass  The class of the entity the request is for.
      */
     public RequestEntityKey(RequestEvent requestEvent, Class entityClass) {
         super(entityClass);
-        if (requestEvent == null)
-            throw new IllegalArgumentException("requestEvent can't be null.");
+        if (requestEvent == null) throw new IllegalArgumentException("requestEvent can't be null.");
         this.requestEvent = requestEvent;
 
     }
 
     /**
      * Get the requested Event by this key.
+     *
      * @return
      */
     public RequestEvent getRequestEvent() {

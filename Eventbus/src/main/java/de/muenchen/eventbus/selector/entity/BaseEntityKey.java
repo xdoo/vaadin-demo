@@ -17,11 +17,11 @@ public abstract class BaseEntityKey implements Keyable {
     /**
      * Create a new Key for the entity by class.
      * The class cannot be null.
+     *
      * @param entityClass The non-null class of an Entity.
      */
     public BaseEntityKey(Class entityClass) {
-        if(entityClass==null)
-            throw new IllegalArgumentException("EntityClass can't be null.");
+        if (entityClass == null) throw new IllegalArgumentException("EntityClass can't be null.");
         this.entityClass = entityClass;
     }
 

@@ -4,7 +4,7 @@ package de.muenchen.eventbus.selector.entity;
  * Stellt einen Schlüssel bereit, der einem Komsumenten die Möglichkeit gibt, bei bereitstehenden Daten benachrichtigt zu werden.
  * Produzenten versenden diesen Key um über zur verfügung stehende Daten zu benachrichtigen.
  * <p>
- *     Komponenten können nur Requests versenden. Controller fressen nur requests. Controller versenden nur Responses. Komponenten empfangen nur responses.
+ * Komponenten können nur Requests versenden. Controller fressen nur requests. Controller versenden nur Responses. Komponenten empfangen nur responses.
  * </p>
  *
  * @author fabian.holtkoetter
