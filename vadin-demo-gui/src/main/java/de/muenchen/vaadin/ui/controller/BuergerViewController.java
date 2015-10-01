@@ -206,12 +206,15 @@ public class BuergerViewController implements Serializable, I18nResolver {
         @SuppressWarnings("unchecked") final Association<Buerger> association = (Association<Buerger>) event.getData();
 
         final Buerger.Rel rel = Buerger.Rel.valueOf(association.getRel());
-        if (Buerger.Rel.kinder == rel)
+        if (Buerger.Rel.kinder == rel) {
             releaseKind(association.getAssociation());
-        if (Buerger.Rel.partner == rel)
+            getModel().getSelectedBuergerKinder().removeItem(association.getAssociation());
+        }
+        if (Buerger.Rel.partner == rel) {
             releasePartner(association.getAssociation());
+            getModel().getSelectedBuergerPartner().removeItem(association.getAssociation());
+        }
 
-        refreshModelAssociations();
         showNotification(NotificationType.success, SimpleAction.release, rel);
         notifyComponents();
     }
@@ -241,10 +244,14 @@ public class BuergerViewController implements Serializable, I18nResolver {
         }
 
         final Buerger.Rel rel = Buerger.Rel.valueOf(association.getRel());
-        if (Buerger.Rel.kinder == rel)
+        if (Buerger.Rel.kinder == rel) {
             addBuergerKind(buerger);
-        if (Buerger.Rel.partner == rel)
+            getModel().getSelectedBuergerKinder().addBean(buerger);
+        }
+        if (Buerger.Rel.partner == rel) {
             setBuergerPartner(buerger);
+            getModel().getSelectedBuergerPartner().addBean(buerger);
+        }
 
         refreshModelAssociations();
         showNotification(NotificationType.success, SimpleAction.add, rel);
@@ -264,9 +271,9 @@ public class BuergerViewController implements Serializable, I18nResolver {
             throw new IllegalArgumentException("The event must be of " + Buerger.class);
 
         final Buerger buerger = (Buerger) event.getData();
-        service.create(buerger);
+        final Buerger fromREST = service.create(buerger);
 
-        refreshModelList();
+        getModel().getBuergers().addBean(fromREST);
         notifyComponents();
         showNotification(NotificationType.success, SimpleAction.create);
     }
@@ -297,7 +304,7 @@ public class BuergerViewController implements Serializable, I18nResolver {
             }
         });
 
-        refreshModelList();
+        getModel().getBuergers().removeItem(buerger);
         notifyComponents();
         showNotification(NotificationType.success, SimpleAction.delete);
     }
@@ -317,10 +324,10 @@ public class BuergerViewController implements Serializable, I18nResolver {
         final Buerger buerger = (Buerger) event.getData();
         if (buerger.getId() == null)
             throw new IllegalArgumentException("The Buerger must have an ID.");
-        service.update(buerger);
+        final Buerger fromREST = service.update(buerger);
 
         refreshModelSelected();
-        refreshModelList();
+        getModel().getBuergers().addBean(fromREST);
         notifyComponents();
         showNotification(NotificationType.success, SimpleAction.update);
     }
