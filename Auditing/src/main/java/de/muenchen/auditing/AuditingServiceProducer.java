@@ -15,14 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import reactor.bus.Event;
 
 import javax.persistence.EntityManagerFactory;
 import java.util.Date;
 import java.util.Objects;
 import java.util.stream.Stream;
-
-import static reactor.bus.selector.Selectors.$;
 
 /**
  * AuditingServiceProducer registriert sich mit Listener auf Änderungen der Datenbank um bei Änderungenszugriffen Userdaten zu speichern.
@@ -69,18 +66,15 @@ public class AuditingServiceProducer {
     }
 
     public void init() {
-        this.eventbus.on($(AuditingEvent.class), this::eventHandler);
         this.registerListeners();
     }
 
-    private void eventHandler(Event<AuditingEvent> event) {
-        AuditingEvent audEvent = event.getData();
-
+    private void pushToQueue(AuditingEvent event) {
         AuditingUserEntity entity = new AuditingUserEntity();
         entity.setUsername(getCurrentUsername());
         entity.setDate(new Date(System.currentTimeMillis()));
-        entity.setChangeType(audEvent.getEventType().name());
-        entity.setEntity(marshallEntityToJSON(audEvent));
+        entity.setChangeType(event.getEventType().name());
+        entity.setEntity(marshallEntityToJSON(event));
 
         queue.put(entity);
     }
@@ -100,8 +94,7 @@ public class AuditingServiceProducer {
                     Object eventEntity = postLoadEvent.getEntity();
                     MUCAudited annotation = eventEntity.getClass().getAnnotation(MUCAudited.class);
                     if (shouldBeAudited(MUCAudited.READ, annotation)) {
-                        //noinspection unchecked
-                        eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(RequestEvent.READ_LIST, eventEntity)));
+                        pushToQueue(new AuditingEvent(RequestEvent.READ, eventEntity));
                     }
                 });
         registry.getEventListenerGroup(EventType.POST_DELETE)
@@ -115,8 +108,7 @@ public class AuditingServiceProducer {
                         Object eventEntity = postDeleteEvent.getEntity();
                         MUCAudited annotation = eventEntity.getClass().getAnnotation(MUCAudited.class);
                         if (shouldBeAudited(MUCAudited.DELETE, annotation)) {
-                            //noinspection unchecked
-                            eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(RequestEvent.DELETE, eventEntity)));
+                            pushToQueue(new AuditingEvent(RequestEvent.DELETE, eventEntity));
                         }
                     }
 
@@ -136,8 +128,7 @@ public class AuditingServiceProducer {
                         Object eventEntity = postInsertEvent.getEntity();
                         MUCAudited annotation = eventEntity.getClass().getAnnotation(MUCAudited.class);
                         if (shouldBeAudited(MUCAudited.CREATE, annotation)) {
-                            //noinspection unchecked
-                            eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(RequestEvent.CREATE, eventEntity)));
+                            pushToQueue(new AuditingEvent(RequestEvent.CREATE, eventEntity));
                         }
                     }
 
@@ -157,8 +148,7 @@ public class AuditingServiceProducer {
                         Object eventEntity = postUpdateEvent.getEntity();
                         MUCAudited annotation = eventEntity.getClass().getAnnotation(MUCAudited.class);
                         if (shouldBeAudited(MUCAudited.UPDATE, annotation)) {
-                            //noinspection unchecked
-                            eventbus.notify(AuditingEvent.class, Event.wrap(new AuditingEvent(RequestEvent.UPDATE, eventEntity)));
+                            pushToQueue(new AuditingEvent(RequestEvent.UPDATE, eventEntity));
                         }
                     }
 
