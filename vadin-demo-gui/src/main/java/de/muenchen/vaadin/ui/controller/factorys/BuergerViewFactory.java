@@ -5,7 +5,7 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.TabSheet;
 import de.muenchen.eventbus.EventBus;
 import de.muenchen.eventbus.events.Association;
-import de.muenchen.eventbus.selector.Keys;
+import de.muenchen.eventbus.selector.Key;
 import de.muenchen.eventbus.selector.entity.RequestEvent;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.ui.components.*;
@@ -50,7 +50,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<?>> {
 
     @PostConstruct
     public void init() {
-        eventBus.on(Keys.REFRESH.toSelector(), this);
+        eventBus.on(Key.REFRESH.toSelector(), this);
     }
 
 

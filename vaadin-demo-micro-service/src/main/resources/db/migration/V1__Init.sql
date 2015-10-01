@@ -204,7 +204,7 @@ buerger bigint not null,
 primary key ( sachbearbeiter,buerger));
 
 --**************************
---Foreign Keys
+--Foreign Key
 --**************************
 alter table adresse_reference
 add constraint FK_adresse_reference_TO_adresse_externe 

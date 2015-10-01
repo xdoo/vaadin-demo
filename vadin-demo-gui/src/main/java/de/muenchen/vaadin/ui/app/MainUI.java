@@ -14,7 +14,7 @@ import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.eventbus.selector.Keys;
+import de.muenchen.eventbus.selector.Key;
 import de.muenchen.vaadin.demo.apilib.services.SecurityService;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
@@ -162,8 +162,8 @@ public class MainUI extends UI implements I18nResolver {
             }
         });
 
-        eventBus.on(Keys.LOGIN.toSelector(), this::loginEventHandler);
-        eventBus.on(Keys.LOGOUT.toSelector(), this::logoutEventHandler);
+        eventBus.on(Key.LOGIN.toSelector(), this::loginEventHandler);
+        eventBus.on(Key.LOGOUT.toSelector(), this::logoutEventHandler);
     }
 
     public void loginEventHandler(reactor.bus.Event<?> event) {
@@ -217,7 +217,7 @@ public class MainUI extends UI implements I18nResolver {
         MenuBar.Command languageSelection = selectedItem -> i18n.getSupportedLocales().stream().forEach(locale -> {
             if (selectedItem.getText().equals(locale.getDisplayLanguage())) {
                 i18n.setLocale(locale);
-                postEvent(Keys.REFRESH);
+                postEvent(Key.REFRESH);
             }
         });
 
@@ -254,7 +254,7 @@ public class MainUI extends UI implements I18nResolver {
             GenericConfirmationWindow confirmationWindow =
                     new GenericConfirmationWindow(MainUI.this,
                             SimpleAction.logout,
-                            e -> this.postEvent(Keys.LOGOUT));
+                            e -> this.postEvent(Key.LOGOUT));
             getUI().addWindow(confirmationWindow);
             confirmationWindow.center();
             confirmationWindow.focus();

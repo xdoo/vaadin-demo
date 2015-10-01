@@ -12,7 +12,7 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.eventbus.selector.Keys;
+import de.muenchen.eventbus.selector.Key;
 import de.muenchen.vaadin.demo.apilib.services.SecurityService;
 import de.muenchen.vaadin.guilib.components.GenericNotification;
 import de.muenchen.vaadin.guilib.components.GenericWarningNotification;
@@ -87,7 +87,7 @@ public class LoginView extends VerticalLayout implements View {
             @Override
             public void buttonClick(final ClickEvent event) {
                 if (security.login(username.getValue(), password.getValue())) {
-                    eventBus.notify(Keys.LOGIN);
+                    eventBus.notify(Key.LOGIN);
                 } else {
 //                    Anmeldung fehlgeschlagen
                     GenericNotification notif = new GenericWarningNotification("Anmeldung fehlgeschlagen",
