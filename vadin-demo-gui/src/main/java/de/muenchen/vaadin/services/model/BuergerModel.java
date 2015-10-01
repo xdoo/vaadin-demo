@@ -1,9 +1,8 @@
 package de.muenchen.vaadin.services.model;
 
+import com.vaadin.data.util.BeanItemContainer;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -13,14 +12,14 @@ import java.util.Optional;
  * @version 1.0
  */
 public class BuergerModel implements BuergerReadOnlyModel {
+    /** All the kinders of the selectedBuerger. */
+    private final BeanItemContainer<Buerger> selectedBuergerKinder = new BeanItemContainer<>(Buerger.class);
+    /** All the partners of the selectedBuerger. */
+    private final BeanItemContainer<Buerger> selectedBuergerPartner = new BeanItemContainer<>(Buerger.class);
+    /** A List of all the Buergers, possible reduced by the query. */
+    private final BeanItemContainer<Buerger> buergers = new BeanItemContainer<>(Buerger.class);
     /** The current (single or none) selected Buerger in the GUI. */
     private Optional<Buerger> selectedBuerger = Optional.empty();
-    /** All the kinders of the selectedBuerger. */
-    private List<Buerger> selectedBuergerKinder = new ArrayList<>();
-    /** All the partners of the selectedBuerger. */
-    private List<Buerger> selectedBuergerPartner = new ArrayList<>();
-    /** A List of all the Buergers, possible reduced by the query. */
-    private List<Buerger> buergers;
     /** The query to filter the buergers. */
     private Optional<String> query = Optional.empty();
 
@@ -39,17 +38,8 @@ public class BuergerModel implements BuergerReadOnlyModel {
     }
 
     @Override
-    public List<Buerger> getBuergers() {
+    public BeanItemContainer<Buerger> getBuergers() {
         return buergers;
-    }
-
-    /**
-     * Set the buergers.
-     *
-     * @param buergers The buergers.
-     */
-    public void setBuergers(List<Buerger> buergers) {
-        this.buergers = buergers;
     }
 
     @Override
@@ -67,30 +57,13 @@ public class BuergerModel implements BuergerReadOnlyModel {
     }
 
     @Override
-    public List<Buerger> getSelectedBuergerPartner() {
+    public BeanItemContainer<Buerger> getSelectedBuergerPartner() {
         return selectedBuergerPartner;
     }
 
-    /**
-     * Set the partners of the selected buerger.
-     *
-     * @param selectedBuergerPartner A list of the partners.
-     */
-    public void setSelectedBuergerPartner(List<Buerger> selectedBuergerPartner) {
-        this.selectedBuergerPartner = selectedBuergerPartner;
-    }
 
     @Override
-    public List<Buerger> getSelectedBuergerKinder() {
+    public BeanItemContainer<Buerger> getSelectedBuergerKinder() {
         return selectedBuergerKinder;
-    }
-
-    /**
-     * Set the kinders of the buerger.
-     *
-     * @param selectedBuergerKinder A list of the kinders.
-     */
-    public void setSelectedBuergerKinder(List<Buerger> selectedBuergerKinder) {
-        this.selectedBuergerKinder = selectedBuergerKinder;
     }
 }

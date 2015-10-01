@@ -292,8 +292,8 @@ public class BuergerViewController implements Serializable, I18nResolver {
         getModel().getSelectedBuerger().ifPresent(selectedBuerger -> {
             if (selectedBuerger.equals(buerger)) {
                 getModel().setSelectedBuerger(null);
-                getModel().getSelectedBuergerKinder().clear();
-                getModel().getSelectedBuergerPartner().clear();
+                getModel().getSelectedBuergerKinder().removeAllItems();
+                getModel().getSelectedBuergerPartner().removeAllItems();
             }
         });
 
@@ -335,9 +335,11 @@ public class BuergerViewController implements Serializable, I18nResolver {
     private void refreshModelList() {
         final Optional<String> query = getModel().getQuery();
         if (query.isPresent()) {
-            getModel().setBuergers(queryBuerger(query.get()));
+            getModel().getBuergers().removeAllItems();
+            getModel().getBuergers().addAll(queryBuerger(query.get()));
         } else {
-            getModel().setBuergers(queryBuerger());
+            getModel().getBuergers().removeAllItems();
+            getModel().getBuergers().addAll(queryBuerger());
         }
     }
 
@@ -349,8 +351,10 @@ public class BuergerViewController implements Serializable, I18nResolver {
             final List<Buerger> kinder = queryKinder(buerger);
             final List<Buerger> partner = new ArrayList<>();
             partner.add(queryPartner(buerger));
-            getModel().setSelectedBuergerKinder(kinder);
-            getModel().setSelectedBuergerPartner(partner);
+            getModel().getSelectedBuergerKinder().removeAllItems();
+            getModel().getSelectedBuergerKinder().addAll(kinder);
+            getModel().getSelectedBuergerPartner().removeAllItems();
+            getModel().getSelectedBuergerPartner().addAll(partner);
         });
     }
 

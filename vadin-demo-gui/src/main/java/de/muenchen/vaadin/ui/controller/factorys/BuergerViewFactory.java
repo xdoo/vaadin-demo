@@ -135,8 +135,6 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<?>> {
         if (!childSearchTable.isPresent()) {
             LOG.debug("creating 'search' table for buerger");
             childSearchTable = Optional.of(generateGrid());
-            childSearchTable.get().removeColumn("id");
-            childSearchTable.get().removeColumn("links");
             childSearchTable.get().addItemClickListener(itemClickEvent -> {
                 if (itemClickEvent.isDoubleClick()) {
                     Association<Buerger> association = new Association<>((Buerger) itemClickEvent.getItemId(), Buerger.Rel.kinder.name());
@@ -152,8 +150,6 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<?>> {
         if (!partnerSearchTable.isPresent()) {
             LOG.debug("creating 'search' table for buerger");
             partnerSearchTable = Optional.of(generateGrid());
-            partnerSearchTable.get().removeColumn("id");
-            partnerSearchTable.get().removeColumn("links");
             partnerSearchTable.get().addItemClickListener(itemClickEvent -> {
                 if (itemClickEvent.isDoubleClick()) {
                     Association<Buerger> association = new Association<>((Buerger) itemClickEvent.getItemId(), Buerger.Rel.partner.name());
@@ -170,8 +166,6 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<?>> {
         KindGrid grid = new KindGrid(controller);
         grid.setSizeFull();
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
-        grid.removeColumn("id");
-        grid.removeColumn("links");
         grid.addItemClickListener(itemClickEvent -> {
             if (itemClickEvent.getPropertyId() != null) {
                 if (itemClickEvent.isDoubleClick()) {
@@ -202,8 +196,6 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<?>> {
         PartnerGrid table = new PartnerGrid(controller);
         table.setSizeFull();
         table.setSelectionMode(Grid.SelectionMode.MULTI);
-        table.removeColumn("id");
-        table.removeColumn("links");
         table.addItemClickListener(itemClickEvent -> {
             if (itemClickEvent.getPropertyId() != null) {
                 if (itemClickEvent.isDoubleClick()) {

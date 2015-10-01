@@ -1,8 +1,8 @@
 package de.muenchen.vaadin.services.model;
 
+import com.vaadin.data.util.BeanItemContainer;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -25,7 +25,7 @@ public interface BuergerReadOnlyModel {
      *
      * @return A list of all buergers.
      */
-    List<Buerger> getBuergers();
+    BeanItemContainer<Buerger> getBuergers();
 
     /**
      * Get the current query.
@@ -39,12 +39,12 @@ public interface BuergerReadOnlyModel {
      *
      * @return A list of the partners.
      */
-    List<Buerger> getSelectedBuergerPartner();
+    BeanItemContainer<Buerger> getSelectedBuergerPartner();
 
     /**
      * Get all the kinders of the selected buerger.
      *
      * @return A list of the kinders.
      */
-    List<Buerger> getSelectedBuergerKinder();
+    BeanItemContainer<Buerger> getSelectedBuergerKinder();
 }
