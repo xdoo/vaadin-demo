@@ -175,7 +175,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<?>> {
         grid.addItemClickListener(itemClickEvent -> {
             if (itemClickEvent.getPropertyId() != null) {
                 if (itemClickEvent.isDoubleClick()) {
-                    //TODO controller.postEvent(controller.buildAppEvent(EventType.SELECT_TO_READ).setItem((BeanItem<Buerger>) itemClickEvent.getItem()));
+                    controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED), Event.wrap((itemClickEvent.getItemId())));
                     controller.getNavigator().navigateTo(navigateToForDetail);
                     return;
                 }
@@ -207,7 +207,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<?>> {
         table.addItemClickListener(itemClickEvent -> {
             if (itemClickEvent.getPropertyId() != null) {
                 if (itemClickEvent.isDoubleClick()) {
-                    //TODO controller.postEvent(controller.buildAppEvent(EventType.SELECT_TO_READ).setItem((BeanItem<Buerger>) itemClickEvent.getItem()));
+                    controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED), Event.wrap((itemClickEvent.getItemId())));
                     controller.getNavigator().navigateTo(navigateToForDetail);
                     return;
                 }

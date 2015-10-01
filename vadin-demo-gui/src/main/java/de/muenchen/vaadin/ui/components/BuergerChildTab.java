@@ -30,13 +30,11 @@ public class BuergerChildTab extends CustomComponent {
 
         ActionButton create = new ActionButton(controller, SimpleAction.create, navigateToForCreate);
         create.addClickListener(clickEvent -> {
-            //TODO kind erstellen und dann hinzufügen.
             controller.getNavigator().navigateTo(navigateToForCreate);
         });
         ActionButton add = new ActionButton(controller, SimpleAction.add, "");
         add.addClickListener(clickEvent -> {
             getUI().addWindow(new TableSelectWindow(controller, controller.getViewFactory().generateChildSearchTable()));
-            //controller.postEvent(controller.buildAppEvent(EventType.ADD_CHILD))
         });
 
         delete = new ActionButton(controller, SimpleAction.delete, null);
