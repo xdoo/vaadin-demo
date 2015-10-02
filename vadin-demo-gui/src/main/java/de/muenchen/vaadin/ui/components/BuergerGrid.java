@@ -128,11 +128,9 @@ public class BuergerGrid extends CustomComponent {
             LOG.debug("copying selected items");
             if (grid.getSelectedRows() != null) {
                 for (Object next : grid.getSelectedRows()) {
+                    grid.deselect(next);
                     BeanItem<Buerger> item = (BeanItem<Buerger>) grid.getContainerDataSource().getItem(next);
                     controller.getEventbus().notify(controller.getRequestKey(RequestEvent.CREATE), reactor.bus.Event.wrap(item.getBean()));
-                    //AppEvent event = controller.buildAppEvent(EventType.COPY_BUERGER).setItem(item);
-                    //controller.postEvent(event);
-                    //TODO copy fehlt noch
                 }
                 refresh();
             }
