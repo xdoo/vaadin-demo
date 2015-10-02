@@ -6,7 +6,7 @@
 package de.muenchen.vaadin.ui.components;
 
 import de.muenchen.vaadin.demo.api.local.Buerger;
-import de.muenchen.vaadin.services.model.BuergerModel;
+import de.muenchen.vaadin.services.model.BuergerDatastore;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
 /**
@@ -20,10 +20,10 @@ public class PartnerGrid extends GenericGrid {
     }
 
     @Override
-    public void accept(reactor.bus.Event<BuergerModel> eventWrapper) {
+    public void accept(reactor.bus.Event<BuergerDatastore> eventWrapper) {
         //super.accept(eventWrapper);
 
-        BuergerModel event = eventWrapper.getData();
+        BuergerDatastore event = eventWrapper.getData();
         if (this.getContainerDataSource().size() == 0)
             this.setContainerDataSource(event.getSelectedBuergerPartner());
     }

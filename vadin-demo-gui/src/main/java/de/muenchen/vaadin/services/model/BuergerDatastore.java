@@ -11,7 +11,7 @@ import java.util.Optional;
  * @author fabian.holtkoetter p.mueller
  * @version 1.0
  */
-public class BuergerModel{
+public class BuergerDatastore {
     /** All the kinders of the selectedBuerger. */
     private final BeanItemContainer<Buerger> selectedBuergerKinder = new BeanItemContainer<>(Buerger.class);
     /** All the partners of the selectedBuerger. */

@@ -12,7 +12,7 @@ import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
-import de.muenchen.vaadin.services.model.BuergerModel;
+import de.muenchen.vaadin.services.model.BuergerDatastore;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +25,7 @@ import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.*;
  *
  * @author claus
  */
-public class BuergerReadForm extends CustomComponent implements Consumer<Event<BuergerModel>> {
+public class BuergerReadForm extends CustomComponent implements Consumer<Event<BuergerDatastore>> {
     
     /**
      * Logger
@@ -109,8 +109,8 @@ public class BuergerReadForm extends CustomComponent implements Consumer<Event<B
     }
 
     @Override
-    public void accept(reactor.bus.Event<BuergerModel> eventWrapper) {
-        BuergerModel event = eventWrapper.getData();
+    public void accept(reactor.bus.Event<BuergerDatastore> eventWrapper) {
+        BuergerDatastore event = eventWrapper.getData();
         event.getSelectedBuerger().ifPresent(binder::setItemDataSource);
     }
 

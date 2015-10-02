@@ -17,7 +17,7 @@ import de.muenchen.vaadin.guilib.components.GenericSuccessNotification;
 import de.muenchen.vaadin.guilib.services.MessageService;
 import de.muenchen.vaadin.guilib.util.VaadinUtil;
 import de.muenchen.vaadin.services.BuergerService;
-import de.muenchen.vaadin.services.model.BuergerModel;
+import de.muenchen.vaadin.services.model.BuergerDatastore;
 import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.controller.factorys.BuergerViewFactory;
 import org.slf4j.Logger;
@@ -55,7 +55,7 @@ public class BuergerViewController implements Serializable, I18nResolver {
     /** Die Service Klasse */
     private final BuergerService buergerService;
     /** Model der Daten für den Eventbus */
-    private final BuergerModel model = new BuergerModel();
+    private final BuergerDatastore model = new BuergerDatastore();
     /** Werkzeuge für Vaadin */
     private final VaadinUtil util;
     /** Event Bus zur Kommunikation */
@@ -115,7 +115,7 @@ public class BuergerViewController implements Serializable, I18nResolver {
         return eventbus;
     }
 
-    private BuergerModel getModel() {
+    private BuergerDatastore getModel() {
         return model;
     }
 
@@ -339,7 +339,7 @@ public class BuergerViewController implements Serializable, I18nResolver {
     }
 
     /**
-     * Refresh the {@link BuergerModel#buergers} list from the DataStore.
+     * Refresh the {@link BuergerDatastore#buergers} list from the DataStore.
      * <p/>
      * <p>
      * This method also filters by the query (ifPresent).
