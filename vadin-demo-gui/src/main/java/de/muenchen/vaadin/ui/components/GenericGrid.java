@@ -3,7 +3,7 @@ package de.muenchen.vaadin.ui.components;
 import com.vaadin.ui.Grid;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
-import de.muenchen.vaadin.services.model.BuergerReadOnlyModel;
+import de.muenchen.vaadin.services.model.BuergerModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.bus.Event;
@@ -12,7 +12,7 @@ import reactor.fn.Consumer;
 /**
  * Created by arne.schoentag on 18.09.15.
  */
-public class GenericGrid extends Grid implements Consumer<Event<BuergerReadOnlyModel>> {
+public class GenericGrid extends Grid implements Consumer<Event<BuergerModel>> {
 
     /**
      * The constant LOG.
@@ -34,8 +34,8 @@ public class GenericGrid extends Grid implements Consumer<Event<BuergerReadOnlyM
      * @param eventWrapper
      */
     @Override
-    public void accept(reactor.bus.Event<BuergerReadOnlyModel> eventWrapper) {
-        BuergerReadOnlyModel event = eventWrapper.getData();
+    public void accept(reactor.bus.Event<BuergerModel> eventWrapper) {
+        BuergerModel event = eventWrapper.getData();
         if (this.getContainerDataSource().size() == 0) //TODO HACK
             this.setContainerDataSource(event.getBuergers());
     }

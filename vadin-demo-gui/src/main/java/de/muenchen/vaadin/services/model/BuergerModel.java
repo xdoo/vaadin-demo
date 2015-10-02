@@ -11,7 +11,7 @@ import java.util.Optional;
  * @author fabian.holtkoetter p.mueller
  * @version 1.0
  */
-public class BuergerModel implements BuergerReadOnlyModel {
+public class BuergerModel{
     /** All the kinders of the selectedBuerger. */
     private final BeanItemContainer<Buerger> selectedBuergerKinder = new BeanItemContainer<>(Buerger.class);
     /** All the partners of the selectedBuerger. */
@@ -23,7 +23,6 @@ public class BuergerModel implements BuergerReadOnlyModel {
     /** The query to filter the buergers. */
     private Optional<String> query = Optional.empty();
 
-    @Override
     public Optional<Buerger> getSelectedBuerger() {
         return selectedBuerger;
     }
@@ -37,12 +36,10 @@ public class BuergerModel implements BuergerReadOnlyModel {
         this.selectedBuerger = Optional.ofNullable(selectedBuerger);
     }
 
-    @Override
     public BeanItemContainer<Buerger> getBuergers() {
         return buergers;
     }
 
-    @Override
     public Optional<String> getQuery() {
         return query;
     }
@@ -56,13 +53,10 @@ public class BuergerModel implements BuergerReadOnlyModel {
         this.query = Optional.ofNullable(query);
     }
 
-    @Override
     public BeanItemContainer<Buerger> getSelectedBuergerPartner() {
         return selectedBuergerPartner;
     }
 
-
-    @Override
     public BeanItemContainer<Buerger> getSelectedBuergerKinder() {
         return selectedBuergerKinder;
     }
