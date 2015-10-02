@@ -53,7 +53,7 @@ public class BuergerViewController implements Serializable, I18nResolver {
     /** Logger */
     private static final Logger LOG = LoggerFactory.getLogger(BuergerViewController.class);
     /** Die Service Klasse */
-    private final BuergerService service;
+    private final BuergerService buergerService;
     /** Model der Daten für den Eventbus */
     private final BuergerModel model = new BuergerModel();
     /** Werkzeuge für Vaadin */
@@ -71,8 +71,8 @@ public class BuergerViewController implements Serializable, I18nResolver {
     private BuergerViewFactory buergerViewFactory;
 
     @Autowired
-    public BuergerViewController(BuergerService service, VaadinUtil util) {
-        this.service = service;
+    public BuergerViewController(BuergerService buergerService, VaadinUtil util) {
+        this.buergerService = buergerService;
         this.util = util;
     }
 
@@ -125,40 +125,40 @@ public class BuergerViewController implements Serializable, I18nResolver {
 
     private void releaseKind(Buerger kind) {
         Link link = getModel().getSelectedBuerger().get().getLink(Buerger.Rel.kinder.name());
-        List<Link> kinder = service.findAll(link)
+        List<Link> kinder = buergerService.findAll(link)
                 .stream()
                 .map(Buerger::getId)
                 .filter(id -> !id.equals(kind.getId()))
                 .collect(Collectors.toList());
 
-        service.setRelations(link, kinder);
+        buergerService.setRelations(link, kinder);
     }
 
     private void releasePartner(Buerger event) {
         Link link = getModel().getSelectedBuerger().get().getLink(Buerger.Rel.partner.name());
-        service.delete(link);
+        buergerService.delete(link);
     }
 
     private void addBuergerKind(Buerger kindEntity) {
         Link link = getModel().getSelectedBuerger().get().getLink(Buerger.Rel.kinder.name());
         List<Link> kinder = Stream.concat(
-                service.findAll(link)
+                buergerService.findAll(link)
                         .stream()
                         .map(Buerger::getId),
                 Stream.of(kindEntity.getId()))
 
                 .collect(Collectors.toList());
 
-        service.setRelations(link, kinder);
+        buergerService.setRelations(link, kinder);
     }
 
     private void setBuergerPartner(Buerger partnerEntity) {
         Link link = getModel().getSelectedBuerger().get().getLink(Buerger.Rel.partner.name());
-        service.setRelation(link, partnerEntity.getId());
+        buergerService.setRelation(link, partnerEntity.getId());
     }
 
     private List<Buerger> queryBuerger() {
-        return service.findAll().stream().collect(Collectors.toList());
+        return buergerService.findAll().stream().collect(Collectors.toList());
     }
 
     private List<Buerger> queryBuerger(String query) {
@@ -166,11 +166,11 @@ public class BuergerViewController implements Serializable, I18nResolver {
     }
 
     private List<Buerger> queryKinder(Buerger entity) {
-        return service.findAll(entity.getLink(Buerger.Rel.kinder.name())).stream().collect(Collectors.toList());
+        return buergerService.findAll(entity.getLink(Buerger.Rel.kinder.name())).stream().collect(Collectors.toList());
     }
 
     private Buerger queryPartner(Buerger entity) {
-        return service.findOne(entity.getLink(Buerger.Rel.partner.name())).orElse(null);
+        return buergerService.findOne(entity.getLink(Buerger.Rel.partner.name())).orElse(null);
     }
 
 
@@ -203,16 +203,18 @@ public class BuergerViewController implements Serializable, I18nResolver {
         if (data.getClass() != Association.class)
             throw new IllegalArgumentException("The event must be of " + Association.class);
 
-        @SuppressWarnings("unchecked") final Association<Buerger> association = (Association<Buerger>) event.getData();
+        final Association association = (Association) event.getData();
 
         final Buerger.Rel rel = Buerger.Rel.valueOf(association.getRel());
         if (Buerger.Rel.kinder == rel) {
-            releaseKind(association.getAssociation());
-            getModel().getSelectedBuergerKinder().removeItem(association.getAssociation());
+            Buerger buerger = (Buerger) association.getAssociation();
+            releaseKind(buerger);
+            getModel().getSelectedBuergerKinder().removeItem(buerger);
         }
         if (Buerger.Rel.partner == rel) {
-            releasePartner(association.getAssociation());
-            getModel().getSelectedBuergerPartner().removeItem(association.getAssociation());
+            Buerger buerger = (Buerger) association.getAssociation();
+            releasePartner(buerger);
+            getModel().getSelectedBuergerPartner().removeItem(buerger);
         }
 
         showNotification(NotificationType.success, SimpleAction.release, rel);
@@ -235,20 +237,24 @@ public class BuergerViewController implements Serializable, I18nResolver {
         if (data.getClass() != Association.class)
             throw new IllegalArgumentException("The event must be of " + Association.class);
 
-        @SuppressWarnings("unchecked") final Association<Buerger> association = (Association<Buerger>) event.getData();
-        final Buerger buerger;
-        if (association.getAssociation().getId() == null) {
-            buerger = service.create(association.getAssociation());
-        } else {
-            buerger = association.getAssociation();
-        }
+        final Association association = (Association) event.getData();
 
         final Buerger.Rel rel = Buerger.Rel.valueOf(association.getRel());
         if (Buerger.Rel.kinder == rel) {
+            Buerger buerger = (Buerger) association.getAssociation();
+            // If Buerger has no ID he has to be created in the backend
+            if (buerger.getId() == null) {
+                buerger = buergerService.create(buerger);
+            }
             addBuergerKind(buerger);
             getModel().getSelectedBuergerKinder().addBean(buerger);
         }
         if (Buerger.Rel.partner == rel) {
+            Buerger buerger = (Buerger) association.getAssociation();
+            if (buerger.getId() == null) {
+                // If Buerger has no ID he has to be created in the backend
+                buerger = buergerService.create(buerger);
+            }
             setBuergerPartner(buerger);
             getModel().getSelectedBuergerPartner().addBean(buerger);
         }
@@ -271,7 +277,7 @@ public class BuergerViewController implements Serializable, I18nResolver {
             throw new IllegalArgumentException("The event must be of " + Buerger.class);
 
         final Buerger buerger = (Buerger) event.getData();
-        final Buerger fromREST = service.create(buerger);
+        final Buerger fromREST = buergerService.create(buerger);
 
         getModel().getBuergers().addBean(fromREST);
         notifyComponents();
@@ -294,7 +300,7 @@ public class BuergerViewController implements Serializable, I18nResolver {
         final Buerger buerger = (Buerger) event.getData();
         if (buerger.getId() == null)
             throw new IllegalArgumentException("The Buerger must have an ID.");
-        service.delete(buerger.getId());
+        buergerService.delete(buerger.getId());
 
         getModel().getSelectedBuerger().ifPresent(selectedBuerger -> {
             if (selectedBuerger.equals(buerger)) {
@@ -324,7 +330,7 @@ public class BuergerViewController implements Serializable, I18nResolver {
         final Buerger buerger = (Buerger) event.getData();
         if (buerger.getId() == null)
             throw new IllegalArgumentException("The Buerger must have an ID.");
-        final Buerger fromREST = service.update(buerger);
+        final Buerger fromREST = buergerService.update(buerger);
 
         refreshModelSelected();
         getModel().getBuergers().addBean(fromREST);
@@ -369,7 +375,7 @@ public class BuergerViewController implements Serializable, I18nResolver {
      * Refresh the current selected Buerger, but *not* its associations.
      */
     private void refreshModelSelected() {
-        getModel().getSelectedBuerger().ifPresent(buerger -> getModel().setSelectedBuerger(service.findOne(buerger.getId()).orElse(null)));
+        getModel().getSelectedBuerger().ifPresent(buerger -> getModel().setSelectedBuerger(buergerService.findOne(buerger.getId()).orElse(null)));
     }
 
     /**
@@ -474,7 +480,7 @@ public class BuergerViewController implements Serializable, I18nResolver {
 
     /**
      * Resolve the relative path (e.g. "asdf.label").
-     * <p/>
+     * <p>
      * The base path will be appended at start and then read from the properties.
      *
      * @param relativePath the path to add to the base path.
@@ -492,7 +498,7 @@ public class BuergerViewController implements Serializable, I18nResolver {
 
     /**
      * Resolve the relative path (e.g. ".asdf.label") to a icon.
-     * <p/>
+     * <p>
      * The base path will be appended at start and then read from the properties.
      *
      * @param relativePath the path to add to the base path.
