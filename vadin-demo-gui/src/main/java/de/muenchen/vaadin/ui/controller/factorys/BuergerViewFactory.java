@@ -227,6 +227,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<?>> {
     private GenericGrid createGrid() {
         LOG.debug("creating table for buerger");
         GenericGrid grid = new GenericGrid(controller, Buerger.class);
+        grid.setColumns(Buerger.Field.getProperties());
         controller.getEventbus().on(controller.getResponseKey().toSelector(), grid);
         return grid;
     }
