@@ -230,7 +230,7 @@ public class BuergerDTOTest {
     @Test
     public void getBuergersM1Test() throws JsonProcessingException {
         System.out.println("========== get Alle Bürger Mandant 'test' Test ==========");
-        int x = this.count("test", "Braun", "test");
+        int x = this.count("test", "hans", "test");
         url = "http://localhost:" + port + "/buergers";
         ResponseEntity<Resources<BuergerResource>> result = restTemplate.exchange(
                 url,
