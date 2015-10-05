@@ -12,7 +12,6 @@ import de.muenchen.vaadin.demo.i18nservice.buttons.Action;
  * Generisches Bestätigungsfenster mit einer "ok" und
  * einer "abbrechen" Schaltfläche.
  * <p/>
- * TODO -> sollte in einen generischen Artefakt übernommen werden.
  *
  * @author claus.straube
  */

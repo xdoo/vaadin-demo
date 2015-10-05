@@ -33,15 +33,6 @@ public abstract class DefaultBuergerView extends VerticalLayout implements View{
         this.controller.registerUI(ui);
     }
     
-    
-    /**
-     * 
-     */
-    @PostConstruct
-    private void postConstruct() {
-        //TODO Wirklich notwendig? Lieber enter() verwenden?
-    }
-    
     /**
      * 
      */
