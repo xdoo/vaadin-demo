@@ -4,7 +4,7 @@ import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.vaadin.demo.i18nservice.ControllerContext;
+import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.Action;
 
@@ -42,7 +42,7 @@ public class GenericConfirmationWindow extends Window {
      * @param action              Art des Fensters
      * @param okButtonClickAction Aktion der bei klick auf den OK-Button ausgeführt werden soll
      */
-    public GenericConfirmationWindow(ControllerContext<?> controller, Action action, Button.ClickListener okButtonClickAction) {
+    public GenericConfirmationWindow(I18nResolver controller, Action action, Button.ClickListener okButtonClickAction) {
         this.okButtonText = controller.resolve(I18nPaths.getConfirmationPath(action, I18nPaths.Type.confirm));
         this.cancelButtonText = controller.resolve(I18nPaths.getConfirmationPath(action, I18nPaths.Type.cancel));
         this.messageText = controller.resolve(I18nPaths.getConfirmationPath(action, I18nPaths.Type.text));

@@ -12,7 +12,7 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.eventbus.events.LoginEvent;
+import de.muenchen.eventbus.selector.Key;
 import de.muenchen.vaadin.demo.apilib.services.SecurityService;
 import de.muenchen.vaadin.guilib.components.GenericNotification;
 import de.muenchen.vaadin.guilib.components.GenericWarningNotification;
@@ -21,13 +21,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import reactor.bus.EventBus;
 
-import static reactor.bus.Event.wrap;
-
 @SpringView(name = LoginView.NAME)
 @UIScope
 public class LoginView extends VerticalLayout implements View {
-    private static final long serialVersionUID = -4430276235082912377L;
     public static final String NAME = SecurityService.LOGIN_VIEW_NAME;
+    private static final long serialVersionUID = -4430276235082912377L;
     private String websiteName;
     // Services
     private SecurityService security;
@@ -89,8 +87,7 @@ public class LoginView extends VerticalLayout implements View {
             @Override
             public void buttonClick(final ClickEvent event) {
                 if (security.login(username.getValue(), password.getValue())) {
-                    LoginEvent loginEvent = new LoginEvent();
-                    eventBus.notify(loginEvent, wrap(loginEvent));
+                    eventBus.notify(Key.LOGIN);
                 } else {
 //                    Anmeldung fehlgeschlagen
                     GenericNotification notif = new GenericWarningNotification("Anmeldung fehlgeschlagen",

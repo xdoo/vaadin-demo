@@ -10,7 +10,8 @@ import com.vaadin.server.Page;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.eventbus.types.EventType;
+import de.muenchen.eventbus.events.Association;
+import de.muenchen.eventbus.selector.entity.RequestEvent;
 import de.muenchen.vaadin.demo.api.domain.Augenfarbe;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
@@ -19,6 +20,8 @@ import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.GenericWarningNotification;
 import de.muenchen.vaadin.guilib.util.ValidatorFactory;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
+
+import java.util.Optional;
 
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.*;
 
@@ -32,7 +35,7 @@ public class BuergerCreateForm extends CustomComponent {
     private final String navigateTo;
     private final String back;
     private final BuergerViewController controller;
-    private EventType type;
+    private Optional<String> relation;
 
     /**
      * Formular zum Erstellen eines {@link Buerger}s. Über diesen
@@ -43,11 +46,8 @@ public class BuergerCreateForm extends CustomComponent {
      * @param controller der Entity Controller
      * @param navigateTo Zielseite nach Druck der 'erstellen' Schaltfläche
      */
-    public BuergerCreateForm(final BuergerViewController controller, final String navigateTo, EventType type) {
-        this.navigateTo = navigateTo;
-        this.back = navigateTo;
-        this.controller = controller;
-        this.type=type;
+    public BuergerCreateForm(final BuergerViewController controller, final String navigateTo, String relation) {
+        this(controller, navigateTo, relation, navigateTo);
         this.createForm();
     }
     
@@ -61,11 +61,11 @@ public class BuergerCreateForm extends CustomComponent {
      * @param navigateTo Zielseite nach Druck der 'erstellen' Schaltfläche
      * @param back Zielseite nach Druck der 'abbrechen' Schaltfläche
      */
-    public BuergerCreateForm(final BuergerViewController controller, final String navigateTo, String back) {
+    public BuergerCreateForm(final BuergerViewController controller, final String navigateTo, String relation, String back) {
         this.navigateTo = navigateTo;
         this.back = back;
         this.controller = controller;
-
+        this.relation = Optional.ofNullable(relation);
         this.createForm();
     }
     
@@ -158,7 +158,13 @@ public class BuergerCreateForm extends CustomComponent {
                 birthdayfield.validate();
                 
                 binder.commit();
-                controller.postEvent(controller.buildAppEvent(this.type).setEntity(binder.getItemDataSource().getBean()));
+
+                if (getRelation().isPresent()) {
+                    final Association<Buerger> buergerAssociation = new Association<>(binder.getItemDataSource().getBean(), getRelation().get());
+                    controller.getEventbus().notify(controller.getRequestKey(RequestEvent.ADD_ASSOCIATION), buergerAssociation.asEvent());
+                } else {
+                    controller.getEventbus().notify(controller.getRequestKey(RequestEvent.CREATE), reactor.bus.Event.wrap(binder.getItemDataSource().getBean()));
+                }
                 getNavigator().navigateTo(getNavigateTo());
 
                 //reset
@@ -199,12 +205,12 @@ public class BuergerCreateForm extends CustomComponent {
         return back;
     }
 
-    public EventType getType() {
-        return type;
+    public Optional<String> getRelation() {
+        return relation;
     }
 
-    public void setType(EventType type) {
-        this.type = type;
+    public void setRelation(String relation) {
+        this.relation = Optional.ofNullable(relation);
     }
 
     private Navigator getNavigator() {

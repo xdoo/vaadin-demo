@@ -5,13 +5,11 @@ import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.eventbus.events.AppEvent;
-import de.muenchen.eventbus.types.EventType;
+import de.muenchen.eventbus.selector.entity.RequestEvent;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
-import de.muenchen.vaadin.guilib.components.GenericGrid;
 import de.muenchen.vaadin.ui.app.views.BuergerCreateView;
 import de.muenchen.vaadin.ui.app.views.BuergerDetailView;
 import de.muenchen.vaadin.ui.app.views.BuergerUpdateView;
@@ -44,6 +42,7 @@ public class BuergerGrid extends CustomComponent {
         this.controller = controller;
 
         VerticalLayout layout = new VerticalLayout();
+        this.grid = controller.getViewFactory().generateGrid();
 
         createFilter();
         createReset();
@@ -67,7 +66,11 @@ public class BuergerGrid extends CustomComponent {
         grid.addItemClickListener(itemClickEvent -> {
             if (itemClickEvent.getPropertyId() != null) {
                 if (itemClickEvent.isDoubleClick()) {
-                    controller.postEvent(controller.buildAppEvent(EventType.SELECT2READ).setItem((BeanItem<Buerger>) itemClickEvent.getItem()));
+                    Buerger buerger = ((BeanItem<Buerger>) itemClickEvent.getItem()).getBean();
+                    controller
+                            .getEventbus()
+                            .notify(controller
+                                    .getRequestKey(RequestEvent.READ_SELECTED), reactor.bus.Event.wrap(buerger));
                     controller.getNavigator().navigateTo(BuergerDetailView.NAME);
                     return;
                 }
@@ -125,9 +128,9 @@ public class BuergerGrid extends CustomComponent {
             LOG.debug("copying selected items");
             if (grid.getSelectedRows() != null) {
                 for (Object next : grid.getSelectedRows()) {
+                    grid.deselect(next);
                     BeanItem<Buerger> item = (BeanItem<Buerger>) grid.getContainerDataSource().getItem(next);
-                    AppEvent event = controller.buildAppEvent(EventType.COPY).setItem(item);
-                    controller.postEvent(event);
+                    controller.getEventbus().notify(controller.getRequestKey(RequestEvent.CREATE), reactor.bus.Event.wrap(item.getBean()));
                 }
                 refresh();
             }
@@ -141,9 +144,7 @@ public class BuergerGrid extends CustomComponent {
             if (grid.getSelectedRows() != null) {
                 for (Object next : grid.getSelectedRows()) {
                     BeanItem<Buerger> item = (BeanItem<Buerger>) grid.getContainerDataSource().getItem(next);
-
-                    AppEvent event = controller.buildAppEvent(EventType.DELETE).setItem(item);
-                    controller.postEvent(event);
+                    controller.getEventbus().notify(controller.getRequestKey(RequestEvent.DELETE), reactor.bus.Event.wrap(item.getBean()));
                     grid.deselect(next);
                 }
             }
@@ -156,8 +157,8 @@ public class BuergerGrid extends CustomComponent {
             if (grid.getSelectedRows().size() != 1)
                 return;
             LOG.debug("update selected");
-            AppEvent<Buerger> event = controller.buildAppEvent(EventType.SELECT2UPDATE).setItem((BeanItem<Buerger>) grid.getContainerDataSource().getItem(grid.getSelectedRows().toArray()[0]));
-            controller.postEvent(event);
+            Buerger buerger = ((BeanItem<Buerger>) grid.getContainerDataSource().getItem(grid.getSelectedRows().toArray()[0])).getBean();
+            controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED), reactor.bus.Event.wrap(buerger));
             controller.getNavigator().navigateTo(BuergerUpdateView.NAME);
         });
     }
@@ -165,7 +166,6 @@ public class BuergerGrid extends CustomComponent {
     private void createCreate() {
         create = new ActionButton(controller, SimpleAction.create, BuergerCreateView.NAME);
         create.addClickListener(clickEvent -> {
-            controller.postEvent(controller.buildAppEvent(EventType.CREATE));
             controller.getNavigator().navigateTo(BuergerCreateView.NAME);
         });
         create.setVisible(Boolean.TRUE);
@@ -178,7 +178,7 @@ public class BuergerGrid extends CustomComponent {
         search.addClickListener(e -> {
             LOG.debug("search clicked: " + filter.getValue());
             if (filter.getValue() != null && filter.getValue().length() > 0)
-                controller.postEvent(controller.buildAppEvent(EventType.QUERY).query(filter.getValue()));
+                controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_LIST), reactor.bus.Event.wrap(filter.getValue()));
             else
                 reset.click();
             refresh();
@@ -187,7 +187,6 @@ public class BuergerGrid extends CustomComponent {
     }
 
     private void createFilter() {
-        this.grid = controller.getViewFactory().generateGrid();
         filter.setId(String.format("%s_QUERY_FIELD", BuergerViewController.I18N_BASE_PATH));
         filter.focus();
         filter.setWidth("100%");
@@ -198,7 +197,7 @@ public class BuergerGrid extends CustomComponent {
         reset.setStyleName(ValoTheme.BUTTON_ICON_ONLY);
         reset.setClickShortcut(ShortcutAction.KeyCode.ESCAPE);
         reset.addClickListener(e -> {
-            controller.postEvent(controller.buildAppEvent(EventType.QUERY));
+            controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_LIST));
             filter.setValue("");
         });
         reset.setId(String.format("%s_RESET_BUTTON", BuergerViewController.I18N_BASE_PATH));
@@ -211,12 +210,9 @@ public class BuergerGrid extends CustomComponent {
         delete.setVisible(size > 0);
     }
 
+    //TODO wirklich nötig?
     void refresh() {
-        refresh(filter.getValue());
-    }
-
-    private void refresh(String stringFilter) {
-        controller.postEvent(controller.buildAppEvent(EventType.QUERY).query((stringFilter == null) ? null : stringFilter));
+        controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_LIST));
     }
 
     public GenericGrid getGrid() {

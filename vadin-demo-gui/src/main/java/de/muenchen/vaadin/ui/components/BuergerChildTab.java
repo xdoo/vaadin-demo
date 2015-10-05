@@ -4,58 +4,48 @@ import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
-import de.muenchen.eventbus.events.AppEvent;
-import de.muenchen.eventbus.events.ComponentEvent;
-import de.muenchen.eventbus.types.EventType;
+import de.muenchen.eventbus.events.Association;
+import de.muenchen.eventbus.selector.entity.RequestEvent;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
-import de.muenchen.vaadin.guilib.components.GenericGrid;
+import de.muenchen.vaadin.ui.app.views.TableSelectWindow;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
-import reactor.bus.Event;
-import reactor.fn.Consumer;
-
-import java.util.Optional;
 
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getEntityFieldPath;
-import static de.muenchen.vaadin.ui.components.BuergerReadForm.LOG;
 
 /**
- *
  * @author claus
  */
-public class BuergerChildTab extends CustomComponent implements Consumer<Event<ComponentEvent<Buerger>>> {
+public class BuergerChildTab extends CustomComponent {
 
     private BuergerViewController controller;
     private GenericGrid grid;
     private ActionButton delete;
 
     public BuergerChildTab(BuergerViewController controller, String navigateToForDetail, String navigateToForCreate, String navigateBack) {
-        
+
         this.controller = controller;
 
-        ActionButton create = new ActionButton(controller, SimpleAction.create,navigateToForCreate);
+        ActionButton create = new ActionButton(controller, SimpleAction.create, navigateToForCreate);
         create.addClickListener(clickEvent -> {
-            controller.postEvent(controller.buildAppEvent(EventType.CREATE));
             controller.getNavigator().navigateTo(navigateToForCreate);
         });
-        ActionButton add = new ActionButton(controller, SimpleAction.add,"");
-        add.addClickListener(clickEvent ->
-                        controller.postEvent(controller.buildAppEvent(EventType.ADD_SEARCHED_CHILD))
-        );
+        ActionButton add = new ActionButton(controller, SimpleAction.add, "");
+        add.addClickListener(clickEvent -> {
+            getUI().addWindow(new TableSelectWindow(controller, controller.getViewFactory().generateChildSearchTable()));
+        });
 
         delete = new ActionButton(controller, SimpleAction.delete, null);
         delete.addClickListener(clickEvent -> {
-            LOG.debug("deleting selected items");
             if (grid.getSelectedRows() != null) {
                 for (Object next : grid.getSelectedRows()) {
                     BeanItem<Buerger> item = (BeanItem<Buerger>) grid.getContainerDataSource().getItem(next);
 
-                    AppEvent event = controller.buildAppEvent(EventType.RELEASE_KIND).setItem(item).setItemId(controller.getCurrent());
-                    controller.postEvent(event);
+                    final Association<Buerger> association = new Association<>(item.getBean(), Buerger.Rel.kinder.name());
+                    controller.getEventbus().notify(controller.getRequestKey(RequestEvent.REMOVE_ASSOCIATION), association.asEvent());
                     grid.deselect(next);
-                    LOG.debug("item deleted");
                 }
             }
         });
@@ -96,20 +86,5 @@ public class BuergerChildTab extends CustomComponent implements Consumer<Event<C
 
     public void setGrid(GenericGrid grid) {
         this.grid = grid;
-    }
-
-    @Override
-    public void accept(reactor.bus.Event<ComponentEvent<Buerger>> componentEventWrapper) {
-        ComponentEvent event = componentEventWrapper.getData();
-        if (event.getEventType().equals(EventType.SELECT2READ)) {
-            LOG.debug("seleted buerger to show childs.");
-            Optional<BeanItem<Buerger>> opt = event.getItem();
-            if (opt.isPresent()) {
-                Buerger entity = opt.get().getBean();
-                this.controller.postEvent(controller.buildAppEvent(EventType.QUERY_CHILD).setEntity(entity));
-            } else {
-                LOG.warn("No item present.");
-            }
-        }
     }
 }

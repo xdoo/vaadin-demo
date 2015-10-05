@@ -2,7 +2,7 @@ package de.muenchen.vaadin.demo.i18nservice.buttons;
 
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CustomComponent;
-import de.muenchen.vaadin.demo.i18nservice.ControllerContext;
+import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Component;
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Type;
@@ -29,7 +29,7 @@ public class ActionButton extends CustomComponent {
      * @param action Action the button should represent (is styled for).
      * @param navigateTo //TODO used to generate the id
      */
-    public ActionButton(final String label, final ControllerContext context, final Action action,final String navigateTo) {
+    public ActionButton(final String label, final I18nResolver context, final Action action,final String navigateTo) {
         Button button = new Button(label);
 
         configureButton(context, action, navigateTo, button);
@@ -45,7 +45,7 @@ public class ActionButton extends CustomComponent {
      * @param navigateTo //TODO used to generate the id
      * @param button The button to configure.
      */
-    private void configureButton(ControllerContext context, Action action, String navigateTo, Button button) {
+    private void configureButton(I18nResolver context, Action action, String navigateTo, Button button) {
         action.getIcon().ifPresent(button::setIcon);
         action.getClickShortCut().ifPresent(button::setClickShortcut);
         action.getStyleNames().forEach(style -> button.setStyleName(style, true));
@@ -63,7 +63,7 @@ public class ActionButton extends CustomComponent {
      * @param action action the button should represent (is styled for).
      * @param navigateTo //TODO used to generate id
      */
-    public ActionButton(final ControllerContext context, final Action action, final String navigateTo) {
+    public ActionButton(final I18nResolver context, final Action action, final String navigateTo) {
         this(resolveLabel(action,context),context,action,navigateTo);
     }
 
@@ -74,7 +74,7 @@ public class ActionButton extends CustomComponent {
      * @param context Used to resolve the i18n key.
      * @return
      */
-    private static String resolveLabel(Action action, ControllerContext context) {
+    private static String resolveLabel(Action action, I18nResolver context) {
         final String labelPath = getFormPath(action, Component.button, Type.label);
         return context.resolveRelative(labelPath);
     }

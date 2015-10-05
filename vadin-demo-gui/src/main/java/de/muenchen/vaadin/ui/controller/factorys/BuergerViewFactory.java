@@ -1,39 +1,32 @@
 package de.muenchen.vaadin.ui.controller.factorys;
 
-import com.vaadin.data.util.BeanItem;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.TabSheet;
 import de.muenchen.eventbus.EventBus;
-import de.muenchen.eventbus.events.RefreshEvent;
-import de.muenchen.eventbus.types.EventType;
+import de.muenchen.eventbus.events.Association;
+import de.muenchen.eventbus.selector.Key;
+import de.muenchen.eventbus.selector.entity.RequestEvent;
 import de.muenchen.vaadin.demo.api.local.Buerger;
-import de.muenchen.vaadin.guilib.components.GenericGrid;
 import de.muenchen.vaadin.ui.components.*;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
-import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.HttpClientErrorException;
 import reactor.bus.Event;
 import reactor.fn.Consumer;
 
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-
-import static reactor.bus.selector.Selectors.T;
 
 /**
  * Created by rene.zarwel on 26.08.15.
  */
 @Component
 @UIScope
-public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshEvent>> {
+public class BuergerViewFactory implements Serializable, Consumer<Event<?>> {
 
     /**
      * Logger
@@ -44,7 +37,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
     EventBus eventBus;
     private BuergerViewController controller;
 
-    /**Singeltons of Components. **/
+    /** Singeltons of Components. **/
     private transient Optional<GenericGrid> childSearchTable = Optional.empty();
     private transient Optional<BuergerChildTab> childTab = Optional.empty();
     private transient Optional<BuergerCreateForm> createForm = Optional.empty();
@@ -56,8 +49,8 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
     private transient Optional<BuergerPartnerTab> partnerTab = Optional.empty();
 
     @PostConstruct
-    public void init(){
-        eventBus.on(T(RefreshEvent.class), this);
+    public void init() {
+        eventBus.on(Key.REFRESH.toSelector(), this);
     }
 
 
@@ -67,24 +60,26 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
 
     public BuergerCreateForm generateCreateForm(String navigateTo) {
         LOG.debug("creating 'create' buerger form");
-        if(!createForm.isPresent()){
-            BuergerCreateForm form = new BuergerCreateForm(controller, navigateTo, EventType.SAVE);
-            createForm = Optional.of(form);}
+        if (!createForm.isPresent()) {
+            BuergerCreateForm form = new BuergerCreateForm(controller, navigateTo, null);
+            createForm = Optional.of(form);
+        }
         return createForm.get();
     }
 
     public BuergerCreateForm generateCreateChildForm(String navigateTo) {
         LOG.debug("creating 'create child' buerger form");
-        if(!createChildForm.isPresent()){
-            BuergerCreateForm form = new BuergerCreateForm(controller, navigateTo, EventType.SAVE_CHILD);
-            createChildForm=Optional.of(form);}
+        if (!createChildForm.isPresent()) {
+            BuergerCreateForm form = new BuergerCreateForm(controller, navigateTo, Buerger.Rel.kinder.name());
+            createChildForm = Optional.of(form);
+        }
         return createChildForm.get();
     }
 
     public BuergerCreateForm generateCreatePartnerForm(String navigateTo) {
         LOG.debug("creating 'create partner' buerger form");
         if (!createPartnerForm.isPresent()) {
-            BuergerCreateForm form = new BuergerCreateForm(controller, navigateTo, EventType.SAVE_PARTNER);
+            BuergerCreateForm form = new BuergerCreateForm(controller, navigateTo, Buerger.Rel.partner.name());
             createPartnerForm = Optional.of(form);
         }
         return createPartnerForm.get();
@@ -94,46 +89,45 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
      * Erzeugt eine neue Instanz eines "Child" Tabs.
      *
      * @param navigateToForDetail Zielseite um sich die Details des 'Child' Objektes anzeigen zu lassen
-     * @param navigateForCreate Zielseite um ein neues 'Child' Objekt zu erstellen
-     * @param navigateBack Ausgangsseite zu der zurück navigiert werden soll
+     * @param navigateForCreate   Zielseite um ein neues 'Child' Objekt zu erstellen
+     * @param navigateBack        Ausgangsseite zu der zurück navigiert werden soll
      * @return {@link TabSheet.Tab} das Tab
      */
     public BuergerChildTab generateChildTab(String navigateToForDetail, String navigateForCreate, String navigateBack) {
-        if(!childTab.isPresent())
-        {
+        if (!childTab.isPresent()) {
             BuergerChildTab tab = new BuergerChildTab(controller, navigateToForDetail, navigateForCreate, navigateBack);
-            controller.registerToAllComponentEvents(tab);
-            childTab = Optional.of(tab);}
+            childTab = Optional.of(tab);
+        }
         return childTab.get();
     }
 
     public BuergerPartnerTab generatePartnerTab(String navigateToForDetail, String navigateForCreate, String navigateForAdd, String navigateBack) {
-        if(!partnerTab.isPresent())
-        {
+        if (!partnerTab.isPresent()) {
             BuergerPartnerTab tab = new BuergerPartnerTab(controller, navigateToForDetail, navigateForCreate, navigateForAdd, navigateBack);
-            controller.registerToAllComponentEvents(tab);
-            partnerTab = Optional.of(tab);}
+            partnerTab = Optional.of(tab);
+        }
         return partnerTab.get();
     }
 
     public BuergerUpdateForm generateUpdateForm(String navigateTo, String navigateBack) {
         LOG.debug("creating 'update' buerger form");
-        if(!updateForm.isPresent()){
+        if (!updateForm.isPresent()) {
             BuergerUpdateForm form = new BuergerUpdateForm(controller, navigateTo, navigateBack);
-            controller.registerToAllComponentEvents(form);
-            controller.postEvent(controller.buildComponentEvent(EventType.SELECT2UPDATE).addEntity(controller.getCurrent().getBean()));
-
-            updateForm=Optional.of(form);}
+            controller.getEventbus().on(controller.getResponseKey().toSelector(), form);
+            updateForm = Optional.of(form);
+        }
+        controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
         return updateForm.get();
     }
 
     public BuergerReadForm generateReadForm(String navigateToUpdate, String navigateBack) {
         LOG.debug("creating 'read' buerger form");
-        if(!readForm.isPresent()){
+        if (!readForm.isPresent()) {
             BuergerReadForm form = new BuergerReadForm(controller, navigateToUpdate, navigateBack);
-            controller.registerToAllComponentEvents(form);
-            readForm=Optional.of(form);}
-        controller.postEvent(controller.buildComponentEvent(EventType.SELECT2READ).addEntity(controller.getCurrent().getBean()));
+            controller.getEventbus().on(controller.getResponseKey().toSelector(), form);
+            readForm = Optional.of(form);
+        }
+        controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
         return readForm.get();
     }
 
@@ -141,14 +135,14 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
         if (!childSearchTable.isPresent()) {
             LOG.debug("creating 'search' table for buerger");
             childSearchTable = Optional.of(generateGrid());
-            childSearchTable.get().removeColumn("id");
-            childSearchTable.get().removeColumn("links");
             childSearchTable.get().addItemClickListener(itemClickEvent -> {
                 if (itemClickEvent.isDoubleClick()) {
-                    controller.postEvent(controller.buildAppEvent(EventType.SAVE_AS_CHILD).setItem((BeanItem<Buerger>) itemClickEvent.getItem()));
+                    Association<Buerger> association = new Association<>((Buerger) itemClickEvent.getItemId(), Buerger.Rel.kinder.name());
+                    controller.getEventbus().notify(controller.getRequestKey(RequestEvent.ADD_ASSOCIATION), association.asEvent());
                 }
             });
         }
+        controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
         return childSearchTable.get();
     }
 
@@ -156,47 +150,44 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
         if (!partnerSearchTable.isPresent()) {
             LOG.debug("creating 'search' table for buerger");
             partnerSearchTable = Optional.of(generateGrid());
-            partnerSearchTable.get().removeColumn("id");
-            partnerSearchTable.get().removeColumn("links");
             partnerSearchTable.get().addItemClickListener(itemClickEvent -> {
                 if (itemClickEvent.isDoubleClick()) {
-                    controller.postEvent(controller.buildAppEvent(EventType.SAVE_AS_PARTNER).setItem((BeanItem<Buerger>) itemClickEvent.getItem()));
+                    Association<Buerger> association = new Association<>((Buerger) itemClickEvent.getItemId(), Buerger.Rel.partner.name());
+                    controller.getEventbus().notify(controller.getRequestKey(RequestEvent.ADD_ASSOCIATION), association.asEvent());
                 }
             });
         }
+        controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
         return partnerSearchTable.get();
     }
 
     public KindGrid generateChildTable(String navigateToForDetail) {
         LOG.debug("creating table for children");
-        KindGrid table = new KindGrid(controller);
-        table.setSizeFull();
-        table.setSelectionMode(Grid.SelectionMode.MULTI);
-        table.removeColumn("id");
-        table.removeColumn("links");
-        table.addItemClickListener(itemClickEvent -> {
+        KindGrid grid = new KindGrid(controller);
+        grid.setSizeFull();
+        grid.setSelectionMode(Grid.SelectionMode.MULTI);
+        grid.addItemClickListener(itemClickEvent -> {
             if (itemClickEvent.getPropertyId() != null) {
                 if (itemClickEvent.isDoubleClick()) {
-                    controller.postEvent(controller.buildAppEvent(EventType.SELECT2READ).setItem((BeanItem<Buerger>) itemClickEvent.getItem()));
+                    controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED), Event.wrap((itemClickEvent.getItemId())));
                     controller.getNavigator().navigateTo(navigateToForDetail);
                     return;
                 }
-                boolean isClicked = table.isSelected(itemClickEvent.getItemId());
-                if (table.getSelectedRows().size() > 0 && !itemClickEvent.isCtrlKey()) {
-                    table.getSelectedRows().stream().forEach(row -> table.deselect(row));
+                boolean isClicked = grid.isSelected(itemClickEvent.getItemId());
+                if (grid.getSelectedRows().size() > 0 && !itemClickEvent.isCtrlKey()) {
+                    grid.getSelectedRows().stream().forEach(row -> grid.deselect(row));
                 }
                 if (!isClicked)
-                    table.select(itemClickEvent.getItemId());
+                    grid.select(itemClickEvent.getItemId());
                 else
-                    table.deselect(itemClickEvent.getItemId());
+                    grid.deselect(itemClickEvent.getItemId());
             }
         });
 
-        List<Buerger> entities = controller.queryKinder(controller.getCurrent().getBean());
-        controller.registerToAllComponentEvents(table);
-        controller.postEvent(controller.buildComponentEvent(EventType.QUERY_CHILD).addEntities(entities));
+        controller.getEventbus().on(controller.getResponseKey().toSelector(), grid);
+        controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
 
-        return table;
+        return grid;
     }
 
     public PartnerGrid generatePartnerTable(String navigateToForDetail) {
@@ -205,12 +196,10 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
         PartnerGrid table = new PartnerGrid(controller);
         table.setSizeFull();
         table.setSelectionMode(Grid.SelectionMode.MULTI);
-        table.removeColumn("id");
-        table.removeColumn("links");
         table.addItemClickListener(itemClickEvent -> {
             if (itemClickEvent.getPropertyId() != null) {
                 if (itemClickEvent.isDoubleClick()) {
-                    controller.postEvent(controller.buildAppEvent(EventType.SELECT2READ).setItem((BeanItem<Buerger>) itemClickEvent.getItem()));
+                    controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED), Event.wrap((itemClickEvent.getItemId())));
                     controller.getNavigator().navigateTo(navigateToForDetail);
                     return;
                 }
@@ -225,18 +214,8 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
             }
         });
 
-        Buerger entity = null;
-        controller.registerToAllComponentEvents(table);
-        try {
-            entity = controller.queryPartner(controller.getCurrent().getBean());
-            controller.postEvent(controller.buildComponentEvent(EventType.QUERY_PARTNER).addEntity(entity));
-        } catch (HttpClientErrorException e) {
-            if (e.getStatusCode().equals(HttpStatus.SC_NOT_FOUND)) {
-                controller.postEvent(controller.buildComponentEvent(EventType.QUERY_PARTNER).addEntities(new ArrayList<>()));
-            } else {
-                LOG.error("HTTP Error: " + e.getLocalizedMessage());
-            }
-        }
+        controller.getEventbus().on(controller.getResponseKey().toSelector(), table);
+        controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
 
         return table;
     }
@@ -248,7 +227,8 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
     private GenericGrid createGrid() {
         LOG.debug("creating table for buerger");
         GenericGrid grid = new GenericGrid(controller, Buerger.class);
-        controller.registerToAllComponentEvents(grid);
+        grid.setColumns(Buerger.Field.getProperties());
+        controller.getEventbus().on(controller.getResponseKey().toSelector(), grid);
         return grid;
     }
 
@@ -267,7 +247,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<RefreshE
     }
 
     @Override
-    public void accept(reactor.bus.Event<RefreshEvent> eventWrapper){
+    public void accept(reactor.bus.Event<?> event) {
         LOG.debug("RefreshEvent received");
         childSearchTable = Optional.empty();
         childTab = Optional.empty();

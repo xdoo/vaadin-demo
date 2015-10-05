@@ -13,14 +13,10 @@ import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.*;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.eventbus.events.*;
-import de.muenchen.eventbus.types.EventType;
-import de.muenchen.vaadin.demo.apilib.domain.BaseEntity;
+import de.muenchen.eventbus.selector.Key;
 import de.muenchen.vaadin.demo.apilib.services.SecurityService;
-import de.muenchen.vaadin.demo.i18nservice.ControllerContext;
+import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.ValoMenuLayout;
 import de.muenchen.vaadin.guilib.components.GenericConfirmationWindow;
@@ -38,14 +34,13 @@ import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
 import static reactor.bus.Event.wrap;
-import static reactor.bus.selector.Selectors.object;
 
 @SpringUI
 @Title("Vaadin Spring-Security Sample")
 @Theme("valo")
 @PreserveOnRefresh
 //@Widgetset("de.muenchen.vaadin.Widgetset")
-public class MainUI extends UI implements ControllerContext{
+public class MainUI extends UI implements I18nResolver {
 
     private static final Logger LOG = LoggerFactory.getLogger(MainUI.class);
 
@@ -167,17 +162,16 @@ public class MainUI extends UI implements ControllerContext{
             }
         });
 
-        eventBus.on(object(new LoginEvent()), this::loginEventHandler);
-        eventBus.on(object(new LogoutEvent()),this::logoutEventHandler);
-
+        eventBus.on(Key.LOGIN.toSelector(), this::loginEventHandler);
+        eventBus.on(Key.LOGOUT.toSelector(), this::logoutEventHandler);
     }
 
-    public void loginEventHandler(reactor.bus.Event<LoginEvent> eventWrapper) {
+    public void loginEventHandler(reactor.bus.Event<?> event) {
         this.root.switchOnMenu();
         getNavigator().navigateTo(MainView.NAME);
     }
 
-    public void logoutEventHandler(reactor.bus.Event<LogoutEvent> eventwrapper) {
+    public void logoutEventHandler(reactor.bus.Event<?> event) {
         this.root.switchOffMenu();
         security.logout();
 
@@ -223,7 +217,7 @@ public class MainUI extends UI implements ControllerContext{
         MenuBar.Command languageSelection = selectedItem -> i18n.getSupportedLocales().stream().forEach(locale -> {
             if (selectedItem.getText().equals(locale.getDisplayLanguage())) {
                 i18n.setLocale(locale);
-                postEvent(new RefreshEvent());
+                postEvent(Key.REFRESH);
             }
         });
 
@@ -245,11 +239,8 @@ public class MainUI extends UI implements ControllerContext{
         menuItemsLayout.setPrimaryStyleName("valo-menuitems");
 
         for (final Entry<String, String> item : menuItems.entrySet()) {
-            final Button b = new Button(item.getValue(), new ClickListener() {
-                @Override
-                public void buttonClick(final ClickEvent event) {
-                    navigator.navigateTo(item.getKey());
-                }
+            final Button b = new Button(item.getValue(), event -> {
+                navigator.navigateTo(item.getKey());
             });
             b.setHtmlContentAllowed(true);
             b.setPrimaryStyleName("valo-menu-item");
@@ -263,9 +254,7 @@ public class MainUI extends UI implements ControllerContext{
             GenericConfirmationWindow confirmationWindow =
                     new GenericConfirmationWindow(MainUI.this,
                             SimpleAction.logout,
-                            e -> {
-                                this.postEvent(new LogoutEvent());
-                            });
+                            e -> this.postEvent(Key.LOGOUT));
             getUI().addWindow(confirmationWindow);
             confirmationWindow.center();
             confirmationWindow.focus();
@@ -288,19 +277,8 @@ public class MainUI extends UI implements ControllerContext{
         return null;
     }
 
-    @Override
     public void postEvent(Object event) {
         eventBus.notify(event, wrap(event));
-    }
-
-    @Override
-    public AppEvent<? extends BaseEntity> buildAppEvent(EventType eventType) {
-        return null;
-    }
-
-    @Override
-    public ComponentEvent buildComponentEvent(EventType eventType) {
-        return null;
     }
 
     @Override

@@ -3,14 +3,12 @@ package de.muenchen.vaadin.ui.components;
 import com.vaadin.data.Validator;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
-import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.Page;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.eventbus.events.ComponentEvent;
-import de.muenchen.eventbus.types.EventType;
+import de.muenchen.eventbus.selector.entity.RequestEvent;
 import de.muenchen.vaadin.demo.api.domain.Augenfarbe;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
@@ -18,13 +16,12 @@ import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.GenericErrorNotification;
 import de.muenchen.vaadin.guilib.util.ValidatorFactory;
+import de.muenchen.vaadin.services.model.BuergerDatastore;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.bus.Event;
 import reactor.fn.Consumer;
-
-import java.util.Optional;
 
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.*;
 
@@ -32,7 +29,7 @@ import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.*;
  *
  * @author claus
  */
-public class BuergerUpdateForm extends CustomComponent implements Consumer<Event<ComponentEvent<Buerger>>> {
+public class BuergerUpdateForm extends CustomComponent implements Consumer<Event<BuergerDatastore>> {
 
     /**
      * Logger
@@ -71,7 +68,7 @@ public class BuergerUpdateForm extends CustomComponent implements Consumer<Event
      */
     private void createForm() {
 
-        controller.registerToAllComponentEvents(this);
+        controller.getEventbus().on(controller.getResponseKey().toSelector(), this);
 
         FormLayout layout = new FormLayout();
         HorizontalLayout buttonLayout = new HorizontalLayout();
@@ -126,7 +123,7 @@ public class BuergerUpdateForm extends CustomComponent implements Consumer<Event
             try {
                 binder.commit();
                 Buerger buerger = binder.getItemDataSource().getBean();
-                controller.postEvent(controller.buildAppEvent(EventType.UPDATE).setEntity(buerger));
+                controller.getEventbus().notify(controller.getRequestKey(RequestEvent.UPDATE), reactor.bus.Event.wrap(buerger));
                 getNavigator().navigateTo(getNavigateTo());
             } catch (FieldGroup.CommitException e) {
                 GenericErrorNotification error = new GenericErrorNotification(controller.resolveRelative(getNotificationPath(I18nPaths.NotificationType.failure, SimpleAction.save, Type.label)),
@@ -145,18 +142,9 @@ public class BuergerUpdateForm extends CustomComponent implements Consumer<Event
     }
 
     @Override
-    public void accept(reactor.bus.Event<ComponentEvent<Buerger>> eventWrapper) {
-        ComponentEvent event = eventWrapper.getData();
-
-        if (event.getEventType().equals(EventType.SELECT2UPDATE)) {
-            LOG.debug("seleted buerger to modify.");
-            Optional<BeanItem<Buerger>> opt = event.getItem();
-            if (opt.isPresent()) {
-                this.binder.setItemDataSource(opt.get());
-            } else {
-                LOG.warn("No item present.");
-            }
-        }
+    public void accept(reactor.bus.Event<BuergerDatastore> eventWrapper) {
+        BuergerDatastore model = eventWrapper.getData();
+        model.getSelectedBuerger().ifPresent(binder::setItemDataSource);
     }
 
     public String getNavigateBack() {
