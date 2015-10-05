@@ -220,6 +220,14 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<?>> {
         return table;
     }
 
+    public BuergerPartnerComponent generateBuergerPartnerComponent(String navigateToForCreate){
+        BuergerPartnerComponent partnerComponent = new BuergerPartnerComponent(controller, navigateToForCreate);
+
+        controller.getEventbus().on(controller.getResponseKey().toSelector(), partnerComponent);
+        controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
+        return partnerComponent;
+    }
+
     public GenericGrid generateGrid() {
         return this.createGrid();
     }

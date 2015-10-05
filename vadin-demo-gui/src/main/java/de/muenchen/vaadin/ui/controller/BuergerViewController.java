@@ -134,7 +134,7 @@ public class BuergerViewController implements Serializable, I18nResolver {
         buergerService.setRelations(link, kinder);
     }
 
-    private void releasePartner(Buerger event) {
+    private void releasePartner() {
         Link link = getModel().getSelectedBuerger().get().getLink(Buerger.Rel.partner.name());
         buergerService.delete(link);
     }
@@ -212,9 +212,8 @@ public class BuergerViewController implements Serializable, I18nResolver {
             getModel().getSelectedBuergerKinder().removeItem(buerger);
         }
         if (Buerger.Rel.partner == rel) {
-            Buerger buerger = (Buerger) association.getAssociation();
-            releasePartner(buerger);
-            getModel().getSelectedBuergerPartner().removeItem(buerger);
+            releasePartner();
+            getModel().getSelectedBuergerPartner().removeAllItems();
         }
 
         showNotification(NotificationType.success, SimpleAction.release, rel);
