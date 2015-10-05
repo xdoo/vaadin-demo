@@ -30,7 +30,7 @@ public enum SimpleAction implements Action {
     cancel,
     copy(FontAwesome.COPY, ShortcutAction.KeyCode.INSERT),
     add,
-    release(FontAwesome.TRASH_O),
+    association(FontAwesome.CHECK),
     logout(FontAwesome.SIGN_OUT);
     
 

@@ -17,7 +17,7 @@ public interface BuergerService {
 
     Buerger update(Buerger buerger);
 
-    void delete(Link link);
+    boolean delete(Link link);
 
     Buerger copy(Link link);
 
@@ -29,7 +29,7 @@ public interface BuergerService {
 
     List<Buerger> queryBuerger(String query);
 
-    void setRelations(Link link, List<Link> relations);
+    boolean setRelations(Link link, List<Link> relations);
 
-    void setRelation(Link link, Link relation);
+    boolean setRelation(Link link, Link relation);
 }
