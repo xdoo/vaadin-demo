@@ -85,6 +85,8 @@ public class MainUI extends UI implements I18nResolver {
             Responsive.makeResponsive(this);
         }
 
+
+
         // build page
         getPage().setTitle(i18n.get("page.title"));
         setContent(root);
@@ -102,9 +104,9 @@ public class MainUI extends UI implements I18nResolver {
 
         // check security
         if (!this.security.isLoggedIn()) {
+            this.navigator.navigateTo(LoginView.NAME);
             this.root.switchOffMenu();
         }
-
         // add navigator to security Service
 //        this.security.setNavigator(this.navigator);
 
@@ -113,7 +115,7 @@ public class MainUI extends UI implements I18nResolver {
             @Override
             public boolean beforeViewChange(final ViewChangeEvent event) {
 
-                LOG.debug("View change to: " + ((event.getViewName().equals(""))?"MainView":event.getViewName()));
+                LOG.debug("View change to: " + ((event.getViewName().equals("")) ? "MainView" : event.getViewName()));
 
                 // Check if a user has logged in
                 boolean isLoggedIn = security.isLoggedIn();

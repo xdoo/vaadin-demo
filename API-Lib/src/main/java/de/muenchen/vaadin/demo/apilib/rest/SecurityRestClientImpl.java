@@ -21,16 +21,11 @@ public class SecurityRestClientImpl implements SecurityRestClient {
 
     private static final Logger LOG = LoggerFactory.getLogger(SecurityRestClientImpl.class);
 
-    @Autowired private ServiceInfoRestClient serviceInfoClient;
-
     @Value("${service.principal.url}")
     private String principalURL;
     
     @Override
     public Optional<Principal> getPrincipal(RestTemplate template) {
-
-        ServiceInfo serviceInfo = serviceInfoClient.getServiceInfo();
-
         Principal principal = null;
         try {
             principal= template.getForEntity(principalURL, Principal.class).getBody();

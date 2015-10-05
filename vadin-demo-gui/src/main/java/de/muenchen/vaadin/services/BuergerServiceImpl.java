@@ -28,17 +28,15 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
     private static final Logger LOG = LoggerFactory.getLogger(BuergerService.class);
     
     private BuergerRestClient client;
-    private InfoService infoService;
     private RestTemplate template;
     private SecurityService securityService;
 
     @Autowired
     public BuergerServiceImpl(InfoService infoService, SecurityService securityService) {
-        this.infoService = infoService;
         this.securityService=securityService;
 
         //TODO
-        this.client = new BuergerRestClientImpl(getTemplate(), URI.create("http://localhost:8080"));
+        this.client = new BuergerRestClientImpl(getTemplate(), infoService.getBaseUri());
     }
 
     @Override
@@ -106,11 +104,7 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
         if (template != null) {
             return template;
         }
-        if (securityService.getRestTemplate().isPresent()) {
-            return securityService.getRestTemplate().get();
-        }
-        LOG.warn("Cannot acquire rest template from security service.");
-        return null;
+        return securityService.getRestTemplate().orElse(null);
     }
   
 }

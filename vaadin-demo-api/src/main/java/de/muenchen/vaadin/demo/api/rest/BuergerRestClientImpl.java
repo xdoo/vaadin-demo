@@ -42,6 +42,8 @@ public class BuergerRestClientImpl implements BuergerRestClient {
      * @param baseUri The base URI of the REST Server.
      */
     public BuergerRestClientImpl(RestTemplate restTemplate, URI baseUri) {
+        if (restTemplate == null) throw new NullPointerException("RestTemplate must not be null!");
+        if (baseUri == null) throw new NullPointerException("BaseUri must not be null!");
         this.restTemplate = restTemplate;
 
         traverson = new Traverson(baseUri, MediaTypes.HAL_JSON);
