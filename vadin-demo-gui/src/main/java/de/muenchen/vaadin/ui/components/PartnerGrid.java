@@ -6,6 +6,7 @@
 package de.muenchen.vaadin.ui.components;
 
 import de.muenchen.vaadin.demo.api.local.Buerger;
+import de.muenchen.vaadin.services.BuergerI18nResolver;
 import de.muenchen.vaadin.services.model.BuergerDatastore;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
@@ -15,8 +16,8 @@ import de.muenchen.vaadin.ui.controller.BuergerViewController;
  */
 public class PartnerGrid extends GenericGrid {
 
-    public PartnerGrid(BuergerViewController controller) {
-        super(controller, Buerger.class);
+    public PartnerGrid(BuergerI18nResolver resolver) {
+        super(resolver, Buerger.class);
     }
 
     @Override

@@ -11,6 +11,7 @@ import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.GenericConfirmationWindow;
+import de.muenchen.vaadin.services.BuergerI18nResolver;
 import de.muenchen.vaadin.ui.app.views.TableSelectWindow;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
@@ -21,20 +22,22 @@ import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getEntityFieldPath;
  */
 public class BuergerPartnerTab extends CustomComponent {
 
-    private BuergerViewController controller;
+    private final BuergerViewController controller;
+    private final BuergerI18nResolver resolver;
     private GenericGrid grid;
     private ActionButton delete;
 
-    public BuergerPartnerTab(BuergerViewController controller, String navigateToForDetail, String navigateToForCreate, String navigateToForAdd, String from) {
+    public BuergerPartnerTab(BuergerViewController controller, BuergerI18nResolver resolver, String navigateToForDetail, String navigateToForCreate, String navigateToForAdd, String from) {
 
         this.controller = controller;
+        this.resolver = resolver;
 
-        ActionButton create = new ActionButton(controller, SimpleAction.create, navigateToForCreate);
+        ActionButton create = new ActionButton(resolver, SimpleAction.create, navigateToForCreate);
         create.addClickListener(clickEvent -> {
             if (grid.getContainerDataSource().size() == 0) {
                 controller.getNavigator().navigateTo(navigateToForCreate);
             } else {
-                GenericConfirmationWindow window = new GenericConfirmationWindow(controller, SimpleAction.override, e -> {
+                GenericConfirmationWindow window = new GenericConfirmationWindow(resolver, SimpleAction.override, e -> {
                     controller.getNavigator().navigateTo(navigateToForCreate);
                 });
                 getUI().addWindow(window);
@@ -42,14 +45,14 @@ public class BuergerPartnerTab extends CustomComponent {
                 window.focus();
             }
         });
-        ActionButton add = new ActionButton(controller, SimpleAction.add, navigateToForAdd);
+        ActionButton add = new ActionButton(resolver, SimpleAction.add, navigateToForAdd);
         add.addClickListener(clickEvent -> {
             if (grid.getContainerDataSource().size() == 0) {
-                getUI().addWindow(new TableSelectWindow(controller, controller.getViewFactory().generateBuergerPartnerSearchTable()));
+                getUI().addWindow(new TableSelectWindow(controller, resolver, controller.getViewFactory().generateBuergerPartnerSearchTable()));
                 //controller.postEvent(controller.buildAppEvent(EventType.ADD_PARTNER));
             } else {
                 GenericConfirmationWindow window =
-                        new GenericConfirmationWindow(controller, SimpleAction.override, e -> getUI().addWindow(new TableSelectWindow(controller, controller.getViewFactory().generateBuergerPartnerSearchTable())));
+                        new GenericConfirmationWindow(resolver, SimpleAction.override, e -> getUI().addWindow(new TableSelectWindow(controller, resolver, controller.getViewFactory().generateBuergerPartnerSearchTable())));
                 getUI().addWindow(window);
                 window.center();
                 window.focus();
@@ -57,7 +60,7 @@ public class BuergerPartnerTab extends CustomComponent {
         });
 
 
-        delete = new ActionButton(controller, SimpleAction.delete, null);
+        delete = new ActionButton(resolver, SimpleAction.delete, null);
         delete.addClickListener(clickEvent -> {
             if (grid.getSelectedRows() != null) {
                 for (Object next : grid.getSelectedRows()) {
@@ -75,10 +78,10 @@ public class BuergerPartnerTab extends CustomComponent {
         grid.addSelectionListener(selectionEvent -> setButtonVisability());
 
         // set headers
-        this.grid.getColumn(Buerger.Field.vorname.name()).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.Field.vorname.name(), I18nPaths.Type.column_header)));
-        this.grid.getColumn(Buerger.Field.geburtsdatum.name()).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.Field.geburtsdatum.name(), I18nPaths.Type.column_header)));
-        this.grid.getColumn(Buerger.Field.nachname.name()).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), I18nPaths.Type.column_header)));
-        this.grid.getColumn(Buerger.Field.augenfarbe.name()).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.Field.augenfarbe.name(), I18nPaths.Type.column_header)));
+        this.grid.getColumn(Buerger.Field.vorname.name()).setHeaderCaption(resolver.resolveRelative(getEntityFieldPath(Buerger.Field.vorname.name(), I18nPaths.Type.column_header)));
+        this.grid.getColumn(Buerger.Field.geburtsdatum.name()).setHeaderCaption(resolver.resolveRelative(getEntityFieldPath(Buerger.Field.geburtsdatum.name(), I18nPaths.Type.column_header)));
+        this.grid.getColumn(Buerger.Field.nachname.name()).setHeaderCaption(resolver.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), I18nPaths.Type.column_header)));
+        this.grid.getColumn(Buerger.Field.augenfarbe.name()).setHeaderCaption(resolver.resolveRelative(getEntityFieldPath(Buerger.Field.augenfarbe.name(), I18nPaths.Type.column_header)));
 
         // Layout für die Schaltflächen über der Tabelle
         HorizontalLayout hlayout = new HorizontalLayout(create, add, delete);
@@ -88,7 +91,7 @@ public class BuergerPartnerTab extends CustomComponent {
         vlayout.setSpacing(true);
         vlayout.setMargin(true);
 
-        setId(String.format("%s_%s_%s_PARENT_TAB", navigateToForDetail, from, BuergerViewController.I18N_BASE_PATH));
+        setId(String.format("%s_%s_%s_PARENT_TAB", navigateToForDetail, from, BuergerI18nResolver.I18N_BASE_PATH));
         setCompositionRoot(vlayout);
     }
 

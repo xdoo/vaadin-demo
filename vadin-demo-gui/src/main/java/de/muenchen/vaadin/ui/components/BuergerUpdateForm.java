@@ -16,6 +16,7 @@ import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.GenericErrorNotification;
 import de.muenchen.vaadin.guilib.util.ValidatorFactory;
+import de.muenchen.vaadin.services.BuergerI18nResolver;
 import de.muenchen.vaadin.services.model.BuergerDatastore;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.slf4j.Logger;
@@ -26,7 +27,6 @@ import reactor.fn.Consumer;
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.*;
 
 /**
- *
  * @author claus
  */
 public class BuergerUpdateForm extends CustomComponent implements Consumer<Event<BuergerDatastore>> {
@@ -38,6 +38,7 @@ public class BuergerUpdateForm extends CustomComponent implements Consumer<Event
 
     private final BeanFieldGroup<Buerger> binder = new BeanFieldGroup<Buerger>(Buerger.class);
     private final BuergerViewController controller;
+    private final BuergerI18nResolver resolver;
 
     private final String navigateTo;
     private final String navigateBack;
@@ -52,9 +53,10 @@ public class BuergerUpdateForm extends CustomComponent implements Consumer<Event
      * @param navigateTo
      * @param navigateBack
      */
-    public BuergerUpdateForm(BuergerViewController controller, final String navigateTo, String navigateBack) {
+    public BuergerUpdateForm(BuergerViewController controller, BuergerI18nResolver resolver, final String navigateTo, String navigateBack) {
 
         this.controller = controller;
+        this.resolver = resolver;
         this.navigateTo = navigateTo;
         this.navigateBack = navigateBack;
 
@@ -76,49 +78,49 @@ public class BuergerUpdateForm extends CustomComponent implements Consumer<Event
         layout.setMargin(true);
 
         // headline
-        Label headline = new Label(controller.resolveRelative(getFormPath(SimpleAction.create, I18nPaths.Component.headline, Type.label)));
+        Label headline = new Label(resolver.resolveRelative(getFormPath(SimpleAction.create, I18nPaths.Component.headline, Type.label)));
         headline.addStyleName(ValoTheme.LABEL_H3);
         layout.addComponent(headline);
 
-        Validator val0 = ValidatorFactory.getValidator(ValidatorFactory.Type.DIAKRITISCH, controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.validationstring)), "true");
-        
+        Validator val0 = ValidatorFactory.getValidator(ValidatorFactory.Type.DIAKRITISCH, resolver.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.validationstring)), "true");
+
         TextField firstField = controller.getUtil().createFormTextField(binder,
-                controller.resolveRelative(getEntityFieldPath(Buerger.Field.vorname.name(), Type.label)),
-                controller.resolveRelative(getEntityFieldPath(Buerger.Field.vorname.name(), Type.input_prompt)),
+                resolver.resolveRelative(getEntityFieldPath(Buerger.Field.vorname.name(), Type.label)),
+                resolver.resolveRelative(getEntityFieldPath(Buerger.Field.vorname.name(), Type.input_prompt)),
                 Buerger.Field.vorname.name(),
-                BuergerViewController.I18N_BASE_PATH);
+                BuergerI18nResolver.I18N_BASE_PATH);
         firstField.focus();
         firstField.addValidator(val0);
-        firstField.addValidator(new StringLengthValidator(controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.validation)), 1, Integer.MAX_VALUE, false));
+        firstField.addValidator(new StringLengthValidator(resolver.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.validation)), 1, Integer.MAX_VALUE, false));
         layout.addComponent(firstField);
-        
+
         // alle anderen Felder
         TextField secField = controller.getUtil().createFormTextField(binder,
-                controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.label)),
-                controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.input_prompt)),
+                resolver.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.label)),
+                resolver.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.input_prompt)),
                 Buerger.Field.nachname.name(),
-                BuergerViewController.I18N_BASE_PATH);
+                BuergerI18nResolver.I18N_BASE_PATH);
         secField.addValidator(val0);
-        secField.addValidator(new StringLengthValidator(controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.validation)), 1, Integer.MAX_VALUE, false));
+        secField.addValidator(new StringLengthValidator(resolver.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.validation)), 1, Integer.MAX_VALUE, false));
         layout.addComponent(secField);
         ComboBox cb = controller.getUtil().createFormComboBox(binder,
-                controller.resolveRelative(getEntityFieldPath(Buerger.Field.augenfarbe.name(), Type.label)),
+                resolver.resolveRelative(getEntityFieldPath(Buerger.Field.augenfarbe.name(), Type.label)),
                 Buerger.Field.augenfarbe.name(),
                 Augenfarbe.class);
         layout.addComponent(cb);
         DateField birthdayfield = controller.getUtil().createFormDateField(binder,
-                controller.resolveRelative(getEntityFieldPath(Buerger.Field.geburtsdatum.name(), Type.label)),
-                Buerger.Field.geburtsdatum.name(), BuergerViewController.I18N_BASE_PATH);
-        String errorMsg = controller.resolveRelative(getEntityFieldPath(Buerger.Field.geburtsdatum.name(), Type.validation));
+                resolver.resolveRelative(getEntityFieldPath(Buerger.Field.geburtsdatum.name(), Type.label)),
+                Buerger.Field.geburtsdatum.name(), BuergerI18nResolver.I18N_BASE_PATH);
+        String errorMsg = resolver.resolveRelative(getEntityFieldPath(Buerger.Field.geburtsdatum.name(), Type.validation));
         birthdayfield.addValidator(ValidatorFactory.getValidator(ValidatorFactory.Type.DATE_RANGE, errorMsg, "start", null));
-        birthdayfield.addValidator(ValidatorFactory.getValidator(ValidatorFactory.Type.NULL, controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.validation)), "false"));
-        layout.addComponent(birthdayfield); 
-        
-        
+        birthdayfield.addValidator(ValidatorFactory.getValidator(ValidatorFactory.Type.NULL, resolver.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.validation)), "false"));
+        layout.addComponent(birthdayfield);
+
+
         layout.addComponent(buttonLayout);
         // die Schaltfläche zum Aktualisieren
 
-        final ActionButton updateButton = new ActionButton(controller, SimpleAction.save, "lasdfölkjef");
+        final ActionButton updateButton = new ActionButton(resolver, SimpleAction.save, "lasdfölkjef");
         updateButton.addClickListener(clickEvent1 -> {
             try {
                 binder.commit();
@@ -126,15 +128,15 @@ public class BuergerUpdateForm extends CustomComponent implements Consumer<Event
                 controller.getEventbus().notify(controller.getRequestKey(RequestEvent.UPDATE), reactor.bus.Event.wrap(buerger));
                 getNavigator().navigateTo(getNavigateTo());
             } catch (FieldGroup.CommitException e) {
-                GenericErrorNotification error = new GenericErrorNotification(controller.resolveRelative(getNotificationPath(I18nPaths.NotificationType.failure, SimpleAction.save, Type.label)),
-                        controller.resolveRelative(getNotificationPath(I18nPaths.NotificationType.failure, SimpleAction.save, Type.text)));
+                GenericErrorNotification error = new GenericErrorNotification(resolver.resolveRelative(getNotificationPath(I18nPaths.NotificationType.failure, SimpleAction.save, Type.label)),
+                        resolver.resolveRelative(getNotificationPath(I18nPaths.NotificationType.failure, SimpleAction.save, Type.text)));
                 error.show(Page.getCurrent());
             }
         });
         buttonLayout.addComponent(updateButton);
 
         // die Schaltfläche zum Abbrechen
-        final ActionButton back = new ActionButton(controller, SimpleAction.back, "egal");
+        final ActionButton back = new ActionButton(resolver, SimpleAction.back, "egal");
         back.addClickListener(clickEvent -> getNavigator().navigateTo(getNavigateBack()));
         buttonLayout.addComponent(back);
 

@@ -16,6 +16,7 @@ import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.GenericSuccessNotification;
 import de.muenchen.vaadin.guilib.services.MessageService;
 import de.muenchen.vaadin.guilib.util.VaadinUtil;
+import de.muenchen.vaadin.services.BuergerI18nResolver;
 import de.muenchen.vaadin.services.BuergerService;
 import de.muenchen.vaadin.services.model.BuergerDatastore;
 import de.muenchen.vaadin.ui.app.MainUI;
@@ -45,10 +46,8 @@ import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.*;
  */
 @SpringComponent
 @UIScope
-public class BuergerViewController implements Serializable, I18nResolver {
+public class BuergerViewController implements Serializable{
 
-    // TODO entweder hier oder im I18nServiceConfigImpl angeben
-    public static final String I18N_BASE_PATH = "buerger";
     private static final long serialVersionUID = 1L;
     /** Logger */
     private static final Logger LOG = LoggerFactory.getLogger(BuergerViewController.class);
@@ -61,9 +60,8 @@ public class BuergerViewController implements Serializable, I18nResolver {
     /** Event Bus zur Kommunikation */
     @Autowired
     private EventBus eventbus;
-    /** {@link MessageService} zur Auflösung der Platzhalter */
     @Autowired
-    private MessageService msg;
+    private BuergerI18nResolver resolver;
     /** {@link UI} {@link Navigator} */
     private Navigator navigator;
     /** BuergerViewFactory zum erstellen der Components */
@@ -451,61 +449,16 @@ public class BuergerViewController implements Serializable, I18nResolver {
 
     private void showNotification(NotificationType type, SimpleAction action, Buerger.Rel relation) {
         GenericSuccessNotification succes = new GenericSuccessNotification(
-                resolveRelative(getNotificationPath(type, action, Type.label, relation.name())),
-                resolveRelative(getNotificationPath(type, action, Type.text, relation.name())));
+                resolver.resolveRelative(getNotificationPath(type, action, Type.label, relation.name())),
+                resolver.resolveRelative(getNotificationPath(type, action, Type.text, relation.name())));
         succes.show(Page.getCurrent());
     }
 
     private void showNotification(NotificationType type, SimpleAction action) {
         GenericSuccessNotification succes = new GenericSuccessNotification(
-                resolveRelative(getNotificationPath(type, action, Type.label)),
-                resolveRelative(getNotificationPath(type, action, Type.text)));
+                resolver.resolveRelative(getNotificationPath(type, action, Type.label)),
+                resolver.resolveRelative(getNotificationPath(type, action, Type.text)));
         succes.show(Page.getCurrent());
     }
 
-    ////////////////////////
-    // I18n Operations //
-    ////////////////////////
-
-    /**
-     * Resolve the path (e.g. "asdf.label").
-     *
-     * @param path the path.
-     * @return the resolved String.
-     */
-    @Override
-    public String resolve(String path) {
-        return msg.get(path);
-    }
-
-    /**
-     * Resolve the relative path (e.g. "asdf.label").
-     * <p>
-     * The base path will be appended at start and then read from the properties.
-     *
-     * @param relativePath the path to add to the base path.
-     * @return the resolved String.
-     */
-    @Override
-    public String resolveRelative(String relativePath) {
-        return msg.get(I18N_BASE_PATH + "." + relativePath);
-    }
-
-    @Override
-    public String getBasePath() {
-        return I18N_BASE_PATH;
-    }
-
-    /**
-     * Resolve the relative path (e.g. ".asdf.label") to a icon.
-     * <p>
-     * The base path will be appended at start and then read from the properties.
-     *
-     * @param relativePath the path to add to the base path.
-     * @return the resolved String.
-     */
-    @Override
-    public FontAwesome resolveIcon(String relativePath) {
-        return msg.getFontAwesome(I18N_BASE_PATH + "." + relativePath + ".icon");
-    }
 }

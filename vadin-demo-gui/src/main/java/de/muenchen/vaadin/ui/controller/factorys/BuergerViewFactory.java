@@ -8,6 +8,7 @@ import de.muenchen.eventbus.events.Association;
 import de.muenchen.eventbus.selector.Key;
 import de.muenchen.eventbus.selector.entity.RequestEvent;
 import de.muenchen.vaadin.demo.api.local.Buerger;
+import de.muenchen.vaadin.services.BuergerI18nResolver;
 import de.muenchen.vaadin.ui.components.*;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.slf4j.Logger;
@@ -35,6 +36,8 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<?>> {
     private static final long serialVersionUID = 1L;
     @Autowired
     EventBus eventBus;
+    @Autowired
+    BuergerI18nResolver resolver;
     private BuergerViewController controller;
 
     /** Singeltons of Components. **/
@@ -61,7 +64,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<?>> {
     public BuergerCreateForm generateCreateForm(String navigateTo) {
         LOG.debug("creating 'create' buerger form");
         if (!createForm.isPresent()) {
-            BuergerCreateForm form = new BuergerCreateForm(controller, navigateTo, null);
+            BuergerCreateForm form = new BuergerCreateForm(controller, resolver, navigateTo, null);
             createForm = Optional.of(form);
         }
         return createForm.get();
@@ -70,7 +73,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<?>> {
     public BuergerCreateForm generateCreateChildForm(String navigateTo) {
         LOG.debug("creating 'create child' buerger form");
         if (!createChildForm.isPresent()) {
-            BuergerCreateForm form = new BuergerCreateForm(controller, navigateTo, Buerger.Rel.kinder.name());
+            BuergerCreateForm form = new BuergerCreateForm(controller, resolver, navigateTo, Buerger.Rel.kinder.name());
             createChildForm = Optional.of(form);
         }
         return createChildForm.get();
@@ -79,7 +82,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<?>> {
     public BuergerCreateForm generateCreatePartnerForm(String navigateTo) {
         LOG.debug("creating 'create partner' buerger form");
         if (!createPartnerForm.isPresent()) {
-            BuergerCreateForm form = new BuergerCreateForm(controller, navigateTo, Buerger.Rel.partner.name());
+            BuergerCreateForm form = new BuergerCreateForm(controller, resolver, navigateTo, Buerger.Rel.partner.name());
             createPartnerForm = Optional.of(form);
         }
         return createPartnerForm.get();
@@ -95,7 +98,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<?>> {
      */
     public BuergerChildTab generateChildTab(String navigateToForDetail, String navigateForCreate, String navigateBack) {
         if (!childTab.isPresent()) {
-            BuergerChildTab tab = new BuergerChildTab(controller, navigateToForDetail, navigateForCreate, navigateBack);
+            BuergerChildTab tab = new BuergerChildTab(controller, resolver, navigateToForDetail, navigateForCreate, navigateBack);
             childTab = Optional.of(tab);
         }
         return childTab.get();
@@ -103,7 +106,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<?>> {
 
     public BuergerPartnerTab generatePartnerTab(String navigateToForDetail, String navigateForCreate, String navigateForAdd, String navigateBack) {
         if (!partnerTab.isPresent()) {
-            BuergerPartnerTab tab = new BuergerPartnerTab(controller, navigateToForDetail, navigateForCreate, navigateForAdd, navigateBack);
+            BuergerPartnerTab tab = new BuergerPartnerTab(controller, resolver, navigateToForDetail, navigateForCreate, navigateForAdd, navigateBack);
             partnerTab = Optional.of(tab);
         }
         return partnerTab.get();
@@ -112,7 +115,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<?>> {
     public BuergerUpdateForm generateUpdateForm(String navigateTo, String navigateBack) {
         LOG.debug("creating 'update' buerger form");
         if (!updateForm.isPresent()) {
-            BuergerUpdateForm form = new BuergerUpdateForm(controller, navigateTo, navigateBack);
+            BuergerUpdateForm form = new BuergerUpdateForm(controller, resolver, navigateTo, navigateBack);
             controller.getEventbus().on(controller.getResponseKey().toSelector(), form);
             updateForm = Optional.of(form);
         }
@@ -123,7 +126,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<?>> {
     public BuergerReadForm generateReadForm(String navigateToUpdate, String navigateBack) {
         LOG.debug("creating 'read' buerger form");
         if (!readForm.isPresent()) {
-            BuergerReadForm form = new BuergerReadForm(controller, navigateToUpdate, navigateBack);
+            BuergerReadForm form = new BuergerReadForm(controller, resolver, navigateToUpdate, navigateBack);
             controller.getEventbus().on(controller.getResponseKey().toSelector(), form);
             readForm = Optional.of(form);
         }
@@ -163,7 +166,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<?>> {
 
     public KindGrid generateChildTable(String navigateToForDetail) {
         LOG.debug("creating table for children");
-        KindGrid grid = new KindGrid(controller);
+        KindGrid grid = new KindGrid(resolver);
         grid.setSizeFull();
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
         grid.addItemClickListener(itemClickEvent -> {
@@ -193,7 +196,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<?>> {
     public PartnerGrid generatePartnerTable(String navigateToForDetail) {
 
         LOG.debug("creating table for partner");
-        PartnerGrid table = new PartnerGrid(controller);
+        PartnerGrid table = new PartnerGrid(resolver);
         table.setSizeFull();
         table.setSelectionMode(Grid.SelectionMode.MULTI);
         table.addItemClickListener(itemClickEvent -> {
@@ -226,7 +229,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<?>> {
 
     private GenericGrid createGrid() {
         LOG.debug("creating table for buerger");
-        GenericGrid grid = new GenericGrid(controller, Buerger.class);
+        GenericGrid grid = new GenericGrid(resolver, Buerger.class);
         grid.setColumns(Buerger.Field.getProperties());
         controller.getEventbus().on(controller.getResponseKey().toSelector(), grid);
         return grid;
@@ -234,7 +237,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<?>> {
 
     public BuergerGrid generateBuergerGrid() {
         LOG.debug("creating buergerGrid");
-        BuergerGrid buergerGrid = new BuergerGrid(controller);
+        BuergerGrid buergerGrid = new BuergerGrid(controller, resolver);
         return buergerGrid;
     }
 

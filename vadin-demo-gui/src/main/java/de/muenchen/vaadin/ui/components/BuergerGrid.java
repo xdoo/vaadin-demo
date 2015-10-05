@@ -10,6 +10,7 @@ import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
+import de.muenchen.vaadin.services.BuergerI18nResolver;
 import de.muenchen.vaadin.ui.app.views.BuergerCreateView;
 import de.muenchen.vaadin.ui.app.views.BuergerDetailView;
 import de.muenchen.vaadin.ui.app.views.BuergerUpdateView;
@@ -26,7 +27,8 @@ import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getEntityFieldPath;
 public class BuergerGrid extends CustomComponent {
 
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerGrid.class);
-    private BuergerViewController controller;
+    private final BuergerViewController controller;
+    private final BuergerI18nResolver resolver;
 
     private GenericGrid grid;
     private TextField filter = new TextField();
@@ -37,9 +39,10 @@ public class BuergerGrid extends CustomComponent {
     private ActionButton delete;
     private ActionButton create;
 
-    public BuergerGrid(final BuergerViewController controller) {
+    public BuergerGrid(final BuergerViewController controller, final BuergerI18nResolver resolver) {
 
         this.controller = controller;
+        this.resolver = resolver;
 
         VerticalLayout layout = new VerticalLayout();
         this.grid = controller.getViewFactory().generateGrid();
@@ -114,16 +117,16 @@ public class BuergerGrid extends CustomComponent {
         });
 
         // set headers
-        this.grid.getColumn(Buerger.Field.vorname.name()).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.Field.vorname.name(), I18nPaths.Type.column_header)));
-        this.grid.getColumn(Buerger.Field.geburtsdatum.name()).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.Field.geburtsdatum.name(), I18nPaths.Type.column_header)));
-        this.grid.getColumn(Buerger.Field.nachname.name()).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), I18nPaths.Type.column_header)));
-        this.grid.getColumn(Buerger.Field.augenfarbe.name()).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.Field.augenfarbe.name(), I18nPaths.Type.column_header)));
+        this.grid.getColumn(Buerger.Field.vorname.name()).setHeaderCaption(resolver.resolveRelative(getEntityFieldPath(Buerger.Field.vorname.name(), I18nPaths.Type.column_header)));
+        this.grid.getColumn(Buerger.Field.geburtsdatum.name()).setHeaderCaption(resolver.resolveRelative(getEntityFieldPath(Buerger.Field.geburtsdatum.name(), I18nPaths.Type.column_header)));
+        this.grid.getColumn(Buerger.Field.nachname.name()).setHeaderCaption(resolver.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), I18nPaths.Type.column_header)));
+        this.grid.getColumn(Buerger.Field.augenfarbe.name()).setHeaderCaption(resolver.resolveRelative(getEntityFieldPath(Buerger.Field.augenfarbe.name(), I18nPaths.Type.column_header)));
 
         setCompositionRoot(layout);
     }
 
     private void createCopy() {
-        copy = new ActionButton(controller, SimpleAction.copy, null);
+        copy = new ActionButton(resolver, SimpleAction.copy, null);
         copy.addClickListener(clickEvent -> {
             LOG.debug("copying selected items");
             if (grid.getSelectedRows() != null) {
@@ -138,7 +141,7 @@ public class BuergerGrid extends CustomComponent {
     }
 
     private void createDelete() {
-        delete = new ActionButton(controller, SimpleAction.delete, null);
+        delete = new ActionButton(resolver, SimpleAction.delete, null);
         delete.addClickListener(clickEvent -> {
             LOG.debug("deleting selected items");
             if (grid.getSelectedRows() != null) {
@@ -152,7 +155,7 @@ public class BuergerGrid extends CustomComponent {
     }
 
     private void createEdit() {
-        edit = new ActionButton(controller, SimpleAction.update, BuergerUpdateView.NAME);
+        edit = new ActionButton(resolver, SimpleAction.update, BuergerUpdateView.NAME);
         edit.addClickListener(clickEvent -> {
             if (grid.getSelectedRows().size() != 1)
                 return;
@@ -164,7 +167,7 @@ public class BuergerGrid extends CustomComponent {
     }
 
     private void createCreate() {
-        create = new ActionButton(controller, SimpleAction.create, BuergerCreateView.NAME);
+        create = new ActionButton(resolver, SimpleAction.create, BuergerCreateView.NAME);
         create.addClickListener(clickEvent -> {
             controller.getNavigator().navigateTo(BuergerCreateView.NAME);
         });
@@ -183,11 +186,11 @@ public class BuergerGrid extends CustomComponent {
                 reset.click();
             refresh();
         });
-        search.setId(String.format("%s_SEARCH_BUTTON", BuergerViewController.I18N_BASE_PATH));
+        search.setId(String.format("%s_SEARCH_BUTTON", BuergerI18nResolver.I18N_BASE_PATH));
     }
 
     private void createFilter() {
-        filter.setId(String.format("%s_QUERY_FIELD", BuergerViewController.I18N_BASE_PATH));
+        filter.setId(String.format("%s_QUERY_FIELD", BuergerI18nResolver.I18N_BASE_PATH));
         filter.focus();
         filter.setWidth("100%");
     }
@@ -200,7 +203,7 @@ public class BuergerGrid extends CustomComponent {
             controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_LIST));
             filter.setValue("");
         });
-        reset.setId(String.format("%s_RESET_BUTTON", BuergerViewController.I18N_BASE_PATH));
+        reset.setId(String.format("%s_RESET_BUTTON", BuergerI18nResolver.I18N_BASE_PATH));
     }
 
     private void setButtonVisability() {
