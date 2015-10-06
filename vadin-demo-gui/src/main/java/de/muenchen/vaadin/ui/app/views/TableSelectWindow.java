@@ -1,5 +1,7 @@
 package de.muenchen.vaadin.ui.app.views;
 
+import com.vaadin.event.ShortcutAction;
+import com.vaadin.shared.ui.window.WindowMode;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Window;
@@ -24,9 +26,9 @@ public class TableSelectWindow extends Window {
 
         center();
         setModal(true);
+        setCloseShortcut(ShortcutAction.KeyCode.ESCAPE);
         setDraggable(false);
         setResizable(false);
-
     }
 
 

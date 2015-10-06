@@ -34,7 +34,9 @@ public class BuergerChildTab extends CustomComponent {
         });
         ActionButton add = new ActionButton(controller, SimpleAction.add, "");
         add.addClickListener(clickEvent -> {
-            getUI().addWindow(new TableSelectWindow(controller, controller.getViewFactory().generateChildSearchTable()));
+            HorizontalLayout layout = new HorizontalLayout(controller.getViewFactory().generateChildSearchTable());
+            layout.setMargin(true);
+            getUI().addWindow(new TableSelectWindow(controller, layout));
         });
 
         delete = new ActionButton(controller, SimpleAction.delete, null);

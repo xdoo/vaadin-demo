@@ -42,9 +42,7 @@ public class BuergerPartnerComponent extends CustomComponent implements Consumer
 
     public BuergerPartnerComponent(BuergerViewController controller, String navigateToForCreate) {
         this.controller = controller;
-
         this.navigateToForCreate = navigateToForCreate;
-
         this.buildComponent();
     }
 
@@ -91,13 +89,17 @@ public class BuergerPartnerComponent extends CustomComponent implements Consumer
         ActionButton add = new ActionButton(controller, SimpleAction.add, null);
         add.addClickListener(clickEvent -> {
             if (partnerReadForm.getComponentCount() == 0) {
-                Window w = new TableSelectWindow(controller, controller.getViewFactory().generateBuergerPartnerSearchTable());
-//                w.getContent().setSizeUndefined();
-                w.getContent().setSizeFull();
-                getUI().addWindow(w);
+                HorizontalLayout layout = new HorizontalLayout(controller.getViewFactory().generateBuergerPartnerSearchTable());
+                layout.setMargin(true);
+                getUI().addWindow(new TableSelectWindow(controller, layout));
             } else {
                 GenericConfirmationWindow window =
-                        new GenericConfirmationWindow(controller, SimpleAction.override, e -> getUI().addWindow(new TableSelectWindow(controller, controller.getViewFactory().generateBuergerPartnerSearchTable())));
+                        new GenericConfirmationWindow(controller, SimpleAction.override, e ->
+                        {
+                            HorizontalLayout layout = new HorizontalLayout(controller.getViewFactory().generateBuergerPartnerSearchTable());
+                            layout.setMargin(true);
+                            getUI().addWindow(new TableSelectWindow(controller, layout));
+                        });
                 getUI().addWindow(window);
                 window.center();
                 window.focus();
