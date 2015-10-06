@@ -59,16 +59,16 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
             returnBuerger = result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
             showSuccessNotification(I18nPaths.NotificationType.success, SimpleAction.create);
         } catch (HttpClientErrorException e) {
+            returnBuerger = this.createBuergerFallback();
             LOG.error(e.getMessage());
-            returnBuerger = null;
             showErrorNotification(I18nPaths.NotificationType.error, SimpleAction.create);
         } catch (TimeoutException e) {
+            returnBuerger = this.createBuergerFallback();
             LOG.error(e.getMessage());
-            returnBuerger = null;
             showErrorNotification(I18nPaths.NotificationType.error, SimpleAction.create, TIMEOUT_I18N);
         } catch (Exception e) {
+            returnBuerger = this.createBuergerFallback();
             LOG.error(e.getMessage());
-            returnBuerger = null;
             showErrorNotification(I18nPaths.NotificationType.error, SimpleAction.create);
         } finally {
             result.cancel(true);
@@ -84,16 +84,16 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
             returnBuerger = result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
             showSuccessNotification(I18nPaths.NotificationType.success, SimpleAction.update);
         } catch (HttpClientErrorException e) {
+            returnBuerger = this.createBuergerFallback();
             LOG.error(e.getMessage());
-            returnBuerger = null;
             showErrorNotification(I18nPaths.NotificationType.error, SimpleAction.update);
         } catch (TimeoutException e) {
+            returnBuerger = this.createBuergerFallback();
             LOG.error(e.getMessage());
-            returnBuerger = null;
             showErrorNotification(I18nPaths.NotificationType.error, SimpleAction.update, TIMEOUT_I18N);
         } catch (Exception e) {
+            returnBuerger = this.createBuergerFallback();
             LOG.error(e.getMessage());
-            returnBuerger = null;
             showErrorNotification(I18nPaths.NotificationType.error, SimpleAction.update);
         } finally {
             result.cancel(true);
@@ -137,16 +137,16 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
             buergers = result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
             return buergers;
         } catch (HttpClientErrorException e) {
+            buergers = this.createBuergersFallback();
             LOG.error(e.getMessage());
-            buergers = new ArrayList<>();
             showErrorNotification(I18nPaths.NotificationType.error, SimpleAction.read);
         } catch (TimeoutException e) {
+            buergers = this.createBuergersFallback();
             LOG.error(e.getMessage());
-            buergers = new ArrayList<>();
             showErrorNotification(I18nPaths.NotificationType.error, SimpleAction.read, TIMEOUT_I18N);
         } catch (Exception e) {
+            buergers = this.createBuergersFallback();
             LOG.error(e.getMessage());
-            buergers = new ArrayList<>();
             showErrorNotification(I18nPaths.NotificationType.error, SimpleAction.read);
         } finally {
             result.cancel(true);
@@ -161,16 +161,16 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
         try {
             buergers = result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
         } catch (HttpClientErrorException e) {
+            buergers = this.createBuergersFallback();
             LOG.error(e.getMessage());
-            buergers = new ArrayList<>();
             showErrorNotification(I18nPaths.NotificationType.error, SimpleAction.read);
         } catch (TimeoutException e) {
+            buergers = this.createBuergersFallback();
             LOG.error(e.getMessage());
-            buergers = new ArrayList<>();
             showErrorNotification(I18nPaths.NotificationType.error, SimpleAction.read, TIMEOUT_I18N);
         } catch (Exception e) {
+            buergers = this.createBuergersFallback();
             LOG.error(e.getMessage());
-            buergers = new ArrayList<>();
             showErrorNotification(I18nPaths.NotificationType.error, SimpleAction.read);
         } finally {
             result.cancel(true);
@@ -185,16 +185,16 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
         try {
             buerger = result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
         } catch (HttpClientErrorException e) {
+            buerger = this.createOptionalBuergerFallback();
             LOG.error(e.getMessage());
-            buerger = Optional.empty();
             showErrorNotification(I18nPaths.NotificationType.error, SimpleAction.read);
         } catch (TimeoutException e) {
+            buerger = this.createOptionalBuergerFallback();
             LOG.error(e.getMessage());
-            buerger = Optional.empty();
             showErrorNotification(I18nPaths.NotificationType.error, SimpleAction.read, TIMEOUT_I18N);
         } catch (Exception e) {
+            buerger = this.createOptionalBuergerFallback();
             LOG.error(e.getMessage());
-            buerger = Optional.empty();
             showErrorNotification(I18nPaths.NotificationType.error, SimpleAction.read);
         } finally {
             result.cancel(true);
@@ -215,16 +215,16 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
             buergers = new ArrayList<>();
 //            buergers = result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
         } catch (HttpClientErrorException e) {
+            buergers = this.createBuergersFallback();
             LOG.error(e.getMessage());
-            buergers = new ArrayList<>();
             showErrorNotification(I18nPaths.NotificationType.error, SimpleAction.read);
 //        } catch (TimeoutException e){
+//            buergers = this.createBuergersFallback();
 //            LOG.error(e.getMessage());
-//            buergers = new ArrayList<>();
 //            showErrorNotification(I18nPaths.NotificationType.error, SimpleAction.read, TIMEOUT_I18N);
         } catch (Exception e) {
+            buergers = this.createBuergersFallback();
             LOG.error(e.getMessage());
-            buergers = new ArrayList<>();
             showErrorNotification(I18nPaths.NotificationType.error, SimpleAction.read);
         } finally {
 //            result.cancel(true);
@@ -278,6 +278,35 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
         } finally {
             result.cancel(true);
         }
+    }
+
+    /** Fallback-Daten generierung. Diese Methoden werden durch Barrakuda mit dem gewünschten Verhalten befüllt. */
+
+    /**
+     * Generiert Fallback-Daten für Methoden die einen einzelnen Bürger zurückliefern.
+     *
+     * @return Generierter fallback-Wert.
+     */
+    private Buerger createBuergerFallback() {
+        return null;
+    }
+
+    /**
+     * Generiert Fallback-Daten für Methoden die eine List von Bürgern zurückliefern.
+     *
+     * @return Generierter fallback-Wert.
+     */
+    private List<Buerger> createBuergersFallback() {
+        return new ArrayList<>();
+    }
+
+    /**
+     * Generiert Fallback-Daten für Methoden die einen optionalen Bürger zurückliefern.
+     *
+     * @return Generierter fallback-Wert.
+     */
+    private Optional<Buerger> createOptionalBuergerFallback() {
+        return Optional.empty();
     }
 
     /**
