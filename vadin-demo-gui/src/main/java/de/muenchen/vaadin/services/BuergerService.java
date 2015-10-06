@@ -19,8 +19,6 @@ public interface BuergerService {
 
     boolean delete(Link link);
 
-    Buerger copy(Link link);
-
     List<Buerger> findAll();
 
     List<Buerger> findAll(Link relation);
