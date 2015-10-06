@@ -30,7 +30,6 @@ public class BuergerPartnerComponent extends CustomComponent implements Consumer
      * UI Elements
      */
     private BuergerViewController controller;
-    private Accordion accordion;
     private FormLayout partnerReadForm;
     private ActionButton create;
     private ActionButton add;
@@ -43,9 +42,6 @@ public class BuergerPartnerComponent extends CustomComponent implements Consumer
 
     public BuergerPartnerComponent(BuergerViewController controller, String navigateToForCreate) {
         this.controller = controller;
-        accordion = new Accordion(){
-
-        };
 
         this.navigateToForCreate = navigateToForCreate;
 
@@ -58,25 +54,19 @@ public class BuergerPartnerComponent extends CustomComponent implements Consumer
         delete = buildDeleteButton();
         partnerReadForm = new FormLayout();
         partnerReadForm.setStyleName(ValoTheme.FORMLAYOUT_LIGHT);
-
+        partnerReadForm.setWidthUndefined();
 
 
         // Layout für ActionButtons
-        HorizontalLayout hlayout = new HorizontalLayout(create, add, delete);
-        hlayout.setSpacing(true);
+        HorizontalLayout buttonLayout = new HorizontalLayout(create, add, delete);
+        buttonLayout.setSpacing(true);
         // Komponente
 
-        VerticalLayout vlayout = new VerticalLayout(hlayout, partnerReadForm);
+        VerticalLayout vlayout = new VerticalLayout(buttonLayout, partnerReadForm);
         vlayout.setSpacing(true);
-        vlayout.setMargin(true);
-
-        accordion.addTab(vlayout, WordUtils.capitalize(Buerger.Rel.partner.name()));
-
+        vlayout.setDefaultComponentAlignment(Alignment.TOP_LEFT);
         setId(String.format("%s_PARENT_COMPONENT", BuergerViewController.I18N_BASE_PATH));
-
-        VerticalLayout root = new VerticalLayout(accordion);
-        root.setMargin(true);
-        setCompositionRoot(root);
+        setCompositionRoot(vlayout);
     }
 
 
@@ -101,8 +91,10 @@ public class BuergerPartnerComponent extends CustomComponent implements Consumer
         ActionButton add = new ActionButton(controller, SimpleAction.add, null);
         add.addClickListener(clickEvent -> {
             if (partnerReadForm.getComponentCount() == 0) {
-                getUI().addWindow(new TableSelectWindow(controller, controller.getViewFactory().generateBuergerPartnerSearchTable()));
-                //controller.postEvent(controller.buildAppEvent(EventType.ADD_PARTNER));
+                Window w = new TableSelectWindow(controller, controller.getViewFactory().generateBuergerPartnerSearchTable());
+//                w.getContent().setSizeUndefined();
+                w.getContent().setSizeFull();
+                getUI().addWindow(w);
             } else {
                 GenericConfirmationWindow window =
                         new GenericConfirmationWindow(controller, SimpleAction.override, e -> getUI().addWindow(new TableSelectWindow(controller, controller.getViewFactory().generateBuergerPartnerSearchTable())));
@@ -120,6 +112,7 @@ public class BuergerPartnerComponent extends CustomComponent implements Consumer
             Association<Buerger> association = new Association<>(new Buerger(), Buerger.Rel.partner.name());
             controller.getEventbus().notify(controller.getRequestKey(RequestEvent.REMOVE_ASSOCIATION), association.asEvent());
         });
+        delete.setVisible(false);
         return delete;
     }
 
@@ -136,10 +129,10 @@ public class BuergerPartnerComponent extends CustomComponent implements Consumer
             partnerReadForm.addComponent(binder.buildAndBind(Buerger.Field.vorname.name()));
             partnerReadForm.addComponent(binder.buildAndBind(Buerger.Field.nachname.name()));
             partnerReadForm.addComponent(binder.buildAndBind(Buerger.Field.geburtsdatum.name()));
-            accordion.getTab(0).setCaption(partner.getBean().getVorname());
+            delete.setVisible(true);
         } else {
             partnerReadForm.removeAllComponents();
-            accordion.getTab(0).setCaption(WordUtils.capitalize(Buerger.Rel.partner.name()));
+            delete.setVisible(false);
         }
     }
 }

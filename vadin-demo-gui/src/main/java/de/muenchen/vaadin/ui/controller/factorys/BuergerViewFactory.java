@@ -190,36 +190,6 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<?>> {
         return grid;
     }
 
-    public PartnerGrid generatePartnerTable(String navigateToForDetail) {
-
-        LOG.debug("creating table for partner");
-        PartnerGrid table = new PartnerGrid(controller);
-        table.setSizeFull();
-        table.setSelectionMode(Grid.SelectionMode.MULTI);
-        table.addItemClickListener(itemClickEvent -> {
-            if (itemClickEvent.getPropertyId() != null) {
-                if (itemClickEvent.isDoubleClick()) {
-                    controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED), Event.wrap((itemClickEvent.getItemId())));
-                    controller.getNavigator().navigateTo(navigateToForDetail);
-                    return;
-                }
-                boolean isClicked = table.isSelected(itemClickEvent.getItemId());
-                if (!itemClickEvent.isCtrlKey()) {
-                    table.getSelectedRows().stream().forEach(row -> table.deselect(row));
-                }
-                if (!isClicked)
-                    table.select(itemClickEvent.getItemId());
-                else
-                    table.deselect(itemClickEvent.getItemId());
-            }
-        });
-
-        controller.getEventbus().on(controller.getResponseKey().toSelector(), table);
-        controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
-
-        return table;
-    }
-
     public BuergerPartnerComponent generateBuergerPartnerComponent(String navigateToForCreate){
         BuergerPartnerComponent partnerComponent = new BuergerPartnerComponent(controller, navigateToForCreate);
 

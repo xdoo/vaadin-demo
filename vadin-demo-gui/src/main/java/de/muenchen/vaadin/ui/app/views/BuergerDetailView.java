@@ -31,7 +31,7 @@ public class BuergerDetailView extends DefaultBuergerView {
     public static final String NAME = "buerger_read_view";
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerDetailView.class);
     private BuergerChildTab childTab;
-    private BuergerPartnerComponent partnerComponent;
+    private BuergerPartnerTab partnerTab;
     private BuergerReadForm readForm;
     @Autowired
     public BuergerDetailView(BuergerViewController controller, MainUI ui) {
@@ -44,17 +44,10 @@ public class BuergerDetailView extends DefaultBuergerView {
         VerticalLayout layout = new VerticalLayout();
         layout.setSpacing(true);
 
-
-        HorizontalLayout innerLayout = new HorizontalLayout();
         // read form
         readForm = this.controller.getViewFactory().generateReadForm(BuergerUpdateView.NAME, BuergerTableView.NAME);
-        innerLayout.addComponent(readForm);
+        layout.addComponent(readForm);
 
-        // Partner Component
-        partnerComponent = controller.getViewFactory().generateBuergerPartnerComponent(BuergerCreatePartnerView.NAME);
-        innerLayout.addComponent(partnerComponent);
-
-        layout.addComponent(innerLayout);
         // tab sheet
         TabSheet tabSheet = new TabSheet();
         tabSheet.addStyleName(ValoTheme.TABSHEET_FRAMED);
@@ -64,12 +57,9 @@ public class BuergerDetailView extends DefaultBuergerView {
         TabSheet.Tab kindTab = tabSheet.addTab(childTab);
         kindTab.setCaption(controller.resolveRelative(getEntityFieldPath(Buerger.Rel.kinder.name(), I18nPaths.Type.label)));
 
-        /**
         partnerTab = controller.getViewFactory().generatePartnerTab(BuergerDetailView.NAME, BuergerCreatePartnerView.NAME, null, NAME);
         TabSheet.Tab pTab = tabSheet.addTab(partnerTab);
         pTab.setCaption(controller.resolveRelative(getEntityFieldPath(Buerger.Rel.partner.name(), I18nPaths.Type.label)));
-        layout.addComponent(tabSheet);
-         **/
         layout.addComponent(tabSheet);
 
         addComponent(layout);
