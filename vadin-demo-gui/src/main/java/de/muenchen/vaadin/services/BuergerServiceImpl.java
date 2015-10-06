@@ -22,6 +22,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getNotificationPath;
 
@@ -33,6 +36,7 @@ import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getNotificationPath;
 public class BuergerServiceImpl implements BuergerService, Serializable{
 
     private static final Logger LOG = LoggerFactory.getLogger(BuergerService.class);
+    public static final int TIMEOUT = 5000;
 
     private BuergerRestClient client;
     private RestTemplate template;
@@ -49,20 +53,23 @@ public class BuergerServiceImpl implements BuergerService, Serializable{
 
     @Override
     public Buerger create(Buerger buerger) {
-        Buerger buerger1;
+        Buerger returnBuerger;
+        Future<Buerger> result = Executors.newCachedThreadPool().submit(() -> client.create(buerger));
         try {
-            buerger1 = client.create(buerger);
+            returnBuerger = result.get(TIMEOUT, TimeUnit.SECONDS);
             showSuccessNotification(I18nPaths.NotificationType.success, SimpleAction.create);
         } catch (HttpClientErrorException e){
             LOG.error(e.getMessage());
-            buerger1 = null;
+            returnBuerger = null;
             showErrorNotification(I18nPaths.NotificationType.error, SimpleAction.create);
         } catch (Exception e){
             LOG.error(e.getMessage());
-            buerger1 = null;
+            returnBuerger = null;
             showErrorNotification(I18nPaths.NotificationType.error, SimpleAction.create);
+        } finally {
+            result.cancel(true);
         }
-        return buerger1;
+        return returnBuerger;
     }
 
     @Override
