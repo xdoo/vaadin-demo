@@ -92,11 +92,11 @@ public class GenericGrid<T> extends CustomComponent {
         grid.addItemClickListener(itemClickEvent -> {
             if (itemClickEvent.getPropertyId() != null) {
                 if (itemClickEvent.isDoubleClick()) {
-                    T buerger = ((BeanItem<T>) itemClickEvent.getItem()).getBean();
+                    T entity = ((BeanItem<T>) itemClickEvent.getItem()).getBean();
                     controller
                             .getEventbus()
                             .notify(controller
-                                    .getRequestKey(RequestEvent.READ_SELECTED), reactor.bus.Event.wrap(buerger));
+                                    .getRequestKey(RequestEvent.READ_SELECTED), reactor.bus.Event.wrap(entity));
                     controller.getNavigator().navigateTo(navigateToRead);
                     return;
                 }
@@ -135,9 +135,9 @@ public class GenericGrid<T> extends CustomComponent {
         // configure
         this.grid.setWidth("100%");
         this.grid.setHeightByRows(10);
-        this.grid.getColumns().stream().forEach(c -> {
-            c.setHidable(true);
-        });
+        this.grid.getColumns().stream().forEach(c ->
+            c.setHidable(true)
+        );
 
         Stream.of(fields).forEach(field ->
                         this.grid.getColumn(field).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(field, I18nPaths.Type.column_header)))
@@ -161,11 +161,14 @@ public class GenericGrid<T> extends CustomComponent {
         copy.addClickListener(clickEvent -> {
             LOG.debug("copying selected items");
             if (grid.getSelectedRows() != null) {
-                for (Object next : grid.getSelectedRows()) {
-                    grid.deselect(next);
-                    BeanItem<T> item = (BeanItem<T>) grid.getContainerDataSource().getItem(next);
-                    controller.getEventbus().notify(controller.getRequestKey(RequestEvent.CREATE), reactor.bus.Event.wrap(item.getBean()));
-                }
+                grid.getSelectedRows().stream()
+                        .peek(grid::deselect)
+                        .map(itemID -> (BeanItem<T>) grid.getContainerDataSource().getItem(itemID))
+                        .forEach(beanItem ->
+                                        controller.getEventbus().notify(controller.getRequestKey(RequestEvent.CREATE), reactor.bus.Event.wrap(beanItem.getBean()))
+                        );
+
+
             }
         });
     }
@@ -175,11 +178,14 @@ public class GenericGrid<T> extends CustomComponent {
         delete.addClickListener(clickEvent -> {
             LOG.debug("deleting selected items");
             if (grid.getSelectedRows() != null) {
-                for (Object next : grid.getSelectedRows()) {
-                    BeanItem<T> item = (BeanItem<T>) grid.getContainerDataSource().getItem(next);
-                    controller.getEventbus().notify(controller.getRequestKey(RequestEvent.DELETE), reactor.bus.Event.wrap(item.getBean()));
-                    grid.deselect(next);
-                }
+                grid.getSelectedRows().stream()
+                        .peek(grid::deselect)
+                        .map(itemID -> (BeanItem<T>) grid.getContainerDataSource().getItem(itemID))
+                        .forEach(beanItem ->
+                            controller.getEventbus().notify(controller.getRequestKey(RequestEvent.DELETE), reactor.bus.Event.wrap(beanItem.getBean()))
+                        );
+
+
             }
         });
     }
@@ -187,12 +193,12 @@ public class GenericGrid<T> extends CustomComponent {
     private void createEdit() {
         edit = new ActionButton(controller, SimpleAction.update, navigateToEdit);
         edit.addClickListener(clickEvent -> {
-            if (grid.getSelectedRows().size() != 1)
-                return;
-            LOG.debug("update selected");
-            T buerger = ((BeanItem<T>) grid.getContainerDataSource().getItem(grid.getSelectedRows().toArray()[0])).getBean();
-            controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED), reactor.bus.Event.wrap(buerger));
-            controller.getNavigator().navigateTo(navigateToEdit);
+            if (grid.getSelectedRows().size() == 1) {
+                LOG.debug("update selected");
+                T buerger = ((BeanItem<T>) grid.getContainerDataSource().getItem(grid.getSelectedRows().toArray()[0])).getBean();
+                controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED), reactor.bus.Event.wrap(buerger));
+                controller.getNavigator().navigateTo(navigateToEdit);
+            }
         });
     }
 
@@ -314,7 +320,7 @@ public class GenericGrid<T> extends CustomComponent {
         Button button = new Button(buttonName);
         customSingleSelectButtons.put(buttonName, button);
         button.addClickListener(event -> {
-            if (grid.getSelectedRows().size() != 1) {
+            if (grid.getSelectedRows().size() == 1) {
                 consumer.accept(((BeanItem<T>) grid.getContainerDataSource().getItem(grid.getSelectedRows().toArray()[0])).getBean());
             }
         });
