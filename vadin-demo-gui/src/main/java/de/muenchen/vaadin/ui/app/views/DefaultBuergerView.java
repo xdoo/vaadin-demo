@@ -7,6 +7,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.ui.app.MainUI;
+import de.muenchen.vaadin.ui.components.nodes.forms.BuergerForm;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
 import javax.annotation.PostConstruct;
@@ -54,6 +55,8 @@ public abstract class DefaultBuergerView extends VerticalLayout implements View{
         removeAllComponents();
         //HorizontalLayout head = new HorizontalLayout(pageTitle);
         addComponent(pageTitle);
+
+        addComponent(new BuergerForm(controller, controller.getEventbus()));
     }
     
     private void configureLayout() {
