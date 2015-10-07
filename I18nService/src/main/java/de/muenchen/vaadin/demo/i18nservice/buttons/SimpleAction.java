@@ -21,7 +21,7 @@ public enum SimpleAction implements Action {
 
     //TODO check for duplicate/unused actions
     create(FontAwesome.MAGIC, ValoTheme.BUTTON_FRIENDLY),
-    read,
+    read(FontAwesome.BOOK),
     update(FontAwesome.PENCIL),
     override(FontAwesome.FILES_O),
     back(FontAwesome.ANGLE_LEFT, ShortcutAction.KeyCode.ARROW_LEFT),
