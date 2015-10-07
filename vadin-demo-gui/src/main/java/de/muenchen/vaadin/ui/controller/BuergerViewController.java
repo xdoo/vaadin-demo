@@ -11,9 +11,9 @@ import de.muenchen.eventbus.selector.entity.RequestEntityKey;
 import de.muenchen.eventbus.selector.entity.RequestEvent;
 import de.muenchen.eventbus.selector.entity.ResponseEntityKey;
 import de.muenchen.vaadin.demo.api.local.Buerger;
-import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.GenericSuccessNotification;
+import de.muenchen.vaadin.guilib.controller.EntityController;
 import de.muenchen.vaadin.guilib.services.MessageService;
 import de.muenchen.vaadin.guilib.util.VaadinUtil;
 import de.muenchen.vaadin.services.BuergerService;
@@ -36,7 +36,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.*;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.NotificationType;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Type;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getNotificationPath;
 
 /**
  * Der Controller ist die zentrale Klasse um die Logik im Kontext BuergerDTO abzubilden.
@@ -45,7 +47,7 @@ import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.*;
  */
 @SpringComponent
 @UIScope
-public class BuergerViewController implements Serializable, I18nResolver {
+public class BuergerViewController implements Serializable, EntityController {
 
     // TODO entweder hier oder im I18nServiceConfigImpl angeben
     public static final String I18N_BASE_PATH = "buerger";
