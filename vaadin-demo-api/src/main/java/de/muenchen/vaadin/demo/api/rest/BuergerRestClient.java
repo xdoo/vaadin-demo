@@ -37,6 +37,8 @@ public interface BuergerRestClient {
      */
     List<Buerger> findAll(Link relation);
 
+    List<Buerger> findFullTextFuzzy(String filter);
+
     /**
      * Try to find one Buerger (with matching tenancy) by its ID / self relation.
      *
@@ -95,4 +97,6 @@ public interface BuergerRestClient {
      * @param id The link to the id.
      */
     void delete(Link id);
+
+
 }

@@ -14,19 +14,18 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.Serializable;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 /**
- *
  * @author claus.straube
  */
-@SpringComponent @UIScope
+@SpringComponent
+@UIScope
 public class BuergerServiceImpl implements BuergerService, Serializable {
 
     private static final Logger LOG = LoggerFactory.getLogger(BuergerService.class);
-    
+
     private BuergerRestClient client;
     private RestTemplate template;
     private SecurityService securityService;
@@ -80,10 +79,7 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
 
     @Override
     public List<Buerger> queryBuerger(String query) {
-        //    Link link = this.infoService.getUrl("buerger_query");
-        //    ArrayList<Link> links = Lists.newArrayList(link.withRel(HateoasUtil.REL_QUERY));
-        //    return client.queryBuerger(query, links, getTemplate());
-        return new ArrayList<>();
+        return client.findFullTextFuzzy(query);
     }
 
     @Override
@@ -98,6 +94,7 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
 
     /**
      * Gets the resttemplate from the security if not present
+     *
      * @return resttemplate of this session
      */
     public RestTemplate getTemplate() {
@@ -106,5 +103,5 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
         }
         return securityService.getRestTemplate().orElse(null);
     }
-  
+
 }

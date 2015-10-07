@@ -336,6 +336,9 @@ public class BuergerViewController implements Serializable, I18nResolver {
         notifyComponents();
         showNotification(NotificationType.success, SimpleAction.update);
     }
+	public List<Buerger> queryBuerger(String query) {
+		return service.queryBuerger(query);
+	}
 
     /**
      * Refresh the {@link BuergerDatastore#buergers} list from the DataStore.
@@ -495,16 +498,183 @@ public class BuergerViewController implements Serializable, I18nResolver {
         return I18N_BASE_PATH;
     }
 
-    /**
-     * Resolve the relative path (e.g. ".asdf.label") to a icon.
-     * <p>
-     * The base path will be appended at start and then read from the properties.
-     *
-     * @param relativePath the path to add to the base path.
-     * @return the resolved String.
-     */
-    @Override
-    public FontAwesome resolveIcon(String relativePath) {
-        return msg.getFontAwesome(I18N_BASE_PATH + "." + relativePath + ".icon");
-    }
+		this.addBuergerKind(event.getEntity());
+		GenericSuccessNotification succes = new GenericSuccessNotification(
+				resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.add, Type.label, "child")),
+				resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.add, Type.text, "child")));
+		succes.show(Page.getCurrent());
+		postEvent(buildComponentEvent(EventType.UPDATE_CHILD).addEntity(event.getEntity()));
+	}
+
+	private void queryChildEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
+		AppEvent<Buerger> event = eventWrapper.getData();
+
+		// UI Komponenten aktualisieren
+		postEvent(buildComponentEvent(EventType.QUERY_CHILD).addEntities(this.queryKinder(event.getEntity())));
+	}
+
+	private void queryEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
+		AppEvent<Buerger> event = eventWrapper.getData();
+
+		List<Buerger> currentEntities;
+		if (event.getQuery().isPresent() && event.getQuery().get().length() > 0) {
+			currentEntities = this.queryBuerger(event.getQuery().get());
+		} else {
+			currentEntities = this.queryBuerger();
+		}
+
+		// UI Komponenten aktualisieren
+		postEvent(buildComponentEvent(EventType.QUERY).addEntities(currentEntities));
+	}
+
+	private void select2ReadEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
+		AppEvent<Buerger> event = eventWrapper.getData();
+
+		this.current = event.getItem();
+
+		// UI Komponente aktualisieren
+		postEvent(buildComponentEvent(EventType.SELECT2READ).addEntity(event.getItem().getBean()));
+
+
+	}
+
+	private void select2UpdateEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
+		AppEvent<Buerger> event = eventWrapper.getData();
+
+		// Das ist notwendig, weil beim ersten Aufruf der UPDATE
+		// Funktion erst die Komponente erstellt wird. Das Event
+		// läuft also zuerst ins Leere und muss deshalb nochmal
+		// wiederholt werden.
+		this.current = event.getItem();
+
+		// UI Komponenten aktualisieren
+		postEvent(buildComponentEvent(EventType.SELECT2UPDATE).addEntity(event.getItem().getBean()));
+
+	}
+
+	private void copyEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
+		AppEvent<Buerger> event = eventWrapper.getData();
+
+		// Service Operationen ausführen
+		Buerger copy = this.copyBuerger(event.getEntity().getId());
+
+		// UI Komponenten aktualisieren
+		postEvent(buildComponentEvent(EventType.COPY).addEntity(copy));
+
+		GenericSuccessNotification succes = new GenericSuccessNotification(
+				resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.copy, Type.label)),
+				resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.copy, Type.text)));
+		succes.show(Page.getCurrent());
+	}
+
+	private void deleteEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
+		AppEvent<Buerger> event = eventWrapper.getData();
+
+		Notification resultNotification;
+
+		// Service Operationen ausführen
+		try {
+			this.deleteBuerger(event.getEntity());
+			// UI Komponenten aktualisieren
+			ComponentEvent<Buerger> componentEvent = buildComponentEvent(EventType.DELETE);
+			componentEvent.setItemID(event.getEntity());
+			postEvent(componentEvent);
+			resultNotification = new GenericSuccessNotification(
+					resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.delete, Type.label)),
+					resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.delete, Type.text)));
+		} catch (HttpClientErrorException e) {
+			LOG.warn("Exception: " + e.getMessage());
+			if (e.getStatusCode().equals(HttpStatus.CONFLICT)) {
+				resultNotification = new GenericFailureNotification(
+						resolveRelative(getNotificationPath(NotificationType.failure, SimpleAction.delete, Type.label)),
+						resolveRelative(getNotificationPath(NotificationType.failure, SimpleAction.delete, Type.text)));
+			} else {
+				resultNotification = new GenericFailureNotification(
+						resolveRelative(getNotificationPath(NotificationType.failure, SimpleAction.delete, Type.label)),
+						e.getLocalizedMessage()
+				);
+			}
+		}
+
+		resultNotification.show(Page.getCurrent());
+	}
+
+	private void saveChildEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
+		AppEvent<Buerger> event = eventWrapper.getData();
+
+		// Service Operation ausführen
+		this.saveBuergerKind(event.getEntity());
+
+		postEvent(buildComponentEvent(EventType.SAVE_CHILD).addEntity(event.getEntity()));
+
+		GenericSuccessNotification succes = new GenericSuccessNotification(
+				resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.save, Type.label)),
+				resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.save, Type.text)));
+		succes.show(Page.getCurrent());
+	}
+
+	private void savePartnerEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
+		AppEvent<Buerger> event = eventWrapper.getData();
+
+		// Service Operation ausführen
+		this.saveBuergerPartner(event.getEntity());
+
+		postEvent(buildComponentEvent(EventType.SAVE_PARTNER).addEntity(event.getEntity()));
+
+		GenericSuccessNotification succes = new GenericSuccessNotification(
+				resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.save, Type.label)),
+				resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.save, Type.text)));
+		succes.show(Page.getCurrent());
+	}
+
+	private void saveEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
+		AppEvent<Buerger> event = eventWrapper.getData();
+
+		// Service Operationen ausführen
+		Buerger newBuerger = this.save(event.getEntity());
+
+		// UI Komponenten aktualisieren
+		postEvent(buildComponentEvent(EventType.SAVE).addEntity(newBuerger));
+
+		GenericSuccessNotification succes = new GenericSuccessNotification(
+				resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.save, Type.label)),
+				resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.save, Type.text)));
+		succes.show(Page.getCurrent());
+
+	}
+
+	private void updateEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
+		AppEvent<Buerger> event = eventWrapper.getData();
+
+		// Service Operationen ausführen
+		this.updateBuerger(event.getEntity());
+
+		// UI Komponenten aktualisieren
+		postEvent(buildComponentEvent(EventType.UPDATE).addEntity(event.getEntity()));
+
+
+		GenericSuccessNotification succes = new GenericSuccessNotification(
+				resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.update, Type.label)),
+				resolveRelative(getNotificationPath(NotificationType.success, SimpleAction.update, Type.text)));
+		succes.show(Page.getCurrent());
+
+	}
+
+	private void queryPartnerEventHandler(Event<AppEvent<Buerger>> eventWrapper) {
+		AppEvent<Buerger> event = eventWrapper.getData();
+		// UI Komponenten aktualisieren
+		Buerger partner;
+		try {
+			partner = this.queryPartner(event.getEntity());
+			postEvent(buildComponentEvent(EventType.QUERY_PARTNER).addEntity(partner));
+		} catch (HttpClientErrorException e) {
+			if (e.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
+				postEvent(buildComponentEvent(EventType.QUERY_PARTNER).addEntities(new ArrayList<>()));
+			}
+		}
+	}
+
+	public EventBus getBus() {
+		return eventbus;
+	}
 }
