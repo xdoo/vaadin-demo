@@ -10,6 +10,7 @@ import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
+import de.muenchen.vaadin.ui.app.views.BuergerDetailView;
 import de.muenchen.vaadin.ui.app.views.TableSelectWindow;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
@@ -22,22 +23,33 @@ public class BuergerChildTab extends CustomComponent {
 
     private BuergerViewController controller;
     private GenericGrid grid;
+    private ActionButton create;
+    private ActionButton add;
+    private ActionButton read;
     private ActionButton delete;
 
     public BuergerChildTab(BuergerViewController controller, String navigateToForDetail, String navigateToForCreate, String navigateBack) {
 
         this.controller = controller;
 
-        ActionButton create = new ActionButton(controller, SimpleAction.create, navigateToForCreate);
+        create = new ActionButton(controller, SimpleAction.create, navigateToForCreate);
         create.addClickListener(clickEvent -> {
             controller.getNavigator().navigateTo(navigateToForCreate);
         });
-        ActionButton add = new ActionButton(controller, SimpleAction.add, "");
+
+        add = new ActionButton(controller, SimpleAction.add, "");
         add.addClickListener(clickEvent -> {
             HorizontalLayout layout = new HorizontalLayout(controller.getViewFactory().generateChildSearchTable());
             layout.setMargin(true);
             getUI().addWindow(new TableSelectWindow(controller, layout));
         });
+
+        read = new ActionButton(controller, SimpleAction.read, null);
+        read.addClickListener(clickEvent -> {
+            controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED), reactor.bus.Event.wrap(grid.getSelectedRows().toArray()[0]));
+            controller.getNavigator().navigateTo(BuergerDetailView.NAME);
+        });
+        read.setVisible(false);
 
         delete = new ActionButton(controller, SimpleAction.delete, null);
         delete.addClickListener(clickEvent -> {
@@ -64,7 +76,7 @@ public class BuergerChildTab extends CustomComponent {
         this.grid.getColumn(Buerger.Field.augenfarbe.name()).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.Field.augenfarbe.name(), I18nPaths.Type.column_header)));
 
         // Layout für die Schaltflächen über der Tabelle
-        HorizontalLayout hlayout = new HorizontalLayout(create, add, delete);
+        HorizontalLayout hlayout = new HorizontalLayout(create, add, read, delete);
         hlayout.setSpacing(true);
         // Gesamtlayout
         VerticalLayout vlayout = new VerticalLayout(hlayout, grid);
@@ -76,10 +88,9 @@ public class BuergerChildTab extends CustomComponent {
     }
 
     private void setButtonVisability() {
-        if (grid.getSelectedRows().size() == 0)
-            delete.setVisible(Boolean.FALSE);
-        else
-            delete.setVisible(Boolean.TRUE);
+        int size = grid.getSelectedRows().size();
+        read.setVisible(size == 1);
+        delete.setVisible(size > 0);
     }
 
     public GenericGrid getGrid() {
