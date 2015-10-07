@@ -105,7 +105,6 @@ public class BuergerGrid extends CustomComponent {
         layout.addComponents(horizon);
         layout.addComponent(grid);
         layout.setSpacing(true);
-        refresh();
 
         // configure
         this.grid.setWidth("100%");
@@ -120,6 +119,7 @@ public class BuergerGrid extends CustomComponent {
         this.grid.getColumn(Buerger.Field.nachname.name()).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), I18nPaths.Type.column_header)));
         this.grid.getColumn(Buerger.Field.augenfarbe.name()).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.Field.augenfarbe.name(), I18nPaths.Type.column_header)));
 
+        controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_LIST));
         setCompositionRoot(layout);
     }
 
@@ -142,7 +142,6 @@ public class BuergerGrid extends CustomComponent {
                     BeanItem<Buerger> item = (BeanItem<Buerger>) grid.getContainerDataSource().getItem(next);
                     controller.getEventbus().notify(controller.getRequestKey(RequestEvent.CREATE), reactor.bus.Event.wrap(item.getBean()));
                 }
-                refresh();
             }
         });
     }
@@ -191,7 +190,6 @@ public class BuergerGrid extends CustomComponent {
                 controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_LIST), reactor.bus.Event.wrap(filter.getValue()));
             else
                 reset.click();
-            refresh();
         });
         search.setId(String.format("%s_SEARCH_BUTTON", BuergerViewController.I18N_BASE_PATH));
     }
@@ -219,11 +217,6 @@ public class BuergerGrid extends CustomComponent {
         edit.setVisible(size == 1);
         copy.setVisible(size > 0);
         delete.setVisible(size > 0);
-    }
-
-    //TODO wirklich nötig?
-    void refresh() {
-        controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_LIST));
     }
 
     public GenericGrid getGrid() {
