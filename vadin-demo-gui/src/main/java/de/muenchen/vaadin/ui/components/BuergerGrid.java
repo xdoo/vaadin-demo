@@ -20,7 +20,6 @@ import org.slf4j.LoggerFactory;
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getEntityFieldPath;
 
 /**
- *
  * @author claus.straube, arne.schoentag
  */
 public class BuergerGrid extends CustomComponent {
@@ -32,6 +31,7 @@ public class BuergerGrid extends CustomComponent {
     private TextField filter = new TextField();
     private Button search;
     private Button reset;
+    private ActionButton read;
     private ActionButton edit;
     private ActionButton copy;
     private ActionButton delete;
@@ -48,6 +48,7 @@ public class BuergerGrid extends CustomComponent {
         createReset();
         createSearch();
         createCreate();
+        createRead();
         createEdit();
         createDelete();
         createCopy();
@@ -88,7 +89,7 @@ public class BuergerGrid extends CustomComponent {
         grid.addSelectionListener(selectionEvent -> setButtonVisability());
 
         filterLayout.addComponents(filter, search, reset);
-        buttonlayout.addComponents(edit, copy, delete);
+        buttonlayout.addComponents(read, edit, copy, delete);
         buttonlayout.setSizeFull();
         filterLayout.setSizeFull();
         horizon.addComponents(create, filterLayout, buttonlayout);
@@ -120,6 +121,15 @@ public class BuergerGrid extends CustomComponent {
         this.grid.getColumn(Buerger.Field.augenfarbe.name()).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.Field.augenfarbe.name(), I18nPaths.Type.column_header)));
 
         setCompositionRoot(layout);
+    }
+
+    private void createRead() {
+        read = new ActionButton(controller, SimpleAction.read, null);
+        read.addClickListener(clickEvent -> {
+            controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED), reactor.bus.Event.wrap(grid.getSelectedRows().toArray()[0]));
+            controller.getNavigator().navigateTo(BuergerDetailView.NAME);
+        });
+        read.setVisible(false);
     }
 
     private void createCopy() {
@@ -205,6 +215,7 @@ public class BuergerGrid extends CustomComponent {
 
     private void setButtonVisability() {
         int size = grid.getSelectedRows().size();
+        read.setVisible(size == 1);
         edit.setVisible(size == 1);
         copy.setVisible(size > 0);
         delete.setVisible(size > 0);
