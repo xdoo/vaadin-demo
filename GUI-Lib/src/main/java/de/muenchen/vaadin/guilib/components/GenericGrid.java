@@ -30,6 +30,7 @@ import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getEntityFieldPath;
 /**
  * Created by rene.zarwel on 07.10.15.
  */
+@SuppressWarnings("unchecked")
 public class GenericGrid<T> extends CustomComponent {
     /**
      * The constant LOG.
@@ -101,7 +102,7 @@ public class GenericGrid<T> extends CustomComponent {
                 }
                 boolean isClicked = grid.isSelected(itemClickEvent.getItemId());
                 if (!itemClickEvent.isCtrlKey()) {
-                    grid.getSelectedRows().stream().forEach(row -> grid.deselect(row));
+                    grid.getSelectedRows().stream().forEach(grid::deselect);
                 }
                 if (!isClicked)
                     grid.select(itemClickEvent.getItemId());
@@ -302,7 +303,8 @@ public class GenericGrid<T> extends CustomComponent {
         customMultiSelectButtons.put(buttonName, button);
         button.addClickListener(event -> {
             if (grid.getSelectedRows() != null) {
-                grid.getSelectedRows().stream().map(item -> ((BeanItem<T>)item).getBean()).forEach(consumer::accept);
+                grid.getSelectedRows().stream().map(item -> ((BeanItem<T>) grid.getContainerDataSource().getItem(item)).getBean())
+                        .forEach(consumer::accept);
             }
         });
         buttonLayout.addComponent(button);
@@ -312,8 +314,8 @@ public class GenericGrid<T> extends CustomComponent {
         Button button = new Button(buttonName);
         customSingleSelectButtons.put(buttonName, button);
         button.addClickListener(event -> {
-            if (grid.getSelectedRows() != null) {
-                grid.getSelectedRows().stream().map(item -> ((BeanItem<T>)item).getBean()).forEach(consumer::accept);
+            if (grid.getSelectedRows().size() != 1) {
+                consumer.accept(((BeanItem<T>) grid.getContainerDataSource().getItem(grid.getSelectedRows().toArray()[0])).getBean());
             }
         });
         buttonLayout.addComponent(button);
