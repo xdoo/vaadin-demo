@@ -25,6 +25,7 @@ public class BuergerForm extends BaseComponent {
 
     public BuergerForm(I18nResolver i18nResolver, EventBus eventBus) {
         super(i18nResolver, eventBus);
+        binder.setItemDataSource(new Buerger());
         fields = buildFields();
 
         final FormLayout formLayout = new FormLayout();
@@ -53,7 +54,7 @@ public class BuergerForm extends BaseComponent {
         try {
             getBinder().commit();
         } catch (FieldGroup.CommitException e) {
-            return null;
+            throw new AssertionError("ItemDataSource must be set?! See constructor.");
         }
         return getBinder().getItemDataSource().getBean();
     }
