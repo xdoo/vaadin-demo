@@ -23,12 +23,13 @@ public class BuergerCreateButton extends BaseComponent {
         String navigateTo = "";
         create = new ActionButton(getI18nResolver(), SimpleAction.create, navigateTo);
         create.addClickListener(this::create);
-        //create.setEnabled(false);
         setCompositionRoot(create);
     }
 
     private void create(Button.ClickEvent clickEvent) {
-        System.out.println("Button clicked :)" + getBuerger().toString());
+        if (buerger == null)
+            throw new NullPointerException();
+        System.out.println("Create Buerger: " + getBuerger().getNachname());
     }
 
     public Buerger getBuerger() {
@@ -40,7 +41,6 @@ public class BuergerCreateButton extends BaseComponent {
     }
 
     public void setBuergerSupplier(Supplier<Buerger> buergerSupplier) {
-        setEnabled(true);
         this.buerger = buergerSupplier;
     }
 }

@@ -6,9 +6,10 @@ import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.ui.app.MainUI;
-import de.muenchen.vaadin.ui.components.BuergerCreateButton;
-import de.muenchen.vaadin.ui.components.forms.read.BuergerReadForm;
+import de.muenchen.vaadin.ui.components.buttons.node.BuergerCreateButton;
+import de.muenchen.vaadin.ui.components.forms.node.BuergerForm;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
 import javax.annotation.PostConstruct;
@@ -67,10 +68,11 @@ public abstract class DefaultBuergerView extends VerticalLayout implements View{
         //HorizontalLayout head = new HorizontalLayout(pageTitle);
         addComponent(pageTitle);
 
-        final BuergerReadForm c = new BuergerReadForm(controller, controller.getEventbus());
+        final BuergerForm c = new BuergerForm(controller, controller.getEventbus());
+        c.setBuerger(new Buerger());
         addComponent(c);
         final BuergerCreateButton c1 = new BuergerCreateButton(controller, controller.getEventbus());
-        c1.setBuergerSupplier(() -> c.getBinder().getItemDataSource().getBean());
+        c1.setBuergerSupplier(c::getBuerger);
         addComponent(c1);
     }
     

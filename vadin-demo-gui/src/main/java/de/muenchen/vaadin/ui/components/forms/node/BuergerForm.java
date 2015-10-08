@@ -1,6 +1,7 @@
 package de.muenchen.vaadin.ui.components.forms.node;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
+import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.ui.*;
 import de.muenchen.vaadin.demo.api.domain.Augenfarbe;
 import de.muenchen.vaadin.demo.api.local.Buerger;
@@ -49,6 +50,11 @@ public class BuergerForm extends BaseComponent {
     }
 
     public Buerger getBuerger() {
+        try {
+            getBinder().commit();
+        } catch (FieldGroup.CommitException e) {
+            return null;
+        }
         return getBinder().getItemDataSource().getBean();
     }
 
