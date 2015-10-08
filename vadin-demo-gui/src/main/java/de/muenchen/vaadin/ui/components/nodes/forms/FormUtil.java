@@ -2,6 +2,7 @@ package de.muenchen.vaadin.ui.components.nodes.forms;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.DateField;
 import com.vaadin.ui.TextField;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
@@ -33,6 +34,22 @@ public class FormUtil {
         return tf;
     }
 
+    private String getCaption(String property) {
+        return getI18nResolver().resolveRelative(I18nPaths.getEntityFieldPath(property, I18nPaths.Type.label));
+    }
+
+    private String getPrompt(String property) {
+        return getI18nResolver().resolveRelative(I18nPaths.getEntityFieldPath(property, I18nPaths.Type.input_prompt));
+    }
+
+    public BeanFieldGroup<?> getBinder() {
+        return binder;
+    }
+
+    public I18nResolver getI18nResolver() {
+        return i18nResolver;
+    }
+
     public ComboBox createComboBox(String property, Class enumeration) {
         final String caption = getCaption(property);
         final String prompt = getPrompt(property);
@@ -48,20 +65,12 @@ public class FormUtil {
         return cb;
     }
 
+    public DateField createDateField(String property) {
+        final String caption = getCaption(property);
 
-    private String getPrompt(String property) {
-        return getI18nResolver().resolveRelative(I18nPaths.getEntityFieldPath(property, I18nPaths.Type.input_prompt));
-    }
+        DateField df = (DateField) binder.buildAndBind(caption, property);
+        df.setId(String.format("%s_%s_DATEFIELD", getI18nResolver().getBasePath(), property).toUpperCase());
 
-    private String getCaption(String property) {
-        return getI18nResolver().resolveRelative(I18nPaths.getEntityFieldPath(property, I18nPaths.Type.label));
-    }
-
-    public BeanFieldGroup<?> getBinder() {
-        return binder;
-    }
-
-    public I18nResolver getI18nResolver() {
-        return i18nResolver;
+        return df;
     }
 }

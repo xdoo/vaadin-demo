@@ -1,10 +1,7 @@
 package de.muenchen.vaadin.ui.components.nodes.forms;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.FormLayout;
-import com.vaadin.ui.TextField;
+import com.vaadin.ui.*;
 import de.muenchen.eventbus.selector.entity.ResponseEntityKey;
 import de.muenchen.vaadin.demo.api.domain.Augenfarbe;
 import de.muenchen.vaadin.demo.api.local.Buerger;
@@ -39,8 +36,19 @@ public class BuergerForm extends BaseComponent {
         setCompositionRoot(formLayout);
     }
 
-    public List<Component> getFields() {
-        return Collections.unmodifiableList(fields);
+    private List<Component> buildFields() {
+        final FormUtil formUtil = new FormUtil(getBinder(), getI18nResolver());
+
+        final TextField vorname = formUtil.createTextField(Buerger.Field.vorname.name());
+        final TextField nachname = formUtil.createTextField(Buerger.Field.nachname.name());
+        final ComboBox augenfarbe = formUtil.createComboBox(Buerger.Field.augenfarbe.name(), Augenfarbe.class);
+        final DateField geburtsdatum = formUtil.createDateField(Buerger.Field.geburtsdatum.name());
+
+        return Arrays.asList(vorname, nachname, augenfarbe, geburtsdatum);
+    }
+
+    public BeanFieldGroup<Buerger> getBinder() {
+        return binder;
     }
 
     private void update(reactor.bus.Event<BuergerDatastore> event) {
@@ -56,23 +64,13 @@ public class BuergerForm extends BaseComponent {
         return formLayout;
     }
 
-    public BeanFieldGroup<Buerger> getBinder() {
-        return binder;
-    }
-
-    private List<Component> buildFields() {
-        final FormUtil formUtil = new FormUtil(getBinder(), getI18nResolver());
-
-        final TextField vorname = formUtil.createTextField(Buerger.Field.vorname.name());
-        final TextField nachname = formUtil.createTextField(Buerger.Field.nachname.name());
-        final ComboBox augenfarbe = formUtil.createComboBox(Buerger.Field.augenfarbe.name(), Augenfarbe.class);
-        //FormUtil.createDateField(binder,Buerger.Field.vorname.name(),getI18nResolver());
-
-        return Arrays.asList(vorname, nachname, augenfarbe);
-    }
-
     @Override
     public void setReadOnly(boolean readOnly) {
         getFields().forEach(c -> c.setReadOnly(readOnly));
     }
+
+    public List<Component> getFields() {
+        return Collections.unmodifiableList(fields);
+    }
+
 }
