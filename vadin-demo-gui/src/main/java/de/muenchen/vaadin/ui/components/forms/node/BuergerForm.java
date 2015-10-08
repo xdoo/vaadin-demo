@@ -1,12 +1,10 @@
-package de.muenchen.vaadin.ui.components.nodes.forms;
+package de.muenchen.vaadin.ui.components.forms.node;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.ui.*;
-import de.muenchen.eventbus.selector.entity.ResponseEntityKey;
 import de.muenchen.vaadin.demo.api.domain.Augenfarbe;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
-import de.muenchen.vaadin.services.model.BuergerDatastore;
 import de.muenchen.vaadin.ui.components.BaseComponent;
 import reactor.bus.EventBus;
 
@@ -26,7 +24,6 @@ public class BuergerForm extends BaseComponent {
 
     public BuergerForm(I18nResolver i18nResolver, EventBus eventBus) {
         super(i18nResolver, eventBus);
-        eventBus.on(new ResponseEntityKey(ENTITY_CLASS).toSelector(), this::update);
         fields = buildFields();
 
         final FormLayout formLayout = new FormLayout();
@@ -51,13 +48,12 @@ public class BuergerForm extends BaseComponent {
         return binder;
     }
 
-    private void update(reactor.bus.Event<BuergerDatastore> event) {
-        final BuergerDatastore datastore = event.getData();
-        datastore.getSelectedBuerger().ifPresent(binder::setItemDataSource);
+    public Buerger getBuerger() {
+        return getBinder().getItemDataSource().getBean();
     }
 
-    private Buerger getBuerger() {
-        return binder.getItemDataSource().getBean();
+    public void setBuerger(Buerger buerger) {
+        getBinder().setItemDataSource(buerger);
     }
 
     public FormLayout getFormLayout() {

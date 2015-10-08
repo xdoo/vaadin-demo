@@ -1,4 +1,4 @@
-package de.muenchen.vaadin.ui.components.nodes.forms;
+package de.muenchen.vaadin.ui.components.forms.node;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.ui.ComboBox;

@@ -7,7 +7,8 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.ui.app.MainUI;
-import de.muenchen.vaadin.ui.components.nodes.forms.BuergerForm;
+import de.muenchen.vaadin.ui.components.BuergerCreateButton;
+import de.muenchen.vaadin.ui.components.forms.read.BuergerReadForm;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
 import javax.annotation.PostConstruct;
@@ -40,31 +41,6 @@ public abstract class DefaultBuergerView extends VerticalLayout implements View{
         //TODO Wirklich notwendig? Lieber enter() verwenden?
     }
     
-    /**
-     * 
-     */
-    protected abstract void site();
-    
-    protected void addHeadline() {
-        
-        // headline
-        Label pageTitle = new Label(controller.resolveRelative(getPagePath(Type.title)));
-        pageTitle.addStyleName(ValoTheme.LABEL_H1);
-        pageTitle.addStyleName(ValoTheme.LABEL_COLORED);
-        
-        removeAllComponents();
-        //HorizontalLayout head = new HorizontalLayout(pageTitle);
-        addComponent(pageTitle);
-
-        addComponent(new BuergerForm(controller, controller.getEventbus()));
-    }
-    
-    private void configureLayout() {
-        setSizeFull();
-        this.setHeightUndefined();
-        setMargin(new MarginInfo(false, true, false, true));
-    }
-    
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
         this.configureLayout();
@@ -73,5 +49,34 @@ public abstract class DefaultBuergerView extends VerticalLayout implements View{
         this.addHeadline();
         this.site();
     }
+    
+    private void configureLayout() {
+        setSizeFull();
+        this.setHeightUndefined();
+        setMargin(new MarginInfo(false, true, false, true));
+    }
+    
+    protected void addHeadline() {
+
+        // headline
+        Label pageTitle = new Label(controller.resolveRelative(getPagePath(Type.title)));
+        pageTitle.addStyleName(ValoTheme.LABEL_H1);
+        pageTitle.addStyleName(ValoTheme.LABEL_COLORED);
+
+        removeAllComponents();
+        //HorizontalLayout head = new HorizontalLayout(pageTitle);
+        addComponent(pageTitle);
+
+        final BuergerReadForm c = new BuergerReadForm(controller, controller.getEventbus());
+        addComponent(c);
+        final BuergerCreateButton c1 = new BuergerCreateButton(controller, controller.getEventbus());
+        c1.setBuergerSupplier(() -> c.getBinder().getItemDataSource().getBean());
+        addComponent(c1);
+    }
+    
+    /**
+     *
+     */
+    protected abstract void site();
     
 }
