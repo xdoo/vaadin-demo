@@ -6,9 +6,13 @@ import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
+import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.components.buttons.node.BuergerCreateButton;
-import de.muenchen.vaadin.ui.components.forms.node.BuergerForm;
+import de.muenchen.vaadin.ui.components.buttons.node.BuergerSaveButton;
+import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerActions;
+import de.muenchen.vaadin.ui.components.forms.read.BuergerReadForm;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
 import javax.annotation.PostConstruct;
@@ -68,11 +72,27 @@ public abstract class DefaultBuergerView extends VerticalLayout implements View{
         addComponent(pageTitle);
 
 //        BuergerReadForm readForm = new BuergerReadForm(controller,controller.getEventbus());
-        BuergerForm form = new BuergerForm(controller, controller.getEventbus());
+        BuergerReadForm form = new BuergerReadForm(controller, controller.getEventbus());
         addComponent(form);
         final BuergerCreateButton c = new BuergerCreateButton(controller, controller.getEventbus());
         c.setBuergerSupplier(form::getBuerger);
         addComponent(c);
+        final BuergerSaveButton update = new BuergerSaveButton(controller, controller.getEventbus());
+        update.setBuergerSupplier(form::getBuerger);
+        addComponent(update);
+
+
+        final ActionButton asdf = new ActionButton(controller, SimpleAction.create, "asdf");
+
+        final BuergerActions buergerAction = new BuergerActions(form::getBuerger, controller.getEventbus());
+
+        asdf.addClickListener(buergerAction::create);
+        asdf.addClickListener(buergerAction::create);
+        asdf.addClickListener(buergerAction::delete);
+        asdf.addClickListener(buergerAction::update);
+
+
+        addComponent(asdf);
 
     }
     
