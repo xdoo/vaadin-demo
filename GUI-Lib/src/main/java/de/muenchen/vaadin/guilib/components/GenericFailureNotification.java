@@ -8,6 +8,7 @@ import com.vaadin.ui.themes.ValoTheme;
 public class GenericFailureNotification extends GenericNotification {
 
 	public GenericFailureNotification(String caption, String description) {
-		super(caption, description, ValoTheme.NOTIFICATION_FAILURE);
+		super(caption, description, ValoTheme.NOTIFICATION_FAILURE + " " + ValoTheme.NOTIFICATION_CLOSABLE);
+		super.setDelayMsec(-1);
 	}
 }

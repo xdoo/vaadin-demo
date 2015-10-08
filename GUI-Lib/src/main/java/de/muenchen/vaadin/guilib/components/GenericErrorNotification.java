@@ -10,7 +10,8 @@ import com.vaadin.ui.themes.ValoTheme;
 public class GenericErrorNotification extends GenericNotification {
 
     public GenericErrorNotification(String caption, String description) {
-        super(caption, description, ValoTheme.NOTIFICATION_ERROR, FontAwesome.EXCLAMATION_TRIANGLE);
+        super(caption, description, ValoTheme.NOTIFICATION_ERROR + " " + ValoTheme.NOTIFICATION_CLOSABLE, FontAwesome.EXCLAMATION_TRIANGLE);
+        super.setDelayMsec(-1);
     }
     
 }
