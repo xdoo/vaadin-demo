@@ -6,10 +6,8 @@ import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
-import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.app.MainUI;
-import de.muenchen.vaadin.ui.components.buttons.node.BuergerSaveButton;
+import de.muenchen.vaadin.ui.components.buttons.node.BuergerCreateButton;
 import de.muenchen.vaadin.ui.components.forms.node.BuergerForm;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
@@ -69,17 +67,13 @@ public abstract class DefaultBuergerView extends VerticalLayout implements View{
         //HorizontalLayout head = new HorizontalLayout(pageTitle);
         addComponent(pageTitle);
 
-
-        // TODO REMOVE TESTING
-        final BuergerForm c = new BuergerForm(controller, controller.getEventbus());
+//        BuergerReadForm readForm = new BuergerReadForm(controller,controller.getEventbus());
+        BuergerForm form = new BuergerForm(controller, controller.getEventbus());
+        addComponent(form);
+        final BuergerCreateButton c = new BuergerCreateButton(controller, controller.getEventbus());
+        c.setBuergerSupplier(form::getBuerger);
         addComponent(c);
-        final BuergerSaveButton c1 = new BuergerSaveButton(controller, controller.getEventbus());
-        c1.setBuergerSupplier(c::getBuerger);
-        addComponent(c1);
 
-        ActionButton freeze = new ActionButton(controller, SimpleAction.back, "");
-        freeze.addClickListener(clickEvent -> c.setReadOnly(true));
-        addComponent(freeze);
     }
     
     /**

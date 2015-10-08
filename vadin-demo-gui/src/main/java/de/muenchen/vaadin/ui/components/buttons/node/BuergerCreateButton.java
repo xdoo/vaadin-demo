@@ -1,6 +1,8 @@
 package de.muenchen.vaadin.ui.components.buttons.node;
 
 import com.vaadin.ui.Button;
+import de.muenchen.eventbus.selector.entity.RequestEntityKey;
+import de.muenchen.eventbus.selector.entity.RequestEvent;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
@@ -13,12 +15,12 @@ import java.util.function.Supplier;
 /**
  * Created by p.mueller on 08.10.15.
  */
-public class BuergerSaveButton extends BaseComponent {
+public class BuergerCreateButton extends BaseComponent {
 
     private final ActionButton create;
     private Supplier<Buerger> buerger = () -> null;
 
-    public BuergerSaveButton(I18nResolver i18nResolver, EventBus eventBus) {
+    public BuergerCreateButton(I18nResolver i18nResolver, EventBus eventBus) {
         super(i18nResolver, eventBus);
         String navigateTo = "";
         create = new ActionButton(getI18nResolver(), SimpleAction.create, navigateTo);
@@ -27,9 +29,10 @@ public class BuergerSaveButton extends BaseComponent {
     }
 
     private void create(Button.ClickEvent clickEvent) {
-        if (buerger == null)
+        if (getBuerger() == null)
             throw new NullPointerException();
-        System.out.println("Create Buerger: " + getBuerger().getNachname());
+        final RequestEntityKey key = new RequestEntityKey(RequestEvent.CREATE, Buerger.class);
+        getEventBus().notify(key, reactor.bus.Event.wrap(getBuerger()));
     }
 
     public Buerger getBuerger() {
