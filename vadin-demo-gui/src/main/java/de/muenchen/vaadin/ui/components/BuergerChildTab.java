@@ -26,17 +26,21 @@ public class BuergerChildTab extends CustomComponent {
         grid = controller.getViewFactory().generateChildTable(BuergerDetailView.NAME)
                 .activateCreate(navigateToForCreate)
                 .activateRead(BuergerDetailView.NAME)
-                .addCustomButton("add", () -> {
+                .addCustomButton("add", () -> { //TODO I18N
                     HorizontalLayout layout = new HorizontalLayout(controller.getViewFactory().generateChildSearchTable());
                     layout.setMargin(true);
                     getUI().addWindow(new TableSelectWindow(controller, layout));
                 })
-                .addCustomMultiSelectButton("delete", buerger -> {
+                .addCustomMultiSelectButton("delete", buerger -> { //TODO I18N
                     final Association<Buerger> association = new Association<>((Buerger) buerger, Buerger.Rel.kinder.name());
                     controller.getEventbus().notify(controller.getRequestKey(RequestEvent.REMOVE_ASSOCIATION), association.asEvent());
                 })
                 ;
 
+        HorizontalLayout layout = new HorizontalLayout(grid);
+        layout.setSizeFull();
+        layout.setMargin(true);
+        setCompositionRoot(layout);
 
 
         setId(String.format("%s_%s_%s_CHILD_TAB", navigateToForDetail, navigateBack, BuergerViewController.I18N_BASE_PATH));

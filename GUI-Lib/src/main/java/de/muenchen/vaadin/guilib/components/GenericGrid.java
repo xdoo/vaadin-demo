@@ -101,7 +101,7 @@ public class GenericGrid<T> extends CustomComponent {
 
         //----------- ComponentsLayout Configuration
         topComponentsLayout.addStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
-        topComponentsLayout.setSizeFull();
+        //topComponentsLayout.setSizeFull();
         topComponentsLayout.setSpacing(true);
         //--------------
 
@@ -263,18 +263,21 @@ public class GenericGrid<T> extends CustomComponent {
         if(!searchLayout.isPresent()){
             //Configure layout
             CssLayout cssLayout = new CssLayout();
-            cssLayout.addStyleName("genericGrid-group");
+            cssLayout.addStyleName("v-component-group");
             cssLayout.setSizeFull();
             //Set Components
             createSearch();
             createFilter();
             createReset();
+            cssLayout.addComponents(filter, search, reset);
+            searchLayout = Optional.of(cssLayout);
         } else {
             //Remove to prevent double attachment
             topComponentsLayout.removeComponent(searchLayout.get());
         }
         topComponentsLayout.addComponent(searchLayout.get());
 
+        setButtonVisability();
         return this;
     }
     public GenericGrid deactivateSearch(){
@@ -289,6 +292,8 @@ public class GenericGrid<T> extends CustomComponent {
         }
         createCreate(navigateToCreate);
         topComponentsLayout.addComponent(create.get());
+
+        setButtonVisability();
         return this;
     }
     public GenericGrid deactivateCreate(){
@@ -306,6 +311,8 @@ public class GenericGrid<T> extends CustomComponent {
 
         createRead(navigateToRead);
         topComponentsLayout.addComponent(read.get());
+
+        setButtonVisability();
         return this;
     }
     public GenericGrid deactivateRead(){
@@ -323,6 +330,8 @@ public class GenericGrid<T> extends CustomComponent {
             createCopy();
         }
         topComponentsLayout.addComponent(copy.get());
+
+        setButtonVisability();
         return this;
     }
     public GenericGrid deactivateCopy(){
@@ -338,6 +347,8 @@ public class GenericGrid<T> extends CustomComponent {
         }
         createEdit(navigateToEdit);
         topComponentsLayout.addComponent(edit.get());
+
+        setButtonVisability();
         return this;
     }
     public GenericGrid deactivateEdit(){
@@ -355,6 +366,8 @@ public class GenericGrid<T> extends CustomComponent {
             createDelete();
         }
         topComponentsLayout.addComponent(delete.get());
+
+        setButtonVisability();
         return this;
     }
     public GenericGrid deactivateDelete(){
