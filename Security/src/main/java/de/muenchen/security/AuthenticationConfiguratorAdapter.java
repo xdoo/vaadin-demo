@@ -1,4 +1,4 @@
-package de.muenchen.demo.service.security;
+package de.muenchen.security;
 
 import org.springframework.security.config.annotation.authentication.configurers.GlobalAuthenticationConfigurerAdapter;
 

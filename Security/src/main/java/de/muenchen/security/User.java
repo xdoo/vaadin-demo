@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.muenchen.demo.service.domain;
+package de.muenchen.security;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.search.annotations.Indexed;
@@ -74,9 +74,6 @@ public class User implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     private java.util.Date lastModDate;
 
-    @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
-    private Set<Account> accounts = new HashSet<>();
-
     @JsonIgnore
     private String mandant;
 
@@ -144,14 +141,6 @@ public class User implements Serializable {
 
     public void setMandant(String tenantId) {
         this.mandant = tenantId;
-    }
-
-    public Set<Account> getAccounts() {
-        return accounts;
-    }
-
-    public void setAccounts(Set<Account> accounts) {
-        this.accounts = accounts;
     }
 
     public String getUsername() {

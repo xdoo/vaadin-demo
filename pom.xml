@@ -17,6 +17,7 @@
         <module>GUI-Lib</module>
         <module>Auditing</module>
         <module>API-Lib</module>
+        <module>Security</module>
     </modules>
     <properties>
         <main.basedir>${basedir}/../..</main.basedir>

@@ -1,4 +1,4 @@
-package de.muenchen.demo.service.domain;
+package de.muenchen.security;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;

@@ -1,9 +1,5 @@
-package de.muenchen.demo.service.security;
+package de.muenchen.security;
 
-import de.muenchen.demo.service.domain.AuthorityPermission;
-import de.muenchen.demo.service.domain.AuthorityPermissionRepository;
-import de.muenchen.demo.service.domain.UserAuthority;
-import de.muenchen.demo.service.domain.UserAuthorityRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

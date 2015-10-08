@@ -1,4 +1,4 @@
-package de.muenchen.demo.service.security;
+package de.muenchen.security;
 
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Configuration;
@@ -14,8 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 /** Security must be more important than chache because of Mandant Feature! (order)*/
 @EnableGlobalMethodSecurity(prePostEnabled = true, order = 1)
 @Order(SecurityProperties.BASIC_AUTH_ORDER - 6)
-public class ApplicationSecurity extends
-        WebSecurityConfigurerAdapter {
+public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 
 
     @Override
