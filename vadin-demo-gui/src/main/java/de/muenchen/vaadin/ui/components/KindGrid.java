@@ -6,7 +6,10 @@
 package de.muenchen.vaadin.ui.components;
 
 import de.muenchen.vaadin.demo.api.local.Buerger;
-import de.muenchen.vaadin.services.model.BuergerDatastore;
+import de.muenchen.vaadin.guilib.components.GenericGrid;
+import de.muenchen.vaadin.ui.app.views.BuergerCreateChildView;
+import de.muenchen.vaadin.ui.app.views.BuergerDetailView;
+import de.muenchen.vaadin.ui.app.views.BuergerUpdateView;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
 /**
@@ -16,14 +19,12 @@ import de.muenchen.vaadin.ui.controller.BuergerViewController;
 public class KindGrid extends GenericGrid {
 
     public KindGrid(BuergerViewController controller) {
-        super(controller, Buerger.class);
+        super(controller,
+                controller.getModel().getSelectedBuergerKinder(),
+                Buerger.Field.getProperties(),
+                BuergerDetailView.NAME, BuergerUpdateView.NAME, BuergerCreateChildView.NAME);
+
     }
 
-    @Override
-    public void accept(reactor.bus.Event<BuergerDatastore> eventWrapper) {
-        //super.accept(eventWrapper);
-        final BuergerDatastore event = eventWrapper.getData();
-        if (this.getContainerDataSource().size() == 0)
-            this.setContainerDataSource(event.getSelectedBuergerKinder());
-    }
+
 }

@@ -117,7 +117,7 @@ public class BuergerViewController implements Serializable, EntityController {
         return eventbus;
     }
 
-    private BuergerDatastore getModel() {
+    public BuergerDatastore getModel() {
         return model;
     }
 

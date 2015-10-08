@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
@@ -37,69 +38,47 @@ public class GenericGrid<T> extends CustomComponent {
      */
     protected static final Logger LOG = LoggerFactory.getLogger(GenericGrid.class);
 
-    /** Components **/
+    /**Default Components **/
     private Grid grid = new Grid();
+    //----------- Search Components
+    private Optional<CssLayout> searchLayout = Optional.empty();
     private TextField filter = new TextField();
     private Button search;
     private Button reset;
-    private ActionButton read;
-    private ActionButton edit;
-    private ActionButton copy;
-    private ActionButton delete;
-    private ActionButton create;
+    //-------------
+    private Optional<ActionButton> read = Optional.empty();
+    private Optional<ActionButton> edit = Optional.empty();
+    private Optional<ActionButton> copy = Optional.empty();
+    private Optional<ActionButton> delete = Optional.empty();
+    private Optional<ActionButton> create = Optional.empty();
+
+    /**Custom Buttons**/
     private Map<String, Button> customSingleSelectButtons = new HashMap<>();
     private Map<String, Button> customMultiSelectButtons = new HashMap<>();
+    private Map<String, Button> customButtons = new HashMap<>();
 
-    /**Components Layouts**/
-    final CssLayout searchLayout = new CssLayout();
-    final CssLayout buttonLayout = new CssLayout();
+    /**Components Layout**/
     final HorizontalLayout topComponentsLayout = new HorizontalLayout();
 
     /** Controller**/
     private EntityController controller;
 
-    /** Navigation Paths **/
-    private String navigateToRead;
-    private String navigateToEdit;
-    private String navigateToCreate;
-
-    public GenericGrid(EntityController controller, BeanItemContainer<T> dataStore, String[] fields, String navigateToRead, String navigateToEdit, String navigateToCreate) {
+    public GenericGrid(EntityController controller, BeanItemContainer<T> dataStore, String[] fields) {
         this.controller = controller;
-        this.navigateToEdit = navigateToEdit;
-        this.navigateToRead = navigateToRead;
-        this.navigateToCreate = navigateToCreate;
 
         grid.setContainerDataSource(dataStore);
 
-        createFilter();
-        createReset();
-        createSearch();
-        createCreate();
-        createRead();
-        createEdit();
-        createDelete();
-        createCopy();
-
+        //----------- Grid Configuration
         grid.setColumns(fields);
         grid.setSizeFull();
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
-
-
-        searchLayout.addStyleName("genericGrid-group");
-        buttonLayout.addStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
-
-
+        grid.addSelectionListener(selectionEvent -> setButtonVisability());
+        grid.setVisible(Boolean.TRUE);
+        grid.setWidth("100%");
+        grid.setHeightByRows(10);
+        //Grid Selection
         grid.addItemClickListener(itemClickEvent -> {
             if (itemClickEvent.getPropertyId() != null) {
-                if (itemClickEvent.isDoubleClick()) {
-                    T entity = ((BeanItem<T>) itemClickEvent.getItem()).getBean();
-                    controller
-                            .getEventbus()
-                            .notify(controller
-                                    .getRequestKey(RequestEvent.READ_SELECTED), reactor.bus.Event.wrap(entity));
-                    controller.getNavigator().navigateTo(navigateToRead);
-                    return;
-                }
                 boolean isClicked = grid.isSelected(itemClickEvent.getItemId());
                 if (!itemClickEvent.isCtrlKey()) {
                     grid.getSelectedRows().stream().forEach(grid::deselect);
@@ -111,54 +90,49 @@ public class GenericGrid<T> extends CustomComponent {
             }
         });
 
-        grid.addSelectionListener(selectionEvent -> setButtonVisability());
-
-        searchLayout.addComponents(filter, search, reset);
-        buttonLayout.addComponents(read, edit, copy, delete);
-        buttonLayout.setSizeFull();
-        searchLayout.setSizeFull();
-        topComponentsLayout.addComponents(create, searchLayout, buttonLayout);
-
-        topComponentsLayout.setSpacing(true);
-
-        edit.setVisible(Boolean.FALSE);
-        copy.setVisible(Boolean.FALSE);
-        delete.setVisible(Boolean.FALSE);
-
-        grid.setVisible(Boolean.TRUE);
-
-        VerticalLayout layout = new VerticalLayout();
-        layout.addComponents(topComponentsLayout);
-        layout.addComponent(grid);
-        layout.setSpacing(true);
-
-        // configure
-        this.grid.setWidth("100%");
-        this.grid.setHeightByRows(10);
         this.grid.getColumns().stream().forEach(c ->
-            c.setHidable(true)
+                        c.setHidable(true)
         );
 
         Stream.of(fields).forEach(field ->
                         this.grid.getColumn(field).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(field, I18nPaths.Type.column_header)))
         );
+        //---------------
 
-        controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_LIST));
+        //----------- ComponentsLayout Configuration
+        topComponentsLayout.addStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
+        topComponentsLayout.setSizeFull();
+        topComponentsLayout.setSpacing(true);
+        //--------------
+
+        // Assemble GenericGrid
+        VerticalLayout layout = new VerticalLayout();
+        layout.addComponents(topComponentsLayout);
+        layout.addComponent(grid);
+        layout.setSpacing(true);
         setCompositionRoot(layout);
+
+        //Request Data for this Grid
+        controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_LIST));
+
     }
 
-    private void createRead() {
-        read = new ActionButton(controller, SimpleAction.read, null);
-        read.addClickListener(clickEvent -> {
+    //-------------------------
+    // Methods to create default components
+    //-------------------------
+    private void createRead(String navigateToRead) {
+        ActionButton readButton = new ActionButton(controller, SimpleAction.read, null);
+        readButton.addClickListener(clickEvent -> {
             controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED), reactor.bus.Event.wrap(grid.getSelectedRows().toArray()[0]));
             controller.getNavigator().navigateTo(navigateToRead);
         });
-        read.setVisible(false);
+        readButton.setVisible(false);
+        read = Optional.of(readButton);
     }
 
     private void createCopy() {
-        copy = new ActionButton(controller, SimpleAction.copy, null);
-        copy.addClickListener(clickEvent -> {
+        ActionButton copyButton = new ActionButton(controller, SimpleAction.copy, null);
+        copyButton.addClickListener(clickEvent -> {
             LOG.debug("copying selected items");
             if (grid.getSelectedRows() != null) {
                 grid.getSelectedRows().stream()
@@ -171,28 +145,30 @@ public class GenericGrid<T> extends CustomComponent {
 
             }
         });
+        copy = Optional.of(copyButton);
     }
 
     private void createDelete() {
-        delete = new ActionButton(controller, SimpleAction.delete, null);
-        delete.addClickListener(clickEvent -> {
+        ActionButton deleteButton = new ActionButton(controller, SimpleAction.delete, null);
+        deleteButton.addClickListener(clickEvent -> {
             LOG.debug("deleting selected items");
             if (grid.getSelectedRows() != null) {
                 grid.getSelectedRows().stream()
                         .peek(grid::deselect)
                         .map(itemID -> (BeanItem<T>) grid.getContainerDataSource().getItem(itemID))
                         .forEach(beanItem ->
-                            controller.getEventbus().notify(controller.getRequestKey(RequestEvent.DELETE), reactor.bus.Event.wrap(beanItem.getBean()))
+                                        controller.getEventbus().notify(controller.getRequestKey(RequestEvent.DELETE), reactor.bus.Event.wrap(beanItem.getBean()))
                         );
 
 
             }
         });
+        delete = Optional.of(deleteButton);
     }
 
-    private void createEdit() {
-        edit = new ActionButton(controller, SimpleAction.update, navigateToEdit);
-        edit.addClickListener(clickEvent -> {
+    private void createEdit(String navigateToEdit) {
+        ActionButton editButton = new ActionButton(controller, SimpleAction.update, navigateToEdit);
+        editButton.addClickListener(clickEvent -> {
             if (grid.getSelectedRows().size() == 1) {
                 LOG.debug("update selected");
                 T buerger = ((BeanItem<T>) grid.getContainerDataSource().getItem(grid.getSelectedRows().toArray()[0])).getBean();
@@ -200,14 +176,16 @@ public class GenericGrid<T> extends CustomComponent {
                 controller.getNavigator().navigateTo(navigateToEdit);
             }
         });
+        edit = Optional.of(editButton);
     }
 
-    private void createCreate() {
-        create = new ActionButton(controller, SimpleAction.create, navigateToCreate);
-        create.addClickListener(clickEvent -> {
+    private void createCreate(String navigateToCreate) {
+        ActionButton createButton = new ActionButton(controller, SimpleAction.create, navigateToCreate);
+        createButton.addClickListener(clickEvent -> {
             controller.getNavigator().navigateTo(navigateToCreate);
         });
-        create.setVisible(Boolean.TRUE);
+        createButton.setVisible(Boolean.TRUE);
+        create = Optional.of(createButton);
     }
 
     private void createSearch() {
@@ -243,10 +221,10 @@ public class GenericGrid<T> extends CustomComponent {
 
     private void setButtonVisability() {
         int size = grid.getSelectedRows().size();
-        read.setVisible(size == 1);
-        edit.setVisible(size == 1);
-        copy.setVisible(size > 0);
-        delete.setVisible(size > 0);
+        if(read.isPresent()) read.get().setVisible(size == 1);
+        if(edit.isPresent()) edit.get().setVisible(size == 1);
+        if(copy.isPresent()) copy.get().setVisible(size > 0);
+        if(delete.isPresent()) delete.get().setVisible(size > 0);
 
         customSingleSelectButtons.values().stream().forEach(button -> button.setVisible(size == 1));
         customMultiSelectButtons.values().stream().forEach(button -> button.setVisible(size > 0));
@@ -256,55 +234,136 @@ public class GenericGrid<T> extends CustomComponent {
     //Configuration-Methods
     //--------------
 
-    public void activateSearch(){
-        //Remove to prevent double attachment
-        topComponentsLayout.removeComponent(searchLayout);
-        topComponentsLayout.addComponent(searchLayout);
+    public GenericGrid activateDoubleClickToRead(String navigateToRead){
+        grid.addItemClickListener(itemClickEvent -> {
+            if (itemClickEvent.getPropertyId() != null) {
+                if (itemClickEvent.isDoubleClick()) {
+                    T entity = ((BeanItem<T>) itemClickEvent.getItem()).getBean();
+                    controller
+                            .getEventbus()
+                            .notify(controller
+                                    .getRequestKey(RequestEvent.READ_SELECTED), reactor.bus.Event.wrap(entity));
+                    controller.getNavigator().navigateTo(navigateToRead);
+                }
+            }
+        });
+        return this;
     }
-    public void deactivateSearch(){
-        topComponentsLayout.removeComponent(searchLayout);
+    public GenericGrid addDoubleClickListener(Consumer consumer){
+        grid.addItemClickListener(itemClickEvent -> {
+            if (itemClickEvent.isDoubleClick()) {
+                consumer.accept(((BeanItem<T>) grid.getContainerDataSource().getItem(itemClickEvent.getItemId())).getBean());
+            }
+        });
+        return this;
     }
-    public void activateCreate(){
-        //Remove to prevent double attachment
-        topComponentsLayout.removeComponent(create);
-        topComponentsLayout.addComponent(create);
+
+    public GenericGrid activateSearch(){
+
+        if(!searchLayout.isPresent()){
+            //Configure layout
+            CssLayout cssLayout = new CssLayout();
+            cssLayout.addStyleName("genericGrid-group");
+            cssLayout.setSizeFull();
+            //Set Components
+            createSearch();
+            createFilter();
+            createReset();
+        } else {
+            //Remove to prevent double attachment
+            topComponentsLayout.removeComponent(searchLayout.get());
+        }
+        topComponentsLayout.addComponent(searchLayout.get());
+
+        return this;
     }
-    public void deactivateCreate(){
-        topComponentsLayout.removeComponent(create);
+    public GenericGrid deactivateSearch(){
+        if(searchLayout.isPresent())
+            topComponentsLayout.removeComponent(searchLayout.get());
+        return this;
     }
-    public void activateRead(){
-        //Remove to prevent double attachment
-        buttonLayout.removeComponent(read);
-        buttonLayout.addComponent(read);
+    public GenericGrid activateCreate(String navigateToCreate){
+        if(create.isPresent()) {
+            //Remove to prevent double attachment
+            topComponentsLayout.removeComponent(create.get());
+        }
+        createCreate(navigateToCreate);
+        topComponentsLayout.addComponent(create.get());
+        return this;
     }
-    public void deactivateRead(){
-        buttonLayout.removeComponent(read);
+    public GenericGrid deactivateCreate(){
+        if(create.isPresent()) {
+            topComponentsLayout.removeComponent(create.get());
+            create = Optional.empty();
+        }
+        return this;
     }
-    public void activateCopy(){
-        //Remove to prevent double attachment
-        buttonLayout.removeComponent(copy);
-        buttonLayout.addComponent(copy);
+    public GenericGrid activateRead(String navigateToRead){
+        if(read.isPresent()) {
+            //Remove to prevent double attachment
+            topComponentsLayout.removeComponent(read.get());
+        }
+
+        createRead(navigateToRead);
+        topComponentsLayout.addComponent(read.get());
+        return this;
     }
-    public void deactivateCopy(){
-        buttonLayout.removeComponent(copy);
+    public GenericGrid deactivateRead(){
+        if(edit.isPresent()) {
+            topComponentsLayout.removeComponent(read.get());
+            read = Optional.empty();
+        }
+        return this;
     }
-    public void activateEdit(){
-        //Remove to prevent double attachment
-        buttonLayout.removeComponent(edit);
-        buttonLayout.addComponent(edit);
+    public GenericGrid activateCopy(){
+        if(copy.isPresent()) {
+            //Remove to prevent double attachment
+            topComponentsLayout.removeComponent(copy.get());
+        } else {
+            createCopy();
+        }
+        topComponentsLayout.addComponent(copy.get());
+        return this;
     }
-    public void deactivateEdit(){
-        buttonLayout.removeComponent(edit);
+    public GenericGrid deactivateCopy(){
+        if(copy.isPresent()) {
+            topComponentsLayout.removeComponent(copy.get());
+        }
+        return this;
     }
-    public void activateDelete(){
-        //Remove to prevent double attachment
-        buttonLayout.removeComponent(delete);
-        buttonLayout.addComponent(delete);
+    public GenericGrid activateEdit(String navigateToEdit){
+        if(edit.isPresent()) {
+            //Remove to prevent double attachment
+            topComponentsLayout.removeComponent(edit.get());
+        }
+        createEdit(navigateToEdit);
+        topComponentsLayout.addComponent(edit.get());
+        return this;
     }
-    public void deactivateDelete(){
-        buttonLayout.removeComponent(delete);
+    public GenericGrid deactivateEdit(){
+        if(edit.isPresent()) {
+            topComponentsLayout.removeComponent(edit.get());
+            edit = Optional.empty();
+        }
+        return this;
     }
-    public void addCustomMultiSelectButton(String buttonName, Consumer<T> consumer){
+    public GenericGrid activateDelete(){
+        if(delete.isPresent()) {
+            //Remove to prevent double attachment
+            topComponentsLayout.removeComponent(delete.get());
+        } else {
+            createDelete();
+        }
+        topComponentsLayout.addComponent(delete.get());
+        return this;
+    }
+    public GenericGrid deactivateDelete(){
+        if(delete.isPresent()) {
+            topComponentsLayout.removeComponent(delete.get());
+        }
+        return this;
+    }
+    public GenericGrid addCustomMultiSelectButton(String buttonName, Consumer<T> consumer){
         Button button = new Button(buttonName);
         customMultiSelectButtons.put(buttonName, button);
         button.addClickListener(event -> {
@@ -313,10 +372,11 @@ public class GenericGrid<T> extends CustomComponent {
                         .forEach(consumer::accept);
             }
         });
-        buttonLayout.addComponent(button);
+        topComponentsLayout.addComponent(button);
         setButtonVisability();
+        return this;
     }
-    public void addCustomSingleSelectButton(String buttonName, Consumer<T> consumer){
+    public GenericGrid addCustomSingleSelectButton(String buttonName, Consumer<T> consumer){
         Button button = new Button(buttonName);
         customSingleSelectButtons.put(buttonName, button);
         button.addClickListener(event -> {
@@ -324,10 +384,21 @@ public class GenericGrid<T> extends CustomComponent {
                 consumer.accept(((BeanItem<T>) grid.getContainerDataSource().getItem(grid.getSelectedRows().toArray()[0])).getBean());
             }
         });
-        buttonLayout.addComponent(button);
+        topComponentsLayout.addComponent(button);
         setButtonVisability();
+        return this;
     }
-    public void releaseCustomButton(String buttonName){
+
+    public GenericGrid addCustomButton(String buttonName, Runnable runnable){
+        Button button = new Button(buttonName);
+        customButtons.put(buttonName, button);
+        button.addClickListener(event -> runnable.run());
+        topComponentsLayout.addComponent(button);
+        button.setVisible(Boolean.TRUE);
+        return this;
+    }
+
+    public GenericGrid releaseCustomButton(String buttonName){
         //Remove button from singleSelect if button is single select
         Button button = customSingleSelectButtons.remove(buttonName);
 
@@ -335,8 +406,15 @@ public class GenericGrid<T> extends CustomComponent {
         if(button == null)
             button = customMultiSelectButtons.remove(buttonName);
 
+        //Otherwise remove button from custom buttons
+        if(button == null)
+            button = customButtons.remove(buttonName);
+
         if(button != null)
-            buttonLayout.removeComponent(button);
+            topComponentsLayout.removeComponent(button);
+
+        return this;
 
     }
+
 }
