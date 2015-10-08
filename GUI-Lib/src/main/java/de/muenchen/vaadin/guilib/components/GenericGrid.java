@@ -21,9 +21,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getEntityFieldPath;
@@ -376,13 +378,14 @@ public class GenericGrid<T> extends CustomComponent {
         }
         return this;
     }
-    public GenericGrid addCustomMultiSelectButton(String buttonName, Consumer<T> consumer){
+    public GenericGrid addCustomMultiSelectButton(String buttonName, Consumer<List<T>> consumer){
         Button button = new Button(buttonName);
         customMultiSelectButtons.put(buttonName, button);
         button.addClickListener(event -> {
             if (grid.getSelectedRows() != null) {
-                grid.getSelectedRows().stream().map(item -> ((BeanItem<T>) grid.getContainerDataSource().getItem(item)).getBean())
-                        .forEach(consumer::accept);
+                consumer.accept(grid.getSelectedRows().stream()
+                            .map(item -> ((BeanItem<T>) grid.getContainerDataSource().getItem(item)).getBean())
+                            .collect(Collectors.toList()));
             }
         });
         topComponentsLayout.addComponent(button);
