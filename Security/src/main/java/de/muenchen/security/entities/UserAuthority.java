@@ -3,7 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.muenchen.security;
+package de.muenchen.security.entities;
+
+import de.muenchen.security.entities.UserAuthId;
 
 import java.io.Serializable;
 import javax.persistence.EmbeddedId;

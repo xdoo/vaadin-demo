@@ -2,7 +2,7 @@ package de.muenchen.demo.service.services;
 
 import de.muenchen.demo.service.domain.BaseEntity;
 import de.muenchen.demo.service.util.IdService;
-import de.muenchen.security.UserRepository;
+import de.muenchen.security.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.core.event.AbstractRepositoryEventListener;
 import org.springframework.security.core.Authentication;

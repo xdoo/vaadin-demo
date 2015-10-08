@@ -1,4 +1,7 @@
-package de.muenchen.security;
+package de.muenchen.security.entities;
+
+import de.muenchen.security.entities.Authority;
+import de.muenchen.security.entities.User;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;

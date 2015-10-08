@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.muenchen.security;
+package de.muenchen.security.repositories;
 
+import de.muenchen.security.entities.Permission;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -18,23 +19,21 @@ import java.util.List;
  * @author praktikant.tmar
  */
 @RepositoryRestResource(exported = false)
-public interface AuthorityRepository  extends CrudRepository<Authority, Long> {
+public interface PermissionRepository  extends CrudRepository<Permission, Long>  {
+    
+    public final static String Permission_CACHE = "PERMISSION_CACHE";
 
-    public final static String Authority_CACHE = "AUTHORITYPERMISSION_CACHE";
-
-    @Cacheable(value = Authority_CACHE, key = "#p0")
-    public Authority findFirstByOid(String oid);
-
-    @Override
-    @CachePut(value = Authority_CACHE, key = "#p0.oid")
-    public Authority save(Authority entity);
-
+    @Cacheable(value = Permission_CACHE, key = "#p0")
+    public Permission findFirstByOid(String oid);
 
     @Override
-    @CacheEvict(value = Authority_CACHE, key = "#p0.oid")
-    public void delete(Authority entity);
+    @CachePut(value = Permission_CACHE, key = "#p0.oid")
+    public Permission save(Permission entity);
 
-    public List<Authority> findByOid(String oid);
+    @Override
+    @CacheEvict(value = Permission_CACHE, key = "#p0.oid")
+    public void delete(Permission entity);
 
+    public List<Permission> findByOid(String oid);
 }
 

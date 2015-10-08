@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.muenchen.security;
+package de.muenchen.security.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Id;

@@ -1,7 +1,7 @@
 package de.muenchen.demo.service;
 
 import de.muenchen.eventbus.EventBus;
-import de.muenchen.security.AuthenticationConfiguratorAdapter;
+import de.muenchen.security.configurator.AuthenticationConfiguratorAdapter;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 import org.slf4j.Logger;

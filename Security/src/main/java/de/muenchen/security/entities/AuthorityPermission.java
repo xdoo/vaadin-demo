@@ -1,4 +1,4 @@
-package de.muenchen.security;
+package de.muenchen.security.entities;
 
 import java.io.Serializable;
 import javax.persistence.EmbeddedId;

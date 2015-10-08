@@ -1,5 +1,9 @@
-package de.muenchen.security;
+package de.muenchen.security.configurator;
 
+import de.muenchen.security.entities.AuthorityPermission;
+import de.muenchen.security.entities.UserAuthority;
+import de.muenchen.security.repositories.AuthorityPermissionRepository;
+import de.muenchen.security.repositories.UserAuthorityRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

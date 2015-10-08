@@ -5,6 +5,9 @@
 */
 package de.muenchen.security;
 
+import de.muenchen.security.entities.UserAuthority;
+import de.muenchen.security.repositories.AuthorityPermissionRepository;
+import de.muenchen.security.repositories.UserAuthorityRepository;
 import de.muenchen.vaadin.demo.apilib.domain.Principal;
 import de.muenchen.vaadin.demo.apilib.rest.SecurityRestClient;
 import org.springframework.beans.factory.annotation.Autowired;
