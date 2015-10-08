@@ -60,6 +60,8 @@ public class BuergerForm extends BaseComponent {
     }
 
     public void setBuerger(Buerger buerger) {
+        if (buerger == null)
+            throw new NullPointerException();
         getBinder().setItemDataSource(buerger);
     }
 
@@ -69,7 +71,7 @@ public class BuergerForm extends BaseComponent {
 
     @Override
     public void setReadOnly(boolean readOnly) {
-        getFields().forEach(c -> c.setReadOnly(readOnly));
+        getBinder().setReadOnly(true);
     }
 
     public List<Component> getFields() {

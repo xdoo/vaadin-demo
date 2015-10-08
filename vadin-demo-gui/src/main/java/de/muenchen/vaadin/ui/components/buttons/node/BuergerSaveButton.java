@@ -13,12 +13,12 @@ import java.util.function.Supplier;
 /**
  * Created by p.mueller on 08.10.15.
  */
-public class BuergerCreateButton extends BaseComponent {
+public class BuergerSaveButton extends BaseComponent {
 
     private final ActionButton create;
     private Supplier<Buerger> buerger = () -> null;
 
-    public BuergerCreateButton(I18nResolver i18nResolver, EventBus eventBus) {
+    public BuergerSaveButton(I18nResolver i18nResolver, EventBus eventBus) {
         super(i18nResolver, eventBus);
         String navigateTo = "";
         create = new ActionButton(getI18nResolver(), SimpleAction.create, navigateTo);
