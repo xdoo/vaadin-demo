@@ -14,9 +14,8 @@ import de.muenchen.vaadin.guilib.controller.EntityController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -51,9 +50,9 @@ public class GenericGrid<T> extends CustomComponent {
     private Optional<ActionButton> create = Optional.empty();
 
     /**Custom Buttons**/
-    private Map<String, Button> customSingleSelectButtons = new HashMap<>();
-    private Map<String, Button> customMultiSelectButtons = new HashMap<>();
-    private Map<String, Button> customButtons = new HashMap<>();
+    private List<Button> customSingleSelectButtons = new ArrayList<>();
+    private List<Button> customMultiSelectButtons = new ArrayList<>();
+    private List<Button> customButtons = new ArrayList<>();
 
     /**
      * Components Layout
@@ -235,8 +234,8 @@ public class GenericGrid<T> extends CustomComponent {
         if(copy.isPresent()) copy.get().setVisible(size > 0);
         if(delete.isPresent()) delete.get().setVisible(size > 0);
 
-        customSingleSelectButtons.values().stream().forEach(button -> button.setVisible(size == 1));
-        customMultiSelectButtons.values().stream().forEach(button -> button.setVisible(size > 0));
+        customSingleSelectButtons.stream().forEach(button -> button.setVisible(size == 1));
+        customMultiSelectButtons.stream().forEach(button -> button.setVisible(size > 0));
     }
 
     //--------------
@@ -308,16 +307,6 @@ public class GenericGrid<T> extends CustomComponent {
         return this;
     }
 
-    /**
-     * Deactivate search on generic grid.
-     *
-     * @return the generic grid
-     */
-    public GenericGrid<T> deactivateSearch(){
-        if(searchLayout.isPresent())
-            topComponentsLayout.removeComponent(searchLayout.get());
-        return this;
-    }
 
     /**
      * Activate create entity on generic grid.
@@ -337,18 +326,6 @@ public class GenericGrid<T> extends CustomComponent {
         return this;
     }
 
-    /**
-     * Deactivate create on generic grid.
-     *
-     * @return the generic grid
-     */
-    public GenericGrid<T> deactivateCreate(){
-        if(create.isPresent()) {
-            topComponentsLayout.removeComponent(create.get());
-            create = Optional.empty();
-        }
-        return this;
-    }
 
     /**
      * Activate read button on generic grid.
@@ -369,18 +346,6 @@ public class GenericGrid<T> extends CustomComponent {
         return this;
     }
 
-    /**
-     * Deactivate read on generic grid.
-     *
-     * @return the generic grid
-     */
-    public GenericGrid<T> deactivateRead(){
-        if(edit.isPresent()) {
-            topComponentsLayout.removeComponent(read.get());
-            read = Optional.empty();
-        }
-        return this;
-    }
 
     /**
      * Activate copy of entities on generic grid.
@@ -397,18 +362,6 @@ public class GenericGrid<T> extends CustomComponent {
         topComponentsLayout.addComponent(copy.get());
 
         setButtonVisability();
-        return this;
-    }
-
-    /**
-     * Deactivate copy on generic grid.
-     *
-     * @return the generic grid
-     */
-    public GenericGrid<T> deactivateCopy(){
-        if(copy.isPresent()) {
-            topComponentsLayout.removeComponent(copy.get());
-        }
         return this;
     }
 
@@ -431,19 +384,6 @@ public class GenericGrid<T> extends CustomComponent {
     }
 
     /**
-     * Deactivate edit on generic grid.
-     *
-     * @return the generic grid
-     */
-    public GenericGrid<T> deactivateEdit(){
-        if(edit.isPresent()) {
-            topComponentsLayout.removeComponent(edit.get());
-            edit = Optional.empty();
-        }
-        return this;
-    }
-
-    /**
      * Activate delete of entities on generic grid.
      *
      * @return the generic grid
@@ -462,27 +402,15 @@ public class GenericGrid<T> extends CustomComponent {
     }
 
     /**
-     * Deactivate delete on generic grid.
-     *
-     * @return the generic grid
-     */
-    public GenericGrid<T> deactivateDelete(){
-        if(delete.isPresent()) {
-            topComponentsLayout.removeComponent(delete.get());
-        }
-        return this;
-    }
-
-    /**
      * Add custom multi select button on generic grid.
      *
      * @param buttonName the button name
      * @param consumer   the consumer
      * @return the generic grid
      */
-    public GenericGrid<T> addDefaultMultiSelectButton(String buttonName, Consumer<List<T>> consumer){
+    public GenericGrid<T> addMultiSelectButton(String buttonName, Consumer<List<T>> consumer){
         Button button = new Button(buttonName);
-        customMultiSelectButtons.put(buttonName, button);
+        customMultiSelectButtons.add(button);
         button.addClickListener(event -> {
             if (grid.getSelectedRows() != null) {
                 consumer.accept(grid.getSelectedRows().stream()
@@ -496,15 +424,29 @@ public class GenericGrid<T> extends CustomComponent {
     }
 
     /**
+     * Add custom multi select button on generic grid.
+     *
+     * @param button the button to add
+     * @return the generic grid
+     */
+    public GenericGrid<T> addMultiSelectButton(Button button){
+
+        //TODO after #147
+
+        setButtonVisability();
+        return this;
+    }
+
+    /**
      * Add custom single select button on generic grid.
      *
      * @param buttonName the button name
      * @param consumer   the consumer
      * @return the generic grid
      */
-    public GenericGrid<T> addDefaultSingleSelectButton(String buttonName, Consumer<T> consumer){
+    public GenericGrid<T> addSingleSelectButton(String buttonName, Consumer<T> consumer){
         Button button = new Button(buttonName);
-        customSingleSelectButtons.put(buttonName, button);
+        customSingleSelectButtons.add(button);
         button.addClickListener(event -> {
             if (grid.getSelectedRows().size() == 1) {
                 consumer.accept(((BeanItem<T>) grid.getContainerDataSource().getItem(grid.getSelectedRows().toArray()[0])).getBean());
@@ -516,15 +458,30 @@ public class GenericGrid<T> extends CustomComponent {
     }
 
     /**
+     * Add custom single select button on generic grid.
+     *
+     * @param button the button to add
+     * @return the generic grid
+     */
+    public GenericGrid<T> addSingleSelectButton(Button button){
+
+        //TODO after #147
+
+        setButtonVisability();
+        return this;
+    }
+
+    /**
      * Add custom button on generic grid.
+     * The Button has its own business action with no connection to this grid.
      *
      * @param buttonName the button name
      * @param runnable   the runnable
      * @return the generic grid
      */
-    public GenericGrid<T> addDefaultButton(String buttonName, Runnable runnable){
+    public GenericGrid<T> addButton(String buttonName, Runnable runnable){
         Button button = new Button(buttonName);
-        customButtons.put(buttonName, button);
+        customButtons.add(button);
         button.addClickListener(event -> runnable.run());
         topComponentsLayout.addComponent(button);
         button.setVisible(Boolean.TRUE);
@@ -532,28 +489,18 @@ public class GenericGrid<T> extends CustomComponent {
     }
 
     /**
-     * Release custom button generic grid.
+     * Add custom button on generic grid.
+     * The Button has its own business action with no connection to this grid.
      *
-     * @param buttonName the button name
+     * @param button the button to add
      * @return the generic grid
      */
-    public GenericGrid<T> releaseCustomButton(String buttonName){
-        //Remove button from singleSelect if button is single select
-        Button button = customSingleSelectButtons.remove(buttonName);
+    public GenericGrid<T> addButton(Button button){
 
-        //Otherwise remove button from multiSelect if button is multi select
-        if(button == null)
-            button = customMultiSelectButtons.remove(buttonName);
+        //TODO after #147
 
-        //Otherwise remove button from custom buttons
-        if(button == null)
-            button = customButtons.remove(buttonName);
-
-        if(button != null)
-            topComponentsLayout.removeComponent(button);
-
+        button.setVisible(Boolean.TRUE);
         return this;
-
     }
 
 }

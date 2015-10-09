@@ -32,7 +32,7 @@ public class BuergerChildTab extends CustomComponent {
         grid = controller.getViewFactory().generateChildTable(BuergerDetailView.NAME)
                 .activateCreate(navigateToForCreate)
                 .activateRead(BuergerDetailView.NAME)
-                .addDefaultButton(
+                .addButton(
                         controller.resolveRelative(
                                 getFormPath(SimpleAction.add,
                                         I18nPaths.Component.button,
@@ -42,7 +42,7 @@ public class BuergerChildTab extends CustomComponent {
                             layout.setMargin(true);
                             getUI().addWindow(new TableSelectWindow(controller, layout));
                         })
-                        .addDefaultMultiSelectButton(
+                        .addMultiSelectButton(
                                 controller.resolveRelative(
                                         getFormPath(SimpleAction.delete,
                                                 I18nPaths.Component.button,
