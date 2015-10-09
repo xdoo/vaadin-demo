@@ -8,14 +8,11 @@ package de.muenchen.security.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.search.annotations.Indexed;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
+import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 
 /**
  *
@@ -69,6 +66,9 @@ public class User implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     private java.util.Date lastModDate;
 
+    @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    private Set<Authority> authorities;
+
     @JsonIgnore
     private String mandant;
 
@@ -88,6 +88,7 @@ public class User implements Serializable {
         this.lastModBy = user.lastModBy;
         this.lastModDate = user.lastModDate;
         this.mandant = user.mandant;
+        this.authorities = user.authorities;
     }
 
     public String getOid() {
@@ -194,6 +195,11 @@ public class User implements Serializable {
         this.email = email;
     }
 
+    public Set<Authority> getAuthorities() {
+        return authorities;
+    }
 
-
+    public void setAuthorities(Set<Authority> authorities) {
+        this.authorities = authorities;
+    }
 }

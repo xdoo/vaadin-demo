@@ -5,9 +5,9 @@
 */
 package de.muenchen.security;
 
-import de.muenchen.security.entities.UserAuthority;
+import de.muenchen.security.entities.User;
 import de.muenchen.security.repositories.AuthorityPermissionRepository;
-import de.muenchen.security.repositories.UserAuthorityRepository;
+import de.muenchen.security.repositories.UserRepository;
 import de.muenchen.vaadin.demo.apilib.domain.Principal;
 import de.muenchen.vaadin.demo.apilib.rest.SecurityRestClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ import java.util.Optional;
 public class SecurityRestClientImpl implements SecurityRestClient {
 
     @Autowired
-    UserAuthorityRepository userAuthoriyRepo;
+    UserRepository userRepository;
     @Autowired
     AuthorityPermissionRepository authorityPermissionRepo;
 
@@ -42,14 +42,12 @@ public class SecurityRestClientImpl implements SecurityRestClient {
         String name = authentication.getName();
         principal.setUsername(name);
 
-        List<UserAuthority> userAuthority = userAuthoriyRepo.findByIdUserUsername(name);
-        userAuthority.stream().map((userAuthority1) -> {
-            principal.getRoles().add(userAuthority1.getId().getAuthority().getAuthority());
+        User user = userRepository.findFirstByUsername(name);
+        user.getAuthorities().stream().map((userAuthority1) -> {
+            principal.getRoles().add(userAuthority1.getAuthority());
             return userAuthority1;
-        }).map((userAuthority1) -> authorityPermissionRepo.findByIdAuthorityAuthority(userAuthority1.getId().getAuthority().getAuthority())).forEach((authPerm) -> {
-            authPerm.stream().forEach((authPerm1) -> {
-                principal.getPermissions().add(authPerm1.getId().getPermission().getPermission());
-            });
+        }).map((userAuthority1) -> authorityPermissionRepo.findByIdAuthorityAuthority(userAuthority1.getAuthority())).forEach((authPerm) -> {
+            authPerm.stream().forEach((authPerm1) -> principal.getPermissions().add(authPerm1.getId().getPermission().getPermission()));
         });
         return Optional.of(principal);
     }
