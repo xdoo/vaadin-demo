@@ -58,9 +58,10 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
         try {
             returnBuerger = result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
             showSuccessNotification(I18nPaths.NotificationType.success, SimpleAction.create);
-        } catch (HttpClientErrorException e) {
+        } catch (ExecutionException e) {
+            HttpClientErrorException exception = (HttpClientErrorException) e.getCause();
             returnBuerger = BuergerFallbackDataGenerator.createBuergerFallback();
-            LOG.error(e.getMessage());
+            LOG.error(exception.getMessage());
             showErrorNotification(I18nPaths.NotificationType.error, SimpleAction.create);
         } catch (TimeoutException e) {
             returnBuerger = BuergerFallbackDataGenerator.createBuergerFallback();
@@ -83,9 +84,10 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
         try {
             returnBuerger = result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
             showSuccessNotification(I18nPaths.NotificationType.success, SimpleAction.update);
-        } catch (HttpClientErrorException e) {
+        } catch (ExecutionException e) {
+            HttpClientErrorException exception = (HttpClientErrorException) e.getCause();
             returnBuerger = BuergerFallbackDataGenerator.createBuergerFallback();
-            LOG.error(e.getMessage());
+            LOG.error(exception.getMessage());
             showErrorNotification(I18nPaths.NotificationType.error, SimpleAction.update);
         } catch (TimeoutException e) {
             returnBuerger = BuergerFallbackDataGenerator.createBuergerFallback();
@@ -108,9 +110,10 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
             result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
             showSuccessNotification(I18nPaths.NotificationType.success, SimpleAction.delete);
             return true;
-        } catch (HttpClientErrorException e) {
+        } catch (ExecutionException e) {
+            HttpClientErrorException exception = (HttpClientErrorException) e.getCause();
             LOG.error(e.getMessage());
-            HttpStatus statusCode = e.getStatusCode();
+            HttpStatus statusCode = exception.getStatusCode();
             if (statusCode.equals(HttpStatus.CONFLICT) || statusCode.equals(HttpStatus.NOT_FOUND))
                 showErrorNotification(I18nPaths.NotificationType.error, SimpleAction.delete, statusCode.toString());
             else
@@ -136,9 +139,10 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
         try {
             buergers = result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
             return buergers;
-        } catch (HttpClientErrorException e) {
+        } catch (ExecutionException e) {
+            HttpClientErrorException exception = (HttpClientErrorException) e.getCause();
             buergers = BuergerFallbackDataGenerator.createBuergersFallback();
-            LOG.error(e.getMessage());
+            LOG.error(exception.getMessage());
             showErrorNotification(I18nPaths.NotificationType.error, SimpleAction.read);
         } catch (TimeoutException e) {
             buergers = BuergerFallbackDataGenerator.createBuergersFallback();
@@ -160,9 +164,10 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
         Future<List<Buerger>> result = Executors.newCachedThreadPool().submit(() -> client.findAll(relation));
         try {
             buergers = result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
-        } catch (HttpClientErrorException e) {
+        } catch (ExecutionException e) {
+            HttpClientErrorException exception = (HttpClientErrorException) e.getCause();
             buergers = BuergerFallbackDataGenerator.createBuergersFallback();
-            LOG.error(e.getMessage());
+            LOG.error(exception.getMessage());
             showErrorNotification(I18nPaths.NotificationType.error, SimpleAction.read);
         } catch (TimeoutException e) {
             buergers = BuergerFallbackDataGenerator.createBuergersFallback();
@@ -184,9 +189,10 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
         Future<Optional<Buerger>> result = Executors.newCachedThreadPool().submit(() -> client.findOne(link));
         try {
             buerger = result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
-        } catch (HttpClientErrorException e) {
+        } catch (ExecutionException e) {
+            HttpClientErrorException exception = (HttpClientErrorException) e.getCause();
             buerger = BuergerFallbackDataGenerator.createOptionalBuergerFallback();
-            LOG.error(e.getMessage());
+            LOG.error(exception.getMessage());
             showErrorNotification(I18nPaths.NotificationType.error, SimpleAction.read);
         } catch (TimeoutException e) {
             buerger = BuergerFallbackDataGenerator.createOptionalBuergerFallback();
