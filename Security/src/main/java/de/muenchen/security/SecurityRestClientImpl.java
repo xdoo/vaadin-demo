@@ -6,7 +6,7 @@
 package de.muenchen.security;
 
 import de.muenchen.security.entities.User;
-import de.muenchen.security.repositories.AuthorityPermissionRepository;
+import de.muenchen.security.repositories.PermissionRepository;
 import de.muenchen.security.repositories.UserRepository;
 import de.muenchen.vaadin.demo.apilib.domain.Principal;
 import de.muenchen.vaadin.demo.apilib.rest.SecurityRestClient;
@@ -17,10 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
+
 /**
- *
  * @author praktikant.tmar
  */
 @Service
@@ -29,26 +28,31 @@ public class SecurityRestClientImpl implements SecurityRestClient {
     @Autowired
     UserRepository userRepository;
     @Autowired
-    AuthorityPermissionRepository authorityPermissionRepo;
+    PermissionRepository permissionRepository;
 
     @Override
     public Optional<Principal> getPrincipal(RestTemplate template) {
         Principal principal = new Principal();
-        ArrayList list =new ArrayList();
+        ArrayList list = new ArrayList();
         principal.setRoles(list);
-        ArrayList list2 =new ArrayList();
+        ArrayList list2 = new ArrayList();
         principal.setPermissions(list2);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
         principal.setUsername(name);
 
         User user = userRepository.findFirstByUsername(name);
-        user.getAuthorities().stream().map((userAuthority1) -> {
-            principal.getRoles().add(userAuthority1.getAuthority());
-            return userAuthority1;
-        }).map((userAuthority1) -> authorityPermissionRepo.findByIdAuthorityAuthority(userAuthority1.getAuthority())).forEach((authPerm) -> {
-            authPerm.stream().forEach((authPerm1) -> principal.getPermissions().add(authPerm1.getId().getPermission().getPermission()));
-        });
+        user.getAuthorities()
+                .stream()
+                .map((userAuthority1) -> {
+                    principal.getRoles().add(userAuthority1.getAuthority());
+                    return userAuthority1;
+                })
+                .map(authority -> authority.getPermissions().stream().map(
+                        permission -> {
+                            principal.getPermissions().add(permission.getPermission());
+                            return permission;
+                            }));
         return Optional.of(principal);
     }
 }

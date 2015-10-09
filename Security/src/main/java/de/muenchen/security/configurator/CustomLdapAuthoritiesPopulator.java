@@ -1,9 +1,6 @@
 package de.muenchen.security.configurator;
 
-import de.muenchen.security.entities.Authority;
-import de.muenchen.security.entities.AuthorityPermission;
 import de.muenchen.security.entities.User;
-import de.muenchen.security.repositories.AuthorityPermissionRepository;
 import de.muenchen.security.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,8 +33,6 @@ public class CustomLdapAuthoritiesPopulator implements LdapAuthoritiesPopulator 
 
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private AuthorityPermissionRepository authorityPermissionRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -58,11 +53,9 @@ public class CustomLdapAuthoritiesPopulator implements LdapAuthoritiesPopulator 
 
             String authorityName = userAuthority.getAuthority();
 
-            List<AuthorityPermission> authorityPermissionsList = authorityPermissionRepository.findByIdAuthorityAuthority(authorityName);
+            userAuthority.getPermissions().stream().forEach(authorityPermission -> {
 
-            authorityPermissionsList.stream().forEach(authorityPermission -> {
-
-                String authName = authorityPermission.getId().getPermission().getPermission();
+                String authName = authorityPermission.getPermission();
 
                 gas.add(new SimpleGrantedAuthority(authName));
 

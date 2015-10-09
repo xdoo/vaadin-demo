@@ -66,7 +66,7 @@ public class User implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     private java.util.Date lastModDate;
 
-    @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
     private Set<Authority> authorities;
 
     @JsonIgnore
