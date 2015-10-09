@@ -6,17 +6,19 @@ import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.components.buttons.node.BuergerCreateButton;
 import de.muenchen.vaadin.ui.components.buttons.node.BuergerSaveButton;
-import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerActions;
+import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerSingleActions;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.NavigateActions;
 import de.muenchen.vaadin.ui.components.forms.read.BuergerReadForm;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Type;
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getPagePath;
@@ -85,7 +87,7 @@ public abstract class DefaultBuergerView extends VerticalLayout implements View{
 
         final ActionButton asdf = new ActionButton(controller, SimpleAction.back);
 
-        final BuergerActions buergerAction = new BuergerActions(form::getBuerger, controller.getEventbus());
+        final BuergerSingleActions buergerAction = new BuergerSingleActions(form::getBuerger, controller.getEventbus());
         final NavigateActions navigateActions = new NavigateActions(controller.getNavigator(), BuergerDetailView.NAME);
 
         asdf.addClickListener(buergerAction::create);
@@ -94,7 +96,11 @@ public abstract class DefaultBuergerView extends VerticalLayout implements View{
 
         addComponent(asdf);
     }
-    
+
+    private List<Buerger> getBuergers() {
+        return null;
+    }
+
     /**
      *
      */
