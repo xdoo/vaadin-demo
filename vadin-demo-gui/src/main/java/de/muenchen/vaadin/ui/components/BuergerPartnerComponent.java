@@ -12,6 +12,7 @@ import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.GenericConfirmationWindow;
+import de.muenchen.vaadin.services.BuergerI18nResolver;
 import de.muenchen.vaadin.services.model.BuergerDatastore;
 import de.muenchen.vaadin.ui.app.views.BuergerDetailView;
 import de.muenchen.vaadin.ui.app.views.TableSelectWindow;
@@ -32,6 +33,7 @@ public class BuergerPartnerComponent extends CustomComponent implements Consumer
      * UI Elements
      */
     private BuergerViewController controller;
+    private BuergerI18nResolver resolver;
     private FormLayout partnerReadForm;
     private ActionButton create;
     private ActionButton add;
@@ -44,8 +46,9 @@ public class BuergerPartnerComponent extends CustomComponent implements Consumer
      */
     private final String navigateToForCreate;
 
-    public BuergerPartnerComponent(BuergerViewController controller, String navigateToForCreate) {
+    public BuergerPartnerComponent(BuergerViewController controller, BuergerI18nResolver resolver, String navigateToForCreate) {
         this.controller = controller;
+        this.resolver = resolver;
         this.navigateToForCreate = navigateToForCreate;
         this.buildComponent();
     }
@@ -68,12 +71,12 @@ public class BuergerPartnerComponent extends CustomComponent implements Consumer
         VerticalLayout vlayout = new VerticalLayout(buttonLayout, partnerReadForm);
         vlayout.setSpacing(true);
         vlayout.setDefaultComponentAlignment(Alignment.TOP_LEFT);
-        setId(String.format("%s_PARENT_COMPONENT", BuergerViewController.I18N_BASE_PATH));
+        setId(String.format("%s_PARENT_COMPONENT", BuergerI18nResolver.I18N_BASE_PATH));
         setCompositionRoot(vlayout);
     }
 
     private ActionButton buildReadButton() {
-        ActionButton read = new ActionButton(controller, SimpleAction.read, navigateToForCreate);
+        ActionButton read = new ActionButton(resolver, SimpleAction.read, navigateToForCreate);
         read.addClickListener(clickEvent -> {
             controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED), reactor.bus.Event.wrap(currentPartner));
             controller.getNavigator().navigateTo(BuergerDetailView.NAME);
@@ -84,12 +87,12 @@ public class BuergerPartnerComponent extends CustomComponent implements Consumer
 
 
     private ActionButton buildCreateButton() {
-        ActionButton create = new ActionButton(controller, SimpleAction.create, navigateToForCreate);
+        ActionButton create = new ActionButton(resolver, SimpleAction.create, navigateToForCreate);
         create.addClickListener(clickEvent -> {
             if (partnerReadForm.getComponentCount() == 0) {
                 controller.getNavigator().navigateTo(navigateToForCreate);
             } else {
-                GenericConfirmationWindow window = new GenericConfirmationWindow(controller, SimpleAction.override, e -> {
+                GenericConfirmationWindow window = new GenericConfirmationWindow(resolver, SimpleAction.override, e -> {
                     controller.getNavigator().navigateTo(navigateToForCreate);
                 });
                 getUI().addWindow(window);
@@ -101,19 +104,19 @@ public class BuergerPartnerComponent extends CustomComponent implements Consumer
     }
 
     private ActionButton buildAddButton() {
-        ActionButton add = new ActionButton(controller, SimpleAction.add, null);
+        ActionButton add = new ActionButton(resolver, SimpleAction.add, null);
         add.addClickListener(clickEvent -> {
             if (partnerReadForm.getComponentCount() == 0) {
                 HorizontalLayout layout = new HorizontalLayout(controller.getViewFactory().generateBuergerPartnerSearchTable());
                 layout.setMargin(true);
-                getUI().addWindow(new TableSelectWindow(controller, layout));
+                getUI().addWindow(new TableSelectWindow(controller, resolver, layout));
             } else {
                 GenericConfirmationWindow window =
-                        new GenericConfirmationWindow(controller, SimpleAction.override, e ->
+                        new GenericConfirmationWindow(resolver, SimpleAction.override, e ->
                         {
                             HorizontalLayout layout = new HorizontalLayout(controller.getViewFactory().generateBuergerPartnerSearchTable());
                             layout.setMargin(true);
-                            getUI().addWindow(new TableSelectWindow(controller, layout));
+                            getUI().addWindow(new TableSelectWindow(controller, resolver, layout));
                         });
                 getUI().addWindow(window);
                 window.center();
@@ -124,7 +127,7 @@ public class BuergerPartnerComponent extends CustomComponent implements Consumer
     }
 
     private ActionButton buildDeleteButton() {
-        ActionButton delete = new ActionButton(controller, SimpleAction.delete, null);
+        ActionButton delete = new ActionButton(resolver, SimpleAction.delete, null);
         delete.addClickListener(event -> {
             Association<Buerger> association = new Association<>(new Buerger(), Buerger.Rel.partner.name());
             controller.getEventbus().notify(controller.getRequestKey(RequestEvent.REMOVE_ASSOCIATION), association.asEvent());

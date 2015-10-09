@@ -127,7 +127,7 @@ public class BuergerGrid extends CustomComponent {
     }
 
     private void createRead() {
-        read = new ActionButton(controller, SimpleAction.read, null);
+        read = new ActionButton(resolver, SimpleAction.read, null);
         read.addClickListener(clickEvent -> {
             controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED), reactor.bus.Event.wrap(grid.getSelectedRows().toArray()[0]));
             controller.getNavigator().navigateTo(BuergerDetailView.NAME);

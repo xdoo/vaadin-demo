@@ -106,7 +106,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<?>> {
 
     public BuergerPartnerTab generatePartnerTab(String navigateToForDetail, String navigateForCreate, String navigateForAdd, String navigateBack) {
         if (!partnerTab.isPresent()) {
-            BuergerPartnerTab tab = new BuergerPartnerTab(controller, resolver, navigateToForDetail, navigateForCreate, navigateForAdd, navigateBack);
+            BuergerPartnerTab tab = new BuergerPartnerTab(controller, navigateToForDetail, navigateForCreate, navigateBack);
             partnerTab = Optional.of(tab);
         }
         return partnerTab.get();
@@ -194,7 +194,7 @@ public class BuergerViewFactory implements Serializable, Consumer<Event<?>> {
     }
 
     public BuergerPartnerComponent generateBuergerPartnerComponent(String navigateToForCreate){
-        BuergerPartnerComponent partnerComponent = new BuergerPartnerComponent(controller, navigateToForCreate);
+        BuergerPartnerComponent partnerComponent = new BuergerPartnerComponent(controller, resolver, navigateToForCreate);
 
         controller.getEventbus().on(controller.getResponseKey().toSelector(), partnerComponent);
         controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));

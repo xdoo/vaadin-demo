@@ -24,14 +24,9 @@ import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getEntityFieldPath;
  */
 public class BuergerPartnerTab extends CustomComponent {
 
-    private final BuergerViewController controller;
-    private final BuergerI18nResolver resolver;
     private BuergerPartnerComponent component;
-    private ActionButton delete;
 
-    public BuergerPartnerTab(BuergerViewController controller, BuergerI18nResolver resolver, String navigateToForDetail, String navigateToForCreate, String navigateToForAdd, String from) {
-
-        this.controller = controller;
+    public BuergerPartnerTab(BuergerViewController controller, String navigateToForDetail, String navigateToForCreate, String from) {
         component = controller.getViewFactory().generateBuergerPartnerComponent(navigateToForCreate);
         // Gesamtlayout
         VerticalLayout vlayout = new VerticalLayout(component);
