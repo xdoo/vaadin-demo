@@ -18,7 +18,7 @@ public class GenericNotification extends Notification {
 		super.setStyleName(style);
 		super.setIcon(icon);
 		super.setDelayMsec(3000);
-		super.setPosition(Position.BOTTOM_RIGHT);
+		super.setPosition(Position.TOP_RIGHT);
 	}
 
 }
