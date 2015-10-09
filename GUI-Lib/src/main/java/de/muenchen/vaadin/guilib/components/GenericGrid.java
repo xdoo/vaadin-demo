@@ -236,7 +236,7 @@ public class GenericGrid<T> extends CustomComponent {
     //Configuration-Methods
     //--------------
 
-    public GenericGrid activateDoubleClickToRead(String navigateToRead){
+    public GenericGrid<T> activateDoubleClickToRead(String navigateToRead){
         grid.addItemClickListener(itemClickEvent -> {
             if (itemClickEvent.getPropertyId() != null) {
                 if (itemClickEvent.isDoubleClick()) {
@@ -251,7 +251,7 @@ public class GenericGrid<T> extends CustomComponent {
         });
         return this;
     }
-    public GenericGrid addDoubleClickListener(Consumer consumer){
+    public GenericGrid<T> addDoubleClickListener(Consumer consumer){
         grid.addItemClickListener(itemClickEvent -> {
             if (itemClickEvent.isDoubleClick()) {
                 consumer.accept(((BeanItem<T>) grid.getContainerDataSource().getItem(itemClickEvent.getItemId())).getBean());
@@ -260,7 +260,7 @@ public class GenericGrid<T> extends CustomComponent {
         return this;
     }
 
-    public GenericGrid activateSearch(){
+    public GenericGrid<T> activateSearch(){
 
         if(!searchLayout.isPresent()){
             //Configure layout
@@ -282,12 +282,12 @@ public class GenericGrid<T> extends CustomComponent {
         setButtonVisability();
         return this;
     }
-    public GenericGrid deactivateSearch(){
+    public GenericGrid<T> deactivateSearch(){
         if(searchLayout.isPresent())
             topComponentsLayout.removeComponent(searchLayout.get());
         return this;
     }
-    public GenericGrid activateCreate(String navigateToCreate){
+    public GenericGrid<T> activateCreate(String navigateToCreate){
         if(create.isPresent()) {
             //Remove to prevent double attachment
             topComponentsLayout.removeComponent(create.get());
@@ -298,14 +298,14 @@ public class GenericGrid<T> extends CustomComponent {
         setButtonVisability();
         return this;
     }
-    public GenericGrid deactivateCreate(){
+    public GenericGrid<T> deactivateCreate(){
         if(create.isPresent()) {
             topComponentsLayout.removeComponent(create.get());
             create = Optional.empty();
         }
         return this;
     }
-    public GenericGrid activateRead(String navigateToRead){
+    public GenericGrid<T> activateRead(String navigateToRead){
         if(read.isPresent()) {
             //Remove to prevent double attachment
             topComponentsLayout.removeComponent(read.get());
@@ -317,14 +317,14 @@ public class GenericGrid<T> extends CustomComponent {
         setButtonVisability();
         return this;
     }
-    public GenericGrid deactivateRead(){
+    public GenericGrid<T> deactivateRead(){
         if(edit.isPresent()) {
             topComponentsLayout.removeComponent(read.get());
             read = Optional.empty();
         }
         return this;
     }
-    public GenericGrid activateCopy(){
+    public GenericGrid<T> activateCopy(){
         if(copy.isPresent()) {
             //Remove to prevent double attachment
             topComponentsLayout.removeComponent(copy.get());
@@ -336,13 +336,13 @@ public class GenericGrid<T> extends CustomComponent {
         setButtonVisability();
         return this;
     }
-    public GenericGrid deactivateCopy(){
+    public GenericGrid<T> deactivateCopy(){
         if(copy.isPresent()) {
             topComponentsLayout.removeComponent(copy.get());
         }
         return this;
     }
-    public GenericGrid activateEdit(String navigateToEdit){
+    public GenericGrid<T> activateEdit(String navigateToEdit){
         if(edit.isPresent()) {
             //Remove to prevent double attachment
             topComponentsLayout.removeComponent(edit.get());
@@ -353,7 +353,7 @@ public class GenericGrid<T> extends CustomComponent {
         setButtonVisability();
         return this;
     }
-    public GenericGrid deactivateEdit(){
+    public GenericGrid<T> deactivateEdit(){
         if(edit.isPresent()) {
             topComponentsLayout.removeComponent(edit.get());
             edit = Optional.empty();
@@ -372,13 +372,13 @@ public class GenericGrid<T> extends CustomComponent {
         setButtonVisability();
         return this;
     }
-    public GenericGrid deactivateDelete(){
+    public GenericGrid<T> deactivateDelete(){
         if(delete.isPresent()) {
             topComponentsLayout.removeComponent(delete.get());
         }
         return this;
     }
-    public GenericGrid addCustomMultiSelectButton(String buttonName, Consumer<List<T>> consumer){
+    public GenericGrid<T> addCustomMultiSelectButton(String buttonName, Consumer<List<T>> consumer){
         Button button = new Button(buttonName);
         customMultiSelectButtons.put(buttonName, button);
         button.addClickListener(event -> {
@@ -392,7 +392,7 @@ public class GenericGrid<T> extends CustomComponent {
         setButtonVisability();
         return this;
     }
-    public GenericGrid addCustomSingleSelectButton(String buttonName, Consumer<T> consumer){
+    public GenericGrid<T> addCustomSingleSelectButton(String buttonName, Consumer<T> consumer){
         Button button = new Button(buttonName);
         customSingleSelectButtons.put(buttonName, button);
         button.addClickListener(event -> {
@@ -405,7 +405,7 @@ public class GenericGrid<T> extends CustomComponent {
         return this;
     }
 
-    public GenericGrid addCustomButton(String buttonName, Runnable runnable){
+    public GenericGrid<T> addCustomButton(String buttonName, Runnable runnable){
         Button button = new Button(buttonName);
         customButtons.put(buttonName, button);
         button.addClickListener(event -> runnable.run());
@@ -414,7 +414,7 @@ public class GenericGrid<T> extends CustomComponent {
         return this;
     }
 
-    public GenericGrid releaseCustomButton(String buttonName){
+    public GenericGrid<T> releaseCustomButton(String buttonName){
         //Remove button from singleSelect if button is single select
         Button button = customSingleSelectButtons.remove(buttonName);
 
