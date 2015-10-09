@@ -14,17 +14,18 @@ import de.muenchen.vaadin.ui.controller.BuergerViewController;
  *
  * @author maximilian.schug
  */
-public class KindGrid extends GenericGrid {
+public class PartnerGrid extends GenericGrid {
 
-    public KindGrid(BuergerI18nResolver resolver) {
+    public PartnerGrid(BuergerI18nResolver resolver) {
         super(resolver, Buerger.class);
     }
 
     @Override
     public void accept(reactor.bus.Event<BuergerDatastore> eventWrapper) {
         //super.accept(eventWrapper);
-        final BuergerDatastore event = eventWrapper.getData();
+
+        BuergerDatastore event = eventWrapper.getData();
         if (this.getContainerDataSource().size() == 0)
-            this.setContainerDataSource(event.getSelectedBuergerKinder());
+            this.setContainerDataSource(event.getSelectedBuergerPartner());
     }
 }

@@ -2,6 +2,7 @@ package de.muenchen.vaadin.ui.app.views;
 
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
+import de.muenchen.vaadin.services.BuergerI18nResolver;
 import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.components.BuergerGrid;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
@@ -23,8 +24,8 @@ public class BuergerTableView extends DefaultBuergerView {
     private BuergerGrid grid;
 
     @Autowired
-    public BuergerTableView(BuergerViewController controller, MainUI ui) {
-        super(controller, ui);
+    public BuergerTableView(BuergerViewController controller, BuergerI18nResolver resolver, MainUI ui) {
+        super(controller, resolver, ui);
         LOG.debug("creating 'buerger_table_view'");
         
     }

@@ -19,6 +19,7 @@ import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.GenericWarningNotification;
 import de.muenchen.vaadin.guilib.util.ValidatorFactory;
+import de.muenchen.vaadin.services.BuergerI18nResolver;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
 import java.util.Optional;
@@ -35,6 +36,7 @@ public class BuergerCreateForm extends CustomComponent {
     private final String navigateTo;
     private final String back;
     private final BuergerViewController controller;
+    private final BuergerI18nResolver resolver;
     private Optional<String> relation;
 
     /**
@@ -46,8 +48,8 @@ public class BuergerCreateForm extends CustomComponent {
      * @param controller der Entity Controller
      * @param navigateTo Zielseite nach Druck der 'erstellen' Schaltfläche
      */
-    public BuergerCreateForm(final BuergerViewController controller, final String navigateTo, String relation) {
-        this(controller, navigateTo, relation, navigateTo);
+    public BuergerCreateForm(final BuergerViewController controller, BuergerI18nResolver resolver, final String navigateTo, String relation) {
+        this(controller, resolver, navigateTo, relation, navigateTo);
         this.createForm();
     }
     
@@ -61,10 +63,11 @@ public class BuergerCreateForm extends CustomComponent {
      * @param navigateTo Zielseite nach Druck der 'erstellen' Schaltfläche
      * @param back Zielseite nach Druck der 'abbrechen' Schaltfläche
      */
-    public BuergerCreateForm(final BuergerViewController controller, final String navigateTo, String relation, String back) {
+    public BuergerCreateForm(final BuergerViewController controller, BuergerI18nResolver resolver, final String navigateTo, String relation, String back) {
         this.navigateTo = navigateTo;
         this.back = back;
         this.controller = controller;
+        this.resolver = resolver;
         this.relation = Optional.ofNullable(relation);
         this.createForm();
     }
@@ -73,14 +76,14 @@ public class BuergerCreateForm extends CustomComponent {
      * Erzeugt das eigentliche Formular.
      */
     private void createForm() {
-        Validator val = ValidatorFactory.getValidator(ValidatorFactory.Type.NULL, controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.validation)), "false");
+        Validator val = ValidatorFactory.getValidator(ValidatorFactory.Type.NULL, resolver.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.validation)), "false");
         FormLayout layout = new FormLayout();
         HorizontalLayout buttonLayout = new HorizontalLayout();
         buttonLayout.setSpacing(true);
         layout.setMargin(true);
         
         // headline
-        Label headline = new Label(controller.resolveRelative(
+        Label headline = new Label(resolver.resolveRelative(
                 getFormPath(SimpleAction.create,
                         I18nPaths.Component.headline,
                         Type.label)));
@@ -93,9 +96,9 @@ public class BuergerCreateForm extends CustomComponent {
         
         // Fokus auf das erste Feld setzen
         TextField firstField = controller.getUtil().createFormTextField(binder,
-                controller.resolveRelative(getEntityFieldPath(Buerger.Field.vorname.name(), Type.label)),
-                controller.resolveRelative(getEntityFieldPath(Buerger.Field.vorname.name(), Type.input_prompt)),
-                Buerger.Field.vorname.name(), BuergerViewController.I18N_BASE_PATH);
+                resolver.resolveRelative(getEntityFieldPath(Buerger.Field.vorname.name(), Type.label)),
+                resolver.resolveRelative(getEntityFieldPath(Buerger.Field.vorname.name(), Type.input_prompt)),
+                Buerger.Field.vorname.name(), BuergerI18nResolver.I18N_BASE_PATH);
         firstField.focus();
         String abc = "";
         for(char c = 'a';c <= 'z'; c++)
@@ -108,37 +111,37 @@ public class BuergerCreateForm extends CustomComponent {
             abc+=Character.toString((char)i);
         abc+="-";
 
-        Validator val0 = ValidatorFactory.getValidator(ValidatorFactory.Type.REGEXP, controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.validationstring)), "true", "[" + abc + "]*");
+        Validator val0 = ValidatorFactory.getValidator(ValidatorFactory.Type.REGEXP, resolver.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.validationstring)), "true", "[" + abc + "]*");
 
-        Validator val1 = ValidatorFactory.getValidator(ValidatorFactory.Type.STRING_LENGTH, controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.validation)), 1 + "", "" + Integer.MAX_VALUE, "true");
+        Validator val1 = ValidatorFactory.getValidator(ValidatorFactory.Type.STRING_LENGTH, resolver.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.validation)), 1 + "", "" + Integer.MAX_VALUE, "true");
         firstField.addValidator(val0);
         firstField.addValidator(val1);
         layout.addComponent(firstField);
         
         // alle anderen Felder
         TextField secField = controller.getUtil().createFormTextField(binder,
-                controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.label)),
-                controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.input_prompt)),
-                Buerger.Field.nachname.name(), BuergerViewController.I18N_BASE_PATH);
+                resolver.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.label)),
+                resolver.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.input_prompt)),
+                Buerger.Field.nachname.name(), BuergerI18nResolver.I18N_BASE_PATH);
         secField.addValidator(val1);
         secField.addValidator(val0);
         layout.addComponent(secField);
         ComboBox eyecolorSelector = controller.getUtil().createFormComboBox(binder,
-                controller.resolveRelative(getEntityFieldPath(Buerger.Field.augenfarbe.name(), Type.label)),
+                resolver.resolveRelative(getEntityFieldPath(Buerger.Field.augenfarbe.name(), Type.label)),
                 Buerger.Field.augenfarbe.name(),
                 Augenfarbe.class);
         layout.addComponent(eyecolorSelector);
         DateField birthdayfield = controller.getUtil().createFormDateField(binder,
-                controller.resolveRelative(getEntityFieldPath(Buerger.Field.geburtsdatum.name(), Type.label)),
-                Buerger.Field.geburtsdatum.name(), BuergerViewController.I18N_BASE_PATH);
-        String errorMsg = controller.resolveRelative(getEntityFieldPath(Buerger.Field.geburtsdatum.name(), Type.validation));
+                resolver.resolveRelative(getEntityFieldPath(Buerger.Field.geburtsdatum.name(), Type.label)),
+                Buerger.Field.geburtsdatum.name(), BuergerI18nResolver.I18N_BASE_PATH);
+        String errorMsg = resolver.resolveRelative(getEntityFieldPath(Buerger.Field.geburtsdatum.name(), Type.validation));
         Validator val3 = ValidatorFactory.getValidator(ValidatorFactory.Type.DATE_RANGE, errorMsg, "start", null);
         birthdayfield.addValidator(val3);
         layout.addComponent(birthdayfield);    
 
         layout.addComponent(buttonLayout);
         // die 'speichern' Schaltfläche
-        String createLabel = controller.resolveRelative(
+        String createLabel = resolver.resolveRelative(
                 getFormPath(SimpleAction.create,
                         I18nPaths.Component.button,
                         Type.label));
@@ -175,8 +178,8 @@ public class BuergerCreateForm extends CustomComponent {
                 binder.setItemDataSource(new Buerger());
             } catch (CommitException | Validator.InvalidValueException e) {
                 GenericWarningNotification warn = new GenericWarningNotification(
-                        controller.resolveRelative(getNotificationPath(NotificationType.warning, SimpleAction.save, Type.label)),
-                        controller.resolveRelative(getNotificationPath(NotificationType.warning, SimpleAction.save, Type.text)));
+                        resolver.resolveRelative(getNotificationPath(NotificationType.warning, SimpleAction.save, Type.label)),
+                        resolver.resolveRelative(getNotificationPath(NotificationType.warning, SimpleAction.save, Type.text)));
                 warn.show(Page.getCurrent());
             }
         });
@@ -186,7 +189,7 @@ public class BuergerCreateForm extends CustomComponent {
         buttonLayout.addComponent(createButton);
         // die 'abbrechen' Schaltfläche
 
-        ActionButton back = new ActionButton(controller, SimpleAction.back, "lsadf");
+        ActionButton back = new ActionButton(resolver, SimpleAction.back, "lsadf");
         back.addClickListener(clickEvent -> getNavigator().navigateTo(getNavigateBack()));
         buttonLayout.addComponent(back);
 

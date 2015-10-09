@@ -16,7 +16,7 @@ import de.muenchen.eventbus.selector.Key;
 import de.muenchen.vaadin.demo.apilib.services.SecurityService;
 import de.muenchen.vaadin.guilib.components.GenericNotification;
 import de.muenchen.vaadin.guilib.components.GenericWarningNotification;
-import org.apache.commons.lang.WordUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import reactor.bus.EventBus;
@@ -37,7 +37,7 @@ public class LoginView extends VerticalLayout implements View {
 
     @Autowired
     public LoginView(SecurityService security, Environment env) {
-        websiteName = WordUtils.capitalize(env.getProperty("spring.application.name"));
+        websiteName = StringUtils.capitalize(env.getProperty("spring.application.name"));
         this.security = security;
         setSizeFull();
         Component loginForm = buildLoginForm();

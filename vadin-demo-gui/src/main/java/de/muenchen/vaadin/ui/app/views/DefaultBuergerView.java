@@ -6,6 +6,7 @@ import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import de.muenchen.vaadin.services.BuergerI18nResolver;
 import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
@@ -24,19 +25,12 @@ import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getPagePath;
 public abstract class DefaultBuergerView extends VerticalLayout implements View{
 
     BuergerViewController controller;
+    BuergerI18nResolver resolver;
     
-    public DefaultBuergerView(BuergerViewController controller, MainUI ui) {
+    public DefaultBuergerView(BuergerViewController controller, BuergerI18nResolver resolver, MainUI ui) {
         this.controller = controller;
+        this.resolver = resolver;
         this.controller.registerUI(ui);
-    }
-    
-    
-    /**
-     * 
-     */
-    @PostConstruct
-    private void postConstruct() {
-        //TODO Wirklich notwendig? Lieber enter() verwenden?
     }
     
     /**
@@ -47,7 +41,7 @@ public abstract class DefaultBuergerView extends VerticalLayout implements View{
     protected void addHeadline() {
         
         // headline
-        Label pageTitle = new Label(controller.resolveRelative(getPagePath(Type.title)));
+        Label pageTitle = new Label(resolver.resolveRelative(getPagePath(Type.title)));
         pageTitle.addStyleName(ValoTheme.LABEL_H1);
         pageTitle.addStyleName(ValoTheme.LABEL_COLORED);
         
