@@ -16,7 +16,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
 /**
@@ -27,32 +26,24 @@ public class SecurityRestClientImpl implements SecurityRestClient {
 
     @Autowired
     UserRepository userRepository;
-    @Autowired
-    PermissionRepository permissionRepository;
 
     @Override
     public Optional<Principal> getPrincipal(RestTemplate template) {
-        Principal principal = new Principal();
-        ArrayList list = new ArrayList();
-        principal.setRoles(list);
-        ArrayList list2 = new ArrayList();
-        principal.setPermissions(list2);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String name = authentication.getName();
-        principal.setUsername(name);
+        Principal principal = new Principal(authentication.getName());
 
-        User user = userRepository.findFirstByUsername(name);
+        User user = userRepository.findFirstByUsername(principal.getUsername());
+
         user.getAuthorities()
                 .stream()
-                .map((userAuthority1) -> {
-                    principal.getRoles().add(userAuthority1.getAuthority());
-                    return userAuthority1;
-                })
-                .map(authority -> authority.getPermissions().stream().map(
-                        permission -> {
-                            principal.getPermissions().add(permission.getPermission());
-                            return permission;
-                            }));
+                .peek(authority1 -> {
+                    // Add Authorities
+                    principal.getRoles().add(authority1.getAuthority());
+                    // Add Permissions
+                    authority1.getPermissions()
+                            .forEach(permission11 -> principal.getPermissions().add(permission11.getPermission()));
+                });
         return Optional.of(principal);
     }
+
 }
