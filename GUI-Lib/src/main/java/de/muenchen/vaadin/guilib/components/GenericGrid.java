@@ -480,7 +480,7 @@ public class GenericGrid<T> extends CustomComponent {
      * @param consumer   the consumer
      * @return the generic grid
      */
-    public GenericGrid<T> addCustomMultiSelectButton(String buttonName, Consumer<List<T>> consumer){
+    public GenericGrid<T> addDefaultMultiSelectButton(String buttonName, Consumer<List<T>> consumer){
         Button button = new Button(buttonName);
         customMultiSelectButtons.put(buttonName, button);
         button.addClickListener(event -> {
@@ -502,7 +502,7 @@ public class GenericGrid<T> extends CustomComponent {
      * @param consumer   the consumer
      * @return the generic grid
      */
-    public GenericGrid<T> addCustomSingleSelectButton(String buttonName, Consumer<T> consumer){
+    public GenericGrid<T> addDefaultSingleSelectButton(String buttonName, Consumer<T> consumer){
         Button button = new Button(buttonName);
         customSingleSelectButtons.put(buttonName, button);
         button.addClickListener(event -> {
@@ -522,7 +522,7 @@ public class GenericGrid<T> extends CustomComponent {
      * @param runnable   the runnable
      * @return the generic grid
      */
-    public GenericGrid<T> addCustomButton(String buttonName, Runnable runnable){
+    public GenericGrid<T> addDefaultButton(String buttonName, Runnable runnable){
         Button button = new Button(buttonName);
         customButtons.put(buttonName, button);
         button.addClickListener(event -> runnable.run());
