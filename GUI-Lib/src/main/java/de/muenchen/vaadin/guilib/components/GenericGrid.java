@@ -96,6 +96,16 @@ public class GenericGrid<T> extends CustomComponent {
             }
         });
 
+        // HACK:
+        // Change Buttonvisibility and RowSelection if
+        // datastore is changed elsewhere
+        dataStore.addItemSetChangeListener(event -> {
+            grid.getSelectedRows().stream()
+                    .filter(itemID -> !event.getContainer().containsId(itemID))
+                    .forEach(grid::deselect);
+            setButtonVisability();
+        });
+
         this.grid.getColumns().stream().forEach(c ->
                         c.setHidable(true)
         );
