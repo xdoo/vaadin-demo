@@ -1,8 +1,8 @@
-package de.muenchen.demo.service.security;
+package de.muenchen.demo.service.services;
 
 import de.muenchen.demo.service.domain.BaseEntity;
-import de.muenchen.demo.service.domain.User;
-import de.muenchen.demo.service.domain.UserRepository;
+import de.muenchen.security.entities.User;
+import de.muenchen.security.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;

@@ -7,7 +7,7 @@
 package de.muenchen.demo.service.util;
 
 import de.muenchen.demo.service.domain.BaseEntity;
-import de.muenchen.demo.service.security.TenantService;
+import de.muenchen.demo.service.services.TenantService;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.query.dsl.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;

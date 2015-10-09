@@ -1,5 +1,6 @@
 package de.muenchen.vaadin.demo.apilib.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -8,32 +9,25 @@ import java.util.List;
  */
 public class Principal {
     
-    String username;
-    List<String> roles;
-    List<String> permissions;
-    
-    public List<String> getRoles() {
-        return roles;
+    private final String username;
+    private final List<String> roles = new ArrayList<>();
+    private final List<String> permissions = new ArrayList<>();
+
+    public Principal(String username) {
+        this.username = username;
     }
 
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
+
+    public List<String> getRoles() {
+        return roles;
     }
 
     public List<String> getPermissions() {
         return permissions;
     }
 
-    public void setPermissions(List<String> permissions) {
-        this.permissions = permissions;
-    }
-
     public String getUsername() {
         return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
     
 }
