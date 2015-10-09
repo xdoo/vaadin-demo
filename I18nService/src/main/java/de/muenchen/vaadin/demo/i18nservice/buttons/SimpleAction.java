@@ -3,7 +3,6 @@ package de.muenchen.vaadin.demo.i18nservice.buttons;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 
 import java.util.Optional;
 import java.util.Set;
@@ -89,9 +88,4 @@ public enum SimpleAction implements Action {
         return Optional.ofNullable(shortcutAction);
     }
 
-
-    @Override
-    public String getID(String navigateTo, I18nResolver context) {
-        return String.format("%s_%s_%s_BUTTON", navigateTo, this.name().toUpperCase(), context.getBasePath());
-    }
 }

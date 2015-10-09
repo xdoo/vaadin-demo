@@ -12,7 +12,7 @@ import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.components.buttons.node.BuergerCreateButton;
 import de.muenchen.vaadin.ui.components.buttons.node.BuergerSaveButton;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerActions;
-import de.muenchen.vaadin.ui.components.buttons.node.listener.NavigateAction;
+import de.muenchen.vaadin.ui.components.buttons.node.listener.NavigateActions;
 import de.muenchen.vaadin.ui.components.forms.read.BuergerReadForm;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
@@ -83,20 +83,16 @@ public abstract class DefaultBuergerView extends VerticalLayout implements View{
         addComponent(update);
 
 
-        final ActionButton asdf = new ActionButton(controller, SimpleAction.create, "asdf");
+        final ActionButton asdf = new ActionButton(controller, SimpleAction.back);
 
         final BuergerActions buergerAction = new BuergerActions(form::getBuerger, controller.getEventbus());
+        final NavigateActions navigateActions = new NavigateActions(controller.getNavigator(), BuergerDetailView.NAME);
 
         asdf.addClickListener(buergerAction::create);
-        asdf.addClickListener(buergerAction::create);
-        asdf.addClickListener(buergerAction::delete);
-        asdf.addClickListener(buergerAction::update);
-        asdf.addClickListener(new NavigateAction(controller.getNavigator(), "asdf"));
-        asdf.addClickListener(clickEvent -> controller.getNavigator().navigateTo("asdf"));
-
+        asdf.addClickListener(buergerAction::read);
+        asdf.addClickListener(navigateActions::navigate);
 
         addComponent(asdf);
-
     }
     
     /**

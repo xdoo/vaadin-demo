@@ -94,12 +94,12 @@ public class BuergerReadForm extends CustomComponent implements Consumer<Event<B
         this.binder.setReadOnly(true);
         layout.addComponent(buttonLayout);
         // die Schaltfläche zum Aktualisieren
-        ActionButton backButton = new ActionButton(controller, SimpleAction.back, this.navigateBack);
+        ActionButton backButton = new ActionButton(controller, SimpleAction.back);
         backButton.addClickListener(clickEvent -> controller.getNavigator().navigateTo(getNavigateBack()));
         buttonLayout.addComponent(backButton);
 
         // die Schaltfläche zum Bearbeiten
-        ActionButton updateButton = new ActionButton(controller, SimpleAction.update,this.navigateToUpdate);
+        ActionButton updateButton = new ActionButton(controller, SimpleAction.update);
         updateButton.addClickListener(clickEvent -> {
             controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED), reactor.bus.Event.wrap(binder.getItemDataSource().getBean()));
             controller.getNavigator().navigateTo(navigateToUpdate);

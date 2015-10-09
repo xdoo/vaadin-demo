@@ -23,7 +23,7 @@ public class BuergerSaveButton extends BaseComponent {
     public BuergerSaveButton(I18nResolver i18nResolver, EventBus eventBus) {
         super(i18nResolver, eventBus);
         String navigateTo = "";
-        save = new ActionButton(getI18nResolver(), SimpleAction.save, navigateTo);
+        save = new ActionButton(getI18nResolver(), SimpleAction.save);
         save.addClickListener(this::update);
         setCompositionRoot(save);
     }

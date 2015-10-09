@@ -29,7 +29,7 @@ public class BuergerPartnerTab extends CustomComponent {
 
         this.controller = controller;
 
-        ActionButton create = new ActionButton(controller, SimpleAction.create, navigateToForCreate);
+        ActionButton create = new ActionButton(controller, SimpleAction.create);
         create.addClickListener(clickEvent -> {
             if (grid.getContainerDataSource().size() == 0) {
                 controller.getNavigator().navigateTo(navigateToForCreate);
@@ -42,7 +42,7 @@ public class BuergerPartnerTab extends CustomComponent {
                 window.focus();
             }
         });
-        ActionButton add = new ActionButton(controller, SimpleAction.add, navigateToForAdd);
+        ActionButton add = new ActionButton(controller, SimpleAction.add);
         add.addClickListener(clickEvent -> {
             if (grid.getContainerDataSource().size() == 0) {
                 getUI().addWindow(new TableSelectWindow(controller, controller.getViewFactory().generateBuergerPartnerSearchTable()));
@@ -57,7 +57,7 @@ public class BuergerPartnerTab extends CustomComponent {
         });
 
 
-        delete = new ActionButton(controller, SimpleAction.delete, null);
+        delete = new ActionButton(controller, SimpleAction.delete);
         delete.addClickListener(clickEvent -> {
             if (grid.getSelectedRows() != null) {
                 for (Object next : grid.getSelectedRows()) {

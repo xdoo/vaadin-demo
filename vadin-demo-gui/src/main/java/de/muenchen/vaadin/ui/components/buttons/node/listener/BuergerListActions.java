@@ -7,17 +7,18 @@ import de.muenchen.vaadin.demo.api.local.Buerger;
 import reactor.bus.Event;
 import reactor.bus.EventBus;
 
+import java.util.List;
 import java.util.function.Supplier;
 
 /**
- * Created by p.mueller on 08.10.15.
+ * Created by p.mueller on 09.10.15.
  */
-public class BuergerActions {
-    private final Supplier<Buerger> buergerSupplier;
+public class BuergerListActions {
+    private final Supplier<List<Buerger>> buergerSupplier;
     private final EventBus eventBus;
 
 
-    public BuergerActions(Supplier<Buerger> buergerSupplier, EventBus eventBus) {
+    public BuergerListActions(Supplier<List<Buerger>> buergerSupplier, EventBus eventBus) {
         if (eventBus == null)
             throw new NullPointerException();
         if (buergerSupplier == null)
@@ -39,10 +40,6 @@ public class BuergerActions {
         notifyRequest(RequestEvent.UPDATE);
     }
 
-    public void read(Button.ClickEvent clickEvent) {
-        notifyRequest(RequestEvent.READ_SELECTED);
-    }
-
     private void notifyRequest(RequestEvent delete) {
 
         if (getBuerger() == null)
@@ -51,7 +48,7 @@ public class BuergerActions {
         getEventBus().notify(key, Event.wrap(getBuerger()));
     }
 
-    public Buerger getBuerger() {
+    public List<Buerger> getBuerger() {
         return buergerSupplier.get();
     }
 

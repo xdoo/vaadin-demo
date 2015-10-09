@@ -123,7 +123,7 @@ public class BuergerGrid extends CustomComponent {
     }
 
     private void createCopy() {
-        copy = new ActionButton(controller, SimpleAction.copy, null);
+        copy = new ActionButton(controller, SimpleAction.copy);
         copy.addClickListener(clickEvent -> {
             LOG.debug("copying selected items");
             if (grid.getSelectedRows() != null) {
@@ -138,7 +138,7 @@ public class BuergerGrid extends CustomComponent {
     }
 
     private void createDelete() {
-        delete = new ActionButton(controller, SimpleAction.delete, null);
+        delete = new ActionButton(controller, SimpleAction.delete);
         delete.addClickListener(clickEvent -> {
             LOG.debug("deleting selected items");
             if (grid.getSelectedRows() != null) {
@@ -152,7 +152,7 @@ public class BuergerGrid extends CustomComponent {
     }
 
     private void createEdit() {
-        edit = new ActionButton(controller, SimpleAction.update, BuergerUpdateView.NAME);
+        edit = new ActionButton(controller, SimpleAction.update);
         edit.addClickListener(clickEvent -> {
             if (grid.getSelectedRows().size() != 1)
                 return;
@@ -164,7 +164,7 @@ public class BuergerGrid extends CustomComponent {
     }
 
     private void createCreate() {
-        create = new ActionButton(controller, SimpleAction.create, BuergerCreateView.NAME);
+        create = new ActionButton(controller, SimpleAction.create);
         create.addClickListener(clickEvent -> {
             controller.getNavigator().navigateTo(BuergerCreateView.NAME);
         });

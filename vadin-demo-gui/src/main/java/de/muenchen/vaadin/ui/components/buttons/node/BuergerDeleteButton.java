@@ -26,7 +26,7 @@ public class BuergerDeleteButton extends BaseComponent {
     public BuergerDeleteButton(I18nResolver i18nResolver, EventBus eventBus) {
         super(i18nResolver, eventBus);
         String navigateTo = "";
-        delete = new ActionButton(getI18nResolver(), SimpleAction.delete, navigateTo);
+        delete = new ActionButton(getI18nResolver(), SimpleAction.delete);
         delete.addClickListener(this::delete);
         setCompositionRoot(delete);
     }

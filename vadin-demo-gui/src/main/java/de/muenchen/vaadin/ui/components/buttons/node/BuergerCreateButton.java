@@ -23,7 +23,7 @@ public class BuergerCreateButton extends BaseComponent {
     public BuergerCreateButton(I18nResolver i18nResolver, EventBus eventBus) {
         super(i18nResolver, eventBus);
         String navigateTo = "";
-        create = new ActionButton(getI18nResolver(), SimpleAction.create, navigateTo);
+        create = new ActionButton(getI18nResolver(), SimpleAction.create);
         create.addClickListener(this::create);
         setCompositionRoot(create);
     }

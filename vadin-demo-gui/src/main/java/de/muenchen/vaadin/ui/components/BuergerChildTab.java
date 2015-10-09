@@ -28,16 +28,16 @@ public class BuergerChildTab extends CustomComponent {
 
         this.controller = controller;
 
-        ActionButton create = new ActionButton(controller, SimpleAction.create, navigateToForCreate);
+        ActionButton create = new ActionButton(controller, SimpleAction.create);
         create.addClickListener(clickEvent -> {
             controller.getNavigator().navigateTo(navigateToForCreate);
         });
-        ActionButton add = new ActionButton(controller, SimpleAction.add, "");
+        ActionButton add = new ActionButton(controller, SimpleAction.add);
         add.addClickListener(clickEvent -> {
             getUI().addWindow(new TableSelectWindow(controller, controller.getViewFactory().generateChildSearchTable()));
         });
 
-        delete = new ActionButton(controller, SimpleAction.delete, null);
+        delete = new ActionButton(controller, SimpleAction.delete);
         delete.addClickListener(clickEvent -> {
             if (grid.getSelectedRows() != null) {
                 for (Object next : grid.getSelectedRows()) {

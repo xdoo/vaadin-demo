@@ -186,7 +186,7 @@ public class BuergerCreateForm extends CustomComponent {
         buttonLayout.addComponent(createButton);
         // die 'abbrechen' Schaltfläche
 
-        ActionButton back = new ActionButton(controller, SimpleAction.back, "lsadf");
+        ActionButton back = new ActionButton(controller, SimpleAction.back);
         back.addClickListener(clickEvent -> getNavigator().navigateTo(getNavigateBack()));
         buttonLayout.addComponent(back);
 

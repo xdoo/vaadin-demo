@@ -6,17 +6,16 @@ import com.vaadin.ui.Button;
 /**
  * Created by p.mueller on 08.10.15.
  */
-public class NavigateAction implements Button.ClickListener {
+public class NavigateActions {
     private final Navigator navigator;
     private final String navigateTo;
 
-    public NavigateAction(Navigator navigator, String navigateTo) {
+    public NavigateActions(Navigator navigator, String navigateTo) {
         this.navigator = navigator;
         this.navigateTo = navigateTo;
     }
 
-    @Override
-    public void buttonClick(Button.ClickEvent clickEvent) {
+    public void navigate(Button.ClickEvent clickEvent) {
         navigator.navigateTo(navigateTo);
     }
 }

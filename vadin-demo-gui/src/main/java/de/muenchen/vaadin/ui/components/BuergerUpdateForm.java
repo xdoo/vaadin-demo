@@ -118,7 +118,7 @@ public class BuergerUpdateForm extends CustomComponent implements Consumer<Event
         layout.addComponent(buttonLayout);
         // die Schaltfläche zum Aktualisieren
 
-        final ActionButton updateButton = new ActionButton(controller, SimpleAction.save, "lasdfölkjef");
+        final ActionButton updateButton = new ActionButton(controller, SimpleAction.save);
         updateButton.addClickListener(clickEvent1 -> {
             try {
                 binder.commit();
@@ -134,7 +134,7 @@ public class BuergerUpdateForm extends CustomComponent implements Consumer<Event
         buttonLayout.addComponent(updateButton);
 
         // die Schaltfläche zum Abbrechen
-        final ActionButton back = new ActionButton(controller, SimpleAction.back, "egal");
+        final ActionButton back = new ActionButton(controller, SimpleAction.back);
         back.addClickListener(clickEvent -> getNavigator().navigateTo(getNavigateBack()));
         buttonLayout.addComponent(back);
 
