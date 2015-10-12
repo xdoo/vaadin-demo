@@ -26,7 +26,7 @@ public class Authority extends SecurityEntity {
     private String authority;
 
     @ManyToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
-    @Column(name = "AUTH_PERMISSION")
+    @JoinTable(name = "authoritys_permissions", joinColumns = { @JoinColumn(name = "authority_oid")}, inverseJoinColumns = {@JoinColumn(name="permission_oid")})
     private Set<Permission> permissions;
 
     public Authority() {
@@ -46,6 +46,7 @@ public class Authority extends SecurityEntity {
     public void setAuthority(String authority) {
         this.authority = authority;
     }
+
 
     public Set<Permission> getPermissions() {
         return permissions;

@@ -24,7 +24,7 @@ public class JDBCAuthenticationConfigurator extends
         auth
                 .jdbcAuthentication()
                 .dataSource(dataSource)
-                .usersByUsernameQuery("select USER_USERNAME,USER_PASSWORD, USER_ENABLED from USERS where USER_USERNAME =  ?")
+                .usersByUsernameQuery("select USER_USERNAME,USER_PASSWORD, USER_ENABLED from USERS where USER_USERNAME =  ? AND USER_PASSWORD IS NOT NULL")
                 .authoritiesByUsernameQuery("SELECT USERS.USER_USERNAME, PERMISSIONS.PERM_PERMISSION "
                         + "FROM USERS_AUTHORITYS "
                         + "JOIN USERS on USERS_AUTHORITYS.USER_OID = USERS.OID "

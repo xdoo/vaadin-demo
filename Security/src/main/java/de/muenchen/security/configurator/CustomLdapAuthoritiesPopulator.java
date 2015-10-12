@@ -48,7 +48,7 @@ public class CustomLdapAuthoritiesPopulator implements LdapAuthoritiesPopulator 
 
         User user = userRepository.findFirstByUsername(username);
 
-        user.getAuthorities().stream().forEach(userAuthority -> {
+        user.getAuthoritys().stream().forEach(userAuthority -> {
 
             String authorityName = userAuthority.getAuthority();
 
