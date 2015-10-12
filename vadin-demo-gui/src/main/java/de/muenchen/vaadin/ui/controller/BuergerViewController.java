@@ -227,7 +227,7 @@ public class BuergerViewController implements Serializable {
         if (Buerger.Rel.partner == rel) {
             Buerger buerger = (Buerger) association.getAssociation();
             if (releasePartner(buerger))
-                getModel().getSelectedBuergerPartner().removeItem(buerger);
+                getModel().setSelectedBuergerPartner(Optional.empty());
         }
 
         notifyComponents();
@@ -268,7 +268,7 @@ public class BuergerViewController implements Serializable {
                 buerger = buergerService.create(buerger);
             }
             if (setBuergerPartner(buerger))
-                getModel().getSelectedBuergerPartner().addBean(buerger);
+                getModel().setSelectedBuergerPartner(Optional.of(buerger));
         }
 
         refreshModelAssociations();
@@ -317,7 +317,7 @@ public class BuergerViewController implements Serializable {
                 if (selectedBuerger.equals(buerger)) {
                     getModel().setSelectedBuerger(null);
                     getModel().getSelectedBuergerKinder().removeAllItems();
-                    getModel().getSelectedBuergerPartner().removeAllItems();
+                    getModel().setSelectedBuergerPartner(Optional.empty());
                 }
             });
 
@@ -374,12 +374,10 @@ public class BuergerViewController implements Serializable {
     private void refreshModelAssociations() {
         getModel().getSelectedBuerger().ifPresent(buerger -> {
             final List<Buerger> kinder = queryKinder(buerger);
-            final List<Buerger> partner = new ArrayList<>();
-            partner.add(queryPartner(buerger));
+            final Buerger partner = queryPartner(buerger);
             getModel().getSelectedBuergerKinder().removeAllItems();
             getModel().getSelectedBuergerKinder().addAll(kinder);
-            getModel().getSelectedBuergerPartner().removeAllItems();
-            getModel().getSelectedBuergerPartner().addAll(partner);
+            getModel().setSelectedBuergerPartner(Optional.of(partner));
         });
     }
 

@@ -26,6 +26,7 @@ public class PartnerGrid extends GenericGrid {
 
         BuergerDatastore event = eventWrapper.getData();
         if (this.getContainerDataSource().size() == 0)
-            this.setContainerDataSource(event.getSelectedBuergerPartner());
+            this.getContainerDataSource().removeAllItems();
+            this.getContainerDataSource().addItem(event.getSelectedBuergerPartner());
     }
 }
