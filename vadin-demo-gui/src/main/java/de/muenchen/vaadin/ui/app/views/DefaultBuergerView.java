@@ -9,11 +9,13 @@ import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
+import de.muenchen.vaadin.guilib.components.actions.EntityActions;
+import de.muenchen.vaadin.guilib.components.actions.EntitySingleActions;
+import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.components.buttons.node.BuergerCreateButton;
 import de.muenchen.vaadin.ui.components.buttons.node.BuergerSaveButton;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerSingleActions;
-import de.muenchen.vaadin.ui.components.buttons.node.listener.NavigateActions;
 import de.muenchen.vaadin.ui.components.forms.read.BuergerReadForm;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
@@ -85,13 +87,17 @@ public abstract class DefaultBuergerView extends VerticalLayout implements View{
         addComponent(update);
 
 
-        final ActionButton asdf = new ActionButton(controller, SimpleAction.back);
 
         final BuergerSingleActions buergerAction = new BuergerSingleActions(form::getBuerger, controller.getEventbus());
+        final EntitySingleActions buergerActiun = new EntitySingleActions<>(form::getBuerger, controller.getEventbus(), Buerger.class);
+
         final NavigateActions navigateActions = new NavigateActions(controller.getNavigator(), BuergerDetailView.NAME);
+        final EntityActions entityActions = new EntityActions(controller.getEventbus(), Buerger.class);
+
+        final ActionButton asdf = new ActionButton(controller, SimpleAction.back);
 
         asdf.addClickListener(buergerAction::create);
-        asdf.addClickListener(buergerAction::read);
+        asdf.addClickListener(entityActions::readList);
         asdf.addClickListener(navigateActions::navigate);
 
         addComponent(asdf);
