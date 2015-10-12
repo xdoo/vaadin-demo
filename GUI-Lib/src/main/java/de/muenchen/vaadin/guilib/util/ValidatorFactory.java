@@ -59,21 +59,23 @@ public class ValidatorFactory {
     }
 
     public static String getDiaRegEx(){
-        String abc = "";
-        for (char c = 'a'; c <= 'z'; c++) {
-            abc += c;
-        }
-        for (char c = 'A'; c <= 'Z'; c++) {
-            abc += c;
-        }
-        for (int i = 192; i <= 382; i++) {
-            abc += Character.toString((char) i);
-        }
-        for (int i = 7682; i <= 7807; i++) {
-            abc += Character.toString((char) i);
-        }
-        abc += "-";
-        return "[" + abc + "]*";
+//        String abc = "";
+//        for (char c = 'a'; c <= 'z'; c++) {
+//            abc += c;
+//        }
+//        for (char c = 'A'; c <= 'Z'; c++) {
+//            abc += c;
+//        }
+//        for (int i = 192; i <= 382; i++) {
+//            abc += Character.toString((char) i);
+//        }
+//        for (int i = 7682; i <= 7807; i++) {
+//            abc += Character.toString((char) i);
+//        }
+//        abc += "-";
+//        return "[" + abc + "]*";
+
+        return "[A-Za-zÀ-ÿ\\-]+";
     }
 
     public enum Type {STRING_LENGTH, DATE_RANGE, INTEGER_RANGE, NULL, REGEXP, DIAKRITISCH}
