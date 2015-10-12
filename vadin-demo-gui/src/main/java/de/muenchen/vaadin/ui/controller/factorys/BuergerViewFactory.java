@@ -74,10 +74,8 @@ public class BuergerViewFactory implements Serializable {
         return form;
     }
 
-    public BuergerReadForm generateReadForm(String navigateToUpdate, String navigateBack) {
-        BuergerReadForm form = new BuergerReadForm(controller, navigateToUpdate, navigateBack);
-        controller.getEventbus().on(controller.getResponseKey().toSelector(), form);
-
+    public DemoBuergerReadForm generateReadForm(String navigateToUpdate, String navigateBack) {
+        DemoBuergerReadForm form = new DemoBuergerReadForm(controller, navigateToUpdate, navigateBack);
         controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
         return form;
     }

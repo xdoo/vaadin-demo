@@ -10,7 +10,7 @@ import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.components.BuergerChildTab;
 import de.muenchen.vaadin.ui.components.BuergerPartnerTab;
-import de.muenchen.vaadin.ui.components.BuergerReadForm;
+import de.muenchen.vaadin.ui.components.DemoBuergerReadForm;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +30,7 @@ public class BuergerDetailView extends DefaultBuergerView {
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerDetailView.class);
     private BuergerChildTab childTab;
     private BuergerPartnerTab partnerTab;
-    private BuergerReadForm readForm;
+    private DemoBuergerReadForm readForm;
     @Autowired
     public BuergerDetailView(BuergerViewController controller, MainUI ui) {
         super(controller, ui);
