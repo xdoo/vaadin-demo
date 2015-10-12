@@ -1,8 +1,12 @@
 package de.muenchen.vaadin.demo.api.local;
 
 import de.muenchen.vaadin.demo.api.domain.Augenfarbe;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.hateoas.ResourceSupport;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.stream.Stream;
 
@@ -20,17 +24,23 @@ public class Buerger extends ResourceSupport {
     /**
      * A mapped Field from the DTO
      */
-    private String vorname;
+    @NotEmpty
+    @Size
+    private String vorname = "";
 
     /** A mapped Field from the DTO */
-    private String nachname;
+    @NotEmpty
+    @Size
+    private String nachname = "";
 
     /** A mapped Field from the DTO */
+    @NotNull
     private Augenfarbe augenfarbe;
-
     /**
      * A mapped Field from the DTO
      */
+    @NotNull
+    @Past
     private Date geburtsdatum;
 
     /**

@@ -2,34 +2,35 @@ package de.muenchen.vaadin.ui.components;
 
 import com.vaadin.data.Validator;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
+import com.vaadin.data.fieldgroup.DefaultFieldGroupFieldFactory;
+import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
+import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.DateField;
+import com.vaadin.ui.Field;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.events.Association;
 import de.muenchen.eventbus.selector.entity.RequestEvent;
-import de.muenchen.vaadin.demo.api.domain.Augenfarbe;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.GenericWarningNotification;
-import de.muenchen.vaadin.guilib.util.ValidatorFactory;
 import de.muenchen.vaadin.services.BuergerI18nResolver;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.NotificationType;
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Type;
@@ -87,11 +88,10 @@ public class BuergerCreateForm extends CustomComponent {
      * Erzeugt das eigentliche Formular.
      */
     private void createForm() {
-        Validator val = ValidatorFactory.getValidator(ValidatorFactory.Type.NULL, resolver.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.validation)), "false");
-        FormLayout layout = new FormLayout();
+        FormLayout propertyLayout = new FormLayout();
         HorizontalLayout buttonLayout = new HorizontalLayout();
         buttonLayout.setSpacing(true);
-        layout.setMargin(true);
+        propertyLayout.setMargin(true);
         
         // headline
         Label headline = new Label(resolver.resolveRelative(
@@ -99,58 +99,51 @@ public class BuergerCreateForm extends CustomComponent {
                         I18nPaths.Component.headline,
                         Type.label)));
         headline.addStyleName(ValoTheme.LABEL_H3);
-        layout.addComponent(headline);
+        propertyLayout.addComponent(headline);
 
         // Now use a binder to bind the members
         final BeanFieldGroup<Buerger> binder = new BeanFieldGroup<>(Buerger.class);
         binder.setItemDataSource(new Buerger());
-        
-        // Fokus auf das erste Feld setzen
-        TextField firstField = controller.getUtil().createFormTextField(binder,
-                resolver.resolveRelative(getEntityFieldPath(Buerger.Field.vorname.name(), Type.label)),
-                resolver.resolveRelative(getEntityFieldPath(Buerger.Field.vorname.name(), Type.input_prompt)),
-                Buerger.Field.vorname.name(), BuergerI18nResolver.I18N_BASE_PATH);
-        firstField.focus();
-        String abc = "";
-        for(char c = 'a';c <= 'z'; c++)
-            abc+=c;
-        for(char c = 'A';c <= 'Z'; c++)
-            abc+=c;
-        for(int i =192;i<=382;i++)
-            abc+=Character.toString((char)i);
-        for(int i =7682;i<=7807;i++)
-            abc+=Character.toString((char)i);
-        abc+="-";
 
-        Validator val0 = ValidatorFactory.getValidator(ValidatorFactory.Type.REGEXP, resolver.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.validationstring)), "true", "[" + abc + "]*");
 
-        Validator val1 = ValidatorFactory.getValidator(ValidatorFactory.Type.STRING_LENGTH, resolver.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.validation)), 1 + "", "" + Integer.MAX_VALUE, "true");
-        firstField.addValidator(val0);
-        firstField.addValidator(val1);
-        layout.addComponent(firstField);
-        
-        // alle anderen Felder
-        TextField secField = controller.getUtil().createFormTextField(binder,
-                resolver.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.label)),
-                resolver.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.input_prompt)),
-                Buerger.Field.nachname.name(), BuergerI18nResolver.I18N_BASE_PATH);
-        secField.addValidator(val1);
-        secField.addValidator(val0);
-        layout.addComponent(secField);
-        ComboBox eyecolorSelector = controller.getUtil().createFormComboBox(binder,
-                resolver.resolveRelative(getEntityFieldPath(Buerger.Field.augenfarbe.name(), Type.label)),
-                Buerger.Field.augenfarbe.name(),
-                Augenfarbe.class);
-        layout.addComponent(eyecolorSelector);
-        DateField birthdayfield = controller.getUtil().createFormDateField(binder,
-                resolver.resolveRelative(getEntityFieldPath(Buerger.Field.geburtsdatum.name(), Type.label)),
-                Buerger.Field.geburtsdatum.name(), BuergerI18nResolver.I18N_BASE_PATH);
-        String errorMsg = resolver.resolveRelative(getEntityFieldPath(Buerger.Field.geburtsdatum.name(), Type.validation));
-        Validator val3 = ValidatorFactory.getValidator(ValidatorFactory.Type.DATE_RANGE, errorMsg, "start", null);
-        birthdayfield.addValidator(val3);
-        layout.addComponent(birthdayfield);    
+        binder.setFieldFactory(new DefaultFieldGroupFieldFactory(){
+            @SuppressWarnings("unchecked")
+            @Override
+            public <T extends Field> T createField(Class<?> type, Class<T> fieldType) {
+                if (Enum.class.isAssignableFrom(type)) {
+                    return (T) super.createField(type, ComboBox.class);
+                }
+                return super.createField(type, fieldType);
+            }
+        });
 
-        layout.addComponent(buttonLayout);
+        // Felder der CreateForm mit Validierung
+        Stream.of(Buerger.Field.getProperties()).forEach(entityField -> {
+            AbstractField field = (AbstractField)binder.buildAndBind(
+                    resolver.resolveRelative(getEntityFieldPath(entityField, Type.label)),
+                    entityField
+            );
+            //HACK
+            //Make validation only visible after CHANGE or COMMIT
+            field.setValidationVisible(false);
+            field.addValueChangeListener(event -> field.setValidationVisible(true));
+            binder.addCommitHandler(new FieldGroup.CommitHandler() {
+                @Override
+                public void preCommit(FieldGroup.CommitEvent commitEvent) throws CommitException {
+                    field.setValidationVisible(true);
+                }
+
+                @Override
+                public void postCommit(FieldGroup.CommitEvent commitEvent) throws CommitException {
+
+                }
+            });
+            //HACK-END
+
+            propertyLayout.addComponent(field);
+        });
+
+        propertyLayout.addComponent(buttonLayout);
         // die 'speichern' Schaltfläche
         String createLabel = resolver.resolveRelative(
                 getFormPath(SimpleAction.create,
@@ -158,19 +151,6 @@ public class BuergerCreateForm extends CustomComponent {
                         Type.label));
         Button createButton = new Button(createLabel, (ClickEvent click) -> {
             try {
-                //If no NullValidators are added to the Fields, they will be added.
-                if(!firstField.getValidators().contains(val)){
-                    firstField.addValidator(val);
-                    secField.addValidator(val);
-                    eyecolorSelector.addValidator(val);
-                    birthdayfield.addValidator(val);
-                }
-                //Validation of the Fields before continuing
-                firstField.validate();                
-                secField.validate();
-                eyecolorSelector.validate();
-                birthdayfield.validate();
-                
                 binder.commit();
 
                 if (getRelation().isPresent()) {
@@ -181,11 +161,6 @@ public class BuergerCreateForm extends CustomComponent {
                 }
                 getNavigator().navigateTo(getNavigateTo());
 
-                //reset
-                firstField.removeValidator(val);
-                secField.removeValidator(val);
-                eyecolorSelector.removeValidator(val);
-                birthdayfield.removeValidator(val);
                 binder.setItemDataSource(new Buerger());
             } catch (CommitException | Validator.InvalidValueException e) {
                 GenericWarningNotification warn = new GenericWarningNotification(
@@ -204,7 +179,7 @@ public class BuergerCreateForm extends CustomComponent {
         back.addClickListener(clickEvent -> getNavigator().navigateTo(getNavigateBack()));
         buttonLayout.addComponent(back);
 
-        setCompositionRoot(layout);
+        setCompositionRoot(propertyLayout);
     }
 
     public String getNavigateTo() {
