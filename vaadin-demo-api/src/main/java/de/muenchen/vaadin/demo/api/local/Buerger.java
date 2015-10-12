@@ -3,7 +3,6 @@ package de.muenchen.vaadin.demo.api.local;
 import de.muenchen.vaadin.demo.api.domain.Augenfarbe;
 import org.springframework.hateoas.ResourceSupport;
 
-import javax.validation.constraints.Future;
 import java.util.Date;
 import java.util.stream.Stream;
 
@@ -33,7 +32,6 @@ public class Buerger extends ResourceSupport {
     /**
      * A mapped Field from the DTO
      */
-    @Future
     private Date geburtsdatum;
 
     /**
