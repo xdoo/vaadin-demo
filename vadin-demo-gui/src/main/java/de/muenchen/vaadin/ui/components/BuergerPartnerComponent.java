@@ -141,7 +141,7 @@ public class BuergerPartnerComponent extends CustomComponent implements Consumer
     @Override
     public void accept(reactor.bus.Event<BuergerDatastore> buergerDatastoreEvent) {
         BuergerDatastore datastore = buergerDatastoreEvent.getData();
-        if (datastore.getSelectedBuergerPartner().equals(Optional.empty())) {
+        if (!datastore.getSelectedBuergerPartner().equals(Optional.empty())) {
             currentPartner = datastore.getSelectedBuergerPartner().get();
             partnerReadForm.removeAllComponents();
             BeanItem<Buerger> partner = new BeanItem(buergerDatastoreEvent.getData().getSelectedBuergerPartner().get());

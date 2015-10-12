@@ -377,7 +377,7 @@ public class BuergerViewController implements Serializable {
             final Buerger partner = queryPartner(buerger);
             getModel().getSelectedBuergerKinder().removeAllItems();
             getModel().getSelectedBuergerKinder().addAll(kinder);
-            getModel().setSelectedBuergerPartner(Optional.of(partner));
+            getModel().setSelectedBuergerPartner(Optional.ofNullable(partner));
         });
     }
 
