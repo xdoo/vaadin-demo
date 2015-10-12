@@ -6,7 +6,6 @@
 package de.muenchen.security;
 
 import de.muenchen.security.entities.User;
-import de.muenchen.security.repositories.PermissionRepository;
 import de.muenchen.security.repositories.UserRepository;
 import de.muenchen.vaadin.demo.apilib.domain.Principal;
 import de.muenchen.vaadin.demo.apilib.rest.SecurityRestClient;
@@ -30,7 +29,8 @@ public class SecurityRestClientImpl implements SecurityRestClient {
     @Override
     public Optional<Principal> getPrincipal(RestTemplate template) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Principal principal = new Principal(authentication.getName());
+        Principal principal = new Principal();
+        principal.setUsername(authentication.getName());
 
         User user = userRepository.findFirstByUsername(principal.getUsername());
 
