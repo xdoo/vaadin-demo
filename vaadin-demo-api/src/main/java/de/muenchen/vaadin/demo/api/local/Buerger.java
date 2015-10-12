@@ -6,6 +6,7 @@ import org.springframework.hateoas.ResourceSupport;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.stream.Stream;
@@ -26,11 +27,13 @@ public class Buerger extends ResourceSupport {
      */
     @NotEmpty
     @Size
+    @Pattern(regexp = "[A-Za-zÀ-ÿ\\-]+")
     private String vorname = "";
 
     /** A mapped Field from the DTO */
     @NotEmpty
     @Size
+    @Pattern(regexp = "[A-Za-zÀ-ÿ\\-]+")
     private String nachname = "";
 
     /** A mapped Field from the DTO */
