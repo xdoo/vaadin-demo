@@ -6,7 +6,6 @@
 package de.muenchen.security;
 
 import de.muenchen.security.entities.User;
-import de.muenchen.security.repositories.PermissionRepository;
 import de.muenchen.security.repositories.UserRepository;
 import de.muenchen.vaadin.demo.apilib.domain.Principal;
 import de.muenchen.vaadin.demo.apilib.rest.SecurityRestClient;

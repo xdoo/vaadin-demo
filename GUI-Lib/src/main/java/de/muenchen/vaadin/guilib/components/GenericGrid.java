@@ -117,7 +117,7 @@ public class GenericGrid<T> extends CustomComponent {
         );
 
         Stream.of(fields).forEach(field ->
-                        this.grid.getColumn(field).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(field, I18nPaths.Type.column_header)))
+                        this.grid.getColumn(field).setHeaderCaption(controller.getResolver().resolveRelative(getEntityFieldPath(field, I18nPaths.Type.column_header)))
         );
         //---------------
 
@@ -145,7 +145,7 @@ public class GenericGrid<T> extends CustomComponent {
 
 
     private void createRead(String navigateToRead) {
-        ActionButton readButton = new ActionButton(controller, SimpleAction.read, null);
+        ActionButton readButton = new ActionButton(controller.getResolver(), SimpleAction.read, null);
         readButton.addClickListener(clickEvent -> {
             controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED), reactor.bus.Event.wrap(grid.getSelectedRows().toArray()[0]));
             controller.getNavigator().navigateTo(navigateToRead);
@@ -155,7 +155,7 @@ public class GenericGrid<T> extends CustomComponent {
     }
 
     private void createCopy() {
-        ActionButton copyButton = new ActionButton(controller, SimpleAction.copy, null);
+        ActionButton copyButton = new ActionButton(controller.getResolver(), SimpleAction.copy, null);
         copyButton.addClickListener(clickEvent -> {
             LOG.debug("copying selected items");
             if (grid.getSelectedRows() != null) {
@@ -173,7 +173,7 @@ public class GenericGrid<T> extends CustomComponent {
     }
 
     private void createDelete() {
-        ActionButton deleteButton = new ActionButton(controller, SimpleAction.delete, null);
+        ActionButton deleteButton = new ActionButton(controller.getResolver(), SimpleAction.delete, null);
         deleteButton.addClickListener(clickEvent -> {
             LOG.debug("deleting selected items");
             if (grid.getSelectedRows() != null) {
@@ -191,7 +191,7 @@ public class GenericGrid<T> extends CustomComponent {
     }
 
     private void createEdit(String navigateToEdit) {
-        ActionButton editButton = new ActionButton(controller, SimpleAction.update, navigateToEdit);
+        ActionButton editButton = new ActionButton(controller.getResolver(), SimpleAction.update, navigateToEdit);
         editButton.addClickListener(clickEvent -> {
             if (grid.getSelectedRows().size() == 1) {
                 LOG.debug("update selected");
@@ -204,7 +204,7 @@ public class GenericGrid<T> extends CustomComponent {
     }
 
     private void createCreate(String navigateToCreate) {
-        ActionButton createButton = new ActionButton(controller, SimpleAction.create, navigateToCreate);
+        ActionButton createButton = new ActionButton(controller.getResolver(), SimpleAction.create, navigateToCreate);
         createButton.addClickListener(clickEvent -> {
             controller.getNavigator().navigateTo(navigateToCreate);
         });
@@ -223,11 +223,11 @@ public class GenericGrid<T> extends CustomComponent {
             else
                 reset.click();
         });
-        search.setId(String.format("%s_SEARCH_BUTTON", controller.getBasePath()));
+        search.setId(String.format("%s_SEARCH_BUTTON", controller.getResolver().getBasePath()));
     }
 
     private void createFilter() {
-        filter.setId(String.format("%s_QUERY_FIELD", controller.getBasePath()));
+        filter.setId(String.format("%s_QUERY_FIELD", controller.getResolver().getBasePath()));
         filter.focus();
         filter.setWidth("100%");
     }
@@ -240,7 +240,7 @@ public class GenericGrid<T> extends CustomComponent {
             controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_LIST));
             filter.setValue("");
         });
-        reset.setId(String.format("%s_RESET_BUTTON", controller.getBasePath()));
+        reset.setId(String.format("%s_RESET_BUTTON", controller.getResolver().getBasePath()));
     }
 
     private void setButtonVisability() {

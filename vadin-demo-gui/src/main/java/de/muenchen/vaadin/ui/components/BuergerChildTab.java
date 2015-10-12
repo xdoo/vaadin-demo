@@ -8,8 +8,8 @@ import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.GenericGrid;
-import de.muenchen.vaadin.ui.app.views.BuergerDetailView;
 import de.muenchen.vaadin.services.BuergerI18nResolver;
+import de.muenchen.vaadin.ui.app.views.BuergerDetailView;
 import de.muenchen.vaadin.ui.app.views.TableSelectWindow;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
@@ -34,17 +34,17 @@ public class BuergerChildTab extends CustomComponent {
                 .activateCreate(navigateToForCreate)
                 .activateRead(BuergerDetailView.NAME)
                 .addButton(
-                        controller.resolveRelative(
+                        controller.getResolver().resolveRelative(
                                 getFormPath(SimpleAction.add,
                                         I18nPaths.Component.button,
                                         I18nPaths.Type.label)),
                         () -> {
                             HorizontalLayout layout = new HorizontalLayout(controller.getViewFactory().generateChildSearchTable());
                             layout.setMargin(true);
-                            getUI().addWindow(new TableSelectWindow(controller, layout));
+                            getUI().addWindow(new TableSelectWindow(controller, controller.getResolver(), layout));
                         })
                         .addMultiSelectButton(
-                                controller.resolveRelative(
+                                controller.getResolver().resolveRelative(
                                         getFormPath(SimpleAction.delete,
                                                 I18nPaths.Component.button,
                                                 I18nPaths.Type.label)),
@@ -60,14 +60,8 @@ public class BuergerChildTab extends CustomComponent {
         layout.setMargin(true);
         setCompositionRoot(layout);
 
-        read = new ActionButton(controller, SimpleAction.read, null);
-        read.addClickListener(clickEvent -> {
-            controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED), reactor.bus.Event.wrap(grid.getSelectedRows().toArray()[0]));
-            controller.getNavigator().navigateTo(BuergerDetailView.NAME);
-        });
-        read.setVisible(false);
 
-        setId(String.format("%s_%s_%s_CHILD_TAB", navigateToForDetail, navigateBack, BuergerViewController.I18N_BASE_PATH));
+        setId(String.format("%s_%s_%s_CHILD_TAB", navigateToForDetail, navigateBack, controller.getResolver().getBasePath()));
     }
 
 

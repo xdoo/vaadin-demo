@@ -10,11 +10,13 @@ import reactor.bus.EventBus;
 /**
  * Created by rene.zarwel on 07.10.15.
  */
-public interface EntityController extends I18nResolver {
+public interface EntityController {
 
     EventBus getEventbus();
 
     Navigator getNavigator();
+
+    I18nResolver getResolver();
 
     RequestEntityKey getRequestKey(RequestEvent event);
 

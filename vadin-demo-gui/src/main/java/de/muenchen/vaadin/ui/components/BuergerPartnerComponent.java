@@ -2,13 +2,15 @@ package de.muenchen.vaadin.ui.components;
 
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
-import com.vaadin.ui.*;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.events.Association;
-import de.muenchen.eventbus.selector.entity.RequestEntityKey;
 import de.muenchen.eventbus.selector.entity.RequestEvent;
 import de.muenchen.vaadin.demo.api.local.Buerger;
-import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.GenericConfirmationWindow;
@@ -17,11 +19,8 @@ import de.muenchen.vaadin.services.model.BuergerDatastore;
 import de.muenchen.vaadin.ui.app.views.BuergerDetailView;
 import de.muenchen.vaadin.ui.app.views.TableSelectWindow;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
-import org.apache.commons.lang.WordUtils;
 import reactor.bus.Event;
 import reactor.fn.Consumer;
-
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getFormPath;
 
 /**
  * Created by claus.straube on 05.10.15.

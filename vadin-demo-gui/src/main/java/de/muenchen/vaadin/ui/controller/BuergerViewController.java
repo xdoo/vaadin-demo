@@ -1,8 +1,6 @@
 package de.muenchen.vaadin.ui.controller;
 
 import com.vaadin.navigator.Navigator;
-import com.vaadin.server.FontAwesome;
-import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.UI;
@@ -11,10 +9,7 @@ import de.muenchen.eventbus.selector.entity.RequestEntityKey;
 import de.muenchen.eventbus.selector.entity.RequestEvent;
 import de.muenchen.eventbus.selector.entity.ResponseEntityKey;
 import de.muenchen.vaadin.demo.api.local.Buerger;
-import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
-import de.muenchen.vaadin.guilib.components.GenericSuccessNotification;
 import de.muenchen.vaadin.guilib.controller.EntityController;
-import de.muenchen.vaadin.guilib.services.MessageService;
 import de.muenchen.vaadin.guilib.util.VaadinUtil;
 import de.muenchen.vaadin.services.BuergerI18nResolver;
 import de.muenchen.vaadin.services.BuergerService;
@@ -37,10 +32,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.NotificationType;
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Type;
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getNotificationPath;
-
 /**
  * Der Controller ist die zentrale Klasse um die Logik im Kontext BuergerDTO abzubilden.
  *
@@ -49,7 +40,6 @@ import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getNotificationPath;
 @SpringComponent
 @UIScope
 public class BuergerViewController implements Serializable, EntityController {
-public class BuergerViewController implements Serializable {
 
     private static final long serialVersionUID = 1L;
     /**
@@ -112,6 +102,10 @@ public class BuergerViewController implements Serializable {
 
     public EventBus getEventbus() {
         return eventbus;
+    }
+
+    public BuergerI18nResolver getResolver(){
+        return resolver;
     }
 
     public VaadinUtil getUtil() {
