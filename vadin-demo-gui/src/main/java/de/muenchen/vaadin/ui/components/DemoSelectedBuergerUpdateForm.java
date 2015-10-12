@@ -55,22 +55,22 @@ public class DemoSelectedBuergerUpdateForm extends SelectedBuergerForm {
         final ActionButton backButton = createBackButton();
         buttons.addComponent(backButton);
 
-        final ActionButton updateButton = createUpdateButton();
+        final ActionButton updateButton = createSaveButton();
         buttons.addComponent(updateButton);
 
         getFormLayout().addComponent(buttons);
     }
 
-    private ActionButton createUpdateButton() {
-        final ActionButton updateButton = new ActionButton(getI18nResolver(), SimpleAction.update);
+    private ActionButton createSaveButton() {
+        final ActionButton saveButton = new ActionButton(getI18nResolver(), SimpleAction.save);
 
         final BuergerSingleActions buergerSingleActions = new BuergerSingleActions(this::getBuerger, getEventBus());
-        updateButton.addClickListener(buergerSingleActions::update);
+        saveButton.addClickListener(buergerSingleActions::update);
 
         final NavigateActions navigateActions = new NavigateActions(getController().getNavigator(), getController().getEventbus(), getNavigateTo());
-        updateButton.addClickListener(navigateActions::navigate);
+        saveButton.addClickListener(navigateActions::navigate);
 
-        return updateButton;
+        return saveButton;
     }
 
     private ActionButton createBackButton() {
