@@ -16,7 +16,7 @@ import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.components.buttons.node.BuergerCreateButton;
 import de.muenchen.vaadin.ui.components.buttons.node.BuergerSaveButton;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerSingleActions;
-import de.muenchen.vaadin.ui.components.forms.read.BuergerROForm;
+import de.muenchen.vaadin.ui.components.forms.read.SelectedBuergerForm;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
 import javax.annotation.PostConstruct;
@@ -76,8 +76,8 @@ public abstract class DefaultBuergerView extends VerticalLayout implements View{
         //HorizontalLayout head = new HorizontalLayout(pageTitle);
         addComponent(pageTitle);
 
-//        BuergerROForm readForm = new BuergerROForm(controller,controller.getEventbus());
-        BuergerROForm form = new BuergerROForm(controller, controller.getEventbus());
+//        SelectedBuergerForm readForm = new SelectedBuergerForm(controller,controller.getEventbus());
+        SelectedBuergerForm form = new SelectedBuergerForm(controller, controller.getEventbus());
         addComponent(form);
         final BuergerCreateButton c = new BuergerCreateButton(controller, controller.getEventbus());
         c.setBuergerSupplier(form::getBuerger);

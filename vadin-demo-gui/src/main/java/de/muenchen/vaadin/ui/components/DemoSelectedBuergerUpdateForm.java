@@ -1,44 +1,27 @@
 package de.muenchen.vaadin.ui.components;
 
-import com.vaadin.data.Validator;
-import com.vaadin.data.fieldgroup.BeanFieldGroup;
-import com.vaadin.data.fieldgroup.FieldGroup;
-import com.vaadin.data.validator.StringLengthValidator;
-import com.vaadin.navigator.Navigator;
-import com.vaadin.server.Page;
-import com.vaadin.ui.*;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.eventbus.selector.entity.RequestEvent;
-import de.muenchen.vaadin.demo.api.domain.Augenfarbe;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
-import de.muenchen.vaadin.guilib.components.GenericErrorNotification;
-import de.muenchen.vaadin.guilib.util.ValidatorFactory;
-import de.muenchen.vaadin.services.model.BuergerDatastore;
+import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
+import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerSingleActions;
+import de.muenchen.vaadin.ui.components.forms.read.SelectedBuergerForm;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import reactor.bus.Event;
-import reactor.fn.Consumer;
 
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.*;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Type;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getFormPath;
 
 /**
  *
  * @author claus
  */
-public class BuergerUpdateForm extends CustomComponent implements Consumer<Event<BuergerDatastore>> {
+public class DemoSelectedBuergerUpdateForm extends SelectedBuergerForm {
 
-    /**
-     * Logger
-     */
-    protected static final Logger LOG = LoggerFactory.getLogger(BuergerUpdateForm.class);
-
-    private final BeanFieldGroup<Buerger> binder = new BeanFieldGroup<Buerger>(Buerger.class);
     private final BuergerViewController controller;
-
     private final String navigateTo;
     private final String navigateBack;
 
@@ -52,20 +35,60 @@ public class BuergerUpdateForm extends CustomComponent implements Consumer<Event
      * @param navigateTo
      * @param navigateBack
      */
-    public BuergerUpdateForm(BuergerViewController controller, final String navigateTo, String navigateBack) {
+    public DemoSelectedBuergerUpdateForm(BuergerViewController controller, final String navigateTo, String navigateBack) {
+        super(controller, controller.getEventbus());
 
         this.controller = controller;
         this.navigateTo = navigateTo;
         this.navigateBack = navigateBack;
 
-        // create form
-        this.createForm();
-
+        init();
     }
 
-    /**
-     * Erzeugt das eigentliche Formular.
-     */
+    private void init() {
+        final Label headline = createHeadline();
+        getFormLayout().addComponent(headline, 0);
+
+        final HorizontalLayout buttons = new HorizontalLayout();
+        buttons.setSpacing(true);
+
+        final ActionButton backButton = createBackButton();
+        buttons.addComponent(backButton);
+
+        final ActionButton updateButton = createUpdateButton();
+        buttons.addComponent(updateButton);
+
+        getFormLayout().addComponent(buttons);
+    }
+
+    private ActionButton createUpdateButton() {
+        final ActionButton updateButton = new ActionButton(getI18nResolver(), SimpleAction.update);
+
+        final BuergerSingleActions buergerSingleActions = new BuergerSingleActions(this::getBuerger, getEventBus());
+        updateButton.addClickListener(buergerSingleActions::update);
+
+        final NavigateActions navigateActions = new NavigateActions(getController().getNavigator(), getController().getEventbus(), getNavigateTo());
+        updateButton.addClickListener(navigateActions::navigate);
+
+        return updateButton;
+    }
+
+    private ActionButton createBackButton() {
+        final ActionButton backButton = new ActionButton(getI18nResolver(), SimpleAction.back);
+
+        final NavigateActions navigateActions = new NavigateActions(getController().getNavigator(), getController().getEventbus(), getNavigateBack());
+        backButton.addClickListener(navigateActions::navigate);
+
+        return backButton;
+    }
+
+    private Label createHeadline() {
+        final Label headline = new Label(getI18nResolver().resolveRelative(getFormPath(SimpleAction.update, I18nPaths.Component.headline, Type.label)));
+        headline.addStyleName(ValoTheme.LABEL_H3);
+        return headline;
+    }
+
+    /*
     private void createForm() {
 
         controller.getEventbus().on(controller.getResponseKey().toSelector(), this);
@@ -140,19 +163,10 @@ public class BuergerUpdateForm extends CustomComponent implements Consumer<Event
 
         setCompositionRoot(layout);
     }
-
-    @Override
-    public void accept(reactor.bus.Event<BuergerDatastore> eventWrapper) {
-        BuergerDatastore model = eventWrapper.getData();
-        model.getSelectedBuerger().ifPresent(binder::setItemDataSource);
-    }
+*/
 
     public String getNavigateBack() {
         return navigateBack;
-    }
-
-    public Navigator getNavigator() {
-        return getController().getNavigator();
     }
 
     public BuergerViewController getController() {

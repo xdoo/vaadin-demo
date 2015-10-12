@@ -3,7 +3,7 @@ package de.muenchen.vaadin.ui.app.views;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import de.muenchen.vaadin.ui.app.MainUI;
-import de.muenchen.vaadin.ui.components.BuergerUpdateForm;
+import de.muenchen.vaadin.ui.components.DemoSelectedBuergerUpdateForm;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +20,7 @@ public class BuergerUpdateView extends DefaultBuergerView {
 
     public static final String NAME = "buerger_update_view";
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerUpdateView.class);
-    private BuergerUpdateForm form;
+    private DemoSelectedBuergerUpdateForm form;
 
     @Autowired
     public BuergerUpdateView(BuergerViewController controller, EventBus eventbus, MainUI ui) {

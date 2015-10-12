@@ -66,16 +66,14 @@ public class BuergerViewFactory implements Serializable {
         return new BuergerPartnerTab(controller, navigateToForDetail, navigateForCreate, navigateForAdd, navigateBack);
     }
 
-    public BuergerUpdateForm generateUpdateForm(String navigateTo, String navigateBack) {
-        BuergerUpdateForm form = new BuergerUpdateForm(controller, navigateTo, navigateBack);
-        controller.getEventbus().on(controller.getResponseKey().toSelector(), form);
-
+    public DemoSelectedBuergerUpdateForm generateUpdateForm(String navigateTo, String navigateBack) {
+        DemoSelectedBuergerUpdateForm form = new DemoSelectedBuergerUpdateForm(controller, navigateTo, navigateBack);
         controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
         return form;
     }
 
-    public DemoBuergerReadForm generateReadForm(String navigateToUpdate, String navigateBack) {
-        DemoBuergerReadForm form = new DemoBuergerReadForm(controller, navigateToUpdate, navigateBack);
+    public DemoSelectedBuergerReadForm generateReadForm(String navigateToUpdate, String navigateBack) {
+        DemoSelectedBuergerReadForm form = new DemoSelectedBuergerReadForm(controller, navigateToUpdate, navigateBack);
         controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
         return form;
     }

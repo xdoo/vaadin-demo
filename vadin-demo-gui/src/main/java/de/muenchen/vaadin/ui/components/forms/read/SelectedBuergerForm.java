@@ -10,13 +10,12 @@ import reactor.bus.EventBus;
 /**
  * Created by p.mueller on 08.10.15.
  */
-public class BuergerROForm extends BuergerForm {
+public class SelectedBuergerForm extends BuergerForm {
 
     public static final Class<Buerger> ENTITY_CLASS = Buerger.class;
 
-    public BuergerROForm(I18nResolver i18nResolver, EventBus eventBus) {
+    public SelectedBuergerForm(I18nResolver i18nResolver, EventBus eventBus) {
         super(i18nResolver, eventBus);
-        setReadOnly(true);
         getEventBus().on(new ResponseEntityKey(ENTITY_CLASS).toSelector(), this::update);
     }
 
