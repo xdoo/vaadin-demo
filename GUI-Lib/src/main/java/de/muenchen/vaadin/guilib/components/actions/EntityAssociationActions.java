@@ -7,15 +7,17 @@ import de.muenchen.eventbus.selector.entity.RequestEvent;
 import reactor.bus.Event;
 import reactor.bus.EventBus;
 
+import java.util.function.Supplier;
+
 /**
  * Created by p.mueller on 09.10.15.
  */
 public class EntityAssociationActions<T> {
     private final EventBus eventBus;
     private final Class<T> entityClass;
-    private final Association<T> association;
+    private final Supplier<Association<?>> association;
 
-    public EntityAssociationActions(Association<T> association, EventBus eventBus, Class<T> entityClass) {
+    public EntityAssociationActions(Supplier<Association<?>> association, EventBus eventBus, Class<T> entityClass) {
         if (eventBus == null)
             throw new NullPointerException();
         if (entityClass == null)
@@ -40,8 +42,8 @@ public class EntityAssociationActions<T> {
         return eventBus;
     }
 
-    public Association<T> getAssociation() {
-        return association;
+    public Association<?> getAssociation() {
+        return association.get();
     }
 
     public Class<T> getEntityClass() {

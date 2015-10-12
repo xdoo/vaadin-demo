@@ -3,7 +3,7 @@ package de.muenchen.vaadin.demo.api.local;
 import de.muenchen.vaadin.demo.api.domain.Augenfarbe;
 import org.springframework.hateoas.ResourceSupport;
 
-import javax.swing.plaf.basic.BasicIconFactory;
+import javax.validation.constraints.Future;
 import java.util.Date;
 import java.util.stream.Stream;
 
@@ -16,6 +16,7 @@ import java.util.stream.Stream;
  * @author p.mueller
  * @version 1.0
  */
+
 public class Buerger extends ResourceSupport {
 
     /**
@@ -32,6 +33,7 @@ public class Buerger extends ResourceSupport {
     /**
      * A mapped Field from the DTO
      */
+    @Future
     private Date geburtsdatum;
 
     /**
@@ -133,12 +135,12 @@ public class Buerger extends ResourceSupport {
             this.field = field;
         }
 
-        public boolean isField() {
-            return field;
-        }
-
         public static Object[] getProperties() {
             return Stream.of(values()).filter(Field::isField).map(Field::name).toArray();
+        }
+
+        public boolean isField() {
+            return field;
         }
     }
 

@@ -54,7 +54,7 @@ public class BuergerForm extends BaseComponent {
         try {
             getBinder().commit();
         } catch (FieldGroup.CommitException e) {
-            throw new AssertionError("ItemDataSource must be set?! See constructor.");
+            throw new AssertionError("ItemDataSource must be set?! See constructor. OR!! now because of validation...");
         }
         return getBinder().getItemDataSource().getBean();
     }

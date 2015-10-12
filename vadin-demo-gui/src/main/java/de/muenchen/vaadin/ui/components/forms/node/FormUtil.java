@@ -1,6 +1,7 @@
 package de.muenchen.vaadin.ui.components.forms.node;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
+import com.vaadin.data.fieldgroup.DefaultFieldGroupFieldFactory;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.TextField;
@@ -12,7 +13,7 @@ import java.util.EnumSet;
 /**
  * Created by p.mueller on 07.10.15.
  */
-public class FormUtil {
+public class FormUtil extends DefaultFieldGroupFieldFactory {
 
     public static final String NULL_REPRESENTATION = "";
     private final BeanFieldGroup<?> binder;
@@ -22,6 +23,7 @@ public class FormUtil {
         this.binder = binder;
         this.i18nResolver = i18nResolver;
     }
+
 
     public TextField createTextField(String property) {
         final String caption = getCaption(property);

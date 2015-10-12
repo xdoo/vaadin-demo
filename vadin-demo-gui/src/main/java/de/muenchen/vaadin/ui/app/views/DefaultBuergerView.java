@@ -7,16 +7,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.local.Buerger;
-import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
-import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
-import de.muenchen.vaadin.guilib.components.actions.EntityActions;
-import de.muenchen.vaadin.guilib.components.actions.EntitySingleActions;
-import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.ui.app.MainUI;
-import de.muenchen.vaadin.ui.components.buttons.node.BuergerCreateButton;
-import de.muenchen.vaadin.ui.components.buttons.node.BuergerSaveButton;
-import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerSingleActions;
-import de.muenchen.vaadin.ui.components.forms.read.SelectedBuergerForm;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
 import javax.annotation.PostConstruct;
@@ -76,31 +67,6 @@ public abstract class DefaultBuergerView extends VerticalLayout implements View{
         //HorizontalLayout head = new HorizontalLayout(pageTitle);
         addComponent(pageTitle);
 
-//        SelectedBuergerForm readForm = new SelectedBuergerForm(controller,controller.getEventbus());
-        SelectedBuergerForm form = new SelectedBuergerForm(controller, controller.getEventbus());
-        addComponent(form);
-        final BuergerCreateButton c = new BuergerCreateButton(controller, controller.getEventbus());
-        c.setBuergerSupplier(form::getBuerger);
-        addComponent(c);
-        final BuergerSaveButton update = new BuergerSaveButton(controller, controller.getEventbus());
-        update.setBuergerSupplier(form::getBuerger);
-        addComponent(update);
-
-
-
-        final BuergerSingleActions buergerAction = new BuergerSingleActions(form::getBuerger, controller.getEventbus());
-        final EntitySingleActions buergerActiun = new EntitySingleActions<>(form::getBuerger, controller.getEventbus(), Buerger.class);
-
-        final NavigateActions navigateActions = new NavigateActions(controller.getNavigator(), controller.getEventbus(), BuergerDetailView.NAME);
-        final EntityActions entityActions = new EntityActions(controller.getEventbus(), Buerger.class);
-
-        final ActionButton asdf = new ActionButton(controller, SimpleAction.back);
-
-        asdf.addClickListener(buergerAction::create);
-        asdf.addClickListener(entityActions::readList);
-        asdf.addClickListener(navigateActions::navigate);
-
-        addComponent(asdf);
     }
 
     private List<Buerger> getBuergers() {
