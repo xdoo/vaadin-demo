@@ -9,7 +9,7 @@ import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerSingleActions;
-import de.muenchen.vaadin.ui.components.forms.read.SelectedBuergerForm;
+import de.muenchen.vaadin.ui.components.forms.selected.SelectedBuergerForm;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Type;

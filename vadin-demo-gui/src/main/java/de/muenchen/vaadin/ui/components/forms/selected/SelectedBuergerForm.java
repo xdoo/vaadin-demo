@@ -1,4 +1,4 @@
-package de.muenchen.vaadin.ui.components.forms.read;
+package de.muenchen.vaadin.ui.components.forms.selected;
 
 import de.muenchen.eventbus.selector.entity.ResponseEntityKey;
 import de.muenchen.vaadin.demo.api.local.Buerger;
