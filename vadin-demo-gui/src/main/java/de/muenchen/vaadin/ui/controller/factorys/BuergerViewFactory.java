@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.bus.Event;
 
-import javax.annotation.PostConstruct;
 import java.io.Serializable;
 
 /**
@@ -33,11 +32,6 @@ public class BuergerViewFactory implements Serializable {
     @Autowired
     EventBus eventBus;
     private BuergerViewController controller;
-
-    @PostConstruct
-    public void init() {
-        // TODO REMOVE eventBus.on(Key.REFRESH.toSelector(), this);
-    }
 
 
     //////////////////////////////////////////////
