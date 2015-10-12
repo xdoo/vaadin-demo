@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 
 /**
  * Anbindung an die Permissions, die in der DB stehen.
@@ -49,7 +48,7 @@ public class CustomLdapAuthoritiesPopulator implements LdapAuthoritiesPopulator 
 
         User user = userRepository.findFirstByUsername(username);
 
-        user.getAuthorities().stream().forEach(userAuthority -> {
+        user.getAuthoritys().stream().forEach(userAuthority -> {
 
             String authorityName = userAuthority.getAuthority();
 

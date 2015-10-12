@@ -34,7 +34,7 @@ public class SecurityRestClientImpl implements SecurityRestClient {
 
         User user = userRepository.findFirstByUsername(principal.getUsername());
 
-        user.getAuthorities()
+        user.getAuthoritys()
                 .stream()
                 .peek(authority1 -> {
                     // Add Authorities
