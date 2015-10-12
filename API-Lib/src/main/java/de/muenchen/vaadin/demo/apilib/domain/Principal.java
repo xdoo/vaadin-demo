@@ -9,14 +9,9 @@ import java.util.List;
  */
 public class Principal {
     
-    private final String username;
-    private final List<String> roles = new ArrayList<>();
-    private final List<String> permissions = new ArrayList<>();
-
-    public Principal(String username) {
-        this.username = username;
-    }
-
+    private String username;
+    private List<String> roles = new ArrayList<>();
+    private List<String> permissions = new ArrayList<>();
 
     public List<String> getRoles() {
         return roles;
@@ -29,5 +24,16 @@ public class Principal {
     public String getUsername() {
         return username;
     }
-    
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
+    }
+
+    public void setPermissions(List<String> permissions) {
+        this.permissions = permissions;
+    }
 }
