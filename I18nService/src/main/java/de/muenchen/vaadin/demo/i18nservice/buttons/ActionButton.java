@@ -3,7 +3,9 @@ package de.muenchen.vaadin.demo.i18nservice.buttons;
 import com.vaadin.ui.Button;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.*;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Component;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Type;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getFormPath;
 
 /**
  * Provides a styled Button that represents a specific action.
