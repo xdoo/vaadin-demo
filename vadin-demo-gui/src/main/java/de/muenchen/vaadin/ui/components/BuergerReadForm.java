@@ -20,7 +20,9 @@ import org.slf4j.LoggerFactory;
 import reactor.bus.Event;
 import reactor.fn.Consumer;
 
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.*;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Type;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getEntityFieldPath;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getFormPath;
 
 /**
  *

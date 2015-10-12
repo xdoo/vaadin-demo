@@ -1,7 +1,6 @@
 package de.muenchen.vaadin.demo.i18nservice.buttons;
 
 import com.vaadin.ui.Button;
-import com.vaadin.ui.CustomComponent;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Component;
@@ -14,10 +13,7 @@ import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getFormPath;
  * @author p.mueller
  * @version 1.0
  */
-public class ActionButton extends CustomComponent {
-
-    /** The Button wrapped by this ActionButton. */
-    private final Button button;
+public class ActionButton extends Button {
 
     /**
      * Create a new ActionButton with the specified label, context, action and //TODO navigateTo String.
@@ -30,11 +26,10 @@ public class ActionButton extends CustomComponent {
      * @param navigateTo //TODO used to generate the id
      */
     public ActionButton(final String label, final I18nResolver context, final Action action,final String navigateTo) {
-        Button button = new Button(label);
+        super(label);
 
-        configureButton(context, action, navigateTo, button);
+        configureButton(context, action, navigateTo);
 
-        this.button = button;
     }
 
     /**
@@ -43,15 +38,13 @@ public class ActionButton extends CustomComponent {
      * @param context //TODO used to generate the id
      * @param action Action the button should represent (is styled for).
      * @param navigateTo //TODO used to generate the id
-     * @param button The button to configure.
      */
-    private void configureButton(I18nResolver context, Action action, String navigateTo, Button button) {
-        action.getIcon().ifPresent(button::setIcon);
-        action.getClickShortCut().ifPresent(button::setClickShortcut);
-        action.getStyleNames().forEach(style -> button.setStyleName(style, true));
-        button.setId(action.getID(navigateTo, context));
+    private void configureButton(I18nResolver context, Action action, String navigateTo) {
+        action.getIcon().ifPresent(this::setIcon);
+        action.getClickShortCut().ifPresent(this::setClickShortcut);
+        action.getStyleNames().forEach(style -> this.setStyleName(style, true));
+        this.setId(action.getID(navigateTo, context));
 
-        setCompositionRoot(button);
     }
 
     /**
@@ -77,21 +70,5 @@ public class ActionButton extends CustomComponent {
     private static String resolveLabel(Action action, I18nResolver context) {
         final String labelPath = getFormPath(action, Component.button, Type.label);
         return context.resolveRelative(labelPath);
-    }
-
-    /**
-     * Get the Button.
-     * @return the button.
-     */
-    public Button getButton() {
-        return this.button;
-    }
-
-    /**
-     * Add a {@link com.vaadin.ui.Button.ClickListener} to this button.
-     * @param clickListener to be added.
-     */
-    public void addClickListener(Button.ClickListener clickListener) {
-        button.addClickListener(clickListener);
     }
 }

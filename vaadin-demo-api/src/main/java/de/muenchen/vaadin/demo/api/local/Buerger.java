@@ -3,7 +3,6 @@ package de.muenchen.vaadin.demo.api.local;
 import de.muenchen.vaadin.demo.api.domain.Augenfarbe;
 import org.springframework.hateoas.ResourceSupport;
 
-import javax.swing.plaf.basic.BasicIconFactory;
 import java.util.Date;
 import java.util.stream.Stream;
 
@@ -137,8 +136,8 @@ public class Buerger extends ResourceSupport {
             return field;
         }
 
-        public static Object[] getProperties() {
-            return Stream.of(values()).filter(Field::isField).map(Field::name).toArray();
+        public static String[] getProperties() {
+            return Stream.of(values()).filter(Field::isField).map(Field::name).toArray(String[]::new);
         }
     }
 
