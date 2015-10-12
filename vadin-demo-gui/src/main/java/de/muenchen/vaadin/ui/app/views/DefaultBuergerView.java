@@ -16,7 +16,7 @@ import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.components.buttons.node.BuergerCreateButton;
 import de.muenchen.vaadin.ui.components.buttons.node.BuergerSaveButton;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerSingleActions;
-import de.muenchen.vaadin.ui.components.forms.read.BuergerReadForm;
+import de.muenchen.vaadin.ui.components.forms.read.BuergerROForm;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
 import javax.annotation.PostConstruct;
@@ -76,8 +76,8 @@ public abstract class DefaultBuergerView extends VerticalLayout implements View{
         //HorizontalLayout head = new HorizontalLayout(pageTitle);
         addComponent(pageTitle);
 
-//        BuergerReadForm readForm = new BuergerReadForm(controller,controller.getEventbus());
-        BuergerReadForm form = new BuergerReadForm(controller, controller.getEventbus());
+//        BuergerROForm readForm = new BuergerROForm(controller,controller.getEventbus());
+        BuergerROForm form = new BuergerROForm(controller, controller.getEventbus());
         addComponent(form);
         final BuergerCreateButton c = new BuergerCreateButton(controller, controller.getEventbus());
         c.setBuergerSupplier(form::getBuerger);
@@ -91,7 +91,7 @@ public abstract class DefaultBuergerView extends VerticalLayout implements View{
         final BuergerSingleActions buergerAction = new BuergerSingleActions(form::getBuerger, controller.getEventbus());
         final EntitySingleActions buergerActiun = new EntitySingleActions<>(form::getBuerger, controller.getEventbus(), Buerger.class);
 
-        final NavigateActions navigateActions = new NavigateActions(controller.getNavigator(), BuergerDetailView.NAME);
+        final NavigateActions navigateActions = new NavigateActions(controller.getNavigator(), controller.getEventbus(), BuergerDetailView.NAME);
         final EntityActions entityActions = new EntityActions(controller.getEventbus(), Buerger.class);
 
         final ActionButton asdf = new ActionButton(controller, SimpleAction.back);

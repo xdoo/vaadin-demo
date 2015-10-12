@@ -46,7 +46,7 @@ public class BuergerForm extends BaseComponent {
         return Arrays.asList(vorname, nachname, augenfarbe, geburtsdatum);
     }
 
-    public BeanFieldGroup<Buerger> getBinder() {
+    private BeanFieldGroup<Buerger> getBinder() {
         return binder;
     }
 

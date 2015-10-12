@@ -25,7 +25,7 @@ public class BuergerCreateButton extends BaseComponent {
         create = new ActionButton(getI18nResolver(), SimpleAction.create);
 
         String navigateTo = "";
-        final NavigateActions navigateActions = new NavigateActions(null, navigateTo);
+        final NavigateActions navigateActions = new NavigateActions(null, null, navigateTo);
         final BuergerSingleActions buergerSingleActions = new BuergerSingleActions(buerger, eventBus);
 
         create.addClickListener(buergerSingleActions::create);

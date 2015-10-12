@@ -20,4 +20,8 @@ public class ResponseEntityKey extends BaseEntityKey {
     public ResponseEntityKey(Class entityClass) {
         super(entityClass);
     }
+
+    public ResponseEntityKey() {
+        super(null);
+    }
 }

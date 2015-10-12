@@ -30,7 +30,7 @@ public class FormUtil {
         TextField tf = (TextField) getBinder().buildAndBind(caption, property);
         tf.setNullRepresentation(NULL_REPRESENTATION);
         tf.setInputPrompt(prompt);
-        tf.setId(String.format("%s_%s_FIELD", getI18nResolver().getBasePath(), property).toUpperCase());
+        //tf.setId(String.format("%s_%s_FIELD", getI18nResolver().getBasePath(), property).toUpperCase());
         return tf;
     }
 
@@ -69,7 +69,7 @@ public class FormUtil {
         final String caption = getCaption(property);
 
         DateField df = (DateField) binder.buildAndBind(caption, property);
-        df.setId(String.format("%s_%s_DATEFIELD", getI18nResolver().getBasePath(), property).toUpperCase());
+        //df.setId(String.format("%s_%s_DATEFIELD", getI18nResolver().getBasePath(), property).toUpperCase());
 
         return df;
     }

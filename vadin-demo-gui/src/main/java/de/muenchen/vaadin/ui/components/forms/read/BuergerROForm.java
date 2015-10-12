@@ -10,17 +10,18 @@ import reactor.bus.EventBus;
 /**
  * Created by p.mueller on 08.10.15.
  */
-public class BuergerReadForm extends BuergerForm {
+public class BuergerROForm extends BuergerForm {
 
     public static final Class<Buerger> ENTITY_CLASS = Buerger.class;
 
-    public BuergerReadForm(I18nResolver i18nResolver, EventBus eventBus) {
+    public BuergerROForm(I18nResolver i18nResolver, EventBus eventBus) {
         super(i18nResolver, eventBus);
         setReadOnly(true);
         getEventBus().on(new ResponseEntityKey(ENTITY_CLASS).toSelector(), this::update);
     }
 
     private void update(reactor.bus.Event<?> event) {
+        System.out.println(this.toString() + System.currentTimeMillis());
         final BuergerDatastore data = (BuergerDatastore) event.getData();
         data.getSelectedBuerger().ifPresent(this::setBuerger);
     }

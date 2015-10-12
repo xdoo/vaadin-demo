@@ -12,16 +12,16 @@ public abstract class BaseEntityKey implements Keyable {
     /**
      * The class of the entity the key is for.
      */
-    final Class entityClass;
+    final private Class entityClass;
 
     /**
      * Create a new Key for the entity by class.
-     * The class cannot be null.
+     * <p/>
+     * If the class is null it matches any class.
      *
-     * @param entityClass The non-null class of an Entity.
+     * @param entityClass The class of an Entity.
      */
     public BaseEntityKey(Class entityClass) {
-        if (entityClass == null) throw new IllegalArgumentException("EntityClass can't be null.");
         this.entityClass = entityClass;
     }
 
@@ -32,7 +32,7 @@ public abstract class BaseEntityKey implements Keyable {
 
         BaseEntityKey baseEntityKey = (BaseEntityKey) o;
 
-        return entityClass.equals(baseEntityKey.entityClass);
+        return entityClass == null || baseEntityKey.entityClass == null || entityClass.equals(baseEntityKey.entityClass);
 
     }
 
