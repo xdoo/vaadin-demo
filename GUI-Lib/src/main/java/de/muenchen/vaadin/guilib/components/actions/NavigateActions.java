@@ -1,4 +1,4 @@
-package de.muenchen.vaadin.ui.components.buttons.node.listener;
+package de.muenchen.vaadin.guilib.components.actions;
 
 import com.vaadin.navigator.Navigator;
 import com.vaadin.ui.Button;
