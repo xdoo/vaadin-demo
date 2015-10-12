@@ -16,6 +16,7 @@ import de.muenchen.vaadin.guilib.components.GenericSuccessNotification;
 import de.muenchen.vaadin.guilib.controller.EntityController;
 import de.muenchen.vaadin.guilib.services.MessageService;
 import de.muenchen.vaadin.guilib.util.VaadinUtil;
+import de.muenchen.vaadin.services.BuergerI18nResolver;
 import de.muenchen.vaadin.services.BuergerService;
 import de.muenchen.vaadin.services.model.BuergerDatastore;
 import de.muenchen.vaadin.ui.app.MainUI;
@@ -48,27 +49,39 @@ import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getNotificationPath;
 @SpringComponent
 @UIScope
 public class BuergerViewController implements Serializable, EntityController {
+public class BuergerViewController implements Serializable {
 
-    // TODO entweder hier oder im I18nServiceConfigImpl angeben
-    public static final String I18N_BASE_PATH = "buerger";
     private static final long serialVersionUID = 1L;
-    /** Logger */
+    /**
+     * Logger
+     */
     private static final Logger LOG = LoggerFactory.getLogger(BuergerViewController.class);
-    /** Die Service Klasse */
+    /**
+     * Die Service Klasse
+     */
     private final BuergerService buergerService;
-    /** Model der Daten für den Eventbus */
+    /**
+     * Model der Daten für den Eventbus
+     */
     private final BuergerDatastore model = new BuergerDatastore();
-    /** Werkzeuge für Vaadin */
+    /**
+     * Werkzeuge für Vaadin
+     */
     private final VaadinUtil util;
-    /** Event Bus zur Kommunikation */
+    /**
+     * Event Bus zur Kommunikation
+     */
     @Autowired
     private EventBus eventbus;
-    /** {@link MessageService} zur Auflösung der Platzhalter */
     @Autowired
-    private MessageService msg;
-    /** {@link UI} {@link Navigator} */
+    private BuergerI18nResolver resolver;
+    /**
+     * {@link UI} {@link Navigator}
+     */
     private Navigator navigator;
-    /** BuergerViewFactory zum erstellen der Components */
+    /**
+     * BuergerViewFactory zum erstellen der Components
+     */
     @Autowired
     private BuergerViewFactory buergerViewFactory;
 
@@ -125,7 +138,7 @@ public class BuergerViewController implements Serializable, EntityController {
     // Service Operations //
     ////////////////////////
 
-    private void releaseKind(Buerger kind) {
+    private boolean releaseKind(Buerger kind) {
         Link link = getModel().getSelectedBuerger().get().getLink(Buerger.Rel.kinder.name());
         List<Link> kinder = buergerService.findAll(link)
                 .stream()
@@ -133,15 +146,16 @@ public class BuergerViewController implements Serializable, EntityController {
                 .filter(id -> !id.equals(kind.getId()))
                 .collect(Collectors.toList());
 
-        buergerService.setRelations(link, kinder);
+        return buergerService.setRelations(link, kinder);
     }
 
-    private void releasePartner() {
+    private boolean releasePartner(Buerger event) {
         Link link = getModel().getSelectedBuerger().get().getLink(Buerger.Rel.partner.name());
-        buergerService.delete(link);
+        return buergerService.delete(link);
+
     }
 
-    private void addBuergerKind(Buerger kindEntity) {
+    private boolean addBuergerKind(Buerger kindEntity) {
         Link link = getModel().getSelectedBuerger().get().getLink(Buerger.Rel.kinder.name());
         List<Link> kinder = Stream.concat(
                 buergerService.findAll(link)
@@ -151,12 +165,12 @@ public class BuergerViewController implements Serializable, EntityController {
 
                 .collect(Collectors.toList());
 
-        buergerService.setRelations(link, kinder);
+        return buergerService.setRelations(link, kinder);
     }
 
-    private void setBuergerPartner(Buerger partnerEntity) {
+    private boolean setBuergerPartner(Buerger partnerEntity) {
         Link link = getModel().getSelectedBuerger().get().getLink(Buerger.Rel.partner.name());
-        buergerService.setRelation(link, partnerEntity.getId());
+        return buergerService.setRelation(link, partnerEntity.getId());
     }
 
     private List<Buerger> queryBuerger() {
@@ -210,15 +224,15 @@ public class BuergerViewController implements Serializable, EntityController {
         final Buerger.Rel rel = Buerger.Rel.valueOf(association.getRel());
         if (Buerger.Rel.kinder == rel) {
             Buerger buerger = (Buerger) association.getAssociation();
-            releaseKind(buerger);
-            getModel().getSelectedBuergerKinder().removeItem(buerger);
+            if (releaseKind(buerger))
+                getModel().getSelectedBuergerKinder().removeItem(buerger);
         }
         if (Buerger.Rel.partner == rel) {
-            releasePartner();
-            getModel().getSelectedBuergerPartner().removeAllItems();
+            Buerger buerger = (Buerger) association.getAssociation();
+            if (releasePartner(buerger))
+                getModel().getSelectedBuergerPartner().removeItem(buerger);
         }
 
-        showNotification(NotificationType.success, SimpleAction.release, rel);
         notifyComponents();
     }
 
@@ -247,8 +261,8 @@ public class BuergerViewController implements Serializable, EntityController {
             if (buerger.getId() == null) {
                 buerger = buergerService.create(buerger);
             }
-            addBuergerKind(buerger);
-            getModel().getSelectedBuergerKinder().addBean(buerger);
+            if (addBuergerKind(buerger))
+                getModel().getSelectedBuergerKinder().addBean(buerger);
         }
         if (Buerger.Rel.partner == rel) {
             Buerger buerger = (Buerger) association.getAssociation();
@@ -256,12 +270,11 @@ public class BuergerViewController implements Serializable, EntityController {
                 // If Buerger has no ID he has to be created in the backend
                 buerger = buergerService.create(buerger);
             }
-            setBuergerPartner(buerger);
-            getModel().getSelectedBuergerPartner().addBean(buerger);
+            if (setBuergerPartner(buerger))
+                getModel().getSelectedBuergerPartner().addBean(buerger);
         }
 
         refreshModelAssociations();
-        showNotification(NotificationType.success, SimpleAction.add, rel);
         notifyComponents();
     }
 
@@ -282,7 +295,6 @@ public class BuergerViewController implements Serializable, EntityController {
 
         getModel().getBuergers().addBean(fromREST);
         notifyComponents();
-        showNotification(NotificationType.success, SimpleAction.create);
     }
 
 
@@ -301,19 +313,22 @@ public class BuergerViewController implements Serializable, EntityController {
         final Buerger buerger = (Buerger) event.getData();
         if (buerger.getId() == null)
             throw new IllegalArgumentException("The Buerger must have an ID.");
-        buergerService.delete(buerger.getId());
 
-        getModel().getSelectedBuerger().ifPresent(selectedBuerger -> {
-            if (selectedBuerger.equals(buerger)) {
-                getModel().setSelectedBuerger(null);
-                getModel().getSelectedBuergerKinder().removeAllItems();
-                getModel().getSelectedBuergerPartner().removeAllItems();
-            }
-        });
+        if (buergerService.delete(buerger.getId())) {
 
-        getModel().getBuergers().removeItem(buerger);
-        notifyComponents();
-        showNotification(NotificationType.success, SimpleAction.delete);
+            getModel().getSelectedBuerger().ifPresent(selectedBuerger -> {
+                if (selectedBuerger.equals(buerger)) {
+                    getModel().setSelectedBuerger(null);
+                    getModel().getSelectedBuergerKinder().removeAllItems();
+                    getModel().getSelectedBuergerPartner().removeAllItems();
+                }
+            });
+
+            getModel().getBuergers().removeItem(buerger);
+            notifyComponents();
+        } else {
+            //Fehler...
+        }
     }
 
     /**
@@ -336,7 +351,6 @@ public class BuergerViewController implements Serializable, EntityController {
         refreshModelSelected();
         getModel().getBuergers().addBean(fromREST);
         notifyComponents();
-        showNotification(NotificationType.success, SimpleAction.update);
     }
 
     /**
@@ -450,63 +464,4 @@ public class BuergerViewController implements Serializable, EntityController {
         return new ResponseEntityKey(Buerger.class);
     }
 
-    private void showNotification(NotificationType type, SimpleAction action, Buerger.Rel relation) {
-        GenericSuccessNotification succes = new GenericSuccessNotification(
-                resolveRelative(getNotificationPath(type, action, Type.label, relation.name())),
-                resolveRelative(getNotificationPath(type, action, Type.text, relation.name())));
-        succes.show(Page.getCurrent());
-    }
-
-    private void showNotification(NotificationType type, SimpleAction action) {
-        GenericSuccessNotification succes = new GenericSuccessNotification(
-                resolveRelative(getNotificationPath(type, action, Type.label)),
-                resolveRelative(getNotificationPath(type, action, Type.text)));
-        succes.show(Page.getCurrent());
-    }
-
-    ////////////////////////
-    // I18n Operations //
-    ////////////////////////
-
-    /**
-     * Resolve the path (e.g. "asdf.label").
-     *
-     * @param path the path.
-     * @return the resolved String.
-     */
-    @Override
-    public String resolve(String path) {
-        return msg.get(path);
-    }
-
-    /**
-     * Resolve the relative path (e.g. "asdf.label").
-     * <p>
-     * The base path will be appended at start and then read from the properties.
-     *
-     * @param relativePath the path to add to the base path.
-     * @return the resolved String.
-     */
-    @Override
-    public String resolveRelative(String relativePath) {
-        return msg.get(I18N_BASE_PATH + "." + relativePath);
-    }
-
-    @Override
-    public String getBasePath() {
-        return I18N_BASE_PATH;
-    }
-
-    /**
-     * Resolve the relative path (e.g. ".asdf.label") to a icon.
-     * <p>
-     * The base path will be appended at start and then read from the properties.
-     *
-     * @param relativePath the path to add to the base path.
-     * @return the resolved String.
-     */
-    @Override
-    public FontAwesome resolveIcon(String relativePath) {
-        return msg.getFontAwesome(I18N_BASE_PATH + "." + relativePath + ".icon");
-    }
 }

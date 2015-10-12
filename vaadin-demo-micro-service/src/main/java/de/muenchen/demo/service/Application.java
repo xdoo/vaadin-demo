@@ -1,7 +1,7 @@
 package de.muenchen.demo.service;
 
-import de.muenchen.demo.service.security.AuthenticationConfiguratorAdapter;
 import de.muenchen.eventbus.EventBus;
+import de.muenchen.security.configurator.AuthenticationConfiguratorAdapter;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 import org.slf4j.Logger;
@@ -18,14 +18,13 @@ import org.springframework.hateoas.config.EnableHypermediaSupport;
 import org.springframework.security.config.annotation.authentication.configurers.GlobalAuthenticationConfigurerAdapter;
 
 @Configuration
-@ComponentScan(basePackages = {"de.muenchen.demo.service", "de.muenchen.auditing"})
-@EntityScan(basePackages = {"de.muenchen.demo.service", "de.muenchen.auditing"})
-@EnableJpaRepositories(basePackages = {"de.muenchen.demo.service", "de.muenchen.auditing"})
+@ComponentScan(basePackages = {"de.muenchen.demo.service", "de.muenchen.auditing", "de.muenchen.security"})
+@EntityScan(basePackages = {"de.muenchen.demo.service", "de.muenchen.auditing", "de.muenchen.security"})
+@EnableJpaRepositories(basePackages = {"de.muenchen.demo.service", "de.muenchen.auditing", "de.muenchen.security"})
 @EnableAutoConfiguration
 @EnableEurekaClient
 @EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)
 public class Application {
-
     private static final Logger LOG
             = LoggerFactory.getLogger(Application.class);
 

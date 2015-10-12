@@ -5,14 +5,14 @@
  */
 package de.muenchen.demo.service.domain;
 
-import java.util.HashSet;
-import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import de.muenchen.security.entities.SecurityEntity;
 import org.hibernate.search.annotations.Indexed;
 
 /**
@@ -30,7 +30,6 @@ public class CompanyBaseInfo extends SecurityEntity {
     private String adresse;
     
     @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
-    private Set<Account> accounts= new HashSet<>();
 
     public String getName() {
         return name;
@@ -47,15 +46,4 @@ public class CompanyBaseInfo extends SecurityEntity {
     public void setAdresse(String adresse) {
         this.adresse = adresse;
     }
-
-    public Set<Account> getAccounts() {
-        return accounts;
-    }
-
-    public void setAccounts(Set<Account> accounts) {
-        this.accounts = accounts;
-    }
-
-
-    
 }

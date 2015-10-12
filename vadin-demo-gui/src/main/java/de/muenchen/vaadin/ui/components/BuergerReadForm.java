@@ -12,6 +12,7 @@ import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
+import de.muenchen.vaadin.services.BuergerI18nResolver;
 import de.muenchen.vaadin.services.model.BuergerDatastore;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.slf4j.Logger;
@@ -34,6 +35,7 @@ public class BuergerReadForm extends CustomComponent implements Consumer<Event<B
 
     final BeanFieldGroup<Buerger> binder = new BeanFieldGroup<Buerger>(Buerger.class);
     final BuergerViewController controller;
+    final BuergerI18nResolver resolver;
     
     private final String navigateToUpdate;
     private final String navigateBack;
@@ -48,9 +50,10 @@ public class BuergerReadForm extends CustomComponent implements Consumer<Event<B
      * @param navigateToUpdate
      * @param navigateBack
      */
-    public BuergerReadForm(BuergerViewController controller, final String navigateToUpdate, String navigateBack) {
+    public BuergerReadForm(BuergerViewController controller, BuergerI18nResolver resolver, final String navigateToUpdate, String navigateBack) {
         
         this.controller = controller;
+        this.resolver = resolver;
         this.navigateToUpdate = navigateToUpdate;
         this.navigateBack = navigateBack;
 
@@ -70,36 +73,36 @@ public class BuergerReadForm extends CustomComponent implements Consumer<Event<B
         layout.setMargin(true);
         
         // headline
-        Label headline = new Label(controller.resolveRelative(getFormPath(SimpleAction.read, I18nPaths.Component.headline, Type.label)));
+        Label headline = new Label(resolver.resolveRelative(getFormPath(SimpleAction.read, I18nPaths.Component.headline, Type.label)));
         headline.addStyleName(ValoTheme.LABEL_H3);
         layout.addComponent(headline);
 
         layout.addComponent(controller.getUtil().createFormTextField(binder,
-                controller.resolveRelative(getEntityFieldPath(Buerger.Field.vorname.name(), Type.label)),
-                controller.resolveRelative(getEntityFieldPath(Buerger.Field.vorname.name(), Type.input_prompt)),
-                Buerger.Field.vorname.name(), BuergerViewController.I18N_BASE_PATH));
+                resolver.resolveRelative(getEntityFieldPath(Buerger.Field.vorname.name(), Type.label)),
+                resolver.resolveRelative(getEntityFieldPath(Buerger.Field.vorname.name(), Type.input_prompt)),
+                Buerger.Field.vorname.name(), BuergerI18nResolver.I18N_BASE_PATH));
         layout.addComponent(controller.getUtil().createFormTextField(binder,
-                controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.label)),
-                controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.input_prompt)),
-                Buerger.Field.nachname.name(), BuergerViewController.I18N_BASE_PATH));
+                resolver.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.label)),
+                resolver.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), Type.input_prompt)),
+                Buerger.Field.nachname.name(), BuergerI18nResolver.I18N_BASE_PATH));
         layout.addComponent(controller.getUtil().createFormComboBox(binder,
-                controller.resolveRelative(getEntityFieldPath(Buerger.Field.augenfarbe.name(), Type.label)),
+                resolver.resolveRelative(getEntityFieldPath(Buerger.Field.augenfarbe.name(), Type.label)),
                 Buerger.Field.augenfarbe.name(),
                 Augenfarbe.class));
         layout.addComponent(controller.getUtil().createFormDateField(
-                binder, controller.resolveRelative(getEntityFieldPath(Buerger.Field.geburtsdatum.name(), Type.label)),
-                Buerger.Field.geburtsdatum.name(), BuergerViewController.I18N_BASE_PATH));
+                binder, resolver.resolveRelative(getEntityFieldPath(Buerger.Field.geburtsdatum.name(), Type.label)),
+                Buerger.Field.geburtsdatum.name(), BuergerI18nResolver.I18N_BASE_PATH));
         
         // auf 'read only setzen
         this.binder.setReadOnly(true);
         layout.addComponent(buttonLayout);
         // die Schaltfläche zum Aktualisieren
-        ActionButton backButton = new ActionButton(controller, SimpleAction.back, this.navigateBack);
+        ActionButton backButton = new ActionButton(resolver, SimpleAction.back, this.navigateBack);
         backButton.addClickListener(clickEvent -> controller.getNavigator().navigateTo(getNavigateBack()));
         buttonLayout.addComponent(backButton);
 
         // die Schaltfläche zum Bearbeiten
-        ActionButton updateButton = new ActionButton(controller, SimpleAction.update,this.navigateToUpdate);
+        ActionButton updateButton = new ActionButton(resolver, SimpleAction.update,this.navigateToUpdate);
         updateButton.addClickListener(clickEvent -> {
             controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED), reactor.bus.Event.wrap(binder.getItemDataSource().getBean()));
             controller.getNavigator().navigateTo(navigateToUpdate);

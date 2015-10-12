@@ -1,4 +1,4 @@
-package de.muenchen.demo.service.security;
+package de.muenchen.security;
 
 import de.muenchen.vaadin.demo.apilib.domain.Principal;
 import de.muenchen.vaadin.demo.apilib.rest.SecurityRestClient;

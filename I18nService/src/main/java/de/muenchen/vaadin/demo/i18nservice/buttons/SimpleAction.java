@@ -29,8 +29,8 @@ public enum SimpleAction implements Action {
     delete(FontAwesome.TRASH_O, ShortcutAction.KeyCode.DELETE, ValoTheme.BUTTON_DANGER),
     cancel,
     copy(FontAwesome.COPY, ShortcutAction.KeyCode.INSERT),
+    association(FontAwesome.CHECK),
     add(FontAwesome.PLUS),
-    release(FontAwesome.TRASH_O),
     logout(FontAwesome.SIGN_OUT);
     
 
