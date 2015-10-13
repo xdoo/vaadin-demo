@@ -14,15 +14,15 @@ import java.util.function.Supplier;
  */
 public class EntityListActions<T> {
 
-    private final Supplier<List<T>> buergerSupplier;
+    private final Supplier<List<T>> entityListSupplier;
     private final EventBus eventBus;
     private final Class<T> entityClass;
 
 
-    public EntityListActions(Supplier<List<T>> buergerSupplier, Class<T> entityClass, EventBus eventBus) {
+    public EntityListActions(Supplier<List<T>> entityListSupplier, Class<T> entityClass, EventBus eventBus) {
         if (eventBus == null)
             throw new NullPointerException();
-        if (buergerSupplier == null)
+        if (entityListSupplier == null)
             throw new NullPointerException();
         if (entityClass == null)
             throw new NullPointerException();
@@ -30,7 +30,7 @@ public class EntityListActions<T> {
 
         this.entityClass = entityClass;
         this.eventBus = eventBus;
-        this.buergerSupplier = buergerSupplier;
+        this.entityListSupplier = entityListSupplier;
     }
 
     public void delete(Button.ClickEvent clickEvent) {
@@ -47,16 +47,16 @@ public class EntityListActions<T> {
 
     private void notifyRequest(RequestEvent delete) {
 
-        if (getBuerger() == null)
+        if (getEntityList() == null)
             throw new NullPointerException();
-        getBuerger().stream().forEach(buerger -> {
+        getEntityList().stream().forEach(buerger -> {
             final RequestEntityKey key = new RequestEntityKey(delete, getEntityClass());
             getEventBus().notify(key, Event.wrap(buerger));
         });
     }
 
-    public List<T> getBuerger() {
-        return buergerSupplier.get();
+    public List<T> getEntityList() {
+        return entityListSupplier.get();
     }
 
     public EventBus getEventBus() {
