@@ -39,15 +39,15 @@ public class BuergerViewFactory implements Serializable {
     //////////////////////////////////////////////
 
     public BuergerCreateForm generateCreateForm(String navigateTo, String navigateBack) {
-        return new BuergerCreateForm(controller, navigateTo, null, navigateBack);
+        return new BuergerCreateForm(controller, controller.getEventbus(), controller.getNavigator(), navigateTo, null, navigateBack);
     }
 
     public BuergerCreateForm generateCreateChildForm(String navigateTo, String navigateBack) {
-        return new BuergerCreateForm(controller, navigateTo, Buerger.Rel.kinder.name(), navigateBack);
+        return new BuergerCreateForm(controller, controller.getEventbus(), controller.getNavigator(), navigateTo, Buerger.Rel.kinder.name(), navigateBack);
     }
 
     public BuergerCreateForm generateCreatePartnerForm(String navigateTo, String navigateBack) {
-        return new BuergerCreateForm(controller, navigateTo, Buerger.Rel.partner.name(), navigateBack);
+        return new BuergerCreateForm(controller, controller.getEventbus(), controller.getNavigator(), navigateTo, Buerger.Rel.partner.name(), navigateBack);
     }
 
     /**
@@ -66,14 +66,14 @@ public class BuergerViewFactory implements Serializable {
         return new BuergerPartnerTab(controller, navigateToForDetail, navigateForCreate, navigateForAdd, navigateBack);
     }
 
-    public DemoSelectedBuergerUpdateForm generateUpdateForm(String navigateTo, String navigateBack) {
-        DemoSelectedBuergerUpdateForm form = new DemoSelectedBuergerUpdateForm(controller, navigateTo, navigateBack);
+    public SelectedBuergerUpdateForm generateUpdateForm(String navigateTo, String navigateBack) {
+        SelectedBuergerUpdateForm form = new SelectedBuergerUpdateForm(controller, navigateTo, navigateBack);
         controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
         return form;
     }
 
-    public DemoSelectedBuergerReadForm generateReadForm(String navigateToUpdate, String navigateBack) {
-        DemoSelectedBuergerReadForm form = new DemoSelectedBuergerReadForm(controller, navigateToUpdate, navigateBack);
+    public SelectedBuergerReadForm generateReadForm(String navigateToUpdate, String navigateBack) {
+        SelectedBuergerReadForm form = new SelectedBuergerReadForm(controller, navigateToUpdate, navigateBack);
         controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
         return form;
     }
