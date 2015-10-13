@@ -31,13 +31,11 @@ public class AuditingServiceProducer {
     private static final Logger LOG = LoggerFactory.getLogger(AuditingServiceProducer.class);
 
     private EntitySaveQueue queue;
-    private EventBus eventbus;
     private EntityManagerFactory entityManagerFactory;
 
     @Autowired
-    public AuditingServiceProducer(EntityManagerFactory entityManagerFactory, EventBus eventbus, AuditingUserRepository auditingUserRepository) {
+    public AuditingServiceProducer(EntityManagerFactory entityManagerFactory, AuditingUserRepository auditingUserRepository) {
         this.entityManagerFactory = entityManagerFactory;
-        this.eventbus = eventbus;
         queue = new EntitySaveQueue();
         this.init();
         new Thread(new AuditingServiceConsumer(auditingUserRepository, queue)).start();
