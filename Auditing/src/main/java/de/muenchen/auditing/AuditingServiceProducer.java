@@ -2,10 +2,14 @@ package de.muenchen.auditing;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.muenchen.eventbus.EventBus;
-import de.muenchen.eventbus.selector.entity.RequestEvent;
 import org.hibernate.event.service.spi.EventListenerRegistry;
-import org.hibernate.event.spi.*;
+import org.hibernate.event.spi.EventType;
+import org.hibernate.event.spi.PostCommitDeleteEventListener;
+import org.hibernate.event.spi.PostCommitInsertEventListener;
+import org.hibernate.event.spi.PostCommitUpdateEventListener;
+import org.hibernate.event.spi.PostDeleteEvent;
+import org.hibernate.event.spi.PostInsertEvent;
+import org.hibernate.event.spi.PostUpdateEvent;
 import org.hibernate.internal.SessionFactoryImpl;
 import org.hibernate.jpa.HibernateEntityManagerFactory;
 import org.hibernate.persister.entity.EntityPersister;
@@ -46,18 +50,18 @@ public class AuditingServiceProducer {
         return (Objects.nonNull(authentication) && authentication.isAuthenticated()) ? authentication.getName() : "Unauthenticated User";
     }
 
-    private String marshallEntityToJSON(AuditingEvent event) {
+    private String marshallEntityToJSON(Object entity) {
         ObjectMapper mapper = new ObjectMapper();
         String json;
 
         try {
-            json = mapper.writeValueAsString(event.getEntity());
+            json = mapper.writeValueAsString(entity);
         } catch (StackOverflowError err) {
             LOG.error("StackOverFlow occurred while Marshalling Entity. Make sure to use @JsonManagedReference and @JsonBackReference on circular dependencies.");
-            json = event.getEntity().toString();
+            json = entity.toString();
         } catch (JsonProcessingException e) {
-            LOG.error("Fehler beim JSON erstellen. Event war <" + event.getEventType() + ">. Fehlermeldung: " + e.getMessage());
-            json = event.getEntity().toString();
+            LOG.error("Fehler beim JSON erstellen. Fehlermeldung: " + e.getMessage());
+            json = entity.toString();
         }
 
         return json;
@@ -67,12 +71,12 @@ public class AuditingServiceProducer {
         this.registerListeners();
     }
 
-    private void pushToQueue(AuditingEvent event) {
+    private void pushToQueue(String event, Object data) {
         AuditingUserEntity entity = new AuditingUserEntity();
         entity.setUsername(getCurrentUsername());
         entity.setDate(new Date(System.currentTimeMillis()));
-        entity.setChangeType(event.getEventType().name());
-        entity.setEntity(marshallEntityToJSON(event));
+        entity.setChangeType(event);
+        entity.setEntity(marshallEntityToJSON(data));
 
         queue.put(entity);
     }
@@ -92,7 +96,7 @@ public class AuditingServiceProducer {
                     Object eventEntity = postLoadEvent.getEntity();
                     MUCAudited annotation = eventEntity.getClass().getAnnotation(MUCAudited.class);
                     if (shouldBeAudited(MUCAudited.READ, annotation)) {
-                        pushToQueue(new AuditingEvent(RequestEvent.READ, eventEntity));
+                        pushToQueue(MUCAudited.READ, eventEntity);
                     }
                 });
         registry.getEventListenerGroup(EventType.POST_DELETE)
@@ -106,7 +110,7 @@ public class AuditingServiceProducer {
                         Object eventEntity = postDeleteEvent.getEntity();
                         MUCAudited annotation = eventEntity.getClass().getAnnotation(MUCAudited.class);
                         if (shouldBeAudited(MUCAudited.DELETE, annotation)) {
-                            pushToQueue(new AuditingEvent(RequestEvent.DELETE, eventEntity));
+                            pushToQueue(MUCAudited.DELETE, eventEntity);
                         }
                     }
 
@@ -126,7 +130,7 @@ public class AuditingServiceProducer {
                         Object eventEntity = postInsertEvent.getEntity();
                         MUCAudited annotation = eventEntity.getClass().getAnnotation(MUCAudited.class);
                         if (shouldBeAudited(MUCAudited.CREATE, annotation)) {
-                            pushToQueue(new AuditingEvent(RequestEvent.CREATE, eventEntity));
+                            pushToQueue(MUCAudited.CREATE, eventEntity);
                         }
                     }
 
@@ -146,7 +150,7 @@ public class AuditingServiceProducer {
                         Object eventEntity = postUpdateEvent.getEntity();
                         MUCAudited annotation = eventEntity.getClass().getAnnotation(MUCAudited.class);
                         if (shouldBeAudited(MUCAudited.UPDATE, annotation)) {
-                            pushToQueue(new AuditingEvent(RequestEvent.UPDATE, eventEntity));
+                            pushToQueue(MUCAudited.UPDATE, eventEntity);
                         }
                     }
 

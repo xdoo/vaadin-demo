@@ -140,7 +140,7 @@
         <dependency>
             <groupId>de.muenchen</groupId>
             <artifactId>Auditing</artifactId>
-            <version>1.0.1-Final</version>
+            <version>1.1.0-Final</version>
         </dependency>
         <dependency>
             <groupId>de.muenchen</groupId>
