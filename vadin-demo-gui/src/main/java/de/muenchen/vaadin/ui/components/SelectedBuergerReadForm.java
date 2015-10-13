@@ -7,9 +7,9 @@ import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
+import de.muenchen.vaadin.guilib.controller.EntityController;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerSingleActions;
 import de.muenchen.vaadin.ui.components.forms.selected.SelectedBuergerForm;
-import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.*;
 
@@ -18,7 +18,6 @@ import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.*;
  */
 public class SelectedBuergerReadForm extends SelectedBuergerForm {
 
-    private final BuergerViewController controller;
     private final String navigateToUpdate;
     private final String navigateBack;
 
@@ -30,11 +29,10 @@ public class SelectedBuergerReadForm extends SelectedBuergerForm {
      * @param navigateToUpdate
      * @param navigateBack
      */
-    public SelectedBuergerReadForm(BuergerViewController controller, final String navigateToUpdate, String navigateBack) {
-        super(controller, controller.getEventbus());
+    public SelectedBuergerReadForm(EntityController controller, final String navigateToUpdate, String navigateBack) {
+        super(controller);
         setReadOnly(true);
 
-        this.controller = controller;
         this.navigateToUpdate = navigateToUpdate;
         this.navigateBack = navigateBack;
 
@@ -61,10 +59,6 @@ public class SelectedBuergerReadForm extends SelectedBuergerForm {
         getFormLayout().addComponent(buttons);
     }
 
-    public BuergerViewController getController() {
-        return controller;
-    }
-
     public String getNavigateToUpdate() {
         return navigateToUpdate;
     }
@@ -72,7 +66,7 @@ public class SelectedBuergerReadForm extends SelectedBuergerForm {
     private ActionButton createBackButton() {
         final ActionButton backButton = new ActionButton(getI18nResolver(), SimpleAction.back);
 
-        final NavigateActions navigateActions = new NavigateActions(getController().getNavigator(), getController().getEventbus(), getNavigateBack());
+        final NavigateActions navigateActions = new NavigateActions(getNavigator(), getEventBus(), getNavigateBack());
         backButton.addClickListener(navigateActions::navigate);
 
         return backButton;
@@ -90,7 +84,7 @@ public class SelectedBuergerReadForm extends SelectedBuergerForm {
         final BuergerSingleActions buergerSingleActions = new BuergerSingleActions(this::getBuerger, getEventBus());
         updateButton.addClickListener(buergerSingleActions::read);
 
-        final NavigateActions navigateActions = new NavigateActions(getController().getNavigator(), getController().getEventbus(), getNavigateToUpdate());
+        final NavigateActions navigateActions = new NavigateActions(getNavigator(), getEventBus(), getNavigateToUpdate());
         updateButton.addClickListener(navigateActions::navigate);
 
         return updateButton;

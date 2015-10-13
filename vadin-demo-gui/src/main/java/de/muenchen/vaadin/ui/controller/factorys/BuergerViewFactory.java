@@ -39,15 +39,15 @@ public class BuergerViewFactory implements Serializable {
     //////////////////////////////////////////////
 
     public BuergerCreateForm generateCreateForm(String navigateTo, String navigateBack) {
-        return new BuergerCreateForm(controller, controller.getEventbus(), controller.getNavigator(), navigateTo, null, navigateBack);
+        return new BuergerCreateForm(controller, navigateTo, null, navigateBack);
     }
 
     public BuergerCreateForm generateCreateChildForm(String navigateTo, String navigateBack) {
-        return new BuergerCreateForm(controller, controller.getEventbus(), controller.getNavigator(), navigateTo, Buerger.Rel.kinder.name(), navigateBack);
+        return new BuergerCreateForm(controller, navigateTo, Buerger.Rel.kinder.name(), navigateBack);
     }
 
     public BuergerCreateForm generateCreatePartnerForm(String navigateTo, String navigateBack) {
-        return new BuergerCreateForm(controller, controller.getEventbus(), controller.getNavigator(), navigateTo, Buerger.Rel.partner.name(), navigateBack);
+        return new BuergerCreateForm(controller, navigateTo, Buerger.Rel.partner.name(), navigateBack);
     }
 
     /**

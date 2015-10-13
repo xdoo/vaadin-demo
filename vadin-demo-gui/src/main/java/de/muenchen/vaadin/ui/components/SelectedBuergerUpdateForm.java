@@ -8,9 +8,9 @@ import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
+import de.muenchen.vaadin.guilib.controller.EntityController;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerSingleActions;
 import de.muenchen.vaadin.ui.components.forms.selected.SelectedBuergerForm;
-import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Type;
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getFormPath;
@@ -22,8 +22,6 @@ import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getFormPath;
  * @version 1.0
  */
 public class SelectedBuergerUpdateForm extends SelectedBuergerForm {
-    /** The String to navigate to on the create button. */
-    private final BuergerViewController controller;
     /** The String to navigate to on the save button. */
     private final String navigateTo;
     /** The String to navigate to on the back button. */
@@ -34,14 +32,13 @@ public class SelectedBuergerUpdateForm extends SelectedBuergerForm {
      * 'abbrechen' Schaltfläche erstellt werden. Dies ist dann sinnvoll, wenn dieses Formular in einen Wizzard, bzw. in
      * eine definierte Abfolge von Formularen eingebettet wird.
      *
-     * @param controller
+     * @param entityController The controller used for everything.
      * @param navigateTo
      * @param navigateBack
      */
-    public SelectedBuergerUpdateForm(final BuergerViewController controller, final String navigateTo, final String navigateBack) {
-        super(controller, controller.getEventbus());
+    public SelectedBuergerUpdateForm(final EntityController entityController, final String navigateTo, final String navigateBack) {
+        super(entityController);
 
-        this.controller = controller;
         this.navigateTo = navigateTo;
         this.navigateBack = navigateBack;
 
@@ -78,7 +75,7 @@ public class SelectedBuergerUpdateForm extends SelectedBuergerForm {
         final BuergerSingleActions buergerSingleActions = new BuergerSingleActions(this::getBuerger, getEventBus());
         saveButton.addClickListener(buergerSingleActions::update);
 
-        final NavigateActions navigateActions = new NavigateActions(getController().getNavigator(), getController().getEventbus(), getNavigateTo());
+        final NavigateActions navigateActions = new NavigateActions(getNavigator(), getEventBus(), getNavigateTo());
         saveButton.addClickListener(navigateActions::navigate);
 
         return saveButton;
@@ -92,7 +89,7 @@ public class SelectedBuergerUpdateForm extends SelectedBuergerForm {
     private ActionButton createBackButton() {
         final ActionButton backButton = new ActionButton(getI18nResolver(), SimpleAction.back);
 
-        final NavigateActions navigateActions = new NavigateActions(getController().getNavigator(), getController().getEventbus(), getNavigateBack());
+        final NavigateActions navigateActions = new NavigateActions(getNavigator(), getEventBus(), getNavigateBack());
         backButton.addClickListener(navigateActions::navigate);
 
         return backButton;
@@ -119,14 +116,6 @@ public class SelectedBuergerUpdateForm extends SelectedBuergerForm {
         return navigateBack;
     }
 
-    /**
-     * Get the Controller of this Component.
-     *
-     * @return The Controller,
-     */
-    public BuergerViewController getController() {
-        return controller;
-    }
 
     /**
      * Get the String representation of the view the form navigates to.

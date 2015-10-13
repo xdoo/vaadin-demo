@@ -5,9 +5,8 @@ import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.ui.*;
 import de.muenchen.vaadin.demo.api.domain.Augenfarbe;
 import de.muenchen.vaadin.demo.api.local.Buerger;
-import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
+import de.muenchen.vaadin.guilib.controller.EntityController;
 import de.muenchen.vaadin.ui.components.BaseComponent;
-import reactor.bus.EventBus;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -41,11 +40,10 @@ public class BuergerForm extends BaseComponent {
      * This Form is only the plain fields for input, and has no additional components or buttons.
      * You can use {@link BuergerForm#setReadOnly(boolean)} for a readonly mode.
      *
-     * @param i18nResolver The Resolver for i18n.
-     * @param eventBus The Eventbus to listen for change events and/or notify updates.
+     * @param entityController The controller used for everything.
      */
-    public BuergerForm(I18nResolver i18nResolver, EventBus eventBus) {
-        super(i18nResolver, eventBus);
+    public BuergerForm(EntityController entityController) {
+        super(entityController);
         binder.setItemDataSource(new Buerger());
         fields = buildFields();
 

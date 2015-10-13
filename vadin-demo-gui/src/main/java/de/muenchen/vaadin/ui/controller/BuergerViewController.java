@@ -14,6 +14,7 @@ import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.GenericSuccessNotification;
+import de.muenchen.vaadin.guilib.controller.EntityController;
 import de.muenchen.vaadin.guilib.services.MessageService;
 import de.muenchen.vaadin.guilib.util.VaadinUtil;
 import de.muenchen.vaadin.services.BuergerService;
@@ -45,7 +46,7 @@ import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.*;
  */
 @SpringComponent
 @UIScope
-public class BuergerViewController implements Serializable, I18nResolver {
+public class BuergerViewController implements Serializable, I18nResolver, EntityController {
 
     // TODO entweder hier oder im I18nServiceConfigImpl angeben
     public static final String I18N_BASE_PATH = "buerger";
@@ -105,6 +106,11 @@ public class BuergerViewController implements Serializable, I18nResolver {
 
     public Navigator getNavigator() {
         return navigator;
+    }
+
+    @Override
+    public I18nResolver getResolver() {
+        return this;
     }
 
     public BuergerViewFactory getViewFactory() {
