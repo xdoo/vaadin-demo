@@ -10,6 +10,18 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>I18nService</artifactId>
+    <version>1.0.0-Final</version>
+    <developers>
+        <developer>
+            <name>Peter Müller</name>
+            <email>p.mueller@muenchen.de</email>
+        </developer>
+        <developer>
+            <name>Maximilian Zollbrecht</name>
+            <email>maximilian.zollbrecht@muenchen.de</email>
+        </developer>
+    </developers>
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
