@@ -11,7 +11,9 @@ import de.muenchen.vaadin.guilib.controller.EntityController;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerSingleActions;
 import de.muenchen.vaadin.ui.components.forms.selected.SelectedBuergerForm;
 
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.*;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Component;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Type;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getFormPath;
 
 /**
  * @author claus

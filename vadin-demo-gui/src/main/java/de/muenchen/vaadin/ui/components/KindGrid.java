@@ -10,7 +10,6 @@ import de.muenchen.vaadin.guilib.components.GenericGrid;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
 /**
- *
  * @author maximilian.schug
  */
 public class KindGrid extends GenericGrid<Buerger> {

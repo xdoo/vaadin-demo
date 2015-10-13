@@ -13,8 +13,7 @@ import reactor.bus.EventBus;
 public class BaseComponent extends CustomComponent {
     private final EntityController entityController;
 
-    public BaseComponent(EntityController entityController)
-    {
+    public BaseComponent(EntityController entityController) {
         this.entityController = entityController;
     }
 

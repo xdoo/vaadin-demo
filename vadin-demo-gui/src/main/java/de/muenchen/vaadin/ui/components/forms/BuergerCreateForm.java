@@ -45,9 +45,9 @@ public class BuergerCreateForm extends BuergerForm {
      * 'abbrechen' Schaltfläche erstellt werden. Dies ist dann sinnvoll, wenn dieses Formular in einen Wizzard, bzw. in
      * eine definierte Abfolge von Formularen eingebettet wird.
      *
-     * @param navigateTo   Zielseite nach Druck der 'erstellen' Schaltfläche
-     * @param back         Zielseite nach Druck der 'abbrechen' Schaltfläche
-     * @param relation     Optionale Angabe einer Assoziation, für die der Buerger ist.
+     * @param navigateTo Zielseite nach Druck der 'erstellen' Schaltfläche
+     * @param back       Zielseite nach Druck der 'abbrechen' Schaltfläche
+     * @param relation   Optionale Angabe einer Assoziation, für die der Buerger ist.
      */
     public BuergerCreateForm(final EntityController entityController, final String navigateTo, final String back, final String relation) {
         super(entityController);

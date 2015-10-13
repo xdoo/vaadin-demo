@@ -2,7 +2,11 @@ package de.muenchen.vaadin.ui.components.forms.node;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
-import com.vaadin.ui.*;
+import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.DateField;
+import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.TextField;
 import de.muenchen.vaadin.demo.api.domain.Augenfarbe;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.guilib.controller.EntityController;
@@ -14,9 +18,9 @@ import java.util.List;
 
 /**
  * Provides a very simple and basic Form for a Buerger.
- *
- * If no Buerger is set, a blank user without an ID will be used.
- * It has no buttons or additional components but can be used for any Buerger you set it to.
+ * <p/>
+ * If no Buerger is set, a blank user without an ID will be used. It has no buttons or additional components but can be
+ * used for any Buerger you set it to.
  *
  * @author p.mueller
  * @version 1.0
@@ -36,9 +40,9 @@ public class BuergerForm extends BaseComponent {
 
     /**
      * Create a new BuergerForm using the specified i18nResolver and the eventbus.
-     *
-     * This Form is only the plain fields for input, and has no additional components or buttons.
-     * You can use {@link BuergerForm#setReadOnly(boolean)} for a readonly mode.
+     * <p/>
+     * This Form is only the plain fields for input, and has no additional components or buttons. You can use {@link
+     * BuergerForm#setReadOnly(boolean)} for a readonly mode.
      *
      * @param entityController The controller used for everything.
      */
@@ -57,7 +61,7 @@ public class BuergerForm extends BaseComponent {
 
     /**
      * Build all the (input) Fields used by this form.
-     *
+     * <p/>
      * The Fields are data binded to the Buerger.
      *
      * @return A List of all Components.
@@ -75,6 +79,7 @@ public class BuergerForm extends BaseComponent {
 
     /**
      * Get the Data-Binder of this Form.
+     *
      * @return The binder.
      */
     private BeanFieldGroup<Buerger> getBinder() {
@@ -83,6 +88,7 @@ public class BuergerForm extends BaseComponent {
 
     /**
      * Get the Buerger object of this form.
+     *
      * @return The Buerger.
      */
     public Buerger getBuerger() {
@@ -96,6 +102,7 @@ public class BuergerForm extends BaseComponent {
 
     /**
      * Set the Buerger of this Form.
+     *
      * @param buerger The new Buerger.
      */
     public void setBuerger(Buerger buerger) {
@@ -106,6 +113,7 @@ public class BuergerForm extends BaseComponent {
 
     /**
      * Get the layout of this form, containing all the Fields.
+     *
      * @return The base Layout.
      */
     public FormLayout getFormLayout() {
@@ -119,6 +127,7 @@ public class BuergerForm extends BaseComponent {
 
     /**
      * Get all the (input) Fields of this form as a list.
+     *
      * @return The list of components.
      */
     public List<Component> getFields() {

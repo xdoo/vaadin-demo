@@ -14,7 +14,8 @@ import de.muenchen.vaadin.ui.components.forms.node.BuergerForm;
 public class SelectedBuergerForm extends BuergerForm {
 
     /**
-     * Creates a new SelectedBuergerForm that updates its Buerger to the {@link BuergerDatastore#getSelectedBuerger()} from the Eventbus.
+     * Creates a new SelectedBuergerForm that updates its Buerger to the {@link BuergerDatastore#getSelectedBuerger()}
+     * from the Eventbus.
      *
      * @param entityController The controller used for everything.
      */
