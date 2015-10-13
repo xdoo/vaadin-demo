@@ -50,13 +50,13 @@ public class BuergerDetailView extends DefaultBuergerView {
         // tab sheet
         TabSheet tabSheet = new TabSheet();
         tabSheet.addStyleName(ValoTheme.TABSHEET_FRAMED);
-        
+
         // add kind tab
         childTab = controller.getViewFactory().generateChildTab(BuergerDetailView.NAME, BuergerCreateChildView.NAME, BuergerTableView.NAME);
         TabSheet.Tab kindTab = tabSheet.addTab(childTab);
         kindTab.setCaption(resolver.resolveRelative(getEntityFieldPath(Buerger.Rel.kinder.name(), I18nPaths.Type.label)));
 
-        partnerTab = controller.getViewFactory().generatePartnerTab(BuergerDetailView.NAME, BuergerCreatePartnerView.NAME, null);
+        partnerTab = controller.getViewFactory().generatePartnerTab(BuergerDetailView.NAME, BuergerCreatePartnerView.NAME, NAME);
         TabSheet.Tab pTab = tabSheet.addTab(partnerTab);
         pTab.setCaption(resolver.resolveRelative(getEntityFieldPath(Buerger.Rel.partner.name(), I18nPaths.Type.label)));
         layout.addComponent(tabSheet);

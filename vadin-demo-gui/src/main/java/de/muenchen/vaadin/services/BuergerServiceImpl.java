@@ -23,12 +23,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+import java.util.concurrent.*;
 
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getNotificationPath;
 
@@ -39,10 +34,9 @@ import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getNotificationPath;
 @UIScope
 public class BuergerServiceImpl implements BuergerService, Serializable {
 
-    private static final Logger LOG = LoggerFactory.getLogger(BuergerService.class);
     public static final String TIMEOUT_I18N = "timeout";
     public static final int TIMEOUT_VAL = 5;
-
+    private static final Logger LOG = LoggerFactory.getLogger(BuergerService.class);
     private BuergerRestClient client;
     private RestTemplate template;
     private SecurityService securityService;

@@ -4,13 +4,7 @@ import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.FontAwesome;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.CssLayout;
-import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.Grid;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.selector.entity.RequestEvent;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
@@ -40,8 +34,11 @@ public class GenericGrid<T> extends CustomComponent {
      * The constant LOG.
      */
     protected static final Logger LOG = LoggerFactory.getLogger(GenericGrid.class);
-
-    /**Default Components **/
+    /**
+     * Components Layout
+     */
+    final HorizontalLayout topComponentsLayout = new HorizontalLayout();
+    /** Default Components **/
     private Grid grid = new Grid();
     //----------- Search Components
     private Optional<CssLayout> searchLayout = Optional.empty();
@@ -54,18 +51,11 @@ public class GenericGrid<T> extends CustomComponent {
     private Optional<ActionButton> copy = Optional.empty();
     private Optional<ActionButton> delete = Optional.empty();
     private Optional<ActionButton> create = Optional.empty();
-
-    /**Custom Buttons**/
+    /** Custom Buttons **/
     private List<Button> customSingleSelectButtons = new ArrayList<>();
     private List<Button> customMultiSelectButtons = new ArrayList<>();
     private List<Button> customButtons = new ArrayList<>();
-
-    /**
-     * Components Layout
-     */
-    final HorizontalLayout topComponentsLayout = new HorizontalLayout();
-
-    /** Controller**/
+    /** Controller **/
     private EntityController controller;
 
     /**
@@ -145,7 +135,7 @@ public class GenericGrid<T> extends CustomComponent {
 
 
     private void createRead(String navigateToRead) {
-        ActionButton readButton = new ActionButton(controller.getResolver(), SimpleAction.read, null);
+        ActionButton readButton = new ActionButton(controller.getResolver(), SimpleAction.read);
         readButton.addClickListener(clickEvent -> {
             controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED), reactor.bus.Event.wrap(grid.getSelectedRows().toArray()[0]));
             controller.getNavigator().navigateTo(navigateToRead);
@@ -155,7 +145,7 @@ public class GenericGrid<T> extends CustomComponent {
     }
 
     private void createCopy() {
-        ActionButton copyButton = new ActionButton(controller.getResolver(), SimpleAction.copy, null);
+        ActionButton copyButton = new ActionButton(controller.getResolver(), SimpleAction.copy);
         copyButton.addClickListener(clickEvent -> {
             LOG.debug("copying selected items");
             if (grid.getSelectedRows() != null) {
@@ -173,7 +163,7 @@ public class GenericGrid<T> extends CustomComponent {
     }
 
     private void createDelete() {
-        ActionButton deleteButton = new ActionButton(controller.getResolver(), SimpleAction.delete, null);
+        ActionButton deleteButton = new ActionButton(controller.getResolver(), SimpleAction.delete);
         deleteButton.addClickListener(clickEvent -> {
             LOG.debug("deleting selected items");
             if (grid.getSelectedRows() != null) {
@@ -191,7 +181,7 @@ public class GenericGrid<T> extends CustomComponent {
     }
 
     private void createEdit(String navigateToEdit) {
-        ActionButton editButton = new ActionButton(controller.getResolver(), SimpleAction.update, navigateToEdit);
+        ActionButton editButton = new ActionButton(controller.getResolver(), SimpleAction.update);
         editButton.addClickListener(clickEvent -> {
             if (grid.getSelectedRows().size() == 1) {
                 LOG.debug("update selected");
@@ -204,7 +194,7 @@ public class GenericGrid<T> extends CustomComponent {
     }
 
     private void createCreate(String navigateToCreate) {
-        ActionButton createButton = new ActionButton(controller.getResolver(), SimpleAction.create, navigateToCreate);
+        ActionButton createButton = new ActionButton(controller.getResolver(), SimpleAction.create);
         createButton.addClickListener(clickEvent -> {
             controller.getNavigator().navigateTo(navigateToCreate);
         });
@@ -245,10 +235,10 @@ public class GenericGrid<T> extends CustomComponent {
 
     private void setButtonVisability() {
         int size = grid.getSelectedRows().size();
-        if(read.isPresent()) read.get().setVisible(size == 1);
-        if(edit.isPresent()) edit.get().setVisible(size == 1);
-        if(copy.isPresent()) copy.get().setVisible(size > 0);
-        if(delete.isPresent()) delete.get().setVisible(size > 0);
+        if (read.isPresent()) read.get().setVisible(size == 1);
+        if (edit.isPresent()) edit.get().setVisible(size == 1);
+        if (copy.isPresent()) copy.get().setVisible(size > 0);
+        if (delete.isPresent()) delete.get().setVisible(size > 0);
 
         customSingleSelectButtons.stream().forEach(button -> button.setVisible(size == 1));
         customMultiSelectButtons.stream().forEach(button -> button.setVisible(size > 0));
@@ -264,7 +254,7 @@ public class GenericGrid<T> extends CustomComponent {
      * @param navigateToRead the navigate to read
      * @return the generic grid
      */
-    public GenericGrid<T> activateDoubleClickToRead(String navigateToRead){
+    public GenericGrid<T> activateDoubleClickToRead(String navigateToRead) {
         grid.addItemClickListener(itemClickEvent -> {
             if (itemClickEvent.getPropertyId() != null) {
                 if (itemClickEvent.isDoubleClick()) {
@@ -286,7 +276,7 @@ public class GenericGrid<T> extends CustomComponent {
      * @param consumer the consumer
      * @return the generic grid
      */
-    public GenericGrid<T> addDoubleClickListener(Consumer consumer){
+    public GenericGrid<T> addDoubleClickListener(Consumer consumer) {
         grid.addItemClickListener(itemClickEvent -> {
             if (itemClickEvent.isDoubleClick()) {
                 consumer.accept(((BeanItem<T>) grid.getContainerDataSource().getItem(itemClickEvent.getItemId())).getBean());
@@ -300,9 +290,9 @@ public class GenericGrid<T> extends CustomComponent {
      *
      * @return the generic grid
      */
-    public GenericGrid<T> activateSearch(){
+    public GenericGrid<T> activateSearch() {
 
-        if(!searchLayout.isPresent()){
+        if (!searchLayout.isPresent()) {
             //Configure layout
             CssLayout cssLayout = new CssLayout();
             cssLayout.addStyleName("v-component-group");
@@ -330,8 +320,8 @@ public class GenericGrid<T> extends CustomComponent {
      * @param navigateToCreate the navigate to create
      * @return the generic grid
      */
-    public GenericGrid<T> activateCreate(String navigateToCreate){
-        if(create.isPresent()) {
+    public GenericGrid<T> activateCreate(String navigateToCreate) {
+        if (create.isPresent()) {
             //Remove to prevent double attachment
             topComponentsLayout.removeComponent(create.get());
         }
@@ -349,8 +339,8 @@ public class GenericGrid<T> extends CustomComponent {
      * @param navigateToRead the navigate to read
      * @return the generic grid
      */
-    public GenericGrid<T> activateRead(String navigateToRead){
-        if(read.isPresent()) {
+    public GenericGrid<T> activateRead(String navigateToRead) {
+        if (read.isPresent()) {
             //Remove to prevent double attachment
             topComponentsLayout.removeComponent(read.get());
         }
@@ -368,8 +358,8 @@ public class GenericGrid<T> extends CustomComponent {
      *
      * @return the generic grid
      */
-    public GenericGrid<T> activateCopy(){
-        if(copy.isPresent()) {
+    public GenericGrid<T> activateCopy() {
+        if (copy.isPresent()) {
             //Remove to prevent double attachment
             topComponentsLayout.removeComponent(copy.get());
         } else {
@@ -387,8 +377,8 @@ public class GenericGrid<T> extends CustomComponent {
      * @param navigateToEdit the navigate to edit
      * @return the generic grid
      */
-    public GenericGrid<T> activateEdit(String navigateToEdit){
-        if(edit.isPresent()) {
+    public GenericGrid<T> activateEdit(String navigateToEdit) {
+        if (edit.isPresent()) {
             //Remove to prevent double attachment
             topComponentsLayout.removeComponent(edit.get());
         }
@@ -404,8 +394,8 @@ public class GenericGrid<T> extends CustomComponent {
      *
      * @return the generic grid
      */
-    public GenericGrid activateDelete(){
-        if(delete.isPresent()) {
+    public GenericGrid activateDelete() {
+        if (delete.isPresent()) {
             //Remove to prevent double attachment
             topComponentsLayout.removeComponent(delete.get());
         } else {
@@ -424,14 +414,14 @@ public class GenericGrid<T> extends CustomComponent {
      * @param consumer   the consumer
      * @return the generic grid
      */
-    public GenericGrid<T> addMultiSelectButton(String buttonName, Consumer<List<T>> consumer){
+    public GenericGrid<T> addMultiSelectButton(String buttonName, Consumer<List<T>> consumer) {
         Button button = new Button(buttonName);
         customMultiSelectButtons.add(button);
         button.addClickListener(event -> {
             if (grid.getSelectedRows() != null) {
                 consumer.accept(grid.getSelectedRows().stream()
-                            .map(item -> ((BeanItem<T>) grid.getContainerDataSource().getItem(item)).getBean())
-                            .collect(Collectors.toList()));
+                        .map(item -> ((BeanItem<T>) grid.getContainerDataSource().getItem(item)).getBean())
+                        .collect(Collectors.toList()));
             }
         });
         topComponentsLayout.addComponent(button);
@@ -445,7 +435,7 @@ public class GenericGrid<T> extends CustomComponent {
      * @param button the button to add
      * @return the generic grid
      */
-    public GenericGrid<T> addMultiSelectButton(Button button){
+    public GenericGrid<T> addMultiSelectButton(Button button) {
 
         //TODO after #147
 
@@ -460,7 +450,7 @@ public class GenericGrid<T> extends CustomComponent {
      * @param consumer   the consumer
      * @return the generic grid
      */
-    public GenericGrid<T> addSingleSelectButton(String buttonName, Consumer<T> consumer){
+    public GenericGrid<T> addSingleSelectButton(String buttonName, Consumer<T> consumer) {
         Button button = new Button(buttonName);
         customSingleSelectButtons.add(button);
         button.addClickListener(event -> {
@@ -479,7 +469,7 @@ public class GenericGrid<T> extends CustomComponent {
      * @param button the button to add
      * @return the generic grid
      */
-    public GenericGrid<T> addSingleSelectButton(Button button){
+    public GenericGrid<T> addSingleSelectButton(Button button) {
 
         //TODO after #147
 
@@ -488,14 +478,13 @@ public class GenericGrid<T> extends CustomComponent {
     }
 
     /**
-     * Add custom button on generic grid.
-     * The Button has its own business action with no connection to this grid.
+     * Add custom button on generic grid. The Button has its own business action with no connection to this grid.
      *
      * @param buttonName the button name
      * @param runnable   the runnable
      * @return the generic grid
      */
-    public GenericGrid<T> addButton(String buttonName, Runnable runnable){
+    public GenericGrid<T> addButton(String buttonName, Runnable runnable) {
         Button button = new Button(buttonName);
         customButtons.add(button);
         button.addClickListener(event -> runnable.run());
@@ -505,13 +494,12 @@ public class GenericGrid<T> extends CustomComponent {
     }
 
     /**
-     * Add custom button on generic grid.
-     * The Button has its own business action with no connection to this grid.
+     * Add custom button on generic grid. The Button has its own business action with no connection to this grid.
      *
      * @param button the button to add
      * @return the generic grid
      */
-    public GenericGrid<T> addButton(Button button){
+    public GenericGrid<T> addButton(Button button) {
 
         //TODO after #147
 

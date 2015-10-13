@@ -26,7 +26,6 @@ import reactor.bus.EventBus;
 
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -104,7 +103,7 @@ public class BuergerViewController implements Serializable, EntityController {
         return eventbus;
     }
 
-    public BuergerI18nResolver getResolver(){
+    public BuergerI18nResolver getResolver() {
         return resolver;
     }
 
@@ -114,11 +113,6 @@ public class BuergerViewController implements Serializable, EntityController {
 
     public Navigator getNavigator() {
         return navigator;
-    }
-
-    @Override
-    public I18nResolver getResolver() {
-        return this;
     }
 
     public BuergerViewFactory getViewFactory() {
