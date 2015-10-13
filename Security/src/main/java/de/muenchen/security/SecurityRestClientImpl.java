@@ -29,7 +29,7 @@ public class SecurityRestClientImpl implements SecurityRestClient {
     @Override
     public Optional<Principal> getPrincipal(RestTemplate template) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Principal principal = new Principal(authentication.getName());
+        Principal principal = new Principal();
 
         User user = userRepository.findFirstByUsername(principal.getUsername());
 
