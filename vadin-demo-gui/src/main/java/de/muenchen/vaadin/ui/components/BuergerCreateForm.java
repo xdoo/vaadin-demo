@@ -1,18 +1,20 @@
 package de.muenchen.vaadin.ui.components;
 
+import com.vaadin.navigator.Navigator;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.events.Association;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
+import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerAssociationActions;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerSingleActions;
 import de.muenchen.vaadin.ui.components.forms.node.BuergerForm;
-import de.muenchen.vaadin.ui.controller.BuergerViewController;
+import reactor.bus.EventBus;
 
 import java.util.Optional;
 
@@ -27,6 +29,7 @@ import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getFormPath;
  */
 public class BuergerCreateForm extends BuergerForm {
 
+    private final Navigator navigator;
     /**
      * The String to navigate to on the create button.
      */
@@ -35,30 +38,28 @@ public class BuergerCreateForm extends BuergerForm {
      * The String to navigate to on the back button.
      */
     private final String back;
-    /** The Controller for Buergers. */
-    private final BuergerViewController controller;
     /**
      * The optional relation this CreateForm is for.
      */
     private final Optional<String> relation;
 
     /**
-     * Formular zum Erstellen eines {@link Buerger}s. Über diesen Konstruktor kann
-     * zusätzlich eine Zielseite für die 'abbrechen' Schaltfläche erstellt werden.
-     * Dies ist dann sinnvoll, wenn dieses Formular in einen Wizzard, bzw. in eine
-     * definierte Abfolge von Formularen eingebettet wird.
+     * Formular zum Erstellen eines {@link Buerger}s. Über diesen Konstruktor kann zusätzlich eine Zielseite für die
+     * 'abbrechen' Schaltfläche erstellt werden. Dies ist dann sinnvoll, wenn dieses Formular in einen Wizzard, bzw. in
+     * eine definierte Abfolge von Formularen eingebettet wird.
      *
-     * @param controller der Entity Controller
-     * @param navigateTo Zielseite nach Druck der 'erstellen' Schaltfläche
-     * @param back       Zielseite nach Druck der 'abbrechen' Schaltfläche
-     * @param relation   Optionale Angabe einer Assoziation, für die der Buerger ist.
+     * @param i18nResolver The i18n resolver.
+     * @param eventBus     The eventbus.
+     * @param navigateTo   Zielseite nach Druck der 'erstellen' Schaltfläche
+     * @param back         Zielseite nach Druck der 'abbrechen' Schaltfläche
+     * @param relation     Optionale Angabe einer Assoziation, für die der Buerger ist.
      */
-    public BuergerCreateForm(final BuergerViewController controller, final String navigateTo, final String back, final String relation) {
-        super(controller, controller.getEventbus());
+    public BuergerCreateForm(final I18nResolver i18nResolver, final EventBus eventBus, final Navigator navigator, final String navigateTo, final String back, final String relation) {
+        super(i18nResolver, eventBus);
 
+        this.navigator = navigator;
         this.navigateTo = navigateTo;
         this.back = back;
-        this.controller = controller;
         this.relation = Optional.ofNullable(relation);
 
         init();
@@ -85,6 +86,7 @@ public class BuergerCreateForm extends BuergerForm {
 
     /**
      * Create the Button for the Create Action.
+     *
      * @return The create Button.
      */
     private ActionButton createCreateButton() {
@@ -101,7 +103,7 @@ public class BuergerCreateForm extends BuergerForm {
         }
 
 
-        final NavigateActions navigateActions = new NavigateActions(controller.getNavigator(), controller.getEventbus(), getNavigateTo());
+        final NavigateActions navigateActions = new NavigateActions(getNavigator(), getEventBus(), getNavigateTo());
         createButton.addClickListener(navigateActions::navigate);
 
         return createButton;
@@ -109,12 +111,13 @@ public class BuergerCreateForm extends BuergerForm {
 
     /**
      * Create the back Button.
+     *
      * @return The back button.
      */
     private ActionButton createBackButton() {
-        ActionButton backButton = new ActionButton(controller, SimpleAction.back);
+        ActionButton backButton = new ActionButton(getI18nResolver(), SimpleAction.back);
 
-        final NavigateActions navigateActions = new NavigateActions(controller.getNavigator(), controller.getEventbus(), getNavigateBack());
+        final NavigateActions navigateActions = new NavigateActions(getNavigator(), getEventBus(), getNavigateBack());
         backButton.addClickListener(navigateActions::navigate);
 
         return backButton;
@@ -122,6 +125,7 @@ public class BuergerCreateForm extends BuergerForm {
 
     /**
      * Create the Headline for the form.
+     *
      * @return The Headline Label.
      */
     private Label createHeadline() {
@@ -132,6 +136,7 @@ public class BuergerCreateForm extends BuergerForm {
 
     /**
      * Get the String representation of the view the form navigates to.
+     *
      * @return The navigate to String.
      */
     public String getNavigateTo() {
@@ -139,15 +144,8 @@ public class BuergerCreateForm extends BuergerForm {
     }
 
     /**
-     * Get the Controller of this Component.
-     * @return The Controller,
-     */
-    public BuergerViewController getController() {
-        return controller;
-    }
-
-    /**
      * Get the String representation of the view the back button of the form navigates to.
+     *
      * @return The navigate back String.
      */
     public String getNavigateBack() {
@@ -156,9 +154,14 @@ public class BuergerCreateForm extends BuergerForm {
 
     /**
      * Get the Relation this CreateForm is for.
+     *
      * @return The optional relation.
      */
     public Optional<String> getRelation() {
         return relation;
+    }
+
+    public Navigator getNavigator() {
+        return navigator;
     }
 }
