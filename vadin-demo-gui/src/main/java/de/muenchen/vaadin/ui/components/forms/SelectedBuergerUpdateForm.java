@@ -1,4 +1,4 @@
-package de.muenchen.vaadin.ui.components;
+package de.muenchen.vaadin.ui.components.forms;
 
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;

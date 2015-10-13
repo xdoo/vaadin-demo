@@ -10,7 +10,7 @@ import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.components.BuergerChildTab;
 import de.muenchen.vaadin.ui.components.BuergerPartnerTab;
-import de.muenchen.vaadin.ui.components.SelectedBuergerReadForm;
+import de.muenchen.vaadin.ui.components.forms.SelectedBuergerReadForm;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
