@@ -38,16 +38,16 @@ public class BuergerViewFactory implements Serializable {
     // Factory Methoden für die UI Komponenten //
     //////////////////////////////////////////////
 
-    public DemoSelectedBuergerCreateForm generateCreateForm(String navigateTo, String navigateBack) {
-        return new DemoSelectedBuergerCreateForm(controller, navigateTo, null, navigateBack);
+    public BuergerCreateForm generateCreateForm(String navigateTo, String navigateBack) {
+        return new BuergerCreateForm(controller, navigateTo, null, navigateBack);
     }
 
-    public DemoSelectedBuergerCreateForm generateCreateChildForm(String navigateTo, String navigateBack) {
-        return new DemoSelectedBuergerCreateForm(controller, navigateTo, Buerger.Rel.kinder.name(), navigateBack);
+    public BuergerCreateForm generateCreateChildForm(String navigateTo, String navigateBack) {
+        return new BuergerCreateForm(controller, navigateTo, Buerger.Rel.kinder.name(), navigateBack);
     }
 
-    public DemoSelectedBuergerCreateForm generateCreatePartnerForm(String navigateTo, String navigateBack) {
-        return new DemoSelectedBuergerCreateForm(controller, navigateTo, Buerger.Rel.partner.name(), navigateBack);
+    public BuergerCreateForm generateCreatePartnerForm(String navigateTo, String navigateBack) {
+        return new BuergerCreateForm(controller, navigateTo, Buerger.Rel.partner.name(), navigateBack);
     }
 
     /**
