@@ -18,6 +18,11 @@
             <artifactId>I18nService</artifactId>
             <version>1.0.0-Final</version>
         </dependency>
+        <dependency>
+            <groupId>de.muenchen</groupId>
+            <artifactId>Eventbus</artifactId>
+            <version>1.0.0-Final</version>
+        </dependency>
 
 
         <dependency>
