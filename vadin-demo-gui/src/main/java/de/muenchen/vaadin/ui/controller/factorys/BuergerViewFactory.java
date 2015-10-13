@@ -1,16 +1,19 @@
 package de.muenchen.vaadin.ui.controller.factorys;
 
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.Grid;
 import com.vaadin.ui.TabSheet;
 import de.muenchen.eventbus.EventBus;
 import de.muenchen.eventbus.events.Association;
 import de.muenchen.eventbus.selector.entity.RequestEvent;
 import de.muenchen.vaadin.demo.api.local.Buerger;
-import de.muenchen.vaadin.ui.components.*;
 import de.muenchen.vaadin.ui.components.forms.BuergerCreateForm;
-import de.muenchen.vaadin.ui.components.forms.SelectedBuergerReadForm;
-import de.muenchen.vaadin.ui.components.forms.SelectedBuergerUpdateForm;
+import de.muenchen.vaadin.guilib.components.GenericGrid;
+import de.muenchen.vaadin.services.BuergerI18nResolver;
+import de.muenchen.vaadin.ui.components.BuergerChildTab;
+import de.muenchen.vaadin.ui.components.BuergerGrid;
+import de.muenchen.vaadin.ui.components.BuergerPartnerComponent;
+import de.muenchen.vaadin.ui.components.BuergerPartnerTab;
+import de.muenchen.vaadin.ui.components.KindGrid;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +37,8 @@ public class BuergerViewFactory implements Serializable {
     private static final long serialVersionUID = 1L;
     @Autowired
     EventBus eventBus;
+    @Autowired
+    BuergerI18nResolver resolver;
     private BuergerViewController controller;
 
 
@@ -81,6 +86,7 @@ public class BuergerViewFactory implements Serializable {
         return form;
     }
 
+
     public GenericGrid generateChildSearchTable() {
         final GenericGrid components = generateGrid();
         components.addItemClickListener(itemClickEvent -> {
@@ -92,6 +98,7 @@ public class BuergerViewFactory implements Serializable {
         controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
         return components;
     }
+
 
     public GenericGrid generateBuergerPartnerSearchTable() {
         final GenericGrid components = generateGrid();
@@ -108,78 +115,30 @@ public class BuergerViewFactory implements Serializable {
     public KindGrid generateChildTable(String navigateToForDetail) {
         LOG.debug("creating table for children");
         KindGrid grid = new KindGrid(controller);
-        grid.setSizeFull();
-        grid.setSelectionMode(Grid.SelectionMode.MULTI);
-        grid.addItemClickListener(itemClickEvent -> {
-            if (itemClickEvent.getPropertyId() != null) {
-                if (itemClickEvent.isDoubleClick()) {
-                    controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED), Event.wrap((itemClickEvent.getItemId())));
-                    controller.getNavigator().navigateTo(navigateToForDetail);
-                    return;
-                }
-                boolean isClicked = grid.isSelected(itemClickEvent.getItemId());
-                if (grid.getSelectedRows().size() > 0 && !itemClickEvent.isCtrlKey()) {
-                    grid.getSelectedRows().stream().forEach(row -> grid.deselect(row));
-                }
-                if (!isClicked)
-                    grid.select(itemClickEvent.getItemId());
-                else
-                    grid.deselect(itemClickEvent.getItemId());
-            }
-        });
 
-        controller.getEventbus().on(controller.getResponseKey().toSelector(), grid);
+        grid.activateDoubleClickToRead(navigateToForDetail);
+
         controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
 
         return grid;
     }
 
-    public PartnerGrid generatePartnerTable(String navigateToForDetail) {
+    public BuergerPartnerComponent generateBuergerPartnerComponent(String navigateToForCreate){
+        BuergerPartnerComponent partnerComponent = new BuergerPartnerComponent(controller, resolver, navigateToForCreate);
 
-        LOG.debug("creating table for partner");
-        PartnerGrid table = new PartnerGrid(controller);
-        table.setSizeFull();
-        table.setSelectionMode(Grid.SelectionMode.MULTI);
-        table.addItemClickListener(itemClickEvent -> {
-            if (itemClickEvent.getPropertyId() != null) {
-                if (itemClickEvent.isDoubleClick()) {
-                    controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED), Event.wrap((itemClickEvent.getItemId())));
-                    controller.getNavigator().navigateTo(navigateToForDetail);
-                    return;
-                }
-                boolean isClicked = table.isSelected(itemClickEvent.getItemId());
-                if (!itemClickEvent.isCtrlKey()) {
-                    table.getSelectedRows().stream().forEach(row -> table.deselect(row));
-                }
-                if (!isClicked)
-                    table.select(itemClickEvent.getItemId());
-                else
-                    table.deselect(itemClickEvent.getItemId());
-            }
-        });
-
-        controller.getEventbus().on(controller.getResponseKey().toSelector(), table);
+        controller.getEventbus().on(controller.getResponseKey().toSelector(), partnerComponent);
         controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
-
-        return table;
-    }
-
-    public GenericGrid generateGrid() {
-        return this.createGrid();
-    }
-
-    private GenericGrid createGrid() {
-        LOG.debug("creating table for buerger");
-        GenericGrid grid = new GenericGrid(controller, Buerger.class);
-        grid.setColumns(Buerger.Field.getProperties());
-        controller.getEventbus().on(controller.getResponseKey().toSelector(), grid);
-        return grid;
+        return partnerComponent;
     }
 
     public BuergerGrid generateBuergerGrid() {
         LOG.debug("creating buergerGrid");
         BuergerGrid buergerGrid = new BuergerGrid(controller);
         return buergerGrid;
+    }
+
+    public GenericGrid<Buerger> generateGrid(){
+        return new GenericGrid<>(controller,controller.getModel().getBuergers(),Buerger.Field.getProperties());
     }
 
     public BuergerViewController getController() {

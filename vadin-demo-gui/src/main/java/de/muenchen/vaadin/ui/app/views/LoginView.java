@@ -8,15 +8,22 @@ import com.vaadin.server.Page;
 import com.vaadin.server.Responsive;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.*;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.PasswordField;
+import com.vaadin.ui.TextField;
+import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.selector.Key;
 import de.muenchen.vaadin.demo.apilib.services.SecurityService;
 import de.muenchen.vaadin.guilib.components.GenericNotification;
 import de.muenchen.vaadin.guilib.components.GenericWarningNotification;
-import org.apache.commons.lang.WordUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import reactor.bus.EventBus;
@@ -37,7 +44,7 @@ public class LoginView extends VerticalLayout implements View {
 
     @Autowired
     public LoginView(SecurityService security, Environment env) {
-        websiteName = WordUtils.capitalize(env.getProperty("spring.application.name"));
+        websiteName = StringUtils.capitalize(env.getProperty("spring.application.name"));
         this.security = security;
         setSizeFull();
         Component loginForm = buildLoginForm();

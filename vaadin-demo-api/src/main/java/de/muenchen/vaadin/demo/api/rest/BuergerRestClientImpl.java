@@ -15,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,19 +28,26 @@ import java.util.stream.Collectors;
  */
 public class BuergerRestClientImpl implements BuergerRestClient {
 
+    public static final String FIND_FULL_TEXT_FUZZY = "findFullTextFuzzy";
+    public static final String SEARCH = "search";
     /**
      * Used to follow HATEOAS relations.
      */
     private final Traverson traverson;
-    /** The restTemplate used for the HTTP Requests. */
+    /**
+     * The restTemplate used for the HTTP Requests.
+     */
     private final RestTemplate restTemplate;
-    /** Assembler to switch from BuergerDTO Resource to Buerger and vice versa. */
+    /**
+     * Assembler to switch from BuergerDTO Resource to Buerger and vice versa.
+     */
     private final BuergerAssembler buergerAssembler = new BuergerAssembler();
 
     /**
      * Create a new BuergerRestClient by RestTemplate and baseUri of the server.
+     *
      * @param restTemplate The restTemplate for the HTTP Requests.
-     * @param baseUri The base URI of the REST Server.
+     * @param baseUri      The base URI of the REST Server.
      */
     public BuergerRestClientImpl(RestTemplate restTemplate, URI baseUri) {
         if (restTemplate == null) throw new NullPointerException("RestTemplate must not be null!");
@@ -76,6 +84,16 @@ public class BuergerRestClientImpl implements BuergerRestClient {
     }
 
     @Override
+    public List<Buerger> findFullTextFuzzy(String filter) {
+        return traverson.follow(BUERGERS, SEARCH, FIND_FULL_TEXT_FUZZY)
+                .withTemplateParameters(Collections.singletonMap("q", filter))
+                .toObject(BuergerResource.LIST).getContent()
+                .stream()
+                .map(buergerAssembler::toBean)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public Optional<Buerger> findOne(Link link) {
         URI uri = URI.create(link.getHref());
         try {
@@ -106,7 +124,7 @@ public class BuergerRestClientImpl implements BuergerRestClient {
     @Override
     public Buerger create(Buerger buerger) {
         URI uri = URI.create(
-                traverson.follow("buergers")
+                traverson.follow(BUERGERS)
                         .asLink().getHref()
         );
 

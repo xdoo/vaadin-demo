@@ -7,6 +7,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
+import de.muenchen.vaadin.services.BuergerI18nResolver;
 import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.components.BuergerChildTab;
 import de.muenchen.vaadin.ui.components.BuergerPartnerTab;
@@ -32,8 +33,8 @@ public class BuergerDetailView extends DefaultBuergerView {
     private BuergerPartnerTab partnerTab;
     private SelectedBuergerReadForm readForm;
     @Autowired
-    public BuergerDetailView(BuergerViewController controller, MainUI ui) {
-        super(controller, ui);
+    public BuergerDetailView(BuergerViewController controller, BuergerI18nResolver resolver, MainUI ui) {
+        super(controller, resolver, ui);
         LOG.debug("creating 'buerger_read_view'");
     }
 
@@ -41,11 +42,11 @@ public class BuergerDetailView extends DefaultBuergerView {
     protected void site() {
         VerticalLayout layout = new VerticalLayout();
         layout.setSpacing(true);
-        
+
         // read form
         readForm = this.controller.getViewFactory().generateReadForm(BuergerUpdateView.NAME, BuergerTableView.NAME);
         layout.addComponent(readForm);
-        
+
         // tab sheet
         TabSheet tabSheet = new TabSheet();
         tabSheet.addStyleName(ValoTheme.TABSHEET_FRAMED);
@@ -53,14 +54,13 @@ public class BuergerDetailView extends DefaultBuergerView {
         // add kind tab
         childTab = controller.getViewFactory().generateChildTab(BuergerDetailView.NAME, BuergerCreateChildView.NAME, BuergerTableView.NAME);
         TabSheet.Tab kindTab = tabSheet.addTab(childTab);
-        kindTab.setCaption(controller.resolveRelative(getEntityFieldPath(Buerger.Rel.kinder.name(), I18nPaths.Type.label)));
+        kindTab.setCaption(resolver.resolveRelative(getEntityFieldPath(Buerger.Rel.kinder.name(), I18nPaths.Type.label)));
 
-
-        partnerTab = controller.getViewFactory().generatePartnerTab(BuergerDetailView.NAME, BuergerCreatePartnerView.NAME, null, NAME);
+        partnerTab = controller.getViewFactory().generatePartnerTab(BuergerDetailView.NAME, BuergerCreatePartnerView.NAME, null);
         TabSheet.Tab pTab = tabSheet.addTab(partnerTab);
-        pTab.setCaption(controller.resolveRelative(getEntityFieldPath(Buerger.Rel.partner.name(), I18nPaths.Type.label)));
+        pTab.setCaption(resolver.resolveRelative(getEntityFieldPath(Buerger.Rel.partner.name(), I18nPaths.Type.label)));
         layout.addComponent(tabSheet);
-        
+
         addComponent(layout);
     }
 

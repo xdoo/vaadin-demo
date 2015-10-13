@@ -1,90 +1,68 @@
 package de.muenchen.vaadin.ui.components;
 
-import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.VerticalLayout;
 import de.muenchen.eventbus.events.Association;
 import de.muenchen.eventbus.selector.entity.RequestEvent;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
-import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
+import de.muenchen.vaadin.guilib.components.GenericGrid;
+import de.muenchen.vaadin.services.BuergerI18nResolver;
+import de.muenchen.vaadin.ui.app.views.BuergerDetailView;
 import de.muenchen.vaadin.ui.app.views.TableSelectWindow;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getEntityFieldPath;
+import java.util.List;
+
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getFormPath;
 
 /**
  * @author claus
  */
+@SuppressWarnings("unchecked")
 public class BuergerChildTab extends CustomComponent {
 
     private BuergerViewController controller;
     private GenericGrid grid;
-    private ActionButton delete;
 
-    public BuergerChildTab(BuergerViewController controller, String navigateToForDetail, String navigateToForCreate, String navigateBack) {
+    public BuergerChildTab(BuergerViewController controller, BuergerI18nResolver resolver, String navigateToForDetail, String navigateToForCreate, String navigateBack) {
 
         this.controller = controller;
 
-        ActionButton create = new ActionButton(controller, SimpleAction.create);
-        create.addClickListener(clickEvent -> {
-            controller.getNavigator().navigateTo(navigateToForCreate);
-        });
-        ActionButton add = new ActionButton(controller, SimpleAction.add);
-        add.addClickListener(clickEvent -> {
-            getUI().addWindow(new TableSelectWindow(controller, controller.getViewFactory().generateChildSearchTable()));
-        });
+        grid = controller.getViewFactory().generateChildTable(BuergerDetailView.NAME)
+                .activateCreate(navigateToForCreate)
+                .activateRead(BuergerDetailView.NAME)
+                .addButton(
+                        controller.getResolver().resolveRelative(
+                                getFormPath(SimpleAction.add,
+                                        I18nPaths.Component.button,
+                                        I18nPaths.Type.label)),
+                        () -> {
+                            HorizontalLayout layout = new HorizontalLayout(controller.getViewFactory().generateChildSearchTable());
+                            layout.setMargin(true);
+                            getUI().addWindow(new TableSelectWindow(controller, controller.getResolver(), layout));
+                        })
+                        .addMultiSelectButton(
+                                controller.getResolver().resolveRelative(
+                                        getFormPath(SimpleAction.delete,
+                                                I18nPaths.Component.button,
+                                                I18nPaths.Type.label)),
+                                buergers -> {
+                                    ((List) buergers).stream().forEach(buerger -> {
+                                        final Association<Buerger> association = new Association<>((Buerger) buerger, Buerger.Rel.kinder.name());
+                                        controller.getEventbus().notify(controller.getRequestKey(RequestEvent.REMOVE_ASSOCIATION), association.asEvent());
+                                    });
+                                });
 
-        delete = new ActionButton(controller, SimpleAction.delete);
-        delete.addClickListener(clickEvent -> {
-            if (grid.getSelectedRows() != null) {
-                for (Object next : grid.getSelectedRows()) {
-                    BeanItem<Buerger> item = (BeanItem<Buerger>) grid.getContainerDataSource().getItem(next);
+        HorizontalLayout layout = new HorizontalLayout(grid);
+        layout.setSizeFull();
+        layout.setMargin(true);
+        setCompositionRoot(layout);
 
-                    final Association<Buerger> association = new Association<>(item.getBean(), Buerger.Rel.kinder.name());
-                    controller.getEventbus().notify(controller.getRequestKey(RequestEvent.REMOVE_ASSOCIATION), association.asEvent());
-                    grid.deselect(next);
-                }
-            }
-        });
-        delete.setVisible(false);
 
-        grid = controller.getViewFactory().generateChildTable(navigateToForDetail);
-        grid.setColumns(Buerger.Field.getProperties());
-        grid.addSelectionListener(selectionEvent -> setButtonVisability());
-
-        // set headers
-        this.grid.getColumn(Buerger.Field.vorname.name()).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.Field.vorname.name(), I18nPaths.Type.column_header)));
-        this.grid.getColumn(Buerger.Field.geburtsdatum.name()).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.Field.geburtsdatum.name(), I18nPaths.Type.column_header)));
-        this.grid.getColumn(Buerger.Field.nachname.name()).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.Field.nachname.name(), I18nPaths.Type.column_header)));
-        this.grid.getColumn(Buerger.Field.augenfarbe.name()).setHeaderCaption(controller.resolveRelative(getEntityFieldPath(Buerger.Field.augenfarbe.name(), I18nPaths.Type.column_header)));
-
-        // Layout für die Schaltflächen über der Tabelle
-        HorizontalLayout hlayout = new HorizontalLayout(create, add, delete);
-        hlayout.setSpacing(true);
-        // Gesamtlayout
-        VerticalLayout vlayout = new VerticalLayout(hlayout, grid);
-        vlayout.setSpacing(true);
-        vlayout.setMargin(true);
-
-        setId(String.format("%s_%s_%s_CHILD_TAB", navigateToForDetail, navigateBack, BuergerViewController.I18N_BASE_PATH));
-        setCompositionRoot(vlayout);
+        setId(String.format("%s_%s_%s_CHILD_TAB", navigateToForDetail, navigateBack, controller.getResolver().getBasePath()));
     }
 
-    private void setButtonVisability() {
-        if (grid.getSelectedRows().size() == 0)
-            delete.setVisible(Boolean.FALSE);
-        else
-            delete.setVisible(Boolean.TRUE);
-    }
 
-    public GenericGrid getGrid() {
-        return grid;
-    }
-
-    public void setGrid(GenericGrid grid) {
-        this.grid = grid;
-    }
 }

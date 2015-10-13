@@ -21,7 +21,6 @@ public abstract class BaseEntity implements Cloneable, Serializable {
     private Long oid;
 
     @IndexedEmbedded(depth = 1, prefix = "mandant")
-
     @NotAudited
     @Column(length = 30, unique = true, nullable = true, name = "mandant")
     @JsonIgnore

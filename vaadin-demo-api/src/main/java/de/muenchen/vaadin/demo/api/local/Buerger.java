@@ -15,7 +15,6 @@ import java.util.stream.Stream;
  * @author p.mueller
  * @version 1.0
  */
-
 public class Buerger extends ResourceSupport {
 
     /**
@@ -133,12 +132,12 @@ public class Buerger extends ResourceSupport {
             this.field = field;
         }
 
-        public static Object[] getProperties() {
-            return Stream.of(values()).filter(Field::isField).map(Field::name).toArray();
-        }
-
         public boolean isField() {
             return field;
+        }
+
+        public static String[] getProperties() {
+            return Stream.of(values()).filter(Field::isField).map(Field::name).toArray(String[]::new);
         }
     }
 

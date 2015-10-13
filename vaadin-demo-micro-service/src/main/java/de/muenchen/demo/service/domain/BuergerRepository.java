@@ -1,14 +1,19 @@
 package de.muenchen.demo.service.domain;
 
-import de.muenchen.demo.service.security.TenantService;
+import de.muenchen.demo.service.services.TenantService;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.access.prepost.PreFilter;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * Provides a Repository for a {@link Buerger}. This Repository can be exported as a REST Resource.
@@ -131,4 +136,16 @@ public interface BuergerRepository extends CrudRepository<Buerger, Long> {
     @PreAuthorize("hasRole('ROLE_DELETE_Buerger')")
     @PostAuthorize(TenantService.IS_TENANT_AUTH)
     void delete(Buerger entity);
+
+    @PreAuthorize("hasRole('ROLE_READ_Buerger')")
+    @PostFilter(TenantService.IS_TENANT_FILTER)
+    List<Buerger> findBuergerByNachname(@Param("nachname") String nachname);
+
+    @PreAuthorize("hasRole('ROLE_READ_Buerger')")
+    @PostFilter(TenantService.IS_TENANT_FILTER)
+    List<Buerger> findBuergerByVorname(@Param("vorname") String vorname);
+
+    @PreAuthorize("hasRole('ROLE_READ_Buerger')")
+    @PostFilter(TenantService.IS_TENANT_FILTER)
+    List<Buerger> findBuergerByGeburtsdatum(@Param("geburtsdatum") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date geburtsdatum);
 }

@@ -20,7 +20,7 @@ public enum SimpleAction implements Action {
 
     //TODO check for duplicate/unused actions
     create(FontAwesome.MAGIC, ValoTheme.BUTTON_FRIENDLY),
-    read,
+    read(FontAwesome.BOOK),
     update(FontAwesome.PENCIL),
     override(FontAwesome.FILES_O),
     back(FontAwesome.ANGLE_LEFT, ShortcutAction.KeyCode.ARROW_LEFT),
@@ -28,8 +28,8 @@ public enum SimpleAction implements Action {
     delete(FontAwesome.TRASH_O, ShortcutAction.KeyCode.DELETE, ValoTheme.BUTTON_DANGER),
     cancel,
     copy(FontAwesome.COPY, ShortcutAction.KeyCode.INSERT),
-    add,
-    release(FontAwesome.TRASH_O),
+    association(FontAwesome.CHECK),
+    add(FontAwesome.PLUS),
     logout(FontAwesome.SIGN_OUT);
     
 
