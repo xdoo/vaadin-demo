@@ -22,6 +22,10 @@ import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import reactor.bus.Event;
 import reactor.fn.Consumer;
 
+import java.util.Optional;
+
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getFormPath;
+
 /**
  * Created by claus.straube on 05.10.15.
  * fabian.holtkoetter ist unschuldig.
@@ -138,10 +142,10 @@ public class BuergerPartnerComponent extends CustomComponent implements Consumer
     @Override
     public void accept(reactor.bus.Event<BuergerDatastore> buergerDatastoreEvent) {
         BuergerDatastore datastore = buergerDatastoreEvent.getData();
-        if (datastore.getSelectedBuergerPartner().size() > 0) {
-            currentPartner = datastore.getSelectedBuergerPartner().getItemIds().get(0);
+        if (!datastore.getSelectedBuergerPartner().equals(Optional.empty())) {
+            currentPartner = datastore.getSelectedBuergerPartner().get();
             partnerReadForm.removeAllComponents();
-            BeanItem<Buerger> partner = buergerDatastoreEvent.getData().getSelectedBuergerPartner().getItem(currentPartner);
+            BeanItem<Buerger> partner = new BeanItem(buergerDatastoreEvent.getData().getSelectedBuergerPartner().get());
 
             FieldGroup binder = new FieldGroup(partner);
             binder.setReadOnly(true);
