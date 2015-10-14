@@ -10,7 +10,6 @@ import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.query.dsl.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostFilter;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -31,7 +30,6 @@ public class QueryService {
     TenantService tenantService;
 
     @SuppressWarnings("unchecked")
-    @PreAuthorize("hasRole('ROLE_READ_Buerger')")
     @PostFilter(TenantService.IS_TENANT_FILTER)
     public <E extends BaseEntity> List<E> query(String text, Class<E> entity, String[] properties) {
         // get the full text entity manager
