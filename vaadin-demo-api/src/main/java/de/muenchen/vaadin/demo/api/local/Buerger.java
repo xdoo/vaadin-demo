@@ -146,7 +146,7 @@ public class Buerger extends ResourceSupport {
         }
 
         public static String[] getProperties() {
-            return Stream.of(values()).filter(Field::isField).map(Field::name).toArray(size -> new String[size]);
+            return Stream.of(values()).filter(Field::isField).map(Field::name).toArray(String[]::new);
         }
 
         public boolean isField() {
