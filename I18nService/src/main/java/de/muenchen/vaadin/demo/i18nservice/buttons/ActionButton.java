@@ -18,7 +18,9 @@ import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getFormPath;
  */
 public class ActionButton extends Button {
 
-    /** Interface for Actions to perform **/
+    /** Interface for Actions to perform.
+     * If an Action crashes it returns true.
+     * **/
     public interface CrashableActionPerformer {
         boolean perform(ClickEvent event);
     }
