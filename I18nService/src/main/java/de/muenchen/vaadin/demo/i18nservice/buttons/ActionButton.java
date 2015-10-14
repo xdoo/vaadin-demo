@@ -79,6 +79,10 @@ public class ActionButton extends Button {
         action.getStyleNames().forEach(style -> this.setStyleName(style, true));
     }
 
+    /**
+     * Add an crashable action performer as click listener.
+     * @param performer performer which can crash.
+     */
     public void addActionPerformer(CrashableActionPerformer performer) {
         this.actions.add(performer);
     }
