@@ -8,15 +8,29 @@ import reactor.bus.EventBus;
 
 import java.util.function.Supplier;
 
+
 /**
- * Created by p.mueller on 09.10.15.
+ * Provides simple general Actions for a single Entity. They are designed to be used as ClickListeners with java8 method
+ * reference.
+ *
+ * @author p.mueller
+ * @version 1.0
  */
 public class EntitySingleActions<T> {
+    /** The supplier for the single entity. */
     private final Supplier<T> entitySupplier;
+    /** The EventBus. */
     private final EventBus eventBus;
+    /** The class of the entity. */
     private final Class<T> entityClass;
 
-
+    /**
+     * Create single actions for the entity.
+     *
+     * @param entitySupplier The supplier for the entity.
+     * @param eventBus       The EventBus.
+     * @param entityClass    The class of the Entity.
+     */
     public EntitySingleActions(Supplier<T> entitySupplier, EventBus eventBus, Class<T> entityClass) {
         this.entityClass = entityClass;
         if (eventBus == null)
@@ -28,38 +42,75 @@ public class EntitySingleActions<T> {
         this.entitySupplier = entitySupplier;
     }
 
+    /**
+     * Delete the single Entity.
+     *
+     * @param clickEvent can be null
+     */
     public void delete(Button.ClickEvent clickEvent) {
         notifyRequest(RequestEvent.DELETE);
     }
 
+    /**
+     * Create the single Entity.
+     *
+     * @param clickEvent can be null
+     */
     public void create(Button.ClickEvent clickEvent) {
         notifyRequest(RequestEvent.CREATE);
     }
 
+    /**
+     * Update the single Entity.
+     *
+     * @param clickEvent can be null
+     */
     public void update(Button.ClickEvent clickEvent) {
         notifyRequest(RequestEvent.UPDATE);
     }
 
+    /**
+     * Read the Entity and set it as current selected Entity.
+     *
+     * @param clickEvent can be null
+     */
     public void read(Button.ClickEvent clickEvent) {
         notifyRequest(RequestEvent.READ_SELECTED);
     }
 
-    private void notifyRequest(RequestEvent delete) {
-
+    /**
+     * Notify the Request.
+     *
+     * @param event The type of the Request.
+     */
+    private void notifyRequest(RequestEvent event) {
         if (getEntity() == null)
             throw new NullPointerException();
-        final RequestEntityKey key = new RequestEntityKey(delete, getEntityClass());
+        final RequestEntityKey key = new RequestEntityKey(event, getEntityClass());
         getEventBus().notify(key, Event.wrap(getEntity()));
     }
 
+    /**
+     * Get the Entity.
+     *
+     * @return the entity.
+     */
     public T getEntity() {
         return entitySupplier.get();
     }
 
+    /**
+     * Get the EventBus.
+     * @return The EventBus.
+     */
     public EventBus getEventBus() {
         return eventBus;
     }
 
+    /**
+     * Get the class of the Entity.
+     * @return The class of the entity.
+     */
     public Class<T> getEntityClass() {
         return entityClass;
     }
