@@ -20,6 +20,21 @@ public class NavigateActions {
     private String navigateTo;
 
     /**
+     * Create new NavigateActions that will navigate based on the NavigateTo with help of the Navigator.
+     * <p/>
+     * This Actions are crucial because they unregister Components from the EventBus.
+     *
+     * @param navigator  The navigator.
+     * @param eventBus   The EventBus.
+     * @param navigateTo The String to navigate to.
+     */
+    public NavigateActions(Navigator navigator, EventBus eventBus, String navigateTo) {
+        this.navigator = navigator;
+        this.eventBus = eventBus;
+        this.navigateTo = navigateTo;
+    }
+
+    /**
      * Get the NavigateTo String.
      *
      * @return The String that is naviagted to.
@@ -34,30 +49,6 @@ public class NavigateActions {
      * @param navigateTo The navigateTo String.
      */
     public void setNavigateTo(String navigateTo) {
-        this.navigateTo = navigateTo;
-    }
-
-    /**
-     * Set the String that is navigated to.
-     *
-     * @param navigateTo The navigateTo String.
-     */
-    public void setNavigateTo(String navigateTo) {
-        this.navigateTo = navigateTo;
-    }
-
-    /**
-     * Create new NavigateActions that will navigate based on the NavigateTo with help of the Navigator.
-     * <p/>
-     * This Actions are crucial because they unregister Components from the EventBus.
-     *
-     * @param navigator  The navigator.
-     * @param eventBus   The EventBus.
-     * @param navigateTo The String to navigate to.
-     */
-    public NavigateActions(Navigator navigator, EventBus eventBus, String navigateTo) {
-        this.navigator = navigator;
-        this.eventBus = eventBus;
         this.navigateTo = navigateTo;
     }
 
