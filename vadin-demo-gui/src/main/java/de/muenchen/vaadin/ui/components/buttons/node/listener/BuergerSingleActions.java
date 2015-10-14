@@ -1,8 +1,8 @@
 package de.muenchen.vaadin.ui.components.buttons.node.listener;
 
+import de.muenchen.eventbus.EventBus;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.guilib.components.actions.EntitySingleActions;
-import reactor.bus.EventBus;
 
 import java.util.function.Supplier;
 

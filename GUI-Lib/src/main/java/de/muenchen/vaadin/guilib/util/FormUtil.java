@@ -1,14 +1,14 @@
-package de.muenchen.vaadin.ui.components.forms.node;
+package de.muenchen.vaadin.guilib.util;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.DefaultFieldGroupFieldFactory;
+import com.vaadin.data.fieldgroup.FieldGroup;
+import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.TextField;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
-
-import java.util.EnumSet;
 
 /**
  * Provides a simple Util for creating various binded Fields on properties.
@@ -55,9 +55,11 @@ public class FormUtil {
         final String caption = getCaption(property);
         final String prompt = getPrompt(property);
 
-        TextField tf = (TextField) getBinder().buildAndBind(caption, property);
+        TextField tf = getBinder().buildAndBind(caption, property, TextField.class);
         tf.setNullRepresentation(NULL_REPRESENTATION);
         tf.setInputPrompt(prompt);
+
+        deactivateValidation(tf);
         //tf.setId(String.format("%s_%s_FIELD", getI18nResolver().getBasePath(), property).toUpperCase());
         return tf;
     }
@@ -106,21 +108,18 @@ public class FormUtil {
      * It has no ID set, the individual component must take care of that.
      *
      * @param property    The property of the entity.
-     * @param enumeration The enum containing all possible values of the property.
      * @return The Combobox for the given property.
      */
-    public ComboBox createComboBox(String property, Class enumeration) {
+    public ComboBox createComboBox(String property) {
         final String caption = getCaption(property);
         final String prompt = getPrompt(property);
 
-        ComboBox cb = new ComboBox(caption);
+        ComboBox cb = getBinder().buildAndBind(caption, property, ComboBox.class);
         cb.setInputPrompt(prompt);
         cb.setTextInputAllowed(true);
         cb.setNullSelectionAllowed(false);
-        if (enumeration.isEnum()) {
-            cb.addItems(EnumSet.allOf(enumeration));
-        }
-        getBinder().bind(cb, property);
+
+        deactivateValidation(cb);
         return cb;
     }
 
@@ -135,9 +134,33 @@ public class FormUtil {
     public DateField createDateField(String property) {
         final String caption = getCaption(property);
 
-        DateField df = (DateField) binder.buildAndBind(caption, property);
+        DateField df = getBinder().buildAndBind(caption, property, DateField.class);
+
+        deactivateValidation(df);
         //df.setId(String.format("%s_%s_DATEFIELD", getI18nResolver().getBasePath(), property).toUpperCase());
 
         return df;
+    }
+
+    /**
+     * Deactivates the visibility of the validation.
+     * On value change or commit the visibility will be active again.
+     *
+     * @param field field configure
+     */
+    private void deactivateValidation(AbstractField field){
+        field.setValidationVisible(false);
+        field.addValueChangeListener(event -> field.setValidationVisible(true));
+        //Hack
+        getBinder().addCommitHandler(new FieldGroup.CommitHandler() {
+            @Override
+            public void preCommit(FieldGroup.CommitEvent commitEvent) throws FieldGroup.CommitException {
+                field.setValidationVisible(true);
+            }
+
+            @Override
+            public void postCommit(FieldGroup.CommitEvent commitEvent) throws FieldGroup.CommitException {
+            }
+        });
     }
 }
