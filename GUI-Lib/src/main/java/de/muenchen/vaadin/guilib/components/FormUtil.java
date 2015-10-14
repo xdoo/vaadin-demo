@@ -1,4 +1,4 @@
-package de.muenchen.vaadin.ui.components.forms.node;
+package de.muenchen.vaadin.guilib.components;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.DefaultFieldGroupFieldFactory;

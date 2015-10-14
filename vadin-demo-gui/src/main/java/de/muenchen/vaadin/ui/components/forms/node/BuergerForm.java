@@ -9,6 +9,7 @@ import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
 import de.muenchen.vaadin.demo.api.domain.Augenfarbe;
 import de.muenchen.vaadin.demo.api.local.Buerger;
+import de.muenchen.vaadin.guilib.components.FormUtil;
 import de.muenchen.vaadin.guilib.controller.EntityController;
 import de.muenchen.vaadin.ui.components.BaseComponent;
 
