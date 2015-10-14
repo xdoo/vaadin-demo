@@ -27,7 +27,7 @@ public class SecurityRestClientController {
     @Autowired
     SecurityRestClient service;
 
-    @PreAuthorize("hasRole('ROLE_READ_Principal')")
+//    @PreAuthorize("hasRole('ROLE_READ_Principal')")
     @RequestMapping(method = {RequestMethod.GET})
     public ResponseEntity getPrincipal() {
         if (LOG.isDebugEnabled()) {

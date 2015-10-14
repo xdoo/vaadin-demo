@@ -14,7 +14,7 @@ insert into users (oid,user_email, user_enabled,  user_password, user_username,m
 insert into users (oid,user_email, user_enabled,  user_password, user_username,mandant) values ('13','fabian.holtkoetter@muenchen.de',TRUE,null,'fabian.holtkoetter','default');
 
 --Authorities
-insert  into authoritys (oid,  auth_authority) values ('2','ADMIN');
+insert  into authorities (oid,  auth_authority) values ('2','ADMIN');
 
 --Permessions
 insert into permissions (oid,perm_permission) values ('1000','ROLE_READ_Wohnung');
@@ -48,51 +48,51 @@ insert into permissions (oid,perm_permission) values ('9000','ROLE_READ_Principa
 
 --Authority-Permission
 
-insert into authoritys_permissions (authority_oid, permission_oid) values ('2','1000');
-insert into authoritys_permissions (authority_oid, permission_oid) values ('2','1001');
-insert into authoritys_permissions (authority_oid, permission_oid) values ('2','1002');
-insert into authoritys_permissions (authority_oid, permission_oid) values ('2','1003');
-insert into authoritys_permissions (authority_oid, permission_oid) values ('2','1005');
-insert into authoritys_permissions (authority_oid, permission_oid) values ('2','1006');
-insert into authoritys_permissions (authority_oid, permission_oid) values ('2','1007');
-insert into authoritys_permissions (authority_oid, permission_oid) values ('2','1008');
+insert into authorities_permissions (authority_oid, permission_oid) values ('2','1000');
+insert into authorities_permissions (authority_oid, permission_oid) values ('2','1001');
+insert into authorities_permissions (authority_oid, permission_oid) values ('2','1002');
+insert into authorities_permissions (authority_oid, permission_oid) values ('2','1003');
+insert into authorities_permissions (authority_oid, permission_oid) values ('2','1005');
+insert into authorities_permissions (authority_oid, permission_oid) values ('2','1006');
+insert into authorities_permissions (authority_oid, permission_oid) values ('2','1007');
+insert into authorities_permissions (authority_oid, permission_oid) values ('2','1008');
 
-insert into authoritys_permissions (authority_oid, permission_oid) values ('2','2000');
-insert into authoritys_permissions (authority_oid, permission_oid) values ('2','2001');
-insert into authoritys_permissions (authority_oid, permission_oid) values ('2','2002');
-insert into authoritys_permissions (authority_oid, permission_oid) values ('2','2003');
-insert into authoritys_permissions (authority_oid, permission_oid) values ('2','2005');
-insert into authoritys_permissions (authority_oid, permission_oid) values ('2','2006');
-insert into authoritys_permissions (authority_oid, permission_oid) values ('2','2007');
-insert into authoritys_permissions (authority_oid, permission_oid) values ('2','2008');
+insert into authorities_permissions (authority_oid, permission_oid) values ('2','2000');
+insert into authorities_permissions (authority_oid, permission_oid) values ('2','2001');
+insert into authorities_permissions (authority_oid, permission_oid) values ('2','2002');
+insert into authorities_permissions (authority_oid, permission_oid) values ('2','2003');
+insert into authorities_permissions (authority_oid, permission_oid) values ('2','2005');
+insert into authorities_permissions (authority_oid, permission_oid) values ('2','2006');
+insert into authorities_permissions (authority_oid, permission_oid) values ('2','2007');
+insert into authorities_permissions (authority_oid, permission_oid) values ('2','2008');
 
-insert into authoritys_permissions (authority_oid, permission_oid) values ('2','3200');
-insert into authoritys_permissions (authority_oid, permission_oid) values ('2','3201');
-insert into authoritys_permissions (authority_oid, permission_oid) values ('2','3202');
-insert into authoritys_permissions (authority_oid, permission_oid) values ('2','3203');
-insert into authoritys_permissions (authority_oid, permission_oid) values ('2','3205');
-insert into authoritys_permissions (authority_oid, permission_oid) values ('2','3206');
-insert into authoritys_permissions (authority_oid, permission_oid) values ('2','3207');
-insert into authoritys_permissions (authority_oid, permission_oid) values ('2','3208');
+insert into authorities_permissions (authority_oid, permission_oid) values ('2','3200');
+insert into authorities_permissions (authority_oid, permission_oid) values ('2','3201');
+insert into authorities_permissions (authority_oid, permission_oid) values ('2','3202');
+insert into authorities_permissions (authority_oid, permission_oid) values ('2','3203');
+insert into authorities_permissions (authority_oid, permission_oid) values ('2','3205');
+insert into authorities_permissions (authority_oid, permission_oid) values ('2','3206');
+insert into authorities_permissions (authority_oid, permission_oid) values ('2','3207');
+insert into authorities_permissions (authority_oid, permission_oid) values ('2','3208');
 
-insert into authoritys_permissions (authority_oid, permission_oid) values ('2','9000');
+insert into authorities_permissions (authority_oid, permission_oid) values ('2','9000');
 
 --User-Authority
 
 
-insert into users_authoritys (authority_oid, user_oid) values ('2','1');
-insert into users_authoritys (authority_oid, user_oid) values ('2','2');
-insert into users_authoritys (authority_oid, user_oid) values ('2','3');
-insert into users_authoritys (authority_oid, user_oid) values ('2','4');
-insert into users_authoritys (authority_oid, user_oid) values ('2','5');
-insert into users_authoritys (authority_oid, user_oid) values ('2','6');
-insert into users_authoritys (authority_oid, user_oid) values ('2','7');
-insert into users_authoritys (authority_oid, user_oid) values ('2','8');
-insert into users_authoritys (authority_oid, user_oid) values ('2','9');
-insert into users_authoritys (authority_oid, user_oid) values ('2','10');
-insert into users_authoritys (authority_oid, user_oid) values ('2','11');
-insert into users_authoritys (authority_oid, user_oid) values ('2','12');
-insert into users_authoritys (authority_oid, user_oid) values ('2','13');
+insert into users_authorities (authority_oid, user_oid) values ('2','1');
+insert into users_authorities (authority_oid, user_oid) values ('2','2');
+insert into users_authorities (authority_oid, user_oid) values ('2','3');
+insert into users_authorities (authority_oid, user_oid) values ('2','4');
+insert into users_authorities (authority_oid, user_oid) values ('2','5');
+insert into users_authorities (authority_oid, user_oid) values ('2','6');
+insert into users_authorities (authority_oid, user_oid) values ('2','7');
+insert into users_authorities (authority_oid, user_oid) values ('2','8');
+insert into users_authorities (authority_oid, user_oid) values ('2','9');
+insert into users_authorities (authority_oid, user_oid) values ('2','10');
+insert into users_authorities (authority_oid, user_oid) values ('2','11');
+insert into users_authorities (authority_oid, user_oid) values ('2','12');
+insert into users_authorities (authority_oid, user_oid) values ('2','13');
 
 
  
