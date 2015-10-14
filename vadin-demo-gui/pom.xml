@@ -100,7 +100,7 @@
         <dependency>
             <groupId>de.muenchen</groupId>
             <artifactId>I18nService</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0.0-Final</version>
         </dependency>
         <dependency>
             <groupId>de.muenchen</groupId>
@@ -110,7 +110,7 @@
         <dependency>
             <groupId>de.muenchen</groupId>
             <artifactId>Eventbus</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0.0-Final</version>
         </dependency>
     </dependencies>
 </project>
