@@ -33,7 +33,7 @@ public class BuergerI18nResolver implements I18nResolver {
 
     /**
      * Resolve the relative path (e.g. "asdf.label").
-     * <p>
+     * <p/>
      * The base path will be appended at start and then read from the properties.
      *
      * @param relativePath the path to add to the base path.
@@ -51,7 +51,7 @@ public class BuergerI18nResolver implements I18nResolver {
 
     /**
      * Resolve the relative path (e.g. ".asdf.label") to a icon.
-     * <p>
+     * <p/>
      * The base path will be appended at start and then read from the properties.
      *
      * @param relativePath the path to add to the base path.

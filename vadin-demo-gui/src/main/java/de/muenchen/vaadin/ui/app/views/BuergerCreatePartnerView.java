@@ -28,7 +28,7 @@ public class BuergerCreatePartnerView extends DefaultBuergerView {
 
     @Override
     protected void site() {
-        addComponent(this.controller.getViewFactory().generateCreatePartnerForm(BuergerDetailView.NAME));
+        addComponent(this.controller.getViewFactory().generateCreatePartnerForm(BuergerDetailView.NAME, BuergerDetailView.NAME));
     }
 
 }

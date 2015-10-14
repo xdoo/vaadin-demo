@@ -2,6 +2,7 @@ package de.muenchen.vaadin.services.model;
 
 import com.vaadin.data.util.BeanItemContainer;
 import de.muenchen.vaadin.demo.api.local.Buerger;
+
 import java.util.Optional;
 
 /*
@@ -15,15 +16,12 @@ public class BuergerDatastore {
 
     /** All the kinder of the selectedBuerger. */
     private final BeanItemContainer<Buerger> selectedBuergerKinder = new BeanItemContainer<>(Buerger.class);
-
-    /** The partner of the selectedBuerger. */
-    private Optional<Buerger> selectedBuergerPartner = Optional.empty();
-
     /** A List of all the Buerger, possible reduced by the query. */
     private final BeanItemContainer<Buerger> buergers = new BeanItemContainer<>(Buerger.class);
-
+    /** The partner of the selectedBuerger. */
+    private Optional<Buerger> selectedBuergerPartner = Optional.empty();
     /** The current (single or none) selected buerger in the GUI. */
-    private Optional<Buerger> selectedBuerger= Optional.empty();
+    private Optional<Buerger> selectedBuerger = Optional.empty();
 
     /** The query to filter the buerger. */
     private Optional<String> query = Optional.empty();
@@ -71,13 +69,13 @@ public class BuergerDatastore {
     public Optional<Buerger> getSelectedBuergerPartner() {
         return selectedBuergerPartner;
     }
+
     /**
      * Set the partner of the current selected buerger
      */
     public void setSelectedBuergerPartner(Optional<Buerger> partner) {
         this.selectedBuergerPartner = partner;
     }
-
 
 
 }

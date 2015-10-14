@@ -24,7 +24,7 @@ public abstract class DefaultBuergerView extends VerticalLayout implements View{
 
     BuergerViewController controller;
     BuergerI18nResolver resolver;
-    
+
     public DefaultBuergerView(BuergerViewController controller, BuergerI18nResolver resolver, MainUI ui) {
         this.controller = controller;
         this.resolver = resolver;
@@ -37,23 +37,23 @@ public abstract class DefaultBuergerView extends VerticalLayout implements View{
     protected abstract void site();
     
     protected void addHeadline() {
-        
+
         // headline
         Label pageTitle = new Label(resolver.resolveRelative(getPagePath(Type.title)));
         pageTitle.addStyleName(ValoTheme.LABEL_H1);
         pageTitle.addStyleName(ValoTheme.LABEL_COLORED);
-        
+
         removeAllComponents();
         //HorizontalLayout head = new HorizontalLayout(pageTitle);
         addComponent(pageTitle);
     }
-    
+
     private void configureLayout() {
         setSizeFull();
         this.setHeightUndefined();
         setMargin(new MarginInfo(false, true, false, true));
     }
-    
+
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
         this.configureLayout();
