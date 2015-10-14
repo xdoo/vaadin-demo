@@ -57,7 +57,7 @@ public class EntityActions {
 
     /**
      * Read the whole list of buergers.
-     * @param clickEvent
+     * @param clickEvent can be null
      */
     public void readList(Button.ClickEvent clickEvent) {
         if (q == null) {
