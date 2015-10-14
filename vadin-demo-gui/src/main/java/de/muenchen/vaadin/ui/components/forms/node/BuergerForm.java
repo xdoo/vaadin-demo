@@ -7,10 +7,9 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
-import de.muenchen.vaadin.demo.api.domain.Augenfarbe;
 import de.muenchen.vaadin.demo.api.local.Buerger;
-import de.muenchen.vaadin.guilib.components.FormUtil;
 import de.muenchen.vaadin.guilib.controller.EntityController;
+import de.muenchen.vaadin.guilib.util.FormUtil;
 import de.muenchen.vaadin.ui.components.BaseComponent;
 
 import java.util.Arrays;
@@ -72,7 +71,7 @@ public class BuergerForm extends BaseComponent {
 
         final TextField vorname = formUtil.createTextField(Buerger.Field.vorname.name());
         final TextField nachname = formUtil.createTextField(Buerger.Field.nachname.name());
-        final ComboBox augenfarbe = formUtil.createComboBox(Buerger.Field.augenfarbe.name(), Augenfarbe.class);
+        final ComboBox augenfarbe = formUtil.createComboBox(Buerger.Field.augenfarbe.name());
         final DateField geburtsdatum = formUtil.createDateField(Buerger.Field.geburtsdatum.name());
 
         return Arrays.asList(vorname, nachname, augenfarbe, geburtsdatum);
