@@ -12,7 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  */
 @Configuration
 /** Security must be more important than chache because of Mandant Feature! (order)*/
-@EnableGlobalMethodSecurity(prePostEnabled = true, order = 1)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @Order(SecurityProperties.BASIC_AUTH_ORDER - 6)
 public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 

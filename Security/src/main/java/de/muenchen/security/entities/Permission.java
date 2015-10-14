@@ -17,7 +17,7 @@ import javax.persistence.Table;
 @Table(name = "PERMISSIONS")
 public class Permission extends SecurityEntity {
 
-    @Column(name = "PERM_PERMISSION")
+    @Column(name = "PERMISSION")
     private String permission;
 
     public String getPermission() {

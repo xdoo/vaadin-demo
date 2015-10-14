@@ -76,10 +76,11 @@ public class User implements Serializable {
     private java.util.Date lastModDate;
 
     @ManyToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
-    @JoinTable(name = "users_authoritys", joinColumns = { @JoinColumn(name = "user_oid")}, inverseJoinColumns = {@JoinColumn(name="authority_oid")})
-    private Set<Authority> authoritys;
+    @JoinTable(name = "users_authorities", joinColumns = { @JoinColumn(name = "user_oid")}, inverseJoinColumns = {@JoinColumn(name="authority_oid")})
+    private Set<Authority> authorities;
 
     @JsonIgnore
+    @Column(name = "USER_MANDANT")
     private String mandant;
 
     public User() {
@@ -98,7 +99,7 @@ public class User implements Serializable {
         this.lastModBy = user.lastModBy;
         this.lastModDate = user.lastModDate;
         this.mandant = user.mandant;
-        this.authoritys = user.authoritys;
+        this.authorities = user.authorities;
     }
 
     public String getOid() {
@@ -206,10 +207,10 @@ public class User implements Serializable {
     }
 
     public Set<Authority> getAuthoritys() {
-        return authoritys;
+        return authorities;
     }
 
     public void setAuthoritys(Set<Authority> authoritys) {
-        this.authoritys = authoritys;
+        this.authorities = authoritys;
     }
 }
