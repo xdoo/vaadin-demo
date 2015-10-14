@@ -43,17 +43,17 @@ public class BuergerChildTab extends CustomComponent {
                             layout.setMargin(true);
                             getUI().addWindow(new TableSelectWindow(controller, controller.getResolver(), layout));
                         })
-                        .addMultiSelectButton(
-                                controller.getResolver().resolveRelative(
-                                        getFormPath(SimpleAction.delete,
-                                                I18nPaths.Component.button,
-                                                I18nPaths.Type.label)),
-                                buergers -> {
-                                    ((List) buergers).stream().forEach(buerger -> {
-                                        final Association<Buerger> association = new Association<>((Buerger) buerger, Buerger.Rel.kinder.name());
-                                        controller.getEventbus().notify(controller.getRequestKey(RequestEvent.REMOVE_ASSOCIATION), association.asEvent());
-                                    });
-                                });
+                .addMultiSelectButton(
+                        controller.getResolver().resolveRelative(
+                                getFormPath(SimpleAction.delete,
+                                        I18nPaths.Component.button,
+                                        I18nPaths.Type.label)),
+                        buergers -> {
+                            ((List) buergers).stream().forEach(buerger -> {
+                                final Association<Buerger> association = new Association<>((Buerger) buerger, Buerger.Rel.kinder.name());
+                                controller.getEventbus().notify(controller.getRequestKey(RequestEvent.REMOVE_ASSOCIATION), association.asEvent());
+                            });
+                        });
 
         HorizontalLayout layout = new HorizontalLayout(grid);
         layout.setSizeFull();

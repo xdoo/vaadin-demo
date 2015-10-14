@@ -18,8 +18,16 @@ public class Principal {
         return roles;
     }
 
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
+    }
+
     public List<String> getPermissions() {
         return permissions;
+    }
+
+    public void setPermissions(List<String> permissions) {
+        this.permissions = permissions;
     }
 
     public String getUsername() {
@@ -28,14 +36,6 @@ public class Principal {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
-    }
-
-    public void setPermissions(List<String> permissions) {
-        this.permissions = permissions;
     }
 
 }

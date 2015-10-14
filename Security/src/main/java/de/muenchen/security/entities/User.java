@@ -8,16 +8,7 @@ package de.muenchen.security.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.search.annotations.Indexed;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
+import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
@@ -76,7 +67,7 @@ public class User implements Serializable {
     private java.util.Date lastModDate;
 
     @ManyToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
-    @JoinTable(name = "users_authoritys", joinColumns = { @JoinColumn(name = "user_oid")}, inverseJoinColumns = {@JoinColumn(name="authority_oid")})
+    @JoinTable(name = "users_authoritys", joinColumns = {@JoinColumn(name = "user_oid")}, inverseJoinColumns = {@JoinColumn(name = "authority_oid")})
     private Set<Authority> authoritys;
 
     @JsonIgnore

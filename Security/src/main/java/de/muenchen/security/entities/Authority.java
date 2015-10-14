@@ -5,18 +5,10 @@
  */
 package de.muenchen.security.entities;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Set;
 
 /**
- *
  * @author praktikant.tmar
  */
 @Entity
@@ -28,7 +20,7 @@ public class Authority extends SecurityEntity {
     private String authority;
 
     @ManyToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
-    @JoinTable(name = "authoritys_permissions", joinColumns = { @JoinColumn(name = "authority_oid")}, inverseJoinColumns = {@JoinColumn(name="permission_oid")})
+    @JoinTable(name = "authoritys_permissions", joinColumns = {@JoinColumn(name = "authority_oid")}, inverseJoinColumns = {@JoinColumn(name = "permission_oid")})
     private Set<Permission> permissions;
 
     public Authority() {
@@ -37,7 +29,7 @@ public class Authority extends SecurityEntity {
     public Authority(Authority authority, Set<Permission> permissions) {
         this.authority = authority.authority;
         this.permissions = permissions;
-        
+
     }
 
 

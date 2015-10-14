@@ -26,7 +26,6 @@ import reactor.bus.EventBus;
 
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -89,10 +88,9 @@ public class BuergerViewController implements Serializable, EntityController {
     }
 
     /**
-     * Die Main wird über die {@link de.muenchen.vaadin.ui.app.views.DefaultBuergerView} registriert. Dies
-     * ist notwendig, da die Vaadin abhängigen Beans zum Zeitpunkt der Instanzierung
-     * noch nicht vorhanden sind. Aus der Main UI wird der {@link Navigator} geholt,
-     * um über ihn eine Navigation zwischen einzelnen Views zu ermöglichen.
+     * Die Main wird über die {@link de.muenchen.vaadin.ui.app.views.DefaultBuergerView} registriert. Dies ist
+     * notwendig, da die Vaadin abhängigen Beans zum Zeitpunkt der Instanzierung noch nicht vorhanden sind. Aus der Main
+     * UI wird der {@link Navigator} geholt, um über ihn eine Navigation zwischen einzelnen Views zu ermöglichen.
      *
      * @param ui MainUI
      */
@@ -104,7 +102,7 @@ public class BuergerViewController implements Serializable, EntityController {
         return eventbus;
     }
 
-    public BuergerI18nResolver getResolver(){
+    public BuergerI18nResolver getResolver() {
         return resolver;
     }
 
@@ -202,8 +200,8 @@ public class BuergerViewController implements Serializable, EntityController {
     }
 
     /**
-     * Remove the specified Association from the specified Relation and update the DataStore.
-     * Update the Model and send it on the ResponseEntityKey if necessary.
+     * Remove the specified Association from the specified Relation and update the DataStore. Update the Model and send
+     * it on the ResponseEntityKey if necessary.
      *
      * @param event The event with an {@link Association} as {@link Event#getData()}.
      */
@@ -231,12 +229,9 @@ public class BuergerViewController implements Serializable, EntityController {
     }
 
     /**
-     * Add the specified Association to the specified Relation and update the DataStore.
-     * <p>
-     * If the {@link Association#getAssociation()} has no {@link ResourceSupport#getId()} the Resouce will be created
-     * on the DataStore first.
-     * </p>
-     * Update the Model and send it on the ResponseEntityKey if necessary.
+     * Add the specified Association to the specified Relation and update the DataStore. <p> If the {@link
+     * Association#getAssociation()} has no {@link ResourceSupport#getId()} the Resouce will be created on the DataStore
+     * first. </p> Update the Model and send it on the ResponseEntityKey if necessary.
      *
      * @param event The event with an {@link Association} as {@link Event#getData()}.
      */
@@ -273,8 +268,7 @@ public class BuergerViewController implements Serializable, EntityController {
     }
 
     /**
-     * Create a new Buerger on the DataStore.
-     * Update the Model and send it on the ResponseEntityKey if necessary.
+     * Create a new Buerger on the DataStore. Update the Model and send it on the ResponseEntityKey if necessary.
      *
      * @param event The event with an {@link Buerger} as {@link Event#getData()}.
      */
@@ -293,8 +287,7 @@ public class BuergerViewController implements Serializable, EntityController {
 
 
     /**
-     * Delete the Buerger on the DataStore.
-     * Update the Model and send it on the ResponseEntityKey if necessary.
+     * Delete the Buerger on the DataStore. Update the Model and send it on the ResponseEntityKey if necessary.
      *
      * @param event The event with an {@link Buerger} as {@link Event#getData()}.
      */
@@ -326,8 +319,7 @@ public class BuergerViewController implements Serializable, EntityController {
     }
 
     /**
-     * Update the Buerger on the DataStore.
-     * Update the Model and send it on the ResponseEntityKey if necessary.
+     * Update the Buerger on the DataStore. Update the Model and send it on the ResponseEntityKey if necessary.
      *
      * @param event The event with an {@link Buerger} as {@link Event#getData()}.
      */
@@ -348,11 +340,8 @@ public class BuergerViewController implements Serializable, EntityController {
     }
 
     /**
-     * Refresh the {@link BuergerDatastore#buergers} list from the DataStore.
-     * <p/>
-     * <p>
-     * This method also filters by the query (ifPresent).
-     * </p>
+     * Refresh the {@link BuergerDatastore#buergers} list from the DataStore. <p/> <p> This method also filters by the
+     * query (ifPresent). </p>
      */
     private void refreshModelList() {
         final Optional<String> query = getModel().getQuery();
@@ -386,8 +375,8 @@ public class BuergerViewController implements Serializable, EntityController {
     }
 
     /**
-     * Set the query based on the String sent in the Event.
-     * Update the Model and send it on the ResponseEntityKey if necessary.
+     * Set the query based on the String sent in the Event. Update the Model and send it on the ResponseEntityKey if
+     * necessary.
      *
      * @param event The event with a {@link String} query as {@link Event#getData()}.
      */
@@ -406,9 +395,9 @@ public class BuergerViewController implements Serializable, EntityController {
     }
 
     /**
-     * Read the Buerger in the Event from the DataStore and set it as the current selected Buerger.
-     * If called with null, the current selected Buerger will only be refreshed from the DataStore.
-     * Update the Model and send it on the ResponseEntityKey if necessary.
+     * Read the Buerger in the Event from the DataStore and set it as the current selected Buerger. If called with null,
+     * the current selected Buerger will only be refreshed from the DataStore. Update the Model and send it on the
+     * ResponseEntityKey if necessary.
      *
      * @param event The event with an {@link Buerger} or *null* as {@link Event#getData()}.
      */

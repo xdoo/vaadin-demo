@@ -1,7 +1,6 @@
 package de.muenchen.vaadin.demo.i18nservice.buttons;
 
 import com.vaadin.server.FontAwesome;
-import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 
 import java.util.HashSet;
@@ -39,16 +38,4 @@ public interface Action extends I18nPaths.I18nPath {
     default Optional<FontAwesome> getIcon() {
         return Optional.empty();
     }
-
-    /**
-     * Get the ID representation for this action.
-     *
-     * //TODO its questionable that the id is provided this way. This means that only one id exists per action.
-     *
-     * @param navigateTo
-     * @param context
-     * @return the String identifier.
-     */
-    String getID(String navigateTo, I18nResolver context);
-
 }
