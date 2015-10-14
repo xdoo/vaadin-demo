@@ -5,8 +5,7 @@
  */
 package de.muenchen.demo.service.services;
 
-import de.muenchen.gis_service._1_0_0
-        .GisService;
+import de.muenchen.gis_service._1_0_0.GisService;
 
 /**
  *

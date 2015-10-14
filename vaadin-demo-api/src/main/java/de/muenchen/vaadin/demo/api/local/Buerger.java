@@ -145,12 +145,12 @@ public class Buerger extends ResourceSupport {
             this.field = field;
         }
 
-        public boolean isField() {
-            return field;
+        public static String[] getProperties() {
+            return Stream.of(values()).filter(Field::isField).map(Field::name).toArray(size -> new String[size]);
         }
 
-        public static String[] getProperties() {
-            return Stream.of(values()).filter(Field::isField).map(Field::name).toArray(String[]::new);
+        public boolean isField() {
+            return field;
         }
     }
 

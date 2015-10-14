@@ -8,17 +8,26 @@ import java.util.List;
  * @author claus.straube
  */
 public class Principal {
-    
+
     private String username;
     private List<String> roles = new ArrayList<>();
     private List<String> permissions = new ArrayList<>();
+
 
     public List<String> getRoles() {
         return roles;
     }
 
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
+    }
+
     public List<String> getPermissions() {
         return permissions;
+    }
+
+    public void setPermissions(List<String> permissions) {
+        this.permissions = permissions;
     }
 
     public String getUsername() {
@@ -29,11 +38,4 @@ public class Principal {
         this.username = username;
     }
 
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
-    }
-
-    public void setPermissions(List<String> permissions) {
-        this.permissions = permissions;
-    }
 }
