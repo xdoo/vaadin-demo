@@ -5,7 +5,7 @@
  * and open the template in the editor.
  */
 
-import de.muenchen.vaadin.demo.apilib.domain.BaseEntity;
+
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.query.dsl.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;

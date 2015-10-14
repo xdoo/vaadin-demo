@@ -1,6 +1,5 @@
 import de.muenchen.security.entities.User;
 import de.muenchen.security.repositories.UserRepository;
-import de.muenchen.vaadin.demo.apilib.domain.BaseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
