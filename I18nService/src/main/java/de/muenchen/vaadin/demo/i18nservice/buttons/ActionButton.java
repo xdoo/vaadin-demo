@@ -19,12 +19,12 @@ import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getFormPath;
 public class ActionButton extends Button {
 
     /** Interface for Actions to perform **/
-    public interface ActionPerformer{
+    public interface CrashableActionPerformer {
         boolean perform(ClickEvent event);
     }
 
     /** List of Actions to perform on click. **/
-    private List<ActionPerformer> actions = new ArrayList<>();
+    private List<CrashableActionPerformer> actions = new ArrayList<>();
 
 
     /**
@@ -77,14 +77,14 @@ public class ActionButton extends Button {
         action.getStyleNames().forEach(style -> this.setStyleName(style, true));
     }
 
-    public void addActionPerformer(ActionPerformer performer) {
+    public void addActionPerformer(CrashableActionPerformer performer) {
         this.actions.add(performer);
     }
 
     @SuppressWarnings("unchecked")
     private void perform(ClickEvent event) {
         //Perform all actions until all actions are performed or one crashes.
-        actions.stream().sequential().anyMatch(actionPerformer -> !actionPerformer.perform(event));
+        actions.stream().sequential().anyMatch(actionPerformer -> actionPerformer.perform(event));
     }
 
 }

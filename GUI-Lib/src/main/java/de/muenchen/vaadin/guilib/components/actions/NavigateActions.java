@@ -59,6 +59,6 @@ public class NavigateActions {
     public boolean navigate(Button.ClickEvent clickEvent) {
         eventBus.getConsumerRegistry().unregister(new ResponseEntityKey());
         navigator.navigateTo(navigateTo);
-        return true;
+        return false;
     }
 }
