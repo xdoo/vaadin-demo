@@ -1,12 +1,19 @@
 package de.muenchen.vaadin.guilib.components.actions;
 
+import com.vaadin.server.Page;
 import com.vaadin.ui.Button;
 import de.muenchen.eventbus.selector.entity.RequestEntityKey;
 import de.muenchen.eventbus.selector.entity.RequestEvent;
+import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
+import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
+import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
+import de.muenchen.vaadin.guilib.components.GenericWarningNotification;
 import reactor.bus.Event;
 import reactor.bus.EventBus;
 
 import java.util.function.Supplier;
+
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getNotificationPath;
 
 
 /**
@@ -23,6 +30,8 @@ public class EntitySingleActions<T> {
     private final EventBus eventBus;
     /** The class of the entity. */
     private final Class<T> entityClass;
+    /** The I18NResolver of this context **/
+    private final I18nResolver resolver;
 
     /**
      * Create single actions for the entity.
@@ -31,13 +40,14 @@ public class EntitySingleActions<T> {
      * @param eventBus       The EventBus.
      * @param entityClass    The class of the Entity.
      */
-    public EntitySingleActions(Supplier<T> entitySupplier, EventBus eventBus, Class<T> entityClass) {
+    public EntitySingleActions(I18nResolver resolver, Supplier<T> entitySupplier, EventBus eventBus, Class<T> entityClass) {
         this.entityClass = entityClass;
         if (eventBus == null)
             throw new NullPointerException();
         if (entitySupplier == null)
             throw new NullPointerException();
 
+        this.resolver = resolver;
         this.eventBus = eventBus;
         this.entitySupplier = entitySupplier;
     }
@@ -47,8 +57,9 @@ public class EntitySingleActions<T> {
      *
      * @param clickEvent can be null
      */
-    public void delete(Button.ClickEvent clickEvent) {
+    public boolean delete(Button.ClickEvent clickEvent) {
         notifyRequest(RequestEvent.DELETE);
+        return true;
     }
 
     /**
@@ -56,8 +67,17 @@ public class EntitySingleActions<T> {
      *
      * @param clickEvent can be null
      */
-    public void create(Button.ClickEvent clickEvent) {
-        notifyRequest(RequestEvent.CREATE);
+    public boolean create(Button.ClickEvent clickEvent) {
+        try {
+            notifyRequest(RequestEvent.CREATE);
+            return true;
+        } catch (Exception e) { //TODO Find a good Exception Type
+            GenericWarningNotification warn = new GenericWarningNotification(
+                    resolver.resolveRelative(getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.create, I18nPaths.Type.label)),
+                    resolver.resolveRelative(getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.create, I18nPaths.Type.text)));
+            warn.show(Page.getCurrent());
+            return false;
+        }
     }
 
     /**
@@ -65,8 +85,17 @@ public class EntitySingleActions<T> {
      *
      * @param clickEvent can be null
      */
-    public void update(Button.ClickEvent clickEvent) {
-        notifyRequest(RequestEvent.UPDATE);
+    public boolean update(Button.ClickEvent clickEvent) {
+        try {
+            notifyRequest(RequestEvent.UPDATE);
+            return true;
+        } catch (Exception e) { //TODO Find a good Exception Type
+            GenericWarningNotification warn = new GenericWarningNotification(
+                    resolver.resolveRelative(getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.update, I18nPaths.Type.label)),
+                    resolver.resolveRelative(getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.update, I18nPaths.Type.text)));
+            warn.show(Page.getCurrent());
+            return false;
+        }
     }
 
     /**
@@ -74,8 +103,9 @@ public class EntitySingleActions<T> {
      *
      * @param clickEvent can be null
      */
-    public void read(Button.ClickEvent clickEvent) {
+    public boolean read(Button.ClickEvent clickEvent) {
         notifyRequest(RequestEvent.READ_SELECTED);
+        return true;
     }
 
     /**

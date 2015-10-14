@@ -72,11 +72,11 @@ public class SelectedBuergerUpdateForm extends SelectedBuergerForm {
     private ActionButton createSaveButton() {
         final ActionButton saveButton = new ActionButton(getI18nResolver(), SimpleAction.save);
 
-        final BuergerSingleActions buergerSingleActions = new BuergerSingleActions(this::getBuerger, getEventBus());
-        saveButton.addClickListener(buergerSingleActions::update);
+        final BuergerSingleActions buergerSingleActions = new BuergerSingleActions(getI18nResolver(), this::getBuerger, getEventBus());
+        saveButton.addActionPerformer(buergerSingleActions::update);
 
         final NavigateActions navigateActions = new NavigateActions(getNavigator(), getEventBus(), getNavigateTo());
-        saveButton.addClickListener(navigateActions::navigate);
+        saveButton.addActionPerformer(navigateActions::navigate);
 
         return saveButton;
     }
@@ -90,7 +90,7 @@ public class SelectedBuergerUpdateForm extends SelectedBuergerForm {
         final ActionButton backButton = new ActionButton(getI18nResolver(), SimpleAction.back);
 
         final NavigateActions navigateActions = new NavigateActions(getNavigator(), getEventBus(), getNavigateBack());
-        backButton.addClickListener(navigateActions::navigate);
+        backButton.addActionPerformer(navigateActions::navigate);
 
         return backButton;
     }

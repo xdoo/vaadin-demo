@@ -30,7 +30,6 @@ public class SelectedBuergerForm extends BuergerForm {
      * @param event
      */
     private void update(reactor.bus.Event<?> event) {
-        System.out.println(this.toString() + System.currentTimeMillis());
         final BuergerDatastore data = (BuergerDatastore) event.getData();
         data.getSelectedBuerger().ifPresent(this::setBuerger);
     }

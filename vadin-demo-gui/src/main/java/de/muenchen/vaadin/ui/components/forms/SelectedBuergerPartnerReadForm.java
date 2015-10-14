@@ -68,7 +68,7 @@ public class SelectedBuergerPartnerReadForm extends SelectedBuergerPartnerForm {
         final ActionButton backButton = new ActionButton(getI18nResolver(), SimpleAction.back);
 
         final NavigateActions navigateActions = new NavigateActions(getNavigator(), getEventBus(), getNavigateBack());
-        backButton.addClickListener(navigateActions::navigate);
+        backButton.addActionPerformer(navigateActions::navigate);
 
         return backButton;
     }
@@ -82,11 +82,11 @@ public class SelectedBuergerPartnerReadForm extends SelectedBuergerPartnerForm {
     private ActionButton createUpdateButton() {
         final ActionButton updateButton = new ActionButton(getI18nResolver(), SimpleAction.update);
 
-        final BuergerSingleActions buergerSingleActions = new BuergerSingleActions(this::getBuerger, getEventBus());
-        updateButton.addClickListener(buergerSingleActions::read);
+        final BuergerSingleActions buergerSingleActions = new BuergerSingleActions(getI18nResolver(), this::getBuerger, getEventBus());
+        updateButton.addActionPerformer(buergerSingleActions::read);
 
         final NavigateActions navigateActions = new NavigateActions(getNavigator(), getEventBus(), getNavigateToUpdate());
-        updateButton.addClickListener(navigateActions::navigate);
+        updateButton.addActionPerformer(navigateActions::navigate);
 
         return updateButton;
     }
