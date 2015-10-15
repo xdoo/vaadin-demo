@@ -1,4 +1,4 @@
-package de.muenchen.vaadin.services;
+package de.muenchen.vaadin.guilib.services;
 
 import com.netflix.discovery.DiscoveryClient;
 import org.springframework.beans.factory.annotation.Autowired;

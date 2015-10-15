@@ -1,6 +1,4 @@
-package de.muenchen.vaadin.services;
-
-import org.springframework.hateoas.Link;
+package de.muenchen.vaadin.guilib.services;
 
 import java.net.URI;
 
