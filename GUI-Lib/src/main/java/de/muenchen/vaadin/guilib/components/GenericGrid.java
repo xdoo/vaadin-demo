@@ -166,7 +166,7 @@ public class GenericGrid<T> extends CustomComponent {
     }
 
     private void createDelete() {
-        ActionButton deleteButton = new ActionButton(controller.getResolver(), SimpleAction.delete);;
+        ActionButton deleteButton = new ActionButton(controller.getResolver(), SimpleAction.delete);
 
         deleteButton.addActionPerformer(getListActionOnSelected()::delete);
         delete = Optional.of(deleteButton);
