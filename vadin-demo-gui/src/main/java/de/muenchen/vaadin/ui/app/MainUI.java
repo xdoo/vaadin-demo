@@ -67,6 +67,8 @@ public class MainUI extends UI implements I18nResolver {
     @Autowired
     private EventBus eventBus;
     private Navigator navigator;
+    private MenuBar bar = new MenuBar();
+    private MenuBar.MenuItem language;
 
     @Autowired
     public MainUI(SpringViewProvider ViewProvider, SecurityService security, MessageService i18n) {
@@ -216,24 +218,30 @@ public class MainUI extends UI implements I18nResolver {
     }
 
     private MenuBar buildMenuBar() {
-        MenuBar bar = new MenuBar();
         bar.addStyleName(ValoTheme.MENUBAR_BORDERLESS);
         addLanguageSelector(bar);
         return bar;
     }
 
     private MenuBar addLanguageSelector(MenuBar bar) {
-        MenuBar.MenuItem language = bar.addItem("Sprache", FontAwesome.LANGUAGE, null);
+        language = bar.addItem(resolveRelative("sprache.title"), FontAwesome.LANGUAGE, null);
+
 
         MenuBar.Command languageSelection = selectedItem -> i18n.getSupportedLocales().stream().forEach(locale -> {
             if (selectedItem.getText().equals(locale.getDisplayLanguage())) {
                 i18n.setLocale(locale);
                 getNavigator().navigateTo(getNavigator().getState());
+                removeLanguageSelector(bar);
+                addLanguageSelector(bar);
             }
         });
 
         i18n.getSupportedLocales().stream().forEach(locale -> language.addItem(locale.getDisplayLanguage(), null, languageSelection));
         return bar;
+    }
+
+    private void removeLanguageSelector(MenuBar bar){
+        bar.removeItem(language);
     }
 
     private Component createSettings() {
