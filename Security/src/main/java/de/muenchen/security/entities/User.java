@@ -67,10 +67,11 @@ public class User implements Serializable {
     private java.util.Date lastModDate;
 
     @ManyToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
-    @JoinTable(name = "users_authoritys", joinColumns = {@JoinColumn(name = "user_oid")}, inverseJoinColumns = {@JoinColumn(name = "authority_oid")})
+    @JoinTable(name = "users_authorities", joinColumns = {@JoinColumn(name = "user_oid")}, inverseJoinColumns = {@JoinColumn(name = "authority_oid")})
     private Set<Authority> authoritys;
 
     @JsonIgnore
+    @Column(name = "USER_MANDANT")
     private String mandant;
 
     public User() {

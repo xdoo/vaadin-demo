@@ -50,24 +50,27 @@ public class EntityListActions<T> {
      * Delete all the Entities from the Supplier.
      * @param clickEvent can be null
      */
-    public void delete(Button.ClickEvent clickEvent) {
+    public boolean delete(Button.ClickEvent clickEvent) {
         notifyRequest(RequestEvent.DELETE);
+        return true;
     }
 
     /**
      * Create all the Entities from the Supplier.
      * @param clickEvent can be null
      */
-    public void create(Button.ClickEvent clickEvent) {
+    public boolean create(Button.ClickEvent clickEvent) {
         notifyRequest(RequestEvent.CREATE);
+        return true;
     }
 
     /**
      * Update all the Entities from the Supplier.
      * @param clickEvent can be null
      */
-    public void update(Button.ClickEvent clickEvent) {
+    public boolean update(Button.ClickEvent clickEvent) {
         notifyRequest(RequestEvent.UPDATE);
+        return true;
     }
 
     /**
@@ -77,9 +80,11 @@ public class EntityListActions<T> {
      */
     private void notifyRequest(RequestEvent event) {
 
-        if (getEntityList() == null)
+        List<T> entityList = getEntityList();
+
+        if (entityList == null)
             throw new NullPointerException();
-        getEntityList().stream().forEach(buerger -> {
+        entityList.stream().forEach(buerger -> {
             final RequestEntityKey key = new RequestEntityKey(event, getEntityClass());
             getEventBus().notify(key, Event.wrap(buerger));
         });

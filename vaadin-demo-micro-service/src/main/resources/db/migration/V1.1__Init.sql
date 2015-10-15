@@ -1,23 +1,23 @@
 --USERS
-insert into users (oid,user_email, user_enabled,  user_password, user_username,mandant) values ('1','hans2@test.de',TRUE,'test2','hans2','default');
-insert into users (oid,user_email, user_enabled,  user_password, user_username,mandant) values ('2','hans@test.de',TRUE,'test','hans','test');
-insert into users (oid,user_email, user_enabled,  user_password, user_username,mandant) values ('3','franz@test.de',TRUE,'test','franz','default');
-insert into users (oid,user_email, user_enabled,  user_password, user_username,mandant) values ('4','rene.zarwel@muenchen.de',TRUE,null,'rene.zarwel','default');
-insert into users (oid,user_email, user_enabled,  user_password, user_username,mandant) values ('5','p.mueller@muenchen.de',TRUE,null,'p.mueller','default');
-insert into users (oid,user_email, user_enabled,  user_password, user_username,mandant) values ('6','maximilian.schug@muenchen.de',TRUE,null,'maximilian.schug','default');
-insert into users (oid,user_email, user_enabled,  user_password, user_username,mandant) values ('7','arne.schoentag@muenchen.de',TRUE,null,'arne.schoentag','default');
-insert into users (oid,user_email, user_enabled,  user_password, user_username,mandant) values ('8','maximilian.zollbrecht@muenchen.de',TRUE,null,'maximilian.zollbrecht','default');
-insert into users (oid,user_email, user_enabled,  user_password, user_username,mandant) values ('9','praktikant.tmar@muenchen.de',TRUE,null,'praktikant.tmar','default');
-insert into users (oid,user_email, user_enabled,  user_password, user_username,mandant) values ('10','claus.straube@muenchen.de',TRUE,null,'claus.straube','default');
-insert into users (oid,user_email, user_enabled,  user_password, user_username,mandant) values ('11','m.kurz@muenchen.de',TRUE,null,'m.kurz','default');
-insert into users (oid,user_email, user_enabled,  user_password, user_username,mandant) values ('12','sebastian.schoebel@muenchen.de',TRUE,null,'sebastian.schoebel','default');
-insert into users (oid,user_email, user_enabled,  user_password, user_username,mandant) values ('13','fabian.holtkoetter@muenchen.de',TRUE,null,'fabian.holtkoetter','default');
+insert into users (oid,user_email, user_enabled,  user_password, user_username,user_mandant) values ('1','hans2@test.de',TRUE,'test2','hans2','default');
+insert into users (oid,user_email, user_enabled,  user_password, user_username,user_mandant) values ('2','hans@test.de',TRUE,'test','hans','test');
+insert into users (oid,user_email, user_enabled,  user_password, user_username,user_mandant) values ('3','franz@test.de',TRUE,'test','franz','default');
+insert into users (oid,user_email, user_enabled,  user_password, user_username,user_mandant) values ('4','rene.zarwel@muenchen.de',TRUE,null,'rene.zarwel','default');
+insert into users (oid,user_email, user_enabled,  user_password, user_username,user_mandant) values ('5','p.mueller@muenchen.de',TRUE,null,'p.mueller','default');
+insert into users (oid,user_email, user_enabled,  user_password, user_username,user_mandant) values ('6','maximilian.schug@muenchen.de',TRUE,null,'maximilian.schug','default');
+insert into users (oid,user_email, user_enabled,  user_password, user_username,user_mandant) values ('7','arne.schoentag@muenchen.de',TRUE,null,'arne.schoentag','default');
+insert into users (oid,user_email, user_enabled,  user_password, user_username,user_mandant) values ('8','maximilian.zollbrecht@muenchen.de',TRUE,null,'maximilian.zollbrecht','default');
+insert into users (oid,user_email, user_enabled,  user_password, user_username,user_mandant) values ('9','praktikant.tmar@muenchen.de',TRUE,null,'praktikant.tmar','default');
+insert into users (oid,user_email, user_enabled,  user_password, user_username,user_mandant) values ('10','claus.straube@muenchen.de',TRUE,null,'claus.straube','default');
+insert into users (oid,user_email, user_enabled,  user_password, user_username,user_mandant) values ('11','m.kurz@muenchen.de',TRUE,null,'m.kurz','default');
+insert into users (oid,user_email, user_enabled,  user_password, user_username,user_mandant) values ('12','sebastian.schoebel@muenchen.de',TRUE,null,'sebastian.schoebel','default');
+insert into users (oid,user_email, user_enabled,  user_password, user_username,user_mandant) values ('13','fabian.holtkoetter@muenchen.de',TRUE,null,'fabian.holtkoetter','default');
 
 --Authorities
 insert  into authorities (oid,  auth_authority) values ('2','ADMIN');
 
 --Permessions
-insert into permissions (oid,perm_permission) values ('1000','ROLE_READ_Wohnung');
+insert into permissions (oid,perm_permission) values ('1000','READ_Wohnung');
 insert into permissions (oid,perm_permission) values ('1001','ROLE_READ_StaatsangehoerigkeitReference');
 insert into permissions (oid,perm_permission) values ('1002','ROLE_READ_Sachbearbeiter');
 insert into permissions (oid,perm_permission) values ('1003','ROLE_READ_Pass');

@@ -12,7 +12,7 @@ import java.util.Set;
  * @author praktikant.tmar
  */
 @Entity
-@Table(name = "AUTHORITYS")
+@Table(name = "AUTHORITIES")
 public class Authority extends SecurityEntity {
 
 
@@ -20,7 +20,7 @@ public class Authority extends SecurityEntity {
     private String authority;
 
     @ManyToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
-    @JoinTable(name = "authoritys_permissions", joinColumns = {@JoinColumn(name = "authority_oid")}, inverseJoinColumns = {@JoinColumn(name = "permission_oid")})
+    @JoinTable(name = "authorities_permissions", joinColumns = {@JoinColumn(name = "authority_oid")}, inverseJoinColumns = {@JoinColumn(name = "permission_oid")})
     private Set<Permission> permissions;
 
     public Authority() {
