@@ -496,6 +496,10 @@ public class GenericGrid<T> extends CustomComponent {
     // Getter / Setter
     //--------------
 
+    /**
+     * Get all selected Entities of this grid.
+     * @return selected Entities.
+     */
     public List<T> getSelectedEntities(){
         return grid.getSelectedRows().stream()
                 .map(item -> (BeanItem<T>) grid.getContainerDataSource().getItem(item))
@@ -503,6 +507,12 @@ public class GenericGrid<T> extends CustomComponent {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Get a single selected Entitiy.
+     * If more than one Entities are selected, this method will return the first one.
+     *
+     * @return single selected entitiy
+     */
     public T getSelectedEntity(){
         return grid.getSelectedRows().stream()
                 .map(item -> (BeanItem<T>) grid.getContainerDataSource().getItem(item))
