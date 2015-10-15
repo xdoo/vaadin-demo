@@ -3,7 +3,12 @@ package de.muenchen.vaadin.demo.i18nservice.buttons;
 import com.vaadin.ui.Button;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Component;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Type;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getFormPath;
 
 /**
  * Provides a styled Button that represents a specific action.
@@ -12,6 +17,16 @@ import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.*;
  * @version 1.0
  */
 public class ActionButton extends Button {
+
+    /** Interface for Actions to perform.
+     * If an Action crashes it returns true.
+     * **/
+    public interface CrashableActionPerformer {
+        boolean perform(ClickEvent event);
+    }
+
+    /** List of Actions to perform on click. **/
+    private List<CrashableActionPerformer> actions = new ArrayList<>();
 
 
     /**
@@ -26,6 +41,7 @@ public class ActionButton extends Button {
         super(label);
 
         configureButton(action);
+        addClickListener(this::perform);
     }
 
     /**
@@ -62,4 +78,19 @@ public class ActionButton extends Button {
         action.getClickShortCut().ifPresent(this::setClickShortcut);
         action.getStyleNames().forEach(style -> this.setStyleName(style, true));
     }
+
+    /**
+     * Add an crashable action performer as click listener.
+     * @param performer performer which can crash.
+     */
+    public void addActionPerformer(CrashableActionPerformer performer) {
+        this.actions.add(performer);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void perform(ClickEvent event) {
+        //Perform all actions until all actions are performed or one crashes.
+        actions.stream().sequential().anyMatch(actionPerformer -> !actionPerformer.perform(event));
+    }
+
 }

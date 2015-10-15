@@ -8,14 +8,15 @@ import com.vaadin.ui.DateField;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
 import de.muenchen.vaadin.demo.api.local.Buerger;
+import de.muenchen.vaadin.guilib.components.BaseComponent;
 import de.muenchen.vaadin.guilib.controller.EntityController;
 import de.muenchen.vaadin.guilib.util.FormUtil;
-import de.muenchen.vaadin.ui.components.BaseComponent;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static com.vaadin.data.Validator.InvalidValueException;
 /**
  * Provides a very simple and basic Form for a Buerger.
  * <p/>
@@ -91,11 +92,14 @@ public class BuergerForm extends BaseComponent {
      *
      * @return The Buerger.
      */
-    public Buerger getBuerger() {
+    public Buerger getBuerger() throws InvalidValueException {
         try {
             getBinder().commit();
-        } catch (FieldGroup.CommitException e) {
-            throw new AssertionError("ItemDataSource must be set?! See constructor. OR!! now because of validation...");
+
+        } catch (FieldGroup.CommitException | InvalidValueException e) {
+
+            throw new InvalidValueException("Cannot create buerger.");
+
         }
         return getBinder().getItemDataSource().getBean();
     }

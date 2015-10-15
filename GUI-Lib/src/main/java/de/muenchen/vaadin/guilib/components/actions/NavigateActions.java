@@ -56,8 +56,9 @@ public class NavigateActions {
      * Navigate to the set String.
      * @param clickEvent can be null
      */
-    public void navigate(Button.ClickEvent clickEvent) {
+    public boolean navigate(Button.ClickEvent clickEvent) {
         eventBus.getConsumerRegistry().unregister(new ResponseEntityKey());
         navigator.navigateTo(navigateTo);
+        return true;
     }
 }
