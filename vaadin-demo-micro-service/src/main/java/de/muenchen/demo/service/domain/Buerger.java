@@ -10,7 +10,18 @@ import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.FieldBridge;
 import org.hibernate.search.annotations.Indexed;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
@@ -49,6 +60,11 @@ public class Buerger extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Augenfarbe augenfarbe;
 
+    @Field
+    @Column(name = "BUER_ALIVE")
+    @NotNull
+    private boolean alive;
+
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "oid")
     @JsonIdentityReference(alwaysAsId = true)
     @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
@@ -83,6 +99,8 @@ public class Buerger extends BaseEntity {
         this.vorname = buerger.vorname;
         this.nachname = buerger.nachname;
         this.geburtsdatum = buerger.geburtsdatum;
+        this.augenfarbe = buerger.augenfarbe;
+        this.alive = buerger.alive;
         this.staatsangehoerigkeitReferences.addAll(buerger.staatsangehoerigkeitReferences);
         // this.pass.addAll(buerger.pass);
         this.wohnungen.addAll(buerger.wohnungen);
@@ -113,6 +131,14 @@ public class Buerger extends BaseEntity {
 
     public void setGeburtsdatum(Date geburtsdatum) {
         this.geburtsdatum = geburtsdatum;
+    }
+
+    public boolean getAlive() {
+        return alive;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
     }
 
     public Set<Wohnung> getWohnungen() {
@@ -181,8 +207,8 @@ public class Buerger extends BaseEntity {
 
     @Override
     public String toString() {
-        return String.format("oid > %s | vorname > %s | nachname > %s | geburtsdatum > %s | augenfarbe > %s",
-                this.getOid(), this.vorname, this.nachname, this.geburtsdatum, this.augenfarbe);
+        return String.format("oid > %s | vorname > %s | nachname > %s | geburtsdatum > %s | augenfarbe > %s | alive > %b",
+                this.getOid(), this.vorname, this.nachname, this.geburtsdatum, this.augenfarbe, this.alive);
     }
 
 }
