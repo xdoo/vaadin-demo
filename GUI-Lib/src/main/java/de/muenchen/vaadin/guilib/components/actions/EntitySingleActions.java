@@ -59,7 +59,7 @@ public class EntitySingleActions<T> {
      */
     public boolean delete(Button.ClickEvent clickEvent) {
         notifyRequest(RequestEvent.DELETE);
-        return false;
+        return true;
     }
 
     /**
@@ -70,13 +70,13 @@ public class EntitySingleActions<T> {
     public boolean create(Button.ClickEvent clickEvent) {
         try {
             notifyRequest(RequestEvent.CREATE);
-            return false;
+            return true;
         } catch (Exception e) { //TODO Find a good Exception Type
             GenericWarningNotification warn = new GenericWarningNotification(
                     resolver.resolveRelative(getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.create, I18nPaths.Type.label)),
                     resolver.resolveRelative(getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.create, I18nPaths.Type.text)));
             warn.show(Page.getCurrent());
-            return true;
+            return false;
         }
     }
 
@@ -88,13 +88,13 @@ public class EntitySingleActions<T> {
     public boolean update(Button.ClickEvent clickEvent) {
         try {
             notifyRequest(RequestEvent.UPDATE);
-            return false;
+            return true;
         } catch (Exception e) { //TODO Find a good Exception Type
             GenericWarningNotification warn = new GenericWarningNotification(
                     resolver.resolveRelative(getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.update, I18nPaths.Type.label)),
                     resolver.resolveRelative(getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.update, I18nPaths.Type.text)));
             warn.show(Page.getCurrent());
-            return true;
+            return false;
         }
     }
 
@@ -105,7 +105,7 @@ public class EntitySingleActions<T> {
      */
     public boolean read(Button.ClickEvent clickEvent) {
         notifyRequest(RequestEvent.READ_SELECTED);
-        return false;
+        return true;
     }
 
     /**

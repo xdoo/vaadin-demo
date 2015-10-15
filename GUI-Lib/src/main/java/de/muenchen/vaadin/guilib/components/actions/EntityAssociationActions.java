@@ -60,13 +60,13 @@ public class EntityAssociationActions<T> {
     public boolean addAssociation(Button.ClickEvent clickEvent) {
         try {
             getEventBus().notify(new RequestEntityKey(RequestEvent.ADD_ASSOCIATION, getEntityClass()), Event.wrap(getAssociation()));
-            return false;
+            return true;
         } catch (Exception e) { //TODO Find a good Exception Type
             GenericWarningNotification warn = new GenericWarningNotification(
                     resolver.resolveRelative(getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.save, I18nPaths.Type.label)),
                     resolver.resolveRelative(getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.save, I18nPaths.Type.text)));
             warn.show(Page.getCurrent());
-            return true;
+            return false;
         }
     }
 
@@ -76,7 +76,7 @@ public class EntityAssociationActions<T> {
      */
     public boolean removeAssociation(Button.ClickEvent clickEvent) {
         getEventBus().notify(new RequestEntityKey(RequestEvent.REMOVE_ASSOCIATION, getEntityClass()), Event.wrap(getAssociation()));
-        return false;
+        return true;
     }
 
     /**
