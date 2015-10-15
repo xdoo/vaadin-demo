@@ -509,7 +509,7 @@ public class GenericGrid<T> extends CustomComponent {
 
     /**
      * Get a single selected Entitiy.
-     * If more than one Entities are selected, this method will return the first one.
+     * If more than one Entity is selected, this method will return the first one.
      *
      * @return single selected entitiy
      */
