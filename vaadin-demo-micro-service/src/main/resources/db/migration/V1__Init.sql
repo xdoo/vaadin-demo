@@ -159,7 +159,7 @@ last_mod_date date,
 user_password varchar(255), 
 user_surname varchar(255), 
 user_username varchar(255) not null, 
-mandant varchar(20), 
+user_mandant varchar(20),
 primary key (oid));
 
 

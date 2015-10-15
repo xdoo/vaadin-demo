@@ -71,6 +71,7 @@ public class User implements Serializable {
     private Set<Authority> authoritys;
 
     @JsonIgnore
+    @Column(name = "USER_MANDANT")
     private String mandant;
 
     public User() {
