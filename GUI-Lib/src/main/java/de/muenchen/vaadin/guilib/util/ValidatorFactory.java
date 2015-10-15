@@ -59,6 +59,10 @@ public class ValidatorFactory {
     }
 
     public static String getDiaRegEx(){
+//        Dieses Kunstwerk wird ihnen presentiert von:
+//          ©ArneSchöntag
+
+//        -----------------------------
 //        String abc = "";
 //        for (char c = 'a'; c <= 'z'; c++) {
 //            abc += c;
@@ -74,6 +78,7 @@ public class ValidatorFactory {
 //        }
 //        abc += "-";
 //        return "[" + abc + "]*";
+//        -----------------------------
 
         return "[A-Za-zÀ-ÿ\\-]+";
     }
