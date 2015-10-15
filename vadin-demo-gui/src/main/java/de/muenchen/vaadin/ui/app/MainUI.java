@@ -231,6 +231,8 @@ public class MainUI extends UI implements I18nResolver {
             if (selectedItem.getText().equals(locale.getDisplayLanguage())) {
                 i18n.setLocale(locale);
                 getNavigator().navigateTo(getNavigator().getState());
+                removeMenuItems();
+                createNavigationMenu();
                 removeLanguageSelector(bar);
                 addLanguageSelector(bar);
             }
@@ -248,12 +250,19 @@ public class MainUI extends UI implements I18nResolver {
         return null;
     }
 
+    private void addMenuItems(){
+        this.menuItems.put(MainView.NAME, resolveRelative("mainpage.title"));
+        this.menuItems.put(BuergerTableView.NAME, resolveRelative("buerger.navigation.button.label"));
+    }
+
+    private void removeMenuItems(){
+        menuItemsLayout.removeAllComponents();
+        this.menuItems.clear();
+    }
+
     private Component createNavigationMenu() {
 
-        // Start Menüeinträge
-        this.menuItems.put(MainView.NAME, "Haupseite");
-        this.menuItems.put(BuergerTableView.NAME, "Bürger Pflege");
-        // Ende Menüeinträge
+       addMenuItems();
 
         menuItemsLayout.setPrimaryStyleName("valo-menuitems");
 
