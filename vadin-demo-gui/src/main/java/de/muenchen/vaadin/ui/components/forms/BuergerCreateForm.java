@@ -87,18 +87,19 @@ public class BuergerCreateForm extends BuergerForm {
         final ActionButton createButton = new ActionButton(getI18nResolver(), SimpleAction.create);
         if (getRelation().isPresent()) {
             final BuergerAssociationActions buergerAssociationActions = new BuergerAssociationActions(
+                    getI18nResolver(),
                     () -> new Association<>(getBuerger(), getRelation().get()),
                     getEventBus());
 
-            createButton.addClickListener(buergerAssociationActions::addAssociation);
+            createButton.addActionPerformer(buergerAssociationActions::addAssociation);
         } else {
-            BuergerSingleActions buergerSingleActions = new BuergerSingleActions(this::getBuerger, getEventBus());
-            createButton.addClickListener(buergerSingleActions::create);
+            BuergerSingleActions buergerSingleActions = new BuergerSingleActions(getI18nResolver(), this::getBuerger, getEventBus());
+            createButton.addActionPerformer(buergerSingleActions::create);
         }
 
 
         final NavigateActions navigateActions = new NavigateActions(getNavigator(), getEventBus(), getNavigateTo());
-        createButton.addClickListener(navigateActions::navigate);
+        createButton.addActionPerformer(navigateActions::navigate);
 
         return createButton;
     }
@@ -112,7 +113,7 @@ public class BuergerCreateForm extends BuergerForm {
         ActionButton backButton = new ActionButton(getI18nResolver(), SimpleAction.back);
 
         final NavigateActions navigateActions = new NavigateActions(getNavigator(), getEventBus(), getNavigateBack());
-        backButton.addClickListener(navigateActions::navigate);
+        backButton.addActionPerformer(navigateActions::navigate);
 
         return backButton;
     }

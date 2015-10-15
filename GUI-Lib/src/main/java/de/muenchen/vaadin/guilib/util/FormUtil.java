@@ -2,6 +2,8 @@ package de.muenchen.vaadin.guilib.util;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.DefaultFieldGroupFieldFactory;
+import com.vaadin.data.fieldgroup.FieldGroup;
+import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.TextField;
@@ -56,6 +58,8 @@ public class FormUtil {
         TextField tf = getBinder().buildAndBind(caption, property, TextField.class);
         tf.setNullRepresentation(NULL_REPRESENTATION);
         tf.setInputPrompt(prompt);
+
+        deactivateValidation(tf);
         //tf.setId(String.format("%s_%s_FIELD", getI18nResolver().getBasePath(), property).toUpperCase());
         return tf;
     }
@@ -114,7 +118,8 @@ public class FormUtil {
         cb.setInputPrompt(prompt);
         cb.setTextInputAllowed(true);
         cb.setNullSelectionAllowed(false);
-        getBinder().bind(cb, property);
+
+        deactivateValidation(cb);
         return cb;
     }
 
@@ -129,9 +134,33 @@ public class FormUtil {
     public DateField createDateField(String property) {
         final String caption = getCaption(property);
 
-        DateField df = binder.buildAndBind(caption, property, DateField.class);
+        DateField df = getBinder().buildAndBind(caption, property, DateField.class);
+
+        deactivateValidation(df);
         //df.setId(String.format("%s_%s_DATEFIELD", getI18nResolver().getBasePath(), property).toUpperCase());
 
         return df;
+    }
+
+    /**
+     * Deactivates the visibility of the validation.
+     * On value change or commit the visibility will be active again.
+     *
+     * @param field field configure
+     */
+    private void deactivateValidation(AbstractField field){
+        field.setValidationVisible(false);
+        field.addValueChangeListener(event -> field.setValidationVisible(true));
+        //Hack
+        getBinder().addCommitHandler(new FieldGroup.CommitHandler() {
+            @Override
+            public void preCommit(FieldGroup.CommitEvent commitEvent) throws FieldGroup.CommitException {
+                field.setValidationVisible(true);
+            }
+
+            @Override
+            public void postCommit(FieldGroup.CommitEvent commitEvent) throws FieldGroup.CommitException {
+            }
+        });
     }
 }

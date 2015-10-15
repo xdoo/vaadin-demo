@@ -22,7 +22,6 @@ public class SelectedBuergerPartnerForm extends BuergerForm {
     }
 
     private void update(reactor.bus.Event<?> event) {
-        System.out.println(this.toString() + System.currentTimeMillis());
         final BuergerDatastore data = (BuergerDatastore) event.getData();
         data.getSelectedBuergerPartner().ifPresent(this::setBuerger);
     }
