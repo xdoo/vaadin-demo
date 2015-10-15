@@ -1,9 +1,8 @@
-package de.muenchen.vaadin.guilib.components.buttons;
+package de.muenchen.vaadin.demo.i18nservice.buttons;
 
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.vaadin.demo.i18nservice.buttons.Action;
 
 import java.util.Optional;
 import java.util.Set;

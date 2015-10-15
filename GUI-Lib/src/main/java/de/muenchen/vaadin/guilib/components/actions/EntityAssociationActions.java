@@ -7,8 +7,8 @@ import de.muenchen.eventbus.selector.entity.RequestEntityKey;
 import de.muenchen.eventbus.selector.entity.RequestEvent;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
+import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.GenericWarningNotification;
-import de.muenchen.vaadin.guilib.components.buttons.SimpleAction;
 import reactor.bus.Event;
 import reactor.bus.EventBus;
 
