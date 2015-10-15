@@ -97,7 +97,6 @@ public class MainUI extends UI implements I18nResolver {
         }
 
 
-
         // build page
         getPage().setTitle(i18n.get("page.title"));
         setContent(root);
@@ -226,15 +225,15 @@ public class MainUI extends UI implements I18nResolver {
     private MenuBar addLanguageSelector(MenuBar bar) {
         language = bar.addItem(resolveRelative("sprache.title"), FontAwesome.LANGUAGE, null);
 
-
         MenuBar.Command languageSelection = selectedItem -> i18n.getSupportedLocales().stream().forEach(locale -> {
             if (selectedItem.getText().equals(locale.getDisplayLanguage())) {
                 i18n.setLocale(locale);
                 getNavigator().navigateTo(getNavigator().getState());
+
+                language.setText(resolveRelative("sprache.title"));
+
                 removeMenuItems();
                 createNavigationMenu();
-                removeLanguageSelector();
-                addLanguageSelector(bar);
             }
         });
 
@@ -242,27 +241,23 @@ public class MainUI extends UI implements I18nResolver {
         return bar;
     }
 
-    private void removeLanguageSelector(){
-        bar.removeItem(language);
-    }
-
     private Component createSettings() {
         return null;
     }
 
-    private void addMenuItems(){
+    private void addMenuItems() {
         this.menuItems.put(MainView.NAME, resolveRelative("mainpage.title"));
         this.menuItems.put(BuergerTableView.NAME, resolveRelative("buerger.navigation.button.label"));
     }
 
-    private void removeMenuItems(){
-        menuItemsLayout.removeAllComponents();
+    private void removeMenuItems() {
         this.menuItems.clear();
+        menuItemsLayout.removeAllComponents();
     }
 
     private Component createNavigationMenu() {
 
-       addMenuItems();
+        addMenuItems();
 
         menuItemsLayout.setPrimaryStyleName("valo-menuitems");
 
@@ -271,7 +266,7 @@ public class MainUI extends UI implements I18nResolver {
                 navigator.navigateTo(item.getKey());
             });
             b.setHtmlContentAllowed(true);
-            b.setPrimaryStyleName("valo-menu-item");
+            b.setPrimaryStyleName(ValoTheme.MENU_ITEM);
             b.setId(String.format("MENU_ITEM_BUTTON_%s", item.getKey()).toUpperCase());
 //            b.setIcon(testIcon.get());
             menuItemsLayout.addComponent(b);
@@ -288,7 +283,7 @@ public class MainUI extends UI implements I18nResolver {
             confirmationWindow.focus();
         });
         logoutButton.setHtmlContentAllowed(true);
-        logoutButton.setPrimaryStyleName("valo-menu-item");
+        logoutButton.setPrimaryStyleName(ValoTheme.MENU_ITEM);
         logoutButton.setId("MENU_ITEM_BUTTON_LOGOUT");
         menuItemsLayout.addComponent(logoutButton);
 
