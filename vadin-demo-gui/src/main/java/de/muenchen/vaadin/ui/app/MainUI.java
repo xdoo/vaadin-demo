@@ -233,7 +233,7 @@ public class MainUI extends UI implements I18nResolver {
                 getNavigator().navigateTo(getNavigator().getState());
                 removeMenuItems();
                 createNavigationMenu();
-                removeLanguageSelector(bar);
+                removeLanguageSelector();
                 addLanguageSelector(bar);
             }
         });
@@ -242,7 +242,7 @@ public class MainUI extends UI implements I18nResolver {
         return bar;
     }
 
-    private void removeLanguageSelector(MenuBar bar){
+    private void removeLanguageSelector(){
         bar.removeItem(language);
     }
 
