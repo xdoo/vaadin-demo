@@ -18,7 +18,7 @@
         <module>Auditing</module>
         <module>API-Lib</module>
         <module>Security</module>
-        <module>SearchService</module>
+        <module>Service-Lib</module>
     </modules>
     <properties>
         <main.basedir>${basedir}/../..</main.basedir>

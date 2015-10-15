@@ -3,6 +3,7 @@ import org.hibernate.envers.NotAudited;
 import org.hibernate.search.annotations.IndexedEmbedded;
 
 import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
@@ -16,6 +17,7 @@ public abstract class BaseEntity implements Cloneable, Serializable {
 
     @Column(name = "OID")
     @Id
+    @GeneratedValue
     private Long oid;
 
     @IndexedEmbedded(depth = 1, prefix = "mandant")
