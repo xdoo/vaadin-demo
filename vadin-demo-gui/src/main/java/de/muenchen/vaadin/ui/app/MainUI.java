@@ -228,7 +228,7 @@ public class MainUI extends UI implements I18nResolver {
         MenuBar.Command languageSelection = selectedItem -> i18n.getSupportedLocales().stream().forEach(locale -> {
             if (selectedItem.getText().equals(locale.getDisplayLanguage())) {
                 i18n.setLocale(locale);
-                postEvent(Key.REFRESH);
+                getNavigator().navigateTo(getNavigator().getState());
             }
         });
 
