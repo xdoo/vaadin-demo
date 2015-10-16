@@ -67,6 +67,8 @@ public class MainUI extends UI implements I18nResolver {
     @Autowired
     private EventBus eventBus;
     private Navigator navigator;
+    private MenuBar bar = new MenuBar();
+    private MenuBar.MenuItem language;
 
     @Autowired
     public MainUI(SpringViewProvider ViewProvider, SecurityService security, MessageService i18n) {
@@ -93,7 +95,6 @@ public class MainUI extends UI implements I18nResolver {
         if (!this.testMode) {
             Responsive.makeResponsive(this);
         }
-
 
 
         // build page
@@ -216,19 +217,23 @@ public class MainUI extends UI implements I18nResolver {
     }
 
     private MenuBar buildMenuBar() {
-        MenuBar bar = new MenuBar();
         bar.addStyleName(ValoTheme.MENUBAR_BORDERLESS);
         addLanguageSelector(bar);
         return bar;
     }
 
     private MenuBar addLanguageSelector(MenuBar bar) {
-        MenuBar.MenuItem language = bar.addItem("Sprache", FontAwesome.LANGUAGE, null);
+        language = bar.addItem(resolveRelative("sprache.title"), FontAwesome.LANGUAGE, null);
 
         MenuBar.Command languageSelection = selectedItem -> i18n.getSupportedLocales().stream().forEach(locale -> {
             if (selectedItem.getText().equals(locale.getDisplayLanguage())) {
                 i18n.setLocale(locale);
                 getNavigator().navigateTo(getNavigator().getState());
+
+                language.setText(resolveRelative("sprache.title"));
+
+                removeMenuItems();
+                createNavigationMenu();
             }
         });
 
@@ -240,12 +245,19 @@ public class MainUI extends UI implements I18nResolver {
         return null;
     }
 
+    private void addMenuItems() {
+        this.menuItems.put(MainView.NAME, resolveRelative("mainpage.title"));
+        this.menuItems.put(BuergerTableView.NAME, resolveRelative("buerger.navigation.button.label"));
+    }
+
+    private void removeMenuItems() {
+        this.menuItems.clear();
+        menuItemsLayout.removeAllComponents();
+    }
+
     private Component createNavigationMenu() {
 
-        // Start Menüeinträge
-        this.menuItems.put(MainView.NAME, "Haupseite");
-        this.menuItems.put(BuergerTableView.NAME, "Bürger Pflege");
-        // Ende Menüeinträge
+        addMenuItems();
 
         menuItemsLayout.setPrimaryStyleName("valo-menuitems");
 
@@ -254,7 +266,7 @@ public class MainUI extends UI implements I18nResolver {
                 navigator.navigateTo(item.getKey());
             });
             b.setHtmlContentAllowed(true);
-            b.setPrimaryStyleName("valo-menu-item");
+            b.setPrimaryStyleName(ValoTheme.MENU_ITEM);
             b.setId(String.format("MENU_ITEM_BUTTON_%s", item.getKey()).toUpperCase());
 //            b.setIcon(testIcon.get());
             menuItemsLayout.addComponent(b);
@@ -271,7 +283,7 @@ public class MainUI extends UI implements I18nResolver {
             confirmationWindow.focus();
         });
         logoutButton.setHtmlContentAllowed(true);
-        logoutButton.setPrimaryStyleName("valo-menu-item");
+        logoutButton.setPrimaryStyleName(ValoTheme.MENU_ITEM);
         logoutButton.setId("MENU_ITEM_BUTTON_LOGOUT");
         menuItemsLayout.addComponent(logoutButton);
 
