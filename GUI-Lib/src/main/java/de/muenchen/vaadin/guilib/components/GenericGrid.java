@@ -1,8 +1,10 @@
 package de.muenchen.vaadin.guilib.components;
 
+import com.vaadin.data.util.AbstractBeanContainer;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.ShortcutAction;
+import com.vaadin.navigator.Navigator;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CssLayout;
@@ -12,10 +14,16 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import de.muenchen.eventbus.EventBus;
 import de.muenchen.eventbus.selector.entity.RequestEvent;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
-import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
+import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
+import de.muenchen.vaadin.guilib.components.actions.EntityActions;
+import de.muenchen.vaadin.guilib.components.actions.EntityListActions;
+import de.muenchen.vaadin.guilib.components.actions.EntitySingleActions;
+import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
+import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
 import de.muenchen.vaadin.guilib.controller.EntityController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,8 +48,11 @@ public class GenericGrid<T> extends CustomComponent {
      * The constant LOG.
      */
     protected static final Logger LOG = LoggerFactory.getLogger(GenericGrid.class);
-
-    /**Default Components **/
+    /**
+     * Components Layout
+     */
+    final HorizontalLayout topComponentsLayout = new HorizontalLayout();
+    /** Default Components **/
     private Grid grid = new Grid();
     //----------- Search Components
     private Optional<CssLayout> searchLayout = Optional.empty();
@@ -54,18 +65,11 @@ public class GenericGrid<T> extends CustomComponent {
     private Optional<ActionButton> copy = Optional.empty();
     private Optional<ActionButton> delete = Optional.empty();
     private Optional<ActionButton> create = Optional.empty();
-
-    /**Custom Buttons**/
+    /** Custom Buttons **/
     private List<Button> customSingleSelectButtons = new ArrayList<>();
     private List<Button> customMultiSelectButtons = new ArrayList<>();
     private List<Button> customButtons = new ArrayList<>();
-
-    /**
-     * Components Layout
-     */
-    final HorizontalLayout topComponentsLayout = new HorizontalLayout();
-
-    /** Controller**/
+    /** Controller **/
     private EntityController controller;
 
     /**
@@ -145,70 +149,44 @@ public class GenericGrid<T> extends CustomComponent {
 
 
     private void createRead(String navigateToRead) {
-        ActionButton readButton = new ActionButton(controller.getResolver(), SimpleAction.read, null);
-        readButton.addClickListener(clickEvent -> {
-            controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED), reactor.bus.Event.wrap(grid.getSelectedRows().toArray()[0]));
-            controller.getNavigator().navigateTo(navigateToRead);
-        });
+        ActionButton readButton = new ActionButton(controller.getResolver(), SimpleAction.read);
+
+        readButton.addActionPerformer(getSingleActionOnSelected()::read);
+        readButton.addActionPerformer(getNavigateAction(navigateToRead)::navigate);
+
         readButton.setVisible(false);
         read = Optional.of(readButton);
     }
 
     private void createCopy() {
-        ActionButton copyButton = new ActionButton(controller.getResolver(), SimpleAction.copy, null);
-        copyButton.addClickListener(clickEvent -> {
-            LOG.debug("copying selected items");
-            if (grid.getSelectedRows() != null) {
-                grid.getSelectedRows().stream()
-                        .peek(grid::deselect)
-                        .map(itemID -> (BeanItem<T>) grid.getContainerDataSource().getItem(itemID))
-                        .forEach(beanItem ->
-                                        controller.getEventbus().notify(controller.getRequestKey(RequestEvent.CREATE), reactor.bus.Event.wrap(beanItem.getBean()))
-                        );
+        ActionButton copyButton = new ActionButton(controller.getResolver(), SimpleAction.copy);
 
-
-            }
-        });
+        copyButton.addActionPerformer(getListActionOnSelected()::create);
         copy = Optional.of(copyButton);
     }
 
     private void createDelete() {
-        ActionButton deleteButton = new ActionButton(controller.getResolver(), SimpleAction.delete, null);
-        deleteButton.addClickListener(clickEvent -> {
-            LOG.debug("deleting selected items");
-            if (grid.getSelectedRows() != null) {
-                grid.getSelectedRows().stream()
-                        .peek(grid::deselect)
-                        .map(itemID -> (BeanItem<T>) grid.getContainerDataSource().getItem(itemID))
-                        .forEach(beanItem ->
-                                        controller.getEventbus().notify(controller.getRequestKey(RequestEvent.DELETE), reactor.bus.Event.wrap(beanItem.getBean()))
-                        );
+        ActionButton deleteButton = new ActionButton(controller.getResolver(), SimpleAction.delete);
 
-
-            }
-        });
+        deleteButton.addActionPerformer(getListActionOnSelected()::delete);
         delete = Optional.of(deleteButton);
     }
 
     private void createEdit(String navigateToEdit) {
-        ActionButton editButton = new ActionButton(controller.getResolver(), SimpleAction.update, navigateToEdit);
-        editButton.addClickListener(clickEvent -> {
-            if (grid.getSelectedRows().size() == 1) {
-                LOG.debug("update selected");
-                T buerger = ((BeanItem<T>) grid.getContainerDataSource().getItem(grid.getSelectedRows().toArray()[0])).getBean();
-                controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED), reactor.bus.Event.wrap(buerger));
-                controller.getNavigator().navigateTo(navigateToEdit);
-            }
-        });
+        ActionButton editButton = new ActionButton(controller.getResolver(), SimpleAction.update);
+
+        editButton.addActionPerformer(getSingleActionOnSelected()::read);
+        editButton.addActionPerformer(getNavigateAction(navigateToEdit)::navigate);
+
         edit = Optional.of(editButton);
     }
 
     private void createCreate(String navigateToCreate) {
-        ActionButton createButton = new ActionButton(controller.getResolver(), SimpleAction.create, navigateToCreate);
-        createButton.addClickListener(clickEvent -> {
-            controller.getNavigator().navigateTo(navigateToCreate);
-        });
+        ActionButton createButton = new ActionButton(controller.getResolver(), SimpleAction.create);
+
+        createButton.addActionPerformer(getNavigateAction(navigateToCreate)::navigate);
         createButton.setVisible(Boolean.TRUE);
+
         create = Optional.of(createButton);
     }
 
@@ -216,13 +194,9 @@ public class GenericGrid<T> extends CustomComponent {
         search = new Button(FontAwesome.SEARCH);
         search.setStyleName(ValoTheme.BUTTON_ICON_ONLY);
         search.setClickShortcut(ShortcutAction.KeyCode.ENTER);
-        search.addClickListener(e -> {
-            LOG.debug("search clicked: " + filter.getValue());
-            if (filter.getValue() != null && filter.getValue().length() > 0)
-                controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_LIST), reactor.bus.Event.wrap(filter.getValue()));
-            else
-                reset.click();
-        });
+
+        search.addClickListener(getEntityAction()::readList);
+
         search.setId(String.format("%s_SEARCH_BUTTON", controller.getResolver().getBasePath()));
     }
 
@@ -237,18 +211,18 @@ public class GenericGrid<T> extends CustomComponent {
         reset.setStyleName(ValoTheme.BUTTON_ICON_ONLY);
         reset.setClickShortcut(ShortcutAction.KeyCode.ESCAPE);
         reset.addClickListener(e -> {
-            controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_LIST));
             filter.setValue("");
+            getEntityAction().readList(e);
         });
         reset.setId(String.format("%s_RESET_BUTTON", controller.getResolver().getBasePath()));
     }
 
     private void setButtonVisability() {
         int size = grid.getSelectedRows().size();
-        if(read.isPresent()) read.get().setVisible(size == 1);
-        if(edit.isPresent()) edit.get().setVisible(size == 1);
-        if(copy.isPresent()) copy.get().setVisible(size > 0);
-        if(delete.isPresent()) delete.get().setVisible(size > 0);
+        if (read.isPresent()) read.get().setVisible(size == 1);
+        if (edit.isPresent()) edit.get().setVisible(size == 1);
+        if (copy.isPresent()) copy.get().setVisible(size > 0);
+        if (delete.isPresent()) delete.get().setVisible(size > 0);
 
         customSingleSelectButtons.stream().forEach(button -> button.setVisible(size == 1));
         customMultiSelectButtons.stream().forEach(button -> button.setVisible(size > 0));
@@ -264,7 +238,7 @@ public class GenericGrid<T> extends CustomComponent {
      * @param navigateToRead the navigate to read
      * @return the generic grid
      */
-    public GenericGrid<T> activateDoubleClickToRead(String navigateToRead){
+    public GenericGrid<T> activateDoubleClickToRead(String navigateToRead) {
         grid.addItemClickListener(itemClickEvent -> {
             if (itemClickEvent.getPropertyId() != null) {
                 if (itemClickEvent.isDoubleClick()) {
@@ -286,7 +260,7 @@ public class GenericGrid<T> extends CustomComponent {
      * @param consumer the consumer
      * @return the generic grid
      */
-    public GenericGrid<T> addDoubleClickListener(Consumer consumer){
+    public GenericGrid<T> addDoubleClickListener(Consumer consumer) {
         grid.addItemClickListener(itemClickEvent -> {
             if (itemClickEvent.isDoubleClick()) {
                 consumer.accept(((BeanItem<T>) grid.getContainerDataSource().getItem(itemClickEvent.getItemId())).getBean());
@@ -300,9 +274,9 @@ public class GenericGrid<T> extends CustomComponent {
      *
      * @return the generic grid
      */
-    public GenericGrid<T> activateSearch(){
+    public GenericGrid<T> activateSearch() {
 
-        if(!searchLayout.isPresent()){
+        if (!searchLayout.isPresent()) {
             //Configure layout
             CssLayout cssLayout = new CssLayout();
             cssLayout.addStyleName("v-component-group");
@@ -330,8 +304,8 @@ public class GenericGrid<T> extends CustomComponent {
      * @param navigateToCreate the navigate to create
      * @return the generic grid
      */
-    public GenericGrid<T> activateCreate(String navigateToCreate){
-        if(create.isPresent()) {
+    public GenericGrid<T> activateCreate(String navigateToCreate) {
+        if (create.isPresent()) {
             //Remove to prevent double attachment
             topComponentsLayout.removeComponent(create.get());
         }
@@ -349,8 +323,8 @@ public class GenericGrid<T> extends CustomComponent {
      * @param navigateToRead the navigate to read
      * @return the generic grid
      */
-    public GenericGrid<T> activateRead(String navigateToRead){
-        if(read.isPresent()) {
+    public GenericGrid<T> activateRead(String navigateToRead) {
+        if (read.isPresent()) {
             //Remove to prevent double attachment
             topComponentsLayout.removeComponent(read.get());
         }
@@ -368,8 +342,8 @@ public class GenericGrid<T> extends CustomComponent {
      *
      * @return the generic grid
      */
-    public GenericGrid<T> activateCopy(){
-        if(copy.isPresent()) {
+    public GenericGrid<T> activateCopy() {
+        if (copy.isPresent()) {
             //Remove to prevent double attachment
             topComponentsLayout.removeComponent(copy.get());
         } else {
@@ -387,8 +361,8 @@ public class GenericGrid<T> extends CustomComponent {
      * @param navigateToEdit the navigate to edit
      * @return the generic grid
      */
-    public GenericGrid<T> activateEdit(String navigateToEdit){
-        if(edit.isPresent()) {
+    public GenericGrid<T> activateEdit(String navigateToEdit) {
+        if (edit.isPresent()) {
             //Remove to prevent double attachment
             topComponentsLayout.removeComponent(edit.get());
         }
@@ -404,8 +378,8 @@ public class GenericGrid<T> extends CustomComponent {
      *
      * @return the generic grid
      */
-    public GenericGrid activateDelete(){
-        if(delete.isPresent()) {
+    public GenericGrid activateDelete() {
+        if (delete.isPresent()) {
             //Remove to prevent double attachment
             topComponentsLayout.removeComponent(delete.get());
         } else {
@@ -424,18 +398,18 @@ public class GenericGrid<T> extends CustomComponent {
      * @param consumer   the consumer
      * @return the generic grid
      */
-    public GenericGrid<T> addMultiSelectButton(String buttonName, Consumer<List<T>> consumer){
+    public GenericGrid<T> addMultiSelectButton(String buttonName, Consumer consumer) {
         Button button = new Button(buttonName);
-        customMultiSelectButtons.add(button);
+
         button.addClickListener(event -> {
             if (grid.getSelectedRows() != null) {
                 consumer.accept(grid.getSelectedRows().stream()
-                            .map(item -> ((BeanItem<T>) grid.getContainerDataSource().getItem(item)).getBean())
-                            .collect(Collectors.toList()));
+                        .map(item -> ((BeanItem<T>) grid.getContainerDataSource().getItem(item)).getBean())
+                        .collect(Collectors.toList()));
             }
         });
-        topComponentsLayout.addComponent(button);
-        setButtonVisability();
+
+        addMultiSelectButton(button);
         return this;
     }
 
@@ -445,9 +419,10 @@ public class GenericGrid<T> extends CustomComponent {
      * @param button the button to add
      * @return the generic grid
      */
-    public GenericGrid<T> addMultiSelectButton(Button button){
+    public GenericGrid<T> addMultiSelectButton(Button button) {
 
-        //TODO after #147
+        customMultiSelectButtons.add(button);
+        topComponentsLayout.addComponent(button);
 
         setButtonVisability();
         return this;
@@ -460,16 +435,16 @@ public class GenericGrid<T> extends CustomComponent {
      * @param consumer   the consumer
      * @return the generic grid
      */
-    public GenericGrid<T> addSingleSelectButton(String buttonName, Consumer<T> consumer){
+    public GenericGrid<T> addSingleSelectButton(String buttonName, Consumer<T> consumer) {
         Button button = new Button(buttonName);
-        customSingleSelectButtons.add(button);
+
         button.addClickListener(event -> {
             if (grid.getSelectedRows().size() == 1) {
                 consumer.accept(((BeanItem<T>) grid.getContainerDataSource().getItem(grid.getSelectedRows().toArray()[0])).getBean());
             }
         });
-        topComponentsLayout.addComponent(button);
-        setButtonVisability();
+
+        addSingleSelectButton(button);
         return this;
     }
 
@@ -479,44 +454,124 @@ public class GenericGrid<T> extends CustomComponent {
      * @param button the button to add
      * @return the generic grid
      */
-    public GenericGrid<T> addSingleSelectButton(Button button){
+    public GenericGrid<T> addSingleSelectButton(Button button) {
 
-        //TODO after #147
+        customSingleSelectButtons.add(button);
+        topComponentsLayout.addComponent(button);
 
         setButtonVisability();
         return this;
     }
 
     /**
-     * Add custom button on generic grid.
-     * The Button has its own business action with no connection to this grid.
+     * Add custom button on generic grid. The Button has its own business action with no connection to this grid.
      *
      * @param buttonName the button name
      * @param runnable   the runnable
      * @return the generic grid
      */
-    public GenericGrid<T> addButton(String buttonName, Runnable runnable){
+    public GenericGrid<T> addButton(String buttonName, Runnable runnable) {
         Button button = new Button(buttonName);
-        customButtons.add(button);
+
         button.addClickListener(event -> runnable.run());
-        topComponentsLayout.addComponent(button);
-        button.setVisible(Boolean.TRUE);
+        addButton(button);
         return this;
     }
 
     /**
-     * Add custom button on generic grid.
-     * The Button has its own business action with no connection to this grid.
+     * Add custom button on generic grid. The Button has its own business action with no connection to this grid.
      *
      * @param button the button to add
      * @return the generic grid
      */
-    public GenericGrid<T> addButton(Button button){
+    public GenericGrid<T> addButton(Button button) {
 
-        //TODO after #147
+        customButtons.add(button);
+        topComponentsLayout.addComponent(button);
 
         button.setVisible(Boolean.TRUE);
         return this;
+    }
+    //--------------
+    // Getter / Setter
+    //--------------
+
+    /**
+     * Get all selected Entities of this grid.
+     * @return selected Entities.
+     */
+    public List<T> getSelectedEntities(){
+        return grid.getSelectedRows().stream()
+                .map(item -> (BeanItem<T>) grid.getContainerDataSource().getItem(item))
+                .map(BeanItem::getBean)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Get a single selected Entitiy.
+     * If more than one Entity is selected, this method will return the first one.
+     *
+     * @return single selected entitiy
+     */
+    public T getSelectedEntity(){
+        return grid.getSelectedRows().stream()
+                .map(item -> (BeanItem<T>) grid.getContainerDataSource().getItem(item))
+                .map(BeanItem::getBean)
+                .findFirst().get();
+    }
+
+
+    //--------------
+    //intern Helper-Methods
+    //--------------
+
+    private EntitySingleActions getSingleActionOnSelected(){
+        return new EntitySingleActions(
+                getResolver(),
+                this::getSelectedEntity,
+                getEventbus(),
+                getType()
+        );
+    }
+
+    private EntityListActions getListActionOnSelected(){
+        return new EntityListActions(
+                () -> grid.getSelectedRows().stream()
+                        .peek(grid::deselect)
+                        .map(itemID -> (BeanItem<T>) grid.getContainerDataSource().getItem(itemID))
+                        .map(BeanItem::getBean)
+                        .collect(Collectors.toList()),
+                getType(),
+                getEventbus()
+        );
+    }
+
+    private EntityActions getEntityAction(){
+        return new EntityActions(
+                filter::getValue,
+                getEventbus(),
+                getType()
+        );
+    }
+
+    private NavigateActions getNavigateAction(String navigateTo){
+        return new NavigateActions(getNavigator(), getEventbus(), navigateTo);
+    }
+
+    private Class<?> getType(){
+        return ((AbstractBeanContainer)grid.getContainerDataSource()).getBeanType();
+    }
+
+    private I18nResolver getResolver(){
+        return controller.getResolver();
+    }
+
+    private EventBus getEventbus(){
+        return controller.getEventbus();
+    }
+
+    private Navigator getNavigator(){
+        return controller.getNavigator();
     }
 
 }

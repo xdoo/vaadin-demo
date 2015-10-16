@@ -19,6 +19,7 @@ import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import de.muenchen.eventbus.EventBus;
 import de.muenchen.eventbus.selector.Key;
 import de.muenchen.vaadin.demo.apilib.services.SecurityService;
 import de.muenchen.vaadin.guilib.components.GenericNotification;
@@ -26,7 +27,6 @@ import de.muenchen.vaadin.guilib.components.GenericWarningNotification;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import reactor.bus.EventBus;
 
 @SpringView(name = LoginView.NAME)
 @UIScope

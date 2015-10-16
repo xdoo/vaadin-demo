@@ -2,14 +2,14 @@ package de.muenchen.vaadin.ui.app.views;
 
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
+import de.muenchen.eventbus.EventBus;
 import de.muenchen.vaadin.services.BuergerI18nResolver;
 import de.muenchen.vaadin.ui.app.MainUI;
-import de.muenchen.vaadin.ui.components.BuergerUpdateForm;
+import de.muenchen.vaadin.ui.components.forms.SelectedBuergerUpdateForm;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import reactor.bus.EventBus;
 
 /**
  *
@@ -21,7 +21,7 @@ public class BuergerUpdateView extends DefaultBuergerView {
 
     public static final String NAME = "buerger_update_view";
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerUpdateView.class);
-    private BuergerUpdateForm form;
+    private SelectedBuergerUpdateForm form;
 
     @Autowired
     public BuergerUpdateView(BuergerViewController controller, BuergerI18nResolver resolver, EventBus eventbus, MainUI ui) {

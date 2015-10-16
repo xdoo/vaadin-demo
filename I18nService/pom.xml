@@ -11,6 +11,18 @@
 
     <artifactId>I18nService</artifactId>
 
+    <developers>
+        <developer>
+            <name>Peter Müller</name>
+            <email>p.mueller@muenchen.de</email>
+        </developer>
+        <developer>
+            <name>Maximilian Zollbrecht</name>
+            <email>maximilian.zollbrecht@muenchen.de</email>
+        </developer>
+    </developers>
+    <packaging>jar</packaging>
+
     <dependencies>
         <dependency>
             <groupId>de.muenchen</groupId>
@@ -18,9 +30,15 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>de.muenchen</groupId>
-            <artifactId>Eventbus</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-client</artifactId>
+            <version>${vaadin.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.validation</groupId>
+                    <artifactId>validation-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>

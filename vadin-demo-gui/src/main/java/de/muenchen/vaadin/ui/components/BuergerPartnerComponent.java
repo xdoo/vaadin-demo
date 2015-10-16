@@ -11,9 +11,9 @@ import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.events.Association;
 import de.muenchen.eventbus.selector.entity.RequestEvent;
 import de.muenchen.vaadin.demo.api.local.Buerger;
-import de.muenchen.vaadin.demo.i18nservice.buttons.ActionButton;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.GenericConfirmationWindow;
+import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
 import de.muenchen.vaadin.services.BuergerI18nResolver;
 import de.muenchen.vaadin.services.model.BuergerDatastore;
 import de.muenchen.vaadin.ui.app.views.BuergerDetailView;
@@ -22,12 +22,17 @@ import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import reactor.bus.Event;
 import reactor.fn.Consumer;
 
+import java.util.Optional;
+
 /**
- * Created by claus.straube on 05.10.15.
- * fabian.holtkoetter ist unschuldig.
+ * Created by claus.straube on 05.10.15. fabian.holtkoetter ist unschuldig.
  */
 public class BuergerPartnerComponent extends CustomComponent implements Consumer<Event<BuergerDatastore>> {
 
+    /**
+     * Navigation Strings
+     */
+    private final String navigateToForCreate;
     /**
      * UI Elements
      */
@@ -38,12 +43,7 @@ public class BuergerPartnerComponent extends CustomComponent implements Consumer
     private ActionButton add;
     private ActionButton read;
     private ActionButton delete;
-
     private Buerger currentPartner;
-    /**
-     * Navigation Strings
-     */
-    private final String navigateToForCreate;
 
     public BuergerPartnerComponent(BuergerViewController controller, BuergerI18nResolver resolver, String navigateToForCreate) {
         this.controller = controller;
@@ -75,7 +75,7 @@ public class BuergerPartnerComponent extends CustomComponent implements Consumer
     }
 
     private ActionButton buildReadButton() {
-        ActionButton read = new ActionButton(resolver, SimpleAction.read, navigateToForCreate);
+        ActionButton read = new ActionButton(resolver, SimpleAction.read);
         read.addClickListener(clickEvent -> {
             controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED), reactor.bus.Event.wrap(currentPartner));
             controller.getNavigator().navigateTo(BuergerDetailView.NAME);
@@ -86,7 +86,7 @@ public class BuergerPartnerComponent extends CustomComponent implements Consumer
 
 
     private ActionButton buildCreateButton() {
-        ActionButton create = new ActionButton(resolver, SimpleAction.create, navigateToForCreate);
+        ActionButton create = new ActionButton(resolver, SimpleAction.create);
         create.addClickListener(clickEvent -> {
             if (partnerReadForm.getComponentCount() == 0) {
                 controller.getNavigator().navigateTo(navigateToForCreate);
@@ -103,7 +103,7 @@ public class BuergerPartnerComponent extends CustomComponent implements Consumer
     }
 
     private ActionButton buildAddButton() {
-        ActionButton add = new ActionButton(resolver, SimpleAction.add, null);
+        ActionButton add = new ActionButton(resolver, SimpleAction.add);
         add.addClickListener(clickEvent -> {
             if (partnerReadForm.getComponentCount() == 0) {
                 HorizontalLayout layout = new HorizontalLayout(controller.getViewFactory().generateBuergerPartnerSearchTable());
@@ -126,7 +126,7 @@ public class BuergerPartnerComponent extends CustomComponent implements Consumer
     }
 
     private ActionButton buildDeleteButton() {
-        ActionButton delete = new ActionButton(resolver, SimpleAction.delete, null);
+        ActionButton delete = new ActionButton(resolver, SimpleAction.delete);
         delete.addClickListener(event -> {
             Association<Buerger> association = new Association<>(new Buerger(), Buerger.Rel.partner.name());
             controller.getEventbus().notify(controller.getRequestKey(RequestEvent.REMOVE_ASSOCIATION), association.asEvent());
@@ -138,10 +138,10 @@ public class BuergerPartnerComponent extends CustomComponent implements Consumer
     @Override
     public void accept(reactor.bus.Event<BuergerDatastore> buergerDatastoreEvent) {
         BuergerDatastore datastore = buergerDatastoreEvent.getData();
-        if (datastore.getSelectedBuergerPartner().size() > 0) {
-            currentPartner = datastore.getSelectedBuergerPartner().getItemIds().get(0);
+        if (!datastore.getSelectedBuergerPartner().equals(Optional.empty())) {
+            currentPartner = datastore.getSelectedBuergerPartner().get();
             partnerReadForm.removeAllComponents();
-            BeanItem<Buerger> partner = buergerDatastoreEvent.getData().getSelectedBuergerPartner().getItem(currentPartner);
+            BeanItem<Buerger> partner = new BeanItem(buergerDatastoreEvent.getData().getSelectedBuergerPartner().get());
 
             FieldGroup binder = new FieldGroup(partner);
             binder.setReadOnly(true);

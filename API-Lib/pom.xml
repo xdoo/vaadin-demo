@@ -11,6 +11,14 @@
 
     <artifactId>API-Lib</artifactId>
 
+    <developers>
+        <developer>
+            <name>Arne Schöntag</name>
+            <email>arne.schoentag@muenchen.de</email>
+        </developer>
+    </developers>
+    <packaging>jar</packaging>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.hateoas</groupId>

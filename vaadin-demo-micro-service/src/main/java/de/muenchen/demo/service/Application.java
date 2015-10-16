@@ -1,11 +1,13 @@
 package de.muenchen.demo.service;
 
+import de.muenchen.demo.service.domain.BuergerRepository;
 import de.muenchen.eventbus.EventBus;
 import de.muenchen.security.configurator.AuthenticationConfiguratorAdapter;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.orm.jpa.EntityScan;
@@ -25,6 +27,7 @@ import org.springframework.security.config.annotation.authentication.configurers
 @EnableEurekaClient
 @EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)
 public class Application {
+
     private static final Logger LOG
             = LoggerFactory.getLogger(Application.class);
 

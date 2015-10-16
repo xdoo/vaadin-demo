@@ -10,6 +10,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>Eventbus</artifactId>
+
+    <developers>
+        <developer>
+            <name>René Zarwel</name>
+            <email>rene.zarwel@muenchen.de</email>
+        </developer>
+    </developers>
+    <packaging>jar</packaging>
+
     <properties>
         <vaadin.version>7.5.3</vaadin.version>
         <maven.compiler.source>1.8</maven.compiler.source>

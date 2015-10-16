@@ -11,6 +11,7 @@ import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.GenericErrorNotification;
 import de.muenchen.vaadin.guilib.components.GenericSuccessNotification;
+import de.muenchen.vaadin.guilib.services.InfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,6 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Callable;
@@ -39,10 +39,9 @@ import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getNotificationPath;
 @UIScope
 public class BuergerServiceImpl implements BuergerService, Serializable {
 
-    private static final Logger LOG = LoggerFactory.getLogger(BuergerService.class);
     public static final String TIMEOUT_I18N = "timeout";
     public static final int TIMEOUT_VAL = 5;
-
+    private static final Logger LOG = LoggerFactory.getLogger(BuergerService.class);
     private BuergerRestClient client;
     private RestTemplate template;
     private SecurityService securityService;
@@ -213,32 +212,26 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
         return buerger;
     }
 
-    //TODO Wenn Suche gemerged wurde
     @Override
     public List<Buerger> queryBuerger(String query) {
-//        Link link = this.infoService.getUrl("buerger_query");
-//        ArrayList<Link> links = Lists.newArrayList(link.withRel(HateoasUtil.REL_QUERY));
-//        return client.queryBuerger(query, links, getTemplate());
-
         List<Buerger> buergers;
-//        Future<List<Buerger>> result = Executors.newCachedThreadPool().submit(() -> client.queryBuerger(query, links, getTemplate());
+        Future<List<Buerger>> result = Executors.newCachedThreadPool().submit(() -> client.findFullTextFuzzy(query));
         try {
-            buergers = new ArrayList<>();
-//            buergers = result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
+            buergers = result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
         } catch (HttpClientErrorException e) {
             buergers = BuergerFallbackDataGenerator.createBuergersFallback();
             LOG.error(e.getMessage());
             showErrorNotification(I18nPaths.NotificationType.error, SimpleAction.read);
-//        } catch (TimeoutException e){
-//            buergers = this.createBuergersFallback();
-//            LOG.error(e.getMessage());
-//            showErrorNotification(I18nPaths.NotificationType.error, SimpleAction.read, TIMEOUT_I18N);
+        } catch (TimeoutException e){
+            buergers = BuergerFallbackDataGenerator.createBuergersFallback();
+            LOG.error(e.getMessage());
+            showErrorNotification(I18nPaths.NotificationType.error, SimpleAction.read, TIMEOUT_I18N);
         } catch (Exception e) {
             buergers = BuergerFallbackDataGenerator.createBuergersFallback();
             LOG.error(e.getMessage());
             showErrorNotification(I18nPaths.NotificationType.error, SimpleAction.read);
         } finally {
-//            result.cancel(true);
+            result.cancel(true);
         }
         return buergers;
     }
