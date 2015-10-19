@@ -208,8 +208,6 @@ public class FormUtil {
 
         getBinder().bind(tf, property);
 
-        tf.setPrimaryStyleName(TokenField.STYLE_TOKENFIELD);
-        tf.setStyleName(TokenField.STYLE_TOKENFIELD);
         tf.setRememberNewTokens(false);
 
         deactivateValidation(tf);
