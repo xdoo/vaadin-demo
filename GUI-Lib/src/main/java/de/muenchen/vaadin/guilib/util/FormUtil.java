@@ -188,6 +188,7 @@ public class FormUtil {
             //HACK TO PREVENT READONLYEXCEPTION AND SHOW CORRECT FIELD IN READONLY MODE
             @Override
             protected void configureTokenButton(Object tokenId, Button button) {
+                //TODO get a good Style for the tokens
                 button.addStyleName(ValoTheme.BUTTON_PRIMARY);
 
                 if(!isReadOnly()) {
