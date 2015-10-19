@@ -12,6 +12,7 @@ import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.guilib.components.BaseComponent;
 import de.muenchen.vaadin.guilib.controller.EntityController;
 import de.muenchen.vaadin.guilib.util.FormUtil;
+import org.vaadin.tokenfield.TokenField;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -76,8 +77,9 @@ public class BuergerForm extends BaseComponent {
         final ComboBox augenfarbe = formUtil.createComboBox(Buerger.Field.augenfarbe.name());
         final DateField geburtsdatum = formUtil.createDateField(Buerger.Field.geburtsdatum.name());
         final CheckBox alive = formUtil.createCheckBox(Buerger.Field.alive.name());
+        final TokenField eigenschaften = formUtil.createTokenField(Buerger.Field.eigenschaften.name());
 
-        return Arrays.asList(vorname, nachname, augenfarbe, geburtsdatum,alive);
+        return Arrays.asList(vorname, nachname, augenfarbe, geburtsdatum,alive, eigenschaften);
     }
 
     /**

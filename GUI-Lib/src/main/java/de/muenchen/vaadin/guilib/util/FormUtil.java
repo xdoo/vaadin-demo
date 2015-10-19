@@ -10,6 +10,7 @@ import com.vaadin.ui.DateField;
 import com.vaadin.ui.TextField;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
+import org.vaadin.tokenfield.TokenField;
 
 /**
  * Provides a simple Util for creating various binded Fields on properties.
@@ -159,6 +160,34 @@ public class FormUtil {
 
         deactivateValidation(df);
         return df;
+    }
+
+    public TokenField createTokenField(String property){
+        final String caption = getCaption(property);
+
+        TokenField tf = new TokenField(caption) {
+
+            @Override
+            protected void onTokenInput(Object tokenId) {
+                String[] tokens = ((String) tokenId).split(",");
+                for (int i = 0; i < tokens.length; i++) {
+                    String token = tokens[i].trim();
+                    if (token.length() > 0) {
+                        super.onTokenInput(token);
+                    }
+                }
+            }
+
+        };
+
+        getBinder().bind(tf, property);
+
+        tf.setStyleName(TokenField.STYLE_TOKENFIELD);
+        tf.setRememberNewTokens(false);
+
+        deactivateValidation(tf);
+
+        return tf;
     }
 
     /**

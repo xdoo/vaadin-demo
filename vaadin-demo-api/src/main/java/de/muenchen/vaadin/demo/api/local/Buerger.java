@@ -9,6 +9,7 @@ import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.Set;
 import java.util.stream.Stream;
 
 /**
@@ -52,6 +53,10 @@ public class Buerger extends ResourceSupport {
     @NotNull
     private boolean alive;
 
+    @NotNull
+    @Size(max = 2)
+    private Set<String> eigenschaften;
+
     /**
      * Create a new Buerger with the vorname, nachname and geburtsdatum.
      *
@@ -59,12 +64,13 @@ public class Buerger extends ResourceSupport {
      * @param nachname the nachname of the Buerger.
      * @param geburtsdatum the geburtsdatum of the Buerger.
      */
-    public Buerger(String vorname, String nachname, Date geburtsdatum, Augenfarbe augenfarbe, boolean alive) {
+    public Buerger(String vorname, String nachname, Date geburtsdatum, Augenfarbe augenfarbe, boolean alive, Set<String> eigenschaften) {
         this.vorname = vorname;
         this.nachname = nachname;
         this.geburtsdatum = geburtsdatum;
         this.augenfarbe = augenfarbe;
         this.alive = alive;
+        this.eigenschaften = eigenschaften;
     }
 
     /**
@@ -141,6 +147,14 @@ public class Buerger extends ResourceSupport {
         this.alive = alive;
     }
 
+    public Set<String> getEigenschaften() {
+        return eigenschaften;
+    }
+
+    public void setEigenschaften(Set<String> eigenschaften) {
+        this.eigenschaften = eigenschaften;
+    }
+
     /**
      * A simple Enum for all the Fields of this Buerger.
      * <p>
@@ -148,7 +162,7 @@ public class Buerger extends ResourceSupport {
      * </p>
      */
     public enum Field {
-        vorname, nachname, geburtsdatum, augenfarbe, alive;
+        vorname, nachname, geburtsdatum, augenfarbe, alive, eigenschaften(false);
 
         private final boolean field;
 

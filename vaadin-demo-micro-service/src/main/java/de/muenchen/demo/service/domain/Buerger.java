@@ -12,6 +12,7 @@ import org.hibernate.search.annotations.Indexed;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -65,6 +66,12 @@ public class Buerger extends BaseEntity {
     @NotNull
     private boolean alive;
 
+    @Column(name = "BUER_EIGENSCHAFTEN")
+    @ElementCollection
+    @NotNull
+    @Size(max = 2)
+    private Set<String> eigenschaften = new HashSet<>();
+
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "oid")
     @JsonIdentityReference(alwaysAsId = true)
     @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
@@ -107,6 +114,7 @@ public class Buerger extends BaseEntity {
         this.staatsangehoerigkeiten.addAll(buerger.staatsangehoerigkeiten);
         this.kinder.addAll(buerger.kinder);
         this.partner = buerger.partner;
+        this.eigenschaften = buerger.eigenschaften;
     }
 
     public String getVorname() {
@@ -139,6 +147,15 @@ public class Buerger extends BaseEntity {
 
     public void setAlive(boolean alive) {
         this.alive = alive;
+    }
+
+    public Set<String> getEigenschaften() {
+        return eigenschaften;
+    }
+
+    public void setEigenschaften(Set<String> eigenschaften) {
+        this.eigenschaften.clear();
+        this.eigenschaften.addAll(eigenschaften);
     }
 
     public Set<Wohnung> getWohnungen() {
@@ -204,6 +221,7 @@ public class Buerger extends BaseEntity {
     public void setAugenfarbe(Augenfarbe augenfarbe) {
         this.augenfarbe = augenfarbe;
     }
+
 
     @Override
     public String toString() {
