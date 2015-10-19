@@ -2,13 +2,11 @@ package de.muenchen.vaadin.ui.app.views;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.server.ClassResource;
-import com.vaadin.server.ExternalResource;
+import com.vaadin.server.ThemeResource;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.Embedded;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
@@ -38,8 +36,12 @@ public class MainView extends VerticalLayout implements View {
         pageTitle.addStyleName(ValoTheme.LABEL_H1);
         pageTitle.addStyleName(ValoTheme.LABEL_COLORED);
 
-        ExternalResource image = new ExternalResource("http://i.imgur.com/U3YxeJ1.png");
-        final Image image1 = new Image(null,image);
+        // Image as a file resource
+        ThemeResource resource = new ThemeResource(
+                "../../img/gaia.png");
+
+
+        final Image image1 = new Image("",resource);
 
         addComponent(pageTitle);
         addComponent(image1);
