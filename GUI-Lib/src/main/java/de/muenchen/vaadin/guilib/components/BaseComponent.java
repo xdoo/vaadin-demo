@@ -27,7 +27,7 @@ public class BaseComponent extends CustomComponent {
     }
 
     public EventBus getEventBus() {
-        return BaseUI.getEventBus();
+        return BaseUI.getCurrentEventBus();
 
     }
 

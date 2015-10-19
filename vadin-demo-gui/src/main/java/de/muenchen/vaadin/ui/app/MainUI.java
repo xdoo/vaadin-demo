@@ -172,8 +172,8 @@ public class MainUI extends BaseUI implements I18nResolver {
             }
         });
 
-        getEventBus().on(Key.LOGIN.toSelector(), this::loginEventHandler);
-        getEventBus().on(Key.LOGOUT.toSelector(), this::logoutEventHandler);
+        getCurrentEventBus().on(Key.LOGIN.toSelector(), this::loginEventHandler);
+        getCurrentEventBus().on(Key.LOGOUT.toSelector(), this::logoutEventHandler);
     }
 
     public void loginEventHandler(reactor.bus.Event<?> event) {
@@ -299,7 +299,7 @@ public class MainUI extends BaseUI implements I18nResolver {
     }
 
     public void postEvent(Object event) {
-        getEventBus().notify(event, wrap(event));
+        getCurrentEventBus().notify(event, wrap(event));
     }
 
     @Override

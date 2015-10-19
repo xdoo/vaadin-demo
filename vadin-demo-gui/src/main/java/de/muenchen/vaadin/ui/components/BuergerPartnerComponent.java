@@ -78,7 +78,7 @@ public class BuergerPartnerComponent extends CustomComponent implements Consumer
     private ActionButton buildReadButton() {
         ActionButton read = new ActionButton(resolver, SimpleAction.read);
         read.addClickListener(clickEvent -> {
-            BaseUI.getEventBus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED), reactor.bus.Event.wrap(currentPartner));
+            BaseUI.getCurrentEventBus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED), reactor.bus.Event.wrap(currentPartner));
             BaseUI.getCurrent().getNavigator().navigateTo(BuergerDetailView.NAME);
         });
         read.setVisible(false);
@@ -130,7 +130,7 @@ public class BuergerPartnerComponent extends CustomComponent implements Consumer
         ActionButton delete = new ActionButton(resolver, SimpleAction.delete);
         delete.addClickListener(event -> {
             Association<Buerger> association = new Association<>(new Buerger(), Buerger.Rel.partner.name());
-            BaseUI.getEventBus().notify(controller.getRequestKey(RequestEvent.REMOVE_ASSOCIATION), association.asEvent());
+            BaseUI.getCurrentEventBus().notify(controller.getRequestKey(RequestEvent.REMOVE_ASSOCIATION), association.asEvent());
         });
         delete.setVisible(false);
         return delete;

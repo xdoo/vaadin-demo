@@ -99,7 +99,7 @@ public class EntityListActions<T> {
      * @return The EventBus.
      */
     private EventBus getEventBus() {
-        return BaseUI.getEventBus();
+        return BaseUI.getCurrentEventBus();
     }
 
     /**

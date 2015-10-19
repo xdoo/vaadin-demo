@@ -62,7 +62,7 @@ public class EntityActions {
      * @return The EventBus.
      */
     private EventBus getEventBus() {
-        return BaseUI.getEventBus();
+        return BaseUI.getCurrentEventBus();
     }
 
     /**

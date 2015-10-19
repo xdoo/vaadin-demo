@@ -77,7 +77,7 @@ public class BuergerViewController implements Serializable, EntityController {
     }
 
     private EventBus getEventbus() {
-        return BaseUI.getEventBus();
+        return BaseUI.getCurrentEventBus();
     }
 
     public BuergerI18nResolver getResolver() {

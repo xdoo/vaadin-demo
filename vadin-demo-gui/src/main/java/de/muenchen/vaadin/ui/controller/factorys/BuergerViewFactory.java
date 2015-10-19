@@ -147,6 +147,6 @@ public class BuergerViewFactory implements Serializable {
     }
 
     public EventBus getEventBus() {
-        return BaseUI.getEventBus();
+        return BaseUI.getCurrentEventBus();
     }
 }

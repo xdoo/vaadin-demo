@@ -570,7 +570,7 @@ public class GenericGrid<T> extends CustomComponent {
      * @return
      */
     private EventBus getEventBus() {
-        return BaseUI.getEventBus();
+        return BaseUI.getCurrentEventBus();
     }
 
     /**
