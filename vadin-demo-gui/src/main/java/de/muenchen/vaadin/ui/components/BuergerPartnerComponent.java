@@ -2,17 +2,14 @@ package de.muenchen.vaadin.ui.components;
 
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.FormLayout;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.events.Association;
 import de.muenchen.eventbus.selector.entity.RequestEvent;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.GenericConfirmationWindow;
+import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
 import de.muenchen.vaadin.services.BuergerI18nResolver;
 import de.muenchen.vaadin.services.model.BuergerDatastore;
@@ -76,9 +73,10 @@ public class BuergerPartnerComponent extends CustomComponent implements Consumer
 
     private ActionButton buildReadButton() {
         ActionButton read = new ActionButton(resolver, SimpleAction.read);
+        NavigateActions navigateAction = new NavigateActions(controller.getNavigator(), controller.getEventbus(), BuergerDetailView.NAME);
         read.addClickListener(clickEvent -> {
             controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED), reactor.bus.Event.wrap(currentPartner));
-            controller.getNavigator().navigateTo(BuergerDetailView.NAME);
+            navigateAction.navigate();
         });
         read.setVisible(false);
         return read;
@@ -88,11 +86,12 @@ public class BuergerPartnerComponent extends CustomComponent implements Consumer
     private ActionButton buildCreateButton() {
         ActionButton create = new ActionButton(resolver, SimpleAction.create);
         create.addClickListener(clickEvent -> {
+            NavigateActions navigateAction = new NavigateActions(controller.getNavigator(), controller.getEventbus(), navigateToForCreate);
             if (partnerReadForm.getComponentCount() == 0) {
-                controller.getNavigator().navigateTo(navigateToForCreate);
+                navigateAction.navigate();
             } else {
                 GenericConfirmationWindow window = new GenericConfirmationWindow(resolver, SimpleAction.override, e -> {
-                    controller.getNavigator().navigateTo(navigateToForCreate);
+                    navigateAction.navigate();
                 });
                 getUI().addWindow(window);
                 window.center();

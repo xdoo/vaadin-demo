@@ -6,13 +6,7 @@ import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.FontAwesome;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.CssLayout;
-import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.Grid;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.EventBus;
 import de.muenchen.eventbus.selector.entity.RequestEvent;
@@ -239,6 +233,7 @@ public class GenericGrid<T> extends CustomComponent {
      * @return the generic grid
      */
     public GenericGrid<T> activateDoubleClickToRead(String navigateToRead) {
+        NavigateActions navigateAction = new NavigateActions(controller.getNavigator(), controller.getEventbus(), navigateToRead);
         grid.addItemClickListener(itemClickEvent -> {
             if (itemClickEvent.getPropertyId() != null) {
                 if (itemClickEvent.isDoubleClick()) {
@@ -247,7 +242,7 @@ public class GenericGrid<T> extends CustomComponent {
                             .getEventbus()
                             .notify(controller
                                     .getRequestKey(RequestEvent.READ_SELECTED), reactor.bus.Event.wrap(entity));
-                    controller.getNavigator().navigateTo(navigateToRead);
+                    navigateAction.navigate();
                 }
             }
         });
