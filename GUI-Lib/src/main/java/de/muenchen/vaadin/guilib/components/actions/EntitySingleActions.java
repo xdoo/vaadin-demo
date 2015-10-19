@@ -7,6 +7,7 @@ import de.muenchen.eventbus.selector.entity.RequestEvent;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
+import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.components.GenericWarningNotification;
 import reactor.bus.Event;
 import reactor.bus.EventBus;
@@ -26,8 +27,6 @@ import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getNotificationPath;
 public class EntitySingleActions<T> {
     /** The supplier for the single entity. */
     private final Supplier<T> entitySupplier;
-    /** The EventBus. */
-    private final EventBus eventBus;
     /** The class of the entity. */
     private final Class<T> entityClass;
     /** The I18NResolver of this context **/
@@ -37,18 +36,14 @@ public class EntitySingleActions<T> {
      * Create single actions for the entity.
      *
      * @param entitySupplier The supplier for the entity.
-     * @param eventBus       The EventBus.
      * @param entityClass    The class of the Entity.
      */
-    public EntitySingleActions(I18nResolver resolver, Supplier<T> entitySupplier, EventBus eventBus, Class<T> entityClass) {
+    public EntitySingleActions(I18nResolver resolver, Supplier<T> entitySupplier, Class<T> entityClass) {
         this.entityClass = entityClass;
-        if (eventBus == null)
-            throw new NullPointerException();
         if (entitySupplier == null)
             throw new NullPointerException();
 
         this.resolver = resolver;
-        this.eventBus = eventBus;
         this.entitySupplier = entitySupplier;
     }
 
@@ -133,8 +128,8 @@ public class EntitySingleActions<T> {
      * Get the EventBus.
      * @return The EventBus.
      */
-    public EventBus getEventBus() {
-        return eventBus;
+    private EventBus getEventBus() {
+        return BaseUI.getEventBus();
     }
 
     /**

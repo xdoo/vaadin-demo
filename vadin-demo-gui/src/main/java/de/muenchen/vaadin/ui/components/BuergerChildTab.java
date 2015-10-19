@@ -51,8 +51,7 @@ public class BuergerChildTab extends CustomComponent {
         BuergerAssociationListActions listAction = new BuergerAssociationListActions(resolver,
                 () -> grid.getSelectedEntities().stream()
                         .map(buerger -> new Association<>( buerger, Buerger.Rel.kinder.name()))
-                        .collect(Collectors.toList()),
-                controller.getEventbus()
+                        .collect(Collectors.toList())
         );
         deleteButton.addActionPerformer(listAction::removeAssociations);
         grid.addMultiSelectButton(deleteButton);

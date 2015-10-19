@@ -6,6 +6,7 @@ import de.muenchen.eventbus.EventBus;
 import de.muenchen.eventbus.events.Association;
 import de.muenchen.eventbus.selector.entity.RequestEvent;
 import de.muenchen.vaadin.demo.api.local.Buerger;
+import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.components.GenericGrid;
 import de.muenchen.vaadin.services.BuergerI18nResolver;
 import de.muenchen.vaadin.ui.components.BuergerChildTab;
@@ -36,8 +37,7 @@ public class BuergerViewFactory implements Serializable {
      */
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerViewFactory.class);
     private static final long serialVersionUID = 1L;
-    @Autowired
-    EventBus eventBus;
+
     @Autowired
     BuergerI18nResolver resolver;
     private BuergerViewController controller;
@@ -77,13 +77,13 @@ public class BuergerViewFactory implements Serializable {
 
     public SelectedBuergerUpdateForm generateUpdateForm(String navigateTo, String navigateBack) {
         SelectedBuergerUpdateForm form = new SelectedBuergerUpdateForm(controller, navigateTo, navigateBack);
-        controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
+        getEventBus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
         return form;
     }
 
     public SelectedBuergerReadForm generateReadForm(String navigateToUpdate, String navigateBack) {
         SelectedBuergerReadForm form = new SelectedBuergerReadForm(controller, navigateToUpdate, navigateBack);
-        controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
+        getEventBus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
         return form;
     }
 
@@ -92,9 +92,9 @@ public class BuergerViewFactory implements Serializable {
         final GenericGrid components = generateGrid();
         components.addDoubleClickListener(buerger -> {
             Association<Buerger> association = new Association<>((Buerger) buerger, Buerger.Rel.kinder.name());
-            controller.getEventbus().notify(controller.getRequestKey(RequestEvent.ADD_ASSOCIATION), association.asEvent());
+            getEventBus().notify(controller.getRequestKey(RequestEvent.ADD_ASSOCIATION), association.asEvent());
         });
-        controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
+        getEventBus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
         return components;
     }
 
@@ -103,9 +103,9 @@ public class BuergerViewFactory implements Serializable {
         final GenericGrid components = generateGrid();
         components.addDoubleClickListener(buerger -> {
             Association<Buerger> association = new Association<>((Buerger) buerger, Buerger.Rel.partner.name());
-            controller.getEventbus().notify(controller.getRequestKey(RequestEvent.ADD_ASSOCIATION), association.asEvent());
+            getEventBus().notify(controller.getRequestKey(RequestEvent.ADD_ASSOCIATION), association.asEvent());
         });
-        controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
+        getEventBus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
         return components;
     }
 
@@ -115,7 +115,7 @@ public class BuergerViewFactory implements Serializable {
 
         grid.activateDoubleClickToRead(navigateToForDetail);
 
-        controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
+        getEventBus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
 
         return grid;
     }
@@ -123,8 +123,8 @@ public class BuergerViewFactory implements Serializable {
     public BuergerPartnerComponent generateBuergerPartnerComponent(String navigateToForCreate) {
         BuergerPartnerComponent partnerComponent = new BuergerPartnerComponent(controller, resolver, navigateToForCreate);
 
-        controller.getEventbus().on(controller.getResponseKey().toSelector(), partnerComponent);
-        controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
+        getEventBus().on(controller.getResponseKey().toSelector(), partnerComponent);
+        getEventBus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
         return partnerComponent;
     }
 
@@ -144,5 +144,9 @@ public class BuergerViewFactory implements Serializable {
 
     public void setController(BuergerViewController controller) {
         this.controller = controller;
+    }
+
+    public EventBus getEventBus() {
+        return BaseUI.getEventBus();
     }
 }

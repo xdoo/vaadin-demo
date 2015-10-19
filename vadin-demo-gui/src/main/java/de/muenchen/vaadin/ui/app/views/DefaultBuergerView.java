@@ -28,7 +28,6 @@ public abstract class DefaultBuergerView extends VerticalLayout implements View{
     public DefaultBuergerView(BuergerViewController controller, BuergerI18nResolver resolver, MainUI ui) {
         this.controller = controller;
         this.resolver = resolver;
-        this.controller.registerUI(ui);
     }
     
     /**

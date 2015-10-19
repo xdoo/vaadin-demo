@@ -3,6 +3,7 @@ package de.muenchen.vaadin.guilib.components.actions;
 import com.vaadin.ui.Button;
 import de.muenchen.eventbus.selector.entity.RequestEntityKey;
 import de.muenchen.eventbus.selector.entity.RequestEvent;
+import de.muenchen.vaadin.guilib.BaseUI;
 import reactor.bus.Event;
 import reactor.bus.EventBus;
 
@@ -20,8 +21,6 @@ public class EntityListActions<T> {
 
     /** The supplier for the List of entities. */
     private final Supplier<List<T>> entityListSupplier;
-    /** The EventBus. */
-    private final EventBus eventBus;
     /** The class of the entity. */
     private final Class<T> entityClass;
 
@@ -30,11 +29,9 @@ public class EntityListActions<T> {
      *
      * @param entityListSupplier The supplier for the List of Entities.
      * @param entityClass        The class of the entity.
-     * @param eventBus           The EventBus.
      */
-    public EntityListActions(Supplier<List<T>> entityListSupplier, Class<T> entityClass, EventBus eventBus) {
-        if (eventBus == null)
-            throw new NullPointerException();
+    public EntityListActions(Supplier<List<T>> entityListSupplier, Class<T> entityClass) {
+
         if (entityListSupplier == null)
             throw new NullPointerException();
         if (entityClass == null)
@@ -42,7 +39,6 @@ public class EntityListActions<T> {
 
 
         this.entityClass = entityClass;
-        this.eventBus = eventBus;
         this.entityListSupplier = entityListSupplier;
     }
 
@@ -102,8 +98,8 @@ public class EntityListActions<T> {
      * Get the EventBus.
      * @return The EventBus.
      */
-    public EventBus getEventBus() {
-        return eventBus;
+    private EventBus getEventBus() {
+        return BaseUI.getEventBus();
     }
 
     /**
