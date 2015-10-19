@@ -2,6 +2,7 @@ package de.muenchen.vaadin.ui.components.forms.node;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
+import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DateField;
@@ -74,8 +75,9 @@ public class BuergerForm extends BaseComponent {
         final TextField nachname = formUtil.createTextField(Buerger.Field.nachname.name());
         final ComboBox augenfarbe = formUtil.createComboBox(Buerger.Field.augenfarbe.name());
         final DateField geburtsdatum = formUtil.createDateField(Buerger.Field.geburtsdatum.name());
+        final CheckBox alive = formUtil.createCheckBox(Buerger.Field.alive.name());
 
-        return Arrays.asList(vorname, nachname, augenfarbe, geburtsdatum);
+        return Arrays.asList(vorname, nachname, augenfarbe, geburtsdatum,alive);
     }
 
     /**

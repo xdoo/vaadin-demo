@@ -47,10 +47,19 @@ public class NavigateActions {
      * Navigate to the set String.
      *
      * @param clickEvent can be null
+     * @return true if navigation succeeded
      */
     public boolean navigate(Button.ClickEvent clickEvent) {
         BaseUI.getCurrentEventBus().getConsumerRegistry().unregister(new ResponseEntityKey());
         BaseUI.getCurrent().getNavigator().navigateTo(navigateTo);
         return true;
+    }
+
+    /**
+     * Navigate method for use outside of clickListener.
+     * @return true if navigation succeeded
+     */
+    public boolean navigate(){
+        return navigate(null);
     }
 }

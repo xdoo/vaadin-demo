@@ -27,7 +27,8 @@ public class BuergerAssembler {
                 buergerDTO.getVorname(),
                 buergerDTO.getNachname(),
                 buergerDTO.getGeburtsdatum(),
-                buergerDTO.getAugenfarbe()
+                buergerDTO.getAugenfarbe(),
+                buergerDTO.getAlive()
         );
         bean.add(resource.getLinks());
 
@@ -46,6 +47,7 @@ public class BuergerAssembler {
         buergerDTO.setNachname(bean.getNachname());
         buergerDTO.setGeburtsdatum(bean.getGeburtsdatum());
         buergerDTO.setAugenfarbe(bean.getAugenfarbe());
+        buergerDTO.setAlive(bean.getAlive());
 
         return new BuergerResource(buergerDTO, bean.getLinks());
     }

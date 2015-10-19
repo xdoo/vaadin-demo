@@ -4,6 +4,7 @@ import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.DefaultFieldGroupFieldFactory;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.ui.AbstractField;
+import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.TextField;
@@ -139,6 +140,24 @@ public class FormUtil {
         deactivateValidation(df);
         //df.setId(String.format("%s_%s_DATEFIELD", getI18nResolver().getBasePath(), property).toUpperCase());
 
+        return df;
+    }
+
+
+    /**
+     * Create a CheckBox Field for the given property.
+     * <p/>
+     * It has no ID set, the individual component must take care of that.
+     *
+     * @param property The property of the entity to bind tlo.
+     * @return The CheckBox for the property.
+     */
+    public CheckBox createCheckBox(String property) {
+        final String caption = getCaption(property);
+
+        CheckBox df = getBinder().buildAndBind(caption, property, CheckBox.class);
+
+        deactivateValidation(df);
         return df;
     }
 
