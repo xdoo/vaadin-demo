@@ -47,17 +47,24 @@ public class Buerger extends ResourceSupport {
     private Date geburtsdatum;
 
     /**
+     * A mapped Field from the DTO
+     */
+    @NotNull
+    private boolean alive;
+
+    /**
      * Create a new Buerger with the vorname, nachname and geburtsdatum.
      *
      * @param vorname the vorname of the Buerger.
      * @param nachname the nachname of the Buerger.
      * @param geburtsdatum the geburtsdatum of the Buerger.
      */
-    public Buerger(String vorname, String nachname, Date geburtsdatum, Augenfarbe augenfarbe) {
+    public Buerger(String vorname, String nachname, Date geburtsdatum, Augenfarbe augenfarbe, boolean alive) {
         this.vorname = vorname;
         this.nachname = nachname;
         this.geburtsdatum = geburtsdatum;
         this.augenfarbe = augenfarbe;
+        this.alive = alive;
     }
 
     /**
@@ -126,6 +133,14 @@ public class Buerger extends ResourceSupport {
         this.augenfarbe = augenfarbe;
     }
 
+    public boolean getAlive(){
+        return alive;
+    }
+
+    public void setAlive(boolean alive){
+        this.alive = alive;
+    }
+
     /**
      * A simple Enum for all the Fields of this Buerger.
      * <p>
@@ -133,7 +148,7 @@ public class Buerger extends ResourceSupport {
      * </p>
      */
     public enum Field {
-        vorname, nachname, geburtsdatum, augenfarbe;
+        vorname, nachname, geburtsdatum, augenfarbe, alive;
 
         private final boolean field;
 
