@@ -66,6 +66,8 @@ public class Buerger extends BaseEntity {
     @NotNull
     private boolean alive;
 
+    @Field
+    @FieldBridge(impl = PetersPerfectBridge.class)
     @Column(name = "BUER_EIGENSCHAFTEN")
     @ElementCollection
     @NotNull
