@@ -53,8 +53,7 @@ public class Buerger extends ResourceSupport {
     @NotNull
     private boolean alive;
 
-    @NotNull
-    @Size(max = 2)
+    @Size(min = 1, max = 5)
     private Set<String> eigenschaften;
 
     /**
