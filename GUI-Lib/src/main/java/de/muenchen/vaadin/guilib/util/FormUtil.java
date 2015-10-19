@@ -4,10 +4,13 @@ import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.DefaultFieldGroupFieldFactory;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.ui.AbstractField;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 import org.vaadin.tokenfield.TokenField;
@@ -165,7 +168,11 @@ public class FormUtil {
     public TokenField createTokenField(String property){
         final String caption = getCaption(property);
 
-        TokenField tf = new TokenField(caption) {
+        //Group Elements of TokenField in CSS Layout
+        CssLayout lo = new CssLayout();
+        lo.addStyleName("v-component-group");
+
+        TokenField tf = new TokenField(caption,lo) {
 
             @Override
             protected void onTokenInput(Object tokenId) {
@@ -178,10 +185,29 @@ public class FormUtil {
                 }
             }
 
+            //HACK TO PREVENT READONLYEXCEPTION AND SHOW CORRECT FIELD IN READONLY MODE
+            @Override
+            protected void configureTokenButton(Object tokenId, Button button) {
+                button.addStyleName(ValoTheme.BUTTON_PRIMARY);
+
+                if(!isReadOnly()) {
+                    button.setCaption(this.getTokenCaption(tokenId) + " ×");
+                }
+                else {
+                    button.setCaption(this.getTokenCaption(tokenId));
+                    button.setEnabled(false);
+
+                    //This is necessary because it will call a rebuild of this TokenField
+                    //Rebuild will set the InputField to invisible
+                    setTokenInsertPosition(InsertPosition.AFTER);
+                }
+
+            }
         };
 
         getBinder().bind(tf, property);
 
+        tf.setPrimaryStyleName(TokenField.STYLE_TOKENFIELD);
         tf.setStyleName(TokenField.STYLE_TOKENFIELD);
         tf.setRememberNewTokens(false);
 
