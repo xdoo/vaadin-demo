@@ -165,6 +165,14 @@ public class FormUtil {
         return df;
     }
 
+    /**
+     * Create a TokenField for the given property.
+     *
+     * <p/>
+     * It has no ID set, the individual component must take care of that.
+     * @param property
+     * @return The TokenField of the property
+     */
     public TokenField createTokenField(String property){
         final String caption = getCaption(property);
 
@@ -176,6 +184,7 @@ public class FormUtil {
 
             @Override
             protected void onTokenInput(Object tokenId) {
+                //Multiple Tokens separated by ',' possible
                 String[] tokens = ((String) tokenId).split(",");
                 for (int i = 0; i < tokens.length; i++) {
                     String token = tokens[i].trim();
@@ -185,7 +194,8 @@ public class FormUtil {
                 }
             }
 
-            //HACK TO PREVENT READONLYEXCEPTION AND SHOW CORRECT FIELD IN READONLY MODE
+            //HACK TO PREVENT READONLYEXCEPTION
+            //AND SHOW CORRECT FIELD IN READONLY MODE
             @Override
             protected void configureTokenButton(Object tokenId, Button button) {
                 //TODO get a good Style for the tokens
