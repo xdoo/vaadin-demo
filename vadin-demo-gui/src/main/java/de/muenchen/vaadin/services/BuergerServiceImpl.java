@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -46,6 +47,7 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
     private RestTemplate template;
     private SecurityService securityService;
     private BuergerI18nResolver resolver;
+    private ExecutorService executor;
 
     @Autowired
     public BuergerServiceImpl(InfoService infoService, SecurityService securityService, BuergerI18nResolver resolver) {
@@ -53,12 +55,13 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
         //TODO
         this.client = new BuergerRestClientImpl(getTemplate(), infoService.getBaseUri());
         this.resolver = resolver;
+        executor = Executors.newCachedThreadPool();
     }
 
     @Override
     public Buerger create(Buerger buerger) {
         Buerger returnBuerger;
-        Future<Buerger> result = Executors.newCachedThreadPool().submit(() -> client.create(buerger));
+        Future<Buerger> result = executor.submit(() -> client.create(buerger));
         try {
             returnBuerger = result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
             showSuccessNotification(I18nPaths.NotificationType.success, SimpleAction.create);
@@ -84,7 +87,7 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
     @Override
     public Buerger update(Buerger buerger) {
         Buerger returnBuerger;
-        Future<Buerger> result = Executors.newCachedThreadPool().submit(() -> client.update(buerger));
+        Future<Buerger> result = executor.submit(() -> client.update(buerger));
         try {
             returnBuerger = result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
             showSuccessNotification(I18nPaths.NotificationType.success, SimpleAction.update);
@@ -109,7 +112,7 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
 
     @Override
     public boolean delete(Link link) {
-        Future<?> result = Executors.newCachedThreadPool().submit(() -> client.delete(link));
+        Future<?> result = executor.submit(() -> client.delete(link));
         try {
             result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
             showSuccessNotification(I18nPaths.NotificationType.success, SimpleAction.delete);
@@ -139,7 +142,7 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
     @Override
     public List<Buerger> findAll() {
         List<Buerger> buergers;
-        Future<List<Buerger>> result = Executors.newCachedThreadPool().submit((Callable<List<Buerger>>) client::findAll);
+        Future<List<Buerger>> result = executor.submit((Callable<List<Buerger>>) client::findAll);
         try {
             buergers = result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
             return buergers;
@@ -165,7 +168,7 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
     @Override
     public List<Buerger> findAll(Link relation) {
         List<Buerger> buergers;
-        Future<List<Buerger>> result = Executors.newCachedThreadPool().submit(() -> client.findAll(relation));
+        Future<List<Buerger>> result = executor.submit(() -> client.findAll(relation));
         try {
             buergers = result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
         } catch (ExecutionException e) {
@@ -190,7 +193,7 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
     @Override
     public Optional<Buerger> findOne(Link link) {
         Optional<Buerger> buerger;
-        Future<Optional<Buerger>> result = Executors.newCachedThreadPool().submit(() -> client.findOne(link));
+        Future<Optional<Buerger>> result = executor.submit(() -> client.findOne(link));
         try {
             buerger = result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
         } catch (ExecutionException e) {
@@ -215,7 +218,7 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
     @Override
     public List<Buerger> queryBuerger(String query) {
         List<Buerger> buergers;
-        Future<List<Buerger>> result = Executors.newCachedThreadPool().submit(() -> client.findFullTextFuzzy(query));
+        Future<List<Buerger>> result = executor.submit(() -> client.findFullTextFuzzy(query));
         try {
             buergers = result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
         } catch (HttpClientErrorException e) {
@@ -238,7 +241,7 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
 
     @Override
     public boolean setRelations(Link link, List<Link> links) {
-        Future<?> result = Executors.newCachedThreadPool().submit(() -> client.setRelations(link, links));
+        Future<?> result = executor.submit(() -> client.setRelations(link, links));
         try {
             result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
             showSuccessNotification(I18nPaths.NotificationType.success, SimpleAction.association);
@@ -262,7 +265,7 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
 
     @Override
     public boolean setRelation(Link link, Link relation) {
-        Future<?> result = Executors.newCachedThreadPool().submit(() -> client.setRelation(link, relation));
+        Future<?> result = executor.submit(() -> client.setRelation(link, relation));
         try {
             result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
             showSuccessNotification(I18nPaths.NotificationType.success, SimpleAction.association);
