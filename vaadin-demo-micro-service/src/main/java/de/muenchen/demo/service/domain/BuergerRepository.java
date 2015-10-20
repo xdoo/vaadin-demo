@@ -4,6 +4,7 @@ import de.muenchen.service.TenantService;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cloud.security.oauth2.resource.EnableOAuth2Resource;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -28,6 +29,7 @@ import java.util.List;
  */
 @SuppressWarnings("SpringElInspection")
 @PreAuthorize("hasRole('ROLE_READ_Buerger')")
+@EnableOAuth2Resource
 public interface BuergerRepository extends CrudRepository<Buerger, Long> {
 
     /**

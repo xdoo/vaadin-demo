@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.hateoas.config.EnableHypermediaSupport;
 import org.springframework.security.config.annotation.authentication.configurers.GlobalAuthenticationConfigurerAdapter;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 
 @Configuration
 @ComponentScan(basePackages = {"de.muenchen.demo.service", "de.muenchen.service", "de.muenchen.auditing", "de.muenchen.security"})
@@ -24,6 +25,7 @@ import org.springframework.security.config.annotation.authentication.configurers
 @EnableAutoConfiguration
 @EnableEurekaClient
 @EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)
+@EnableResourceServer
 public class Application {
 
     private static final Logger LOG
