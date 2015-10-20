@@ -1,13 +1,11 @@
 package de.muenchen.demo.service;
 
-import de.muenchen.demo.service.domain.BuergerRepository;
 import de.muenchen.eventbus.EventBus;
 import de.muenchen.security.configurator.AuthenticationConfiguratorAdapter;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.orm.jpa.EntityScan;
@@ -20,9 +18,9 @@ import org.springframework.hateoas.config.EnableHypermediaSupport;
 import org.springframework.security.config.annotation.authentication.configurers.GlobalAuthenticationConfigurerAdapter;
 
 @Configuration
-@ComponentScan(basePackages = {"de.muenchen.demo.service", "de.muenchen.auditing", "de.muenchen.security"})
-@EntityScan(basePackages = {"de.muenchen.demo.service", "de.muenchen.auditing", "de.muenchen.security"})
-@EnableJpaRepositories(basePackages = {"de.muenchen.demo.service", "de.muenchen.auditing", "de.muenchen.security"})
+@ComponentScan(basePackages = {"de.muenchen.demo.service", "de.muenchen.service", "de.muenchen.auditing", "de.muenchen.security"})
+@EntityScan(basePackages = {"de.muenchen.demo.service", "de.muenchen.service", "de.muenchen.auditing", "de.muenchen.security"})
+@EnableJpaRepositories(basePackages = {"de.muenchen.demo.service", "de.muenchen.service", "de.muenchen.auditing", "de.muenchen.security"})
 @EnableAutoConfiguration
 @EnableEurekaClient
 @EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)

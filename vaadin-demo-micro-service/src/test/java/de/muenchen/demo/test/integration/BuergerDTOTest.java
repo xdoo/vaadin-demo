@@ -12,7 +12,7 @@ import com.google.common.collect.Lists;
 import de.muenchen.demo.service.Application;
 import de.muenchen.demo.service.domain.Buerger;
 import de.muenchen.demo.service.domain.BuergerRepository;
-import de.muenchen.demo.service.util.QueryService;
+import de.muenchen.service.QueryService;
 import de.muenchen.vaadin.demo.api.domain.Augenfarbe;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
