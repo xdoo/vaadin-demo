@@ -63,7 +63,6 @@ public class Buerger extends BaseEntity {
 
     @Field
     @Column(name = "BUER_ALIVE")
-    @NotNull
     private boolean alive;
 
     @Field
@@ -156,8 +155,7 @@ public class Buerger extends BaseEntity {
     }
 
     public void setEigenschaften(Set<String> eigenschaften) {
-        this.eigenschaften.clear();
-        this.eigenschaften.addAll(eigenschaften);
+        this.eigenschaften = eigenschaften;
     }
 
     public Set<Wohnung> getWohnungen() {
@@ -227,8 +225,8 @@ public class Buerger extends BaseEntity {
 
     @Override
     public String toString() {
-        return String.format("oid > %s | vorname > %s | nachname > %s | geburtsdatum > %s | augenfarbe > %s | alive > %b",
-                this.getOid(), this.vorname, this.nachname, this.geburtsdatum, this.augenfarbe, this.alive);
+        return String.format("oid > %s | vorname > %s | nachname > %s | geburtsdatum > %s | augenfarbe > %s | alive > %b | eigenschaften > %s",
+                this.getOid(), this.vorname, this.nachname, this.geburtsdatum, this.augenfarbe, this.alive, this.eigenschaften);
     }
 
 }
