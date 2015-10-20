@@ -5,6 +5,10 @@
  */
 package de.muenchen.demo.service.domain;
 
+
+
+import de.muenchen.service.BaseEntity;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -18,6 +22,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "ADRESSE_EXTERNE")
 public class AdresseExterne extends BaseEntity implements Serializable {
+
 
     @Column(nullable = true, name = "ADR_STR")
     @Size(max = 70)

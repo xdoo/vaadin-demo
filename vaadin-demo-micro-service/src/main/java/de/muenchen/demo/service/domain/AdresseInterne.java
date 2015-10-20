@@ -1,5 +1,7 @@
 package de.muenchen.demo.service.domain;
 
+import de.muenchen.service.BaseEntity;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;

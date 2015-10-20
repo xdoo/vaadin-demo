@@ -2,7 +2,7 @@ package de.muenchen.demo.service.rest.search;
 
 import de.muenchen.demo.service.domain.Buerger;
 import de.muenchen.demo.service.domain.BuergerRepository;
-import de.muenchen.demo.service.util.QueryService;
+import de.muenchen.service.QueryService;
 import org.hibernate.search.exception.EmptyQueryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

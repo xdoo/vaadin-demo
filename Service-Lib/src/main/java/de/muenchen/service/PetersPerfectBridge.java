@@ -1,3 +1,5 @@
+package de.muenchen.service;
+
 import org.hibernate.search.bridge.StringBridge;
 
 import java.time.LocalDate;

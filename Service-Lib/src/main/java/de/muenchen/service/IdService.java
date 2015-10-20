@@ -1,4 +1,4 @@
-package de.muenchen.demo.service.util;
+package de.muenchen.service;
 
 import java.util.UUID;
 

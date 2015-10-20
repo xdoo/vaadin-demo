@@ -1,3 +1,4 @@
+package de.muenchen.service;
 
 import de.muenchen.security.entities.User;
 import de.muenchen.security.repositories.UserRepository;

@@ -2,6 +2,7 @@ package de.muenchen.demo.service.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import de.muenchen.security.entities.User;
+import de.muenchen.service.BaseEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;

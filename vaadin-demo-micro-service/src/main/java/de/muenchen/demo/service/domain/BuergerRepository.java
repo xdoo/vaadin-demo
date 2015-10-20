@@ -1,6 +1,6 @@
 package de.muenchen.demo.service.domain;
 
-import de.muenchen.demo.service.services.TenantService;
+import de.muenchen.service.TenantService;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;

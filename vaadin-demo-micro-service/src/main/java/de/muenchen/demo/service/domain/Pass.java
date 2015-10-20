@@ -5,6 +5,8 @@
  */
 package de.muenchen.demo.service.domain;
 
+import de.muenchen.service.BaseEntity;
+
 import javax.persistence.*;
 import java.util.Date;
 
