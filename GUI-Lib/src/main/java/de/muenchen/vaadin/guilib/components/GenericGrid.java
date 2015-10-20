@@ -579,7 +579,7 @@ public class GenericGrid<T> extends CustomComponent {
      * @return
      */
     private Navigator getNavigator() {
-        return BaseUI.getCurrent().getNavigator();
+        return BaseUI.getCurrentNavigator();
     }
 
 }

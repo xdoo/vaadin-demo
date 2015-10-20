@@ -10,7 +10,6 @@ import de.muenchen.eventbus.selector.entity.ResponseEntityKey;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.controller.EntityController;
-import de.muenchen.vaadin.guilib.util.VaadinUtil;
 import de.muenchen.vaadin.services.BuergerI18nResolver;
 import de.muenchen.vaadin.services.BuergerService;
 import de.muenchen.vaadin.services.model.BuergerDatastore;
@@ -51,10 +50,7 @@ public class BuergerViewController implements Serializable, EntityController {
      * Model der Daten für den Eventbus
      */
     private final BuergerDatastore model = new BuergerDatastore();
-    /**
-     * Werkzeuge für Vaadin
-     */
-    private final VaadinUtil util;
+
     @Autowired
     private BuergerI18nResolver resolver;
     /**
@@ -64,9 +60,8 @@ public class BuergerViewController implements Serializable, EntityController {
     private BuergerViewFactory buergerViewFactory;
 
     @Autowired
-    public BuergerViewController(BuergerService buergerService, VaadinUtil util) {
+    public BuergerViewController(BuergerService buergerService) {
         this.buergerService = buergerService;
-        this.util = util;
     }
 
     @PostConstruct
@@ -82,10 +77,6 @@ public class BuergerViewController implements Serializable, EntityController {
 
     public BuergerI18nResolver getResolver() {
         return resolver;
-    }
-
-    public VaadinUtil getUtil() {
-        return util;
     }
 
 
