@@ -51,7 +51,7 @@ public class NavigateActions {
      */
     public boolean navigate(Button.ClickEvent clickEvent) {
         BaseUI.getCurrentEventBus().getConsumerRegistry().unregister(new ResponseEntityKey());
-        BaseUI.getCurrent().getNavigator().navigateTo(navigateTo);
+        BaseUI.getCurrentNavigator().navigateTo(navigateTo);
         return true;
     }
 

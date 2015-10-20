@@ -32,7 +32,7 @@ public class BaseComponent extends CustomComponent {
     }
 
     public Navigator getNavigator() {
-        return BaseUI.getCurrent().getNavigator();
+        return BaseUI.getCurrentNavigator();
     }
 
 
