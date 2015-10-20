@@ -28,7 +28,6 @@ public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
                 .withClient("acme") //TODO Correct Client Name
-                .secret("acmesecret") // TODO a good Secret e.g. from Properties
                 .autoApprove(true)
                 .authorizedGrantTypes("password")
                 .scopes("scope");
