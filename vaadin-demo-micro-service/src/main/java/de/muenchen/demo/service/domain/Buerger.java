@@ -11,7 +11,19 @@ import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.FieldBridge;
 import org.hibernate.search.annotations.Indexed;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
@@ -52,8 +64,15 @@ public class Buerger extends BaseEntity {
 
     @Field
     @Column(name = "BUER_ALIVE")
-    @NotNull
     private boolean alive;
+
+    @Field
+    @FieldBridge(impl = PetersPerfectBridge.class)
+    @Column(name = "BUER_EIGENSCHAFTEN")
+    @ElementCollection
+    @NotNull
+    @Size(min = 1, max = 5)
+    private Set<String> eigenschaften = new HashSet<>();
 
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "oid")
     @JsonIdentityReference(alwaysAsId = true)
@@ -97,6 +116,7 @@ public class Buerger extends BaseEntity {
         this.staatsangehoerigkeiten.addAll(buerger.staatsangehoerigkeiten);
         this.kinder.addAll(buerger.kinder);
         this.partner = buerger.partner;
+        this.eigenschaften = buerger.eigenschaften;
     }
 
     public String getVorname() {
@@ -129,6 +149,14 @@ public class Buerger extends BaseEntity {
 
     public void setAlive(boolean alive) {
         this.alive = alive;
+    }
+
+    public Set<String> getEigenschaften() {
+        return eigenschaften;
+    }
+
+    public void setEigenschaften(Set<String> eigenschaften) {
+        this.eigenschaften = eigenschaften;
     }
 
     public Set<Wohnung> getWohnungen() {
@@ -195,10 +223,11 @@ public class Buerger extends BaseEntity {
         this.augenfarbe = augenfarbe;
     }
 
+
     @Override
     public String toString() {
-        return String.format("oid > %s | vorname > %s | nachname > %s | geburtsdatum > %s | augenfarbe > %s | alive > %b",
-                this.getOid(), this.vorname, this.nachname, this.geburtsdatum, this.augenfarbe, this.alive);
+        return String.format("oid > %s | vorname > %s | nachname > %s | geburtsdatum > %s | augenfarbe > %s | alive > %b | eigenschaften > %s",
+                this.getOid(), this.vorname, this.nachname, this.geburtsdatum, this.augenfarbe, this.alive, this.eigenschaften);
     }
 
 }

@@ -3,6 +3,7 @@ package de.muenchen.vaadin.demo.api.domain;
 import de.muenchen.vaadin.demo.apilib.domain.BaseEntity;
 
 import java.util.Date;
+import java.util.Set;
 
 /**
  * Provides a simple DTO for a Buerger.
@@ -36,6 +37,8 @@ public class BuergerDTO extends BaseEntity {
      * A plain Field of the DTO
      */
     private boolean alive;
+
+    private Set<String> eigenschaften;
 
     /**
      * Get the vorname.
@@ -99,6 +102,14 @@ public class BuergerDTO extends BaseEntity {
 
     public void setAlive(boolean alive) {
         this.alive = alive;
+    }
+
+    public Set<String> getEigenschaften() {
+        return eigenschaften;
+    }
+
+    public void setEigenschaften(Set<String> eigenschaften) {
+        this.eigenschaften = eigenschaften;
     }
 
     @Override

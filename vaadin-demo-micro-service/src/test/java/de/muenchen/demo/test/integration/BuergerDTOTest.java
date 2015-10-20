@@ -34,7 +34,12 @@ import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.hateoas.hal.Jackson2HalModule;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -52,10 +57,20 @@ import java.net.MalformedURLException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 /**
  *
@@ -129,6 +144,9 @@ public class BuergerDTOTest {
             Authentication auth = authenticationManager.authenticate(token);
             SecurityContextHolder.getContext().setAuthentication(auth);
             Buerger b1M1 = new Buerger();
+            Set<String> eig1 = new HashSet<>();
+            eig1.add("eig");
+            b1M1.setEigenschaften(eig1);
             b1M1.setNachname("name1");
             b1M1.setVorname("vorname1");
             b1M1.setMandant("test");
@@ -137,6 +155,9 @@ public class BuergerDTOTest {
             b1M1.setOid(1L);
             repo.save(b1M1);
             Buerger b2M1 = new Buerger();
+            Set<String> eig2 = new HashSet<>();
+            eig2.add("eig");
+            b2M1.setEigenschaften(eig2);
             b2M1.setNachname("name2");
             b2M1.setVorname("vorname2");
             b2M1.setMandant("test");
@@ -144,6 +165,9 @@ public class BuergerDTOTest {
             b2M1.setOid(2L);
             repo.save(b2M1);
             Buerger b3M1 = new Buerger();
+            Set<String> eig3 = new HashSet<>();
+            eig3.add("eig");
+            b3M1.setEigenschaften(eig3);
             b3M1.setNachname("name3");
             b3M1.setVorname("vorname3");
             b3M1.setMandant("test");
@@ -151,6 +175,9 @@ public class BuergerDTOTest {
             b3M1.setOid(3L);
             repo.save(b3M1);
             Buerger b4M1 = new Buerger();
+            Set<String> eig4 = new HashSet<>();
+            eig4.add("eig");
+            b4M1.setEigenschaften(eig4);
             b4M1.setNachname("name4");
             b4M1.setVorname("vorname4");
             b4M1.setMandant("test");
@@ -159,6 +186,9 @@ public class BuergerDTOTest {
             b4M1.getKinder().add(b3M1);
             repo.save(b4M1);
             Buerger b5M1 = new Buerger();
+            Set<String> eig5 = new HashSet<>();
+            eig5.add("eig");
+            b5M1.setEigenschaften(eig5);
             b5M1.setNachname("name5");
             b5M1.setVorname("vorname5");
             b5M1.setMandant("test");
@@ -169,6 +199,9 @@ public class BuergerDTOTest {
             Authentication auth2 = authenticationManager.authenticate(token2);
             SecurityContextHolder.getContext().setAuthentication(auth2);
             Buerger b1M2 = new Buerger();
+            Set<String> eig6 = new HashSet<>();
+            eig6.add("eig");
+            b1M2.setEigenschaften(eig6);
             b1M2.setNachname("name1");
             b1M2.setVorname("vorname1");
             b1M2.setMandant("default");
@@ -176,6 +209,9 @@ public class BuergerDTOTest {
             b1M2.setOid(6L);
             repo.save(b1M2);
             Buerger b2M2 = new Buerger();
+            Set<String> eig7 = new HashSet<>();
+            eig7.add("eig");
+            b2M2.setEigenschaften(eig7);
             b2M2.setNachname("name2");
             b2M2.setVorname("vorname2");
             b2M2.setMandant("default");
@@ -183,6 +219,9 @@ public class BuergerDTOTest {
             b2M2.setOid(7L);
             repo.save(b2M2);
             Buerger b3M2 = new Buerger();
+            Set<String> eig8 = new HashSet<>();
+            eig8.add("eig");
+            b3M2.setEigenschaften(eig8);
             b3M2.setNachname("name3");
             b3M2.setVorname("vorname3");
             b3M2.setMandant("default");
@@ -190,6 +229,9 @@ public class BuergerDTOTest {
             b3M2.setOid(8L);
             repo.save(b3M2);
             Buerger b4M2 = new Buerger();
+            Set<String> eig9 = new HashSet<>();
+            eig9.add("eig");
+            b4M2.setEigenschaften(eig9);
             b4M2.setNachname("name4");
             b4M2.setVorname("vorname4");
             b4M2.setMandant("default");
@@ -197,6 +239,9 @@ public class BuergerDTOTest {
             b4M2.setOid(9L);
             repo.save(b4M2);
             Buerger b5M2 = new Buerger();
+            Set<String> eig10 = new HashSet<>();
+            eig10.add("eig");
+            b5M2.setEigenschaften(eig10);
             b5M2.setNachname("name5");
             b5M2.setVorname("vorname5");
             b5M2.setMandant("default");
@@ -270,6 +315,9 @@ public class BuergerDTOTest {
         buerger.setNachname("hans");
         buerger.setVorname("peter");
         buerger.setAugenfarbe(Augenfarbe.Blau);
+        Set<String> eig = new HashSet<>();
+        eig.add("eig");
+        buerger.setEigenschaften(eig);
         return buerger;
     }
 

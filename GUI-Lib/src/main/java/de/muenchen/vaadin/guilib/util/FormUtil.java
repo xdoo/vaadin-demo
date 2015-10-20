@@ -4,12 +4,16 @@ import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.DefaultFieldGroupFieldFactory;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.ui.AbstractField;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
+import org.vaadin.tokenfield.TokenField;
 
 /**
  * Provides a simple Util for creating various binded Fields on properties.
@@ -159,6 +163,66 @@ public class FormUtil {
 
         deactivateValidation(df);
         return df;
+    }
+
+    /**
+     * Create a TokenField for the given property.
+     *
+     * <p/>
+     * It has no ID set, the individual component must take care of that.
+     * @param property
+     * @return The TokenField of the property
+     */
+    public TokenField createTokenField(String property){
+        final String caption = getCaption(property);
+
+        //Group Elements of TokenField in CSS Layout
+        CssLayout lo = new CssLayout();
+        lo.addStyleName("v-component-group");
+
+        TokenField tf = new TokenField(caption,lo) {
+
+            @Override
+            protected void onTokenInput(Object tokenId) {
+                //Multiple Tokens separated by ',' possible
+                String[] tokens = ((String) tokenId).split(",");
+                for (int i = 0; i < tokens.length; i++) {
+                    String token = tokens[i].trim();
+                    if (token.length() > 0) {
+                        super.onTokenInput(token);
+                    }
+                }
+            }
+
+            //HACK TO PREVENT READONLYEXCEPTION
+            //AND SHOW CORRECT FIELD IN READONLY MODE
+            @Override
+            protected void configureTokenButton(Object tokenId, Button button) {
+                //TODO get a good Style for the tokens
+                button.addStyleName(ValoTheme.BUTTON_PRIMARY);
+
+                if(!isReadOnly()) {
+                    button.setCaption(this.getTokenCaption(tokenId) + " ×");
+                }
+                else {
+                    button.setCaption(this.getTokenCaption(tokenId));
+                    button.setEnabled(false);
+
+                    //This is necessary because it will call a rebuild of this TokenField
+                    //Rebuild will set the InputField to invisible
+                    setTokenInsertPosition(InsertPosition.AFTER);
+                }
+
+            }
+        };
+
+        getBinder().bind(tf, property);
+
+        tf.setRememberNewTokens(false);
+
+        deactivateValidation(tf);
+
+        return tf;
     }
 
     /**
