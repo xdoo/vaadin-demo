@@ -18,7 +18,6 @@ public abstract class BaseEntity implements Cloneable, Serializable {
 
     @Column(name = "OID")
     @Id
-    @GeneratedValue
     private Long oid;
 
     @IndexedEmbedded(depth = 1, prefix = "mandant")
