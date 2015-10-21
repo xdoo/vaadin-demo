@@ -21,20 +21,6 @@ public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    //TODO GET A OWN KEYPAIR.....WHY? IDK
-    @Bean
-    public JwtAccessTokenConverter jwtAccessTokenConverter() {
-        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-
-        //Sample for own Keypair
-//        KeyPair keyPair = new KeyStoreKeyFactory(
-//                new ClassPathResource("server.jks"), "123456".toCharArray())
-//                .getKeyPair("mytestkey", "123456".toCharArray());
-//        converter.setKeyPair(keyPair);
-
-        return converter;
-    }
-
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints.authenticationManager(authenticationManager).accessTokenConverter(jwtAccessTokenConverter());
@@ -49,4 +35,17 @@ public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
                 .scopes("scope");
     }
 
+    //TODO GET A OWN KEYPAIR.....WHY? IDK
+    @Bean
+    public JwtAccessTokenConverter jwtAccessTokenConverter() {
+        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+
+        //Sample for own Keypair
+//        KeyPair keyPair = new KeyStoreKeyFactory(
+//                new ClassPathResource("server.jks"), "123456".toCharArray())
+//                .getKeyPair("mytestkey", "123456".toCharArray());
+//        converter.setKeyPair(keyPair);
+
+        return converter;
+    }
 }
