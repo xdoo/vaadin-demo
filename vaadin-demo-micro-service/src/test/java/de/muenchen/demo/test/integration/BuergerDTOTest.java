@@ -9,7 +9,7 @@ package de.muenchen.demo.test.integration;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
-import de.muenchen.demo.service.Application;
+import de.muenchen.demo.service.MicroServiceApplication;
 import de.muenchen.demo.service.domain.Buerger;
 import de.muenchen.demo.service.domain.BuergerRepository;
 import de.muenchen.service.QueryService;
@@ -77,7 +77,7 @@ import static org.junit.Assert.assertNull;
  * @author praktikant.tmar
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = MicroServiceApplication.class)
 @WebIntegrationTest({"server.port=0", "management.port=0"})
 public class BuergerDTOTest {
 
