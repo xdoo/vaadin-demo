@@ -6,13 +6,20 @@ import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.FontAwesome;
-import com.vaadin.ui.*;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.CssLayout;
+import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.Grid;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.TextField;
+import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.EventBus;
 import de.muenchen.eventbus.selector.entity.RequestEvent;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
+import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.components.actions.EntityActions;
 import de.muenchen.vaadin.guilib.components.actions.EntityListActions;
 import de.muenchen.vaadin.guilib.components.actions.EntitySingleActions;
@@ -133,7 +140,7 @@ public class GenericGrid<T> extends CustomComponent {
         setCompositionRoot(layout);
 
         //Request Data for this Grid
-        controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_LIST));
+        getEventBus().notify(controller.getRequestKey(RequestEvent.READ_LIST));
 
     }
 
@@ -233,13 +240,12 @@ public class GenericGrid<T> extends CustomComponent {
      * @return the generic grid
      */
     public GenericGrid<T> activateDoubleClickToRead(String navigateToRead) {
-        NavigateActions navigateAction = new NavigateActions(controller.getNavigator(), controller.getEventbus(), navigateToRead);
+        NavigateActions navigateAction = new NavigateActions(navigateToRead);
         grid.addItemClickListener(itemClickEvent -> {
             if (itemClickEvent.getPropertyId() != null) {
                 if (itemClickEvent.isDoubleClick()) {
                     T entity = ((BeanItem<T>) itemClickEvent.getItem()).getBean();
-                    controller
-                            .getEventbus()
+                    getEventBus()
                             .notify(controller
                                     .getRequestKey(RequestEvent.READ_SELECTED), reactor.bus.Event.wrap(entity));
                     navigateAction.navigate();
@@ -524,7 +530,6 @@ public class GenericGrid<T> extends CustomComponent {
         return new EntitySingleActions(
                 getResolver(),
                 this::getSelectedEntity,
-                getEventbus(),
                 getType()
         );
     }
@@ -536,21 +541,19 @@ public class GenericGrid<T> extends CustomComponent {
                         .map(itemID -> (BeanItem<T>) grid.getContainerDataSource().getItem(itemID))
                         .map(BeanItem::getBean)
                         .collect(Collectors.toList()),
-                getType(),
-                getEventbus()
+                getType()
         );
     }
 
     private EntityActions getEntityAction(){
         return new EntityActions(
                 filter::getValue,
-                getEventbus(),
                 getType()
         );
     }
 
     private NavigateActions getNavigateAction(String navigateTo){
-        return new NavigateActions(getNavigator(), getEventbus(), navigateTo);
+        return new NavigateActions(navigateTo);
     }
 
     private Class<?> getType(){
@@ -561,12 +564,22 @@ public class GenericGrid<T> extends CustomComponent {
         return controller.getResolver();
     }
 
-    private EventBus getEventbus(){
-        return controller.getEventbus();
+
+    /**
+     * TODO REMOVE
+     *
+     * @return
+     */
+    private EventBus getEventBus() {
+        return BaseUI.getCurrentEventBus();
     }
 
-    private Navigator getNavigator(){
-        return controller.getNavigator();
+    /**
+     * TODO REMOVE
+     * @return
+     */
+    private Navigator getNavigator() {
+        return BaseUI.getCurrentNavigator();
     }
 
 }

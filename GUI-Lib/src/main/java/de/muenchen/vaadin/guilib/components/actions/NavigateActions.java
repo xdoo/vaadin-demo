@@ -1,9 +1,8 @@
 package de.muenchen.vaadin.guilib.components.actions;
 
-import com.vaadin.navigator.Navigator;
 import com.vaadin.ui.Button;
 import de.muenchen.eventbus.selector.entity.ResponseEntityKey;
-import reactor.bus.EventBus;
+import de.muenchen.vaadin.guilib.BaseUI;
 
 /**
  * Provides simple Actions for Navigation.
@@ -12,10 +11,6 @@ import reactor.bus.EventBus;
  * @version 1.0
  */
 public class NavigateActions {
-    /** The Navigator to perform the navigation. */
-    private final Navigator navigator;
-    /** The EventBus. */
-    private final EventBus eventBus;
     /** The String to navigate to. */
     private String navigateTo;
 
@@ -24,13 +19,9 @@ public class NavigateActions {
      * <p/>
      * This Actions are crucial because they unregister Components from the EventBus.
      *
-     * @param navigator  The navigator.
-     * @param eventBus   The EventBus.
      * @param navigateTo The String to navigate to.
      */
-    public NavigateActions(Navigator navigator, EventBus eventBus, String navigateTo) {
-        this.navigator = navigator;
-        this.eventBus = eventBus;
+    public NavigateActions(String navigateTo) {
         this.navigateTo = navigateTo;
     }
 
@@ -54,12 +45,13 @@ public class NavigateActions {
 
     /**
      * Navigate to the set String.
+     *
      * @param clickEvent can be null
      * @return true if navigation succeeded
      */
     public boolean navigate(Button.ClickEvent clickEvent) {
-        eventBus.getConsumerRegistry().unregister(new ResponseEntityKey());
-        navigator.navigateTo(navigateTo);
+        BaseUI.getCurrentEventBus().getConsumerRegistry().unregister(new ResponseEntityKey());
+        BaseUI.getCurrentNavigator().navigateTo(navigateTo);
         return true;
     }
 

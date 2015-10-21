@@ -1,21 +1,18 @@
 package de.muenchen.vaadin.ui.controller;
 
-import com.vaadin.navigator.Navigator;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.UI;
 import de.muenchen.eventbus.EventBus;
 import de.muenchen.eventbus.events.Association;
 import de.muenchen.eventbus.selector.entity.RequestEntityKey;
 import de.muenchen.eventbus.selector.entity.RequestEvent;
 import de.muenchen.eventbus.selector.entity.ResponseEntityKey;
 import de.muenchen.vaadin.demo.api.local.Buerger;
+import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.controller.EntityController;
-import de.muenchen.vaadin.guilib.util.VaadinUtil;
 import de.muenchen.vaadin.services.BuergerI18nResolver;
 import de.muenchen.vaadin.services.BuergerService;
 import de.muenchen.vaadin.services.model.BuergerDatastore;
-import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.controller.factorys.BuergerViewFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,21 +50,9 @@ public class BuergerViewController implements Serializable, EntityController {
      * Model der Daten für den Eventbus
      */
     private final BuergerDatastore model = new BuergerDatastore();
-    /**
-     * Werkzeuge für Vaadin
-     */
-    private final VaadinUtil util;
-    /**
-     * Event Bus zur Kommunikation
-     */
-    @Autowired
-    private EventBus eventbus;
+
     @Autowired
     private BuergerI18nResolver resolver;
-    /**
-     * {@link UI} {@link Navigator}
-     */
-    private Navigator navigator;
     /**
      * BuergerViewFactory zum erstellen der Components
      */
@@ -75,9 +60,8 @@ public class BuergerViewController implements Serializable, EntityController {
     private BuergerViewFactory buergerViewFactory;
 
     @Autowired
-    public BuergerViewController(BuergerService buergerService, VaadinUtil util) {
+    public BuergerViewController(BuergerService buergerService) {
         this.buergerService = buergerService;
-        this.util = util;
     }
 
     @PostConstruct
@@ -87,40 +71,19 @@ public class BuergerViewController implements Serializable, EntityController {
         initEventhandlers();
     }
 
-    /**
-     * Die Main wird über die {@link de.muenchen.vaadin.ui.app.views.DefaultBuergerView} registriert. Dies ist
-     * notwendig, da die Vaadin abhängigen Beans zum Zeitpunkt der Instanzierung noch nicht vorhanden sind. Aus der Main
-     * UI wird der {@link Navigator} geholt, um über ihn eine Navigation zwischen einzelnen Views zu ermöglichen.
-     *
-     * @param ui MainUI
-     */
-    public void registerUI(MainUI ui) {
-        this.navigator = ui.getNavigator();
-    }
-
-    public EventBus getEventbus() {
-        return eventbus;
+    private EventBus getEventbus() {
+        return BaseUI.getCurrentEventBus();
     }
 
     public BuergerI18nResolver getResolver() {
         return resolver;
     }
 
-    public VaadinUtil getUtil() {
-        return util;
-    }
-
-    public Navigator getNavigator() {
-        return navigator;
-    }
 
     public BuergerViewFactory getViewFactory() {
         return buergerViewFactory;
     }
 
-    public EventBus getBus() {
-        return eventbus;
-    }
 
     public BuergerDatastore getModel() {
         return model;
@@ -190,13 +153,13 @@ public class BuergerViewController implements Serializable, EntityController {
      * Register all event handlers on the RequestEntityKey.
      */
     public void initEventhandlers() {
-        eventbus.on(getRequestKey(RequestEvent.CREATE).toSelector(), this::create);
-        eventbus.on(getRequestKey(RequestEvent.DELETE).toSelector(), this::delete);
-        eventbus.on(getRequestKey(RequestEvent.UPDATE).toSelector(), this::update);
-        eventbus.on(getRequestKey(RequestEvent.ADD_ASSOCIATION).toSelector(), this::addAssociation);
-        eventbus.on(getRequestKey(RequestEvent.REMOVE_ASSOCIATION).toSelector(), this::removeAssociation);
-        eventbus.on(getRequestKey(RequestEvent.READ_LIST).toSelector(), this::readList);
-        eventbus.on(getRequestKey(RequestEvent.READ_SELECTED).toSelector(), this::readSelected);
+        getEventbus().on(getRequestKey(RequestEvent.CREATE).toSelector(), this::create);
+        getEventbus().on(getRequestKey(RequestEvent.DELETE).toSelector(), this::delete);
+        getEventbus().on(getRequestKey(RequestEvent.UPDATE).toSelector(), this::update);
+        getEventbus().on(getRequestKey(RequestEvent.ADD_ASSOCIATION).toSelector(), this::addAssociation);
+        getEventbus().on(getRequestKey(RequestEvent.REMOVE_ASSOCIATION).toSelector(), this::removeAssociation);
+        getEventbus().on(getRequestKey(RequestEvent.READ_LIST).toSelector(), this::readList);
+        getEventbus().on(getRequestKey(RequestEvent.READ_SELECTED).toSelector(), this::readSelected);
     }
 
     /**
@@ -423,7 +386,7 @@ public class BuergerViewController implements Serializable, EntityController {
      * Notify all the Components.
      */
     public void notifyComponents() {
-        eventbus.notify(getResponseKey(), Event.wrap(getModel()));
+        getEventbus().notify(getResponseKey(), Event.wrap(getModel()));
     }
 
     /**

@@ -2,12 +2,17 @@ package de.muenchen.vaadin.ui.components;
 
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
-import com.vaadin.ui.*;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.events.Association;
 import de.muenchen.eventbus.selector.entity.RequestEvent;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
+import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.components.GenericConfirmationWindow;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
@@ -15,6 +20,7 @@ import de.muenchen.vaadin.services.BuergerI18nResolver;
 import de.muenchen.vaadin.services.model.BuergerDatastore;
 import de.muenchen.vaadin.ui.app.views.BuergerDetailView;
 import de.muenchen.vaadin.ui.app.views.TableSelectWindow;
+import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerSingleActions;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import reactor.bus.Event;
 import reactor.fn.Consumer;
@@ -73,11 +79,12 @@ public class BuergerPartnerComponent extends CustomComponent implements Consumer
 
     private ActionButton buildReadButton() {
         ActionButton read = new ActionButton(resolver, SimpleAction.read);
-        NavigateActions navigateAction = new NavigateActions(controller.getNavigator(), controller.getEventbus(), BuergerDetailView.NAME);
-        read.addClickListener(clickEvent -> {
-            controller.getEventbus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED), reactor.bus.Event.wrap(currentPartner));
-            navigateAction.navigate();
-        });
+        final NavigateActions navigateAction = new NavigateActions(BuergerDetailView.NAME);
+        final BuergerSingleActions buergerSingleActions = new BuergerSingleActions(controller.getResolver(), () -> currentPartner);
+
+        read.addActionPerformer(buergerSingleActions::read);
+        read.addActionPerformer(navigateAction::navigate);
+
         read.setVisible(false);
         return read;
     }
@@ -86,7 +93,7 @@ public class BuergerPartnerComponent extends CustomComponent implements Consumer
     private ActionButton buildCreateButton() {
         ActionButton create = new ActionButton(resolver, SimpleAction.create);
         create.addClickListener(clickEvent -> {
-            NavigateActions navigateAction = new NavigateActions(controller.getNavigator(), controller.getEventbus(), navigateToForCreate);
+            NavigateActions navigateAction = new NavigateActions(navigateToForCreate);
             if (partnerReadForm.getComponentCount() == 0) {
                 navigateAction.navigate();
             } else {
@@ -128,7 +135,7 @@ public class BuergerPartnerComponent extends CustomComponent implements Consumer
         ActionButton delete = new ActionButton(resolver, SimpleAction.delete);
         delete.addClickListener(event -> {
             Association<Buerger> association = new Association<>(new Buerger(), Buerger.Rel.partner.name());
-            controller.getEventbus().notify(controller.getRequestKey(RequestEvent.REMOVE_ASSOCIATION), association.asEvent());
+            BaseUI.getCurrentEventBus().notify(controller.getRequestKey(RequestEvent.REMOVE_ASSOCIATION), association.asEvent());
         });
         delete.setVisible(false);
         return delete;

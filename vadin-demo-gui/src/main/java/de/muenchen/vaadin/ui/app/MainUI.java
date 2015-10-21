@@ -20,14 +20,13 @@ import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.MenuBar;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.eventbus.EventBus;
 import de.muenchen.eventbus.selector.Key;
 import de.muenchen.vaadin.demo.apilib.services.SecurityService;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
+import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.ValoMenuLayout;
 import de.muenchen.vaadin.guilib.components.GenericConfirmationWindow;
 import de.muenchen.vaadin.guilib.services.MessageService;
@@ -49,7 +48,7 @@ import static reactor.bus.Event.wrap;
 @Theme("valo")
 @PreserveOnRefresh
 //@Widgetset("de.muenchen.vaadin.Widgetset")
-public class MainUI extends UI implements I18nResolver {
+public class MainUI extends BaseUI implements I18nResolver {
 
     private static final Logger LOG = LoggerFactory.getLogger(MainUI.class);
 
@@ -64,14 +63,13 @@ public class MainUI extends UI implements I18nResolver {
     protected ComponentContainer viewDisplay = root.getContentContainer();
     protected CssLayout menu = new CssLayout();
     protected CssLayout menuItemsLayout = new CssLayout();
-    @Autowired
-    private EventBus eventBus;
-    private Navigator navigator;
+
     private MenuBar bar = new MenuBar();
     private MenuBar.MenuItem language;
 
     @Autowired
     public MainUI(SpringViewProvider ViewProvider, SecurityService security, MessageService i18n) {
+        super();
         LOG.info("starting UI");
         this.viewProvider = ViewProvider;
         this.security = security;
@@ -108,13 +106,13 @@ public class MainUI extends UI implements I18nResolver {
         VerticalLayout componentContainer = new VerticalLayout();
         viewDisplay.addComponent(buildMenuBar());
         viewDisplay.addComponent(componentContainer);
-        this.navigator = new Navigator(this, componentContainer);
-        this.navigator.addProvider(viewProvider);
-        setNavigator(this.navigator);
+        final Navigator navigator = new Navigator(this, componentContainer);
+        navigator.addProvider(viewProvider);
+        setNavigator(navigator);
 
         // check security
         if (!this.security.isLoggedIn()) {
-            this.navigator.navigateTo(LoginView.NAME);
+            getNavigator().navigateTo(LoginView.NAME);
             this.root.switchOffMenu();
         }
         // add navigator to security Service
@@ -174,8 +172,8 @@ public class MainUI extends UI implements I18nResolver {
             }
         });
 
-        eventBus.on(Key.LOGIN.toSelector(), this::loginEventHandler);
-        eventBus.on(Key.LOGOUT.toSelector(), this::logoutEventHandler);
+        getCurrentEventBus().on(Key.LOGIN.toSelector(), this::loginEventHandler);
+        getCurrentEventBus().on(Key.LOGOUT.toSelector(), this::logoutEventHandler);
     }
 
     public void loginEventHandler(reactor.bus.Event<?> event) {
@@ -263,7 +261,7 @@ public class MainUI extends UI implements I18nResolver {
 
         for (final Entry<String, String> item : menuItems.entrySet()) {
             final Button b = new Button(item.getValue(), event -> {
-                navigator.navigateTo(item.getKey());
+                getNavigator().navigateTo(item.getKey());
             });
             b.setHtmlContentAllowed(true);
             b.setPrimaryStyleName(ValoTheme.MENU_ITEM);
@@ -301,7 +299,7 @@ public class MainUI extends UI implements I18nResolver {
     }
 
     public void postEvent(Object event) {
-        eventBus.notify(event, wrap(event));
+        getCurrentEventBus().notify(event, wrap(event));
     }
 
     @Override

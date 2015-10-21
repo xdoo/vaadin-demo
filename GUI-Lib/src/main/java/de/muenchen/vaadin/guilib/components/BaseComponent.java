@@ -5,6 +5,7 @@ import com.vaadin.ui.CustomComponent;
 import de.muenchen.eventbus.EventBus;
 import de.muenchen.eventbus.selector.entity.ResponseEntityKey;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
+import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.controller.EntityController;
 
 /**
@@ -26,12 +27,12 @@ public class BaseComponent extends CustomComponent {
     }
 
     public EventBus getEventBus() {
-        return entityController.getEventbus();
+        return BaseUI.getCurrentEventBus();
 
     }
 
     public Navigator getNavigator() {
-        return entityController.getNavigator();
+        return BaseUI.getCurrentNavigator();
     }
 
 

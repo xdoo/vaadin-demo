@@ -4,7 +4,6 @@ import de.muenchen.eventbus.events.Association;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 import de.muenchen.vaadin.guilib.components.actions.EntityAssociationListAction;
-import reactor.bus.EventBus;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -21,7 +20,7 @@ public class BuergerAssociationListActions extends EntityAssociationListAction<B
      * @param association The association.
      * @param eventBus    The EventBus.
      */
-    public BuergerAssociationListActions(I18nResolver resolver, Supplier<List<Association<Buerger>>> association, EventBus eventBus) {
-        super(resolver, association, eventBus, Buerger.class);
+    public BuergerAssociationListActions(I18nResolver resolver, Supplier<List<Association<Buerger>>> association) {
+        super(resolver, association, Buerger.class);
     }
 }

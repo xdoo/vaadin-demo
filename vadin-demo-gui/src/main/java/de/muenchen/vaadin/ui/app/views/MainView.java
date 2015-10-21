@@ -11,8 +11,6 @@ import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.vaadin.guilib.util.VaadinUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 
@@ -20,11 +18,8 @@ import javax.annotation.PostConstruct;
 @UIScope
 public class MainView extends VerticalLayout implements View {
 
-    private static final long serialVersionUID = -3780256410686877889L;
     public static final String NAME = "";
-    
-    @Autowired
-    VaadinUtil util;
+    private static final long serialVersionUID = -3780256410686877889L;
 
     @PostConstruct
     private void postConstruct() {

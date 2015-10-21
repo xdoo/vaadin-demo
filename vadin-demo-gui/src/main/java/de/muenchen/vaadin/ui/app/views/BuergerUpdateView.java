@@ -2,7 +2,6 @@ package de.muenchen.vaadin.ui.app.views;
 
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
-import de.muenchen.eventbus.EventBus;
 import de.muenchen.vaadin.services.BuergerI18nResolver;
 import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.components.forms.SelectedBuergerUpdateForm;
@@ -24,7 +23,7 @@ public class BuergerUpdateView extends DefaultBuergerView {
     private SelectedBuergerUpdateForm form;
 
     @Autowired
-    public BuergerUpdateView(BuergerViewController controller, BuergerI18nResolver resolver, EventBus eventbus, MainUI ui) {
+    public BuergerUpdateView(BuergerViewController controller, BuergerI18nResolver resolver, MainUI ui) {
         super(controller, resolver, ui);
         LOG.debug("creating 'buerger_update_view'");
     }

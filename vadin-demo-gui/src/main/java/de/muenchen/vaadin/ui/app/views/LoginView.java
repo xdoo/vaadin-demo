@@ -19,9 +19,9 @@ import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.eventbus.EventBus;
 import de.muenchen.eventbus.selector.Key;
 import de.muenchen.vaadin.demo.apilib.services.SecurityService;
+import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.components.GenericNotification;
 import de.muenchen.vaadin.guilib.components.GenericWarningNotification;
 import org.apache.commons.lang.StringUtils;
@@ -36,8 +36,6 @@ public class LoginView extends VerticalLayout implements View {
     private String websiteName;
     // Services
     private SecurityService security;
-    @Autowired
-    private EventBus eventBus;
     // Vaadin Komponenten
     private TextField username;
     private PasswordField password;
@@ -94,7 +92,7 @@ public class LoginView extends VerticalLayout implements View {
             @Override
             public void buttonClick(final ClickEvent event) {
                 if (security.login(username.getValue(), password.getValue())) {
-                    eventBus.notify(Key.LOGIN);
+                    BaseUI.getCurrentEventBus().notify(Key.LOGIN);
                 } else {
 //                    Anmeldung fehlgeschlagen
                     GenericNotification notif = new GenericWarningNotification("Anmeldung fehlgeschlagen",
