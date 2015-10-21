@@ -10,10 +10,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import de.muenchen.demo.service.MicroServiceApplication;
-import de.muenchen.demo.service.domain.Buerger;
-import de.muenchen.demo.service.domain.BuergerRepository;
+import de.muenchen.demo.service.gen.domain.Augenfarben;
+import de.muenchen.demo.service.gen.domain.Buerger;
+import de.muenchen.demo.service.gen.rest.BuergerRepository;
 import de.muenchen.service.QueryService;
-import de.muenchen.vaadin.demo.api.domain.Augenfarbe;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;
@@ -151,7 +151,7 @@ public class BuergerDTOTest {
             b1M1.setVorname("vorname1");
             b1M1.setMandant("test");
             b1M1.setGeburtsdatum(new Date(System.currentTimeMillis()));
-            b1M1.setAugenfarbe(Augenfarbe.Blau);
+            b1M1.setAugenfarbe(Augenfarben.blau);
             b1M1.setOid(1L);
             repo.save(b1M1);
             Buerger b2M1 = new Buerger();
@@ -161,7 +161,7 @@ public class BuergerDTOTest {
             b2M1.setNachname("name2");
             b2M1.setVorname("vorname2");
             b2M1.setMandant("test");
-            b2M1.setAugenfarbe(Augenfarbe.Grün);
+            b2M1.setAugenfarbe(Augenfarben.grün);
             b2M1.setOid(2L);
             repo.save(b2M1);
             Buerger b3M1 = new Buerger();
@@ -171,7 +171,7 @@ public class BuergerDTOTest {
             b3M1.setNachname("name3");
             b3M1.setVorname("vorname3");
             b3M1.setMandant("test");
-            b3M1.setAugenfarbe(Augenfarbe.Braun);
+            b3M1.setAugenfarbe(Augenfarben.braun);
             b3M1.setOid(3L);
             repo.save(b3M1);
             Buerger b4M1 = new Buerger();
@@ -181,7 +181,7 @@ public class BuergerDTOTest {
             b4M1.setNachname("name4");
             b4M1.setVorname("vorname4");
             b4M1.setMandant("test");
-            b4M1.setAugenfarbe(Augenfarbe.Rot);
+            b4M1.setAugenfarbe(Augenfarben.rot);
             b4M1.setOid(4L);
             b4M1.getKinder().add(b3M1);
             repo.save(b4M1);
@@ -192,7 +192,7 @@ public class BuergerDTOTest {
             b5M1.setNachname("name5");
             b5M1.setVorname("vorname5");
             b5M1.setMandant("test");
-            b5M1.setAugenfarbe(Augenfarbe.Braun);
+            b5M1.setAugenfarbe(Augenfarben.braun);
             b5M1.setOid(5L);
             repo.save(b5M1);
             UsernamePasswordAuthenticationToken token2 = new UsernamePasswordAuthenticationToken("hans2", "test2");
@@ -205,7 +205,7 @@ public class BuergerDTOTest {
             b1M2.setNachname("name1");
             b1M2.setVorname("vorname1");
             b1M2.setMandant("default");
-            b1M2.setAugenfarbe(Augenfarbe.Blau);
+            b1M2.setAugenfarbe(Augenfarben.blau);
             b1M2.setOid(6L);
             repo.save(b1M2);
             Buerger b2M2 = new Buerger();
@@ -215,7 +215,7 @@ public class BuergerDTOTest {
             b2M2.setNachname("name2");
             b2M2.setVorname("vorname2");
             b2M2.setMandant("default");
-            b2M2.setAugenfarbe(Augenfarbe.Grün);
+            b2M2.setAugenfarbe(Augenfarben.grün);
             b2M2.setOid(7L);
             repo.save(b2M2);
             Buerger b3M2 = new Buerger();
@@ -225,7 +225,7 @@ public class BuergerDTOTest {
             b3M2.setNachname("name3");
             b3M2.setVorname("vorname3");
             b3M2.setMandant("default");
-            b3M2.setAugenfarbe(Augenfarbe.Rot);
+            b3M2.setAugenfarbe(Augenfarben.rot);
             b3M2.setOid(8L);
             repo.save(b3M2);
             Buerger b4M2 = new Buerger();
@@ -235,7 +235,7 @@ public class BuergerDTOTest {
             b4M2.setNachname("name4");
             b4M2.setVorname("vorname4");
             b4M2.setMandant("default");
-            b4M2.setAugenfarbe(Augenfarbe.Blau);
+            b4M2.setAugenfarbe(Augenfarben.blau);
             b4M2.setOid(9L);
             repo.save(b4M2);
             Buerger b5M2 = new Buerger();
@@ -245,7 +245,7 @@ public class BuergerDTOTest {
             b5M2.setNachname("name5");
             b5M2.setVorname("vorname5");
             b5M2.setMandant("default");
-            b5M2.setAugenfarbe(Augenfarbe.Braun);
+            b5M2.setAugenfarbe(Augenfarben.braun);
             b5M2.setOid(10L);
             repo.save(b5M2);
             lock = true;
@@ -314,7 +314,7 @@ public class BuergerDTOTest {
         Buerger buerger = new Buerger();
         buerger.setNachname("hans");
         buerger.setVorname("peter");
-        buerger.setAugenfarbe(Augenfarbe.Blau);
+        buerger.setAugenfarbe(Augenfarben.blau);
         Set<String> eig = new HashSet<>();
         eig.add("eig");
         buerger.setEigenschaften(eig);

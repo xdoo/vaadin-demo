@@ -32,7 +32,7 @@ public class BuergerDTO extends BaseEntity {
     /**
      * A plain Field of the DTO
      */
-    private Augenfarbe augenfarbe;
+    private Augenfarben augenfarbe;
     /**
      * A plain Field of the DTO
      */
@@ -88,11 +88,11 @@ public class BuergerDTO extends BaseEntity {
         this.geburtsdatum = geburtsdatum;
     }
 
-    public Augenfarbe getAugenfarbe() {
+    public Augenfarben getAugenfarbe() {
         return augenfarbe;
     }
 
-    public void setAugenfarbe(Augenfarbe augenfarbe) {
+    public void setAugenfarbe(Augenfarben augenfarbe) {
         this.augenfarbe = augenfarbe;
     }
 
@@ -114,7 +114,7 @@ public class BuergerDTO extends BaseEntity {
 
     @Override
     public String toString() {
-        return String.format("%s = {\"vorname\": \"%s\", \"nachname\": \"%s\", \"geburtsdatum\": \"%s\", \"augenfarbe\": \"%s\", \"alive\": \"%b\"}",
+        return String.format("%s = {\"vorname\": \"%s\", \"nachname\": \"%s\", \"geburtsdatum\": \"%s\", \"augenfarben\": \"%s\", \"alive\": \"%b\"}",
                 getClass(),
                 this.vorname,
                 this.nachname,
