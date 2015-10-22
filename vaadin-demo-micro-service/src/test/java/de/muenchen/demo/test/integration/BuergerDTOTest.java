@@ -45,6 +45,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.token.grant.password.ResourceOwnerPasswordResourceDetails;
+import org.springframework.security.oauth2.common.exceptions.UserDeniedAuthorizationException;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -367,7 +368,7 @@ public class BuergerDTOTest {
 
     }
 
-    @Test(expected = HttpClientErrorException.class)
+    @Test(expected = UserDeniedAuthorizationException.class)
     public void getBuergerM2Test() throws JsonProcessingException {
         System.out.println("========== get Bürger Test ==========");
         url = "http://localhost:" + port + "/buergers/1";
@@ -389,7 +390,7 @@ public class BuergerDTOTest {
         }
     }
 
-    @Test(expected = HttpClientErrorException.class)
+    @Test(expected = UserDeniedAuthorizationException.class)
     public void deleteBuergerM2Test() throws JsonProcessingException {
         System.out.println("========== delete Bürger Test ==========");
         url = "http://localhost:" + port + "/buergers/5";
@@ -410,7 +411,7 @@ public class BuergerDTOTest {
 
     }
 
-    @Test(expected = HttpClientErrorException.class)
+    @Test(expected = UserDeniedAuthorizationException.class)
     public void putBuergerM2Test() throws JsonProcessingException {
         System.out.println("========== put Bürger Test ==========");
         url = "http://localhost:" + port + "/buergers/4";
@@ -431,7 +432,7 @@ public class BuergerDTOTest {
         System.out.println("Bürger wurde mit neuem Vornamen in der DB gespeichert.");
     }
 
-    @Test(expected = HttpClientErrorException.class)
+    @Test(expected = UserDeniedAuthorizationException.class)
     public void patchBuergerM2Test() throws JsonProcessingException, MalformedURLException {
         System.out.println("========== patch Bürger Test ==========");
         Map m = new HashMap();
@@ -456,7 +457,7 @@ public class BuergerDTOTest {
 
     }
 
-    @Test(expected = HttpClientErrorException.class)
+    @Test(expected = UserDeniedAuthorizationException.class)
     public void getBuergerKinderM2Test() throws JsonProcessingException {
         System.out.println("========== get Bürger Kinder Test ==========");
         url = "http://localhost:" + port + "/buergers/2/kinder";
@@ -488,7 +489,7 @@ public class BuergerDTOTest {
         System.out.println("Kind mit oid 2 wurde zu dem BuergerDTO mit Oid 1 hinzufügt.");
     }
 
-    @Test(expected = HttpClientErrorException.class)
+    @Test(expected = UserDeniedAuthorizationException.class)
     public void putBuergerKinderM2Test() {
         System.out.println("========== put Bürger Kinder M2 Test ==========");
         url = "http://localhost:" + port + "/buergers/3/kinder";
