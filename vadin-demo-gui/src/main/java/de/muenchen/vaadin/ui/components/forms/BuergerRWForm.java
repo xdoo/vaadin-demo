@@ -12,27 +12,45 @@ import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerSingleActio
 import de.muenchen.vaadin.ui.components.forms.selected.SelectedBuergerForm;
 
 /**
- * Created by p.mueller on 22.10.15.
+ * Provides a full-featured Form for a Buerger. It allows to view the current selected buerger and edit it.
+ *
+ * @author p.mueller
+ * @version 1.0
  */
 public class BuergerRWForm extends BaseComponent {
 
+    /** The default (readOnly/write) mode the Form initially starts. */
     public static final boolean DEFAULT_MODE = false;
 
+    /** The Form displaying the current selected Buerger. */
     private final SelectedBuergerForm buergerForm;
+    /** The layout for all buttons that are shown in readonly mode. */
     private final HorizontalLayout buttons = new HorizontalLayout();
+    /** The layout for all buttons that are shown in the update mode. */
     private final HorizontalLayout editButtons = new HorizontalLayout();
+    /** The String to navigate to on the back button. */
     private final String navigateBack;
+    /** The current mode the RWForm is in. */
     private boolean edit;
 
+    /**
+     * Create a new BuergerRWForm with the internationalization of the Controller.
+     * It will navigate to the navigateBack value on the back button click.
+     *
+     * @param entityController The Controller for i18n.
+     * @param navigateBack     The String to navigate back to.
+     */
     public BuergerRWForm(EntityController entityController, final String navigateBack) {
         super(entityController);
         this.navigateBack = navigateBack;
-
-
         buergerForm = new SelectedBuergerForm(entityController);
+
         init();
     }
 
+    /**
+     * Initialize the Layout and all the Buttons in it.
+     */
     private void init() {
         getButtons().setSpacing(true);
         getButtons().addComponents(createButtons());
@@ -45,6 +63,10 @@ public class BuergerRWForm extends BaseComponent {
         setCompositionRoot(getBuergerForm());
     }
 
+    /**
+     * Create the edit Buttons for this form.
+     * @return An array of all buttons.
+     */
     private Component[] createEditButtons() {
         final ActionButton saveButton = new ActionButton(getI18nResolver(), SimpleAction.save);
 
@@ -66,6 +88,10 @@ public class BuergerRWForm extends BaseComponent {
         return new Component[]{cancelButton, saveButton};
     }
 
+    /**
+     * Create the Buttons for the readOnly mode.
+     * @return An array of all buttons.
+     */
     private Component[] createButtons() {
         final ActionButton editButton = new ActionButton(getI18nResolver(), SimpleAction.update);
         editButton.addClickListener(clickEvent -> setEdit(true));
@@ -78,14 +104,26 @@ public class BuergerRWForm extends BaseComponent {
         return new Component[]{backButton, editButton};
     }
 
+    /**
+     * Get the Layout for Buttons of the readOnly mode.
+     * @return The Layout for the readOnly mode Buttons.
+     */
     public HorizontalLayout getButtons() {
         return buttons;
     }
 
+    /**
+     * Check if this Form is in Edit mode.
+     * @return true, if it is in edit mode.
+     */
     public boolean isEdit() {
         return edit;
     }
 
+    /**
+     * Set the mode of this form. True means edit and false means readOnly.
+     * @param edit true means edit mode.
+     */
     public void setEdit(boolean edit) {
         this.edit = edit;
 
@@ -97,14 +135,26 @@ public class BuergerRWForm extends BaseComponent {
             getBuergerForm().getFields().stream().findFirst().ifPresent(Field::focus);
     }
 
+    /**
+     * Get the Layout for the Buttons that is shown in edit mode.
+     * @return The layout for edit mode.
+     */
     public HorizontalLayout getEditButtons() {
         return editButtons;
     }
 
+    /**
+     * Get the BuergerForm used by this RWForm.
+     * @return The BuergerForm.
+     */
     public SelectedBuergerForm getBuergerForm() {
         return buergerForm;
     }
 
+    /**
+     * Get the String of the View that the back button of this form will navigate to.
+     * @return The String of the View to navigate to on back.
+     */
     public String getNavigateBack() {
         return navigateBack;
     }
