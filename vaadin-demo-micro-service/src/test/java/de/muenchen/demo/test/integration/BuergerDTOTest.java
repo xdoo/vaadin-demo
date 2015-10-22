@@ -74,7 +74,7 @@ import static org.junit.Assert.assertNull;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
-@WebIntegrationTest({"server.port=8080", "management.port=8080"})
+@WebIntegrationTest({"server.port=${local.server.port:8080}", "management.port=${local.server.port:8080}"})
 public class BuergerDTOTest {
 
     @Rule
