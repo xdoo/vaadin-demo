@@ -12,6 +12,7 @@ import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
 import de.muenchen.vaadin.guilib.controller.EntityController;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerAssociationActions;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerSingleActions;
+import de.muenchen.vaadin.ui.components.forms.selected.SelectedBuergerPartnerForm;
 
 /**
  * Created by p.mueller on 13.10.15.
@@ -20,7 +21,7 @@ public class BuergerPartnerForm extends BaseComponent {
 
     private final String navigateToCreate;
     private final String navigateToRead;
-    private final de.muenchen.vaadin.ui.components.forms.selected.SelectedBuergerPartnerForm partnerForm;
+    private final SelectedBuergerPartnerForm partnerForm;
 
     /**
      * Formular zum Lesen eines {@link Buerger}s. Über diesen Konstruktor kann zusätzlich eine Zielseite für die
@@ -32,7 +33,7 @@ public class BuergerPartnerForm extends BaseComponent {
     public BuergerPartnerForm(EntityController controller, final String navigateToCreate, final String navigateToRead) {
         super(controller);
 
-        partnerForm = new de.muenchen.vaadin.ui.components.forms.selected.SelectedBuergerPartnerForm(controller) {
+        partnerForm = new SelectedBuergerPartnerForm(controller) {
             @Override
             public void setBuerger(Buerger buerger) {
                 setFormVisible(buerger != null);
