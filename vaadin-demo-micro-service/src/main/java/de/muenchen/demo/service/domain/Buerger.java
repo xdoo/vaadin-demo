@@ -70,7 +70,7 @@ public class Buerger extends BaseEntity {
     @FieldBridge(impl = PetersPerfectBridge.class)
     @Column(name = "BUER_EIGENSCHAFTEN")
     @ElementCollection
-    @NotNull
+//    @NotNull
     @Size(min = 1, max = 5)
     private Set<String> eigenschaften = new HashSet<>();
 
