@@ -27,7 +27,6 @@ public class BuergerGrid extends GenericGrid {
                 .activateCreate(BuergerCreateView.NAME)
                 .activateSearch()
                 .activateRead(BuergerDetailView.NAME)
-                .activateEdit(BuergerDetailView.NAME)
                 .activateCopy()
                 .activateDelete();
 
