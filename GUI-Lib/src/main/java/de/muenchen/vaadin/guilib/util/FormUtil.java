@@ -9,6 +9,8 @@ import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 import org.vaadin.tokenfield.TokenField;
 
+import java.util.stream.Stream;
+
 /**
  * Provides a simple Util for creating various binded Fields on properties.
  * <p/>
@@ -197,17 +199,14 @@ public class FormUtil {
         lo.addStyleName("v-component-group");
 
         TokenField tf = new TokenField(caption, lo) {
-
+            public static final String SEPERATOR = ",";
             @Override
             protected void onTokenInput(Object tokenId) {
                 //Multiple Tokens separated by ',' possible
-                String[] tokens = ((String) tokenId).split(",");
-                for (int i = 0; i < tokens.length; i++) {
-                    String token = tokens[i].trim();
-                    if (token.length() > 0) {
-                        super.onTokenInput(token);
-                    }
-                }
+                Stream.of(((String) tokenId).split(SEPERATOR))
+                        .map(String::trim)
+                        .filter(s -> !s.isEmpty())
+                        .forEach(t -> super.onTokenInput(t));
             }
 
             //HACK TO PREVENT READONLYEXCEPTION
@@ -223,6 +222,8 @@ public class FormUtil {
             public void setReadOnly(boolean readOnly) {
                 super.setReadOnly(readOnly);
                 buttons.values().forEach(button -> button.setEnabled(!readOnly));
+                if (readOnly)
+                    getLayout().removeComponent(cb);
             }
         };
 
