@@ -15,7 +15,6 @@ import de.muenchen.demo.service.domain.BuergerRepository;
 import de.muenchen.service.QueryService;
 import de.muenchen.vaadin.demo.api.domain.Augenfarbe;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -73,7 +72,7 @@ import static org.junit.Assert.assertNull;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
-@WebIntegrationTest({"server.port=0", "management.port=0"})
+@WebIntegrationTest({"server.port=8080", "management.port=8080"})
 public class BuergerDTOTest {
 
     @Rule
@@ -104,19 +103,14 @@ public class BuergerDTOTest {
     /**
      * Necessary properties
      **/
-    @Value("${local.server.port}")
+    @Value("${local.server.port:8080}")
     private int port;
     @Value("${service.token.url}")
     private String TOKEN_URL;
     @Value("${security.oauth2.client.id}")
     private String clientID;
-    @Value("${security.oauth2.client.scope:scope}")
+    @Value("${security.oauth2.client.scope:defaultScope}")
     private Set<String> scopes;
-
-    @BeforeClass
-    public void init() {
-
-    }
 
 
     @Before
@@ -131,7 +125,7 @@ public class BuergerDTOTest {
             resource.setGrantType("password");
             resource.setClientId(clientID);
             resource.setAccessTokenUri(TOKEN_URL);
-            resource.setScope(Arrays.asList("scope"));
+//            resource.setScope(Arrays.asList("scope"));
 
             restTemplate = new OAuth2RestTemplate(resource, new DefaultOAuth2ClientContext());
 
