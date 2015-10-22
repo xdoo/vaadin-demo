@@ -8,6 +8,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.services.BuergerI18nResolver;
 import de.muenchen.vaadin.ui.app.MainUI;
+import de.muenchen.vaadin.ui.components.forms.BuergerRWForm;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Type;
@@ -29,12 +30,22 @@ public abstract class DefaultBuergerView extends VerticalLayout implements View{
         this.controller = controller;
         this.resolver = resolver;
     }
-    
-    /**
-     * 
-     */
-    protected abstract void site();
-    
+
+    @Override
+    public void enter(ViewChangeListener.ViewChangeEvent event) {
+        this.configureLayout();
+
+        // add some components
+        this.addHeadline();
+        this.site();
+    }
+
+    private void configureLayout() {
+        setSizeFull();
+        this.setHeightUndefined();
+        setMargin(new MarginInfo(false, true, false, true));
+    }
+
     protected void addHeadline() {
 
         // headline
@@ -45,21 +56,14 @@ public abstract class DefaultBuergerView extends VerticalLayout implements View{
         removeAllComponents();
         //HorizontalLayout head = new HorizontalLayout(pageTitle);
         addComponent(pageTitle);
+
+
+        addComponent(new BuergerRWForm(controller));
     }
 
-    private void configureLayout() {
-        setSizeFull();
-        this.setHeightUndefined();
-        setMargin(new MarginInfo(false, true, false, true));
-    }
-
-    @Override
-    public void enter(ViewChangeListener.ViewChangeEvent event) {
-        this.configureLayout();
-
-        // add some components
-        this.addHeadline();
-        this.site();
-    }
+    /**
+     *
+     */
+    protected abstract void site();
     
 }

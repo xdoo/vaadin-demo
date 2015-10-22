@@ -123,7 +123,7 @@ public class BuergerForm extends BaseComponent {
 
     @Override
     public void setReadOnly(boolean readOnly) {
-        getBinder().setReadOnly(true);
+        getBinder().setReadOnly(readOnly);
     }
 
     /**
