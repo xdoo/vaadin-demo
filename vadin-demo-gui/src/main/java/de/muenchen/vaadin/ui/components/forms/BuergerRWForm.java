@@ -1,6 +1,7 @@
 package de.muenchen.vaadin.ui.components.forms;
 
 import com.vaadin.ui.Component;
+import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.BaseComponent;
@@ -91,6 +92,9 @@ public class BuergerRWForm extends BaseComponent {
         getButtons().setVisible(!isEdit());
         getEditButtons().setVisible(isEdit());
         getBuergerForm().setReadOnly(!isEdit());
+
+        if (edit)
+            getBuergerForm().getFields().stream().findFirst().ifPresent(Field::focus);
     }
 
     public HorizontalLayout getEditButtons() {

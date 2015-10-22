@@ -34,7 +34,7 @@ public class BuergerForm extends BaseComponent {
     /** Contains the current Buerger and handles the data binding. */
     private final BeanFieldGroup<Buerger> binder = new BeanFieldGroup<>(ENTITY_CLASS);
     /** A list of all the Fields. */
-    private final List<Component> fields;
+    private final List<Field> fields;
 
     /**
      * Create a new BuergerForm using the specified i18nResolver and the eventbus.
@@ -51,8 +51,8 @@ public class BuergerForm extends BaseComponent {
 
         final FormLayout formLayout = new FormLayout();
         fields.stream().forEach(formLayout::addComponent);
-
         this.formLayout = formLayout;
+
         setCompositionRoot(formLayout);
     }
 
@@ -64,7 +64,7 @@ public class BuergerForm extends BaseComponent {
      *
      * @return A List of all Components.
      */
-    private List<Component> buildFields() {
+    private List<Field> buildFields() {
         final FormUtil formUtil = new FormUtil(getBinder(), getI18nResolver());
 
         final TextField vorname = formUtil.createTextField(Buerger.Field.vorname.name());
@@ -131,7 +131,7 @@ public class BuergerForm extends BaseComponent {
      *
      * @return The list of components.
      */
-    public List<Component> getFields() {
+    public List<Field> getFields() {
         return Collections.unmodifiableList(fields);
     }
 
