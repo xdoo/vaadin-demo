@@ -28,7 +28,7 @@ import java.util.List;
  */
 @SuppressWarnings("SpringElInspection")
 @PreAuthorize("hasRole('ROLE_READ_Buerger')")
-public interface BuergerRepository extends CrudRepository<Buerger, Long> {
+public interface BuergerRepository extends  CrudRepository<Buerger, Long> {
 
     /**
      * Name for the specific cache.
