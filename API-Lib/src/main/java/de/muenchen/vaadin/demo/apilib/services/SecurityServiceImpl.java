@@ -39,6 +39,9 @@ public class SecurityServiceImpl implements SecurityService, Serializable {
 
     @Value("${service.token.url}")
     private String TOKEN_URL;
+
+    @Value("${security.oauth2.client.id}")
+    private String clientID;
     
     @Autowired private SecurityRestClient restClient;
 
@@ -61,7 +64,7 @@ public class SecurityServiceImpl implements SecurityService, Serializable {
         resource.setUsername(username);
         resource.setPassword(password);
         resource.setGrantType("password");
-        resource.setClientId("acme");
+        resource.setClientId(clientID);
         resource.setAccessTokenUri(TOKEN_URL);
 
         OAuth2RestTemplate template = new OAuth2RestTemplate(resource, new DefaultOAuth2ClientContext());

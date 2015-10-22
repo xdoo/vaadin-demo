@@ -1,5 +1,6 @@
 package de.muenchen.security;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -16,6 +17,9 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 @Order(SecurityProperties.BASIC_AUTH_ORDER - 6)
 public class ApplicationSecurity extends ResourceServerConfigurerAdapter {
 
+    @Value("${security.basic.enabled:true}")
+    private boolean securityEnabled;
+
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
@@ -30,12 +34,15 @@ public class ApplicationSecurity extends ResourceServerConfigurerAdapter {
 
                 // Allow anonymous service info request
                 .antMatchers("/service_info").permitAll()
-
-                // All other request need to be authenticated
-                .anyRequest().authenticated()
                 .and()
 
                 .csrf().disable();
+
+        if(securityEnabled) {
+            http.authorizeRequests()
+                    // All other request need to be authenticated
+                    .anyRequest().authenticated();
+        }
 
     }
 

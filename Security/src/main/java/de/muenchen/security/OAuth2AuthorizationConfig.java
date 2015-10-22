@@ -1,6 +1,7 @@
 package de.muenchen.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,6 +11,8 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
+import java.util.Set;
+
 /**
  * Created by rene.zarwel on 20.10.15.
  */
@@ -17,6 +20,15 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 @Configuration
 @EnableAuthorizationServer
 public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdapter {
+
+    @Value("${security.oauth2.client.access-token-validity-seconds:43200}")
+    private int tokenValiditySeconds;
+
+    @Value("${security.oauth2.client.id}")
+    private String clientID;
+
+    @Value("${security.oauth2.client.scope:defaultScope}")
+    private Set<String> scopes;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -29,13 +41,14 @@ public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
-                .withClient("acme") //TODO Correct Client Name
+                .withClient(clientID)
                 .autoApprove(true)
                 .authorizedGrantTypes("password")
-                .scopes("scope");
+                .accessTokenValiditySeconds(tokenValiditySeconds)
+                .scopes(scopes.toArray(new String[1]));
     }
 
-    //TODO GET A OWN KEYPAIR.....WHY? IDK
+    //TODO GET A OWN KEYPAIR
     @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
@@ -48,4 +61,5 @@ public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
 
         return converter;
     }
+
 }
