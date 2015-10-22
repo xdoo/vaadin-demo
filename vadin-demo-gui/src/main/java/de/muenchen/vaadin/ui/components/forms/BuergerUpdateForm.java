@@ -21,7 +21,7 @@ import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getFormPath;
  * @author p.mueller
  * @version 1.0
  */
-public class SelectedBuergerUpdateForm extends SelectedBuergerForm {
+public class BuergerUpdateForm extends SelectedBuergerForm {
     /** The String to navigate to on the save button. */
     private final String navigateTo;
     /** The String to navigate to on the back button. */
@@ -36,7 +36,7 @@ public class SelectedBuergerUpdateForm extends SelectedBuergerForm {
      * @param navigateTo
      * @param navigateBack
      */
-    public SelectedBuergerUpdateForm(final EntityController entityController, final String navigateTo, final String navigateBack) {
+    public BuergerUpdateForm(final EntityController entityController, final String navigateTo, final String navigateBack) {
         super(entityController);
 
         this.navigateTo = navigateTo;

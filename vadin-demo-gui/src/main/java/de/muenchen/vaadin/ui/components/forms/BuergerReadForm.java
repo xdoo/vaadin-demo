@@ -11,14 +11,12 @@ import de.muenchen.vaadin.guilib.controller.EntityController;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerSingleActions;
 import de.muenchen.vaadin.ui.components.forms.selected.SelectedBuergerForm;
 
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Component;
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Type;
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getFormPath;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.*;
 
 /**
  * @author claus
  */
-public class SelectedBuergerReadForm extends SelectedBuergerForm {
+public class BuergerReadForm extends SelectedBuergerForm {
 
     private final String navigateToUpdate;
     private final String navigateBack;
@@ -31,7 +29,7 @@ public class SelectedBuergerReadForm extends SelectedBuergerForm {
      * @param navigateToUpdate
      * @param navigateBack
      */
-    public SelectedBuergerReadForm(EntityController controller, final String navigateToUpdate, String navigateBack) {
+    public BuergerReadForm(EntityController controller, final String navigateToUpdate, String navigateBack) {
         super(controller);
         setReadOnly(true);
 

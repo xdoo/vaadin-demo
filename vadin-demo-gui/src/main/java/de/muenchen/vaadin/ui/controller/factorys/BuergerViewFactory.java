@@ -14,9 +14,9 @@ import de.muenchen.vaadin.ui.components.BuergerGrid;
 import de.muenchen.vaadin.ui.components.BuergerPartnerTab;
 import de.muenchen.vaadin.ui.components.KindGrid;
 import de.muenchen.vaadin.ui.components.forms.BuergerCreateForm;
-import de.muenchen.vaadin.ui.components.forms.SelectedBuergerPartnerReadForm;
-import de.muenchen.vaadin.ui.components.forms.SelectedBuergerReadForm;
-import de.muenchen.vaadin.ui.components.forms.SelectedBuergerUpdateForm;
+import de.muenchen.vaadin.ui.components.forms.BuergerPartnerForm;
+import de.muenchen.vaadin.ui.components.forms.BuergerReadForm;
+import de.muenchen.vaadin.ui.components.forms.BuergerUpdateForm;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,14 +75,14 @@ public class BuergerViewFactory implements Serializable {
         return new BuergerPartnerTab(controller, navigateToForDetail, navigateForCreate, navigateBack);
     }
 
-    public SelectedBuergerUpdateForm generateUpdateForm(String navigateTo, String navigateBack) {
-        SelectedBuergerUpdateForm form = new SelectedBuergerUpdateForm(controller, navigateTo, navigateBack);
+    public BuergerUpdateForm generateUpdateForm(String navigateTo, String navigateBack) {
+        BuergerUpdateForm form = new BuergerUpdateForm(controller, navigateTo, navigateBack);
         getEventBus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
         return form;
     }
 
-    public SelectedBuergerReadForm generateReadForm(String navigateToUpdate, String navigateBack) {
-        SelectedBuergerReadForm form = new SelectedBuergerReadForm(controller, navigateToUpdate, navigateBack);
+    public BuergerReadForm generateReadForm(String navigateToUpdate, String navigateBack) {
+        BuergerReadForm form = new BuergerReadForm(controller, navigateToUpdate, navigateBack);
         getEventBus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
         return form;
     }
@@ -120,8 +120,8 @@ public class BuergerViewFactory implements Serializable {
         return grid;
     }
 
-    public SelectedBuergerPartnerReadForm generateBuergerPartnerComponent(String navigateToForCreate, String navigateToRead) {
-        SelectedBuergerPartnerReadForm partnerComponent = new SelectedBuergerPartnerReadForm(controller, navigateToForCreate, navigateToRead);
+    public BuergerPartnerForm generateBuergerPartnerComponent(String navigateToForCreate, String navigateToRead) {
+        BuergerPartnerForm partnerComponent = new BuergerPartnerForm(controller, navigateToForCreate, navigateToRead);
         getEventBus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
         return partnerComponent;
     }
