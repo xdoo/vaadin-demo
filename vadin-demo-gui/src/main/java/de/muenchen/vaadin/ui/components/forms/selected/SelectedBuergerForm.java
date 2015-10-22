@@ -1,6 +1,7 @@
 package de.muenchen.vaadin.ui.components.forms.selected;
 
 import de.muenchen.eventbus.selector.entity.ResponseEntityKey;
+import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.guilib.controller.EntityController;
 import de.muenchen.vaadin.services.model.BuergerDatastore;
 import de.muenchen.vaadin.ui.components.forms.node.BuergerForm;
@@ -31,6 +32,7 @@ public class SelectedBuergerForm extends BuergerForm {
      */
     private void update(reactor.bus.Event<?> event) {
         final BuergerDatastore data = (BuergerDatastore) event.getData();
-        data.getSelectedBuerger().ifPresent(this::setBuerger);
+        final Buerger buerger = data.getSelectedBuerger().orElse(null);
+        setBuerger(buerger);
     }
 }

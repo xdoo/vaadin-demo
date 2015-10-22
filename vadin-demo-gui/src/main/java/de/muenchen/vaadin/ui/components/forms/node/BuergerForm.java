@@ -2,12 +2,7 @@ package de.muenchen.vaadin.ui.components.forms.node;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
-import com.vaadin.ui.CheckBox;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.DateField;
-import com.vaadin.ui.FormLayout;
-import com.vaadin.ui.TextField;
+import com.vaadin.ui.*;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.guilib.components.BaseComponent;
 import de.muenchen.vaadin.guilib.controller.EntityController;
@@ -114,9 +109,7 @@ public class BuergerForm extends BaseComponent {
      * @param buerger The new Buerger.
      */
     public void setBuerger(Buerger buerger) {
-        if (buerger == null)
-            throw new NullPointerException();
-        getBinder().setItemDataSource(buerger);
+        getBinder().setItemDataSource(buerger == null ? new Buerger() : buerger);
     }
 
     /**

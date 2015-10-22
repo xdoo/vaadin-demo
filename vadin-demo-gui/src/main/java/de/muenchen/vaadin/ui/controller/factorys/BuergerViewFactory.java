@@ -11,10 +11,10 @@ import de.muenchen.vaadin.guilib.components.GenericGrid;
 import de.muenchen.vaadin.services.BuergerI18nResolver;
 import de.muenchen.vaadin.ui.components.BuergerChildTab;
 import de.muenchen.vaadin.ui.components.BuergerGrid;
-import de.muenchen.vaadin.ui.components.BuergerPartnerComponent;
 import de.muenchen.vaadin.ui.components.BuergerPartnerTab;
 import de.muenchen.vaadin.ui.components.KindGrid;
 import de.muenchen.vaadin.ui.components.forms.BuergerCreateForm;
+import de.muenchen.vaadin.ui.components.forms.SelectedBuergerPartnerReadForm;
 import de.muenchen.vaadin.ui.components.forms.SelectedBuergerReadForm;
 import de.muenchen.vaadin.ui.components.forms.SelectedBuergerUpdateForm;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
@@ -120,10 +120,8 @@ public class BuergerViewFactory implements Serializable {
         return grid;
     }
 
-    public BuergerPartnerComponent generateBuergerPartnerComponent(String navigateToForCreate) {
-        BuergerPartnerComponent partnerComponent = new BuergerPartnerComponent(controller, resolver, navigateToForCreate);
-
-        getEventBus().on(controller.getResponseKey().toSelector(), partnerComponent);
+    public SelectedBuergerPartnerReadForm generateBuergerPartnerComponent(String navigateToForCreate, String navigateToRead) {
+        SelectedBuergerPartnerReadForm partnerComponent = new SelectedBuergerPartnerReadForm(controller, navigateToForCreate, navigateToRead);
         getEventBus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
         return partnerComponent;
     }

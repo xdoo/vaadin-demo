@@ -1,104 +1,124 @@
 package de.muenchen.vaadin.ui.components.forms;
 
+import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.themes.ValoTheme;
+import com.vaadin.ui.VerticalLayout;
+import de.muenchen.eventbus.events.Association;
 import de.muenchen.vaadin.demo.api.local.Buerger;
-import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
+import de.muenchen.vaadin.guilib.components.BaseComponent;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
 import de.muenchen.vaadin.guilib.controller.EntityController;
+import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerAssociationActions;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerSingleActions;
 import de.muenchen.vaadin.ui.components.forms.selected.SelectedBuergerPartnerForm;
-
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getFormPath;
 
 /**
  * Created by p.mueller on 13.10.15.
  */
-public class SelectedBuergerPartnerReadForm extends SelectedBuergerPartnerForm {
+public class SelectedBuergerPartnerReadForm extends BaseComponent {
 
-    private final String navigateToUpdate;
-    private final String navigateBack;
+    private final String navigateToCreate;
+    private final String navigateToRead;
+    private final SelectedBuergerPartnerForm partnerForm;
 
     /**
      * Formular zum Lesen eines {@link Buerger}s. Über diesen Konstruktor kann zusätzlich eine Zielseite für die
      * 'zurück' und 'bearbeiten' Schaltflächen erstellt werden.
      *
      * @param controller
-     * @param navigateToUpdate
-     * @param navigateBack
+     * @param navigateToRead
      */
-    public SelectedBuergerPartnerReadForm(EntityController controller, final String navigateToUpdate, String navigateBack) {
+    public SelectedBuergerPartnerReadForm(EntityController controller, final String navigateToCreate, final String navigateToRead) {
         super(controller);
-        setReadOnly(true);
 
-        this.navigateToUpdate = navigateToUpdate;
-        this.navigateBack = navigateBack;
+        partnerForm = new SelectedBuergerPartnerForm(controller) {
+            @Override
+            public void setBuerger(Buerger buerger) {
+                setFormVisible(buerger != null);
+                super.setBuerger(buerger);
+            }
+        };
+        partnerForm.setReadOnly(true);
+
+        this.navigateToRead = navigateToRead;
+        this.navigateToCreate = navigateToCreate;
 
         init();
     }
 
+    public SelectedBuergerPartnerForm getPartnerForm() {
+        return partnerForm;
+    }
 
     /**
      * Build the basic layout and insert the headline and all Buttons.
      */
     private void init() {
-        final Label headline = createHeadline();
-        getFormLayout().addComponent(headline, 0);
+        final VerticalLayout layout = new VerticalLayout();
 
-        final HorizontalLayout buttons = new HorizontalLayout();
-        buttons.setSpacing(true);
 
-        final ActionButton backButton = createBackButton();
-        buttons.addComponent(backButton);
+        final HorizontalLayout buttonsAlwaysVisible = new HorizontalLayout();
+        buttonsAlwaysVisible.setSpacing(true);
+        buttonsAlwaysVisible.addComponents(createCreateButton(), createAddButton());
 
-        final ActionButton updateButton = createUpdateButton();
-        buttons.addComponent(updateButton);
+        final HorizontalLayout buttonsInForm = new HorizontalLayout();
+        buttonsInForm.setSpacing(true);
+        buttonsInForm.addComponents(createReadButton(), createDeleteButton());
+        getPartnerForm().getFormLayout().addComponent(buttonsInForm);
 
-        getFormLayout().addComponent(buttons);
+        layout.addComponents(buttonsAlwaysVisible, getPartnerForm());
+        setCompositionRoot(layout);
     }
 
-    public String getNavigateToUpdate() {
-        return navigateToUpdate;
+    private Component createDeleteButton() {
+        final ActionButton deleteButton = new ActionButton(getI18nResolver(), SimpleAction.delete);
+
+        final BuergerAssociationActions associationActions = new BuergerAssociationActions(getI18nResolver(),
+                () -> new Association<>(getPartnerForm().getBuerger(), Buerger.Rel.partner.name()));
+        deleteButton.addActionPerformer(associationActions::removeAssociation);
+
+        return deleteButton;
     }
 
-    private ActionButton createBackButton() {
-        final ActionButton backButton = new ActionButton(getI18nResolver(), SimpleAction.back);
+    private Component createReadButton() {
+        final ActionButton readButton = new ActionButton(getI18nResolver(), SimpleAction.read);
+        final BuergerSingleActions singleActions = new BuergerSingleActions(getI18nResolver(), getPartnerForm()::getBuerger);
+        readButton.addActionPerformer(singleActions::read);
 
-        final NavigateActions navigateActions = new NavigateActions(getNavigateBack());
-        backButton.addActionPerformer(navigateActions::navigate);
+        final NavigateActions navigateActions = new NavigateActions(getNavigateToRead());
+        readButton.addActionPerformer(navigateActions::navigate);
 
-        return backButton;
+        return readButton;
     }
 
-
-    /**
-     * Create the Button for the Save Action.
-     *
-     * @return The save Button.
-     */
-    private ActionButton createUpdateButton() {
-        final ActionButton updateButton = new ActionButton(getI18nResolver(), SimpleAction.update);
-
-        final BuergerSingleActions buergerSingleActions = new BuergerSingleActions(getI18nResolver(), this::getBuerger);
-        updateButton.addActionPerformer(buergerSingleActions::read);
-
-        final NavigateActions navigateActions = new NavigateActions(getNavigateToUpdate());
-        updateButton.addActionPerformer(navigateActions::navigate);
-
-        return updateButton;
+    private ActionButton createAddButton() {
+        final ActionButton addButton = new ActionButton(getI18nResolver(), SimpleAction.add);
+        addButton.addClickListener(b -> {
+            throw new AssertionError("Fabian macht das dann hab kein Bock :)");
+        });
+        return addButton;
     }
 
+    private ActionButton createCreateButton() {
+        final ActionButton createButton = new ActionButton(getI18nResolver(), SimpleAction.create);
 
-    private Label createHeadline() {
-        final Label headline = new Label(getI18nResolver().resolveRelative(getFormPath(SimpleAction.read, I18nPaths.Component.headline, I18nPaths.Type.label)));
-        headline.addStyleName(ValoTheme.LABEL_H3);
-        return headline;
+        final NavigateActions navigateActions = new NavigateActions(getNavigateToCreate());
+        createButton.addActionPerformer(navigateActions::navigate);
+
+        return createButton;
     }
 
-    public String getNavigateBack() {
-        return navigateBack;
+    public String getNavigateToCreate() {
+        return navigateToCreate;
+    }
+
+    public void setFormVisible(boolean formVisible) {
+        getPartnerForm().setVisible(formVisible);
+    }
+
+    public String getNavigateToRead() {
+        return navigateToRead;
     }
 }
