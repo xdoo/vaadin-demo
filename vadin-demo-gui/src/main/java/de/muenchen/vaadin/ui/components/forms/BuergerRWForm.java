@@ -6,6 +6,7 @@ import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.BaseComponent;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
 import de.muenchen.vaadin.guilib.controller.EntityController;
+import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerSingleActions;
 import de.muenchen.vaadin.ui.components.forms.selected.SelectedBuergerForm;
 
 /**
@@ -42,9 +43,23 @@ public class BuergerRWForm extends BaseComponent {
 
     private Component[] createEditButtons() {
         final ActionButton saveButton = new ActionButton(getI18nResolver(), SimpleAction.save);
-        saveButton.addClickListener(clickEvent -> setEdit(false));
 
-        return new Component[]{saveButton};
+        final BuergerSingleActions singleActions = new BuergerSingleActions(getI18nResolver(), getBuergerForm()::getBuerger);
+        saveButton.addActionPerformer(singleActions::update);
+        saveButton.addActionPerformer(clickEvent -> {
+            setEdit(false);
+            return true;
+        });
+
+        final ActionButton cancelButton = new ActionButton(getI18nResolver(), SimpleAction.cancel);
+
+        cancelButton.addActionPerformer(singleActions::reRead);
+        cancelButton.addActionPerformer(clickEvent -> {
+            setEdit(false);
+            return true;
+        });
+
+        return new Component[]{cancelButton, saveButton};
     }
 
     private Component[] createButtons() {

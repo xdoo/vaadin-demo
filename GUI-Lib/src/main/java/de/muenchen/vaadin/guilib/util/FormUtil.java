@@ -220,7 +220,9 @@ public class FormUtil {
             @Override
             public void setReadOnly(boolean readOnly) {
                 super.setReadOnly(readOnly);
-                buttons.values().forEach(button -> button.setEnabled(!readOnly));
+                buttons.values()
+                        .forEach(button -> button.setEnabled(!readOnly));
+
                 if (readOnly)
                     getLayout().removeComponent(cb);
             }
