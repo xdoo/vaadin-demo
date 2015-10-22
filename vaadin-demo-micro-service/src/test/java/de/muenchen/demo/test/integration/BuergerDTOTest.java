@@ -35,6 +35,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -129,6 +130,9 @@ public class BuergerDTOTest {
 
             restTemplate = new OAuth2RestTemplate(resource, new DefaultOAuth2ClientContext());
 
+            restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
+
+
             MappingJackson2HttpMessageConverter halConverter = new MappingJackson2HttpMessageConverter();
 
             ObjectMapper objectMapper = new ObjectMapper();
@@ -152,6 +156,8 @@ public class BuergerDTOTest {
             resource2.setAccessTokenUri(TOKEN_URL);
 
             restTemplate2 = new OAuth2RestTemplate(resource2);
+
+            restTemplate2.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
 
             restTemplate2.setMessageConverters(Arrays.asList(
                     halConverter,
