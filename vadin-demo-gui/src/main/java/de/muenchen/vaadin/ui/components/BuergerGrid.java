@@ -4,7 +4,6 @@ import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.guilib.components.GenericGrid;
 import de.muenchen.vaadin.ui.app.views.BuergerCreateView;
 import de.muenchen.vaadin.ui.app.views.BuergerDetailView;
-import de.muenchen.vaadin.ui.app.views.BuergerUpdateView;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +27,7 @@ public class BuergerGrid extends GenericGrid {
                 .activateCreate(BuergerCreateView.NAME)
                 .activateSearch()
                 .activateRead(BuergerDetailView.NAME)
-                .activateEdit(BuergerUpdateView.NAME)
+                .activateEdit(BuergerDetailView.NAME)
                 .activateCopy()
                 .activateDelete();
 

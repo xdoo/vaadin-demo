@@ -11,7 +11,7 @@ import de.muenchen.vaadin.services.BuergerI18nResolver;
 import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.components.BuergerChildTab;
 import de.muenchen.vaadin.ui.components.BuergerPartnerTab;
-import de.muenchen.vaadin.ui.components.forms.BuergerReadForm;
+import de.muenchen.vaadin.ui.components.forms.BuergerRWForm;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +31,7 @@ public class BuergerDetailView extends DefaultBuergerView {
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerDetailView.class);
     private BuergerChildTab childTab;
     private BuergerPartnerTab partnerTab;
-    private BuergerReadForm readForm;
+    private BuergerRWForm readForm;
     @Autowired
     public BuergerDetailView(BuergerViewController controller, BuergerI18nResolver resolver, MainUI ui) {
         super(controller, resolver, ui);
@@ -44,7 +44,7 @@ public class BuergerDetailView extends DefaultBuergerView {
         layout.setSpacing(true);
 
         // read form
-        readForm = this.controller.getViewFactory().generateReadForm(BuergerUpdateView.NAME, BuergerTableView.NAME);
+        readForm = this.controller.getViewFactory().generateRWForm(BuergerTableView.NAME);
         layout.addComponent(readForm);
 
         // tab sheet

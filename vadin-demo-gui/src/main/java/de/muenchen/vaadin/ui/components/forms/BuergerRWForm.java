@@ -4,6 +4,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.BaseComponent;
+import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
 import de.muenchen.vaadin.guilib.controller.EntityController;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerSingleActions;
@@ -19,10 +20,12 @@ public class BuergerRWForm extends BaseComponent {
     private final SelectedBuergerForm buergerForm;
     private final HorizontalLayout buttons = new HorizontalLayout();
     private final HorizontalLayout editButtons = new HorizontalLayout();
+    private final String navigateBack;
     private boolean edit;
 
-    public BuergerRWForm(EntityController entityController) {
+    public BuergerRWForm(EntityController entityController, final String navigateBack) {
         super(entityController);
+        this.navigateBack = navigateBack;
 
 
         buergerForm = new SelectedBuergerForm(entityController);
@@ -66,7 +69,12 @@ public class BuergerRWForm extends BaseComponent {
         final ActionButton editButton = new ActionButton(getI18nResolver(), SimpleAction.update);
         editButton.addClickListener(clickEvent -> setEdit(true));
 
-        return new Component[]{editButton};
+
+        final ActionButton backButton = new ActionButton(getI18nResolver(), SimpleAction.back);
+        final NavigateActions navigateActions = new NavigateActions(getNavigateBack());
+        backButton.addActionPerformer(navigateActions::navigate);
+
+        return new Component[]{backButton, editButton};
     }
 
     public HorizontalLayout getButtons() {
@@ -93,4 +101,7 @@ public class BuergerRWForm extends BaseComponent {
         return buergerForm;
     }
 
+    public String getNavigateBack() {
+        return navigateBack;
+    }
 }
