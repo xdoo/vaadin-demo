@@ -213,9 +213,8 @@ public class FormUtil {
             //AND SHOW CORRECT FIELD IN READONLY MODE
             @Override
             protected void configureTokenButton(Object tokenId, Button button) {
-                //TODO get a good Style for the tokens
                 super.configureTokenButton(tokenId, button);
-                button.setStyleName(ValoTheme.BUTTON_PRIMARY);
+                button.removeStyleName(ValoTheme.BUTTON_LINK);
             }
 
             @Override
