@@ -1,7 +1,7 @@
 package de.muenchen.demo.service.domain;
 
 import de.muenchen.service.TenantService;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PostFilter;
@@ -10,7 +10,7 @@ import org.springframework.security.access.prepost.PreFilter;
 
 @RepositoryRestResource(exported = true)
 @PreAuthorize("hasRole('ROLE_READ_CompanyBaseInfo')")
-public interface CompanyBaseInfoRepository extends CrudRepository<CompanyBaseInfo, Long> {
+public interface CompanyBaseInfoRepository extends PagingAndSortingRepository<CompanyBaseInfo, Long> {
 
 	@Override
 	@PostFilter(TenantService.IS_TENANT_FILTER)

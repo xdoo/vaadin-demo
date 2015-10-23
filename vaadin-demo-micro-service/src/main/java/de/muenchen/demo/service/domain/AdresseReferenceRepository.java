@@ -4,7 +4,7 @@ import de.muenchen.service.TenantService;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PostFilter;
@@ -13,7 +13,7 @@ import org.springframework.security.access.prepost.PreFilter;
 
 @RepositoryRestResource(exported = true)
 @PreAuthorize("hasRole('ROLE_READ_AdresseReference')")
-public interface AdresseReferenceRepository extends CrudRepository<AdresseReference, Long> {
+public interface AdresseReferenceRepository extends PagingAndSortingRepository<AdresseReference, Long> {
 
 	public final static String ADRESSEREFERENCE_CACHE = "ADRESSEREFERENCE_CACHE";
 

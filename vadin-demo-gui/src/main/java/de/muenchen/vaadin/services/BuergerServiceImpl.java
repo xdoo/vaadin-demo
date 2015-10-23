@@ -144,7 +144,7 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
         List<Buerger> buergers;
         Future<List<Buerger>> result = executor.submit((Callable<List<Buerger>>) client::findAll);
         try {
-            buergers = result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
+            buergers = result.get(99999999, TimeUnit.SECONDS);
             return buergers;
         } catch (ExecutionException e) {
             HttpClientErrorException exception = (HttpClientErrorException) e.getCause();
