@@ -48,8 +48,8 @@ public class BuergerPartnerForm extends BaseComponent {
         init();
     }
 
-    public de.muenchen.vaadin.ui.components.forms.selected.SelectedBuergerPartnerForm getPartnerForm() {
-        return partnerForm;
+    public void setFormVisible(boolean formVisible) {
+        getPartnerForm().setVisible(formVisible);
     }
 
     /**
@@ -72,14 +72,25 @@ public class BuergerPartnerForm extends BaseComponent {
         setCompositionRoot(layout);
     }
 
-    private Component createDeleteButton() {
-        final ActionButton deleteButton = new ActionButton(getI18nResolver(), SimpleAction.delete);
+    public de.muenchen.vaadin.ui.components.forms.selected.SelectedBuergerPartnerForm getPartnerForm() {
+        return partnerForm;
+    }
 
-        final BuergerAssociationActions associationActions = new BuergerAssociationActions(getI18nResolver(),
-                () -> new Association<>(getPartnerForm().getBuerger(), Buerger.Rel.partner.name()));
-        deleteButton.addActionPerformer(associationActions::removeAssociation);
+    private ActionButton createCreateButton() {
+        final ActionButton createButton = new ActionButton(getI18nResolver(), SimpleAction.create);
 
-        return deleteButton;
+        final NavigateActions navigateActions = new NavigateActions(getNavigateToCreate());
+        createButton.addActionPerformer(navigateActions::navigate);
+
+        return createButton;
+    }
+
+    private ActionButton createAddButton() {
+        final ActionButton addButton = new ActionButton(getI18nResolver(), SimpleAction.add);
+        addButton.addClickListener(clickEvent -> {
+            throw new AssertionError("");
+        });
+        return addButton;
     }
 
     private Component createReadButton() {
@@ -93,29 +104,18 @@ public class BuergerPartnerForm extends BaseComponent {
         return readButton;
     }
 
-    private ActionButton createAddButton() {
-        final ActionButton addButton = new ActionButton(getI18nResolver(), SimpleAction.add);
-        addButton.addClickListener(b -> {
-            throw new AssertionError("Fabian macht das dann hab kein Bock :)");
-        });
-        return addButton;
-    }
+    private Component createDeleteButton() {
+        final ActionButton deleteButton = new ActionButton(getI18nResolver(), SimpleAction.delete);
 
-    private ActionButton createCreateButton() {
-        final ActionButton createButton = new ActionButton(getI18nResolver(), SimpleAction.create);
+        final BuergerAssociationActions associationActions = new BuergerAssociationActions(getI18nResolver(),
+                () -> new Association<>(getPartnerForm().getBuerger(), Buerger.Rel.partner.name()));
+        deleteButton.addActionPerformer(associationActions::removeAssociation);
 
-        final NavigateActions navigateActions = new NavigateActions(getNavigateToCreate());
-        createButton.addActionPerformer(navigateActions::navigate);
-
-        return createButton;
+        return deleteButton;
     }
 
     public String getNavigateToCreate() {
         return navigateToCreate;
-    }
-
-    public void setFormVisible(boolean formVisible) {
-        getPartnerForm().setVisible(formVisible);
     }
 
     public String getNavigateToRead() {

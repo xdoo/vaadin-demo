@@ -5,7 +5,6 @@ import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.BaseComponent;
-import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
 import de.muenchen.vaadin.guilib.controller.EntityController;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerSingleActions;
@@ -28,8 +27,6 @@ public class BuergerRWForm extends BaseComponent {
     private final HorizontalLayout buttons = new HorizontalLayout();
     /** The layout for all buttons that are shown in the update mode. */
     private final HorizontalLayout editButtons = new HorizontalLayout();
-    /** The String to navigate to on the back button. */
-    private final String navigateBack;
     /** The current mode the RWForm is in. */
     private boolean edit;
 
@@ -38,11 +35,9 @@ public class BuergerRWForm extends BaseComponent {
      * It will navigate to the navigateBack value on the back button click.
      *
      * @param entityController The Controller for i18n.
-     * @param navigateBack     The String to navigate back to.
      */
-    public BuergerRWForm(EntityController entityController, final String navigateBack) {
+    public BuergerRWForm(EntityController entityController) {
         super(entityController);
-        this.navigateBack = navigateBack;
         buergerForm = new SelectedBuergerForm(entityController);
 
         init();
@@ -96,12 +91,7 @@ public class BuergerRWForm extends BaseComponent {
         final ActionButton editButton = new ActionButton(getI18nResolver(), SimpleAction.update);
         editButton.addClickListener(clickEvent -> setEdit(true));
 
-
-        final ActionButton backButton = new ActionButton(getI18nResolver(), SimpleAction.back);
-        final NavigateActions navigateActions = new NavigateActions(getNavigateBack());
-        backButton.addActionPerformer(navigateActions::navigate);
-
-        return new Component[]{backButton, editButton};
+        return new Component[]{editButton};
     }
 
     /**
@@ -151,11 +141,4 @@ public class BuergerRWForm extends BaseComponent {
         return buergerForm;
     }
 
-    /**
-     * Get the String of the View that the back button of this form will navigate to.
-     * @return The String of the View to navigate to on back.
-     */
-    public String getNavigateBack() {
-        return navigateBack;
-    }
 }

@@ -2,6 +2,7 @@ package de.muenchen.vaadin.ui.app.views;
 
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
@@ -12,6 +13,7 @@ import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.components.BuergerChildTab;
 import de.muenchen.vaadin.ui.components.BuergerPartnerTab;
 import de.muenchen.vaadin.ui.components.forms.BuergerRWForm;
+import de.muenchen.vaadin.ui.components.forms.BuergerReadForm;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +47,8 @@ public class BuergerDetailView extends DefaultBuergerView {
 
         // read form
         readForm = this.controller.getViewFactory().generateRWForm(BuergerTableView.NAME);
-        layout.addComponent(readForm);
+        final BuergerReadForm alternateReadForm = new BuergerReadForm(controller, BuergerUpdateView.NAME);
+        layout.addComponent(new HorizontalLayout(readForm, alternateReadForm));
 
         // tab sheet
         TabSheet tabSheet = new TabSheet();

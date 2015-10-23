@@ -26,6 +26,29 @@ public class NavigateActions {
     }
 
     /**
+     * Navigate method for use outside of clickListener.
+     *
+     * @return true if navigation succeeded
+     */
+    public boolean navigate() {
+        return navigate(null);
+    }
+
+    /**
+     * Navigate to the set String.
+     *
+     * @param clickEvent can be null
+     * @return true if navigation succeeded
+     */
+    public boolean navigate(Button.ClickEvent clickEvent) {
+        if (getNavigateTo() == null) return true;
+
+        BaseUI.getCurrentEventBus().getConsumerRegistry().unregister(new ResponseEntityKey());
+        BaseUI.getCurrentNavigator().navigateTo(navigateTo);
+        return true;
+    }
+
+    /**
      * Get the NavigateTo String.
      *
      * @return The String that is naviagted to.
@@ -41,25 +64,5 @@ public class NavigateActions {
      */
     public void setNavigateTo(String navigateTo) {
         this.navigateTo = navigateTo;
-    }
-
-    /**
-     * Navigate to the set String.
-     *
-     * @param clickEvent can be null
-     * @return true if navigation succeeded
-     */
-    public boolean navigate(Button.ClickEvent clickEvent) {
-        BaseUI.getCurrentEventBus().getConsumerRegistry().unregister(new ResponseEntityKey());
-        BaseUI.getCurrentNavigator().navigateTo(navigateTo);
-        return true;
-    }
-
-    /**
-     * Navigate method for use outside of clickListener.
-     * @return true if navigation succeeded
-     */
-    public boolean navigate(){
-        return navigate(null);
     }
 }

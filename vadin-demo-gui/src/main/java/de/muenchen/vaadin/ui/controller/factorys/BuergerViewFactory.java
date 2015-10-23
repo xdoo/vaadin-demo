@@ -75,7 +75,7 @@ public class BuergerViewFactory implements Serializable {
     }
 
     public BuergerRWForm generateRWForm(String navigateBack) {
-        BuergerRWForm form = new BuergerRWForm(controller, navigateBack);
+        BuergerRWForm form = new BuergerRWForm(controller);
         getEventBus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
         return form;
     }
