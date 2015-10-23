@@ -1,23 +1,20 @@
 package de.muenchen.vaadin.ui.components.forms;
 
+import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.events.Association;
 import de.muenchen.vaadin.demo.api.local.Buerger;
-import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
+import de.muenchen.vaadin.guilib.components.BaseComponent;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
 import de.muenchen.vaadin.guilib.controller.EntityController;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerAssociationActions;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerSingleActions;
 import de.muenchen.vaadin.ui.components.forms.node.BuergerForm;
+import de.muenchen.vaadin.ui.components.forms.selected.SelectedBuergerForm;
 
 import java.util.Optional;
-
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Type;
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getFormPath;
 
 /**
  * Provides a simple Form for creating a new Buerger or a Buerger as an Association.
@@ -25,20 +22,23 @@ import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getFormPath;
  * @author claus.straube p.mueller
  * @version 2.0
  */
-public class BuergerCreateForm extends BuergerForm {
+public class BuergerCreateForm extends BaseComponent {
+    private static final boolean READ_ONLY = false;
 
-    /**
-     * The String to navigate to on the create button.
-     */
-    private final String navigateTo;
-    /**
-     * The String to navigate to on the back button.
-     */
-    private final String back;
     /**
      * The optional relation this CreateForm is for.
      */
     private final Optional<String> relation;
+
+    private final BuergerForm buergerForm;
+
+    private final HorizontalLayout buttonLayout = new HorizontalLayout();
+    private final NavigateActions saveNavigation;
+    private final ActionButton saveButton = new ActionButton(getI18nResolver(), SimpleAction.save);
+
+    public BuergerCreateForm(final EntityController entityController, final String navigateTo) {
+        this(entityController, navigateTo, null);
+    }
 
     /**
      * Formular zum Erstellen eines {@link Buerger}s. Über diesen Konstruktor kann zusätzlich eine Zielseite für die
@@ -46,14 +46,12 @@ public class BuergerCreateForm extends BuergerForm {
      * eine definierte Abfolge von Formularen eingebettet wird.
      *
      * @param navigateTo Zielseite nach Druck der 'erstellen' Schaltfläche
-     * @param back       Zielseite nach Druck der 'abbrechen' Schaltfläche
      * @param relation   Optionale Angabe einer Assoziation, für die der Buerger ist.
      */
-    public BuergerCreateForm(final EntityController entityController, final String navigateTo, final String back, final String relation) {
+    public BuergerCreateForm(final EntityController entityController, final String navigateTo, final String relation) {
         super(entityController);
-
-        this.navigateTo = navigateTo;
-        this.back = back;
+        this.saveNavigation = new NavigateActions(navigateTo);
+        buergerForm = new SelectedBuergerForm(entityController);
         this.relation = Optional.ofNullable(relation);
 
         init();
@@ -63,87 +61,45 @@ public class BuergerCreateForm extends BuergerForm {
      * Build the basic layout and insert the headline and all Buttons.
      */
     private void init() {
-        final Label headline = createHeadline();
-        getFormLayout().addComponent(headline, 0);
+        getBuergerForm().setReadOnly(READ_ONLY);
 
-        final HorizontalLayout buttons = new HorizontalLayout();
-        buttons.setSpacing(true);
 
-        final ActionButton backButton = createBackButton();
-        buttons.addComponent(backButton);
+        getButtonLayout().setSpacing(true);
+        getButtonLayout().addComponents(getSaveButton());
 
-        final ActionButton createButton = createCreateButton();
-        buttons.addComponent(createButton);
+        configureSaveButton();
 
-        getFormLayout().addComponent(buttons);
+        getBuergerForm().getFormLayout().addComponent(getButtonLayout());
+        setCompositionRoot(getBuergerForm());
+
+        getBuergerForm().getFields().stream().findFirst().ifPresent(Field::focus);
     }
 
-    /**
-     * Create the Button for the Create Action.
-     *
-     * @return The create Button.
-     */
-    private ActionButton createCreateButton() {
-        final ActionButton createButton = new ActionButton(getI18nResolver(), SimpleAction.create);
+    public BuergerForm getBuergerForm() {
+        return buergerForm;
+    }
+
+    public HorizontalLayout getButtonLayout() {
+        return buttonLayout;
+    }
+
+    public ActionButton getSaveButton() {
+        return saveButton;
+    }
+
+    private void configureSaveButton() {
         if (getRelation().isPresent()) {
             final BuergerAssociationActions buergerAssociationActions = new BuergerAssociationActions(
                     getI18nResolver(),
-                    () -> new Association<>(getBuerger(), getRelation().get()));
+                    () -> new Association<>(getBuergerForm().getBuerger(), getRelation().get()));
 
-            createButton.addActionPerformer(buergerAssociationActions::addAssociation);
+            getSaveButton().addActionPerformer(buergerAssociationActions::addAssociation);
         } else {
-            BuergerSingleActions buergerSingleActions = new BuergerSingleActions(getI18nResolver(), this::getBuerger);
-            createButton.addActionPerformer(buergerSingleActions::create);
+            BuergerSingleActions buergerSingleActions = new BuergerSingleActions(getI18nResolver(), getBuergerForm()::getBuerger);
+            getSaveButton().addActionPerformer(buergerSingleActions::create);
         }
 
-
-        final NavigateActions navigateActions = new NavigateActions(getNavigateTo());
-        createButton.addActionPerformer(navigateActions::navigate);
-
-        return createButton;
-    }
-
-    /**
-     * Create the back Button.
-     *
-     * @return The back button.
-     */
-    private ActionButton createBackButton() {
-        ActionButton backButton = new ActionButton(getI18nResolver(), SimpleAction.back);
-
-        final NavigateActions navigateActions = new NavigateActions(getNavigateBack());
-        backButton.addActionPerformer(navigateActions::navigate);
-
-        return backButton;
-    }
-
-    /**
-     * Create the Headline for the form.
-     *
-     * @return The Headline Label.
-     */
-    private Label createHeadline() {
-        final Label headline = new Label(getI18nResolver().resolveRelative(getFormPath(SimpleAction.create, I18nPaths.Component.headline, Type.label)));
-        headline.addStyleName(ValoTheme.LABEL_H3);
-        return headline;
-    }
-
-    /**
-     * Get the String representation of the view the form navigates to.
-     *
-     * @return The navigate to String.
-     */
-    public String getNavigateTo() {
-        return navigateTo;
-    }
-
-    /**
-     * Get the String representation of the view the back button of the form navigates to.
-     *
-     * @return The navigate back String.
-     */
-    public String getNavigateBack() {
-        return back;
+        getSaveButton().addActionPerformer(getSaveNavigation()::navigate);
     }
 
     /**
@@ -153,5 +109,9 @@ public class BuergerCreateForm extends BuergerForm {
      */
     public Optional<String> getRelation() {
         return relation;
+    }
+
+    public NavigateActions getSaveNavigation() {
+        return saveNavigation;
     }
 }

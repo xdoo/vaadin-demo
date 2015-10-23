@@ -21,7 +21,7 @@ public class BuergerUpdateForm extends BaseComponent {
 
     private final HorizontalLayout buttonLayout = new HorizontalLayout();
     private final NavigateActions saveNavigation;
-    private ActionButton saveButton = new ActionButton(getI18nResolver(), SimpleAction.save);
+    private final ActionButton saveButton = new ActionButton(getI18nResolver(), SimpleAction.save);
 
 
     public BuergerUpdateForm(EntityController entityController, final String navigateToSaved) {
