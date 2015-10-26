@@ -40,6 +40,7 @@ public class BuergerPartnerForm extends BaseComponent {
                 super.setBuerger(buerger);
             }
         };
+        partnerForm.reLoadBuerger();
         partnerForm.setReadOnly(true);
 
         this.navigateToRead = navigateToRead;

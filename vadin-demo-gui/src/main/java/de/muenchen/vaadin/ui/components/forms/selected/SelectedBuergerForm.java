@@ -24,8 +24,6 @@ public class SelectedBuergerForm extends BuergerForm {
     public SelectedBuergerForm(EntityController entityController) {
         super(entityController);
         getEventBus().on(new ResponseEntityKey(BuergerForm.ENTITY_CLASS).toSelector(), this::update);
-
-        reLoadBuerger();
     }
 
     public void reLoadBuerger() {

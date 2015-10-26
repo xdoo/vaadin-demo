@@ -21,10 +21,7 @@ public class SelectedBuergerPartnerForm extends BuergerForm {
     public SelectedBuergerPartnerForm(EntityController entityController) {
         super(entityController);
         getEventBus().on(getResponeKey().toSelector(), this::update);
-
-        reLoadBuerger();
     }
-
 
     public void reLoadBuerger() {
         final BuergerSingleActions singleActions = new BuergerSingleActions(getI18nResolver(), this::getBuerger);

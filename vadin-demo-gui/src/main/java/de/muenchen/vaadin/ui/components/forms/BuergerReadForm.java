@@ -26,6 +26,8 @@ public class BuergerReadForm extends BaseComponent {
     public BuergerReadForm(EntityController entityController, final String navigateToUpdate) {
         super(entityController);
         buergerForm = new SelectedBuergerForm(entityController);
+        buergerForm.reLoadBuerger();
+
         updateNavigation = new NavigateActions(navigateToUpdate);
         init();
     }

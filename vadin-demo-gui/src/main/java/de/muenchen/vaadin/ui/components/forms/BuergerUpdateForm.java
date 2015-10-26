@@ -28,6 +28,7 @@ public class BuergerUpdateForm extends BaseComponent {
         super(entityController);
         saveNavigation = new NavigateActions(navigateToSaved);
         buergerForm = new SelectedBuergerForm(entityController);
+        buergerForm.reLoadBuerger();
 
         init();
     }

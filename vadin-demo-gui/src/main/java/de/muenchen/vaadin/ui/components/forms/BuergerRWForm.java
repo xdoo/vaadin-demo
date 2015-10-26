@@ -39,6 +39,7 @@ public class BuergerRWForm extends BaseComponent {
     public BuergerRWForm(EntityController entityController) {
         super(entityController);
         buergerForm = new SelectedBuergerForm(entityController);
+        buergerForm.reLoadBuerger();
 
         init();
     }
