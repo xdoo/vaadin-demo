@@ -78,9 +78,9 @@ public class BuergerPartnerComponent extends CustomComponent implements Consumer
     }
 
     private ActionButton buildReadButton() {
-        ActionButton read = new ActionButton(resolver, SimpleAction.read);
+        ActionButton read = new ActionButton(Buerger.class, SimpleAction.read);
         final NavigateActions navigateAction = new NavigateActions(BuergerDetailView.NAME);
-        final BuergerSingleActions buergerSingleActions = new BuergerSingleActions(controller.getResolver(), () -> currentPartner);
+        final BuergerSingleActions buergerSingleActions = new BuergerSingleActions(Buerger.class, () -> currentPartner);
 
         read.addActionPerformer(buergerSingleActions::read);
         read.addActionPerformer(navigateAction::navigate);
@@ -91,7 +91,7 @@ public class BuergerPartnerComponent extends CustomComponent implements Consumer
 
 
     private ActionButton buildCreateButton() {
-        ActionButton create = new ActionButton(resolver, SimpleAction.create);
+        ActionButton create = new ActionButton(Buerger.class, SimpleAction.create);
         create.addClickListener(clickEvent -> {
             NavigateActions navigateAction = new NavigateActions(navigateToForCreate);
             if (partnerReadForm.getComponentCount() == 0) {
@@ -109,7 +109,7 @@ public class BuergerPartnerComponent extends CustomComponent implements Consumer
     }
 
     private ActionButton buildAddButton() {
-        ActionButton add = new ActionButton(resolver, SimpleAction.add);
+        ActionButton add = new ActionButton(Buerger.class, SimpleAction.add);
         add.addClickListener(clickEvent -> {
             if (partnerReadForm.getComponentCount() == 0) {
                 HorizontalLayout layout = new HorizontalLayout(controller.getViewFactory().generateBuergerPartnerSearchTable());
@@ -132,7 +132,7 @@ public class BuergerPartnerComponent extends CustomComponent implements Consumer
     }
 
     private ActionButton buildDeleteButton() {
-        ActionButton delete = new ActionButton(resolver, SimpleAction.delete);
+        ActionButton delete = new ActionButton(Buerger.class, SimpleAction.delete);
         delete.addClickListener(event -> {
             Association<Buerger> association = new Association<>(new Buerger(), Buerger.Rel.partner.name());
             BaseUI.getCurrentEventBus().notify(controller.getRequestKey(RequestEvent.REMOVE_ASSOCIATION), association.asEvent());

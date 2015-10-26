@@ -70,9 +70,9 @@ public class SelectedBuergerUpdateForm extends SelectedBuergerForm {
      * @return The save Button.
      */
     private ActionButton createSaveButton() {
-        final ActionButton saveButton = new ActionButton(getI18nResolver(), SimpleAction.save);
+        final ActionButton saveButton = new ActionButton(Buerger.class, SimpleAction.save);
 
-        final BuergerSingleActions buergerSingleActions = new BuergerSingleActions(getI18nResolver(), this::getBuerger);
+        final BuergerSingleActions buergerSingleActions = new BuergerSingleActions(Buerger.class, this::getBuerger);
         saveButton.addActionPerformer(buergerSingleActions::update);
 
         final NavigateActions navigateActions = new NavigateActions(getNavigateTo());
@@ -87,7 +87,7 @@ public class SelectedBuergerUpdateForm extends SelectedBuergerForm {
      * @return The back Button.
      */
     private ActionButton createBackButton() {
-        final ActionButton backButton = new ActionButton(getI18nResolver(), SimpleAction.back);
+        final ActionButton backButton = new ActionButton(Buerger.class, SimpleAction.back);
 
         final NavigateActions navigateActions = new NavigateActions(getNavigateBack());
         backButton.addActionPerformer(navigateActions::navigate);
@@ -101,7 +101,7 @@ public class SelectedBuergerUpdateForm extends SelectedBuergerForm {
      * @return The Headline Label.
      */
     private Label createHeadline() {
-        final Label headline = new Label(getI18nResolver().resolveRelative(getFormPath(SimpleAction.update, I18nPaths.Component.headline, Type.label)));
+        final Label headline = new Label(getI18nResolver().resolveRelative(Buerger.class, getFormPath(SimpleAction.update, I18nPaths.Component.headline, Type.label)));
         headline.addStyleName(ValoTheme.LABEL_H3);
         return headline;
     }

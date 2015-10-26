@@ -6,6 +6,7 @@ import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
+import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
 import de.muenchen.vaadin.guilib.controller.EntityController;
@@ -65,7 +66,7 @@ public class SelectedBuergerPartnerReadForm extends SelectedBuergerPartnerForm {
     }
 
     private ActionButton createBackButton() {
-        final ActionButton backButton = new ActionButton(getI18nResolver(), SimpleAction.back);
+        final ActionButton backButton = new ActionButton(Buerger.class, SimpleAction.back);
 
         final NavigateActions navigateActions = new NavigateActions(getNavigateBack());
         backButton.addActionPerformer(navigateActions::navigate);
@@ -80,9 +81,9 @@ public class SelectedBuergerPartnerReadForm extends SelectedBuergerPartnerForm {
      * @return The save Button.
      */
     private ActionButton createUpdateButton() {
-        final ActionButton updateButton = new ActionButton(getI18nResolver(), SimpleAction.update);
+        final ActionButton updateButton = new ActionButton(Buerger.class, SimpleAction.update);
 
-        final BuergerSingleActions buergerSingleActions = new BuergerSingleActions(getI18nResolver(), this::getBuerger);
+        final BuergerSingleActions buergerSingleActions = new BuergerSingleActions(Buerger.class, this::getBuerger);
         updateButton.addActionPerformer(buergerSingleActions::read);
 
         final NavigateActions navigateActions = new NavigateActions(getNavigateToUpdate());
@@ -93,7 +94,7 @@ public class SelectedBuergerPartnerReadForm extends SelectedBuergerPartnerForm {
 
 
     private Label createHeadline() {
-        final Label headline = new Label(getI18nResolver().resolveRelative(getFormPath(SimpleAction.read, I18nPaths.Component.headline, I18nPaths.Type.label)));
+        final Label headline = new Label(BaseUI.getCurrentI18nResolver().resolveRelative(Buerger.class, getFormPath(SimpleAction.read, I18nPaths.Component.headline, I18nPaths.Type.label)));
         headline.addStyleName(ValoTheme.LABEL_H3);
         return headline;
     }

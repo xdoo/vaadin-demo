@@ -66,7 +66,7 @@ public class SelectedBuergerReadForm extends SelectedBuergerForm {
     }
 
     private ActionButton createBackButton() {
-        final ActionButton backButton = new ActionButton(getI18nResolver(), SimpleAction.back);
+        final ActionButton backButton = new ActionButton(Buerger.class, SimpleAction.back);
 
         final NavigateActions navigateActions = new NavigateActions(getNavigateBack());
         backButton.addActionPerformer(navigateActions::navigate);
@@ -81,9 +81,9 @@ public class SelectedBuergerReadForm extends SelectedBuergerForm {
      * @return The save Button.
      */
     private ActionButton createUpdateButton() {
-        final ActionButton updateButton = new ActionButton(getI18nResolver(), SimpleAction.update);
+        final ActionButton updateButton = new ActionButton(Buerger.class, SimpleAction.update);
 
-        final BuergerSingleActions buergerSingleActions = new BuergerSingleActions(getI18nResolver(), this::getBuerger);
+        final BuergerSingleActions buergerSingleActions = new BuergerSingleActions(Buerger.class, this::getBuerger);
         updateButton.addActionPerformer(buergerSingleActions::read);
 
         final NavigateActions navigateActions = new NavigateActions(getNavigateToUpdate());
@@ -94,7 +94,7 @@ public class SelectedBuergerReadForm extends SelectedBuergerForm {
 
 
     private Label createHeadline() {
-        final Label headline = new Label(getI18nResolver().resolveRelative(getFormPath(SimpleAction.read, Component.headline, Type.label)));
+        final Label headline = new Label(getI18nResolver().resolveRelative(Buerger.class, getFormPath(SimpleAction.read, Component.headline, Type.label)));
         headline.addStyleName(ValoTheme.LABEL_H3);
         return headline;
     }

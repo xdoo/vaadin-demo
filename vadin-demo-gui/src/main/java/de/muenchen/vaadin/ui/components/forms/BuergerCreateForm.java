@@ -7,6 +7,7 @@ import de.muenchen.eventbus.events.Association;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
+import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
 import de.muenchen.vaadin.guilib.controller.EntityController;
@@ -84,7 +85,7 @@ public class BuergerCreateForm extends BuergerForm {
      * @return The create Button.
      */
     private ActionButton createCreateButton() {
-        final ActionButton createButton = new ActionButton(getI18nResolver(), SimpleAction.create);
+        final ActionButton createButton = new ActionButton(Buerger.class, SimpleAction.create);
         if (getRelation().isPresent()) {
             final BuergerAssociationActions buergerAssociationActions = new BuergerAssociationActions(
                     getI18nResolver(),
@@ -92,7 +93,7 @@ public class BuergerCreateForm extends BuergerForm {
 
             createButton.addActionPerformer(buergerAssociationActions::addAssociation);
         } else {
-            BuergerSingleActions buergerSingleActions = new BuergerSingleActions(getI18nResolver(), this::getBuerger);
+            BuergerSingleActions buergerSingleActions = new BuergerSingleActions(Buerger.class, this::getBuerger);
             createButton.addActionPerformer(buergerSingleActions::create);
         }
 
@@ -109,7 +110,7 @@ public class BuergerCreateForm extends BuergerForm {
      * @return The back button.
      */
     private ActionButton createBackButton() {
-        ActionButton backButton = new ActionButton(getI18nResolver(), SimpleAction.back);
+        ActionButton backButton = new ActionButton(Buerger.class, SimpleAction.back);
 
         final NavigateActions navigateActions = new NavigateActions(getNavigateBack());
         backButton.addActionPerformer(navigateActions::navigate);
@@ -123,7 +124,7 @@ public class BuergerCreateForm extends BuergerForm {
      * @return The Headline Label.
      */
     private Label createHeadline() {
-        final Label headline = new Label(getI18nResolver().resolveRelative(getFormPath(SimpleAction.create, I18nPaths.Component.headline, Type.label)));
+        final Label headline = new Label(BaseUI.getCurrentI18nResolver().resolveRelative(Buerger.class, getFormPath(SimpleAction.create, I18nPaths.Component.headline, Type.label)));
         headline.addStyleName(ValoTheme.LABEL_H3);
         return headline;
     }
