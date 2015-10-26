@@ -34,7 +34,7 @@ public class BuergerCreateView extends DefaultBuergerView {
     @Override
     protected void site() {
         final ActionButton backButton = new ActionButton(controller.getResolver(), SimpleAction.back);
-        final NavigateActions navigateActions = new NavigateActions(BuergerDetailView.NAME);
+        final NavigateActions navigateActions = new NavigateActions(BuergerTableView.NAME);
         backButton.addActionPerformer(navigateActions::navigate);
 
         final BuergerCreateForm c = this.controller.getViewFactory().generateCreateForm(BuergerTableView.NAME, BuergerTableView.NAME);
