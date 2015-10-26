@@ -19,7 +19,7 @@ import de.muenchen.vaadin.ui.components.forms.selected.SelectedBuergerForm;
 public class BuergerRWForm extends BaseComponent {
 
     /** The default (readOnly/write) mode the Form initially starts. */
-    public static final boolean DEFAULT_MODE = false;
+    public static final boolean MODE_IS_EDIT = false;
 
     /** The Form displaying the current selected Buerger. */
     private final SelectedBuergerForm buergerForm;
@@ -55,7 +55,7 @@ public class BuergerRWForm extends BaseComponent {
 
         getBuergerForm().getFormLayout().addComponents(getButtons(), getEditButtons());
 
-        setEdit(DEFAULT_MODE);
+        setEdit(MODE_IS_EDIT);
         setCompositionRoot(getBuergerForm());
     }
 
