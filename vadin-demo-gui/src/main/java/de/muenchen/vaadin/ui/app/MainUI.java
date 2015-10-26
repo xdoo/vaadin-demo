@@ -293,7 +293,7 @@ public class MainUI extends BaseUI implements I18nResolver {
 
     @Override
     public String resolveRelative(Class clazz, String relativePath) {
-        return i18n.get(clazz + relativePath);
+        return i18n.get(clazz.getSimpleName().toLowerCase()+ "." + relativePath);
     }
 
     @Override
