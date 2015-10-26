@@ -8,6 +8,9 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
+import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
+import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
+import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
 import de.muenchen.vaadin.services.BuergerI18nResolver;
 import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.components.BuergerChildTab;
@@ -42,7 +45,14 @@ public class BuergerDetailView extends DefaultBuergerView {
 
     @Override
     protected void site() {
+        final ActionButton backButton = new ActionButton(controller.getResolver(), SimpleAction.back);
+        final NavigateActions navigateActions = new NavigateActions(BuergerTableView.NAME);
+        backButton.addActionPerformer(navigateActions::navigate);
+
+
         VerticalLayout layout = new VerticalLayout();
+        layout.addComponent(backButton);
+
         layout.setSpacing(true);
 
         // read form

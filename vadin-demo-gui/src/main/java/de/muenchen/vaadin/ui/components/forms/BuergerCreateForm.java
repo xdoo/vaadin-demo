@@ -12,7 +12,6 @@ import de.muenchen.vaadin.guilib.controller.EntityController;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerAssociationActions;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerSingleActions;
 import de.muenchen.vaadin.ui.components.forms.node.BuergerForm;
-import de.muenchen.vaadin.ui.components.forms.selected.SelectedBuergerForm;
 
 import java.util.Optional;
 
@@ -51,7 +50,7 @@ public class BuergerCreateForm extends BaseComponent {
     public BuergerCreateForm(final EntityController entityController, final String navigateTo, final String relation) {
         super(entityController);
         this.saveNavigation = new NavigateActions(navigateTo);
-        buergerForm = new SelectedBuergerForm(entityController);
+        buergerForm = new BuergerForm(entityController);
         this.relation = Optional.ofNullable(relation);
 
         init();

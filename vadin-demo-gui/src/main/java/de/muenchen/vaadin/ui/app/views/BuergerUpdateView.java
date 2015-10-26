@@ -2,6 +2,10 @@ package de.muenchen.vaadin.ui.app.views;
 
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
+import com.vaadin.ui.VerticalLayout;
+import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
+import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
+import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
 import de.muenchen.vaadin.services.BuergerI18nResolver;
 import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.components.forms.BuergerUpdateForm;
@@ -24,7 +28,17 @@ public class BuergerUpdateView extends DefaultBuergerView {
 
     @Override
     protected void site() {
-        addComponent(new BuergerUpdateForm(controller, BuergerDetailView.NAME));
+        final ActionButton backButton = new ActionButton(controller.getResolver(), SimpleAction.back);
+        final NavigateActions navigateActions = new NavigateActions(BuergerDetailView.NAME);
+        backButton.addActionPerformer(navigateActions::navigate);
+
+        final BuergerUpdateForm c = new BuergerUpdateForm(controller, BuergerDetailView.NAME);
+
+        final VerticalLayout layout = new VerticalLayout(backButton, c);
+        layout.setSpacing(true);
+
+        addComponent(layout);
+
     }
 
 }
