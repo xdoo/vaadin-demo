@@ -10,19 +10,30 @@ import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerSingleActio
 import de.muenchen.vaadin.ui.components.forms.selected.SelectedBuergerForm;
 
 /**
- * Created by p.mueller on 23.10.15.
+ * Provides a simple ReadForm with a update Button that always shows the selected Buerger.
+ *
+ * @author p.mueller
+ * @version 1.0
  */
 public class BuergerReadForm extends BaseComponent {
-    public static final boolean READ_ONLY = true;
 
+    /** Indicates the mode of the Form. */
+    public static final boolean READ_ONLY = true;
     /** The underlying form. */
     private final SelectedBuergerForm buergerForm;
-
+    /** The layout for all Buttons. */
     private final HorizontalLayout buttonLayout = new HorizontalLayout();
+    /** The button for the update action. */
     private final ActionButton updateButton = new ActionButton(getI18nResolver(), SimpleAction.update);
-
+    /** The actions for the navigate on update. */
     private final NavigateActions updateNavigation;
 
+    /**
+     * Create a new ReadForm that navigates to the specified View on the update action.
+     *
+     * @param entityController The controller used.
+     * @param navigateToUpdate The View that is navigated to on update.
+     */
     public BuergerReadForm(EntityController entityController, final String navigateToUpdate) {
         super(entityController);
         buergerForm = new SelectedBuergerForm(entityController);
@@ -32,6 +43,9 @@ public class BuergerReadForm extends BaseComponent {
         init();
     }
 
+    /**
+     * Initialize the Component.
+     */
     private void init() {
         getBuergerForm().setReadOnly(READ_ONLY);
 
@@ -44,26 +58,47 @@ public class BuergerReadForm extends BaseComponent {
         setCompositionRoot(getBuergerForm());
     }
 
+    /**
+     * Get the underlying BuergerForm.
+     *
+     * @return The BuergerForm.
+     */
     public SelectedBuergerForm getBuergerForm() {
         return buergerForm;
     }
 
+    /**
+     * Get the Layout for all Buttons.
+     *
+     * @return The horizontal Layout.
+     */
     public HorizontalLayout getButtonLayout() {
         return buttonLayout;
     }
 
+    /**
+     * Get the Button for the update Action.
+     *
+     * @return The ActionButton.
+     */
     public ActionButton getUpdateButton() {
         return updateButton;
     }
 
-
+    /**
+     * Configure the Update Button and add the actions.
+     */
     private void configureUpdateButton() {
         final BuergerSingleActions singleActions = new BuergerSingleActions(getI18nResolver(), getBuergerForm()::getBuerger);
         getUpdateButton().addActionPerformer(singleActions::read);
         getUpdateButton().addActionPerformer(getUpdateNavigation()::navigate);
     }
 
-
+    /**
+     * Get the Navigation for the update Action.
+     *
+     * @return The NavigateActions used by the update Button.
+     */
     public NavigateActions getUpdateNavigation() {
         return updateNavigation;
     }
