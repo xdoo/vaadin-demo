@@ -16,13 +16,25 @@ public interface I18nResolver {
     String resolve(String path);
 
     /**
-     * //TODO
+     * Resolves the Path with a Classname as BasePath and a String of the relative Path
+     * @param clazz
      * @param relativePath
      * @return
      */
-    String resolveRelative(String relativePath);
+    String resolveRelative(Class clazz, String relativePath);
 
-    FontAwesome resolveIcon(String relativePath);
+    /**
+     * resolves the icon due to given Classname and relative path
+     * @param clazz
+     * @param relativePath
+     * @return
+     */
+    FontAwesome resolveIcon(Class clazz, String relativePath);
 
-    String getBasePath();
+    /**
+     * returns the basePath resulting from a given class
+     * @param clazz
+     * @return
+     */
+    String getBasePath(Class clazz);
 }

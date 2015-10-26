@@ -2,8 +2,10 @@ package de.muenchen.vaadin.ui.components;
 
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.VerticalLayout;
-import de.muenchen.vaadin.services.BuergerI18nResolver;
+import de.muenchen.vaadin.demo.api.local.Buerger;
+import de.muenchen.vaadin.demo.i18nservice.I18nResolverImpl;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author Maximilian Schug
@@ -12,6 +14,9 @@ public class BuergerPartnerTab extends CustomComponent {
 
     private BuergerPartnerComponent component;
 
+    @Autowired
+    I18nResolverImpl i18nResolver;
+
     public BuergerPartnerTab(BuergerViewController controller, String navigateToForDetail, String navigateToForCreate, String from) {
         component = controller.getViewFactory().generateBuergerPartnerComponent(navigateToForCreate);
         // Gesamtlayout
@@ -19,7 +24,7 @@ public class BuergerPartnerTab extends CustomComponent {
         vlayout.setSpacing(true);
         vlayout.setMargin(true);
 
-        setId(String.format("%s_%s_%s_PARENT_TAB", navigateToForDetail, from, BuergerI18nResolver.I18N_BASE_PATH));
+        setId(String.format("%s_%s_%s_PARENT_TAB", navigateToForDetail, from, i18nResolver.getBasePath(Buerger.class)));
         setCompositionRoot(vlayout);
     }
 }

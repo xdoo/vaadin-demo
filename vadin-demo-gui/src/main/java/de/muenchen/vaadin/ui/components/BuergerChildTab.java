@@ -5,10 +5,10 @@ import com.vaadin.ui.HorizontalLayout;
 import de.muenchen.eventbus.events.Association;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
+import de.muenchen.vaadin.demo.i18nservice.I18nResolverImpl;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.GenericGrid;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
-import de.muenchen.vaadin.services.BuergerI18nResolver;
 import de.muenchen.vaadin.ui.app.views.BuergerDetailView;
 import de.muenchen.vaadin.ui.app.views.TableSelectWindow;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerAssociationListActions;
@@ -27,7 +27,7 @@ public class BuergerChildTab extends CustomComponent {
     private BuergerViewController controller;
     private GenericGrid<Buerger> grid;
 
-    public BuergerChildTab(BuergerViewController controller, BuergerI18nResolver resolver, String navigateToForDetail, String navigateToForCreate, String navigateBack) {
+    public BuergerChildTab(BuergerViewController controller, I18nResolverImpl resolver, String navigateToForDetail, String navigateToForCreate, String navigateBack) {
 
         this.controller = controller;
 

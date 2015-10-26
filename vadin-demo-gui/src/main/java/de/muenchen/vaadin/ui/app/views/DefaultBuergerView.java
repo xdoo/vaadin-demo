@@ -6,7 +6,8 @@ import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.vaadin.services.BuergerI18nResolver;
+import de.muenchen.vaadin.demo.api.local.Buerger;
+import de.muenchen.vaadin.demo.i18nservice.I18nResolverImpl;
 import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
@@ -23,9 +24,9 @@ import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getPagePath;
 public abstract class DefaultBuergerView extends VerticalLayout implements View{
 
     BuergerViewController controller;
-    BuergerI18nResolver resolver;
+    I18nResolverImpl resolver;
 
-    public DefaultBuergerView(BuergerViewController controller, BuergerI18nResolver resolver, MainUI ui) {
+    public DefaultBuergerView(BuergerViewController controller, I18nResolverImpl resolver, MainUI ui) {
         this.controller = controller;
         this.resolver = resolver;
     }
@@ -38,7 +39,7 @@ public abstract class DefaultBuergerView extends VerticalLayout implements View{
     protected void addHeadline() {
 
         // headline
-        Label pageTitle = new Label(resolver.resolveRelative(getPagePath(Type.title)));
+        Label pageTitle = new Label(resolver.resolveRelative(Buerger.class, getPagePath(Type.title)));
         pageTitle.addStyleName(ValoTheme.LABEL_H1);
         pageTitle.addStyleName(ValoTheme.LABEL_COLORED);
 
