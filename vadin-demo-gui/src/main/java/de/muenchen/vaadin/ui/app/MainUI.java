@@ -224,14 +224,14 @@ public class MainUI extends BaseUI implements I18nResolver {
     }
 
     private MenuBar addLanguageSelector(MenuBar bar) {
-        language = bar.addItem(resolveRelative(null, "sprache.title"), FontAwesome.LANGUAGE, null);
+        language = bar.addItem(resolve("sprache.title"), FontAwesome.LANGUAGE, null);
 
         MenuBar.Command languageSelection = selectedItem -> i18n.getSupportedLocales().stream().forEach(locale -> {
             if (selectedItem.getText().equals(locale.getDisplayLanguage())) {
                 i18n.setLocale(locale);
                 getNavigator().navigateTo(getNavigator().getState());
 
-                language.setText(resolveRelative(null, "sprache.title"));
+                language.setText(resolve("sprache.title"));
 
                 removeMenuItems();
                 createNavigationMenu();
@@ -247,8 +247,8 @@ public class MainUI extends BaseUI implements I18nResolver {
     }
 
     private void addMenuItems() {
-        this.menuItems.put(MainView.NAME, resolveRelative(null, "mainpage.title"));
-        this.menuItems.put(BuergerTableView.NAME, resolveRelative(Buerger.class, "buerger.navigation.button.label"));
+        this.menuItems.put(MainView.NAME, resolve("mainpage.title"));
+        this.menuItems.put(BuergerTableView.NAME, resolveRelative(Buerger.class, "navigation.button.label"));
     }
 
     private void removeMenuItems() {
