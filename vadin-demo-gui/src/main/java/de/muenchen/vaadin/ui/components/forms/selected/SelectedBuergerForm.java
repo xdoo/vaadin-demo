@@ -26,6 +26,9 @@ public class SelectedBuergerForm extends BuergerForm {
         getEventBus().on(new ResponseEntityKey(BuergerForm.ENTITY_CLASS).toSelector(), this::update);
     }
 
+    /**
+     * Reloads the Buerger via the Controller.
+     */
     public void reLoadBuerger() {
         final BuergerSingleActions singleActions = new BuergerSingleActions(getI18nResolver(), this::getBuerger);
         singleActions.reRead(null);
@@ -34,7 +37,7 @@ public class SelectedBuergerForm extends BuergerForm {
     /**
      * Update the Buerger of this Form to the selected one form the DataStore.
      *
-     * @param event
+     * @param event A reactor Event with a {@link BuergerDatastore} as Data.
      */
     private void update(reactor.bus.Event<?> event) {
         final BuergerDatastore data = (BuergerDatastore) event.getData();

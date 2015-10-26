@@ -22,19 +22,26 @@ import java.util.Optional;
  * @version 2.0
  */
 public class BuergerCreateForm extends BaseComponent {
+    /** Indicates the mode of the Form. */
     private static final boolean READ_ONLY = false;
-
-    /**
-     * The optional relation this CreateForm is for.
-     */
+    /** The optional relation this CreateForm is for. */
     private final Optional<String> relation;
-
+    /** The Form used to diplay the fields. */
     private final BuergerForm buergerForm;
-
+    /** Layout for all buttons. */
     private final HorizontalLayout buttonLayout = new HorizontalLayout();
+    /** Action for executing the navigation on save. */
     private final NavigateActions saveNavigation;
+    /** The Button for the save action. */
     private final ActionButton saveButton = new ActionButton(getI18nResolver(), SimpleAction.save);
 
+    /**
+     * Create a new BuergerCreateForm that navigates to the navigateTo View on save.
+     * This CreateForm is for the pure Buerger, and not as a relation of a different controller.
+     *
+     * @param entityController The controller.
+     * @param navigateTo       The String of the view to navigate to on save.
+     */
     public BuergerCreateForm(final EntityController entityController, final String navigateTo) {
         this(entityController, navigateTo, null);
     }
@@ -62,7 +69,6 @@ public class BuergerCreateForm extends BaseComponent {
     private void init() {
         getBuergerForm().setReadOnly(READ_ONLY);
 
-
         getButtonLayout().setSpacing(true);
         getButtonLayout().addComponents(getSaveButton());
 
@@ -74,18 +80,36 @@ public class BuergerCreateForm extends BaseComponent {
         getBuergerForm().getFields().stream().findFirst().ifPresent(Field::focus);
     }
 
+    /**
+     * Get the Form that displays the fields.
+     *
+     * @return the underlying Form.
+     */
     public BuergerForm getBuergerForm() {
         return buergerForm;
     }
 
+    /**
+     * Get the layout of all Buttons.
+     *
+     * @return The layout of the Buttons
+     */
     public HorizontalLayout getButtonLayout() {
         return buttonLayout;
     }
 
+    /**
+     * Get the Button for the save action.
+     *
+     * @return the Save Button.
+     */
     public ActionButton getSaveButton() {
         return saveButton;
     }
 
+    /**
+     * Add the on-click functionality to the save Button. It depends on the presence and type of the relation.
+     */
     private void configureSaveButton() {
         if (getRelation().isPresent()) {
             final BuergerAssociationActions buergerAssociationActions = new BuergerAssociationActions(
@@ -110,6 +134,10 @@ public class BuergerCreateForm extends BaseComponent {
         return relation;
     }
 
+    /**
+     * Get the Action for the save navigation.
+     * @return The NavigateActions.
+     */
     public NavigateActions getSaveNavigation() {
         return saveNavigation;
     }

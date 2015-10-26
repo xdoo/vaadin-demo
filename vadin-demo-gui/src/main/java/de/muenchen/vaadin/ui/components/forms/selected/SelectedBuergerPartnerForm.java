@@ -7,15 +7,14 @@ import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerSingleActio
 import de.muenchen.vaadin.ui.components.forms.node.BuergerForm;
 
 /**
- * Created by p.mueller on 13.10.15.
+ * Provides a simple {@link BuergerForm} that always shows the {@link BuergerDatastore#getSelectedBuergerPartner()} ()}.
+ *
+ * @author p.mueller
+ * @version 1.0
  */
 public class SelectedBuergerPartnerForm extends BuergerForm {
     /**
-     * Create a new BuergerForm using the specified i18nResolver and the eventbus.
-     * <p/>
-     * This Form is only the plain fields for input, and has no additional components or buttons. You can use {@link
-     * BuergerForm#setReadOnly(boolean)} for a readonly mode.
-     *
+     * Creates a new Buerger Partner form
      * @param entityController The controller used for everything.
      */
     public SelectedBuergerPartnerForm(EntityController entityController) {
@@ -23,11 +22,19 @@ public class SelectedBuergerPartnerForm extends BuergerForm {
         getEventBus().on(getResponeKey().toSelector(), this::update);
     }
 
+    /**
+     * Reloads the Partner via the Controller.
+     */
     public void reLoadBuerger() {
         final BuergerSingleActions singleActions = new BuergerSingleActions(getI18nResolver(), this::getBuerger);
         singleActions.reRead(null);
     }
 
+    /**
+     * Update the Buerger of this Form to the selected one form the DataStore.
+     *
+     * @param event A reactor Event with a {@link BuergerDatastore} as Data.
+     */
     private void update(reactor.bus.Event<?> event) {
         final BuergerDatastore data = (BuergerDatastore) event.getData();
         final Buerger buerger = data.getSelectedBuergerPartner().orElse(null);
