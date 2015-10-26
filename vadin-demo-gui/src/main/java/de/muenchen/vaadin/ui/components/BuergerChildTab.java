@@ -35,7 +35,7 @@ public class BuergerChildTab extends CustomComponent {
                 .activateCreate(navigateToForCreate)
                 .activateRead(BuergerDetailView.NAME)
                 .addButton(
-                        controller.getResolver().resolveRelative(
+                        controller.getResolver().resolveRelative(Buerger.class,
                                 getFormPath(SimpleAction.add,
                                         I18nPaths.Component.button,
                                         I18nPaths.Type.label)),
@@ -63,7 +63,7 @@ public class BuergerChildTab extends CustomComponent {
         setCompositionRoot(layout);
 
 
-        setId(String.format("%s_%s_%s_CHILD_TAB", navigateToForDetail, navigateBack, controller.getResolver().getBasePath()));
+        setId(String.format("%s_%s_%s_CHILD_TAB", navigateToForDetail, navigateBack, controller.getResolver().getBasePath(Buerger.class)));
     }
 
 
