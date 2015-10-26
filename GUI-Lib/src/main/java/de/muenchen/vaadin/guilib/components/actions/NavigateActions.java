@@ -22,6 +22,8 @@ public class NavigateActions {
      * @param navigateTo The String to navigate to.
      */
     public NavigateActions(String navigateTo) {
+        if (navigateTo == null)
+            throw new NullPointerException();
         this.navigateTo = navigateTo;
     }
 
@@ -41,7 +43,8 @@ public class NavigateActions {
      * @return true if navigation succeeded
      */
     public boolean navigate(Button.ClickEvent clickEvent) {
-        if (getNavigateTo() == null) return true;
+        if (BaseUI.getCurrentNavigator().getState().equals(getNavigateTo()))
+            return true;
 
         BaseUI.getCurrentEventBus().getConsumerRegistry().unregister(new ResponseEntityKey());
         BaseUI.getCurrentNavigator().navigateTo(navigateTo);
@@ -54,6 +57,7 @@ public class NavigateActions {
      * @return The String that is naviagted to.
      */
     public String getNavigateTo() {
+
         return navigateTo;
     }
 
@@ -63,6 +67,8 @@ public class NavigateActions {
      * @param navigateTo The navigateTo String.
      */
     public void setNavigateTo(String navigateTo) {
+        if (getNavigateTo() == null)
+            throw new NullPointerException();
         this.navigateTo = navigateTo;
     }
 }
