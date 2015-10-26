@@ -15,7 +15,10 @@ import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerSingleActio
 import de.muenchen.vaadin.ui.components.forms.selected.SelectedBuergerPartnerForm;
 
 /**
- * Created by p.mueller on 13.10.15.
+ * Provides a simple Form to display the Partner of a Buerger.
+ *
+ * @author p.mueller
+ * @version 1.0
  */
 public class BuergerPartnerForm extends BaseComponent {
 
@@ -24,11 +27,13 @@ public class BuergerPartnerForm extends BaseComponent {
     private final SelectedBuergerPartnerForm partnerForm;
 
     /**
-     * Formular zum Lesen eines {@link Buerger}s. Über diesen Konstruktor kann zusätzlich eine Zielseite für die
-     * 'zurück' und 'bearbeiten' Schaltflächen erstellt werden.
+     * Create a new BuergerPartnerForm with the navigateToCreate and navigateToRead.
+     * <p/>
+     * It will always show the current partner of the selected Buerger. The Form won't be visible if no Partner is present.
      *
-     * @param controller
-     * @param navigateToRead
+     * @param controller       The controller used for i18n.
+     * @param navigateToCreate The View to navigate to on the create action.
+     * @param navigateToRead   The View to navigate to on the read action.
      */
     public BuergerPartnerForm(EntityController controller, final String navigateToCreate, final String navigateToRead) {
         super(controller);
@@ -49,7 +54,12 @@ public class BuergerPartnerForm extends BaseComponent {
         init();
     }
 
-    public void setFormVisible(boolean formVisible) {
+    /**
+     * Set the visibility of the form.
+     *
+     * @param formVisible True, if it should be visible.
+     */
+    private void setFormVisible(boolean formVisible) {
         getPartnerForm().setVisible(formVisible);
     }
 
@@ -73,10 +83,20 @@ public class BuergerPartnerForm extends BaseComponent {
         setCompositionRoot(layout);
     }
 
+    /**
+     * Get the used form for the partner.
+     *
+     * @return The underlying Form.
+     */
     public de.muenchen.vaadin.ui.components.forms.selected.SelectedBuergerPartnerForm getPartnerForm() {
         return partnerForm;
     }
 
+    /**
+     * Create the Button for the create action.
+     *
+     * @return A new ActionButton preconfigured with actions.
+     */
     private ActionButton createCreateButton() {
         final ActionButton createButton = new ActionButton(getI18nResolver(), SimpleAction.create);
 
@@ -86,6 +106,11 @@ public class BuergerPartnerForm extends BaseComponent {
         return createButton;
     }
 
+    /**
+     * Create the Button for the add action.
+     *
+     * @return A new ActionButton preconfigured with actions.
+     */
     private ActionButton createAddButton() {
         final ActionButton addButton = new ActionButton(getI18nResolver(), SimpleAction.add);
         addButton.addClickListener(clickEvent -> {
@@ -94,6 +119,12 @@ public class BuergerPartnerForm extends BaseComponent {
         return addButton;
     }
 
+
+    /**
+     * Create the Button for the read action.
+     *
+     * @return A new ActionButton preconfigured with actions.
+     */
     private Component createReadButton() {
         final ActionButton readButton = new ActionButton(getI18nResolver(), SimpleAction.read);
         final BuergerSingleActions singleActions = new BuergerSingleActions(getI18nResolver(), getPartnerForm()::getBuerger);
@@ -105,6 +136,12 @@ public class BuergerPartnerForm extends BaseComponent {
         return readButton;
     }
 
+
+    /**
+     * Create the Button for the delete action.
+     *
+     * @return A new ActionButton preconfigured with actions.
+     */
     private Component createDeleteButton() {
         final ActionButton deleteButton = new ActionButton(getI18nResolver(), SimpleAction.delete);
 
@@ -115,10 +152,20 @@ public class BuergerPartnerForm extends BaseComponent {
         return deleteButton;
     }
 
+    /**
+     * Get the String that is navigated to on create.
+     *
+     * @return The String of the View that is navigated to on create.
+     */
     public String getNavigateToCreate() {
         return navigateToCreate;
     }
 
+    /**
+     * Get the String that is navigated to on read.
+     *
+     * @return The String of the View that is navigated to on read.
+     */
     public String getNavigateToRead() {
         return navigateToRead;
     }
