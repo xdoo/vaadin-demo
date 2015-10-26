@@ -71,7 +71,7 @@ public class MainUI extends BaseUI implements I18nResolver {
     private MenuBar.MenuItem language;
 
     @Autowired
-    public MainUI(SpringViewProvider ViewProvider, SecurityService security, MessageService i18n, EventBus eventBus, I18nResolverImpl i18nResolver) {
+    public MainUI(EventBus eventBus, I18nResolverImpl i18nResolver, SpringViewProvider ViewProvider, SecurityService security, MessageService i18n) {
         super(eventBus, i18nResolver);
         LOG.info("starting UI");
         this.viewProvider = ViewProvider;
