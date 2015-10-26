@@ -103,7 +103,7 @@ public class BuergerDTOTest {
     @Before
     public void setUp() throws JsonProcessingException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
         BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-        credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials("hans", "test"));
+        credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials("admin1", "admin1"));
 
         HttpClient httpClient = HttpClientBuilder.create()
                 .setDefaultCredentialsProvider(credentialsProvider)
@@ -125,7 +125,7 @@ public class BuergerDTOTest {
                 new StringHttpMessageConverter()
         ));
         BasicCredentialsProvider credentialsProvider2 = new BasicCredentialsProvider();
-        credentialsProvider2.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials("hans2", "test2"));
+        credentialsProvider2.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials("admin2", "admin2"));
 
         HttpClient httpClient2 = HttpClientBuilder.create()
                 .setDefaultCredentialsProvider(credentialsProvider2)
@@ -140,7 +140,7 @@ public class BuergerDTOTest {
         ));
 
         if (lock == false) {
-            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken("hans", "test");
+            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken("admin1", "admin1");
             Authentication auth = authenticationManager.authenticate(token);
             SecurityContextHolder.getContext().setAuthentication(auth);
             Buerger b1M1 = new Buerger();
@@ -149,10 +149,12 @@ public class BuergerDTOTest {
             b1M1.setEigenschaften(eig1);
             b1M1.setNachname("name1");
             b1M1.setVorname("vorname1");
-            b1M1.setMandant("test");
+            b1M1.setAlive(true);
+            b1M1.setMandant("m1");
             b1M1.setGeburtsdatum(new Date(System.currentTimeMillis()));
             b1M1.setAugenfarbe(Augenfarben.blau);
             b1M1.setOid(1L);
+            b1M1.setGeburtsdatum(new Date());
             repo.save(b1M1);
             Buerger b2M1 = new Buerger();
             Set<String> eig2 = new HashSet<>();
@@ -160,9 +162,11 @@ public class BuergerDTOTest {
             b2M1.setEigenschaften(eig2);
             b2M1.setNachname("name2");
             b2M1.setVorname("vorname2");
-            b2M1.setMandant("test");
+            b2M1.setAlive(true);
+            b2M1.setMandant("m1");
             b2M1.setAugenfarbe(Augenfarben.grün);
             b2M1.setOid(2L);
+            b2M1.setGeburtsdatum(new Date());
             repo.save(b2M1);
             Buerger b3M1 = new Buerger();
             Set<String> eig3 = new HashSet<>();
@@ -170,9 +174,11 @@ public class BuergerDTOTest {
             b3M1.setEigenschaften(eig3);
             b3M1.setNachname("name3");
             b3M1.setVorname("vorname3");
-            b3M1.setMandant("test");
+            b3M1.setAlive(true);
+            b3M1.setMandant("m1");
             b3M1.setAugenfarbe(Augenfarben.braun);
             b3M1.setOid(3L);
+            b3M1.setGeburtsdatum(new Date());
             repo.save(b3M1);
             Buerger b4M1 = new Buerger();
             Set<String> eig4 = new HashSet<>();
@@ -180,10 +186,12 @@ public class BuergerDTOTest {
             b4M1.setEigenschaften(eig4);
             b4M1.setNachname("name4");
             b4M1.setVorname("vorname4");
-            b4M1.setMandant("test");
+            b4M1.setAlive(true);
+            b4M1.setMandant("m1");
             b4M1.setAugenfarbe(Augenfarben.rot);
             b4M1.setOid(4L);
             b4M1.getKinder().add(b3M1);
+            b4M1.setGeburtsdatum(new Date());
             repo.save(b4M1);
             Buerger b5M1 = new Buerger();
             Set<String> eig5 = new HashSet<>();
@@ -191,11 +199,13 @@ public class BuergerDTOTest {
             b5M1.setEigenschaften(eig5);
             b5M1.setNachname("name5");
             b5M1.setVorname("vorname5");
-            b5M1.setMandant("test");
+            b5M1.setAlive(true);
+            b5M1.setMandant("m1");
             b5M1.setAugenfarbe(Augenfarben.braun);
             b5M1.setOid(5L);
+            b5M1.setGeburtsdatum(new Date());
             repo.save(b5M1);
-            UsernamePasswordAuthenticationToken token2 = new UsernamePasswordAuthenticationToken("hans2", "test2");
+            UsernamePasswordAuthenticationToken token2 = new UsernamePasswordAuthenticationToken("admin2", "admin2");
             Authentication auth2 = authenticationManager.authenticate(token2);
             SecurityContextHolder.getContext().setAuthentication(auth2);
             Buerger b1M2 = new Buerger();
@@ -204,9 +214,11 @@ public class BuergerDTOTest {
             b1M2.setEigenschaften(eig6);
             b1M2.setNachname("name1");
             b1M2.setVorname("vorname1");
-            b1M2.setMandant("default");
+            b1M2.setAlive(true);
+            b1M2.setMandant("m2");
             b1M2.setAugenfarbe(Augenfarben.blau);
             b1M2.setOid(6L);
+            b1M2.setGeburtsdatum(new Date());
             repo.save(b1M2);
             Buerger b2M2 = new Buerger();
             Set<String> eig7 = new HashSet<>();
@@ -214,9 +226,11 @@ public class BuergerDTOTest {
             b2M2.setEigenschaften(eig7);
             b2M2.setNachname("name2");
             b2M2.setVorname("vorname2");
-            b2M2.setMandant("default");
+            b2M2.setAlive(true);
+            b2M2.setMandant("m2");
             b2M2.setAugenfarbe(Augenfarben.grün);
             b2M2.setOid(7L);
+            b2M2.setGeburtsdatum(new Date());
             repo.save(b2M2);
             Buerger b3M2 = new Buerger();
             Set<String> eig8 = new HashSet<>();
@@ -224,9 +238,11 @@ public class BuergerDTOTest {
             b3M2.setEigenschaften(eig8);
             b3M2.setNachname("name3");
             b3M2.setVorname("vorname3");
-            b3M2.setMandant("default");
+            b3M2.setAlive(true);
+            b3M2.setMandant("m2");
             b3M2.setAugenfarbe(Augenfarben.rot);
             b3M2.setOid(8L);
+            b3M2.setGeburtsdatum(new Date());
             repo.save(b3M2);
             Buerger b4M2 = new Buerger();
             Set<String> eig9 = new HashSet<>();
@@ -234,9 +250,11 @@ public class BuergerDTOTest {
             b4M2.setEigenschaften(eig9);
             b4M2.setNachname("name4");
             b4M2.setVorname("vorname4");
-            b4M2.setMandant("default");
+            b4M2.setAlive(true);
+            b4M2.setMandant("m2");
             b4M2.setAugenfarbe(Augenfarben.blau);
             b4M2.setOid(9L);
+            b4M2.setGeburtsdatum(new Date());
             repo.save(b4M2);
             Buerger b5M2 = new Buerger();
             Set<String> eig10 = new HashSet<>();
@@ -244,9 +262,11 @@ public class BuergerDTOTest {
             b5M2.setEigenschaften(eig10);
             b5M2.setNachname("name5");
             b5M2.setVorname("vorname5");
-            b5M2.setMandant("default");
+            b5M2.setAlive(true);
+            b5M2.setMandant("m2");
             b5M2.setAugenfarbe(Augenfarben.braun);
             b5M2.setOid(10L);
+            b5M2.setGeburtsdatum(new Date());
             repo.save(b5M2);
             lock = true;
 
@@ -261,8 +281,8 @@ public class BuergerDTOTest {
 
     @Test
     public void getBuergersM1Test() throws JsonProcessingException {
-        System.out.println("========== get Alle Bürger Mandant 'test' Test ==========");
-        int x = this.count("test", "hans", "test");
+        System.out.println("========== get Alle Bürger Mandant 'm1' Test ==========");
+        int x = this.count("m1", "admin1", "admin1");
         url = "http://localhost:" + port + "/buergers";
         ResponseEntity<Resources<BuergerResource>> result = restTemplate.exchange(
                 url,
@@ -273,13 +293,13 @@ public class BuergerDTOTest {
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals(x, result.getBody().getContent().size());
         assertFalse(result.getBody().getContent().isEmpty());
-        System.out.println(String.format("Suche wurde erfolgreich durchgeführt. Einträge Mandant 'test': %s | Ergebnis der Suche: %s", x, result.getBody().getContent().size()));
+        System.out.println(String.format("Suche wurde erfolgreich durchgeführt. Einträge Mandant 'm1': %s | Ergebnis der Suche: %s", x, result.getBody().getContent().size()));
     }
 
     @Test
     public void getBuergersM2Test() throws JsonProcessingException {
-        System.out.println("========== get Alle Bürger Mandant 'default' Test ==========");
-        int x = this.count("default", "hans2", "test2");
+        System.out.println("========== get Alle Bürger Mandant 'm2' Test ==========");
+        int x = this.count("m2", "admin2", "admin2");
         url = "http://localhost:" + port + "/buergers";
         ResponseEntity<Resources<BuergerResource>> result = restTemplate2.exchange(
                 url,
@@ -289,7 +309,7 @@ public class BuergerDTOTest {
         );
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals(x, result.getBody().getContent().size());
-        System.out.println(String.format("Suche wurde erfolgreich durchgeführt. Einträge Mandant 'default': %s | Ergebnis der Suche: %s", x, result.getBody().getContent().size()));
+        System.out.println(String.format("Suche wurde erfolgreich durchgeführt. Einträge Mandant 'm2': %s | Ergebnis der Suche: %s", x, result.getBody().getContent().size()));
     }
 
     private int count(String mid, String name, String password) {
@@ -315,6 +335,8 @@ public class BuergerDTOTest {
         buerger.setNachname("hans");
         buerger.setVorname("peter");
         buerger.setAugenfarbe(Augenfarben.blau);
+        buerger.setGeburtsdatum(new Date());
+        buerger.setAlive(true);
         Set<String> eig = new HashSet<>();
         eig.add("eig");
         buerger.setEigenschaften(eig);
@@ -330,11 +352,11 @@ public class BuergerDTOTest {
         assertNotNull(result.getBody().getLink("kinder"));
         assertNotNull(result.getBody().getLink("sachbearbeiter"));
         assertNotNull(result.getBody().getLink("partner"));
-        assertNotNull(result.getBody().getLink("staatsangehoerigkeitReferences"));
+        assertNotNull(result.getBody().getLink("staatsangehoerigkeiten"));
         assertNotNull(result.getBody().getLink("wohnungen"));
-        assertNotNull(result.getBody().getLink("pass"));
+        assertNotNull(result.getBody().getLink("paesse"));
         assertNotNull(result.getBody().getLink("self"));
-        System.out.println(String.format("Bürger mit Mandant 'test' wurde von der DB gelesen."));
+        System.out.println(String.format("Bürger mit Mandant 'm1' wurde von der DB gelesen."));
 
     }
 
@@ -356,7 +378,7 @@ public class BuergerDTOTest {
 
         } catch (HttpClientErrorException e) {
             assertNotNull(e);
-            System.out.println(String.format("Bürger mit OID : 5 und Mandant 'test' wurde nicht von der DB gelöscht."));
+            System.out.println(String.format("Bürger mit OID : 5 und Mandant 'm1' wurde nicht von der DB gelöscht."));
         }
     }
 

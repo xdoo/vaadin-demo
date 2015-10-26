@@ -1,6 +1,8 @@
 package de.muenchen.demo.service;
 
 import de.muenchen.security.configurator.AuthenticationConfiguratorAdapter;
+import de.muenchen.security.configurator.JDBCAuthenticationConfigurator;
+import de.muenchen.security.configurator.LDAPAuthenticationConfigurator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.orm.jpa.EntityScan;
@@ -32,12 +34,12 @@ public class MicroServiceApplication {
     // Database-Security
     @Bean
     public GlobalAuthenticationConfigurerAdapter configurationAdapter1(){
-        return AuthenticationConfiguratorAdapter.findAdapter("JDBC_Authentication");
+        return new JDBCAuthenticationConfigurator();
     }
 
     // LDAP-Security
     @Bean
     public GlobalAuthenticationConfigurerAdapter configurationAdapter2(){
-        return AuthenticationConfiguratorAdapter.findAdapter("LDAP_Authentication");
+        return new LDAPAuthenticationConfigurator();
     }
 }
