@@ -22,9 +22,12 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import de.muenchen.eventbus.EventBus;
 import de.muenchen.eventbus.selector.Key;
+import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.apilib.services.SecurityService;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
+import de.muenchen.vaadin.demo.i18nservice.I18nResolverImpl;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.ValoMenuLayout;
@@ -68,8 +71,8 @@ public class MainUI extends BaseUI implements I18nResolver {
     private MenuBar.MenuItem language;
 
     @Autowired
-    public MainUI(SpringViewProvider ViewProvider, SecurityService security, MessageService i18n) {
-        super();
+    public MainUI(SpringViewProvider ViewProvider, SecurityService security, MessageService i18n, EventBus eventBus, I18nResolverImpl i18nResolver) {
+        super(eventBus, i18nResolver);
         LOG.info("starting UI");
         this.viewProvider = ViewProvider;
         this.security = security;
@@ -221,14 +224,14 @@ public class MainUI extends BaseUI implements I18nResolver {
     }
 
     private MenuBar addLanguageSelector(MenuBar bar) {
-        language = bar.addItem(resolveRelative("sprache.title"), FontAwesome.LANGUAGE, null);
+        language = bar.addItem(resolveRelative(null, "sprache.title"), FontAwesome.LANGUAGE, null);
 
         MenuBar.Command languageSelection = selectedItem -> i18n.getSupportedLocales().stream().forEach(locale -> {
             if (selectedItem.getText().equals(locale.getDisplayLanguage())) {
                 i18n.setLocale(locale);
                 getNavigator().navigateTo(getNavigator().getState());
 
-                language.setText(resolveRelative("sprache.title"));
+                language.setText(resolveRelative(null, "sprache.title"));
 
                 removeMenuItems();
                 createNavigationMenu();
@@ -244,8 +247,8 @@ public class MainUI extends BaseUI implements I18nResolver {
     }
 
     private void addMenuItems() {
-        this.menuItems.put(MainView.NAME, resolveRelative("mainpage.title"));
-        this.menuItems.put(BuergerTableView.NAME, resolveRelative("buerger.navigation.button.label"));
+        this.menuItems.put(MainView.NAME, resolveRelative(null, "mainpage.title"));
+        this.menuItems.put(BuergerTableView.NAME, resolveRelative(Buerger.class, "buerger.navigation.button.label"));
     }
 
     private void removeMenuItems() {
@@ -289,12 +292,12 @@ public class MainUI extends BaseUI implements I18nResolver {
     }
 
     @Override
-    public String resolveRelative(String relativePath) {
-        return i18n.get(relativePath);
+    public String resolveRelative(Class clazz, String relativePath) {
+        return i18n.get(clazz + relativePath);
     }
 
     @Override
-    public FontAwesome resolveIcon(String relativePath) {
+    public FontAwesome resolveIcon(Class clazz, String relativePath) {
         return null;
     }
 
@@ -303,7 +306,7 @@ public class MainUI extends BaseUI implements I18nResolver {
     }
 
     @Override
-    public String getBasePath() {
+    public String getBasePath(Class clazz) {
         return null;
     }
 

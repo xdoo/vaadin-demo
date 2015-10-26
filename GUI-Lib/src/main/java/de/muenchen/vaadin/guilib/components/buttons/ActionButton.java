@@ -3,6 +3,7 @@ package de.muenchen.vaadin.guilib.components.buttons;
 import com.vaadin.ui.Button;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 import de.muenchen.vaadin.demo.i18nservice.buttons.Action;
+import de.muenchen.vaadin.guilib.BaseUI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,23 +51,23 @@ public class ActionButton extends Button {
      *
      * The label of the button is fetched via i18n matching the action.
      *
-     * @param context resolves the i18n key.
+     * @param clazz resolves the i18n key.
      * @param action action the button should represent (is styled for).
      */
-    public ActionButton(final I18nResolver context, final Action action) {
-        this(resolveLabel(action, context), action);
+    public ActionButton(final Class clazz, final Action action) {
+        this(resolveLabel(action, clazz), action);
     }
 
     /**
      * Resolve the action label with help of the context [i18n].
      *
      * @param action The action that will be resolved to a i18n string.
-     * @param context Used to resolve the i18n key.
+     * @param clazz Used to resolve the i18n key.
      * @return
      */
-    private static String resolveLabel(Action action, I18nResolver context) {
+    private static String resolveLabel(Action action, Class clazz) {
         final String labelPath = getFormPath(action, Component.button, Type.label);
-        return context.resolveRelative(labelPath);
+        return BaseUI.getCurrentI18nResolver().resolveRelative(clazz, labelPath);
     }
 
     /**

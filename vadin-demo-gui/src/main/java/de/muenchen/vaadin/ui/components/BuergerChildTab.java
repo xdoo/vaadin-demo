@@ -7,6 +7,7 @@ import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolverImpl;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
+import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.components.GenericGrid;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
 import de.muenchen.vaadin.ui.app.views.BuergerDetailView;
@@ -47,7 +48,7 @@ public class BuergerChildTab extends CustomComponent {
 
 
         //Create Button to delete one or more associations
-        ActionButton deleteButton = new ActionButton(resolver, SimpleAction.delete);
+        ActionButton deleteButton = new ActionButton(Buerger.class, SimpleAction.delete);
         BuergerAssociationListActions listAction = new BuergerAssociationListActions(resolver,
                 () -> grid.getSelectedEntities().stream()
                         .map(buerger -> new Association<>( buerger, Buerger.Rel.kinder.name()))

@@ -39,12 +39,12 @@ public class I18nResolverImpl implements I18nResolver {
      */
     @Override
     public String resolveRelative(Class clazz, String relativePath) {
-        return msg.get(clazz.getName().toLowerCase() + "." + relativePath);
+        return msg.get(((clazz!=null)?clazz.getName().toLowerCase():null) + "." + relativePath);
     }
 
     @Override
     public String getBasePath(Class clazz) {
-        return clazz.getName().toLowerCase();
+        return (clazz!=null)?clazz.getName().toLowerCase():null;
     }
 
     /**
@@ -58,6 +58,6 @@ public class I18nResolverImpl implements I18nResolver {
      */
     @Override
     public FontAwesome resolveIcon(Class clazz, String relativePath) {
-        return msg.getFontAwesome(clazz.getName().toLowerCase() + "." + relativePath + ".icon");
+        return msg.getFontAwesome((clazz!=null)?clazz.getName().toLowerCase():null + "." + relativePath + ".icon");
     }
 }

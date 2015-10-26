@@ -58,8 +58,8 @@ public class EntityAssociationActions<T> {
             return true;
         } catch (Exception e) { //TODO Find a good Exception Type
             GenericWarningNotification warn = new GenericWarningNotification(
-                    resolver.resolveRelative(getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.save, I18nPaths.Type.label)),
-                    resolver.resolveRelative(getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.save, I18nPaths.Type.text)));
+                    resolver.resolveRelative(getEntityClass(), getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.save, I18nPaths.Type.label)),
+                    resolver.resolveRelative(getEntityClass(), getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.save, I18nPaths.Type.text)));
             warn.show(Page.getCurrent());
             return false;
         }

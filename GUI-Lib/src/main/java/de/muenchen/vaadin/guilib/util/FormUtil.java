@@ -13,6 +13,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
+import de.muenchen.vaadin.guilib.BaseUI;
 import org.vaadin.tokenfield.TokenField;
 
 /**
@@ -23,11 +24,14 @@ import org.vaadin.tokenfield.TokenField;
  * @author p.mueller
  * @version 1.0
  */
-public class FormUtil {
+public class FormUtil<T> {
     /**
      * The null representation on one input.
      */
     public static final String NULL_REPRESENTATION = "";
+
+
+    private Class clazz;
     /**
      * The binder that is used for the DataBinding.
      */
@@ -41,11 +45,12 @@ public class FormUtil {
      * Create a new FormUtil for the binder resolving string via i18n.
      *
      * @param binder       The binder containing the Data the Fields are bound to.
-     * @param i18nResolver The i18nResolver used to resolve the Strings.
+     * @param clazz        the class for the I18nResolver
      */
-    public FormUtil(BeanFieldGroup<?> binder, I18nResolver i18nResolver) {
+    public FormUtil(BeanFieldGroup<?> binder, Class clazz) {
         this.binder = binder;
-        this.i18nResolver = i18nResolver;
+        this.clazz = clazz;
+        this.i18nResolver = BaseUI.getCurrentI18nResolver();
     }
 
     /**
@@ -76,7 +81,7 @@ public class FormUtil {
      * @return The caption of the property.
      */
     private String getCaption(String property) {
-        return getI18nResolver().resolveRelative(I18nPaths.getEntityFieldPath(property, I18nPaths.Type.label));
+        return getI18nResolver().resolveRelative(clazz, I18nPaths.getEntityFieldPath(property, I18nPaths.Type.label));
     }
 
     /**
@@ -86,7 +91,7 @@ public class FormUtil {
      * @return The prompt of the property.
      */
     private String getPrompt(String property) {
-        return getI18nResolver().resolveRelative(I18nPaths.getEntityFieldPath(property, I18nPaths.Type.input_prompt));
+        return getI18nResolver().resolveRelative(clazz, I18nPaths.getEntityFieldPath(property, I18nPaths.Type.input_prompt));
     }
 
     /**
@@ -104,7 +109,7 @@ public class FormUtil {
      * @return
      */
     public I18nResolver getI18nResolver() {
-        return i18nResolver;
+        return BaseUI.getCurrentI18nResolver();
     }
 
     /**
