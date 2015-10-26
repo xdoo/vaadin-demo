@@ -3,8 +3,8 @@ package de.muenchen.vaadin.demo.api.rest;
 import de.muenchen.vaadin.demo.api.domain.BuergerDTO;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.PagedResources;
 import org.springframework.hateoas.Resource;
-import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 
@@ -20,7 +20,7 @@ public class BuergerResource extends Resource<BuergerDTO> {
     /**
      * This is a simple way to get the Resources "class" for the {@link org.springframework.web.client.RestTemplate#exchange(String, HttpMethod, HttpEntity, ParameterizedTypeReference, Object...)}.
      */
-    public static final ParameterizedTypeReference<Resources<BuergerResource>> LIST = new ParameterizedTypeReference<Resources<BuergerResource>>() {
+    public static final ParameterizedTypeReference<PagedResources<BuergerResource>> LIST = new ParameterizedTypeReference<PagedResources<BuergerResource>>() {
     };
 
     /**

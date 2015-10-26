@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.hal.Jackson2HalModule;
+import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -73,7 +74,8 @@ public class SecurityServiceImpl implements SecurityService, Serializable {
         objectMapper.registerModule(new Jackson2HalModule());
 
         halConverter.setObjectMapper(objectMapper);
-        halConverter.setSupportedMediaTypes(Arrays.asList(MediaTypes.HAL_JSON));
+        halConverter.setSupportedMediaTypes(MediaType.parseMediaTypes(MediaTypes.HAL_JSON_VALUE));
+
 
         template.setMessageConverters(Arrays.asList(
                 new StringHttpMessageConverter(Charset.forName("UTF-8")),
