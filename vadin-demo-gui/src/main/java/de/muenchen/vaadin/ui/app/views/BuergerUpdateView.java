@@ -38,7 +38,6 @@ public class BuergerUpdateView extends DefaultBuergerView {
         layout.setSpacing(true);
 
         addComponent(layout);
-
     }
 
 }
