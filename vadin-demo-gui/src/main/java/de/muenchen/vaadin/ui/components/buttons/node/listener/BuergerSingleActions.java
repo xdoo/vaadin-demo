@@ -9,7 +9,7 @@ import java.util.function.Supplier;
  * Created by p.mueller on 08.10.15.
  */
 public class BuergerSingleActions extends EntitySingleActions<Buerger> {
-    public BuergerSingleActions(Class clazz, Supplier<Buerger> buergerSupplier) {
-        super(clazz, buergerSupplier, Buerger.class);
+    public BuergerSingleActions(Supplier<Buerger> buergerSupplier) {
+        super(buergerSupplier, Buerger.class);
     }
 }

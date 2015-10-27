@@ -292,12 +292,12 @@ public class MainUI extends BaseUI implements I18nResolver {
     }
 
     @Override
-    public String resolveRelative(Class clazz, String relativePath) {
-        return i18n.get(clazz.getSimpleName().toLowerCase()+ "." + relativePath);
+    public String resolveRelative(Class entityClass, String relativePath) {
+        return i18n.get(entityClass.getSimpleName().toLowerCase()+ "." + relativePath);
     }
 
     @Override
-    public FontAwesome resolveIcon(Class clazz, String relativePath) {
+    public FontAwesome resolveIcon(Class entityClass, String relativePath) {
         return null;
     }
 
@@ -306,7 +306,7 @@ public class MainUI extends BaseUI implements I18nResolver {
     }
 
     @Override
-    public String getBasePath(Class clazz) {
+    public String getBasePath(Class entityClass) {
         return null;
     }
 

@@ -31,8 +31,7 @@ public class EntityAssociationListAction<T> {
     private final Class<T> entityClass;
     /** The supplier for the Association. */
     private final Supplier<List<Association<T>>> association;
-    /** The I18NResolver of this context **/
-    private final Class clazz;
+
 
     /**
      * Create new AssociationActions for the Entity with the single association.
@@ -40,7 +39,7 @@ public class EntityAssociationListAction<T> {
      * @param association The association.
      * @param entityClass The class of the Entity.
      */
-    public EntityAssociationListAction(Class clazz, Supplier<List<Association<T>>> association, Class<T> entityClass) {
+    public EntityAssociationListAction(Supplier<List<Association<T>>> association, Class<T> entityClass) {
 
         if (entityClass == null) {
             throw new NullPointerException();
@@ -49,7 +48,6 @@ public class EntityAssociationListAction<T> {
             throw new NullPointerException();
         }
 
-        this.clazz = clazz;
         this.entityClass = entityClass;
         this.association = association;
     }
@@ -66,8 +64,8 @@ public class EntityAssociationListAction<T> {
                 return true;
             } catch (Exception e) { //TODO Find a good Exception Type
                 GenericWarningNotification warn = new GenericWarningNotification(
-                        BaseUI.getCurrentI18nResolver().resolveRelative(clazz, getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.save, I18nPaths.Type.label)),
-                        BaseUI.getCurrentI18nResolver().resolveRelative(clazz, getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.save, I18nPaths.Type.text)));
+                        BaseUI.getCurrentI18nResolver().resolveRelative(entityClass, getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.save, I18nPaths.Type.label)),
+                        BaseUI.getCurrentI18nResolver().resolveRelative(entityClass, getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.save, I18nPaths.Type.text)));
                 warn.show(Page.getCurrent());
                 return false;
             }

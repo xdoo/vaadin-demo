@@ -30,8 +30,10 @@ public class FormUtil<T> {
      */
     public static final String NULL_REPRESENTATION = "";
 
-
-    private Class clazz;
+    /**
+     * The class for the I18nResolver
+     */
+    private Class entityClass;
     /**
      * The binder that is used for the DataBinding.
      */
@@ -45,11 +47,10 @@ public class FormUtil<T> {
      * Create a new FormUtil for the binder resolving string via i18n.
      *
      * @param binder       The binder containing the Data the Fields are bound to.
-     * @param clazz        the class for the I18nResolver
      */
-    public FormUtil(BeanFieldGroup<?> binder, Class clazz) {
+    public FormUtil(BeanFieldGroup<?> binder) {
         this.binder = binder;
-        this.clazz = clazz;
+        this.entityClass = binder.getItemDataSource().getBean().getClass();;
         this.i18nResolver = BaseUI.getCurrentI18nResolver();
     }
 
@@ -81,7 +82,7 @@ public class FormUtil<T> {
      * @return The caption of the property.
      */
     private String getCaption(String property) {
-        return getI18nResolver().resolveRelative(clazz, I18nPaths.getEntityFieldPath(property, I18nPaths.Type.label));
+        return getI18nResolver().resolveRelative(entityClass, I18nPaths.getEntityFieldPath(property, I18nPaths.Type.label));
     }
 
     /**
@@ -91,7 +92,7 @@ public class FormUtil<T> {
      * @return The prompt of the property.
      */
     private String getPrompt(String property) {
-        return getI18nResolver().resolveRelative(clazz, I18nPaths.getEntityFieldPath(property, I18nPaths.Type.input_prompt));
+        return getI18nResolver().resolveRelative(entityClass, I18nPaths.getEntityFieldPath(property, I18nPaths.Type.input_prompt));
     }
 
     /**

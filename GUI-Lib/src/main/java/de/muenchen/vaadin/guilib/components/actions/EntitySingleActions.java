@@ -28,8 +28,6 @@ public class EntitySingleActions<T> {
     private final Supplier<T> entitySupplier;
     /** The class of the entity. */
     private final Class<T> entityClass;
-    /** The Clazz for the I18nResolver **/
-    private final Class clazz;
 
     /**
      * Create single actions for the entity.
@@ -37,12 +35,11 @@ public class EntitySingleActions<T> {
      * @param entitySupplier The supplier for the entity.
      * @param entityClass    The class of the Entity.
      */
-    public EntitySingleActions(Class clazz, Supplier<T> entitySupplier, Class<T> entityClass) {
-        this.entityClass = entityClass;
+    public EntitySingleActions(Supplier<T> entitySupplier, Class<T> entityClass) {
         if (entitySupplier == null)
             throw new NullPointerException();
 
-        this.clazz = clazz;
+        this.entityClass = entityClass;
         this.entitySupplier = entitySupplier;
     }
 
@@ -67,8 +64,8 @@ public class EntitySingleActions<T> {
             return true;
         } catch (Exception e) { //TODO Find a good Exception Type
             GenericWarningNotification warn = new GenericWarningNotification(
-                    BaseUI.getCurrentI18nResolver().resolveRelative(clazz, getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.create, I18nPaths.Type.label)),
-                    BaseUI.getCurrentI18nResolver().resolveRelative(clazz, getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.create, I18nPaths.Type.text)));
+                    BaseUI.getCurrentI18nResolver().resolveRelative(entityClass, getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.create, I18nPaths.Type.label)),
+                    BaseUI.getCurrentI18nResolver().resolveRelative(entityClass, getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.create, I18nPaths.Type.text)));
             warn.show(Page.getCurrent());
             return false;
         }
@@ -85,8 +82,8 @@ public class EntitySingleActions<T> {
             return true;
         } catch (Exception e) { //TODO Find a good Exception Type
             GenericWarningNotification warn = new GenericWarningNotification(
-                    BaseUI.getCurrentI18nResolver().resolveRelative(clazz, getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.update, I18nPaths.Type.label)),
-                    BaseUI.getCurrentI18nResolver().resolveRelative(clazz, getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.update, I18nPaths.Type.text)));
+                    BaseUI.getCurrentI18nResolver().resolveRelative(entityClass, getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.update, I18nPaths.Type.label)),
+                    BaseUI.getCurrentI18nResolver().resolveRelative(entityClass, getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.update, I18nPaths.Type.text)));
             warn.show(Page.getCurrent());
             return false;
         }

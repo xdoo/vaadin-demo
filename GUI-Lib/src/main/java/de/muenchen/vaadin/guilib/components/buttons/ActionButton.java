@@ -51,23 +51,23 @@ public class ActionButton extends Button {
      *
      * The label of the button is fetched via i18n matching the action.
      *
-     * @param clazz resolves the i18n key.
+     * @param entityClass resolves the i18n key.
      * @param action action the button should represent (is styled for).
      */
-    public ActionButton(final Class clazz, final Action action) {
-        this(resolveLabel(action, clazz), action);
+    public ActionButton(final Class entityClass, final Action action) {
+        this(resolveLabel(action, entityClass), action);
     }
 
     /**
      * Resolve the action label with help of the context [i18n].
      *
      * @param action The action that will be resolved to a i18n string.
-     * @param clazz Used to resolve the i18n key.
+     * @param entityClass Used to resolve the i18n key.
      * @return
      */
-    private static String resolveLabel(Action action, Class clazz) {
+    private static String resolveLabel(Action action, Class entityClass) {
         final String labelPath = getFormPath(action, Component.button, Type.label);
-        return BaseUI.getCurrentI18nResolver().resolveRelative(clazz, labelPath);
+        return BaseUI.getCurrentI18nResolver().resolveRelative(entityClass, labelPath);
     }
 
     /**

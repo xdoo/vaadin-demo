@@ -15,10 +15,9 @@ public class BuergerAssociationListActions extends EntityAssociationListAction<B
     /**
      * Create new AssociationActions for the Entity with the single association.
      *
-     * @param clazz
      * @param association The association..
      */
-    public BuergerAssociationListActions(Class clazz, Supplier<List<Association<Buerger>>> association) {
-        super(clazz, association, Buerger.class);
+    public BuergerAssociationListActions(Supplier<List<Association<Buerger>>> association) {
+        super(association, Buerger.class);
     }
 }
