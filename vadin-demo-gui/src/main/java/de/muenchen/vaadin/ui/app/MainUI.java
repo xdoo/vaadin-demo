@@ -51,7 +51,7 @@ import static reactor.bus.Event.wrap;
 @Theme("valo")
 @PreserveOnRefresh
 //@Widgetset("de.muenchen.vaadin.Widgetset")
-public class MainUI extends BaseUI implements I18nResolver {
+public class MainUI extends BaseUI {
 
     private static final Logger LOG = LoggerFactory.getLogger(MainUI.class);
 
@@ -224,14 +224,14 @@ public class MainUI extends BaseUI implements I18nResolver {
     }
 
     private MenuBar addLanguageSelector(MenuBar bar) {
-        language = bar.addItem(resolve("sprache.title"), FontAwesome.LANGUAGE, null);
+        language = bar.addItem(BaseUI.getCurrentI18nResolver().resolve("sprache.title"), FontAwesome.LANGUAGE, null);
 
         MenuBar.Command languageSelection = selectedItem -> i18n.getSupportedLocales().stream().forEach(locale -> {
             if (selectedItem.getText().equals(locale.getDisplayLanguage())) {
                 i18n.setLocale(locale);
                 getNavigator().navigateTo(getNavigator().getState());
 
-                language.setText(resolve("sprache.title"));
+                language.setText(BaseUI.getCurrentI18nResolver().resolve("sprache.title"));
 
                 removeMenuItems();
                 createNavigationMenu();
@@ -247,8 +247,8 @@ public class MainUI extends BaseUI implements I18nResolver {
     }
 
     private void addMenuItems() {
-        this.menuItems.put(MainView.NAME, resolve("mainpage.title"));
-        this.menuItems.put(BuergerTableView.NAME, resolveRelative(Buerger.class, "navigation.button.label"));
+        this.menuItems.put(MainView.NAME, BaseUI.getCurrentI18nResolver().resolve("mainpage.title"));
+        this.menuItems.put(BuergerTableView.NAME, BaseUI.getCurrentI18nResolver().resolveRelative(Buerger.class, "navigation.button.label"));
     }
 
     private void removeMenuItems() {
@@ -276,7 +276,7 @@ public class MainUI extends BaseUI implements I18nResolver {
         // creates and displays the logout button
         final Button logoutButton = new Button("Logout", event -> {
             GenericConfirmationWindow confirmationWindow =
-                    new GenericConfirmationWindow(MainUI.this,
+                    new GenericConfirmationWindow(BaseUI.getCurrentI18nResolver(),
                             SimpleAction.logout,
                             e -> this.postEvent(Key.LOGOUT));
             getUI().addWindow(confirmationWindow);
@@ -291,28 +291,7 @@ public class MainUI extends BaseUI implements I18nResolver {
         return menuItemsLayout;
     }
 
-    @Override
-    public String resolveRelative(Class entityClass, String relativePath) {
-        return i18n.get(entityClass.getSimpleName().toLowerCase()+ "." + relativePath);
-    }
-
-    @Override
-    public FontAwesome resolveIcon(Class entityClass, String relativePath) {
-        return null;
-    }
-
     public void postEvent(Object event) {
         getCurrentEventBus().notify(event, wrap(event));
     }
-
-    @Override
-    public String getBasePath(Class entityClass) {
-        return null;
-    }
-
-    @Override
-    public String resolve(String path) {
-        return i18n.get(path);
-    }
-
 }
