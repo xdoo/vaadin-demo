@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.oauth2.client.resource.OAuth2AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -31,7 +32,12 @@ public class SecurityRestClientImpl implements SecurityRestClient {
             principal= template.getForEntity(principalURL, Principal.class).getBody();
         } catch (RestClientException e) {
             LOG.debug("HTTP Response Error bei Login: "+ e.getMessage());
+        } catch (OAuth2AccessDeniedException e) {
+            LOG.debug("HTTP Response Error bei Login: "+ e.getMessage());
         }
+        
+        
+        
         return Optional.ofNullable(principal);
     }
     
