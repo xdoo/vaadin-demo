@@ -11,7 +11,7 @@ import java.util.function.Supplier;
  * Created by p.mueller on 09.10.15.
  */
 public class BuergerAssociationActions extends EntityAssociationActions<Buerger> {
-    public BuergerAssociationActions(I18nResolver resolver, Supplier<Association<?>> associationSupplier) {
-        super(resolver, associationSupplier, Buerger.class);
+    public BuergerAssociationActions(Supplier<Association<?>> associationSupplier) {
+        super(associationSupplier, Buerger.class);
     }
 }

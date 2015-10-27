@@ -30,7 +30,7 @@ public class SelectedBuergerForm extends BuergerForm {
      * Reloads the Buerger via the Controller.
      */
     public void reLoadBuerger() {
-        final BuergerSingleActions singleActions = new BuergerSingleActions(getI18nResolver(), this::getBuerger);
+        final BuergerSingleActions singleActions = new BuergerSingleActions(this::getBuerger);
         singleActions.reRead(null);
     }
 

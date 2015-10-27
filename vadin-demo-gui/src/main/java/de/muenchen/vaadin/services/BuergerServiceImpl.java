@@ -8,6 +8,7 @@ import de.muenchen.vaadin.demo.api.rest.BuergerRestClient;
 import de.muenchen.vaadin.demo.api.rest.BuergerRestClientImpl;
 import de.muenchen.vaadin.demo.apilib.services.SecurityService;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
+import de.muenchen.vaadin.demo.i18nservice.I18nResolverImpl;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.GenericErrorNotification;
 import de.muenchen.vaadin.guilib.components.GenericSuccessNotification;
@@ -46,11 +47,11 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
     private BuergerRestClient client;
     private RestTemplate template;
     private SecurityService securityService;
-    private BuergerI18nResolver resolver;
+    private I18nResolverImpl resolver;
     private ExecutorService executor;
 
     @Autowired
-    public BuergerServiceImpl(InfoService infoService, SecurityService securityService, BuergerI18nResolver resolver) {
+    public BuergerServiceImpl(InfoService infoService, SecurityService securityService, I18nResolverImpl resolver) {
         this.securityService = securityService;
         //TODO
         this.client = new BuergerRestClientImpl(getTemplate(), infoService.getBaseUri());
@@ -301,22 +302,22 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
 
     private void showSuccessNotification(I18nPaths.NotificationType type, SimpleAction action) {
         GenericSuccessNotification succes = new GenericSuccessNotification(
-                resolver.resolveRelative(getNotificationPath(type, action, I18nPaths.Type.label)),
-                resolver.resolveRelative(getNotificationPath(type, action, I18nPaths.Type.text)));
+                resolver.resolveRelative(Buerger.class, getNotificationPath(type, action, I18nPaths.Type.label)),
+                resolver.resolveRelative(Buerger.class, getNotificationPath(type, action, I18nPaths.Type.text)));
         succes.show(Page.getCurrent());
     }
 
     private void showErrorNotification(I18nPaths.NotificationType type, SimpleAction action) {
         GenericErrorNotification succes = new GenericErrorNotification(
-                resolver.resolveRelative(getNotificationPath(type, action, I18nPaths.Type.label)),
-                resolver.resolveRelative(getNotificationPath(type, action, I18nPaths.Type.text)));
+                resolver.resolveRelative(Buerger.class, getNotificationPath(type, action, I18nPaths.Type.label)),
+                resolver.resolveRelative(Buerger.class, getNotificationPath(type, action, I18nPaths.Type.text)));
         succes.show(Page.getCurrent());
     }
 
     private void showErrorNotification(I18nPaths.NotificationType type, SimpleAction action, String statusCode) {
         GenericErrorNotification succes = new GenericErrorNotification(
-                resolver.resolveRelative(getNotificationPath(type, action, I18nPaths.Type.label, statusCode)),
-                resolver.resolveRelative(getNotificationPath(type, action, I18nPaths.Type.text, statusCode)));
+                resolver.resolveRelative(Buerger.class, getNotificationPath(type, action, I18nPaths.Type.label, statusCode)),
+                resolver.resolveRelative(Buerger.class, getNotificationPath(type, action, I18nPaths.Type.text, statusCode)));
         succes.show(Page.getCurrent());
     }
 }

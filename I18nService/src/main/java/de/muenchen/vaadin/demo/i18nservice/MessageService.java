@@ -1,4 +1,4 @@
-package de.muenchen.vaadin.guilib.services;
+package de.muenchen.vaadin.demo.i18nservice;
 
 import com.vaadin.server.FontAwesome;
 

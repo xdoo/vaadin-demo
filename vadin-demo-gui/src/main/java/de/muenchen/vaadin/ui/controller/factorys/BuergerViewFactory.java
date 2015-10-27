@@ -6,9 +6,9 @@ import de.muenchen.eventbus.EventBus;
 import de.muenchen.eventbus.events.Association;
 import de.muenchen.eventbus.selector.entity.RequestEvent;
 import de.muenchen.vaadin.demo.api.local.Buerger;
+import de.muenchen.vaadin.demo.i18nservice.I18nResolverImpl;
 import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.components.GenericGrid;
-import de.muenchen.vaadin.services.BuergerI18nResolver;
 import de.muenchen.vaadin.ui.components.BuergerChildTab;
 import de.muenchen.vaadin.ui.components.BuergerGrid;
 import de.muenchen.vaadin.ui.components.BuergerPartnerTab;
@@ -38,7 +38,7 @@ public class BuergerViewFactory implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Autowired
-    BuergerI18nResolver resolver;
+    I18nResolverImpl resolver;
     private BuergerViewController controller;
 
 
