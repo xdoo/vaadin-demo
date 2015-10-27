@@ -6,7 +6,6 @@ import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.BaseComponent;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
-import de.muenchen.vaadin.guilib.controller.EntityController;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerSingleActions;
 import de.muenchen.vaadin.ui.components.forms.selected.SelectedBuergerForm;
 
@@ -32,12 +31,10 @@ public class BuergerReadForm extends BaseComponent {
     /**
      * Create a new ReadForm that navigates to the specified View on the update action.
      *
-     * @param entityController The controller used.
      * @param navigateToUpdate The View that is navigated to on update.
      */
-    public BuergerReadForm(EntityController entityController, final String navigateToUpdate) {
-        super(entityController);
-        buergerForm = new SelectedBuergerForm(entityController);
+    public BuergerReadForm(final String navigateToUpdate) {
+        buergerForm = new SelectedBuergerForm();
         buergerForm.reLoadBuerger();
 
         updateNavigation = new NavigateActions(navigateToUpdate);

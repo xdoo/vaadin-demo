@@ -7,7 +7,6 @@ import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.BaseComponent;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
-import de.muenchen.vaadin.guilib.controller.EntityController;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerSingleActions;
 import de.muenchen.vaadin.ui.components.forms.selected.SelectedBuergerForm;
 
@@ -32,13 +31,11 @@ public class BuergerUpdateForm extends BaseComponent {
     /**
      * Create a new Update Form for the current buerger, after the save click it will navigate to the View specified by the String.
      *
-     * @param entityController The used controller.
      * @param navigateToSaved  The String of the View that is navigated to on save.
      */
-    public BuergerUpdateForm(EntityController entityController, final String navigateToSaved) {
-        super(entityController);
+    public BuergerUpdateForm(final String navigateToSaved) {
         saveNavigation = new NavigateActions(navigateToSaved);
-        buergerForm = new SelectedBuergerForm(entityController);
+        buergerForm = new SelectedBuergerForm();
         buergerForm.reLoadBuerger();
 
         init();

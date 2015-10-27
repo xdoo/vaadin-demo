@@ -2,7 +2,6 @@ package de.muenchen.vaadin.ui.components.forms.selected;
 
 import de.muenchen.eventbus.selector.entity.ResponseEntityKey;
 import de.muenchen.vaadin.demo.api.local.Buerger;
-import de.muenchen.vaadin.guilib.controller.EntityController;
 import de.muenchen.vaadin.services.model.BuergerDatastore;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerSingleActions;
 import de.muenchen.vaadin.ui.components.forms.node.BuergerForm;
@@ -19,10 +18,8 @@ public class SelectedBuergerForm extends BuergerForm {
      * Creates a new SelectedBuergerForm that updates its Buerger to the {@link BuergerDatastore#getSelectedBuerger()}
      * from the Eventbus.
      *
-     * @param entityController The controller used for everything.
      */
-    public SelectedBuergerForm(EntityController entityController) {
-        super(entityController);
+    public SelectedBuergerForm() {
         getEventBus().on(new ResponseEntityKey(BuergerForm.ENTITY_CLASS).toSelector(), this::update);
     }
 

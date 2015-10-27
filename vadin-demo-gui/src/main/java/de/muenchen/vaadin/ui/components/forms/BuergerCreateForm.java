@@ -6,10 +6,8 @@ import de.muenchen.eventbus.events.Association;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.BaseComponent;
-import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
-import de.muenchen.vaadin.guilib.controller.EntityController;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerAssociationActions;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerSingleActions;
 import de.muenchen.vaadin.ui.components.forms.node.BuergerForm;
@@ -40,11 +38,10 @@ public class BuergerCreateForm extends BaseComponent {
      * Create a new BuergerCreateForm that navigates to the navigateTo View on save.
      * This CreateForm is for the pure Buerger, and not as a relation of a different controller.
      *
-     * @param entityController The controller.
      * @param navigateTo       The String of the view to navigate to on save.
      */
-    public BuergerCreateForm(final EntityController entityController, final String navigateTo) {
-        this(entityController, navigateTo, null);
+    public BuergerCreateForm(final String navigateTo) {
+        this(navigateTo, null);
     }
 
     /**
@@ -55,10 +52,9 @@ public class BuergerCreateForm extends BaseComponent {
      * @param navigateTo Zielseite nach Druck der 'erstellen' Schaltfläche
      * @param relation   Optionale Angabe einer Assoziation, für die der Buerger ist.
      */
-    public BuergerCreateForm(final EntityController entityController, final String navigateTo, final String relation) {
-        super(entityController);
+    public BuergerCreateForm(final String navigateTo, final String relation) {
         this.saveNavigation = new NavigateActions(navigateTo);
-        buergerForm = new BuergerForm(entityController);
+        buergerForm = new BuergerForm();
         this.relation = Optional.ofNullable(relation);
 
         init();

@@ -15,6 +15,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.EventBus;
+import de.muenchen.eventbus.selector.entity.RequestEntityKey;
 import de.muenchen.eventbus.selector.entity.RequestEvent;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
@@ -25,7 +26,6 @@ import de.muenchen.vaadin.guilib.components.actions.EntityListActions;
 import de.muenchen.vaadin.guilib.components.actions.EntitySingleActions;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
-import de.muenchen.vaadin.guilib.controller.EntityController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,18 +70,14 @@ public class GenericGrid<T> extends CustomComponent {
     private List<Button> customSingleSelectButtons = new ArrayList<>();
     private List<Button> customMultiSelectButtons = new ArrayList<>();
     private List<Button> customButtons = new ArrayList<>();
-    /** Controller **/
-    private EntityController controller;
 
     /**
      * Constructor of Grid with default configuration (no Buttons just grid).
      *
-     * @param controller Controller of current context
      * @param dataStore  Datastore of this grid
      * @param fields     Fields to show.
      */
-    public GenericGrid(EntityController controller, BeanItemContainer<T> dataStore, String[] fields) {
-        this.controller = controller;
+    public GenericGrid(BeanItemContainer<T> dataStore, String[] fields) {
         grid.setContainerDataSource(dataStore);
 
         //----------- Grid Configuration
@@ -139,7 +135,7 @@ public class GenericGrid<T> extends CustomComponent {
         setCompositionRoot(layout);
 
         //Request Data for this Grid
-        getEventBus().notify(controller.getRequestKey(RequestEvent.READ_LIST));
+        getEventBus().notify(new RequestEntityKey(RequestEvent.READ_LIST, getType()));
 
     }
 
@@ -251,8 +247,7 @@ public class GenericGrid<T> extends CustomComponent {
                 if (itemClickEvent.isDoubleClick()) {
                     T entity = ((BeanItem<T>) itemClickEvent.getItem()).getBean();
                     getEventBus()
-                            .notify(controller
-                                    .getRequestKey(RequestEvent.READ_SELECTED), reactor.bus.Event.wrap(entity));
+                            .notify(new RequestEntityKey(RequestEvent.READ_SELECTED, getType()), reactor.bus.Event.wrap(entity));
                     navigateAction.navigate();
                 }
             }

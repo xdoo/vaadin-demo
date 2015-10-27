@@ -15,8 +15,7 @@ import de.muenchen.vaadin.ui.controller.BuergerViewController;
 public class KindGrid extends GenericGrid<Buerger> {
 
     public KindGrid(BuergerViewController controller) {
-        super(controller,
-                controller.getModel().getSelectedBuergerKinder(),
+        super(controller.getModel().getSelectedBuergerKinder(),
                 Buerger.Field.getProperties());
 
     }
