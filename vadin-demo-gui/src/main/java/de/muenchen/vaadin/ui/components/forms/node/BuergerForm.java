@@ -77,7 +77,7 @@ public class BuergerForm extends BaseComponent {
      * @return A List of all Components.
      */
     private List<Field> buildFields() {
-        final FormUtil formUtil = new FormUtil(getBinder(), getI18nResolver());
+        final FormUtil formUtil = new FormUtil(getBinder());
 
         final TextField vorname = formUtil.createTextField(Buerger.Field.vorname.name());
         final TextField nachname = formUtil.createTextField(Buerger.Field.nachname.name());

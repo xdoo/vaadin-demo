@@ -2,6 +2,7 @@ package de.muenchen.vaadin.ui.components.forms;
 
 import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
+import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.BaseComponent;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
@@ -26,7 +27,7 @@ public class BuergerUpdateForm extends BaseComponent {
     /** The actions for the navigation on save. */
     private final NavigateActions saveNavigation;
     /** The Button for the save action. */
-    private final ActionButton saveButton = new ActionButton(getI18nResolver(), SimpleAction.save);
+    private final ActionButton saveButton = new ActionButton(Buerger.class, SimpleAction.save);
 
     /**
      * Create a new Update Form for the current buerger, after the save click it will navigate to the View specified by the String.
@@ -88,7 +89,7 @@ public class BuergerUpdateForm extends BaseComponent {
      * Configure the save Button and add all on-click actions.
      */
     private void configureSaveButton() {
-        final BuergerSingleActions singleActions = new BuergerSingleActions(getI18nResolver(), getBuergerForm()::getBuerger);
+        final BuergerSingleActions singleActions = new BuergerSingleActions(getBuergerForm()::getBuerger);
         getSaveButton().addActionPerformer(singleActions::update);
         getSaveButton().addActionPerformer(getSaveNavigation()::navigate);
     }

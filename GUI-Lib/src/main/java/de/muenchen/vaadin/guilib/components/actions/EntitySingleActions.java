@@ -5,7 +5,6 @@ import com.vaadin.ui.Button;
 import de.muenchen.eventbus.selector.entity.RequestEntityKey;
 import de.muenchen.eventbus.selector.entity.RequestEvent;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
-import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.components.GenericWarningNotification;
@@ -29,8 +28,6 @@ public class EntitySingleActions<T> {
     private final Supplier<T> entitySupplier;
     /** The class of the entity. */
     private final Class<T> entityClass;
-    /** The I18NResolver of this context **/
-    private final I18nResolver resolver;
 
     /**
      * Create single actions for the entity.
@@ -38,12 +35,11 @@ public class EntitySingleActions<T> {
      * @param entitySupplier The supplier for the entity.
      * @param entityClass    The class of the Entity.
      */
-    public EntitySingleActions(I18nResolver resolver, Supplier<T> entitySupplier, Class<T> entityClass) {
-        this.entityClass = entityClass;
+    public EntitySingleActions(Supplier<T> entitySupplier, Class<T> entityClass) {
         if (entitySupplier == null)
             throw new NullPointerException();
 
-        this.resolver = resolver;
+        this.entityClass = entityClass;
         this.entitySupplier = entitySupplier;
     }
 
@@ -106,8 +102,8 @@ public class EntitySingleActions<T> {
             return true;
         } catch (Exception e) { //TODO Find a good Exception Type
             GenericWarningNotification warn = new GenericWarningNotification(
-                    resolver.resolveRelative(getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.create, I18nPaths.Type.label)),
-                    resolver.resolveRelative(getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.create, I18nPaths.Type.text)));
+                    BaseUI.getCurrentI18nResolver().resolveRelative(entityClass, getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.create, I18nPaths.Type.label)),
+                    BaseUI.getCurrentI18nResolver().resolveRelative(entityClass, getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.create, I18nPaths.Type.text)));
             warn.show(Page.getCurrent());
             return false;
         }
@@ -124,8 +120,8 @@ public class EntitySingleActions<T> {
             return true;
         } catch (Exception e) { //TODO Find a good Exception Type
             GenericWarningNotification warn = new GenericWarningNotification(
-                    resolver.resolveRelative(getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.update, I18nPaths.Type.label)),
-                    resolver.resolveRelative(getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.update, I18nPaths.Type.text)));
+                    BaseUI.getCurrentI18nResolver().resolveRelative(entityClass, getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.update, I18nPaths.Type.label)),
+                    BaseUI.getCurrentI18nResolver().resolveRelative(entityClass, getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.update, I18nPaths.Type.text)));
             warn.show(Page.getCurrent());
             return false;
         }

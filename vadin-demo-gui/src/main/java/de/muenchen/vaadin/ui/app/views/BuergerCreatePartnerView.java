@@ -3,10 +3,10 @@ package de.muenchen.vaadin.ui.app.views;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.VerticalLayout;
+import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
-import de.muenchen.vaadin.services.BuergerI18nResolver;
 import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.components.forms.BuergerCreateForm;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
@@ -26,14 +26,14 @@ public class BuergerCreatePartnerView extends DefaultBuergerView {
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerCreatePartnerView.class);
 
     @Autowired
-    public BuergerCreatePartnerView(BuergerViewController controller, BuergerI18nResolver resolver, MainUI ui) {
-        super(controller, resolver, ui);
+    public BuergerCreatePartnerView(BuergerViewController controller) {
+        super(controller);
         LOG.debug("creating 'buerger_create_partner_view'");
     }
 
     @Override
     protected void site() {
-        final ActionButton backButton = new ActionButton(controller.getResolver(), SimpleAction.back);
+        final ActionButton backButton = new ActionButton(Buerger.class, SimpleAction.back);
         final NavigateActions navigateActions = new NavigateActions(BuergerDetailView.NAME);
         backButton.addActionPerformer(navigateActions::navigate);
 

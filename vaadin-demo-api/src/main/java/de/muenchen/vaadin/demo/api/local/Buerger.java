@@ -1,6 +1,6 @@
 package de.muenchen.vaadin.demo.api.local;
 
-import de.muenchen.vaadin.demo.api.domain.Augenfarbe;
+import de.muenchen.vaadin.demo.api.domain.Augenfarben;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.hateoas.ResourceSupport;
 
@@ -39,7 +39,7 @@ public class Buerger extends ResourceSupport {
 
     /** A mapped Field from the DTO */
     @NotNull
-    private Augenfarbe augenfarbe;
+    private Augenfarben augenfarbe;
     /**
      * A mapped Field from the DTO
      */
@@ -64,7 +64,7 @@ public class Buerger extends ResourceSupport {
      * @param nachname the nachname of the Buerger.
      * @param geburtsdatum the geburtsdatum of the Buerger.
      */
-    public Buerger(String vorname, String nachname, Date geburtsdatum, Augenfarbe augenfarbe, boolean alive, Set<String> eigenschaften) {
+    public Buerger(String vorname, String nachname, Date geburtsdatum, Augenfarben augenfarbe, boolean alive, Set<String> eigenschaften) {
         this.vorname = vorname;
         this.nachname = nachname;
         this.geburtsdatum = geburtsdatum;
@@ -131,11 +131,11 @@ public class Buerger extends ResourceSupport {
         this.geburtsdatum = geburtsdatum;
     }
 
-    public Augenfarbe getAugenfarbe() {
+    public Augenfarben getAugenfarbe() {
         return augenfarbe;
     }
 
-    public void setAugenfarbe(Augenfarbe augenfarbe) {
+    public void setAugenfarbe(Augenfarben augenfarbe) {
         this.augenfarbe = augenfarbe;
     }
 

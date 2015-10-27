@@ -82,7 +82,6 @@ public class GenericGrid<T> extends CustomComponent {
      */
     public GenericGrid(EntityController controller, BeanItemContainer<T> dataStore, String[] fields) {
         this.controller = controller;
-
         grid.setContainerDataSource(dataStore);
 
         //----------- Grid Configuration
@@ -122,7 +121,7 @@ public class GenericGrid<T> extends CustomComponent {
         );
 
         Stream.of(fields).forEach(field ->
-                        this.grid.getColumn(field).setHeaderCaption(controller.getResolver().resolveRelative(getEntityFieldPath(field, I18nPaths.Type.column_header)))
+                        this.grid.getColumn(field).setHeaderCaption(BaseUI.getCurrentI18nResolver().resolveRelative(getType(), getEntityFieldPath(field, I18nPaths.Type.column_header)))
         );
         //---------------
 
@@ -150,7 +149,7 @@ public class GenericGrid<T> extends CustomComponent {
 
 
     private void createRead(String navigateToRead) {
-        ActionButton readButton = new ActionButton(controller.getResolver(), SimpleAction.read);
+        ActionButton readButton = new ActionButton(getType(), SimpleAction.read);
 
         readButton.addActionPerformer(getSingleActionOnSelected()::read);
         readButton.addActionPerformer(getNavigateAction(navigateToRead)::navigate);
@@ -160,21 +159,21 @@ public class GenericGrid<T> extends CustomComponent {
     }
 
     private void createCopy() {
-        ActionButton copyButton = new ActionButton(controller.getResolver(), SimpleAction.copy);
+        ActionButton copyButton = new ActionButton(getType(), SimpleAction.copy);
 
         copyButton.addActionPerformer(getListActionOnSelected()::create);
         copy = Optional.of(copyButton);
     }
 
     private void createDelete() {
-        ActionButton deleteButton = new ActionButton(controller.getResolver(), SimpleAction.delete);
+        ActionButton deleteButton = new ActionButton(getType(), SimpleAction.delete);
 
         deleteButton.addActionPerformer(getListActionOnSelected()::delete);
         delete = Optional.of(deleteButton);
     }
 
     private void createEdit(String navigateToEdit) {
-        ActionButton editButton = new ActionButton(controller.getResolver(), SimpleAction.update);
+        ActionButton editButton = new ActionButton(getType(), SimpleAction.update);
 
         editButton.addActionPerformer(getSingleActionOnSelected()::read);
         editButton.addActionPerformer(getNavigateAction(navigateToEdit)::navigate);
@@ -183,13 +182,14 @@ public class GenericGrid<T> extends CustomComponent {
     }
 
     private void createCreate(String navigateToCreate) {
-        ActionButton createButton = new ActionButton(controller.getResolver(), SimpleAction.create);
+        ActionButton createButton = new ActionButton(getType(), SimpleAction.create);
 
         createButton.addActionPerformer(getNavigateAction(navigateToCreate)::navigate);
         createButton.setVisible(Boolean.TRUE);
 
         create = Optional.of(createButton);
     }
+
 
     private void createSearch() {
         search = new Button(FontAwesome.SEARCH);
@@ -198,11 +198,11 @@ public class GenericGrid<T> extends CustomComponent {
 
         search.addClickListener(getEntityAction()::readList);
 
-        search.setId(String.format("%s_SEARCH_BUTTON", controller.getResolver().getBasePath()));
+        search.setId(String.format("%s_SEARCH_BUTTON", BaseUI.getCurrentI18nResolver().getBasePath(getType())));
     }
 
     private void createFilter() {
-        filter.setId(String.format("%s_QUERY_FIELD", controller.getResolver().getBasePath()));
+        filter.setId(String.format("%s_QUERY_FIELD", BaseUI.getCurrentI18nResolver().getBasePath(getType())));
         filter.focus();
         filter.setWidth("100%");
     }
@@ -215,7 +215,7 @@ public class GenericGrid<T> extends CustomComponent {
             filter.setValue("");
             getEntityAction().readList(e);
         });
-        reset.setId(String.format("%s_RESET_BUTTON", controller.getResolver().getBasePath()));
+        reset.setId(String.format("%s_RESET_BUTTON", BaseUI.getCurrentI18nResolver().getBasePath(getType())));
     }
 
     private void setButtonVisability() {
@@ -528,7 +528,6 @@ public class GenericGrid<T> extends CustomComponent {
 
     private EntitySingleActions getSingleActionOnSelected() {
         return new EntitySingleActions(
-                getResolver(),
                 this::getSelectedEntity,
                 getType()
         );
@@ -560,8 +559,8 @@ public class GenericGrid<T> extends CustomComponent {
         return ((AbstractBeanContainer) grid.getContainerDataSource()).getBeanType();
     }
 
-    private I18nResolver getResolver() {
-        return controller.getResolver();
+    private I18nResolver getResolver(){
+        return BaseUI.getCurrentI18nResolver();
     }
 
 

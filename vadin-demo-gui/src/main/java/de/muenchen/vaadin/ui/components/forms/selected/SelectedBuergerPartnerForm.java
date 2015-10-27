@@ -26,7 +26,7 @@ public class SelectedBuergerPartnerForm extends BuergerForm {
      * Reloads the Partner via the Controller.
      */
     public void reLoadBuerger() {
-        final BuergerSingleActions singleActions = new BuergerSingleActions(getI18nResolver(), this::getBuerger);
+        final BuergerSingleActions singleActions = new BuergerSingleActions(this::getBuerger);
         singleActions.reRead(null);
     }
 

@@ -16,6 +16,8 @@
 package de.muenchen.vaadin;
 
 
+import com.vaadin.spring.annotation.UIScope;
+import de.muenchen.eventbus.EventBus;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -47,5 +49,11 @@ public class Application {
         FilterRegistrationBean registrationBean = new FilterRegistrationBean();
         registrationBean.setFilter(hiddenHttpMethodFilter);
         return registrationBean;
+    }
+
+    @Bean
+    @UIScope
+    public EventBus eventbus(){
+        return new EventBus();
     }
 }

@@ -7,6 +7,7 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
+import de.muenchen.vaadin.guilib.BaseUI;
 import org.vaadin.tokenfield.TokenField;
 
 import java.util.stream.Stream;
@@ -24,6 +25,11 @@ public class FormUtil {
      * The null representation on one input.
      */
     public static final String NULL_REPRESENTATION = "";
+
+    /**
+     * The class for the I18nResolver
+     */
+    private Class entityClass;
     /**
      * The binder that is used for the DataBinding.
      */
@@ -37,11 +43,11 @@ public class FormUtil {
      * Create a new FormUtil for the binder resolving string via i18n.
      *
      * @param binder       The binder containing the Data the Fields are bound to.
-     * @param i18nResolver The i18nResolver used to resolve the Strings.
      */
-    public FormUtil(BeanFieldGroup<?> binder, I18nResolver i18nResolver) {
+    public FormUtil(BeanFieldGroup<?> binder) {
         this.binder = binder;
-        this.i18nResolver = i18nResolver;
+        this.entityClass = binder.getItemDataSource().getBean().getClass();;
+        this.i18nResolver = BaseUI.getCurrentI18nResolver();
     }
 
     /**
@@ -72,7 +78,7 @@ public class FormUtil {
      * @return The caption of the property.
      */
     private String getCaption(String property) {
-        return getI18nResolver().resolveRelative(I18nPaths.getEntityFieldPath(property, I18nPaths.Type.label));
+        return getI18nResolver().resolveRelative(entityClass, I18nPaths.getEntityFieldPath(property, I18nPaths.Type.label));
     }
 
     /**
@@ -82,7 +88,7 @@ public class FormUtil {
      * @return The prompt of the property.
      */
     private String getPrompt(String property) {
-        return getI18nResolver().resolveRelative(I18nPaths.getEntityFieldPath(property, I18nPaths.Type.input_prompt));
+        return getI18nResolver().resolveRelative(entityClass, I18nPaths.getEntityFieldPath(property, I18nPaths.Type.input_prompt));
     }
 
     /**
@@ -122,7 +128,7 @@ public class FormUtil {
      * @return
      */
     public I18nResolver getI18nResolver() {
-        return i18nResolver;
+        return BaseUI.getCurrentI18nResolver();
     }
 
     /**

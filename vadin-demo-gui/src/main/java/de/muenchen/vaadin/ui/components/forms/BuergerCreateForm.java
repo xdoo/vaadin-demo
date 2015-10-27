@@ -6,6 +6,7 @@ import de.muenchen.eventbus.events.Association;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.BaseComponent;
+import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
 import de.muenchen.vaadin.guilib.controller.EntityController;
@@ -33,7 +34,7 @@ public class BuergerCreateForm extends BaseComponent {
     /** Action for executing the navigation on save. */
     private final NavigateActions saveNavigation;
     /** The Button for the save action. */
-    private final ActionButton saveButton = new ActionButton(getI18nResolver(), SimpleAction.save);
+    private final ActionButton saveButton = new ActionButton(Buerger.class, SimpleAction.save);
 
     /**
      * Create a new BuergerCreateForm that navigates to the navigateTo View on save.
@@ -113,12 +114,12 @@ public class BuergerCreateForm extends BaseComponent {
     private void configureSaveButton() {
         if (getRelation().isPresent()) {
             final BuergerAssociationActions buergerAssociationActions = new BuergerAssociationActions(
-                    getI18nResolver(),
+
                     () -> new Association<>(getBuergerForm().getBuerger(), getRelation().get()));
 
             getSaveButton().addActionPerformer(buergerAssociationActions::addAssociation);
         } else {
-            BuergerSingleActions buergerSingleActions = new BuergerSingleActions(getI18nResolver(), getBuergerForm()::getBuerger);
+            BuergerSingleActions buergerSingleActions = new BuergerSingleActions(getBuergerForm()::getBuerger);
             getSaveButton().addActionPerformer(buergerSingleActions::create);
         }
 

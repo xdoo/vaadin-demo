@@ -1,6 +1,7 @@
 package de.muenchen.vaadin.ui.components.forms;
 
 import com.vaadin.ui.HorizontalLayout;
+import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.BaseComponent;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
@@ -24,7 +25,7 @@ public class BuergerReadForm extends BaseComponent {
     /** The layout for all Buttons. */
     private final HorizontalLayout buttonLayout = new HorizontalLayout();
     /** The button for the update action. */
-    private final ActionButton updateButton = new ActionButton(getI18nResolver(), SimpleAction.update);
+    private final ActionButton updateButton = new ActionButton(Buerger.class, SimpleAction.update);
     /** The actions for the navigate on update. */
     private final NavigateActions updateNavigation;
 
@@ -89,7 +90,7 @@ public class BuergerReadForm extends BaseComponent {
      * Configure the Update Button and add the actions.
      */
     private void configureUpdateButton() {
-        final BuergerSingleActions singleActions = new BuergerSingleActions(getI18nResolver(), getBuergerForm()::getBuerger);
+        final BuergerSingleActions singleActions = new BuergerSingleActions(getBuergerForm()::getBuerger);
         getUpdateButton().addActionPerformer(singleActions::read);
         getUpdateButton().addActionPerformer(getUpdateNavigation()::navigate);
     }

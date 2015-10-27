@@ -101,7 +101,7 @@ public class BuergerPartnerForm extends BaseComponent {
      * @return A new ActionButton preconfigured with actions.
      */
     private ActionButton createCreateButton() {
-        final ActionButton createButton = new ActionButton(getI18nResolver(), SimpleAction.create);
+        final ActionButton createButton = new ActionButton(Buerger.class, SimpleAction.create);
 
         final NavigateActions navigateActions = new NavigateActions(getNavigateToCreate());
         createButton.addActionPerformer(navigateActions::navigate);
@@ -115,7 +115,7 @@ public class BuergerPartnerForm extends BaseComponent {
      * @return A new ActionButton preconfigured with actions.
      */
     private ActionButton createAddButton() {
-        final ActionButton addButton = new ActionButton(getI18nResolver(), SimpleAction.add);
+        final ActionButton addButton = new ActionButton(Buerger.class, SimpleAction.add);
         final NavigateActions navigateActions = new NavigateActions(BuergerAddPartnerView.NAME);
         addButton.addClickListener(clickEvent -> {
             if (partnerForm.isVisible()) {
@@ -137,8 +137,8 @@ public class BuergerPartnerForm extends BaseComponent {
      * @return A new ActionButton preconfigured with actions.
      */
     private Component createReadButton() {
-        final ActionButton readButton = new ActionButton(getI18nResolver(), SimpleAction.read);
-        final BuergerSingleActions singleActions = new BuergerSingleActions(getI18nResolver(), getPartnerForm()::getBuerger);
+        final ActionButton readButton = new ActionButton(Buerger.class, SimpleAction.read);
+        final BuergerSingleActions singleActions = new BuergerSingleActions(getPartnerForm()::getBuerger);
         readButton.addActionPerformer(singleActions::read);
 
         final NavigateActions navigateActions = new NavigateActions(getNavigateToRead());
@@ -154,9 +154,9 @@ public class BuergerPartnerForm extends BaseComponent {
      * @return A new ActionButton preconfigured with actions.
      */
     private Component createDeleteButton() {
-        final ActionButton deleteButton = new ActionButton(getI18nResolver(), SimpleAction.delete);
+        final ActionButton deleteButton = new ActionButton(Buerger.class, SimpleAction.delete);
 
-        final BuergerAssociationActions associationActions = new BuergerAssociationActions(getI18nResolver(),
+        final BuergerAssociationActions associationActions = new BuergerAssociationActions(
                 () -> new Association<>(getPartnerForm().getBuerger(), Buerger.Rel.partner.name()));
         deleteButton.addActionPerformer(associationActions::removeAssociation);
 

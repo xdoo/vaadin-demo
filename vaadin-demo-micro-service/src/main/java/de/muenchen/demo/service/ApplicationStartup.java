@@ -1,6 +1,5 @@
 package de.muenchen.demo.service;
 
-import de.muenchen.eventbus.EventBus;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.Search;
 import org.slf4j.Logger;
@@ -12,6 +11,9 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 
+/**
+ * TODO not generated
+ */
 @Component
 public class ApplicationStartup implements ApplicationListener<ContextRefreshedEvent> {
 
@@ -19,8 +21,6 @@ public class ApplicationStartup implements ApplicationListener<ContextRefreshedE
 	
 	@Autowired
 	private EntityManager entityManager;
-	@Autowired
-	private EventBus eventBus;
 
 	/*
 	 * This method is called during Spring's startup.
