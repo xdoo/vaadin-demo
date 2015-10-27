@@ -528,7 +528,6 @@ public class GenericGrid<T> extends CustomComponent {
 
     private EntitySingleActions getSingleActionOnSelected(){
         return new EntitySingleActions(
-                getType(),
                 this::getSelectedEntity,
                 getType()
         );

@@ -83,7 +83,7 @@ public class SelectedBuergerReadForm extends SelectedBuergerForm {
     private ActionButton createUpdateButton() {
         final ActionButton updateButton = new ActionButton(Buerger.class, SimpleAction.update);
 
-        final BuergerSingleActions buergerSingleActions = new BuergerSingleActions(Buerger.class, this::getBuerger);
+        final BuergerSingleActions buergerSingleActions = new BuergerSingleActions(this::getBuerger);
         updateButton.addActionPerformer(buergerSingleActions::read);
 
         final NavigateActions navigateActions = new NavigateActions(getNavigateToUpdate());

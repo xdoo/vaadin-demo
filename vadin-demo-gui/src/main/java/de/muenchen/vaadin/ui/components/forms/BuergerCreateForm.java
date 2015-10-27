@@ -93,7 +93,7 @@ public class BuergerCreateForm extends BuergerForm {
 
             createButton.addActionPerformer(buergerAssociationActions::addAssociation);
         } else {
-            BuergerSingleActions buergerSingleActions = new BuergerSingleActions(Buerger.class, this::getBuerger);
+            BuergerSingleActions buergerSingleActions = new BuergerSingleActions(this::getBuerger);
             createButton.addActionPerformer(buergerSingleActions::create);
         }
 

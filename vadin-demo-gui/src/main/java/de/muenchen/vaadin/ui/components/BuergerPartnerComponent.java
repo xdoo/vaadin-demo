@@ -80,7 +80,7 @@ public class BuergerPartnerComponent extends CustomComponent implements Consumer
     private ActionButton buildReadButton() {
         ActionButton read = new ActionButton(Buerger.class, SimpleAction.read);
         final NavigateActions navigateAction = new NavigateActions(BuergerDetailView.NAME);
-        final BuergerSingleActions buergerSingleActions = new BuergerSingleActions(Buerger.class, () -> currentPartner);
+        final BuergerSingleActions buergerSingleActions = new BuergerSingleActions(() -> currentPartner);
 
         read.addActionPerformer(buergerSingleActions::read);
         read.addActionPerformer(navigateAction::navigate);
