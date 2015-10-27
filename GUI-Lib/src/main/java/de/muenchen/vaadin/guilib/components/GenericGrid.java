@@ -501,7 +501,7 @@ public class GenericGrid<T> extends CustomComponent {
      * Get all selected Entities of this grid.
      * @return selected Entities.
      */
-    public List<T> getSelectedEntities(){
+    public List<T> getSelectedEntities() {
         return grid.getSelectedRows().stream()
                 .map(item -> (BeanItem<T>) grid.getContainerDataSource().getItem(item))
                 .map(BeanItem::getBean)
@@ -514,7 +514,7 @@ public class GenericGrid<T> extends CustomComponent {
      *
      * @return single selected entitiy
      */
-    public T getSelectedEntity(){
+    public T getSelectedEntity() {
         return grid.getSelectedRows().stream()
                 .map(item -> (BeanItem<T>) grid.getContainerDataSource().getItem(item))
                 .map(BeanItem::getBean)
@@ -526,7 +526,7 @@ public class GenericGrid<T> extends CustomComponent {
     //intern Helper-Methods
     //--------------
 
-    private EntitySingleActions getSingleActionOnSelected(){
+    private EntitySingleActions getSingleActionOnSelected() {
         return new EntitySingleActions(
                 getResolver(),
                 this::getSelectedEntity,
@@ -534,7 +534,7 @@ public class GenericGrid<T> extends CustomComponent {
         );
     }
 
-    private EntityListActions getListActionOnSelected(){
+    private EntityListActions getListActionOnSelected() {
         return new EntityListActions(
                 () -> grid.getSelectedRows().stream()
                         .peek(grid::deselect)
@@ -545,22 +545,22 @@ public class GenericGrid<T> extends CustomComponent {
         );
     }
 
-    private EntityActions getEntityAction(){
+    private EntityActions getEntityAction() {
         return new EntityActions(
                 filter::getValue,
                 getType()
         );
     }
 
-    private NavigateActions getNavigateAction(String navigateTo){
+    private NavigateActions getNavigateAction(String navigateTo) {
         return new NavigateActions(navigateTo);
     }
 
-    private Class<?> getType(){
-        return ((AbstractBeanContainer)grid.getContainerDataSource()).getBeanType();
+    private Class<?> getType() {
+        return ((AbstractBeanContainer) grid.getContainerDataSource()).getBeanType();
     }
 
-    private I18nResolver getResolver(){
+    private I18nResolver getResolver() {
         return controller.getResolver();
     }
 

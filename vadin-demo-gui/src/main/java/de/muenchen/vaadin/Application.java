@@ -31,7 +31,9 @@ import org.springframework.web.filter.HiddenHttpMethodFilter;
 @EnableEurekaClient
 @Configuration
 @ComponentScan
-@EnableAutoConfiguration
+//Exclude SecAutoConfig because OAuth needs to be manually configured
+@EnableAutoConfiguration(exclude = {
+        org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration.class})
 public class Application {
     
     public static void main(String[] args) throws Exception {

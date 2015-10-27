@@ -29,12 +29,22 @@ public abstract class DefaultBuergerView extends VerticalLayout implements View{
         this.controller = controller;
         this.resolver = resolver;
     }
-    
-    /**
-     * 
-     */
-    protected abstract void site();
-    
+
+    @Override
+    public void enter(ViewChangeListener.ViewChangeEvent event) {
+        this.configureLayout();
+
+        // add some components
+        this.addHeadline();
+        this.site();
+    }
+
+    private void configureLayout() {
+        setSizeFull();
+        this.setHeightUndefined();
+        setMargin(new MarginInfo(false, true, false, true));
+    }
+
     protected void addHeadline() {
 
         // headline
@@ -47,19 +57,9 @@ public abstract class DefaultBuergerView extends VerticalLayout implements View{
         addComponent(pageTitle);
     }
 
-    private void configureLayout() {
-        setSizeFull();
-        this.setHeightUndefined();
-        setMargin(new MarginInfo(false, true, false, true));
-    }
-
-    @Override
-    public void enter(ViewChangeListener.ViewChangeEvent event) {
-        this.configureLayout();
-
-        // add some components
-        this.addHeadline();
-        this.site();
-    }
+    /**
+     *
+     */
+    protected abstract void site();
     
 }

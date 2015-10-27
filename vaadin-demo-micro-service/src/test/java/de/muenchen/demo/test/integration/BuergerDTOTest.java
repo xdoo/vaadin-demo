@@ -19,6 +19,7 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
+import de.muenchen.vaadin.demo.api.domain.Augenfarbe;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -40,7 +41,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -48,12 +48,15 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
+import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+import org.springframework.security.oauth2.client.token.grant.password.ResourceOwnerPasswordResourceDetails;
+import org.springframework.security.oauth2.common.exceptions.UserDeniedAuthorizationException;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
 
-import javax.persistence.EntityManager;
 import java.net.MalformedURLException;
+import java.nio.charset.Charset;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -73,7 +76,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 /**
- *
  * @author praktikant.tmar
  */
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -83,66 +85,98 @@ public class BuergerDTOTest {
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
+
     @Autowired
     BuergerRepository repo;
     @Autowired
     AuthenticationManager authenticationManager;
-    Boolean lock = false;
     @Autowired
     QueryService queryService;
-    private RestTemplate restTemplate;
-    private RestTemplate restTemplate2;
-    @Value("${local.server.port}")
-    private int port;
+
+    /**
+     * First init lock
+     **/
+    Boolean lock = false;
+    /**
+     * Helper for holding current TEST URL
+     **/
     private String url;
-    //    @AfterClass
-//    public 
-    @Autowired
-    private EntityManager entityMangager;
+
+    /**
+     * Templates for REST access
+     **/
+    private OAuth2RestTemplate restTemplate;
+    private OAuth2RestTemplate restTemplate2;
+
+    /**
+     * Necessary properties
+     **/
+    @Value("${local.server.port:8080}")
+    private int port;
+    @Value("${service.token.url}")
+    private String TOKEN_URL;
+    @Value("${security.oauth2.client.id}")
+    private String clientID;
+    @Value("${security.oauth2.client.scope:defaultScope}")
+    private Set<String> scopes;
+
 
     @Before
     public void setUp() throws JsonProcessingException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
-        BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-        credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials("admin1", "admin1"));
-
-        HttpClient httpClient = HttpClientBuilder.create()
-                .setDefaultCredentialsProvider(credentialsProvider)
-                .build();
-
-        ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
-        restTemplate = new RestTemplate(requestFactory);
-
-        MappingJackson2HttpMessageConverter halConverter = new MappingJackson2HttpMessageConverter();
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new Jackson2HalModule());
-
-        halConverter.setObjectMapper(objectMapper);
-        halConverter.setSupportedMediaTypes(Arrays.asList(MediaTypes.HAL_JSON));
-
-        restTemplate.setMessageConverters(Arrays.asList(
-                halConverter,
-                new StringHttpMessageConverter()
-        ));
-        BasicCredentialsProvider credentialsProvider2 = new BasicCredentialsProvider();
-        credentialsProvider2.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials("admin2", "admin2"));
-
-        HttpClient httpClient2 = HttpClientBuilder.create()
-                .setDefaultCredentialsProvider(credentialsProvider2)
-                .build();
-
-        ClientHttpRequestFactory requestFactory2 = new HttpComponentsClientHttpRequestFactory(httpClient2);
-        restTemplate2 = new RestTemplate(requestFactory2);
-
-        restTemplate2.setMessageConverters(Arrays.asList(
-                halConverter,
-                new StringHttpMessageConverter()
-        ));
 
         if (lock == false) {
-            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken("admin1", "admin1");
+
+            // Init RestTemplate Hans1 -----------------------------
+            ResourceOwnerPasswordResourceDetails resource = new ResourceOwnerPasswordResourceDetails();
+            resource.setUsername("admin1");
+            resource.setPassword("admin1");
+            resource.setGrantType("password");
+            resource.setClientId(clientID);
+            resource.setAccessTokenUri(TOKEN_URL);
+//            resource.setScope(Arrays.asList("scope"));
+
+            restTemplate = new OAuth2RestTemplate(resource, new DefaultOAuth2ClientContext());
+
+            restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
+
+
+            MappingJackson2HttpMessageConverter halConverter = new MappingJackson2HttpMessageConverter();
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.registerModule(new Jackson2HalModule());
+
+            halConverter.setObjectMapper(objectMapper);
+            halConverter.setSupportedMediaTypes(Arrays.asList(MediaTypes.HAL_JSON));
+
+            restTemplate.setMessageConverters(Arrays.asList(
+                    new StringHttpMessageConverter(Charset.forName("UTF-8")),
+                    halConverter
+            ));
+            //-------------------------------------------------------
+
+            // Init RestTemplate Hans2 ------------------------------
+            ResourceOwnerPasswordResourceDetails resource2 = new ResourceOwnerPasswordResourceDetails();
+            resource2.setUsername("admin2");
+            resource2.setPassword("admin2");
+            resource2.setGrantType("password");
+            resource2.setClientId(clientID);
+            resource2.setAccessTokenUri(TOKEN_URL);
+
+            restTemplate2 = new OAuth2RestTemplate(resource2);
+
+            restTemplate2.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
+
+            restTemplate2.setMessageConverters(Arrays.asList(
+                    halConverter,
+                    new StringHttpMessageConverter()
+            ));
+            //-------------------------------------------------------
+
+            //INIT Repo ---------------------------------------------
+            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken("hans", "test");
             Authentication auth = authenticationManager.authenticate(token);
             SecurityContextHolder.getContext().setAuthentication(auth);
+
             Buerger b1M1 = new Buerger();
             Set<String> eig1 = new HashSet<>();
             eig1.add("eig");
@@ -268,6 +302,8 @@ public class BuergerDTOTest {
             b5M2.setOid(10L);
             b5M2.setGeburtsdatum(new Date());
             repo.save(b5M2);
+            //-------------------------------------------------------
+
             lock = true;
 
         }
@@ -360,11 +396,11 @@ public class BuergerDTOTest {
 
     }
 
-    @Test(expected = HttpClientErrorException.class)
+    @Test(expected = UserDeniedAuthorizationException.class)
     public void getBuergerM2Test() throws JsonProcessingException {
         System.out.println("========== get Bürger Test ==========");
         url = "http://localhost:" + port + "/buergers/1";
-            restTemplate2.getForEntity(url, BuergerResource.class);
+        restTemplate2.getForEntity(url, BuergerResource.class);
     }
 
     @Test
@@ -382,11 +418,11 @@ public class BuergerDTOTest {
         }
     }
 
-    @Test(expected = HttpClientErrorException.class)
+    @Test(expected = UserDeniedAuthorizationException.class)
     public void deleteBuergerM2Test() throws JsonProcessingException {
         System.out.println("========== delete Bürger Test ==========");
-            url = "http://localhost:" + port + "/buergers/5";
-            restTemplate2.delete(url);
+        url = "http://localhost:" + port + "/buergers/5";
+        restTemplate2.delete(url);
     }
 
     @Test
@@ -403,14 +439,14 @@ public class BuergerDTOTest {
 
     }
 
-    @Test(expected = HttpClientErrorException.class)
+    @Test(expected = UserDeniedAuthorizationException.class)
     public void putBuergerM2Test() throws JsonProcessingException {
         System.out.println("========== put Bürger Test ==========");
         url = "http://localhost:" + port + "/buergers/4";
         BuergerResource response4 = restTemplate.getForEntity(url, BuergerResource.class).getBody();
         Buerger buerger4 = response4.getContent();
         buerger4.setVorname("hans");
-            restTemplate2.put(url, buerger4);
+        restTemplate2.put(url, buerger4);
     }
 
     @Test
@@ -424,13 +460,13 @@ public class BuergerDTOTest {
         System.out.println("Bürger wurde mit neuem Vornamen in der DB gespeichert.");
     }
 
-    @Test(expected = HttpClientErrorException.class)
+    @Test(expected = UserDeniedAuthorizationException.class)
     public void patchBuergerM2Test() throws JsonProcessingException, MalformedURLException {
         System.out.println("========== patch Bürger Test ==========");
         Map m = new HashMap();
         m.put("vorname", "peter");
-            url = "http://localhost:" + port + "/buergers/4";
-            restTemplate2.exchange(url, HttpMethod.PATCH, new HttpEntity(m), BuergerResource.class);
+        url = "http://localhost:" + port + "/buergers/4";
+        restTemplate2.exchange(url, HttpMethod.PATCH, new HttpEntity(m), BuergerResource.class);
     }
 
     @Test
@@ -449,16 +485,16 @@ public class BuergerDTOTest {
 
     }
 
-    @Test(expected = HttpClientErrorException.class)
+    @Test(expected = UserDeniedAuthorizationException.class)
     public void getBuergerKinderM2Test() throws JsonProcessingException {
         System.out.println("========== get Bürger Kinder Test ==========");
         url = "http://localhost:" + port + "/buergers/2/kinder";
-            restTemplate2.exchange(
-                    url,
-                    HttpMethod.GET,
-                    null,
-                    BuergerResource.LIST
-            );
+        restTemplate2.exchange(
+                url,
+                HttpMethod.GET,
+                null,
+                BuergerResource.LIST
+        );
     }
 
     @Test
@@ -481,14 +517,14 @@ public class BuergerDTOTest {
         System.out.println("Kind mit oid 2 wurde zu dem BuergerDTO mit Oid 1 hinzufügt.");
     }
 
-    @Test(expected = HttpClientErrorException.class)
+    @Test(expected = UserDeniedAuthorizationException.class)
     public void putBuergerKinderM2Test() {
         System.out.println("========== put Bürger Kinder M2 Test ==========");
         url = "http://localhost:" + port + "/buergers/3/kinder";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("text", "uri-list"));
-            String uri2 = "http://localhost:" + port + "/buergers/6";
-            restTemplate2.put(url, new HttpEntity<>(uri2, headers));
+        String uri2 = "http://localhost:" + port + "/buergers/6";
+        restTemplate2.put(url, new HttpEntity<>(uri2, headers));
     }
 
 }

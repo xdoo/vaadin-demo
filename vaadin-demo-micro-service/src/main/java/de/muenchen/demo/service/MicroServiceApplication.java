@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.hateoas.config.EnableHypermediaSupport;
 import org.springframework.security.config.annotation.authentication.configurers.GlobalAuthenticationConfigurerAdapter;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 
 /**
  * Application class for starting the micro-service.
@@ -24,6 +25,7 @@ import org.springframework.security.config.annotation.authentication.configurers
 @EnableAutoConfiguration
 @EnableEurekaClient //TODO not generated
 @EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)
+@EnableResourceServer
 public class MicroServiceApplication {
 
     public static void main(String[] args) throws Exception {
