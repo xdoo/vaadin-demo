@@ -3,7 +3,6 @@ package de.muenchen.vaadin.ui.controller.factorys;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.TabSheet;
 import de.muenchen.eventbus.EventBus;
-import de.muenchen.eventbus.events.Association;
 import de.muenchen.eventbus.selector.entity.RequestEvent;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolverImpl;
@@ -29,7 +28,7 @@ import java.io.Serializable;
  */
 @Component
 @UIScope
-public class BuergerViewFactory implements Serializable {
+class BuergerViewFactoryasdf implements Serializable {
 
     /**
      * Logger
@@ -70,8 +69,8 @@ public class BuergerViewFactory implements Serializable {
         return new BuergerChildTab(controller, controller.getResolver(), navigateToForDetail, navigateForCreate, navigateBack);
     }
 
-    public BuergerPartnerTab generatePartnerTab(String navigateToForDetail, String navigateForCreate, String navigateBack) {
-        return new BuergerPartnerTab(controller, navigateToForDetail, navigateForCreate, navigateBack);
+    public BuergerPartnerTab generatePartnerTab(String navigateToForDetail, String navigateForCreate) {
+        return new BuergerPartnerTab(navigateToForDetail, navigateForCreate);
     }
 
     public BuergerRWForm generateRWForm(String navigateBack) {

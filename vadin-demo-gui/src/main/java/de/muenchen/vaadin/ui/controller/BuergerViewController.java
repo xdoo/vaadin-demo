@@ -12,7 +12,6 @@ import de.muenchen.vaadin.demo.i18nservice.I18nResolverImpl;
 import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.services.BuergerService;
 import de.muenchen.vaadin.services.model.BuergerDatastore;
-import de.muenchen.vaadin.ui.controller.factorys.BuergerViewFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,12 +51,6 @@ public class BuergerViewController implements Serializable {
 
     @Autowired
     private I18nResolverImpl resolver;
-    /**
-     * BuergerViewFactory zum erstellen der Components
-     */
-    @Autowired
-    private BuergerViewFactory buergerViewFactory;
-
     @Autowired
     public BuergerViewController(BuergerService buergerService) {
         this.buergerService = buergerService;
@@ -65,8 +58,6 @@ public class BuergerViewController implements Serializable {
 
     @PostConstruct
     public void init() {
-        //Set Controller in Factory after Construct to prevent circular reference
-        buergerViewFactory.setController(this);
         initEventhandlers();
     }
 
@@ -77,12 +68,6 @@ public class BuergerViewController implements Serializable {
     public I18nResolverImpl getResolver() {
         return resolver;
     }
-
-
-    public BuergerViewFactory getViewFactory() {
-        return buergerViewFactory;
-    }
-
 
     public BuergerDatastore getModel() {
         return model;

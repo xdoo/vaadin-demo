@@ -7,7 +7,6 @@ import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
-import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.components.forms.BuergerCreateForm;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.slf4j.Logger;
@@ -37,7 +36,7 @@ public class BuergerCreatePartnerView extends DefaultBuergerView {
         final NavigateActions navigateActions = new NavigateActions(BuergerDetailView.NAME);
         backButton.addActionPerformer(navigateActions::navigate);
 
-        final BuergerCreateForm c = this.controller.getViewFactory().generateCreatePartnerForm(BuergerDetailView.NAME, BuergerDetailView.NAME);
+        final BuergerCreateForm c = new BuergerCreateForm(BuergerDetailView.NAME, Buerger.Rel.partner.name());
 
         final VerticalLayout layout = new VerticalLayout(backButton, c);
         layout.setSpacing(true);

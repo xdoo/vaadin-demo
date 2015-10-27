@@ -3,6 +3,7 @@ package de.muenchen.vaadin.ui.app.views;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.VerticalLayout;
+import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
@@ -35,7 +36,7 @@ public class BuergerCreateChildView extends DefaultBuergerView {
         final NavigateActions navigateActions = new NavigateActions(BuergerDetailView.NAME);
         backButton.addActionPerformer(navigateActions::navigate);
 
-        final BuergerCreateForm c = this.controller.getViewFactory().generateCreatePartnerForm(BuergerDetailView.NAME, BuergerDetailView.NAME);
+        final BuergerCreateForm c = new BuergerCreateForm(BuergerDetailView.NAME, Buerger.Rel.kinder.name());
 
         final VerticalLayout layout = new VerticalLayout(backButton, c);
         layout.setSpacing(true);

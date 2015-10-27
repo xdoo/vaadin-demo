@@ -55,7 +55,7 @@ public class BuergerDetailView extends DefaultBuergerView {
         layout.setSpacing(true);
 
         // read form
-        readForm = this.controller.getViewFactory().generateRWForm(BuergerTableView.NAME);
+        readForm = new BuergerRWForm();
         final BuergerReadForm alternateReadForm = new BuergerReadForm(BuergerUpdateView.NAME);
         layout.addComponent(new HorizontalLayout(readForm, alternateReadForm));
 
@@ -68,7 +68,7 @@ public class BuergerDetailView extends DefaultBuergerView {
         TabSheet.Tab kindTab = tabSheet.addTab(childTab);
         kindTab.setCaption(BaseUI.getCurrentI18nResolver().resolveRelative(Buerger.class, getEntityFieldPath(Buerger.Rel.kinder.name(), I18nPaths.Type.label)));
 
-        partnerTab = controller.getViewFactory().generatePartnerTab(BuergerDetailView.NAME, BuergerCreatePartnerView.NAME, NAME);
+        partnerTab = new BuergerPartnerTab(BuergerDetailView.NAME, BuergerCreatePartnerView.NAME);
         TabSheet.Tab pTab = tabSheet.addTab(partnerTab);
         pTab.setCaption(BaseUI.getCurrentI18nResolver().resolveRelative(Buerger.class, getEntityFieldPath(Buerger.Rel.partner.name(), I18nPaths.Type.label)));
         layout.addComponent(tabSheet);
