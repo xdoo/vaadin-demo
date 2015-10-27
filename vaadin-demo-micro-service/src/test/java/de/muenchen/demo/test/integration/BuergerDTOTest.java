@@ -14,12 +14,6 @@ import de.muenchen.demo.service.gen.domain.Augenfarben;
 import de.muenchen.demo.service.gen.domain.Buerger;
 import de.muenchen.demo.service.gen.rest.BuergerRepository;
 import de.muenchen.service.QueryService;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.BasicCredentialsProvider;
-import org.apache.http.impl.client.HttpClientBuilder;
-import de.muenchen.vaadin.demo.api.domain.Augenfarbe;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -80,7 +74,7 @@ import static org.junit.Assert.assertNull;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = MicroServiceApplication.class)
-@WebIntegrationTest({"server.port=0", "management.port=0"})
+@WebIntegrationTest({"server.port=8080", "management.port=8080"})
 public class BuergerDTOTest {
 
     @Rule
@@ -173,7 +167,7 @@ public class BuergerDTOTest {
             //-------------------------------------------------------
 
             //INIT Repo ---------------------------------------------
-            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken("hans", "test");
+            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken("admin1", "admin1");
             Authentication auth = authenticationManager.authenticate(token);
             SecurityContextHolder.getContext().setAuthentication(auth);
 
