@@ -6,6 +6,7 @@ import com.vaadin.ui.VerticalLayout;
 import de.muenchen.eventbus.events.Association;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
+import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.components.BaseComponent;
 import de.muenchen.vaadin.guilib.components.GenericConfirmationWindow;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
@@ -102,10 +103,17 @@ public class BuergerPartnerForm extends BaseComponent {
      */
     private ActionButton createCreateButton() {
         final ActionButton createButton = new ActionButton(Buerger.class, SimpleAction.create);
-
         final NavigateActions navigateActions = new NavigateActions(getNavigateToCreate());
-        createButton.addActionPerformer(navigateActions::navigate);
-
+        createButton.addClickListener(clickEvent -> {
+            if (partnerForm.isVisible()) {
+                GenericConfirmationWindow window = new GenericConfirmationWindow(BaseUI.getCurrentI18nResolver(), SimpleAction.override, navigateActions::navigate);
+                getUI().addWindow(window);
+                window.center();
+                window.focus();
+            } else {
+                navigateActions.navigate();
+            }
+        });
         return createButton;
     }
 
@@ -119,7 +127,7 @@ public class BuergerPartnerForm extends BaseComponent {
         final NavigateActions navigateActions = new NavigateActions(BuergerAddPartnerView.NAME);
         addButton.addClickListener(clickEvent -> {
             if (partnerForm.isVisible()) {
-                GenericConfirmationWindow window = new GenericConfirmationWindow(super.getI18nResolver(), SimpleAction.override, navigateActions::navigate);
+                GenericConfirmationWindow window = new GenericConfirmationWindow(BaseUI.getCurrentI18nResolver(), SimpleAction.override, navigateActions::navigate);
                 getUI().addWindow(window);
                 window.center();
                 window.focus();

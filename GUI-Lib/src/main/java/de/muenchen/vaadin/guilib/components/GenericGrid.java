@@ -563,6 +563,9 @@ public class GenericGrid<T> extends CustomComponent {
         return BaseUI.getCurrentI18nResolver();
     }
 
+    public Grid getGrid(){
+        return grid;
+    }
 
     /**
      * TODO REMOVE

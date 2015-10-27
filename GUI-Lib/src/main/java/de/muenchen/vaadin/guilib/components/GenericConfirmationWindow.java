@@ -12,6 +12,8 @@ import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 import de.muenchen.vaadin.demo.i18nservice.buttons.Action;
+import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
+import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
 
 /**
@@ -90,7 +92,10 @@ public class GenericConfirmationWindow extends Window {
      * @return "ok" Schaltfläche
      */
     private Button addOkButton(ActionButton.CrashableActionPerformer action, FontAwesome icon) {
-        ActionButton ok = new ActionButton();
+        //TODO Peter bau nen AcitonButton ohne fucking Klasse
+        ActionButton ok = new ActionButton(BaseUI.getCurrentI18nResolver().resolve("confirmation.override.confirm"), SimpleAction.override);
+        ok.addActionPerformer(action);
+        ok.addClickListener(event -> GenericConfirmationWindow.this.close());
         ok.setIcon(icon);
         ok.setCaption(this.okButtonText);
         ok.addStyleName(ValoTheme.BUTTON_DANGER);
