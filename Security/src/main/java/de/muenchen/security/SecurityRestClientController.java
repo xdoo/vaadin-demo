@@ -5,6 +5,7 @@ import de.muenchen.vaadin.demo.apilib.rest.SecurityRestClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.security.oauth2.resource.EnableOAuth2Resource;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,7 @@ import java.util.Optional;
 @Controller
 @ExposesResourceFor(SecurityRestClientController.class)
 @RequestMapping("/principal")
+@EnableOAuth2Resource
 public class SecurityRestClientController {
     private static final Logger LOG = LoggerFactory.getLogger(SecurityRestClientController.class);
 

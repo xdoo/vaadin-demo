@@ -4,6 +4,7 @@ import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.VerticalLayout;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolverImpl;
+import de.muenchen.vaadin.ui.components.forms.BuergerPartnerForm;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -12,13 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class BuergerPartnerTab extends CustomComponent {
 
-    private BuergerPartnerComponent component;
+    private BuergerPartnerForm component;
 
     @Autowired
     I18nResolverImpl i18nResolver;
 
     public BuergerPartnerTab(BuergerViewController controller, String navigateToForDetail, String navigateToForCreate, String from) {
-        component = controller.getViewFactory().generateBuergerPartnerComponent(navigateToForCreate);
+        component = controller.getViewFactory().generateBuergerPartnerComponent(navigateToForCreate, navigateToForDetail);
         // Gesamtlayout
         VerticalLayout vlayout = new VerticalLayout(component);
         vlayout.setSpacing(true);

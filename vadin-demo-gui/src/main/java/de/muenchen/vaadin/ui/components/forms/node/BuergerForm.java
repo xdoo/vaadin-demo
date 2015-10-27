@@ -4,8 +4,8 @@ import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.Component;
 import com.vaadin.ui.DateField;
+import com.vaadin.ui.Field;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
 import de.muenchen.vaadin.demo.api.local.Buerger;
@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.vaadin.data.Validator.InvalidValueException;
+
 /**
  * Provides a very simple and basic Form for a Buerger.
  * <p/>
@@ -34,12 +35,18 @@ public class BuergerForm extends BaseComponent {
      * The class of the Entity of this Form.
      */
     public static final Class<Buerger> ENTITY_CLASS = Buerger.class;
-    /** The FormLayout that contains all the form fields. */
+    /**
+     * The FormLayout that contains all the form fields.
+     */
     private final FormLayout formLayout;
-    /** Contains the current Buerger and handles the data binding. */
+    /**
+     * Contains the current Buerger and handles the data binding.
+     */
     private final BeanFieldGroup<Buerger> binder = new BeanFieldGroup<>(ENTITY_CLASS);
-    /** A list of all the Fields. */
-    private final List<Component> fields;
+    /**
+     * A list of all the Fields.
+     */
+    private final List<Field> fields;
 
     /**
      * Create a new BuergerForm using the specified i18nResolver and the eventbus.
@@ -56,8 +63,8 @@ public class BuergerForm extends BaseComponent {
 
         final FormLayout formLayout = new FormLayout();
         fields.stream().forEach(formLayout::addComponent);
-
         this.formLayout = formLayout;
+
         setCompositionRoot(formLayout);
     }
 
@@ -69,7 +76,7 @@ public class BuergerForm extends BaseComponent {
      *
      * @return A List of all Components.
      */
-    private List<Component> buildFields() {
+    private List<Field> buildFields() {
         final FormUtil formUtil = new FormUtil(getBinder());
 
         final TextField vorname = formUtil.createTextField(Buerger.Field.vorname.name());
@@ -79,7 +86,7 @@ public class BuergerForm extends BaseComponent {
         final CheckBox alive = formUtil.createCheckBox(Buerger.Field.alive.name());
         final TokenField eigenschaften = formUtil.createTokenField(Buerger.Field.eigenschaften.name());
 
-        return Arrays.asList(vorname, nachname, augenfarbe, geburtsdatum,alive, eigenschaften);
+        return Arrays.asList(vorname, nachname, augenfarbe, geburtsdatum, alive, eigenschaften);
     }
 
     /**
@@ -114,9 +121,7 @@ public class BuergerForm extends BaseComponent {
      * @param buerger The new Buerger.
      */
     public void setBuerger(Buerger buerger) {
-        if (buerger == null)
-            throw new NullPointerException();
-        getBinder().setItemDataSource(buerger);
+        getBinder().setItemDataSource(buerger == null ? new Buerger() : buerger);
     }
 
     /**
@@ -130,7 +135,7 @@ public class BuergerForm extends BaseComponent {
 
     @Override
     public void setReadOnly(boolean readOnly) {
-        getBinder().setReadOnly(true);
+        getBinder().setReadOnly(readOnly);
     }
 
     /**
@@ -138,7 +143,7 @@ public class BuergerForm extends BaseComponent {
      *
      * @return The list of components.
      */
-    public List<Component> getFields() {
+    public List<Field> getFields() {
         return Collections.unmodifiableList(fields);
     }
 

@@ -3,20 +3,17 @@ package de.muenchen.vaadin.demo.apilib.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.vaadin.demo.apilib.domain.Principal;
 import de.muenchen.vaadin.demo.apilib.rest.SecurityRestClient;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.BasicCredentialsProvider;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.hal.Jackson2HalModule;
-import org.springframework.http.client.ClientHttpRequestFactory;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
+import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+import org.springframework.security.oauth2.client.token.grant.password.ResourceOwnerPasswordResourceDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -38,7 +35,13 @@ public class SecurityServiceImpl implements SecurityService, Serializable {
     
     private boolean login;
     private Principal principal;
-    private RestTemplate restTemplate;
+    private OAuth2RestTemplate restTemplate;
+
+    @Value("${service.token.url}")
+    private String TOKEN_URL;
+
+    @Value("${security.oauth2.client.id}")
+    private String clientID;
     
     @Autowired private SecurityRestClient restClient;
 
@@ -56,17 +59,18 @@ public class SecurityServiceImpl implements SecurityService, Serializable {
     public boolean login(String username, String password) {
 
         
-        // Security 
-        BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-        credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(username, password));
-        
-        HttpClient httpClient = HttpClientBuilder
-                .create()
-                .setDefaultCredentialsProvider(credentialsProvider)
-                .build();
-        ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
-        RestTemplate template = new RestTemplate(requestFactory);
+        // Get RestTemplate
+        ResourceOwnerPasswordResourceDetails resource = new ResourceOwnerPasswordResourceDetails();
+        resource.setUsername(username);
+        resource.setPassword(password);
+        resource.setGrantType("password");
+        resource.setClientId(clientID);
+        resource.setAccessTokenUri(TOKEN_URL);
 
+        OAuth2RestTemplate template = new OAuth2RestTemplate(resource, new DefaultOAuth2ClientContext());
+
+
+        //MessageConverter
         MappingJackson2HttpMessageConverter halConverter = new MappingJackson2HttpMessageConverter();
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -94,6 +98,8 @@ public class SecurityServiceImpl implements SecurityService, Serializable {
     
     @Override
     public void logout() {
+        //Delete Token
+        restTemplate = null;  //TODO Ist this way correct?
         this.login = Boolean.FALSE;
     }
 
