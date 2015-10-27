@@ -58,6 +58,44 @@ public class EntitySingleActions<T> {
     }
 
     /**
+     * Notify the Request.
+     *
+     * @param event The type of the Request.
+     */
+    private void notifyRequest(RequestEvent event) {
+        if (getEntity() == null)
+            throw new NullPointerException();
+        final RequestEntityKey key = new RequestEntityKey(event, getEntityClass());
+        getEventBus().notify(key, Event.wrap(getEntity()));
+    }
+
+    /**
+     * Get the Entity.
+     *
+     * @return the entity.
+     */
+    public T getEntity() {
+        return entitySupplier.get();
+    }
+
+    /**
+     * Get the class of the Entity.
+     *
+     * @return The class of the entity.
+     */
+    public Class<T> getEntityClass() {
+        return entityClass;
+    }
+
+    /**
+     * Get the EventBus.
+     * @return The EventBus.
+     */
+    private EventBus getEventBus() {
+        return BaseUI.getCurrentEventBus();
+    }
+
+    /**
      * Create the single Entity.
      *
      * @param clickEvent can be null
@@ -104,39 +142,13 @@ public class EntitySingleActions<T> {
     }
 
     /**
-     * Notify the Request.
+     * Reload the current selected entity.
      *
-     * @param event The type of the Request.
+     * @param clickEvent can be null
      */
-    private void notifyRequest(RequestEvent event) {
-        if (getEntity() == null)
-            throw new NullPointerException();
-        final RequestEntityKey key = new RequestEntityKey(event, getEntityClass());
-        getEventBus().notify(key, Event.wrap(getEntity()));
-    }
-
-    /**
-     * Get the Entity.
-     *
-     * @return the entity.
-     */
-    public T getEntity() {
-        return entitySupplier.get();
-    }
-
-    /**
-     * Get the EventBus.
-     * @return The EventBus.
-     */
-    private EventBus getEventBus() {
-        return BaseUI.getCurrentEventBus();
-    }
-
-    /**
-     * Get the class of the Entity.
-     * @return The class of the entity.
-     */
-    public Class<T> getEntityClass() {
-        return entityClass;
+    public boolean reRead(Button.ClickEvent clickEvent) {
+        final RequestEntityKey key = new RequestEntityKey(RequestEvent.READ_SELECTED, getEntityClass());
+        getEventBus().notify(key);
+        return true;
     }
 }

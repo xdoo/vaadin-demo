@@ -27,7 +27,6 @@ public class BuergerTableView extends DefaultBuergerView {
     public BuergerTableView(BuergerViewController controller, BuergerI18nResolver resolver, MainUI ui) {
         super(controller, resolver, ui);
         LOG.debug("creating 'buerger_table_view'");
-        
     }
 
     @Override

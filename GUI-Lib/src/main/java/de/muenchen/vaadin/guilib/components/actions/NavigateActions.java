@@ -22,25 +22,18 @@ public class NavigateActions {
      * @param navigateTo The String to navigate to.
      */
     public NavigateActions(String navigateTo) {
+        if (navigateTo == null)
+            throw new NullPointerException();
         this.navigateTo = navigateTo;
     }
 
     /**
-     * Get the NavigateTo String.
+     * Navigate method for use outside of clickListener.
      *
-     * @return The String that is naviagted to.
+     * @return true if navigation succeeded
      */
-    public String getNavigateTo() {
-        return navigateTo;
-    }
-
-    /**
-     * Set the String that is navigated to.
-     *
-     * @param navigateTo The navigateTo String.
-     */
-    public void setNavigateTo(String navigateTo) {
-        this.navigateTo = navigateTo;
+    public boolean navigate() {
+        return navigate(null);
     }
 
     /**
@@ -50,16 +43,32 @@ public class NavigateActions {
      * @return true if navigation succeeded
      */
     public boolean navigate(Button.ClickEvent clickEvent) {
+        if (BaseUI.getCurrentNavigator().getState().equals(getNavigateTo()))
+            return true;
+
         BaseUI.getCurrentEventBus().getConsumerRegistry().unregister(new ResponseEntityKey());
         BaseUI.getCurrentNavigator().navigateTo(navigateTo);
         return true;
     }
 
     /**
-     * Navigate method for use outside of clickListener.
-     * @return true if navigation succeeded
+     * Get the NavigateTo String.
+     *
+     * @return The String that is naviagted to.
      */
-    public boolean navigate(){
-        return navigate(null);
+    public String getNavigateTo() {
+
+        return navigateTo;
+    }
+
+    /**
+     * Set the String that is navigated to.
+     *
+     * @param navigateTo The navigateTo String.
+     */
+    public void setNavigateTo(String navigateTo) {
+        if (getNavigateTo() == null)
+            throw new NullPointerException();
+        this.navigateTo = navigateTo;
     }
 }

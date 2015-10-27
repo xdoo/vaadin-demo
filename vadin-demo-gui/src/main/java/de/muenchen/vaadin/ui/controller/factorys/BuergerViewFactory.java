@@ -11,12 +11,11 @@ import de.muenchen.vaadin.guilib.components.GenericGrid;
 import de.muenchen.vaadin.services.BuergerI18nResolver;
 import de.muenchen.vaadin.ui.components.BuergerChildTab;
 import de.muenchen.vaadin.ui.components.BuergerGrid;
-import de.muenchen.vaadin.ui.components.BuergerPartnerComponent;
 import de.muenchen.vaadin.ui.components.BuergerPartnerTab;
 import de.muenchen.vaadin.ui.components.KindGrid;
 import de.muenchen.vaadin.ui.components.forms.BuergerCreateForm;
-import de.muenchen.vaadin.ui.components.forms.SelectedBuergerReadForm;
-import de.muenchen.vaadin.ui.components.forms.SelectedBuergerUpdateForm;
+import de.muenchen.vaadin.ui.components.forms.BuergerPartnerForm;
+import de.muenchen.vaadin.ui.components.forms.BuergerRWForm;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,15 +47,15 @@ public class BuergerViewFactory implements Serializable {
     //////////////////////////////////////////////
 
     public BuergerCreateForm generateCreateForm(String navigateTo, String navigateBack) {
-        return new BuergerCreateForm(controller, navigateTo, navigateBack, null);
+        return new BuergerCreateForm(controller, navigateTo);
     }
 
     public BuergerCreateForm generateCreateChildForm(String navigateTo, String navigateBack) {
-        return new BuergerCreateForm(controller, navigateTo, navigateBack, Buerger.Rel.kinder.name());
+        return new BuergerCreateForm(controller, navigateTo, Buerger.Rel.kinder.name());
     }
 
     public BuergerCreateForm generateCreatePartnerForm(String navigateTo, String navigateBack) {
-        return new BuergerCreateForm(controller, navigateTo, navigateBack, Buerger.Rel.partner.name());
+        return new BuergerCreateForm(controller, navigateTo, Buerger.Rel.partner.name());
     }
 
     /**
@@ -75,18 +74,15 @@ public class BuergerViewFactory implements Serializable {
         return new BuergerPartnerTab(controller, navigateToForDetail, navigateForCreate, navigateBack);
     }
 
-    public SelectedBuergerUpdateForm generateUpdateForm(String navigateTo, String navigateBack) {
-        SelectedBuergerUpdateForm form = new SelectedBuergerUpdateForm(controller, navigateTo, navigateBack);
+    public BuergerRWForm generateRWForm(String navigateBack) {
+        BuergerRWForm form = new BuergerRWForm(controller);
         getEventBus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
         return form;
     }
 
-    public SelectedBuergerReadForm generateReadForm(String navigateToUpdate, String navigateBack) {
-        SelectedBuergerReadForm form = new SelectedBuergerReadForm(controller, navigateToUpdate, navigateBack);
-        getEventBus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
-        return form;
+    public EventBus getEventBus() {
+        return BaseUI.getCurrentEventBus();
     }
-
 
     public GenericGrid generateChildSearchTable() {
         final GenericGrid components = generateGrid();
@@ -98,6 +94,9 @@ public class BuergerViewFactory implements Serializable {
         return components;
     }
 
+    public GenericGrid<Buerger> generateGrid() {
+        return new GenericGrid<>(controller, controller.getModel().getBuergers(), Buerger.Field.getProperties());
+    }
 
     public GenericGrid generateBuergerPartnerSearchTable() {
         final GenericGrid components = generateGrid();
@@ -120,10 +119,8 @@ public class BuergerViewFactory implements Serializable {
         return grid;
     }
 
-    public BuergerPartnerComponent generateBuergerPartnerComponent(String navigateToForCreate) {
-        BuergerPartnerComponent partnerComponent = new BuergerPartnerComponent(controller, resolver, navigateToForCreate);
-
-        getEventBus().on(controller.getResponseKey().toSelector(), partnerComponent);
+    public BuergerPartnerForm generateBuergerPartnerComponent(String navigateToForCreate, String navigateToRead) {
+        BuergerPartnerForm partnerComponent = new BuergerPartnerForm(controller, navigateToForCreate, navigateToRead);
         getEventBus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
         return partnerComponent;
     }
@@ -134,19 +131,11 @@ public class BuergerViewFactory implements Serializable {
         return buergerGrid;
     }
 
-    public GenericGrid<Buerger> generateGrid() {
-        return new GenericGrid<>(controller, controller.getModel().getBuergers(), Buerger.Field.getProperties());
-    }
-
     public BuergerViewController getController() {
         return controller;
     }
 
     public void setController(BuergerViewController controller) {
         this.controller = controller;
-    }
-
-    public EventBus getEventBus() {
-        return BaseUI.getCurrentEventBus();
     }
 }

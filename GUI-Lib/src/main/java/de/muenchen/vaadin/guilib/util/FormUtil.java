@@ -3,17 +3,13 @@ package de.muenchen.vaadin.guilib.util;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.DefaultFieldGroupFieldFactory;
 import com.vaadin.data.fieldgroup.FieldGroup;
-import com.vaadin.ui.AbstractField;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.CheckBox;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.CssLayout;
-import com.vaadin.ui.DateField;
-import com.vaadin.ui.TextField;
+import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 import org.vaadin.tokenfield.TokenField;
+
+import java.util.stream.Stream;
 
 /**
  * Provides a simple Util for creating various binded Fields on properties.
@@ -99,6 +95,28 @@ public class FormUtil {
     }
 
     /**
+     * Deactivates the visibility of the validation.
+     * On value change or commit the visibility will be active again.
+     *
+     * @param field field configure
+     */
+    private void deactivateValidation(AbstractField field) {
+        field.setValidationVisible(false);
+        field.addValueChangeListener(event -> field.setValidationVisible(true));
+        //Hack
+        getBinder().addCommitHandler(new FieldGroup.CommitHandler() {
+            @Override
+            public void preCommit(FieldGroup.CommitEvent commitEvent) throws FieldGroup.CommitException {
+                field.setValidationVisible(true);
+            }
+
+            @Override
+            public void postCommit(FieldGroup.CommitEvent commitEvent) throws FieldGroup.CommitException {
+            }
+        });
+    }
+
+    /**
      * Get the i18n Resolver of this Util.
      *
      * @return
@@ -112,7 +130,7 @@ public class FormUtil {
      * <p/>
      * It has no ID set, the individual component must take care of that.
      *
-     * @param property    The property of the entity.
+     * @param property The property of the entity.
      * @return The Combobox for the given property.
      */
     public ComboBox createComboBox(String property) {
@@ -147,7 +165,6 @@ public class FormUtil {
         return df;
     }
 
-
     /**
      * Create a CheckBox Field for the given property.
      * <p/>
@@ -167,52 +184,47 @@ public class FormUtil {
 
     /**
      * Create a TokenField for the given property.
-     *
+     * <p/>
      * <p/>
      * It has no ID set, the individual component must take care of that.
+     *
      * @param property
      * @return The TokenField of the property
      */
-    public TokenField createTokenField(String property){
+    public TokenField createTokenField(String property) {
         final String caption = getCaption(property);
 
         //Group Elements of TokenField in CSS Layout
         CssLayout lo = new CssLayout();
         lo.addStyleName("v-component-group");
 
-        TokenField tf = new TokenField(caption,lo) {
-
+        TokenField tf = new TokenField(caption, lo) {
+            public static final String SEPERATOR = ",";
             @Override
             protected void onTokenInput(Object tokenId) {
                 //Multiple Tokens separated by ',' possible
-                String[] tokens = ((String) tokenId).split(",");
-                for (int i = 0; i < tokens.length; i++) {
-                    String token = tokens[i].trim();
-                    if (token.length() > 0) {
-                        super.onTokenInput(token);
-                    }
-                }
+                Stream.of(((String) tokenId).split(SEPERATOR))
+                        .map(String::trim)
+                        .filter(s -> !s.isEmpty())
+                        .forEach(t -> super.onTokenInput(t));
             }
 
             //HACK TO PREVENT READONLYEXCEPTION
             //AND SHOW CORRECT FIELD IN READONLY MODE
             @Override
             protected void configureTokenButton(Object tokenId, Button button) {
-                //TODO get a good Style for the tokens
-                button.addStyleName(ValoTheme.BUTTON_PRIMARY);
+                super.configureTokenButton(tokenId, button);
+                button.removeStyleName(ValoTheme.BUTTON_LINK);
+            }
 
-                if(!isReadOnly()) {
-                    button.setCaption(this.getTokenCaption(tokenId) + " ×");
-                }
-                else {
-                    button.setCaption(this.getTokenCaption(tokenId));
-                    button.setEnabled(false);
+            @Override
+            public void setReadOnly(boolean readOnly) {
+                super.setReadOnly(readOnly);
+                buttons.values()
+                        .forEach(button -> button.setEnabled(!readOnly));
 
-                    //This is necessary because it will call a rebuild of this TokenField
-                    //Rebuild will set the InputField to invisible
-                    setTokenInsertPosition(InsertPosition.AFTER);
-                }
-
+                if (readOnly)
+                    getLayout().removeComponent(cb);
             }
         };
 
@@ -223,27 +235,5 @@ public class FormUtil {
         deactivateValidation(tf);
 
         return tf;
-    }
-
-    /**
-     * Deactivates the visibility of the validation.
-     * On value change or commit the visibility will be active again.
-     *
-     * @param field field configure
-     */
-    private void deactivateValidation(AbstractField field){
-        field.setValidationVisible(false);
-        field.addValueChangeListener(event -> field.setValidationVisible(true));
-        //Hack
-        getBinder().addCommitHandler(new FieldGroup.CommitHandler() {
-            @Override
-            public void preCommit(FieldGroup.CommitEvent commitEvent) throws FieldGroup.CommitException {
-                field.setValidationVisible(true);
-            }
-
-            @Override
-            public void postCommit(FieldGroup.CommitEvent commitEvent) throws FieldGroup.CommitException {
-            }
-        });
     }
 }

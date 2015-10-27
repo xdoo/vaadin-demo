@@ -1,8 +1,10 @@
 package de.muenchen.vaadin.ui.components.forms.selected;
 
 import de.muenchen.eventbus.selector.entity.ResponseEntityKey;
+import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.guilib.controller.EntityController;
 import de.muenchen.vaadin.services.model.BuergerDatastore;
+import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerSingleActions;
 import de.muenchen.vaadin.ui.components.forms.node.BuergerForm;
 
 /**
@@ -25,12 +27,21 @@ public class SelectedBuergerForm extends BuergerForm {
     }
 
     /**
+     * Reloads the Buerger via the Controller.
+     */
+    public void reLoadBuerger() {
+        final BuergerSingleActions singleActions = new BuergerSingleActions(getI18nResolver(), this::getBuerger);
+        singleActions.reRead(null);
+    }
+
+    /**
      * Update the Buerger of this Form to the selected one form the DataStore.
      *
-     * @param event
+     * @param event A reactor Event with a {@link BuergerDatastore} as Data.
      */
     private void update(reactor.bus.Event<?> event) {
         final BuergerDatastore data = (BuergerDatastore) event.getData();
-        data.getSelectedBuerger().ifPresent(this::setBuerger);
+        final Buerger buerger = data.getSelectedBuerger().orElse(null);
+        setBuerger(buerger);
     }
 }
