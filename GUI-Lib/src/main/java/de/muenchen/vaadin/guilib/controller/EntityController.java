@@ -3,7 +3,6 @@ package de.muenchen.vaadin.guilib.controller;
 import de.muenchen.eventbus.selector.entity.RequestEntityKey;
 import de.muenchen.eventbus.selector.entity.RequestEvent;
 import de.muenchen.eventbus.selector.entity.ResponseEntityKey;
-import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 
 
 /**

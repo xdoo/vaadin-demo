@@ -1,7 +1,6 @@
 package de.muenchen.vaadin.guilib.components.buttons;
 
 import com.vaadin.ui.Button;
-import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 import de.muenchen.vaadin.demo.i18nservice.buttons.Action;
 import de.muenchen.vaadin.guilib.BaseUI;
 

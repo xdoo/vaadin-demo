@@ -4,7 +4,6 @@ import com.vaadin.navigator.Navigator;
 import com.vaadin.ui.CustomComponent;
 import de.muenchen.eventbus.EventBus;
 import de.muenchen.eventbus.selector.entity.ResponseEntityKey;
-import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.controller.EntityController;
 
