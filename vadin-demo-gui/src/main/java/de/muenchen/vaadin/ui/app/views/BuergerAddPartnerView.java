@@ -40,7 +40,7 @@ public class BuergerAddPartnerView extends DefaultBuergerView {
 
         final GenericGrid<Buerger> grid = this.controller.getViewFactory().generateBuergerSearchTable();
 
-        grid.getGrid().setSelectionMode(Grid.SelectionMode.SINGLE);
+        grid.setSelectionMode(Grid.SelectionMode.SINGLE).activateSearch();
 
         ActionButton addSingle = new ActionButton(Buerger.class, SimpleAction.add);
         BuergerAssociationActions actionsSingle = new BuergerAssociationActions(

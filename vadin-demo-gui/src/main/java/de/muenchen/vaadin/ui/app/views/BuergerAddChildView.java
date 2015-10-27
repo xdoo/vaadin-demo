@@ -37,7 +37,7 @@ public class BuergerAddChildView extends DefaultBuergerView{
         final NavigateActions navigateActions = new NavigateActions(BuergerDetailView.NAME);
         backButton.addActionPerformer(navigateActions::navigate);
 
-        final GenericGrid<Buerger> grid = this.controller.getViewFactory().generateBuergerSearchTable();
+        final GenericGrid<Buerger> grid = this.controller.getViewFactory().generateBuergerSearchTable().activateSearch();
 
         ActionButton addMultiple = new ActionButton(Buerger.class, SimpleAction.add);
         BuergerAssociationListActions actionMultiple = new BuergerAssociationListActions(
