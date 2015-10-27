@@ -2,8 +2,6 @@ package de.muenchen.vaadin.ui.app.views;
 
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
-import de.muenchen.vaadin.demo.i18nservice.I18nResolverImpl;
-import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +19,8 @@ public class BuergerCreateChildView extends DefaultBuergerView {
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerCreateChildView.class);
 
     @Autowired
-    public BuergerCreateChildView(BuergerViewController controller, I18nResolverImpl resolver, MainUI ui) {
-        super(controller, resolver, ui);
+    public BuergerCreateChildView(BuergerViewController controller) {
+        super(controller);
         LOG.debug("creating 'buerger_create_child_view'");
     }
 
