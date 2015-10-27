@@ -114,7 +114,7 @@ public class BuergerCreateForm extends BaseComponent {
     private void configureSaveButton() {
         if (getRelation().isPresent()) {
             final BuergerAssociationActions buergerAssociationActions = new BuergerAssociationActions(
-                    BaseUI.getCurrentI18nResolver(),
+
                     () -> new Association<>(getBuergerForm().getBuerger(), getRelation().get()));
 
             getSaveButton().addActionPerformer(buergerAssociationActions::addAssociation);

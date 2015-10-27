@@ -3,6 +3,7 @@ package de.muenchen.vaadin.ui.app.views;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.VerticalLayout;
+import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
@@ -31,7 +32,7 @@ public class BuergerCreateView extends DefaultBuergerView {
 
     @Override
     protected void site() {
-        final ActionButton backButton = new ActionButton(controller.getResolver(), SimpleAction.back);
+        final ActionButton backButton = new ActionButton(Buerger.class, SimpleAction.back);
         final NavigateActions navigateActions = new NavigateActions(BuergerTableView.NAME);
         backButton.addActionPerformer(navigateActions::navigate);
 

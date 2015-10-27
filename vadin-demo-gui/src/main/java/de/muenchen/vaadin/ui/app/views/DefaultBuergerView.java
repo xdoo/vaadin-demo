@@ -46,7 +46,7 @@ public abstract class DefaultBuergerView extends VerticalLayout implements View{
     protected void addHeadline() {
 
         // headline
-        Label pageTitle = new Label(resolver.resolveRelative(getPagePath(Type.title)));
+        Label pageTitle = new Label(BaseUI.getCurrentI18nResolver().resolveRelative(Buerger.class, getPagePath(Type.title)));
         pageTitle.addStyleName(ValoTheme.LABEL_H1);
         pageTitle.addStyleName(ValoTheme.LABEL_COLORED);
 

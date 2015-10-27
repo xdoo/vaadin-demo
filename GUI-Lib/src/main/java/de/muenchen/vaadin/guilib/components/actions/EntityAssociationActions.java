@@ -28,8 +28,6 @@ public class EntityAssociationActions<T> {
     private final Class<T> entityClass;
     /** The supplier for the Association. */
     private final Supplier<Association<?>> association;
-    /** The I18NResolver of this context **/
-    private final I18nResolver resolver;
 
     /**
      * Create new AssociationActions for the Entity with the single association.
@@ -37,13 +35,12 @@ public class EntityAssociationActions<T> {
      * @param association The association.
      * @param entityClass The class of the Entity.
      */
-    public EntityAssociationActions(I18nResolver resolver, Supplier<Association<?>> association, Class<T> entityClass) {
+    public EntityAssociationActions(Supplier<Association<?>> association, Class<T> entityClass) {
         if (entityClass == null)
             throw new NullPointerException();
         if (association == null)
             throw new NullPointerException();
 
-        this.resolver = resolver;
         this.entityClass = entityClass;
         this.association = association;
     }
@@ -58,8 +55,8 @@ public class EntityAssociationActions<T> {
             return true;
         } catch (Exception e) { //TODO Find a good Exception Type
             GenericWarningNotification warn = new GenericWarningNotification(
-                    resolver.resolveRelative(getEntityClass(), getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.save, I18nPaths.Type.label)),
-                    resolver.resolveRelative(getEntityClass(), getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.save, I18nPaths.Type.text)));
+                    BaseUI.getCurrentI18nResolver().resolveRelative(getEntityClass(), getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.save, I18nPaths.Type.label)),
+                    BaseUI.getCurrentI18nResolver().resolveRelative(getEntityClass(), getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.save, I18nPaths.Type.text)));
             warn.show(Page.getCurrent());
             return false;
         }

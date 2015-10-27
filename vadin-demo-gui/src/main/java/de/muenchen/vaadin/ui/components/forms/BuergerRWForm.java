@@ -3,6 +3,7 @@ package de.muenchen.vaadin.ui.components.forms;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
+import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.BaseComponent;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
@@ -64,16 +65,16 @@ public class BuergerRWForm extends BaseComponent {
      * @return An array of all buttons.
      */
     private Component[] createEditButtons() {
-        final ActionButton saveButton = new ActionButton(getI18nResolver(), SimpleAction.save);
+        final ActionButton saveButton = new ActionButton(Buerger.class, SimpleAction.save);
 
-        final BuergerSingleActions singleActions = new BuergerSingleActions(getI18nResolver(), getBuergerForm()::getBuerger);
+        final BuergerSingleActions singleActions = new BuergerSingleActions(getBuergerForm()::getBuerger);
         saveButton.addActionPerformer(singleActions::update);
         saveButton.addActionPerformer(clickEvent -> {
             setEdit(false);
             return true;
         });
 
-        final ActionButton cancelButton = new ActionButton(getI18nResolver(), SimpleAction.cancel);
+        final ActionButton cancelButton = new ActionButton(Buerger.class, SimpleAction.cancel);
 
         cancelButton.addActionPerformer(singleActions::reRead);
         cancelButton.addActionPerformer(clickEvent -> {
@@ -89,7 +90,7 @@ public class BuergerRWForm extends BaseComponent {
      * @return An array of all buttons.
      */
     private Component[] createButtons() {
-        final ActionButton editButton = new ActionButton(getI18nResolver(), SimpleAction.update);
+        final ActionButton editButton = new ActionButton(Buerger.class, SimpleAction.update);
         editButton.addClickListener(clickEvent -> setEdit(true));
 
         return new Component[]{editButton};

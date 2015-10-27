@@ -44,7 +44,7 @@ public class BuergerDetailView extends DefaultBuergerView {
 
     @Override
     protected void site() {
-        final ActionButton backButton = new ActionButton(controller.getResolver(), SimpleAction.back);
+        final ActionButton backButton = new ActionButton(Buerger.class, SimpleAction.back);
         final NavigateActions navigateActions = new NavigateActions(BuergerTableView.NAME);
         backButton.addActionPerformer(navigateActions::navigate);
 
