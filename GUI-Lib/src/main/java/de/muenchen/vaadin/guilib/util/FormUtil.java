@@ -24,7 +24,7 @@ import org.vaadin.tokenfield.TokenField;
  * @author p.mueller
  * @version 1.0
  */
-public class FormUtil<T> {
+public class FormUtil {
     /**
      * The null representation on one input.
      */
