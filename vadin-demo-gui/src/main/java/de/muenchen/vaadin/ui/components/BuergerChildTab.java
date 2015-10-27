@@ -7,8 +7,10 @@ import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.GenericGrid;
+import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
 import de.muenchen.vaadin.services.BuergerI18nResolver;
+import de.muenchen.vaadin.ui.app.views.BuergerAddChildView;
 import de.muenchen.vaadin.ui.app.views.BuergerDetailView;
 import de.muenchen.vaadin.ui.app.views.TableSelectWindow;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerAssociationListActions;
@@ -31,20 +33,14 @@ public class BuergerChildTab extends CustomComponent {
 
         this.controller = controller;
 
-        grid = controller.getViewFactory().generateChildTable(BuergerDetailView.NAME)
+        grid = this.controller.getViewFactory().generateChildTable(BuergerDetailView.NAME)
                 .activateCreate(navigateToForCreate)
-                .activateRead(BuergerDetailView.NAME)
-                .addButton(
-                        controller.getResolver().resolveRelative(
-                                getFormPath(SimpleAction.add,
-                                        I18nPaths.Component.button,
-                                        I18nPaths.Type.label)),
-                        () -> {
-                            HorizontalLayout layout = new HorizontalLayout(controller.getViewFactory().generateChildSearchTable());
-                            layout.setMargin(true);
-                            getUI().addWindow(new TableSelectWindow(controller, controller.getResolver(), layout));
-                        });
+                .activateRead(BuergerDetailView.NAME);
 
+        ActionButton addButton = new ActionButton(resolver, SimpleAction.add);
+        NavigateActions navigateActions = new NavigateActions(BuergerAddChildView.NAME);
+        addButton.addActionPerformer(navigateActions::navigate);
+        grid.addButton(addButton);
 
         //Create Button to delete one or more associations
         ActionButton deleteButton = new ActionButton(resolver, SimpleAction.delete);
@@ -63,7 +59,7 @@ public class BuergerChildTab extends CustomComponent {
         setCompositionRoot(layout);
 
 
-        setId(String.format("%s_%s_%s_CHILD_TAB", navigateToForDetail, navigateBack, controller.getResolver().getBasePath()));
+        setId(String.format("%s_%s_%s_CHILD_TAB", navigateToForDetail, navigateBack, this.controller.getResolver().getBasePath()));
     }
 
 

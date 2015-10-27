@@ -7,6 +7,7 @@ import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 import de.muenchen.vaadin.demo.i18nservice.buttons.Action;
+import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
 
 /**
  * Generisches Bestätigungsfenster mit einer "ok" und
@@ -39,9 +40,9 @@ public class GenericConfirmationWindow extends Window {
      *
      * @param controller          der Controller
      * @param action              Art des Fensters
-     * @param okButtonClickAction Aktion der bei klick auf den OK-Button ausgeführt werden soll
+     * @param onAcceptAction Aktion der bei klick auf den OK-Button ausgeführt werden soll
      */
-    public GenericConfirmationWindow(I18nResolver controller, Action action, Button.ClickListener okButtonClickAction) {
+    public GenericConfirmationWindow(I18nResolver controller, Action action, ActionButton.CrashableActionPerformer onAcceptAction) {
         this.okButtonText = controller.resolve(I18nPaths.getConfirmationPath(action, I18nPaths.Type.confirm));
         this.cancelButtonText = controller.resolve(I18nPaths.getConfirmationPath(action, I18nPaths.Type.cancel));
         this.messageText = controller.resolve(I18nPaths.getConfirmationPath(action, I18nPaths.Type.text));
@@ -53,7 +54,7 @@ public class GenericConfirmationWindow extends Window {
         content.addStyleName(ValoTheme.PANEL_BORDERLESS);
         content.setContent(l);
 
-        HorizontalLayout footer = new HorizontalLayout(this.addOkButton(okButtonClickAction, getIconFor(action)), this.addCancelButton());
+        HorizontalLayout footer = new HorizontalLayout(this.addOkButton(onAcceptAction, getIconFor(action)), this.addCancelButton());
         footer.setWidth("100%");
         footer.setSpacing(true);
         footer.addStyleName(ValoTheme.WINDOW_BOTTOM_TOOLBAR);
@@ -80,24 +81,14 @@ public class GenericConfirmationWindow extends Window {
      * Erstellt eine Schaltfläche, die das übergebene Event an
      * den Eventbus schickt. Danach wird das Fenster geschlossen.
      *
-     * @param clickListener
+     * @param action
      * @return "ok" Schaltfläche
      */
-    private Button addOkButton(Button.ClickListener clickListener, FontAwesome icon) {
-        Button ok = new Button() {
-            @Override
-            public void addClickListener(Button.ClickListener listener) {
-                Button.ClickListener complete = event -> {
-                    listener.buttonClick(event);
-                    GenericConfirmationWindow.this.close();
-                };
-                super.addClickListener(complete);
-            }
-        };
+    private Button addOkButton(ActionButton.CrashableActionPerformer action, FontAwesome icon) {
+        ActionButton ok = new ActionButton();
         ok.setIcon(icon);
         ok.setCaption(this.okButtonText);
         ok.addStyleName(ValoTheme.BUTTON_DANGER);
-        ok.addClickListener(clickListener);
         ok.setSizeFull();
         return ok;
     }
@@ -111,9 +102,7 @@ public class GenericConfirmationWindow extends Window {
         Button cancel = new Button();
         cancel.setIcon(FontAwesome.REORDER);
         cancel.setCaption(this.cancelButtonText);
-        cancel.addClickListener(e -> {
-            this.close();
-        });
+        cancel.addClickListener(e -> this.close());
         cancel.setSizeFull();
         return cancel;
     }

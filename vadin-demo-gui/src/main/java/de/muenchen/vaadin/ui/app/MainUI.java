@@ -275,7 +275,10 @@ public class MainUI extends BaseUI implements I18nResolver {
             GenericConfirmationWindow confirmationWindow =
                     new GenericConfirmationWindow(MainUI.this,
                             SimpleAction.logout,
-                            e -> this.postEvent(Key.LOGOUT));
+                            e -> {
+                                this.postEvent(Key.LOGOUT);
+                                return true;
+                            });
             getUI().addWindow(confirmationWindow);
             confirmationWindow.center();
             confirmationWindow.focus();
