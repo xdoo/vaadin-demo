@@ -24,7 +24,12 @@ public class PetersPerfectBridge implements StringBridge {
     @Override
     public String objectToString(Object object) {
         if (object instanceof Date) {
-            final LocalDate localDate = ((Date) object).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            final LocalDate localDate;
+            if (object.getClass() == java.sql.Date.class) {
+                localDate = ((java.sql.Date) object).toLocalDate();
+            } else {
+                localDate = ((Date) object).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            }
             String build = localDate.toString();
             build += " " + localDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL));
             build += " " + localDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT));
