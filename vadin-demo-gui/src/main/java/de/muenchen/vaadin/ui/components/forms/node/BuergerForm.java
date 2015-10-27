@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.vaadin.data.Validator.InvalidValueException;
+
 /**
  * Provides a very simple and basic Form for a Buerger.
  * <p/>
@@ -29,11 +30,17 @@ public class BuergerForm extends BaseComponent {
      * The class of the Entity of this Form.
      */
     public static final Class<Buerger> ENTITY_CLASS = Buerger.class;
-    /** The FormLayout that contains all the form fields. */
+    /**
+     * The FormLayout that contains all the form fields.
+     */
     private final FormLayout formLayout;
-    /** Contains the current Buerger and handles the data binding. */
+    /**
+     * Contains the current Buerger and handles the data binding.
+     */
     private final BeanFieldGroup<Buerger> binder = new BeanFieldGroup<>(ENTITY_CLASS);
-    /** A list of all the Fields. */
+    /**
+     * A list of all the Fields.
+     */
     private final List<Field> fields;
 
     /**
@@ -74,7 +81,7 @@ public class BuergerForm extends BaseComponent {
         final CheckBox alive = formUtil.createCheckBox(Buerger.Field.alive.name());
         final TokenField eigenschaften = formUtil.createTokenField(Buerger.Field.eigenschaften.name());
 
-        return Arrays.asList(vorname, nachname, augenfarbe, geburtsdatum,alive, eigenschaften);
+        return Arrays.asList(vorname, nachname, augenfarbe, geburtsdatum, alive, eigenschaften);
     }
 
     /**
