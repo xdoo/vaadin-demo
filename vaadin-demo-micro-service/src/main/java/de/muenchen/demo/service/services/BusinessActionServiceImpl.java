@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.util.Arrays;
+import java.util.HashSet;
 
 /**
  * Provides a service to execute business-actions.
@@ -56,6 +57,9 @@ public class BusinessActionServiceImpl implements BusinessActionService {
         }
         buerger.setAugenfarbe(Augenfarben.blau);
         buerger.setAlive(true);
+        HashSet<String> eigenschaften = new HashSet<>();
+        eigenschaften.add("Eigenschaft1");
+        buerger.setEigenschaften(eigenschaften);
         buerger.setMandant(getCurrentMandant());
 
         //insert example data for Wohnung
