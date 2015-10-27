@@ -229,6 +229,11 @@ public class GenericGrid<T> extends CustomComponent {
     //Configuration-Methods
     //--------------
 
+    public GenericGrid<T> setSelectionMode(Grid.SelectionMode mode){
+        grid.setSelectionMode(mode);
+        return this;
+    }
+
     /**
      * Activate double click to read entity.
      *
@@ -557,7 +562,6 @@ public class GenericGrid<T> extends CustomComponent {
     private I18nResolver getResolver(){
         return BaseUI.getCurrentI18nResolver();
     }
-
 
     /**
      * TODO REMOVE
