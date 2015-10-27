@@ -10,11 +10,7 @@ import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.components.GenericGrid;
 import de.muenchen.vaadin.ui.components.BuergerChildTab;
 import de.muenchen.vaadin.ui.components.BuergerGrid;
-import de.muenchen.vaadin.ui.components.BuergerPartnerTab;
 import de.muenchen.vaadin.ui.components.KindGrid;
-import de.muenchen.vaadin.ui.components.forms.BuergerCreateForm;
-import de.muenchen.vaadin.ui.components.forms.BuergerPartnerForm;
-import de.muenchen.vaadin.ui.components.forms.BuergerRWForm;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,18 +41,6 @@ class BuergerViewFactoryasdf implements Serializable {
     // Factory Methoden für die UI Komponenten //
     //////////////////////////////////////////////
 
-    public BuergerCreateForm generateCreateForm(String navigateTo, String navigateBack) {
-        return new BuergerCreateForm(navigateTo);
-    }
-
-    public BuergerCreateForm generateCreateChildForm(String navigateTo, String navigateBack) {
-        return new BuergerCreateForm(navigateTo, Buerger.Rel.kinder.name());
-    }
-
-    public BuergerCreateForm generateCreatePartnerForm(String navigateTo, String navigateBack) {
-        return new BuergerCreateForm(navigateTo, Buerger.Rel.partner.name());
-    }
-
     /**
      * Erzeugt eine neue Instanz eines "Child" Tabs.
      *
@@ -67,16 +51,6 @@ class BuergerViewFactoryasdf implements Serializable {
      */
     public BuergerChildTab generateChildTab(String navigateToForDetail, String navigateForCreate, String navigateBack) {
         return new BuergerChildTab(controller, controller.getResolver(), navigateToForDetail, navigateForCreate, navigateBack);
-    }
-
-    public BuergerPartnerTab generatePartnerTab(String navigateToForDetail, String navigateForCreate) {
-        return new BuergerPartnerTab(navigateToForDetail, navigateForCreate);
-    }
-
-    public BuergerRWForm generateRWForm(String navigateBack) {
-        BuergerRWForm form = new BuergerRWForm();
-        getEventBus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
-        return form;
     }
 
     public EventBus getEventBus() {
@@ -102,12 +76,6 @@ class BuergerViewFactoryasdf implements Serializable {
         getEventBus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
 
         return grid;
-    }
-
-    public BuergerPartnerForm generateBuergerPartnerComponent(String navigateToForCreate, String navigateToRead) {
-        BuergerPartnerForm partnerComponent = new BuergerPartnerForm(navigateToForCreate, navigateToRead);
-        getEventBus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
-        return partnerComponent;
     }
 
     public BuergerGrid generateBuergerGrid() {
