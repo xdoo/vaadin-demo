@@ -84,28 +84,14 @@ public class BuergerViewFactory implements Serializable {
         return BaseUI.getCurrentEventBus();
     }
 
-    public GenericGrid generateChildSearchTable() {
+    public GenericGrid<Buerger> generateBuergerSearchTable() {
         final GenericGrid components = generateGrid();
-        components.addDoubleClickListener(buerger -> {
-            Association<Buerger> association = new Association<>((Buerger) buerger, Buerger.Rel.kinder.name());
-            getEventBus().notify(controller.getRequestKey(RequestEvent.ADD_ASSOCIATION), association.asEvent());
-        });
         getEventBus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
         return components;
     }
 
     public GenericGrid<Buerger> generateGrid() {
         return new GenericGrid<>(controller, controller.getModel().getBuergers(), Buerger.Field.getProperties());
-    }
-
-    public GenericGrid generateBuergerPartnerSearchTable() {
-        final GenericGrid components = generateGrid();
-        components.addDoubleClickListener(buerger -> {
-            Association<Buerger> association = new Association<>((Buerger) buerger, Buerger.Rel.partner.name());
-            getEventBus().notify(controller.getRequestKey(RequestEvent.ADD_ASSOCIATION), association.asEvent());
-        });
-        getEventBus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
-        return components;
     }
 
     public KindGrid generateChildTable(String navigateToForDetail) {
