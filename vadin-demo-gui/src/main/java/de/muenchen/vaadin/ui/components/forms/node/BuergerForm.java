@@ -10,7 +10,6 @@ import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.guilib.components.BaseComponent;
-import de.muenchen.vaadin.guilib.controller.EntityController;
 import de.muenchen.vaadin.guilib.util.FormUtil;
 import org.vaadin.tokenfield.TokenField;
 
@@ -54,10 +53,9 @@ public class BuergerForm extends BaseComponent {
      * This Form is only the plain fields for input, and has no additional components or buttons. You can use {@link
      * BuergerForm#setReadOnly(boolean)} for a readonly mode.
      *
-     * @param entityController The controller used for everything.
      */
-    public BuergerForm(EntityController entityController) {
-        super(entityController);
+    public BuergerForm() {
+        super();
         binder.setItemDataSource(new Buerger());
         fields = buildFields();
 

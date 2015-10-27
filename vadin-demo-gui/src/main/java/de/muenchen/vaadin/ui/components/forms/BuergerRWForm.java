@@ -7,7 +7,6 @@ import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.BaseComponent;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
-import de.muenchen.vaadin.guilib.controller.EntityController;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerSingleActions;
 import de.muenchen.vaadin.ui.components.forms.selected.SelectedBuergerForm;
 
@@ -35,11 +34,10 @@ public class BuergerRWForm extends BaseComponent {
      * Create a new BuergerRWForm with the internationalization of the Controller.
      * It will navigate to the navigateBack value on the back button click.
      *
-     * @param entityController The Controller for i18n.
      */
-    public BuergerRWForm(EntityController entityController) {
-        super(entityController);
-        buergerForm = new SelectedBuergerForm(entityController);
+    public BuergerRWForm() {
+        super();
+        buergerForm = new SelectedBuergerForm();
         buergerForm.reLoadBuerger();
 
         init();

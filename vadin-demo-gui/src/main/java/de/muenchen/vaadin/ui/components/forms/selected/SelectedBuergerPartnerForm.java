@@ -1,7 +1,7 @@
 package de.muenchen.vaadin.ui.components.forms.selected;
 
+import de.muenchen.eventbus.selector.entity.ResponseEntityKey;
 import de.muenchen.vaadin.demo.api.local.Buerger;
-import de.muenchen.vaadin.guilib.controller.EntityController;
 import de.muenchen.vaadin.services.model.BuergerDatastore;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerSingleActions;
 import de.muenchen.vaadin.ui.components.forms.node.BuergerForm;
@@ -15,11 +15,10 @@ import de.muenchen.vaadin.ui.components.forms.node.BuergerForm;
 public class SelectedBuergerPartnerForm extends BuergerForm {
     /**
      * Creates a new Buerger Partner form
-     * @param entityController The controller used for everything.
      */
-    public SelectedBuergerPartnerForm(EntityController entityController) {
-        super(entityController);
-        getEventBus().on(getResponeKey().toSelector(), this::update);
+    public SelectedBuergerPartnerForm() {
+        super();
+        getEventBus().on(new ResponseEntityKey(Buerger.class).toSelector(), this::update);
     }
 
     /**

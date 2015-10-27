@@ -9,9 +9,9 @@ import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
+import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
-import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.ui.components.BuergerChildTab;
 import de.muenchen.vaadin.ui.components.BuergerPartnerTab;
 import de.muenchen.vaadin.ui.components.forms.BuergerRWForm;
@@ -56,7 +56,7 @@ public class BuergerDetailView extends DefaultBuergerView {
 
         // read form
         readForm = this.controller.getViewFactory().generateRWForm(BuergerTableView.NAME);
-        final BuergerReadForm alternateReadForm = new BuergerReadForm(controller, BuergerUpdateView.NAME);
+        final BuergerReadForm alternateReadForm = new BuergerReadForm(BuergerUpdateView.NAME);
         layout.addComponent(new HorizontalLayout(readForm, alternateReadForm));
 
         // tab sheet

@@ -7,7 +7,6 @@ import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
-import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.components.forms.BuergerUpdateForm;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +31,7 @@ public class BuergerUpdateView extends DefaultBuergerView {
         final NavigateActions navigateActions = new NavigateActions(BuergerDetailView.NAME);
         backButton.addActionPerformer(navigateActions::navigate);
 
-        final BuergerUpdateForm c = new BuergerUpdateForm(controller, BuergerDetailView.NAME);
-
+        final BuergerUpdateForm c = new BuergerUpdateForm(BuergerDetailView.NAME);
         final VerticalLayout layout = new VerticalLayout(backButton, c);
         layout.setSpacing(true);
 

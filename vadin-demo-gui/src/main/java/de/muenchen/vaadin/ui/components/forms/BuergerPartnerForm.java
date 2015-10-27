@@ -9,7 +9,6 @@ import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.BaseComponent;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
-import de.muenchen.vaadin.guilib.controller.EntityController;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerAssociationActions;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerSingleActions;
 import de.muenchen.vaadin.ui.components.forms.selected.SelectedBuergerPartnerForm;
@@ -31,14 +30,13 @@ public class BuergerPartnerForm extends BaseComponent {
      * <p/>
      * It will always show the current partner of the selected Buerger. The Form won't be visible if no Partner is present.
      *
-     * @param controller       The controller used for i18n.
      * @param navigateToCreate The View to navigate to on the create action.
      * @param navigateToRead   The View to navigate to on the read action.
      */
-    public BuergerPartnerForm(EntityController controller, final String navigateToCreate, final String navigateToRead) {
-        super(controller);
+    public BuergerPartnerForm(final String navigateToCreate, final String navigateToRead) {
+        super();
 
-        partnerForm = new SelectedBuergerPartnerForm(controller) {
+        partnerForm = new SelectedBuergerPartnerForm() {
             @Override
             public void setBuerger(Buerger buerger) {
                 setFormVisible(buerger != null);

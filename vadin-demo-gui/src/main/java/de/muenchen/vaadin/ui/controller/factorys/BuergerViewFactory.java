@@ -47,15 +47,15 @@ public class BuergerViewFactory implements Serializable {
     //////////////////////////////////////////////
 
     public BuergerCreateForm generateCreateForm(String navigateTo, String navigateBack) {
-        return new BuergerCreateForm(controller, navigateTo);
+        return new BuergerCreateForm(navigateTo);
     }
 
     public BuergerCreateForm generateCreateChildForm(String navigateTo, String navigateBack) {
-        return new BuergerCreateForm(controller, navigateTo, Buerger.Rel.kinder.name());
+        return new BuergerCreateForm(navigateTo, Buerger.Rel.kinder.name());
     }
 
     public BuergerCreateForm generateCreatePartnerForm(String navigateTo, String navigateBack) {
-        return new BuergerCreateForm(controller, navigateTo, Buerger.Rel.partner.name());
+        return new BuergerCreateForm(navigateTo, Buerger.Rel.partner.name());
     }
 
     /**
@@ -75,7 +75,7 @@ public class BuergerViewFactory implements Serializable {
     }
 
     public BuergerRWForm generateRWForm(String navigateBack) {
-        BuergerRWForm form = new BuergerRWForm(controller);
+        BuergerRWForm form = new BuergerRWForm();
         getEventBus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
         return form;
     }
@@ -95,7 +95,7 @@ public class BuergerViewFactory implements Serializable {
     }
 
     public GenericGrid<Buerger> generateGrid() {
-        return new GenericGrid<>(controller, controller.getModel().getBuergers(), Buerger.Field.getProperties());
+        return new GenericGrid<>(controller.getModel().getBuergers(), Buerger.Field.getProperties());
     }
 
     public GenericGrid generateBuergerPartnerSearchTable() {
@@ -120,7 +120,7 @@ public class BuergerViewFactory implements Serializable {
     }
 
     public BuergerPartnerForm generateBuergerPartnerComponent(String navigateToForCreate, String navigateToRead) {
-        BuergerPartnerForm partnerComponent = new BuergerPartnerForm(controller, navigateToForCreate, navigateToRead);
+        BuergerPartnerForm partnerComponent = new BuergerPartnerForm(navigateToForCreate, navigateToRead);
         getEventBus().notify(controller.getRequestKey(RequestEvent.READ_SELECTED));
         return partnerComponent;
     }
