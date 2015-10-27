@@ -17,7 +17,6 @@ public class SelectedBuergerPartnerForm extends BuergerForm {
      * Creates a new Buerger Partner form
      */
     public SelectedBuergerPartnerForm() {
-        super();
         getEventBus().on(new ResponseEntityKey(Buerger.class).toSelector(), this::update);
     }
 

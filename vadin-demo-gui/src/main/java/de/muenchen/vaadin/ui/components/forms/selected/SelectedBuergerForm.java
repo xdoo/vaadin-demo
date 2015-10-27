@@ -20,7 +20,6 @@ public class SelectedBuergerForm extends BuergerForm {
      *
      */
     public SelectedBuergerForm() {
-        super();
         getEventBus().on(new ResponseEntityKey(BuergerForm.ENTITY_CLASS).toSelector(), this::update);
     }
 
