@@ -35,9 +35,6 @@ public class SecurityRestClientImpl implements SecurityRestClient {
         } catch (OAuth2AccessDeniedException e) {
             LOG.debug("HTTP Response Error bei Login: "+ e.getMessage());
         }
-        
-        
-        
         return Optional.ofNullable(principal);
     }
     
