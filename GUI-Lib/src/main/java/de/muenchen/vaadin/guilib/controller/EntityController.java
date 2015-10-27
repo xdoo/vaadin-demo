@@ -10,7 +10,6 @@ import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
  * Created by rene.zarwel on 07.10.15.
  */
 public interface EntityController {
-    I18nResolver getResolver();
 
     RequestEntityKey getRequestKey(RequestEvent event);
 

@@ -6,6 +6,7 @@ import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
+import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
 import de.muenchen.vaadin.guilib.controller.EntityController;
@@ -101,7 +102,7 @@ public class SelectedBuergerUpdateForm extends SelectedBuergerForm {
      * @return The Headline Label.
      */
     private Label createHeadline() {
-        final Label headline = new Label(getI18nResolver().resolveRelative(Buerger.class, getFormPath(SimpleAction.update, I18nPaths.Component.headline, Type.label)));
+        final Label headline = new Label(BaseUI.getCurrentI18nResolver().resolveRelative(Buerger.class, getFormPath(SimpleAction.update, I18nPaths.Component.headline, Type.label)));
         headline.addStyleName(ValoTheme.LABEL_H3);
         return headline;
     }

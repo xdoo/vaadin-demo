@@ -43,7 +43,7 @@ public class BuergerChildTab extends CustomComponent {
                         () -> {
                             HorizontalLayout layout = new HorizontalLayout(controller.getViewFactory().generateChildSearchTable());
                             layout.setMargin(true);
-                            getUI().addWindow(new TableSelectWindow(controller, controller.getResolver(), layout));
+                            getUI().addWindow(new TableSelectWindow(layout));
                         });
 
 

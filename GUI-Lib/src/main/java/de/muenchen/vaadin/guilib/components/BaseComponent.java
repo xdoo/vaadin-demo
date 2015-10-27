@@ -22,9 +22,9 @@ public class BaseComponent extends CustomComponent {
         return this.entityController.getResponseKey();
     }
 
-    public I18nResolver getI18nResolver() {
-        return entityController.getResolver();
-    }
+//    public I18nResolver getI18nResolver() {
+//        return BaseUI.getCurrentI18nResolver();
+//    }
 
     public EventBus getEventBus() {
         return BaseUI.getCurrentEventBus();

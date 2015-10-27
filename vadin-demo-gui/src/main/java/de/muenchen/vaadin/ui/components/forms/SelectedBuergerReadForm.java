@@ -5,6 +5,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
+import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
 import de.muenchen.vaadin.guilib.controller.EntityController;
@@ -94,7 +95,7 @@ public class SelectedBuergerReadForm extends SelectedBuergerForm {
 
 
     private Label createHeadline() {
-        final Label headline = new Label(getI18nResolver().resolveRelative(Buerger.class, getFormPath(SimpleAction.read, Component.headline, Type.label)));
+        final Label headline = new Label(BaseUI.getCurrentI18nResolver().resolveRelative(Buerger.class, getFormPath(SimpleAction.read, Component.headline, Type.label)));
         headline.addStyleName(ValoTheme.LABEL_H3);
         return headline;
     }

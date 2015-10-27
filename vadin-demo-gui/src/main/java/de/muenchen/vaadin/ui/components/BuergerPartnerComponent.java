@@ -114,14 +114,14 @@ public class BuergerPartnerComponent extends CustomComponent implements Consumer
             if (partnerReadForm.getComponentCount() == 0) {
                 HorizontalLayout layout = new HorizontalLayout(controller.getViewFactory().generateBuergerPartnerSearchTable());
                 layout.setMargin(true);
-                getUI().addWindow(new TableSelectWindow(controller, resolver, layout));
+                getUI().addWindow(new TableSelectWindow(layout));
             } else {
                 GenericConfirmationWindow window =
                         new GenericConfirmationWindow(resolver, SimpleAction.override, e ->
                         {
                             HorizontalLayout layout = new HorizontalLayout(controller.getViewFactory().generateBuergerPartnerSearchTable());
                             layout.setMargin(true);
-                            getUI().addWindow(new TableSelectWindow(controller, resolver, layout));
+                            getUI().addWindow(new TableSelectWindow(layout));
                         });
                 getUI().addWindow(window);
                 window.center();

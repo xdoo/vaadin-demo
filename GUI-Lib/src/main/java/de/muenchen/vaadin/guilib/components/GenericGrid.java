@@ -121,7 +121,7 @@ public class GenericGrid<T> extends CustomComponent {
         );
 
         Stream.of(fields).forEach(field ->
-                        this.grid.getColumn(field).setHeaderCaption(controller.getResolver().resolveRelative(getType(), getEntityFieldPath(field, I18nPaths.Type.column_header)))
+                        this.grid.getColumn(field).setHeaderCaption(BaseUI.getCurrentI18nResolver().resolveRelative(getType(), getEntityFieldPath(field, I18nPaths.Type.column_header)))
         );
         //---------------
 
@@ -198,11 +198,11 @@ public class GenericGrid<T> extends CustomComponent {
 
         search.addClickListener(getEntityAction()::readList);
 
-        search.setId(String.format("%s_SEARCH_BUTTON", controller.getResolver().getBasePath(getType())));
+        search.setId(String.format("%s_SEARCH_BUTTON", BaseUI.getCurrentI18nResolver().getBasePath(getType())));
     }
 
     private void createFilter() {
-        filter.setId(String.format("%s_QUERY_FIELD", controller.getResolver().getBasePath(getType())));
+        filter.setId(String.format("%s_QUERY_FIELD", BaseUI.getCurrentI18nResolver().getBasePath(getType())));
         filter.focus();
         filter.setWidth("100%");
     }
@@ -215,7 +215,7 @@ public class GenericGrid<T> extends CustomComponent {
             filter.setValue("");
             getEntityAction().readList(e);
         });
-        reset.setId(String.format("%s_RESET_BUTTON", controller.getResolver().getBasePath(getType())));
+        reset.setId(String.format("%s_RESET_BUTTON", BaseUI.getCurrentI18nResolver().getBasePath(getType())));
     }
 
     private void setButtonVisability() {
@@ -560,7 +560,7 @@ public class GenericGrid<T> extends CustomComponent {
     }
 
     private I18nResolver getResolver(){
-        return controller.getResolver();
+        return BaseUI.getCurrentI18nResolver();
     }
 
 

@@ -88,7 +88,7 @@ public class BuergerCreateForm extends BuergerForm {
         final ActionButton createButton = new ActionButton(Buerger.class, SimpleAction.create);
         if (getRelation().isPresent()) {
             final BuergerAssociationActions buergerAssociationActions = new BuergerAssociationActions(
-                    getI18nResolver(),
+                    BaseUI.getCurrentI18nResolver(),
                     () -> new Association<>(getBuerger(), getRelation().get()));
 
             createButton.addActionPerformer(buergerAssociationActions::addAssociation);
