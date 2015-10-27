@@ -50,10 +50,6 @@ public class GenericGrid<T> extends CustomComponent {
      */
     protected static final Logger LOG = LoggerFactory.getLogger(GenericGrid.class);
     /**
-     * The class of T
-     */
-    private Class clazz;
-    /**
      * Components Layout
      */
     final HorizontalLayout topComponentsLayout = new HorizontalLayout();
@@ -86,7 +82,6 @@ public class GenericGrid<T> extends CustomComponent {
      */
     public GenericGrid(EntityController controller, BeanItemContainer<T> dataStore, String[] fields) {
         this.controller = controller;
-        this.clazz = dataStore.getBeanType();
         grid.setContainerDataSource(dataStore);
 
         //----------- Grid Configuration
@@ -126,7 +121,7 @@ public class GenericGrid<T> extends CustomComponent {
         );
 
         Stream.of(fields).forEach(field ->
-                        this.grid.getColumn(field).setHeaderCaption(controller.getResolver().resolveRelative(clazz, getEntityFieldPath(field, I18nPaths.Type.column_header)))
+                        this.grid.getColumn(field).setHeaderCaption(controller.getResolver().resolveRelative(getType(), getEntityFieldPath(field, I18nPaths.Type.column_header)))
         );
         //---------------
 
@@ -154,7 +149,7 @@ public class GenericGrid<T> extends CustomComponent {
 
 
     private void createRead(String navigateToRead) {
-        ActionButton readButton = new ActionButton(clazz, SimpleAction.read);
+        ActionButton readButton = new ActionButton(getType(), SimpleAction.read);
 
         readButton.addActionPerformer(getSingleActionOnSelected()::read);
         readButton.addActionPerformer(getNavigateAction(navigateToRead)::navigate);
@@ -164,21 +159,21 @@ public class GenericGrid<T> extends CustomComponent {
     }
 
     private void createCopy() {
-        ActionButton copyButton = new ActionButton(clazz, SimpleAction.copy);
+        ActionButton copyButton = new ActionButton(getType(), SimpleAction.copy);
 
         copyButton.addActionPerformer(getListActionOnSelected()::create);
         copy = Optional.of(copyButton);
     }
 
     private void createDelete() {
-        ActionButton deleteButton = new ActionButton(clazz, SimpleAction.delete);
+        ActionButton deleteButton = new ActionButton(getType(), SimpleAction.delete);
 
         deleteButton.addActionPerformer(getListActionOnSelected()::delete);
         delete = Optional.of(deleteButton);
     }
 
     private void createEdit(String navigateToEdit) {
-        ActionButton editButton = new ActionButton(clazz, SimpleAction.update);
+        ActionButton editButton = new ActionButton(getType(), SimpleAction.update);
 
         editButton.addActionPerformer(getSingleActionOnSelected()::read);
         editButton.addActionPerformer(getNavigateAction(navigateToEdit)::navigate);
@@ -187,7 +182,7 @@ public class GenericGrid<T> extends CustomComponent {
     }
 
     private void createCreate(String navigateToCreate) {
-        ActionButton createButton = new ActionButton(clazz, SimpleAction.create);
+        ActionButton createButton = new ActionButton(getType(), SimpleAction.create);
 
         createButton.addActionPerformer(getNavigateAction(navigateToCreate)::navigate);
         createButton.setVisible(Boolean.TRUE);
@@ -203,11 +198,11 @@ public class GenericGrid<T> extends CustomComponent {
 
         search.addClickListener(getEntityAction()::readList);
 
-        search.setId(String.format("%s_SEARCH_BUTTON", controller.getResolver().getBasePath(clazz)));
+        search.setId(String.format("%s_SEARCH_BUTTON", controller.getResolver().getBasePath(getType())));
     }
 
     private void createFilter() {
-        filter.setId(String.format("%s_QUERY_FIELD", controller.getResolver().getBasePath(clazz)));
+        filter.setId(String.format("%s_QUERY_FIELD", controller.getResolver().getBasePath(getType())));
         filter.focus();
         filter.setWidth("100%");
     }
@@ -220,7 +215,7 @@ public class GenericGrid<T> extends CustomComponent {
             filter.setValue("");
             getEntityAction().readList(e);
         });
-        reset.setId(String.format("%s_RESET_BUTTON", controller.getResolver().getBasePath(clazz)));
+        reset.setId(String.format("%s_RESET_BUTTON", controller.getResolver().getBasePath(getType())));
     }
 
     private void setButtonVisability() {
@@ -533,7 +528,7 @@ public class GenericGrid<T> extends CustomComponent {
 
     private EntitySingleActions getSingleActionOnSelected(){
         return new EntitySingleActions(
-                clazz,
+                getType(),
                 this::getSelectedEntity,
                 getType()
         );
