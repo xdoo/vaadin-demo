@@ -3,6 +3,7 @@ package de.muenchen.demo.service.gen.domain;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import de.muenchen.auditing.MUCAudited;
 import de.muenchen.service.BaseEntity;
 import de.muenchen.service.PetersPerfectBridge;
 import org.hibernate.search.annotations.Field;
@@ -33,6 +34,7 @@ import java.util.Set;
 @Entity
 @Indexed
 @Table(name = "BUERGER")
+@MUCAudited({MUCAudited.CREATE, MUCAudited.DELETE})
 public class Buerger extends BaseEntity {
 
     // ========= //

@@ -86,11 +86,6 @@ public class AuditingServiceProducer {
         SessionFactoryImpl sessionFactoryImpl = (SessionFactoryImpl) hibernateEntityManagerFactory.getSessionFactory();
         EventListenerRegistry registry = sessionFactoryImpl.getServiceRegistry().getService(EventListenerRegistry.class);
 
-        registry.getEventListenerGroup(EventType.POST_LOAD).clear();
-        registry.getEventListenerGroup(EventType.POST_DELETE).clear();
-        registry.getEventListenerGroup(EventType.POST_INSERT).clear();
-        registry.getEventListenerGroup(EventType.POST_UPDATE).clear();
-
         registry.getEventListenerGroup(EventType.POST_LOAD)
                 .appendListener(postLoadEvent -> {
                     Object eventEntity = postLoadEvent.getEntity();
