@@ -34,7 +34,6 @@ public class BuergerUpdateForm extends BaseComponent {
      * @param navigateToSaved  The String of the View that is navigated to on save.
      */
     public BuergerUpdateForm(final String navigateToSaved) {
-        super();
         saveNavigation = new NavigateActions(navigateToSaved);
         buergerForm = new SelectedBuergerForm();
         buergerForm.reLoadBuerger();

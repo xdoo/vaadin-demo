@@ -31,11 +31,9 @@ public class BuergerReadForm extends BaseComponent {
     /**
      * Create a new ReadForm that navigates to the specified View on the update action.
      *
-     * @param entityController The controller used.
      * @param navigateToUpdate The View that is navigated to on update.
      */
     public BuergerReadForm(final String navigateToUpdate) {
-        super();
         buergerForm = new SelectedBuergerForm();
         buergerForm.reLoadBuerger();
 

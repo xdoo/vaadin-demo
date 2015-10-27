@@ -34,7 +34,6 @@ public class BuergerPartnerForm extends BaseComponent {
      * @param navigateToRead   The View to navigate to on the read action.
      */
     public BuergerPartnerForm(final String navigateToCreate, final String navigateToRead) {
-        super();
 
         partnerForm = new SelectedBuergerPartnerForm() {
             @Override

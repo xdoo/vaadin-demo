@@ -17,11 +17,9 @@ public class BaseComponent extends CustomComponent {
 
     public EventBus getEventBus() {
         return BaseUI.getCurrentEventBus();
-
     }
 
     public Navigator getNavigator() {
         return BaseUI.getCurrentNavigator();
     }
-
 }

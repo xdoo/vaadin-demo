@@ -55,7 +55,6 @@ public class BuergerForm extends BaseComponent {
      *
      */
     public BuergerForm() {
-        super();
         binder.setItemDataSource(new Buerger());
         fields = buildFields();
 

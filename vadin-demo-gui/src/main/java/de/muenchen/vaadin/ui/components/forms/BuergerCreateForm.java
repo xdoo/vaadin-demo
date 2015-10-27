@@ -53,7 +53,6 @@ public class BuergerCreateForm extends BaseComponent {
      * @param relation   Optionale Angabe einer Assoziation, für die der Buerger ist.
      */
     public BuergerCreateForm(final String navigateTo, final String relation) {
-        super();
         this.saveNavigation = new NavigateActions(navigateTo);
         buergerForm = new BuergerForm();
         this.relation = Optional.ofNullable(relation);

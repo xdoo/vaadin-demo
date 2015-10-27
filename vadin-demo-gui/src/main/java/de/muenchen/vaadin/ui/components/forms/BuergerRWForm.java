@@ -36,7 +36,6 @@ public class BuergerRWForm extends BaseComponent {
      *
      */
     public BuergerRWForm() {
-        super();
         buergerForm = new SelectedBuergerForm();
         buergerForm.reLoadBuerger();
 
