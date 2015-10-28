@@ -1,5 +1,8 @@
 package de.muenchen.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.persistence.PrePersist;
 
 /**
@@ -10,6 +13,8 @@ import javax.persistence.PrePersist;
  */
 public class DatabaseBeforeSaveEventListener {
 
+    private static final Logger LOG = LoggerFactory.getLogger(DatabaseBeforeSaveEventListener.class);
+
     /**
      * Setzt die OID der zu speichernden Entität vor dem Speichern in der Datenbank
      * @param object
@@ -17,7 +22,6 @@ public class DatabaseBeforeSaveEventListener {
     @PrePersist
     public void addOid(Object object) {
         BaseEntity entity = (BaseEntity) object;
-        //TODO Hackfür die Tests. Soll das wirklich möglich sein?
         if (entity.getOid() == null)
             entity.setOid(IdService.next());
     }
