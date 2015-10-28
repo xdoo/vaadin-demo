@@ -3,7 +3,10 @@ package de.muenchen.service;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.search.annotations.IndexedEmbedded;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.EntityListeners;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 
 /**
