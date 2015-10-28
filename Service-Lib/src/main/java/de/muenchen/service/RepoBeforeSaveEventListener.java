@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
  * Created by p.mueller on 11.09.15.
  */
 @Component
-public class BeforeSaveEventListener extends AbstractRepositoryEventListener<BaseEntity> {
+public class RepoBeforeSaveEventListener extends AbstractRepositoryEventListener<BaseEntity> {
 
     @Autowired
     UserRepository userRepository;
@@ -20,7 +20,6 @@ public class BeforeSaveEventListener extends AbstractRepositoryEventListener<Bas
     @Override
     protected void onBeforeCreate(BaseEntity entity) {
         entity.setMandant(getCurrentMandant());
-        entity.setOid(IdService.next());
     }
 
     public String getCurrentMandant() {

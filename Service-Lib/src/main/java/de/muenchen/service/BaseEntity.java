@@ -3,10 +3,7 @@ package de.muenchen.service;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.search.annotations.IndexedEmbedded;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -14,6 +11,7 @@ import java.io.Serializable;
  * @author claus.straube
  */
 @MappedSuperclass
+@EntityListeners(DatabaseBeforeSaveEventListener.class)
 public abstract class BaseEntity implements Cloneable, Serializable {
 
     @Column(name = "OID")
