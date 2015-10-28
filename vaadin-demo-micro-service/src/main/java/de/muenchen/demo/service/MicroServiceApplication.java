@@ -1,6 +1,5 @@
 package de.muenchen.demo.service;
 
-import de.muenchen.security.configurator.AuthenticationConfiguratorAdapter;
 import de.muenchen.security.configurator.JDBCAuthenticationConfigurator;
 import de.muenchen.security.configurator.LDAPAuthenticationConfigurator;
 import org.springframework.boot.SpringApplication;
