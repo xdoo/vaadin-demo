@@ -57,11 +57,13 @@ public class AuditingServiceProducer {
         try {
             json = mapper.writeValueAsString(entity);
         } catch (StackOverflowError err) {
-            LOG.error("StackOverFlow occurred while Marshalling Entity. Make sure to use @JsonManagedReference and @JsonBackReference on circular dependencies.");
-            json = entity.toString();
+            String message = "StackOverFlow occurred while Marshalling Entity. Make sure to use @JsonManagedReference and @JsonBackReference on circular dependencies.";
+            LOG.error(message);
+            json = message + "Class was: " + entity.getClass();
         } catch (JsonProcessingException e) {
-            LOG.error("Fehler beim JSON erstellen. Fehlermeldung: " + e.getMessage());
-            json = entity.toString();
+            String message = "Fehler beim JSON erstellen. Fehlermeldung: " + e.getMessage();
+            LOG.error(message);
+            json = message;
         }
 
         return json;
