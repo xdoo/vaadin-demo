@@ -73,13 +73,15 @@ public class Buerger extends BaseEntity {
     //TODO @NotNull
     private Augenfarben augenfarbe;
 
-
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "oid")
+    @JsonIdentityReference(alwaysAsId = true)
     @JoinTable(name = "buergers_wohnungens", joinColumns = {@JoinColumn(name = "buerger_oid")}, inverseJoinColumns = {@JoinColumn(name = "wohnungen_oid")})
     @OneToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
     //TODO @NotNull
     private Wohnung wohnungen;
 
-
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "oid")
+    @JsonIdentityReference(alwaysAsId = true)
     @JoinTable(name = "buergers_staatsangehoerigkeitens", joinColumns = {@JoinColumn(name = "buerger_oid")}, inverseJoinColumns = {@JoinColumn(name = "staatsangehoerigkeiten_oid")})
     @ManyToMany
     @NotNull
@@ -99,25 +101,23 @@ public class Buerger extends BaseEntity {
     @OneToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
     private Buerger partner;
 
-
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "oid")
+    @JsonIdentityReference(alwaysAsId = true)
     @JoinTable(name = "buergers_sachbearbeiters", joinColumns = {@JoinColumn(name = "buerger_oid")}, inverseJoinColumns = {@JoinColumn(name = "sachbearbeiter_oid")})
     @ManyToMany
     @NotNull
     private java.util.Collection<Sachbearbeiter> sachbearbeiter = new ArrayList<>();
-    ;
 
-
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "oid")
+    @JsonIdentityReference(alwaysAsId = true)
     @JoinTable(name = "buergers_paesses", joinColumns = {@JoinColumn(name = "buerger_oid")}, inverseJoinColumns = {@JoinColumn(name = "paesse_oid")})
     @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
     @NotNull
     private java.util.Collection<Pass> paesse = new ArrayList<>();
-    ;
-
 
     @Column(name = "alive")
     @NotNull
     private Boolean alive;
-
 
     @Field
     @FieldBridge(impl = PetersPerfectBridge.class)
