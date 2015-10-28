@@ -16,48 +16,69 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by p.mueller on 28.10.15.
+ * Provides a simple Window that allows the execution of multiple {@link de.muenchen.vaadin.guilib.components.buttons.ActionButton.CrashableActionPerformer}
+ * on confirmation.
  */
 public class ConfirmationWindow extends Window {
-
-    private final String okButtonText;
-    private final String cancelButtonText;
-    private final String messageText;
-
-
-    /**
-     * List of Actions to perform on click.
-     **/
+    /** The Content of the Window. */
+    private final VerticalLayout layout = new VerticalLayout();
+    /** The Layout for the Buttons. */
+    private final HorizontalLayout buttons = new HorizontalLayout();
+    /** The Button for the confirmation. */
+    private final ActionButton ok;
+    /** The action that shall be confirmed. */
+    private final Action action;
+    /** List of Actions to perform on click. */
     private List<ActionButton.CrashableActionPerformer> actions = new ArrayList<>();
 
-    private final HorizontalLayout buttons = new HorizontalLayout();
-    private final VerticalLayout layout = new VerticalLayout();
-
-    public ActionButton getOk() {
-        return ok;
-    }
-
-    private final ActionButton ok;
-
+    /**
+     * Create a new ConfirmationWindow for the specified Action.
+     *
+     * @param action The action which requires a confirmation.
+     */
     public ConfirmationWindow(Action action) {
-        okButtonText = BaseUI.getCurrentI18nResolver().resolve(I18nPaths.getConfirmationPath(action, I18nPaths.Type.confirm));
-        cancelButtonText = BaseUI.getCurrentI18nResolver().resolve(I18nPaths.getConfirmationPath(action, I18nPaths.Type.cancel));
-        messageText = BaseUI.getCurrentI18nResolver().resolve(I18nPaths.getConfirmationPath(action, I18nPaths.Type.text));
+        if (action == null) {
+            throw new NullPointerException();
+        }
+        this.action = action;
 
-        ok = new ActionButton(getOkButtonText(), SimpleAction.none);
+        final String okButtonText = BaseUI.getCurrentI18nResolver().resolve(I18nPaths.getConfirmationPath(getAction(), I18nPaths.Type.confirm));
+        ok = new ActionButton(okButtonText, SimpleAction.none);
 
         init();
         setContent(layout);
     }
 
+    /**
+     * Get the Action of this ConfirmationWindow.
+     *
+     * @return The Action.
+     */
+    public Action getAction() {
+        return action;
+    }
+
+    /**
+     * Get the Button that is used for the confirmation.
+     *
+     * @return The 'oK' ActionButton.
+     */
+    public ActionButton getOk() {
+        return ok;
+    }
+
+    /**
+     * Initialize the content of the Window.
+     */
     private void init() {
-        Button cancel = new Button(getCancelButtonText());
+        final String cancelButtonText = BaseUI.getCurrentI18nResolver().resolve(I18nPaths.getConfirmationPath(action, I18nPaths.Type.cancel));
+        Button cancel = new Button(cancelButtonText);
         cancel.setStyleName(ValoTheme.BUTTON_BORDERLESS);
         cancel.addClickListener(c -> close());
-
         getButtons().addComponents(cancel, getOk());
 
-        final Label label = new Label(getMessageText());
+        final String messageText = BaseUI.getCurrentI18nResolver().resolve(I18nPaths.getConfirmationPath(action, I18nPaths.Type.text));
+        final Label label = new Label(messageText);
         label.setHeightUndefined();
 
         getLayout().addComponents(label, getButtons());
@@ -68,6 +89,10 @@ public class ConfirmationWindow extends Window {
         configureWindow();
     }
 
+
+    /**
+     * Configure the OK Button.
+     */
     private void configureOkButton() {
         getOk().setStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
         getOk().addClickListener(c -> {
@@ -76,9 +101,8 @@ public class ConfirmationWindow extends Window {
         });
     }
 
-
     /**
-     * Add an crashable action performer as click listener.
+     * Add an crashable action performer as click listener to the OK Button..
      *
      * @param performer performer which can crash.
      */
@@ -87,15 +111,26 @@ public class ConfirmationWindow extends Window {
     }
 
 
+    /**
+     * Perform all actions until all actions are performed or one crashes.
+     *
+     * @param event The ClickEvent.
+     */
     private void perform(Button.ClickEvent event) {
         //Perform all actions until all actions are performed or one crashes.
         actions.stream().sequential().anyMatch(actionPerformer -> !actionPerformer.perform(event));
     }
 
+    /**
+     * Configure the Buttons Layout.
+     */
     private void configureButtons() {
         getButtons().setSpacing(true);
     }
 
+    /**
+     * Configure the Content Layout.
+     */
     private void configureContent() {
         getLayout().setHeightUndefined();
         getLayout().setSpacing(true);
@@ -103,6 +138,9 @@ public class ConfirmationWindow extends Window {
         getLayout().setComponentAlignment(getButtons(), Alignment.BOTTOM_RIGHT);
     }
 
+    /**
+     * Configure this Window.
+     */
     private void configureWindow() {
         setCaption("Achtung!");
         setClosable(false);
@@ -111,25 +149,22 @@ public class ConfirmationWindow extends Window {
         setSizeUndefined();
     }
 
-
+    /**
+     * Get the Layout for the Buttons.
+     *
+     * @return The layout with the Buttons.
+     */
     public HorizontalLayout getButtons() {
         return buttons;
     }
 
+    /**
+     * Get the layout used as Content in the Window.
+     *
+     * @return The vertical layout.
+     */
     public VerticalLayout getLayout() {
         return layout;
-    }
-
-    public String getOkButtonText() {
-        return okButtonText;
-    }
-
-    public String getCancelButtonText() {
-        return cancelButtonText;
-    }
-
-    public String getMessageText() {
-        return messageText;
     }
 }
 
