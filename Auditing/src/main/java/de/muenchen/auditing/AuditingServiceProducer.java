@@ -57,11 +57,13 @@ public class AuditingServiceProducer {
         try {
             json = mapper.writeValueAsString(entity);
         } catch (StackOverflowError err) {
-            LOG.error("StackOverFlow occurred while Marshalling Entity. Make sure to use @JsonManagedReference and @JsonBackReference on circular dependencies.");
-            json = entity.toString();
+            String message = "StackOverFlow occurred while Marshalling Entity. Make sure to use @JsonManagedReference and @JsonBackReference on circular dependencies.";
+            LOG.error(message);
+            json = message + "Class was: " + entity.getClass();
         } catch (JsonProcessingException e) {
-            LOG.error("Fehler beim JSON erstellen. Fehlermeldung: " + e.getMessage());
-            json = entity.toString();
+            String message = "Fehler beim JSON erstellen. Fehlermeldung: " + e.getMessage();
+            LOG.error(message);
+            json = message;
         }
 
         return json;
@@ -85,11 +87,6 @@ public class AuditingServiceProducer {
         HibernateEntityManagerFactory hibernateEntityManagerFactory = (HibernateEntityManagerFactory) this.entityManagerFactory;
         SessionFactoryImpl sessionFactoryImpl = (SessionFactoryImpl) hibernateEntityManagerFactory.getSessionFactory();
         EventListenerRegistry registry = sessionFactoryImpl.getServiceRegistry().getService(EventListenerRegistry.class);
-
-        registry.getEventListenerGroup(EventType.POST_LOAD).clear();
-        registry.getEventListenerGroup(EventType.POST_DELETE).clear();
-        registry.getEventListenerGroup(EventType.POST_INSERT).clear();
-        registry.getEventListenerGroup(EventType.POST_UPDATE).clear();
 
         registry.getEventListenerGroup(EventType.POST_LOAD)
                 .appendListener(postLoadEvent -> {

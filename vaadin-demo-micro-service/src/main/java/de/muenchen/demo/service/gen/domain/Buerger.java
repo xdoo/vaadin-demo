@@ -3,6 +3,7 @@ package de.muenchen.demo.service.gen.domain;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import de.muenchen.auditing.MUCAudited;
 import de.muenchen.service.BaseEntity;
 import de.muenchen.service.PetersPerfectBridge;
 import org.hibernate.search.annotations.Field;
@@ -47,6 +48,7 @@ import java.util.Set;
 @Entity
 @Indexed
 @Table(name = "BUERGER")
+@MUCAudited({MUCAudited.CREATE, MUCAudited.DELETE})
 public class Buerger extends BaseEntity {
 
     // ========= //
@@ -85,13 +87,15 @@ public class Buerger extends BaseEntity {
     //TODO @NotNull
     private Augenfarben augenfarbe;
 
-
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "oid")
+    @JsonIdentityReference(alwaysAsId = true)
     @JoinTable(name = "buergers_wohnungens", joinColumns = {@JoinColumn(name = "buerger_oid")}, inverseJoinColumns = {@JoinColumn(name = "wohnungen_oid")})
     @OneToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
     //TODO @NotNull
     private Wohnung wohnungen;
 
-
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "oid")
+    @JsonIdentityReference(alwaysAsId = true)
     @JoinTable(name = "buergers_staatsangehoerigkeitens", joinColumns = {@JoinColumn(name = "buerger_oid")}, inverseJoinColumns = {@JoinColumn(name = "staatsangehoerigkeiten_oid")})
     @ManyToMany
     @NotNull
@@ -111,25 +115,23 @@ public class Buerger extends BaseEntity {
     @OneToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
     private Buerger partner;
 
-
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "oid")
+    @JsonIdentityReference(alwaysAsId = true)
     @JoinTable(name = "buergers_sachbearbeiters", joinColumns = {@JoinColumn(name = "buerger_oid")}, inverseJoinColumns = {@JoinColumn(name = "sachbearbeiter_oid")})
     @ManyToMany
     @NotNull
     private java.util.Collection<Sachbearbeiter> sachbearbeiter = new ArrayList<>();
-    ;
 
-
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "oid")
+    @JsonIdentityReference(alwaysAsId = true)
     @JoinTable(name = "buergers_paesses", joinColumns = {@JoinColumn(name = "buerger_oid")}, inverseJoinColumns = {@JoinColumn(name = "paesse_oid")})
     @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
     @NotNull
     private java.util.Collection<Pass> paesse = new ArrayList<>();
-    ;
-
 
     @Column(name = "alive")
     @NotNull
     private Boolean alive;
-
 
     @Field
     @FieldBridge(impl = PetersPerfectBridge.class)
