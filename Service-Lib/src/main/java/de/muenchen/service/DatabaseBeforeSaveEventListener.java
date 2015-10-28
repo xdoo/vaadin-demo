@@ -9,8 +9,10 @@ import javax.persistence.PrePersist;
 public class DatabaseBeforeSaveEventListener {
 
     @PrePersist
-    public void addOid(Object object){
+    public void addOid(Object object) {
         BaseEntity entity = (BaseEntity) object;
-        entity.setOid(IdService.next());
+        //TODO Hackfür die Tests. Soll das wirklich möglich sein?
+        if (entity.getOid() == null)
+            entity.setOid(IdService.next());
     }
 }
