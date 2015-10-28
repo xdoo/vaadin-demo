@@ -9,6 +9,7 @@ import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.GenericGrid;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
+import de.muenchen.vaadin.ui.components.BuergerAddKinderGrid;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerAssociationListActions;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,23 +34,8 @@ public class BuergerAddChildView extends DefaultBuergerView{
     @Override
     protected void site() {
 
-        final ActionButton backButton = new ActionButton(Buerger.class, SimpleAction.back);
-        final NavigateActions navigateActions = new NavigateActions(BuergerDetailView.NAME);
-        backButton.addActionPerformer(navigateActions::navigate);
+        final BuergerAddKinderGrid grid = new BuergerAddKinderGrid(BuergerDetailView.NAME, controller);
 
-        final GenericGrid<Buerger> grid = this.controller.getViewFactory().generateBuergerSearchTable().activateSearch();
-
-        ActionButton addMultiple = new ActionButton(Buerger.class, SimpleAction.add);
-        BuergerAssociationListActions actionMultiple = new BuergerAssociationListActions(
-                () -> grid.getSelectedEntities().stream().map(buerger -> new Association<>(buerger, Buerger.Rel.kinder.name())).collect(Collectors.toList()));
-        addMultiple.addActionPerformer(actionMultiple::addAssociations);
-        addMultiple.addActionPerformer(navigateActions::navigate);
-
-        grid.addMultiSelectButton(addMultiple);
-
-        final VerticalLayout layout = new VerticalLayout(backButton, grid);
-        layout.setSpacing(true);
-
-        addComponent(layout);
+        addComponent(grid);
     }
 }

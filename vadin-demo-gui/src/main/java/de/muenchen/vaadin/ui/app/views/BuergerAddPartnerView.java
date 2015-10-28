@@ -12,6 +12,7 @@ import de.muenchen.vaadin.guilib.components.GenericGrid;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
 import de.muenchen.vaadin.ui.app.MainUI;
+import de.muenchen.vaadin.ui.components.BuergerAddKinderGrid;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerAssociationActions;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,25 +35,8 @@ public class BuergerAddPartnerView extends DefaultBuergerView {
     @Override
     protected void site() {
 
-        final ActionButton backButton = new ActionButton(Buerger.class, SimpleAction.back);
-        final NavigateActions navigateActions = new NavigateActions(BuergerDetailView.NAME);
-        backButton.addActionPerformer(navigateActions::navigate);
+        final BuergerAddKinderGrid grid = new BuergerAddKinderGrid(BuergerDetailView.NAME, controller);
 
-        final GenericGrid<Buerger> grid = this.controller.getViewFactory().generateBuergerSearchTable();
-
-        grid.setSelectionMode(Grid.SelectionMode.SINGLE).activateSearch();
-
-        ActionButton addSingle = new ActionButton(Buerger.class, SimpleAction.add);
-        BuergerAssociationActions actionsSingle = new BuergerAssociationActions(
-                () -> new Association<>(grid.getSelectedEntities().get(0), Buerger.Rel.partner.name()));
-        addSingle.addActionPerformer(actionsSingle::addAssociation);
-        addSingle.addActionPerformer(navigateActions::navigate);
-
-        grid.addSingleSelectButton(addSingle);
-
-        final VerticalLayout layout = new VerticalLayout(backButton, grid);
-        layout.setSpacing(true);
-
-        addComponent(layout);
+        addComponent(grid);
     }
 }
