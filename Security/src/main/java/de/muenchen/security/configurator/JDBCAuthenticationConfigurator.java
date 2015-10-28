@@ -4,6 +4,7 @@ import org.kohsuke.MetaInfServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configurers.GlobalAuthenticationConfigurerAdapter;
 
 import javax.sql.DataSource;
 
@@ -12,8 +13,7 @@ import javax.sql.DataSource;
  */
 @MetaInfServices
 @Order(1)
-public class JDBCAuthenticationConfigurator extends
-        AuthenticationConfiguratorAdapter {
+public class JDBCAuthenticationConfigurator extends GlobalAuthenticationConfigurerAdapter {
 
     @Autowired
     private DataSource dataSource;
@@ -33,10 +33,5 @@ public class JDBCAuthenticationConfigurator extends
                         + "JOIN PERMISSIONS ON AUTHORITIES_PERMISSIONS.PERMISSION_OID = PERMISSIONS.OID "
                         + "WHERE USERS.USER_USERNAME =  ?");
 
-    }
-
-    @Override
-    public boolean accepts(String serviceTyp) {
-        return (serviceTyp.equals("JDBC_Authentication"));
     }
 }
