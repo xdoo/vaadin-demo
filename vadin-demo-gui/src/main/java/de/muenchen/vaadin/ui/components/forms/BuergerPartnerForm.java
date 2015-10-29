@@ -1,6 +1,5 @@
 package de.muenchen.vaadin.ui.components.forms;
 
-import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import de.muenchen.eventbus.events.Association;
@@ -10,7 +9,6 @@ import de.muenchen.vaadin.guilib.components.BaseComponent;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
 import de.muenchen.vaadin.guilib.components.buttons.ConfirmationWindow;
-import de.muenchen.vaadin.ui.app.views.BuergerAddPartnerView;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerAssociationActions;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerSingleActions;
 import de.muenchen.vaadin.ui.components.forms.selected.SelectedBuergerPartnerForm;
@@ -23,9 +21,24 @@ import de.muenchen.vaadin.ui.components.forms.selected.SelectedBuergerPartnerFor
  */
 public class BuergerPartnerForm extends BaseComponent {
 
-    private final String navigateToCreate;
-    private final String navigateToRead;
-    private final SelectedBuergerPartnerForm partnerForm;
+    public static final boolean READ_ONLY = true;
+    private final SelectedBuergerPartnerForm partnerForm = new SelectedBuergerPartnerForm() {
+        @Override
+        public void setBuerger(Buerger buerger) {
+            setFormVisible(buerger != null);
+            super.setBuerger(buerger);
+        }
+    };
+    private final VerticalLayout rootLayout = new VerticalLayout();
+    private final HorizontalLayout buttonLayout = new HorizontalLayout();
+    private final ActionButton createButton = new ActionButton(Buerger.class, SimpleAction.create);
+    private final ActionButton addButton = new ActionButton(Buerger.class, SimpleAction.add);
+    private final HorizontalLayout formButtonLayout = new HorizontalLayout();
+    private final ActionButton readButton = new ActionButton(Buerger.class, SimpleAction.read);
+    private final ActionButton deleteButton = new ActionButton(Buerger.class, SimpleAction.delete);
+    private final NavigateActions createNavigation;
+    private final NavigateActions readNavigation;
+    private final NavigateActions addNavigation;
 
     /**
      * Create a new BuergerPartnerForm with the navigateToCreate and navigateToRead.
@@ -35,20 +48,11 @@ public class BuergerPartnerForm extends BaseComponent {
      * @param navigateToCreate The View to navigate to on the create action.
      * @param navigateToRead   The View to navigate to on the read action.
      */
-    public BuergerPartnerForm(final String navigateToCreate, final String navigateToRead) {
-
-        partnerForm = new SelectedBuergerPartnerForm() {
-            @Override
-            public void setBuerger(Buerger buerger) {
-                setFormVisible(buerger != null);
-                super.setBuerger(buerger);
-            }
-        };
+    public BuergerPartnerForm(String navigateToCreate, String navigateToRead, String navigateToAdd) {
         partnerForm.reLoadBuerger();
-        partnerForm.setReadOnly(true);
-
-        this.navigateToRead = navigateToRead;
-        this.navigateToCreate = navigateToCreate;
+        this.createNavigation = new NavigateActions(navigateToCreate);
+        this.readNavigation = new NavigateActions(navigateToRead);
+        this.addNavigation = new NavigateActions(navigateToAdd);
 
         init();
         setIds();
@@ -57,35 +61,108 @@ public class BuergerPartnerForm extends BaseComponent {
     private void setIds() {
         setId(getClass().getName());
         getPartnerForm().setId(getId() + "#form");
+
+        getCreateButton().setId(getId() + "#create-button" + getCreateNavigation().getNavigateTo());
+        getAddButton().setId(getId() + "#add-button" + getAddNavigation().getNavigateTo());
+        getReadButton().setId(getId() + "#read-button" + getReadNavigation().getNavigateTo());
+        getDeleteButton().setId(getId() + "#delete-button");
+
     }
+
+
+    public VerticalLayout getRootLayout() {
+        return rootLayout;
+    }
+
+    private void init() {
+        getPartnerForm().setReadOnly(READ_ONLY);
+
+        getRootLayout().addComponents(getButtonLayout(), getPartnerForm());
+
+        getButtonLayout().setSpacing(true);
+        getButtonLayout().addComponents(getCreateButton(), getAddButton());
+
+        getFormButtonLayout().setSpacing(true);
+        getFormButtonLayout().addComponents(getReadButton(), getDeleteButton());
+
+        getPartnerForm().getFormLayout().addComponent(getFormButtonLayout());
+
+        configureCreateButton();
+        configureAddButton();
+        configureReadButton();
+        configureDeleteButton();
+
+        setCompositionRoot(getRootLayout());
+    }
+
+    private void configureDeleteButton() {
+        final BuergerAssociationActions associationActions = new BuergerAssociationActions(
+                () -> new Association<>(getPartnerForm().getBuerger(), Buerger.Rel.partner.name()));
+        getDeleteButton().addActionPerformer(associationActions::removeAssociation);
+    }
+
+    private void configureReadButton() {
+        final BuergerSingleActions singleActions = new BuergerSingleActions(getPartnerForm()::getBuerger);
+        getReadButton().addActionPerformer(singleActions::read);
+        getReadButton().addActionPerformer(getReadNavigation()::navigate);
+    }
+
+    private void configureAddButton() {
+        getAddButton().addClickListener(clickEvent -> {
+            if (partnerForm.isVisible()) {
+                final ConfirmationWindow window = new ConfirmationWindow(SimpleAction.override);
+                window.addActionPerformer(getAddNavigation()::navigate);
+                getUI().addWindow(window);
+            } else {
+                getAddNavigation().navigate();
+            }
+        });
+    }
+
+    private void configureCreateButton() {
+        createButton.addClickListener(clickEvent -> {
+            if (partnerForm.isVisible()) {
+                final ConfirmationWindow window = new ConfirmationWindow(SimpleAction.override);
+                window.addActionPerformer(getCreateNavigation()::navigate);
+                getUI().addWindow(window);
+            } else {
+                getCreateNavigation().navigate();
+            }
+        });
+    }
+
+    public ActionButton getCreateButton() {
+        return createButton;
+    }
+
+    public ActionButton getAddButton() {
+        return addButton;
+    }
+
+    public ActionButton getReadButton() {
+        return readButton;
+    }
+
+    public ActionButton getDeleteButton() {
+        return deleteButton;
+    }
+
+    public NavigateActions getCreateNavigation() {
+        return createNavigation;
+    }
+
+    public NavigateActions getReadNavigation() {
+        return readNavigation;
+    }
+
 
     /**
      * Set the visibility of the form.
      *
-     * @param formVisible True, if it should be visible.
+     * @param formVisible True, to set it visible.
      */
     private void setFormVisible(boolean formVisible) {
         getPartnerForm().setVisible(formVisible);
-    }
-
-    /**
-     * Build the basic layout and insert the headline and all Buttons.
-     */
-    private void init() {
-        final VerticalLayout layout = new VerticalLayout();
-
-
-        final HorizontalLayout buttonsAlwaysVisible = new HorizontalLayout();
-        buttonsAlwaysVisible.setSpacing(true);
-        buttonsAlwaysVisible.addComponents(createCreateButton(), createAddButton());
-
-        final HorizontalLayout buttonsInForm = new HorizontalLayout();
-        buttonsInForm.setSpacing(true);
-        buttonsInForm.addComponents(createReadButton(), createDeleteButton());
-        getPartnerForm().getFormLayout().addComponent(buttonsInForm);
-
-        layout.addComponents(buttonsAlwaysVisible, getPartnerForm());
-        setCompositionRoot(layout);
     }
 
     /**
@@ -93,98 +170,20 @@ public class BuergerPartnerForm extends BaseComponent {
      *
      * @return The underlying Form.
      */
-    public de.muenchen.vaadin.ui.components.forms.selected.SelectedBuergerPartnerForm getPartnerForm() {
+    public SelectedBuergerPartnerForm getPartnerForm() {
         return partnerForm;
     }
 
-    /**
-     * Create the Button for the create action.
-     *
-     * @return A new ActionButton preconfigured with actions.
-     */
-    private ActionButton createCreateButton() {
-        final ActionButton createButton = new ActionButton(Buerger.class, SimpleAction.create);
-        final NavigateActions navigateActions = new NavigateActions(getNavigateToCreate());
-        createButton.addClickListener(clickEvent -> {
-            if (partnerForm.isVisible()) {
-                final ConfirmationWindow window = new ConfirmationWindow(SimpleAction.override);
-                window.addActionPerformer(navigateActions::navigate);
-                getUI().addWindow(window);
-            } else {
-                navigateActions.navigate();
-            }
-        });
-        return createButton;
+
+    public HorizontalLayout getButtonLayout() {
+        return buttonLayout;
     }
 
-    /**
-     * Create the Button for the add action.
-     *
-     * @return A new ActionButton preconfigured with actions.
-     */
-    private ActionButton createAddButton() {
-        final ActionButton addButton = new ActionButton(Buerger.class, SimpleAction.add);
-        final NavigateActions navigateActions = new NavigateActions(BuergerAddPartnerView.NAME);
-        addButton.addClickListener(clickEvent -> {
-            if (partnerForm.isVisible()) {
-                final ConfirmationWindow window = new ConfirmationWindow(SimpleAction.override);
-                window.addActionPerformer(navigateActions::navigate);
-                getUI().addWindow(window);
-            } else {
-                navigateActions.navigate();
-            }
-        });
-        return addButton;
+    public HorizontalLayout getFormButtonLayout() {
+        return formButtonLayout;
     }
 
-
-    /**
-     * Create the Button for the read action.
-     *
-     * @return A new ActionButton preconfigured with actions.
-     */
-    private Component createReadButton() {
-        final ActionButton readButton = new ActionButton(Buerger.class, SimpleAction.read);
-        final BuergerSingleActions singleActions = new BuergerSingleActions(getPartnerForm()::getBuerger);
-        readButton.addActionPerformer(singleActions::read);
-
-        final NavigateActions navigateActions = new NavigateActions(getNavigateToRead());
-        readButton.addActionPerformer(navigateActions::navigate);
-
-        return readButton;
-    }
-
-
-    /**
-     * Create the Button for the delete action.
-     *
-     * @return A new ActionButton preconfigured with actions.
-     */
-    private Component createDeleteButton() {
-        final ActionButton deleteButton = new ActionButton(Buerger.class, SimpleAction.delete);
-
-        final BuergerAssociationActions associationActions = new BuergerAssociationActions(
-                () -> new Association<>(getPartnerForm().getBuerger(), Buerger.Rel.partner.name()));
-        deleteButton.addActionPerformer(associationActions::removeAssociation);
-
-        return deleteButton;
-    }
-
-    /**
-     * Get the String that is navigated to on create.
-     *
-     * @return The String of the View that is navigated to on create.
-     */
-    public String getNavigateToCreate() {
-        return navigateToCreate;
-    }
-
-    /**
-     * Get the String that is navigated to on read.
-     *
-     * @return The String of the View that is navigated to on read.
-     */
-    public String getNavigateToRead() {
-        return navigateToRead;
+    public NavigateActions getAddNavigation() {
+        return addNavigation;
     }
 }
