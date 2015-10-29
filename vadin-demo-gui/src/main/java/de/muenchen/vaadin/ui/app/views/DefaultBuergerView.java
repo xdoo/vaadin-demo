@@ -8,6 +8,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.guilib.BaseUI;
+import de.muenchen.vaadin.ui.components.forms.BuergerPartnerReadForm;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Type;
@@ -52,7 +53,8 @@ public abstract class DefaultBuergerView extends VerticalLayout implements View{
 
         removeAllComponents();
         //HorizontalLayout head = new HorizontalLayout(pageTitle);
-        addComponent(pageTitle);
+        final BuergerPartnerReadForm components = new BuergerPartnerReadForm(BuergerDetailView.NAME);
+        addComponents(pageTitle, components);
     }
 
     /**

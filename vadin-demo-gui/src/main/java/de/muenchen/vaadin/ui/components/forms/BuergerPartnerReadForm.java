@@ -6,6 +6,7 @@ import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.BaseComponent;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
+import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerSingleActions;
 import de.muenchen.vaadin.ui.components.forms.selected.SelectedBuergerPartnerForm;
 
 /**
@@ -18,7 +19,13 @@ public class BuergerPartnerReadForm extends BaseComponent {
     /** Indicates the mode of the form. */
     public static final boolean READ_ONLY = true;
     /** The underlying form. */
-    private final SelectedBuergerPartnerForm partnerForm = new SelectedBuergerPartnerForm();
+    private final SelectedBuergerPartnerForm partnerForm = new SelectedBuergerPartnerForm() {
+        @Override
+        public void setBuerger(Buerger buerger) {
+            getButtonLayout().setVisible(buerger != null);
+            super.setBuerger(buerger);
+        }
+    };
     /** The layout for all Buttons. */
     private final HorizontalLayout buttonLayout = new HorizontalLayout();
     /** The button for the update action. */
@@ -51,7 +58,7 @@ public class BuergerPartnerReadForm extends BaseComponent {
      * Initialize the ReadForm.
      */
     private void init() {
-        setReadOnly(READ_ONLY);
+        getPartnerForm().setReadOnly(READ_ONLY);
 
         getButtonLayout().setSpacing(true);
         getButtonLayout().addComponents(getDetailButton());
@@ -66,6 +73,8 @@ public class BuergerPartnerReadForm extends BaseComponent {
      * Configure the Detail Button.
      */
     private void configureDetailButton() {
+        final BuergerSingleActions singleActions = new BuergerSingleActions(getPartnerForm()::getBuerger);
+        getDetailButton().addActionPerformer(singleActions::read);
         getDetailButton().addActionPerformer(getDetailNavigation()::navigate);
     }
 
