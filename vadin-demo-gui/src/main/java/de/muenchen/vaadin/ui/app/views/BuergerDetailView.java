@@ -68,7 +68,7 @@ public class BuergerDetailView extends DefaultBuergerView {
         TabSheet.Tab kindTab = tabSheet.addTab(childTab);
         kindTab.setCaption(BaseUI.getCurrentI18nResolver().resolveRelative(Buerger.class, getEntityFieldPath(Buerger.Rel.kinder.name(), I18nPaths.Type.label)));
 
-        partnerTab = controller.getViewFactory().generatePartnerTab(BuergerDetailView.NAME, BuergerCreatePartnerView.NAME, NAME);
+        partnerTab = controller.getViewFactory().generatePartnerTab(BuergerDetailView.NAME, BuergerCreatePartnerView.NAME, BuergerAddPartnerView.NAME);
         TabSheet.Tab pTab = tabSheet.addTab(partnerTab);
         pTab.setCaption(BaseUI.getCurrentI18nResolver().resolveRelative(Buerger.class, getEntityFieldPath(Buerger.Rel.partner.name(), I18nPaths.Type.label)));
         layout.addComponent(tabSheet);
