@@ -83,7 +83,7 @@ public class BuergerCreateForm extends BaseComponent {
      * Set the IDs for important components.
      */
     private void setIds() {
-        setId(getClass().getName());
+        setId(getClass().getSimpleName());
         getBuergerForm().setId(getId() + "#form");
         getSaveButton().setId(getId() + "#save-button");
     }

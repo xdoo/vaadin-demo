@@ -47,7 +47,7 @@ public class BuergerPartnerReadForm extends BaseComponent {
     }
 
     private void setIds() {
-        setId("BuergerPartnerReadForm");
+        setId(getClass().getSimpleName());
         getPartnerForm().setId(getId() + "#form");
         getDetailButton().setId(getId() + "#detail-button-" + getDetailNavigation().getNavigateTo());
     }

@@ -43,7 +43,7 @@ public class BuergerUpdateForm extends BaseComponent {
     }
 
     private void setIds() {
-        setId(getClass().getName());
+        setId(getClass().getSimpleName());
         getBuergerForm().setId(getId() + "#form");
         getSaveButton().setId(getId() + "#save-button-" + getSaveNavigation().getNavigateTo());
     }

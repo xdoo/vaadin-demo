@@ -82,14 +82,12 @@ public class BuergerPartnerForm extends BaseComponent {
      * Set the IDs for this component
      */
     private void setIds() {
-        setId(getClass().getName());
+        setId(getClass().getSimpleName());
         getPartnerForm().setId(getId() + "#form");
-
         getCreateButton().setId(getId() + "#create-button" + getCreateNavigation().getNavigateTo());
         getAddButton().setId(getId() + "#add-button" + getAddNavigation().getNavigateTo());
         getReadButton().setId(getId() + "#read-button" + getReadNavigation().getNavigateTo());
         getDeleteButton().setId(getId() + "#delete-button");
-
     }
 
     /**
