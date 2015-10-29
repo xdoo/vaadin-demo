@@ -72,7 +72,7 @@ public class ConfirmationWindow extends Window {
      */
     private void init() {
         final String cancelButtonText = BaseUI.getCurrentI18nResolver().resolve(I18nPaths.getConfirmationPath(action, I18nPaths.Type.cancel));
-        Button cancel = new Button(cancelButtonText);
+        final Button cancel = new Button(cancelButtonText);
         cancel.setStyleName(ValoTheme.BUTTON_BORDERLESS);
         cancel.addClickListener(c -> close());
         getButtons().addComponents(cancel, getOk());
@@ -82,7 +82,6 @@ public class ConfirmationWindow extends Window {
         label.setHeightUndefined();
 
         getLayout().addComponents(label, getButtons());
-
         configureOkButton();
         configureButtons();
         configureContent();
