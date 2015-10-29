@@ -40,6 +40,13 @@ public class BuergerRWForm extends BaseComponent {
         buergerForm.reLoadBuerger();
 
         init();
+        setIds();
+    }
+
+    private void setIds() {
+        setId(getClass().getName());
+        getBuergerForm().setId(getId() + "#form");
+
     }
 
     /**

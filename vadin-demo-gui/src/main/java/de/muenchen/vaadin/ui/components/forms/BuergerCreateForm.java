@@ -21,6 +21,7 @@ import java.util.Optional;
  * @version 2.0
  */
 public class BuergerCreateForm extends BaseComponent {
+
     /** Indicates the mode of the Form. */
     private static final boolean READ_ONLY = false;
     /** The optional relation this CreateForm is for. */
@@ -58,6 +59,7 @@ public class BuergerCreateForm extends BaseComponent {
         this.relation = Optional.ofNullable(relation);
 
         init();
+        setIds();
     }
 
     /**
@@ -75,6 +77,15 @@ public class BuergerCreateForm extends BaseComponent {
         setCompositionRoot(getBuergerForm());
 
         getBuergerForm().getFields().stream().findFirst().ifPresent(Field::focus);
+    }
+
+    /**
+     * Set the IDs for important components.
+     */
+    private void setIds() {
+        setId(getClass().getName());
+        getBuergerForm().setId(getId() + "#form");
+        getSaveButton().setId(getId() + "#save-button");
     }
 
     /**

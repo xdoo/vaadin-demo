@@ -52,6 +52,12 @@ public class BuergerPartnerForm extends BaseComponent {
         this.navigateToCreate = navigateToCreate;
 
         init();
+        setIds();
+    }
+
+    private void setIds() {
+        setId(getClass().getName());
+        getPartnerForm().setId(getId() + "#form");
     }
 
     /**

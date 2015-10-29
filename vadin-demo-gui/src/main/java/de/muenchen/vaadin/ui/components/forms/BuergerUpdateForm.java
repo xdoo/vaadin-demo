@@ -39,6 +39,13 @@ public class BuergerUpdateForm extends BaseComponent {
         buergerForm.reLoadBuerger();
 
         init();
+        setIds();
+    }
+
+    private void setIds() {
+        setId(getClass().getName());
+        getBuergerForm().setId(getId() + "#form");
+        getSaveButton().setId(getId() + "#save-button-" + getSaveNavigation().getNavigateTo());
     }
 
     /**

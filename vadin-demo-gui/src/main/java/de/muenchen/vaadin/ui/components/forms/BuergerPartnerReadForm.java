@@ -43,6 +43,13 @@ public class BuergerPartnerReadForm extends BaseComponent {
         detailNavigation = new NavigateActions(navigateToDetail);
 
         init();
+        setIds();
+    }
+
+    private void setIds() {
+        setId("BuergerPartnerReadForm");
+        getPartnerForm().setId(getId() + "#form");
+        getDetailButton().setId(getId() + "#detail-button-" + getDetailNavigation().getNavigateTo());
     }
 
     /**
