@@ -19,6 +19,7 @@ import java.util.stream.Stream;
 public enum SimpleAction implements Action {
 
     //TODO check for duplicate/unused actions
+    none,
     create(FontAwesome.MAGIC, ValoTheme.BUTTON_FRIENDLY),
     read(FontAwesome.BOOK),
     update(FontAwesome.PENCIL),
