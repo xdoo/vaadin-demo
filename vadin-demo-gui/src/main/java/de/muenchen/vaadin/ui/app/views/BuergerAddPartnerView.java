@@ -13,6 +13,7 @@ import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
 import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.components.BuergerAddKinderGrid;
+import de.muenchen.vaadin.ui.components.BuergerAddPartnerGrid;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerAssociationActions;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class BuergerAddPartnerView extends DefaultBuergerView {
     @Override
     protected void site() {
 
-        final BuergerAddKinderGrid grid = new BuergerAddKinderGrid(BuergerDetailView.NAME, controller);
+        final BuergerAddPartnerGrid grid = new BuergerAddPartnerGrid(BuergerDetailView.NAME, controller);
 
         addComponent(grid);
     }
