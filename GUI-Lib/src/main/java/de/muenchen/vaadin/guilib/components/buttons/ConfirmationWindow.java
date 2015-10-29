@@ -20,6 +20,7 @@ import java.util.List;
  * on confirmation.
  */
 public class ConfirmationWindow extends Window {
+    public static final String CONFIRMATION_HEADER_TEXT = "confirmation.header.text";
     /** The Content of the Window. */
     private final VerticalLayout layout = new VerticalLayout();
     /** The Layout for the Buttons. */
@@ -77,11 +78,15 @@ public class ConfirmationWindow extends Window {
         cancel.addClickListener(c -> close());
         getButtons().addComponents(cancel, getOk());
 
+        final String headerText = BaseUI.getCurrentI18nResolver().resolve(CONFIRMATION_HEADER_TEXT);
+        final Label header = new Label(headerText);
+        header.addStyleName(ValoTheme.LABEL_BOLD);
+
         final String messageText = BaseUI.getCurrentI18nResolver().resolve(I18nPaths.getConfirmationPath(action, I18nPaths.Type.text));
         final Label label = new Label(messageText);
         label.setHeightUndefined();
 
-        getLayout().addComponents(label, getButtons());
+        getLayout().addComponents(header, label, getButtons());
         configureOkButton();
         configureButtons();
         configureContent();
@@ -141,7 +146,6 @@ public class ConfirmationWindow extends Window {
      * Configure this Window.
      */
     private void configureWindow() {
-        setCaption("Achtung!");
         setClosable(false);
         setResizable(false);
         setModal(true);
