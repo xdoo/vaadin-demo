@@ -4,6 +4,8 @@ insert into users (oid, user_email, user_enabled, user_username, user_password, 
 insert into users (oid, user_email, user_enabled, user_username, user_password, user_mandant) values (3,'admin@admin.muenchen.de',TRUE,'read1','read1','m1');
 insert into users (oid, user_email, user_enabled, user_username, user_password, user_mandant) values (4,'admin@admin.muenchen.de',TRUE,'read2','read2','m2');
 
+insert into users (oid, user_email, user_enabled, user_username, user_password, user_mandant) values (5,'admin@admin.muenchen.de',TRUE,'hans','test','m1');
+
 insert into authorities (oid, auth_authority) values (1,'ADMIN');
 insert into authorities (oid, auth_authority) values (2,'READ_ONLY_USER');
 
@@ -12,6 +14,8 @@ insert into users_authorities (authority_oid, user_oid) values (1, 2);
 
 insert into users_authorities (authority_oid, user_oid) values (2, 3);
 insert into users_authorities (authority_oid, user_oid) values (2, 4);
+
+insert into users_authorities (authority_oid, user_oid) values (1, 5);
 
 insert into authorities (oid, auth_authority) values (100,'Tester');
 insert into users_authorities (authority_oid, user_oid) values (100, 1);
