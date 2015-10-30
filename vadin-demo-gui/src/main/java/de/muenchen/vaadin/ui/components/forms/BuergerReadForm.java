@@ -46,6 +46,7 @@ public class BuergerReadForm extends BaseComponent {
     private void setIds() {
         setId(getClass().getSimpleName());
         getBuergerForm().setId(getId() + "#form");
+        getBuergerForm().getFields().forEach(f -> f.setId(getId() + "#" + f.getId()));
         getUpdateButton().setId(getId() + "#update-button-" + getUpdateNavigation().getNavigateTo());
     }
 

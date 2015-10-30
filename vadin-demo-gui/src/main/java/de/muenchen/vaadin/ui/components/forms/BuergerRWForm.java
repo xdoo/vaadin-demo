@@ -50,6 +50,7 @@ public class BuergerRWForm extends BaseComponent {
      */
     private void setIds() {
         setId(getClass().getSimpleName());
+        getBuergerForm().getFields().forEach(f -> f.setId(getId() + "#" + f.getId()));
         getBuergerForm().setId(getId() + "#form");
         getEditButton().setId(getId() + "#edit-button");
         getSaveButton().setId(getId() + "#save-button");
