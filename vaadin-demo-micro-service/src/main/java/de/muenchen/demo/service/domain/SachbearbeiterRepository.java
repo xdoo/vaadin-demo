@@ -4,22 +4,24 @@ import de.muenchen.service.TenantService;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.access.prepost.PreFilter;
 
+import java.util.List;
+
 @RepositoryRestResource(exported = true)
 @PreAuthorize("hasRole('ROLE_READ_Sachbearbeiter')")
-public interface SachbearbeiterRepository extends PagingAndSortingRepository<Sachbearbeiter, Long> {
+public interface SachbearbeiterRepository extends JpaRepository<Sachbearbeiter, Long> {
 
 	public final static String Sachbearbeiter_CACHE = "SACHBEARBEITER_CACHE";
 
 	@Override
 	@PostFilter(TenantService.IS_TENANT_FILTER)
-	Iterable<Sachbearbeiter> findAll();
+	List<Sachbearbeiter> findAll();
 
 	@Override
 	@Cacheable(value = Sachbearbeiter_CACHE, key = "#p0")

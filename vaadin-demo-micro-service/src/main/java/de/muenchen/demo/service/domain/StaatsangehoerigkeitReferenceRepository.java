@@ -4,22 +4,24 @@ import de.muenchen.service.TenantService;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.access.prepost.PreFilter;
 
+import java.util.List;
+
 @RepositoryRestResource(exported = true)
 @PreAuthorize("hasRole('ROLE_READ_StaatsangehoerigkeitReference')")
-public interface StaatsangehoerigkeitReferenceRepository extends PagingAndSortingRepository<StaatsangehoerigkeitReference, Long> {
+public interface StaatsangehoerigkeitReferenceRepository extends JpaRepository<StaatsangehoerigkeitReference, Long> {
 
 	public final static String StaatsangehoerigkeitReference_CACHE = "STAATSANGEHOERIGKEITREFERENCE_CACHE";
 
 	@Override
 	@PostFilter(TenantService.IS_TENANT_FILTER)
-	Iterable<StaatsangehoerigkeitReference> findAll();
+	List<StaatsangehoerigkeitReference> findAll();
 
 	@Override
 	@Cacheable(value = StaatsangehoerigkeitReference_CACHE, key = "#p0")

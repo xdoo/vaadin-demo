@@ -1,20 +1,22 @@
 package de.muenchen.demo.service.domain;
 
 import de.muenchen.service.TenantService;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.access.prepost.PreFilter;
 
+import java.util.List;
+
 @RepositoryRestResource(exported = true)
 @PreAuthorize("hasRole('ROLE_READ_CompanyBaseInfo')")
-public interface CompanyBaseInfoRepository extends PagingAndSortingRepository<CompanyBaseInfo, Long> {
+public interface CompanyBaseInfoRepository extends JpaRepository<CompanyBaseInfo, Long> {
 
 	@Override
 	@PostFilter(TenantService.IS_TENANT_FILTER)
-	Iterable<CompanyBaseInfo> findAll();
+	List<CompanyBaseInfo> findAll();
 
 	@Override
 	@PreAuthorize("hasRole('ROLE_READ_CompanyBaseInfo')")
