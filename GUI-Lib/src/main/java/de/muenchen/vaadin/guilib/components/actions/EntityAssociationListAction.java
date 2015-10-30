@@ -30,7 +30,7 @@ public class EntityAssociationListAction<T> {
     /** The class of the Entity */
     private final Class<T> entityClass;
     /** The supplier for the Association. */
-    private final Supplier<List<Association<T>>> association;
+    private final Supplier<List<Association<?>>> association;
 
 
     /**
@@ -39,7 +39,7 @@ public class EntityAssociationListAction<T> {
      * @param association The association.
      * @param entityClass The class of the Entity.
      */
-    public EntityAssociationListAction(Supplier<List<Association<T>>> association, Class<T> entityClass) {
+    public EntityAssociationListAction(Supplier<List<Association<?>>> association, Class<T> entityClass) {
 
         if (entityClass == null) {
             throw new NullPointerException();
@@ -97,7 +97,7 @@ public class EntityAssociationListAction<T> {
      * Get the Association.
      * @return The Association.
      */
-    public List<Association<T>> getAssociations() {
+    public List<Association<?>> getAssociations() {
         return association.get();
     }
 
