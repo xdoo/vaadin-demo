@@ -47,7 +47,7 @@ public class BuergerDetailView extends DefaultBuergerView {
         final ActionButton backButton = new ActionButton(Buerger.class, SimpleAction.back);
         final NavigateActions navigateActions = new NavigateActions(BuergerTableView.NAME);
         backButton.addActionPerformer(navigateActions::navigate);
-
+        backButton.setId("back-button-" + navigateActions.getNavigateTo());
 
         VerticalLayout layout = new VerticalLayout();
         layout.addComponent(backButton);

@@ -35,6 +35,8 @@ public class BuergerCreateView extends DefaultBuergerView {
         final ActionButton backButton = new ActionButton(Buerger.class, SimpleAction.back);
         final NavigateActions navigateActions = new NavigateActions(BuergerTableView.NAME);
         backButton.addActionPerformer(navigateActions::navigate);
+        backButton.setId("back-button-" + navigateActions.getNavigateTo());
+
 
         final BuergerCreateForm c = this.controller.getViewFactory().generateCreateForm(BuergerTableView.NAME, BuergerTableView.NAME);
 

@@ -30,6 +30,7 @@ public class BuergerUpdateView extends DefaultBuergerView {
         final ActionButton backButton = new ActionButton(Buerger.class, SimpleAction.back);
         final NavigateActions navigateActions = new NavigateActions(BuergerDetailView.NAME);
         backButton.addActionPerformer(navigateActions::navigate);
+        backButton.setId("back-button-" + navigateActions.getNavigateTo());
 
         final BuergerUpdateForm c = new BuergerUpdateForm(BuergerDetailView.NAME);
         final VerticalLayout layout = new VerticalLayout(backButton, c);
