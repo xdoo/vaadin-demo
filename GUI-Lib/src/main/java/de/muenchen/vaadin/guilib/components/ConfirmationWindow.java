@@ -14,6 +14,9 @@ import java.util.List;
 /**
  * Provides a simple Window that allows the execution of multiple {@link de.muenchen.vaadin.guilib.components.buttons.ActionButton.CrashableActionPerformer}
  * on confirmation.
+ * 
+ * @author rene.zarwel p.mueller
+ * @version 2.0
  */
 public class ConfirmationWindow extends Window {
     public static final String CONFIRMATION_HEADER_TEXT = "confirmation.header.text";
