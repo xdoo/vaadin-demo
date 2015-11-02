@@ -14,7 +14,7 @@ public class SearchResourcesProcessor implements ResourceProcessor<RepositorySea
     @Override
     public RepositorySearchesResource process(RepositorySearchesResource repositorySearchesResource) {
         final String search = repositorySearchesResource.getId().getHref();
-        final Link findFullTextFuzzy = new Link(search + "/findFullTextFuzzy{?q}").withRel("findFullTextFuzzy");
+        final Link findFullTextFuzzy = new Link(search + "/findFullTextFuzzy{?q}{?page}{?size}{?sort}").withRel("findFullTextFuzzy");
         repositorySearchesResource.add(findFullTextFuzzy);
 
         return repositorySearchesResource;
