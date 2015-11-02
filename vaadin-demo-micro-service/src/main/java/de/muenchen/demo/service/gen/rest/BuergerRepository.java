@@ -6,6 +6,7 @@ import de.muenchen.service.TenantService;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
@@ -29,7 +30,7 @@ import java.util.List;
 @RepositoryRestResource(exported = true,
         path = "buergers", collectionResourceRel = "buergers")
 @PreAuthorize("hasRole('ROLE_READ_Buerger')")
-public interface BuergerRepository extends PagingAndSortingRepository<Buerger, Long> {
+public interface BuergerRepository extends JpaRepository<Buerger, Long> {
 
     /**
      * Name for the specific cache.
@@ -46,7 +47,7 @@ public interface BuergerRepository extends PagingAndSortingRepository<Buerger, L
      */
     @Override
     @PostFilter(TenantService.IS_TENANT_FILTER)
-    Iterable<Buerger> findAll();
+    List<Buerger> findAll();
 
     /**
      * Get one specific Buerger by its unique oid.

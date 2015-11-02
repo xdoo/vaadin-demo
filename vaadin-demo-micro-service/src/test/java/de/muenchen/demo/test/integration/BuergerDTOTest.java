@@ -26,8 +26,8 @@ import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
+import org.springframework.hateoas.PagedResources;
 import org.springframework.hateoas.Resource;
-import org.springframework.hateoas.Resources;
 import org.springframework.hateoas.hal.Jackson2HalModule;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -140,7 +140,7 @@ public class BuergerDTOTest {
             objectMapper.registerModule(new Jackson2HalModule());
 
             halConverter.setObjectMapper(objectMapper);
-            halConverter.setSupportedMediaTypes(Arrays.asList(MediaTypes.HAL_JSON));
+            halConverter.setSupportedMediaTypes(MediaType.parseMediaTypes(MediaTypes.HAL_JSON_VALUE));
 
             restTemplate.setMessageConverters(Arrays.asList(
                     new StringHttpMessageConverter(Charset.forName("UTF-8")),
@@ -314,7 +314,7 @@ public class BuergerDTOTest {
         System.out.println("========== get Alle Bürger Mandant 'm1' Test ==========");
         int x = this.count("m1", "admin1", "admin1");
         url = "http://localhost:" + port + "/buergers";
-        ResponseEntity<Resources<BuergerResource>> result = restTemplate.exchange(
+        ResponseEntity<PagedResources<BuergerResource>> result = restTemplate.exchange(
                 url,
                 HttpMethod.GET,
                 null,
@@ -331,7 +331,7 @@ public class BuergerDTOTest {
         System.out.println("========== get Alle Bürger Mandant 'm2' Test ==========");
         int x = this.count("m2", "admin2", "admin2");
         url = "http://localhost:" + port + "/buergers";
-        ResponseEntity<Resources<BuergerResource>> result = restTemplate2.exchange(
+        ResponseEntity<PagedResources<BuergerResource>> result = restTemplate2.exchange(
                 url,
                 HttpMethod.GET,
                 null,
@@ -467,7 +467,7 @@ public class BuergerDTOTest {
     public void getBuergerKinderM1Test() throws JsonProcessingException {
         System.out.println("========== get Bürger Kinder Test ==========");
         url = "http://localhost:" + port + "/buergers/4/kinder";
-        ResponseEntity<Resources<BuergerResource>> result = restTemplate.exchange(
+        ResponseEntity<PagedResources<BuergerResource>> result = restTemplate.exchange(
                 url,
                 HttpMethod.GET,
                 null,
@@ -499,7 +499,7 @@ public class BuergerDTOTest {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("text", "uri-list"));
         restTemplate.put(url, new HttpEntity<>(uri, headers));
-        ResponseEntity<Resources<BuergerResource>> result2 = restTemplate.exchange(
+        ResponseEntity<PagedResources<BuergerResource>> result2 = restTemplate.exchange(
                 url,
                 HttpMethod.GET,
                 null,
@@ -525,8 +525,7 @@ public class BuergerDTOTest {
 
 class BuergerResource extends Resource<Buerger> {
 
-    public static final ParameterizedTypeReference<Resources<BuergerResource>> LIST = new ParameterizedTypeReference<Resources<BuergerResource>>() {
-    };
+    public static final ParameterizedTypeReference<PagedResources<BuergerResource>> LIST = new ParameterizedTypeReference<PagedResources<BuergerResource>>() {};
 
     public BuergerResource() {
         super(new Buerger());
