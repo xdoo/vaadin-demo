@@ -7,6 +7,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -28,7 +29,7 @@ import java.util.List;
 @RepositoryRestResource(exported = true,
         path = "buergers", collectionResourceRel = "buergers")
 @PreAuthorize("hasRole('ROLE_READ_Buerger')")
-public interface BuergerRepository extends CrudRepository<Buerger, Long> {
+public interface BuergerRepository extends PagingAndSortingRepository<Buerger, Long> {
 
     /**
      * Name for the specific cache.

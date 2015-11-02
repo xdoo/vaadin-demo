@@ -53,18 +53,18 @@ public class BuergerSearchController {
                 .of(Buerger.class.getDeclaredFields())
                 .filter(field -> field.isAnnotationPresent(org.hibernate.search.annotations.Field.class))
                 .map(Field::getName)
-                .toArray(size -> new String[size]);
+                .toArray(String[]::new);
 
-        List<Buerger> buergerStream;
+        List<Buerger> buergerResults;
         try {
-            buergerStream = service.query(q, Buerger.class, annotatedFields);
+            buergerResults = service.query(q, Buerger.class, annotatedFields);
         } catch (EmptyQueryException e) {
-            buergerStream = StreamSupport.stream(repository.findAll().spliterator(), false).collect(Collectors.toList());
+            buergerResults = StreamSupport.stream(repository.findAll().spliterator(), false).collect(Collectors.toList());
         }
 
-        final List<Buerger> buergers = buergerStream.subList(p.getOffset(), Math.min(p.getOffset() + p.getPageSize(), buergerStream.size()));
+        final List<Buerger> buergerPage = buergerResults.subList(p.getOffset(), Math.min(p.getOffset() + p.getPageSize(), buergerResults.size()));
 
-        Page<?> page = new PageImpl<>(buergers, p, buergerStream.size());
+        final Page<?> page = new PageImpl<>(buergerPage, p, buergerResults.size());
         final PagedResources<?> collect = pagedResourcesAssembler.toResource(page, assembler);
         return collect;
     }

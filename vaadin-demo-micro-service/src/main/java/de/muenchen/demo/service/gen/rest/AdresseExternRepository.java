@@ -5,7 +5,7 @@ import de.muenchen.service.TenantService;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -27,7 +27,7 @@ import java.util.List;
 @RepositoryRestResource(exported = true,
         path = "adresseExterns", collectionResourceRel = "adresseExterns")
 @PreAuthorize("hasRole('ROLE_READ_AdresseExtern')")
-public interface AdresseExternRepository extends CrudRepository<AdresseExtern, Long> {
+public interface AdresseExternRepository extends JpaRepository<AdresseExtern, Long> {
 
     /**
      * Name for the specific cache.
@@ -44,7 +44,7 @@ public interface AdresseExternRepository extends CrudRepository<AdresseExtern, L
      */
     @Override
     @PostFilter(TenantService.IS_TENANT_FILTER)
-    Iterable<AdresseExtern> findAll();
+    List<AdresseExtern> findAll();
 
     /**
      * Get one specific AdresseExtern by its unique oid.

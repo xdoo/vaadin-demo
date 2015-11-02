@@ -5,13 +5,15 @@ import de.muenchen.service.TenantService;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.access.prepost.PreFilter;
+
+import java.util.List;
 
 /**
  * Provides a Repository for a {@link Sachbearbeiter}. This Repository can be exported as a REST Resource.
@@ -25,7 +27,7 @@ import org.springframework.security.access.prepost.PreFilter;
 @RepositoryRestResource(exported = true,
         path = "sachbearbeiters", collectionResourceRel = "sachbearbeiters")
 @PreAuthorize("hasRole('ROLE_READ_Sachbearbeiter')")
-public interface SachbearbeiterRepository extends CrudRepository<Sachbearbeiter, Long> {
+public interface SachbearbeiterRepository extends JpaRepository<Sachbearbeiter, Long> {
 
     /**
      * Name for the specific cache.
@@ -42,7 +44,7 @@ public interface SachbearbeiterRepository extends CrudRepository<Sachbearbeiter,
      */
     @Override
     @PostFilter(TenantService.IS_TENANT_FILTER)
-    Iterable<Sachbearbeiter> findAll();
+    List<Sachbearbeiter> findAll();
 
     /**
      * Get one specific Sachbearbeiter by its unique oid.

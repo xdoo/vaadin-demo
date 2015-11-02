@@ -1,16 +1,22 @@
 package de.muenchen.demo.service.rest.search;
 
 
+import de.muenchen.demo.service.gen.domain.Buerger;
 import de.muenchen.demo.service.gen.domain.Pass;
 import de.muenchen.demo.service.gen.rest.PassRepository;
 import de.muenchen.service.QueryService;
 import org.hibernate.search.exception.EmptyQueryException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.data.rest.webmvc.PersistentEntityResource;
 import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
+import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.ExposesResourceFor;
+import org.springframework.hateoas.PagedResources;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,9 +45,12 @@ public class PassSearchController {
     @Autowired
     PassRepository repository;
 
+    @Autowired
+    PagedResourcesAssembler pagedResourcesAssembler;
+
     @RequestMapping(method = RequestMethod.GET, value = "findFullTextFuzzy")
     @ResponseBody
-    public ResponseEntity<?> findFullTextFuzzy(PersistentEntityResourceAssembler assembler, @Param("q") String q) {
+    public PagedResources<?> findFullTextFuzzy(PersistentEntityResourceAssembler assembler, Pageable p, @Param("q") String q) {
         if (q == null)
             q = "";
 
@@ -49,17 +58,20 @@ public class PassSearchController {
                 .of(Pass.class.getDeclaredFields())
                 .filter(field -> field.isAnnotationPresent(org.hibernate.search.annotations.Field.class))
                 .map(Field::getName)
-                .toArray(size -> new String[size]);
+                .toArray(String[]::new);
 
-        Stream<Pass> passStream;
+        List<Pass> passResults;
         try {
-            passStream = service.query(q, Pass.class, annotatedFields).stream();
+            passResults = service.query(q, Pass.class, annotatedFields);
         } catch (EmptyQueryException e) {
-            passStream = StreamSupport.stream(repository.findAll().spliterator(), false);
+            passResults = StreamSupport.stream(repository.findAll().spliterator(), false).collect(Collectors.toList());
         }
 
-        final List<PersistentEntityResource> collect = passStream.map(assembler::toResource).collect(Collectors.toList());
-        return new ResponseEntity<Object>(new Resources<>(collect), HttpStatus.OK);
+        final List<Pass> passPage = passResults.subList(p.getOffset(), Math.min(p.getOffset() + p.getPageSize(), passResults.size()));
+
+        final Page<?> page = new PageImpl<>(passPage, p, passResults.size());
+        final PagedResources<?> collect = pagedResourcesAssembler.toResource(page, assembler);
+        return collect;
     }
 }
 
