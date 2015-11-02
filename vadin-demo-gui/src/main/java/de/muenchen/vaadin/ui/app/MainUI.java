@@ -31,7 +31,7 @@ import de.muenchen.vaadin.demo.i18nservice.MessageService;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.ValoMenuLayout;
-import de.muenchen.vaadin.guilib.components.GenericConfirmationWindow;
+import de.muenchen.vaadin.guilib.components.buttons.ConfirmationWindow;
 import de.muenchen.vaadin.ui.app.views.BuergerTableView;
 import de.muenchen.vaadin.ui.app.views.LoginView;
 import de.muenchen.vaadin.ui.app.views.MainView;
@@ -274,16 +274,12 @@ public class MainUI extends BaseUI {
 
         // creates and displays the logout button
         final Button logoutButton = new Button("Logout", event -> {
-            GenericConfirmationWindow confirmationWindow =
-                    new GenericConfirmationWindow(BaseUI.getCurrentI18nResolver(),
-                            SimpleAction.logout,
-                            e -> {
-                                this.postEvent(Key.LOGOUT);
-                                return true;
-                            });
-            getUI().addWindow(confirmationWindow);
-            confirmationWindow.center();
-            confirmationWindow.focus();
+            final ConfirmationWindow window = new ConfirmationWindow(SimpleAction.logout);
+            window.addActionPerformer(c -> {
+                postEvent(Key.LOGOUT);
+                return true;
+            });
+            getUI().addWindow(window);
         });
         logoutButton.setHtmlContentAllowed(true);
         logoutButton.setPrimaryStyleName(ValoTheme.MENU_ITEM);

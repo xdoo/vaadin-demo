@@ -38,7 +38,16 @@ public class BuergerReadForm extends BaseComponent {
         buergerForm.reLoadBuerger();
 
         updateNavigation = new NavigateActions(navigateToUpdate);
+
         init();
+        setIds();
+    }
+
+    private void setIds() {
+        setId(getClass().getSimpleName());
+        getBuergerForm().setId(getId() + "#form");
+        getBuergerForm().getFields().forEach(f -> f.setId(getId() + "#" + f.getId()));
+        getUpdateButton().setId(getId() + "#update-button-" + getUpdateNavigation().getNavigateTo());
     }
 
     /**
