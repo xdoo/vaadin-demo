@@ -105,14 +105,14 @@ public class Buerger extends BaseEntity {
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "oid")
     @JsonIdentityReference(alwaysAsId = true)
     @JoinTable(name = "buergers_kinders", joinColumns = {@JoinColumn(name = "buerger_oid")}, inverseJoinColumns = {@JoinColumn(name = "kinder_oid")})
-    @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
     private java.util.Collection<Buerger> kinder = new ArrayList<>();
 
 
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "oid")
     @JsonIdentityReference(alwaysAsId = true)
     @JoinTable(name = "buergers_partners", joinColumns = {@JoinColumn(name = "buerger_oid")}, inverseJoinColumns = {@JoinColumn(name = "partner_oid")})
-    @OneToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    @OneToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
     private Buerger partner;
 
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "oid")

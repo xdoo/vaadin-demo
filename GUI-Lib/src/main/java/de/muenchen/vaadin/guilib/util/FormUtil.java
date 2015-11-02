@@ -25,6 +25,10 @@ public class FormUtil {
      * The null representation on one input.
      */
     public static final String NULL_REPRESENTATION = "";
+    /**
+     * The append for the id of an input.
+     */
+    public static final String INPUT = "-input";
 
     /**
      * The class for the I18nResolver
@@ -46,7 +50,7 @@ public class FormUtil {
      */
     public FormUtil(BeanFieldGroup<?> binder) {
         this.binder = binder;
-        this.entityClass = binder.getItemDataSource().getBean().getClass();;
+        this.entityClass = binder.getItemDataSource().getBean().getClass();
         this.i18nResolver = BaseUI.getCurrentI18nResolver();
     }
 
@@ -65,7 +69,7 @@ public class FormUtil {
         TextField tf = getBinder().buildAndBind(caption, property, TextField.class);
         tf.setNullRepresentation(NULL_REPRESENTATION);
         tf.setInputPrompt(prompt);
-
+        tf.setId(property + INPUT);
         deactivateValidation(tf);
         //tf.setId(String.format("%s_%s_FIELD", getI18nResolver().getBasePath(), property).toUpperCase());
         return tf;
@@ -147,7 +151,7 @@ public class FormUtil {
         cb.setInputPrompt(prompt);
         cb.setTextInputAllowed(true);
         cb.setNullSelectionAllowed(false);
-
+        cb.setId(property + INPUT);
         deactivateValidation(cb);
         return cb;
     }
@@ -166,8 +170,8 @@ public class FormUtil {
         DateField df = getBinder().buildAndBind(caption, property, DateField.class);
 
         deactivateValidation(df);
-        //df.setId(String.format("%s_%s_DATEFIELD", getI18nResolver().getBasePath(), property).toUpperCase());
 
+        df.setId(property + INPUT);
         return df;
     }
 
@@ -183,7 +187,7 @@ public class FormUtil {
         final String caption = getCaption(property);
 
         CheckBox df = getBinder().buildAndBind(caption, property, CheckBox.class);
-
+        df.setId(property + INPUT);
         deactivateValidation(df);
         return df;
     }
@@ -237,9 +241,8 @@ public class FormUtil {
         getBinder().bind(tf, property);
 
         tf.setRememberNewTokens(false);
-
+        tf.setId(property + INPUT);
         deactivateValidation(tf);
-
         return tf;
     }
 }
