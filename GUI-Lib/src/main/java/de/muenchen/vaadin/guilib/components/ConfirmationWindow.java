@@ -1,4 +1,4 @@
-package de.muenchen.vaadin.guilib.components.buttons;
+package de.muenchen.vaadin.guilib.components;
 
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -11,6 +11,7 @@ import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.Action;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.BaseUI;
+import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
