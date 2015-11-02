@@ -17,7 +17,7 @@ public class BuergerAssociationListActions extends EntityAssociationListAction<B
      *
      * @param association The association..
      */
-    public BuergerAssociationListActions(Supplier<List<Association<Buerger>>> association) {
+    public BuergerAssociationListActions(Supplier<List<Association<?>>> association) {
         super(association, Buerger.class);
     }
 }
