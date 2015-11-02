@@ -16,7 +16,6 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -90,7 +89,7 @@ public class Buerger extends BaseEntity {
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "oid")
     @JsonIdentityReference(alwaysAsId = true)
     @JoinTable(name = "buergers_wohnungens", joinColumns = {@JoinColumn(name = "buerger_oid")}, inverseJoinColumns = {@JoinColumn(name = "wohnungen_oid")})
-    @OneToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    @OneToOne(cascade = {CascadeType.REFRESH})
     //TODO @NotNull
     private Wohnung wohnungen;
 
@@ -105,14 +104,14 @@ public class Buerger extends BaseEntity {
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "oid")
     @JsonIdentityReference(alwaysAsId = true)
     @JoinTable(name = "buergers_kinders", joinColumns = {@JoinColumn(name = "buerger_oid")}, inverseJoinColumns = {@JoinColumn(name = "kinder_oid")})
-    @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    @OneToMany(cascade = {CascadeType.REFRESH})
     private java.util.Collection<Buerger> kinder = new ArrayList<>();
 
 
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "oid")
     @JsonIdentityReference(alwaysAsId = true)
     @JoinTable(name = "buergers_partners", joinColumns = {@JoinColumn(name = "buerger_oid")}, inverseJoinColumns = {@JoinColumn(name = "partner_oid")})
-    @OneToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    @OneToOne(cascade = {CascadeType.REFRESH})
     private Buerger partner;
 
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "oid")
@@ -125,7 +124,7 @@ public class Buerger extends BaseEntity {
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "oid")
     @JsonIdentityReference(alwaysAsId = true)
     @JoinTable(name = "buergers_paesses", joinColumns = {@JoinColumn(name = "buerger_oid")}, inverseJoinColumns = {@JoinColumn(name = "paesse_oid")})
-    @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    @OneToMany(cascade = {CascadeType.REFRESH})
     @NotNull
     private java.util.Collection<Pass> paesse = new ArrayList<>();
 
