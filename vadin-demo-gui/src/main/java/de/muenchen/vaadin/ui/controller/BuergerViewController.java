@@ -8,9 +8,8 @@ import de.muenchen.eventbus.selector.entity.RequestEntityKey;
 import de.muenchen.eventbus.selector.entity.RequestEvent;
 import de.muenchen.eventbus.selector.entity.ResponseEntityKey;
 import de.muenchen.vaadin.demo.api.local.Buerger;
+import de.muenchen.vaadin.demo.i18nservice.I18nResolverImpl;
 import de.muenchen.vaadin.guilib.BaseUI;
-import de.muenchen.vaadin.guilib.controller.EntityController;
-import de.muenchen.vaadin.services.BuergerI18nResolver;
 import de.muenchen.vaadin.services.BuergerService;
 import de.muenchen.vaadin.services.model.BuergerDatastore;
 import de.muenchen.vaadin.ui.controller.factorys.BuergerViewFactory;
@@ -35,7 +34,7 @@ import java.util.stream.Stream;
  */
 @SpringComponent
 @UIScope
-public class BuergerViewController implements Serializable, EntityController {
+public class BuergerViewController implements Serializable {
 
     private static final long serialVersionUID = 1L;
     /**
@@ -52,7 +51,7 @@ public class BuergerViewController implements Serializable, EntityController {
     private final BuergerDatastore model = new BuergerDatastore();
 
     @Autowired
-    private BuergerI18nResolver resolver;
+    private I18nResolverImpl resolver;
     /**
      * BuergerViewFactory zum erstellen der Components
      */
@@ -75,7 +74,7 @@ public class BuergerViewController implements Serializable, EntityController {
         return BaseUI.getCurrentEventBus();
     }
 
-    public BuergerI18nResolver getResolver() {
+    public I18nResolverImpl getResolver() {
         return resolver;
     }
 

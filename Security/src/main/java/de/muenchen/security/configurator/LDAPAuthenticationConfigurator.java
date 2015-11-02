@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.ldap.core.support.LdapContextSource;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configurers.GlobalAuthenticationConfigurerAdapter;
 import org.springframework.security.ldap.DefaultSpringSecurityContextSource;
 
 /**
@@ -12,8 +13,7 @@ import org.springframework.security.ldap.DefaultSpringSecurityContextSource;
  */
 @MetaInfServices
 @Order(2)
-public class LDAPAuthenticationConfigurator extends
-        AuthenticationConfiguratorAdapter {
+public class LDAPAuthenticationConfigurator extends GlobalAuthenticationConfigurerAdapter {
 
     private final static String USER_SEARCH_BASE = "o=Landeshauptstadt München,c=de";
 
@@ -44,11 +44,6 @@ public class LDAPAuthenticationConfigurator extends
         contextSource.setAnonymousReadOnly(true);
         contextSource.setCacheEnvironmentProperties(false);
         return contextSource;
-    }
-
-    @Override
-    public boolean accepts(String serviceTyp) {
-        return (serviceTyp.equals("LDAP_Authentication"));
     }
 }
 

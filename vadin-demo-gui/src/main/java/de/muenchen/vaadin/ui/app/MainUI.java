@@ -22,14 +22,16 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import de.muenchen.eventbus.EventBus;
 import de.muenchen.eventbus.selector.Key;
+import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.apilib.services.SecurityService;
-import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
+import de.muenchen.vaadin.demo.i18nservice.I18nResolverImpl;
+import de.muenchen.vaadin.demo.i18nservice.MessageService;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.ValoMenuLayout;
-import de.muenchen.vaadin.guilib.components.GenericConfirmationWindow;
-import de.muenchen.vaadin.guilib.services.MessageService;
+import de.muenchen.vaadin.guilib.components.ConfirmationWindow;
 import de.muenchen.vaadin.ui.app.views.BuergerTableView;
 import de.muenchen.vaadin.ui.app.views.LoginView;
 import de.muenchen.vaadin.ui.app.views.MainView;
@@ -48,7 +50,7 @@ import static reactor.bus.Event.wrap;
 @Theme("valo")
 @PreserveOnRefresh
 //@Widgetset("de.muenchen.vaadin.Widgetset")
-public class MainUI extends BaseUI implements I18nResolver {
+public class MainUI extends BaseUI {
 
     private static final Logger LOG = LoggerFactory.getLogger(MainUI.class);
 
@@ -68,8 +70,8 @@ public class MainUI extends BaseUI implements I18nResolver {
     private MenuBar.MenuItem language;
 
     @Autowired
-    public MainUI(SpringViewProvider ViewProvider, SecurityService security, MessageService i18n) {
-        super();
+    public MainUI(EventBus eventBus, I18nResolverImpl i18nResolver, SpringViewProvider ViewProvider, SecurityService security, MessageService i18n) {
+        super(eventBus, i18nResolver);
         LOG.info("starting UI");
         this.viewProvider = ViewProvider;
         this.security = security;
@@ -221,14 +223,14 @@ public class MainUI extends BaseUI implements I18nResolver {
     }
 
     private MenuBar addLanguageSelector(MenuBar bar) {
-        language = bar.addItem(resolveRelative("sprache.title"), FontAwesome.LANGUAGE, null);
+        language = bar.addItem(BaseUI.getCurrentI18nResolver().resolve("sprache.title"), FontAwesome.LANGUAGE, null);
 
         MenuBar.Command languageSelection = selectedItem -> i18n.getSupportedLocales().stream().forEach(locale -> {
             if (selectedItem.getText().equals(locale.getDisplayLanguage())) {
                 i18n.setLocale(locale);
                 getNavigator().navigateTo(getNavigator().getState());
 
-                language.setText(resolveRelative("sprache.title"));
+                language.setText(BaseUI.getCurrentI18nResolver().resolve("sprache.title"));
 
                 removeMenuItems();
                 createNavigationMenu();
@@ -244,8 +246,8 @@ public class MainUI extends BaseUI implements I18nResolver {
     }
 
     private void addMenuItems() {
-        this.menuItems.put(MainView.NAME, resolveRelative("mainpage.title"));
-        this.menuItems.put(BuergerTableView.NAME, resolveRelative("buerger.navigation.button.label"));
+        this.menuItems.put(MainView.NAME, BaseUI.getCurrentI18nResolver().resolve("mainpage.title"));
+        this.menuItems.put(BuergerTableView.NAME, BaseUI.getCurrentI18nResolver().resolveRelative(Buerger.class, "navigation.button.label"));
     }
 
     private void removeMenuItems() {
@@ -272,13 +274,12 @@ public class MainUI extends BaseUI implements I18nResolver {
 
         // creates and displays the logout button
         final Button logoutButton = new Button("Logout", event -> {
-            GenericConfirmationWindow confirmationWindow =
-                    new GenericConfirmationWindow(MainUI.this,
-                            SimpleAction.logout,
-                            e -> this.postEvent(Key.LOGOUT));
-            getUI().addWindow(confirmationWindow);
-            confirmationWindow.center();
-            confirmationWindow.focus();
+            final ConfirmationWindow window = new ConfirmationWindow(SimpleAction.logout);
+            window.addActionPerformer(c -> {
+                postEvent(Key.LOGOUT);
+                return true;
+            });
+            getUI().addWindow(window);
         });
         logoutButton.setHtmlContentAllowed(true);
         logoutButton.setPrimaryStyleName(ValoTheme.MENU_ITEM);
@@ -288,28 +289,7 @@ public class MainUI extends BaseUI implements I18nResolver {
         return menuItemsLayout;
     }
 
-    @Override
-    public String resolveRelative(String relativePath) {
-        return i18n.get(relativePath);
-    }
-
-    @Override
-    public FontAwesome resolveIcon(String relativePath) {
-        return null;
-    }
-
     public void postEvent(Object event) {
         getCurrentEventBus().notify(event, wrap(event));
     }
-
-    @Override
-    public String getBasePath() {
-        return null;
-    }
-
-    @Override
-    public String resolve(String path) {
-        return i18n.get(path);
-    }
-
 }

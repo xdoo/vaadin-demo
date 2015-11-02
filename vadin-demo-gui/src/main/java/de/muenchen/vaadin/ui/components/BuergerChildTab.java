@@ -5,10 +5,12 @@ import com.vaadin.ui.HorizontalLayout;
 import de.muenchen.eventbus.events.Association;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
+import de.muenchen.vaadin.demo.i18nservice.I18nResolverImpl;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.GenericGrid;
+import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
-import de.muenchen.vaadin.services.BuergerI18nResolver;
+import de.muenchen.vaadin.ui.app.views.BuergerAddChildView;
 import de.muenchen.vaadin.ui.app.views.BuergerDetailView;
 import de.muenchen.vaadin.ui.app.views.TableSelectWindow;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerAssociationListActions;
@@ -27,28 +29,22 @@ public class BuergerChildTab extends CustomComponent {
     private BuergerViewController controller;
     private GenericGrid<Buerger> grid;
 
-    public BuergerChildTab(BuergerViewController controller, BuergerI18nResolver resolver, String navigateToForDetail, String navigateToForCreate, String navigateBack) {
+    public BuergerChildTab(BuergerViewController controller, I18nResolverImpl resolver, String navigateToForDetail, String navigateToForCreate, String navigateBack) {
 
         this.controller = controller;
 
-        grid = controller.getViewFactory().generateChildTable(BuergerDetailView.NAME)
+        grid = this.controller.getViewFactory().generateChildTable(BuergerDetailView.NAME)
                 .activateCreate(navigateToForCreate)
-                .activateRead(BuergerDetailView.NAME)
-                .addButton(
-                        controller.getResolver().resolveRelative(
-                                getFormPath(SimpleAction.add,
-                                        I18nPaths.Component.button,
-                                        I18nPaths.Type.label)),
-                        () -> {
-                            HorizontalLayout layout = new HorizontalLayout(controller.getViewFactory().generateChildSearchTable());
-                            layout.setMargin(true);
-                            getUI().addWindow(new TableSelectWindow(controller, controller.getResolver(), layout));
-                        });
+                .activateRead(BuergerDetailView.NAME);
 
+        ActionButton addButton = new ActionButton(Buerger.class, SimpleAction.add);
+        NavigateActions navigateActions = new NavigateActions(BuergerAddChildView.NAME);
+        addButton.addActionPerformer(navigateActions::navigate);
+        grid.addButton(addButton);
 
         //Create Button to delete one or more associations
-        ActionButton deleteButton = new ActionButton(resolver, SimpleAction.delete);
-        BuergerAssociationListActions listAction = new BuergerAssociationListActions(resolver,
+        ActionButton deleteButton = new ActionButton(Buerger.class, SimpleAction.delete);
+        BuergerAssociationListActions listAction = new BuergerAssociationListActions(
                 () -> grid.getSelectedEntities().stream()
                         .map(buerger -> new Association<>( buerger, Buerger.Rel.kinder.name()))
                         .collect(Collectors.toList())
@@ -63,7 +59,7 @@ public class BuergerChildTab extends CustomComponent {
         setCompositionRoot(layout);
 
 
-        setId(String.format("%s_%s_%s_CHILD_TAB", navigateToForDetail, navigateBack, controller.getResolver().getBasePath()));
+        setId(String.format("%s_%s_%s_CHILD_TAB", navigateToForDetail, navigateBack, controller.getResolver().getBasePath(Buerger.class)));
     }
 
 

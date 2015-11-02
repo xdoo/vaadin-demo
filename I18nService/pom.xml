@@ -45,6 +45,11 @@
             <artifactId>spring-cloud-context</artifactId>
             <version>1.0.2.RELEASE</version>
         </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-spring</artifactId>
+            <version>1.0.0.beta3</version>
+        </dependency>
 
     </dependencies>
     <name>gaia :: i18nservice</name>

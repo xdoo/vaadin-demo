@@ -2,16 +2,20 @@ package de.muenchen.vaadin.ui.app.views;
 
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
-import de.muenchen.vaadin.services.BuergerI18nResolver;
-import de.muenchen.vaadin.ui.app.MainUI;
+import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
+import de.muenchen.vaadin.guilib.BaseUI;
+import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
+import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
 import de.muenchen.vaadin.ui.components.BuergerChildTab;
 import de.muenchen.vaadin.ui.components.BuergerPartnerTab;
-import de.muenchen.vaadin.ui.components.forms.SelectedBuergerReadForm;
+import de.muenchen.vaadin.ui.components.forms.BuergerRWForm;
+import de.muenchen.vaadin.ui.components.forms.BuergerReadForm;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,21 +35,29 @@ public class BuergerDetailView extends DefaultBuergerView {
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerDetailView.class);
     private BuergerChildTab childTab;
     private BuergerPartnerTab partnerTab;
-    private SelectedBuergerReadForm readForm;
+    private BuergerRWForm readForm;
     @Autowired
-    public BuergerDetailView(BuergerViewController controller, BuergerI18nResolver resolver, MainUI ui) {
-        super(controller, resolver, ui);
+    public BuergerDetailView(BuergerViewController controller) {
+        super(controller);
         LOG.debug("creating 'buerger_read_view'");
     }
 
     @Override
     protected void site() {
+        final ActionButton backButton = new ActionButton(Buerger.class, SimpleAction.back);
+        final NavigateActions navigateActions = new NavigateActions(BuergerTableView.NAME);
+        backButton.addActionPerformer(navigateActions::navigate);
+        backButton.setId("back-button-" + navigateActions.getNavigateTo());
+
         VerticalLayout layout = new VerticalLayout();
+        layout.addComponent(backButton);
+
         layout.setSpacing(true);
 
         // read form
-        readForm = this.controller.getViewFactory().generateReadForm(BuergerUpdateView.NAME, BuergerTableView.NAME);
-        layout.addComponent(readForm);
+        readForm = this.controller.getViewFactory().generateRWForm(BuergerTableView.NAME);
+        final BuergerReadForm alternateReadForm = new BuergerReadForm(BuergerUpdateView.NAME);
+        layout.addComponent(new HorizontalLayout(readForm, alternateReadForm));
 
         // tab sheet
         TabSheet tabSheet = new TabSheet();
@@ -54,11 +66,11 @@ public class BuergerDetailView extends DefaultBuergerView {
         // add kind tab
         childTab = controller.getViewFactory().generateChildTab(BuergerDetailView.NAME, BuergerCreateChildView.NAME, BuergerTableView.NAME);
         TabSheet.Tab kindTab = tabSheet.addTab(childTab);
-        kindTab.setCaption(resolver.resolveRelative(getEntityFieldPath(Buerger.Rel.kinder.name(), I18nPaths.Type.label)));
+        kindTab.setCaption(BaseUI.getCurrentI18nResolver().resolveRelative(Buerger.class, getEntityFieldPath(Buerger.Rel.kinder.name(), I18nPaths.Type.label)));
 
-        partnerTab = controller.getViewFactory().generatePartnerTab(BuergerDetailView.NAME, BuergerCreatePartnerView.NAME, NAME);
+        partnerTab = controller.getViewFactory().generatePartnerTab(BuergerDetailView.NAME, BuergerCreatePartnerView.NAME, BuergerAddPartnerView.NAME);
         TabSheet.Tab pTab = tabSheet.addTab(partnerTab);
-        pTab.setCaption(resolver.resolveRelative(getEntityFieldPath(Buerger.Rel.partner.name(), I18nPaths.Type.label)));
+        pTab.setCaption(BaseUI.getCurrentI18nResolver().resolveRelative(Buerger.class, getEntityFieldPath(Buerger.Rel.partner.name(), I18nPaths.Type.label)));
         layout.addComponent(tabSheet);
 
         addComponent(layout);

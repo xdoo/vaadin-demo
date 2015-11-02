@@ -2,7 +2,6 @@ package de.muenchen.vaadin.ui.components.buttons.node.listener;
 
 import de.muenchen.eventbus.events.Association;
 import de.muenchen.vaadin.demo.api.local.Buerger;
-import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 import de.muenchen.vaadin.guilib.components.actions.EntityAssociationListAction;
 
 import java.util.List;
@@ -16,11 +15,9 @@ public class BuergerAssociationListActions extends EntityAssociationListAction<B
     /**
      * Create new AssociationActions for the Entity with the single association.
      *
-     * @param resolver
-     * @param association The association.
-     * @param eventBus    The EventBus.
+     * @param association The association..
      */
-    public BuergerAssociationListActions(I18nResolver resolver, Supplier<List<Association<Buerger>>> association) {
-        super(resolver, association, Buerger.class);
+    public BuergerAssociationListActions(Supplier<List<Association<?>>> association) {
+        super(association, Buerger.class);
     }
 }

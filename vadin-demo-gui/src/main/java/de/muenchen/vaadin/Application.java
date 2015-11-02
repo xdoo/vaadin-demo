@@ -16,6 +16,8 @@
 package de.muenchen.vaadin;
 
 
+import com.vaadin.spring.annotation.UIScope;
+import de.muenchen.eventbus.EventBus;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -31,7 +33,9 @@ import org.springframework.web.filter.HiddenHttpMethodFilter;
 @EnableEurekaClient
 @Configuration
 @ComponentScan
-@EnableAutoConfiguration
+//Exclude SecAutoConfig because OAuth needs to be manually configured
+@EnableAutoConfiguration(exclude = {
+        org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration.class})
 public class Application {
     
     public static void main(String[] args) throws Exception {
@@ -45,5 +49,11 @@ public class Application {
         FilterRegistrationBean registrationBean = new FilterRegistrationBean();
         registrationBean.setFilter(hiddenHttpMethodFilter);
         return registrationBean;
+    }
+
+    @Bean
+    @UIScope
+    public EventBus eventbus(){
+        return new EventBus();
     }
 }

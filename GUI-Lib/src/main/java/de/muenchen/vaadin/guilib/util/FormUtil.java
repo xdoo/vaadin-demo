@@ -3,17 +3,14 @@ package de.muenchen.vaadin.guilib.util;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.DefaultFieldGroupFieldFactory;
 import com.vaadin.data.fieldgroup.FieldGroup;
-import com.vaadin.ui.AbstractField;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.CheckBox;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.CssLayout;
-import com.vaadin.ui.DateField;
-import com.vaadin.ui.TextField;
+import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
+import de.muenchen.vaadin.guilib.BaseUI;
 import org.vaadin.tokenfield.TokenField;
+
+import java.util.stream.Stream;
 
 /**
  * Provides a simple Util for creating various binded Fields on properties.
@@ -29,6 +26,15 @@ public class FormUtil {
      */
     public static final String NULL_REPRESENTATION = "";
     /**
+     * The append for the id of an input.
+     */
+    public static final String INPUT = "-input";
+
+    /**
+     * The class for the I18nResolver
+     */
+    private Class entityClass;
+    /**
      * The binder that is used for the DataBinding.
      */
     private final BeanFieldGroup<?> binder;
@@ -41,11 +47,11 @@ public class FormUtil {
      * Create a new FormUtil for the binder resolving string via i18n.
      *
      * @param binder       The binder containing the Data the Fields are bound to.
-     * @param i18nResolver The i18nResolver used to resolve the Strings.
      */
-    public FormUtil(BeanFieldGroup<?> binder, I18nResolver i18nResolver) {
+    public FormUtil(BeanFieldGroup<?> binder) {
         this.binder = binder;
-        this.i18nResolver = i18nResolver;
+        this.entityClass = binder.getItemDataSource().getBean().getClass();
+        this.i18nResolver = BaseUI.getCurrentI18nResolver();
     }
 
     /**
@@ -63,7 +69,7 @@ public class FormUtil {
         TextField tf = getBinder().buildAndBind(caption, property, TextField.class);
         tf.setNullRepresentation(NULL_REPRESENTATION);
         tf.setInputPrompt(prompt);
-
+        tf.setId(property + INPUT);
         deactivateValidation(tf);
         //tf.setId(String.format("%s_%s_FIELD", getI18nResolver().getBasePath(), property).toUpperCase());
         return tf;
@@ -76,7 +82,7 @@ public class FormUtil {
      * @return The caption of the property.
      */
     private String getCaption(String property) {
-        return getI18nResolver().resolveRelative(I18nPaths.getEntityFieldPath(property, I18nPaths.Type.label));
+        return getI18nResolver().resolveRelative(entityClass, I18nPaths.getEntityFieldPath(property, I18nPaths.Type.label));
     }
 
     /**
@@ -86,7 +92,7 @@ public class FormUtil {
      * @return The prompt of the property.
      */
     private String getPrompt(String property) {
-        return getI18nResolver().resolveRelative(I18nPaths.getEntityFieldPath(property, I18nPaths.Type.input_prompt));
+        return getI18nResolver().resolveRelative(entityClass, I18nPaths.getEntityFieldPath(property, I18nPaths.Type.input_prompt));
     }
 
     /**
@@ -99,12 +105,34 @@ public class FormUtil {
     }
 
     /**
+     * Deactivates the visibility of the validation.
+     * On value change or commit the visibility will be active again.
+     *
+     * @param field field configure
+     */
+    private void deactivateValidation(AbstractField field) {
+        field.setValidationVisible(false);
+        field.addValueChangeListener(event -> field.setValidationVisible(true));
+        //Hack
+        getBinder().addCommitHandler(new FieldGroup.CommitHandler() {
+            @Override
+            public void preCommit(FieldGroup.CommitEvent commitEvent) throws FieldGroup.CommitException {
+                field.setValidationVisible(true);
+            }
+
+            @Override
+            public void postCommit(FieldGroup.CommitEvent commitEvent) throws FieldGroup.CommitException {
+            }
+        });
+    }
+
+    /**
      * Get the i18n Resolver of this Util.
      *
      * @return
      */
     public I18nResolver getI18nResolver() {
-        return i18nResolver;
+        return BaseUI.getCurrentI18nResolver();
     }
 
     /**
@@ -112,7 +140,7 @@ public class FormUtil {
      * <p/>
      * It has no ID set, the individual component must take care of that.
      *
-     * @param property    The property of the entity.
+     * @param property The property of the entity.
      * @return The Combobox for the given property.
      */
     public ComboBox createComboBox(String property) {
@@ -123,7 +151,7 @@ public class FormUtil {
         cb.setInputPrompt(prompt);
         cb.setTextInputAllowed(true);
         cb.setNullSelectionAllowed(false);
-
+        cb.setId(property + INPUT);
         deactivateValidation(cb);
         return cb;
     }
@@ -142,11 +170,10 @@ public class FormUtil {
         DateField df = getBinder().buildAndBind(caption, property, DateField.class);
 
         deactivateValidation(df);
-        //df.setId(String.format("%s_%s_DATEFIELD", getI18nResolver().getBasePath(), property).toUpperCase());
 
+        df.setId(property + INPUT);
         return df;
     }
-
 
     /**
      * Create a CheckBox Field for the given property.
@@ -160,90 +187,62 @@ public class FormUtil {
         final String caption = getCaption(property);
 
         CheckBox df = getBinder().buildAndBind(caption, property, CheckBox.class);
-
+        df.setId(property + INPUT);
         deactivateValidation(df);
         return df;
     }
 
     /**
      * Create a TokenField for the given property.
-     *
+     * <p/>
      * <p/>
      * It has no ID set, the individual component must take care of that.
+     *
      * @param property
      * @return The TokenField of the property
      */
-    public TokenField createTokenField(String property){
+    public TokenField createTokenField(String property) {
         final String caption = getCaption(property);
 
         //Group Elements of TokenField in CSS Layout
         CssLayout lo = new CssLayout();
         lo.addStyleName("v-component-group");
 
-        TokenField tf = new TokenField(caption,lo) {
-
+        TokenField tf = new TokenField(caption, lo) {
+            public static final String SEPERATOR = ",";
             @Override
             protected void onTokenInput(Object tokenId) {
                 //Multiple Tokens separated by ',' possible
-                String[] tokens = ((String) tokenId).split(",");
-                for (int i = 0; i < tokens.length; i++) {
-                    String token = tokens[i].trim();
-                    if (token.length() > 0) {
-                        super.onTokenInput(token);
-                    }
-                }
+                Stream.of(((String) tokenId).split(SEPERATOR))
+                        .map(String::trim)
+                        .filter(s -> !s.isEmpty())
+                        .forEach(t -> super.onTokenInput(t));
             }
 
             //HACK TO PREVENT READONLYEXCEPTION
             //AND SHOW CORRECT FIELD IN READONLY MODE
             @Override
             protected void configureTokenButton(Object tokenId, Button button) {
-                //TODO get a good Style for the tokens
-                button.addStyleName(ValoTheme.BUTTON_PRIMARY);
+                super.configureTokenButton(tokenId, button);
+                button.removeStyleName(ValoTheme.BUTTON_LINK);
+            }
 
-                if(!isReadOnly()) {
-                    button.setCaption(this.getTokenCaption(tokenId) + " ×");
-                }
-                else {
-                    button.setCaption(this.getTokenCaption(tokenId));
-                    button.setEnabled(false);
+            @Override
+            public void setReadOnly(boolean readOnly) {
+                super.setReadOnly(readOnly);
+                buttons.values()
+                        .forEach(button -> button.setEnabled(!readOnly));
 
-                    //This is necessary because it will call a rebuild of this TokenField
-                    //Rebuild will set the InputField to invisible
-                    setTokenInsertPosition(InsertPosition.AFTER);
-                }
-
+                if (readOnly)
+                    getLayout().removeComponent(cb);
             }
         };
 
         getBinder().bind(tf, property);
 
         tf.setRememberNewTokens(false);
-
+        tf.setId(property + INPUT);
         deactivateValidation(tf);
-
         return tf;
-    }
-
-    /**
-     * Deactivates the visibility of the validation.
-     * On value change or commit the visibility will be active again.
-     *
-     * @param field field configure
-     */
-    private void deactivateValidation(AbstractField field){
-        field.setValidationVisible(false);
-        field.addValueChangeListener(event -> field.setValidationVisible(true));
-        //Hack
-        getBinder().addCommitHandler(new FieldGroup.CommitHandler() {
-            @Override
-            public void preCommit(FieldGroup.CommitEvent commitEvent) throws FieldGroup.CommitException {
-                field.setValidationVisible(true);
-            }
-
-            @Override
-            public void postCommit(FieldGroup.CommitEvent commitEvent) throws FieldGroup.CommitException {
-            }
-        });
     }
 }

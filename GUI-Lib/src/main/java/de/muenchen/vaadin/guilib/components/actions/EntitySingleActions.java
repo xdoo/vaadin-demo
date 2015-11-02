@@ -5,7 +5,6 @@ import com.vaadin.ui.Button;
 import de.muenchen.eventbus.selector.entity.RequestEntityKey;
 import de.muenchen.eventbus.selector.entity.RequestEvent;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
-import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.components.GenericWarningNotification;
@@ -29,8 +28,6 @@ public class EntitySingleActions<T> {
     private final Supplier<T> entitySupplier;
     /** The class of the entity. */
     private final Class<T> entityClass;
-    /** The I18NResolver of this context **/
-    private final I18nResolver resolver;
 
     /**
      * Create single actions for the entity.
@@ -38,12 +35,11 @@ public class EntitySingleActions<T> {
      * @param entitySupplier The supplier for the entity.
      * @param entityClass    The class of the Entity.
      */
-    public EntitySingleActions(I18nResolver resolver, Supplier<T> entitySupplier, Class<T> entityClass) {
-        this.entityClass = entityClass;
+    public EntitySingleActions(Supplier<T> entitySupplier, Class<T> entityClass) {
         if (entitySupplier == null)
             throw new NullPointerException();
 
-        this.resolver = resolver;
+        this.entityClass = entityClass;
         this.entitySupplier = entitySupplier;
     }
 
@@ -54,52 +50,6 @@ public class EntitySingleActions<T> {
      */
     public boolean delete(Button.ClickEvent clickEvent) {
         notifyRequest(RequestEvent.DELETE);
-        return true;
-    }
-
-    /**
-     * Create the single Entity.
-     *
-     * @param clickEvent can be null
-     */
-    public boolean create(Button.ClickEvent clickEvent) {
-        try {
-            notifyRequest(RequestEvent.CREATE);
-            return true;
-        } catch (Exception e) { //TODO Find a good Exception Type
-            GenericWarningNotification warn = new GenericWarningNotification(
-                    resolver.resolveRelative(getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.create, I18nPaths.Type.label)),
-                    resolver.resolveRelative(getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.create, I18nPaths.Type.text)));
-            warn.show(Page.getCurrent());
-            return false;
-        }
-    }
-
-    /**
-     * Update the single Entity.
-     *
-     * @param clickEvent can be null
-     */
-    public boolean update(Button.ClickEvent clickEvent) {
-        try {
-            notifyRequest(RequestEvent.UPDATE);
-            return true;
-        } catch (Exception e) { //TODO Find a good Exception Type
-            GenericWarningNotification warn = new GenericWarningNotification(
-                    resolver.resolveRelative(getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.update, I18nPaths.Type.label)),
-                    resolver.resolveRelative(getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.update, I18nPaths.Type.text)));
-            warn.show(Page.getCurrent());
-            return false;
-        }
-    }
-
-    /**
-     * Read the Entity and set it as current selected Entity.
-     *
-     * @param clickEvent can be null
-     */
-    public boolean read(Button.ClickEvent clickEvent) {
-        notifyRequest(RequestEvent.READ_SELECTED);
         return true;
     }
 
@@ -125,6 +75,15 @@ public class EntitySingleActions<T> {
     }
 
     /**
+     * Get the class of the Entity.
+     *
+     * @return The class of the entity.
+     */
+    public Class<T> getEntityClass() {
+        return entityClass;
+    }
+
+    /**
      * Get the EventBus.
      * @return The EventBus.
      */
@@ -133,10 +92,59 @@ public class EntitySingleActions<T> {
     }
 
     /**
-     * Get the class of the Entity.
-     * @return The class of the entity.
+     * Create the single Entity.
+     *
+     * @param clickEvent can be null
      */
-    public Class<T> getEntityClass() {
-        return entityClass;
+    public boolean create(Button.ClickEvent clickEvent) {
+        try {
+            notifyRequest(RequestEvent.CREATE);
+            return true;
+        } catch (Exception e) { //TODO Find a good Exception Type
+            GenericWarningNotification warn = new GenericWarningNotification(
+                    BaseUI.getCurrentI18nResolver().resolveRelative(entityClass, getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.create, I18nPaths.Type.label)),
+                    BaseUI.getCurrentI18nResolver().resolveRelative(entityClass, getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.create, I18nPaths.Type.text)));
+            warn.show(Page.getCurrent());
+            return false;
+        }
+    }
+
+    /**
+     * Update the single Entity.
+     *
+     * @param clickEvent can be null
+     */
+    public boolean update(Button.ClickEvent clickEvent) {
+        try {
+            notifyRequest(RequestEvent.UPDATE);
+            return true;
+        } catch (Exception e) { //TODO Find a good Exception Type
+            GenericWarningNotification warn = new GenericWarningNotification(
+                    BaseUI.getCurrentI18nResolver().resolveRelative(entityClass, getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.update, I18nPaths.Type.label)),
+                    BaseUI.getCurrentI18nResolver().resolveRelative(entityClass, getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.update, I18nPaths.Type.text)));
+            warn.show(Page.getCurrent());
+            return false;
+        }
+    }
+
+    /**
+     * Read the Entity and set it as current selected Entity.
+     *
+     * @param clickEvent can be null
+     */
+    public boolean read(Button.ClickEvent clickEvent) {
+        notifyRequest(RequestEvent.READ_SELECTED);
+        return true;
+    }
+
+    /**
+     * Reload the current selected entity.
+     *
+     * @param clickEvent can be null
+     */
+    public boolean reRead(Button.ClickEvent clickEvent) {
+        final RequestEntityKey key = new RequestEntityKey(RequestEvent.READ_SELECTED, getEntityClass());
+        getEventBus().notify(key);
+        return true;
     }
 }
