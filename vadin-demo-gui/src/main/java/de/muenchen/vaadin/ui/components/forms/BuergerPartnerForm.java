@@ -6,9 +6,8 @@ import com.vaadin.ui.VerticalLayout;
 import de.muenchen.eventbus.events.Association;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
-import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.components.BaseComponent;
-import de.muenchen.vaadin.guilib.components.GenericConfirmationWindow;
+import de.muenchen.vaadin.guilib.components.ConfirmationWindow;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
 import de.muenchen.vaadin.ui.app.views.BuergerAddPartnerView;
@@ -30,7 +29,7 @@ public class BuergerPartnerForm extends BaseComponent {
 
     /**
      * Create a new BuergerPartnerForm with the navigateToCreate and navigateToRead.
-     * <p>
+     * <p/>
      * It will always show the current partner of the selected Buerger. The Form won't be visible if no Partner is present.
      *
      * @param navigateToCreate The View to navigate to on the create action.
@@ -102,10 +101,9 @@ public class BuergerPartnerForm extends BaseComponent {
         final NavigateActions navigateActions = new NavigateActions(getNavigateToCreate());
         createButton.addClickListener(clickEvent -> {
             if (partnerForm.isVisible()) {
-                GenericConfirmationWindow window = new GenericConfirmationWindow(BaseUI.getCurrentI18nResolver(), SimpleAction.override, navigateActions::navigate);
+                final ConfirmationWindow window = new ConfirmationWindow(SimpleAction.override);
+                window.addActionPerformer(navigateActions::navigate);
                 getUI().addWindow(window);
-                window.center();
-                window.focus();
             } else {
                 navigateActions.navigate();
             }
@@ -123,10 +121,9 @@ public class BuergerPartnerForm extends BaseComponent {
         final NavigateActions navigateActions = new NavigateActions(BuergerAddPartnerView.NAME);
         addButton.addClickListener(clickEvent -> {
             if (partnerForm.isVisible()) {
-                GenericConfirmationWindow window = new GenericConfirmationWindow(BaseUI.getCurrentI18nResolver(), SimpleAction.override, navigateActions::navigate);
+                final ConfirmationWindow window = new ConfirmationWindow(SimpleAction.override);
+                window.addActionPerformer(navigateActions::navigate);
                 getUI().addWindow(window);
-                window.center();
-                window.focus();
             } else {
                 navigateActions.navigate();
             }
