@@ -1,6 +1,7 @@
-package de.muenchen.service;
+package de.muenchen.service.security.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import de.muenchen.service.DatabaseBeforeSaveEventListener;
 import org.hibernate.search.annotations.IndexedEmbedded;
 
 import javax.persistence.Column;

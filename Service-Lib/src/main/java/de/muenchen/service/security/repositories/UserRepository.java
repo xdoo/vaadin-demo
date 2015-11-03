@@ -3,20 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.muenchen.security.repositories;
+package de.muenchen.service.security.repositories;
 
-import de.muenchen.security.entities.User;
+import de.muenchen.service.security.entities.User;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 /**
  *
  * @author praktikant.tmar
  */
-@RepositoryRestResource(exported = false)
+@RepositoryRestResource
 public interface UserRepository extends CrudRepository<User, Long> {
 
     public final static String User_CACHE = "USER_CACHE";
@@ -32,5 +33,5 @@ public interface UserRepository extends CrudRepository<User, Long> {
     @CacheEvict(value = User_CACHE, key = "#p0.oid")
     public void delete(User entity);
 
-    public User findFirstByUsername(String username);
+    public User findFirstByUsername(@Param("username") String username);
 }

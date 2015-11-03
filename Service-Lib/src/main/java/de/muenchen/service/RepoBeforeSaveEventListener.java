@@ -1,7 +1,8 @@
 package de.muenchen.service;
 
 
-import de.muenchen.security.repositories.UserRepository;
+import de.muenchen.service.security.entities.BaseEntity;
+import de.muenchen.service.security.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.core.event.AbstractRepositoryEventListener;
 import org.springframework.security.core.Authentication;

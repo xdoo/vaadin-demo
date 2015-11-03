@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.muenchen.security.entities;
+package de.muenchen.service.security.entities;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -13,20 +13,19 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "AUTHORITIES")
-public class Authority extends SecurityEntity {
-
+public class Authority extends BaseEntity {
 
     @Column(name = "AUTH_AUTHORITY")
     private String authority;
 
-    @ManyToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
-    @JoinTable(name = "authorities_permissions", joinColumns = {@JoinColumn(name = "authority_oid")}, inverseJoinColumns = {@JoinColumn(name = "permission_oid")})
-    private Set<Permission> permissions;
+    @ElementCollection
+    @JoinTable(name = "authorities_permissions", joinColumns = {@JoinColumn(name = "authority_oid")})
+    private Set<String> permissions;
 
     public Authority() {
     }
 
-    public Authority(Authority authority, Set<Permission> permissions) {
+    public Authority(Authority authority, Set<String> permissions) {
         this.authority = authority.authority;
         this.permissions = permissions;
 
@@ -42,11 +41,11 @@ public class Authority extends SecurityEntity {
     }
 
 
-    public Set<Permission> getPermissions() {
+    public Set<String> getPermissions() {
         return permissions;
     }
 
-    public void setPermissions(Set<Permission> permissions) {
+    public void setPermissions(Set<String> permissions) {
         this.permissions = permissions;
     }
 }

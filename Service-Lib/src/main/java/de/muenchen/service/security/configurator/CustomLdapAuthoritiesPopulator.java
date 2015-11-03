@@ -1,7 +1,7 @@
-package de.muenchen.security.configurator;
+package de.muenchen.service.security.configurator;
 
-import de.muenchen.security.entities.User;
-import de.muenchen.security.repositories.UserRepository;
+import de.muenchen.service.security.entities.User;
+import de.muenchen.service.security.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +54,7 @@ public class CustomLdapAuthoritiesPopulator implements LdapAuthoritiesPopulator 
 
             userAuthority.getPermissions().stream().forEach(authorityPermission -> {
 
-                String authName = authorityPermission.getPermission();
+                String authName = authorityPermission;
 
                 gas.add(new SimpleGrantedAuthority(authName));
 

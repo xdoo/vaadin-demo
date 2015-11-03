@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.muenchen.security.repositories;
+package de.muenchen.service.security.repositories;
 
-import de.muenchen.security.entities.Authority;
+import de.muenchen.service.security.entities.Authority;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -18,7 +18,7 @@ import java.util.List;
  *
  * @author praktikant.tmar
  */
-@RepositoryRestResource(exported = false)
+@RepositoryRestResource
 public interface AuthorityRepository  extends CrudRepository<Authority, Long> {
 
     public final static String Authority_CACHE = "AUTHORITYPERMISSION_CACHE";
