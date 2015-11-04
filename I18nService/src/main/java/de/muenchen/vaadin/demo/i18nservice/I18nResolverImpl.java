@@ -39,12 +39,12 @@ public class I18nResolverImpl implements I18nResolver {
      */
     @Override
     public String resolveRelative(Class clazz, String relativePath) {
-        return msg.get(((clazz!=null)?clazz.getSimpleName().toLowerCase() + ".":"") + relativePath);
+        return msg.get(((clazz!=null) ? removeUnderscore(clazz.getSimpleName().toLowerCase()) + "." : "") + relativePath);
     }
 
     @Override
     public String getBasePath(Class clazz) {
-        return (clazz!=null)?clazz.getSimpleName().toLowerCase():"";
+        return (clazz!=null) ? (removeUnderscore(clazz.getSimpleName().toLowerCase())) : "";
     }
 
     /**
@@ -58,6 +58,16 @@ public class I18nResolverImpl implements I18nResolver {
      */
     @Override
     public FontAwesome resolveIcon(Class clazz, String relativePath) {
-        return msg.getFontAwesome((clazz != null) ? clazz.getSimpleName().toLowerCase()+ "." : "" + "." + relativePath + ".icon");
+        return msg.getFontAwesome((clazz != null) ? removeUnderscore(clazz.getSimpleName().toLowerCase()) + "." : "" + "." + relativePath + ".icon");
     }
+
+    /**
+     * Help method to remove an Underscore if a string ends with one.
+     * @param string
+     * @return
+     */
+    private String removeUnderscore(String string){
+        return (string.charAt(string.length()-1)==('_')) ? string.toLowerCase().substring(0,string.length()-1):string;
+    }
+
 }
