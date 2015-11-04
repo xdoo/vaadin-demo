@@ -5,7 +5,6 @@
  */
 package de.muenchen.service.security.repositories;
 
-import de.muenchen.service.TenantService;
 import de.muenchen.service.security.entities.Authority;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -13,10 +12,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cloud.security.oauth2.resource.EnableOAuth2Resource;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
-import org.springframework.security.access.prepost.PostAuthorize;
-import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.access.prepost.PreFilter;
 
 /**
  *
@@ -32,12 +28,10 @@ public interface AuthorityRepository  extends CrudRepository<Authority, Long> {
     String ROLE_DELETE = "hasRole('ROLE_DELETE_SEC_Authority')";
 
     @Override
-    @PostFilter(TenantService.IS_TENANT_FILTER)
     Iterable<Authority> findAll();
 
     @Override
     @Cacheable(value = AUTHORITY_CACHE, key = "#p0")
-    @PostAuthorize(TenantService.IS_TENANT_AUTH)
     Authority findOne(Long oid);
 
     @SuppressWarnings("unchecked")
@@ -49,25 +43,21 @@ public interface AuthorityRepository  extends CrudRepository<Authority, Long> {
     @Override
     @CacheEvict(value = AUTHORITY_CACHE, key = "#p0")
     @PreAuthorize(ROLE_DELETE)
-    @PostAuthorize(TenantService.IS_TENANT_AUTH)
     void delete(Long oid);
 
     @Override
     @CacheEvict(value = AUTHORITY_CACHE, key = "#p0.oid")
     @PreAuthorize(ROLE_DELETE)
-    @PostAuthorize(TenantService.IS_TENANT_AUTH)
     void delete(Authority entity);
 
     @Override
     @CacheEvict(value = AUTHORITY_CACHE, allEntries = true)
     @PreAuthorize(ROLE_DELETE)
-    @PreFilter(TenantService.IS_TENANT_FILTER)
     void delete(Iterable<? extends Authority> entities);
 
     @Override
     @CacheEvict(value = AUTHORITY_CACHE, allEntries = true)
     @PreAuthorize(ROLE_DELETE)
-    @PreFilter(TenantService.IS_TENANT_FILTER)
     void deleteAll();
 
 }
