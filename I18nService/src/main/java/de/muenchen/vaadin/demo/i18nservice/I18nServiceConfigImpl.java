@@ -57,7 +57,7 @@ public class I18nServiceConfigImpl implements I18nService {
             LOG.warn(String.format("found no message to path \"%s\"", fullPath));
             return getDebug() ? fullPath : "Could not be resolved in this language.";
         }
-        return isoToUtf8(message);
+        return message;
     }
 
     /**
@@ -69,20 +69,6 @@ public class I18nServiceConfigImpl implements I18nService {
      */
     private String getFullPath(String path, Locale locale) {
         return "i18n." + locale.toLanguageTag() + "." + path;
-    }
-
-    /**
-     * Returns the utf8 string representation of an iso8859-1 encoded string.
-     *
-     * @param isoEncoded iso-8859-1 encoded String
-     * @return the utf8 encoded String.
-     */
-    private String isoToUtf8(String isoEncoded) {
-        try {
-            return new String(isoEncoded.getBytes(ISO_8859_1), UTF_8);
-        } catch (UnsupportedEncodingException e) {
-            throw new AssertionError("Encoding not known.");
-        }
     }
 
     @Override
