@@ -14,6 +14,7 @@ import org.springframework.cloud.security.oauth2.resource.EnableOAuth2Resource;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,17 +23,22 @@ import org.springframework.security.access.prepost.PreFilter;
 /**
  * @author praktikant.tmar
  */
-@PreAuthorize("hasRole('ROLE_READ_SEC_User')")
 @EnableOAuth2Resource
 @RepositoryRestResource
 public interface UserRepository extends CrudRepository<User, Long> {
 
     String User_CACHE = "SEC_USER_CACHE";
+    String ROLE_WRITE = "hasRole('ROLE_WRITE_SEC_User')";
+    String ROLE_DELETE = "hasRole('ROLE_DELETE_SEC_User')";
 
-
-    @PostAuthorize(TenantService.IS_TENANT_AUTH)
+    /**
+     * Used by Tenant-Service. Not exported due to security-reasons. Tenant-Filtering leads to circulating calls.
+     * @param username
+     * @return
+     */
+    @RestResource(exported = false)
     @Cacheable(value = User_CACHE, key = "#p0")
-    public User findFirstByUsername(@Param("username") String username);
+    User findFirstByUsername(@Param("username") String username);
 
     @Override
     @PostFilter(TenantService.IS_TENANT_FILTER)
@@ -47,32 +53,32 @@ public interface UserRepository extends CrudRepository<User, Long> {
     @SuppressWarnings("unchecked")
     @Override
     @CachePut(value = User_CACHE, key = "#p0.oid")
-    @PreAuthorize("hasRole('ROLE_WRITE_SEC_User')")
+    @PreAuthorize(ROLE_WRITE)
     User save(User User);
 
     @Override
     @CacheEvict(value = User_CACHE, key = "#p0")
-    @PreAuthorize("hasRole('ROLE_DELETE_SEC_User')")
+    @PreAuthorize(ROLE_DELETE)
     @PostAuthorize(TenantService.IS_TENANT_AUTH)
     void delete(Long oid);
 
 
     @Override
     @CacheEvict(value = User_CACHE, key = "#p0.oid")
-    @PreAuthorize("hasRole('ROLE_DELETE_SEC_User')")
+    @PreAuthorize(ROLE_DELETE)
     @PostAuthorize(TenantService.IS_TENANT_AUTH)
     void delete(User entity);
 
     @Override
     @CacheEvict(value = User_CACHE, allEntries = true)
-    @PreAuthorize("hasRole('ROLE_DELETE_SEC_User')")
+    @PreAuthorize(ROLE_DELETE)
     @PreFilter(TenantService.IS_TENANT_FILTER)
     void delete(Iterable<? extends User> entities);
 
 
     @Override
     @CacheEvict(value = User_CACHE, allEntries = true)
-    @PreAuthorize("hasRole('ROLE_DELETE_SEC_User')")
+    @PreAuthorize(ROLE_DELETE)
     @PreFilter(TenantService.IS_TENANT_FILTER)
     void deleteAll();
 

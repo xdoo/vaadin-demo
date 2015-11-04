@@ -1,4 +1,4 @@
-package de.muenchen.demo.service.rest.search;
+package de.muenchen.service;
 
 import org.springframework.data.rest.webmvc.RepositorySearchesResource;
 import org.springframework.hateoas.Link;
