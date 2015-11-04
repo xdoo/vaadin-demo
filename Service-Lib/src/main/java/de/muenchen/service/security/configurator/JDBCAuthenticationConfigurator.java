@@ -31,7 +31,7 @@ public class JDBCAuthenticationConfigurator extends GlobalAuthenticationConfigur
                                 "JOIN USERS on USERS_AUTHORITIES.USER_OID = USERS.OID " +
                                 "JOIN AUTHORITIES on USERS_AUTHORITIES.AUTHORITY_OID  = AUTHORITIES.OID " +
                                 "JOIN AUTHORITIES_PERMISSIONS on AUTHORITIES_PERMISSIONS.AUTHORITY_OID = USERS_AUTHORITIES.AUTHORITY_OID " +
-                                "JOIN PERMISSIONS ON AUTHORITIES_PERMISSIONS.PERMISSION_OID = PERMISSION.OID " +
+                                "JOIN PERMISSIONS ON AUTHORITIES_PERMISSIONS.PERMISSION_OID = PERMISSIONS.OID " +
                                 "WHERE USERS.USER_USERNAME = ?");
 
     }

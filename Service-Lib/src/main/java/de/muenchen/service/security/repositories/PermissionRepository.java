@@ -5,7 +5,7 @@
  */
 package de.muenchen.service.security.repositories;
 
-import de.muenchen.security.entities.Permission;
+import de.muenchen.service.security.entities.Permission;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -18,7 +18,7 @@ import java.util.List;
  *
  * @author praktikant.tmar
  */
-@RepositoryRestResource(exported = false)
+@RepositoryRestResource
 public interface PermissionRepository  extends CrudRepository<Permission, Long>  {
 
     public final static String Permission_CACHE = "PERMISSION_CACHE";

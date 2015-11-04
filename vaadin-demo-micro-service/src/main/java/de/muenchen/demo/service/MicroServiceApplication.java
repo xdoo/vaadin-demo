@@ -1,7 +1,7 @@
 package de.muenchen.demo.service;
 
-import de.muenchen.security.configurator.JDBCAuthenticationConfigurator;
-import de.muenchen.security.configurator.LDAPAuthenticationConfigurator;
+import de.muenchen.service.security.configurator.JDBCAuthenticationConfigurator;
+import de.muenchen.service.security.configurator.LDAPAuthenticationConfigurator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.orm.jpa.EntityScan;
