@@ -17,7 +17,6 @@
         <module>GUI-Lib</module>
         <module>Auditing</module>
         <module>API-Lib</module>
-        <module>Security</module>
         <module>Service-Lib</module>
     </modules>
     <properties>

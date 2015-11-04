@@ -3,13 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.muenchen.security.entities;
+package de.muenchen.service.security.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import de.muenchen.service.BaseEntity;
 import org.hibernate.search.annotations.Indexed;
 
-import javax.persistence.*;
-import javax.validation.constraints.Size;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
@@ -21,21 +29,14 @@ import java.util.Set;
 @Entity
 @Indexed
 @Table(name = "USERS")
-public class User implements Serializable {
-
-    @Column(name = "OID")
-    @Size(max = 32)
-    @Id
-    private String oid;
+public class User extends BaseEntity implements Serializable {
 
     @Column(name = "USER_USERNAME", nullable = false)
     private String username;
 
+    @JsonIgnore
     @Column(name = "USER_PASSWORD")
     private String password;
-
-    @Column(name = "USER_ENABLED")
-    private boolean enabled;
 
     @Column(name = "USER_FORNAME")
     private String forname;
@@ -50,29 +51,12 @@ public class User implements Serializable {
     @Column(name = "USER_EMAIL")
     private String email;
 
-    @Column(name = "CREATED_BY")
-    @Size(max = 255)
-    private String createdBy;
-
-    @Column(name = "CREATED_DATE")
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private java.util.Date createdDate;
-
-    @Column(name = "LAST_MOD_BY")
-    @Size(max = 255)
-    private String lastModBy;
-
-    @Column(name = "LAST_MOD_DATE")
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private java.util.Date lastModDate;
+    @Column(name = "USER_ENABLED")
+    private boolean userEnabled;
 
     @ManyToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
     @JoinTable(name = "users_authorities", joinColumns = {@JoinColumn(name = "user_oid")}, inverseJoinColumns = {@JoinColumn(name = "authority_oid")})
     private Set<Authority> authoritys;
-
-    @JsonIgnore
-    @Column(name = "USER_MANDANT")
-    private String mandant;
 
     public User() {
     }
@@ -80,65 +64,12 @@ public class User implements Serializable {
     public User(User user) {
         this.username = user.username;
         this.password = user.password;
-        this.enabled = user.enabled;
         this.forname = user.forname;
         this.surname = user.surname;
         this.birthdate = user.birthdate;
         this.email = user.email;
-        this.createdBy = user.createdBy;
-        this.createdDate = user.createdDate;
-        this.lastModBy = user.lastModBy;
-        this.lastModDate = user.lastModDate;
-        this.mandant = user.mandant;
+        this.userEnabled = user.userEnabled;
         this.authoritys = user.authoritys;
-    }
-
-    public String getOid() {
-        return oid;
-    }
-
-    public void setOid(String oid) {
-        this.oid = oid;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public java.util.Date getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(java.util.Date createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public String getLastModBy() {
-        return lastModBy;
-    }
-
-    public void setLastModBy(String lastModBy) {
-        this.lastModBy = lastModBy;
-    }
-
-    public java.util.Date getLastModDate() {
-        return lastModDate;
-    }
-
-    public void setLastModDate(java.util.Date lastModDate) {
-        this.lastModDate = lastModDate;
-    }
-
-    public String getMandant() {
-        return mandant;
-    }
-
-    public void setMandant(String tenantId) {
-        this.mandant = tenantId;
     }
 
     public String getUsername() {
@@ -155,14 +86,6 @@ public class User implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
     }
 
     public String getForname() {
@@ -195,6 +118,14 @@ public class User implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public boolean isUserEnabled() {
+        return userEnabled;
+    }
+
+    public void setUserEnabled(boolean userEnabled) {
+        this.userEnabled = userEnabled;
     }
 
     public Set<Authority> getAuthoritys() {

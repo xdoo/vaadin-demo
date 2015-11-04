@@ -3,7 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.muenchen.security.entities;
+package de.muenchen.service.security.entities;
+
+import de.muenchen.service.BaseEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,7 +17,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "PERMISSIONS")
-public class Permission extends SecurityEntity {
+public class Permission extends BaseEntity {
 
     @Column(name = "PERM_PERMISSION")
     private String permission;

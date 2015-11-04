@@ -3,10 +3,10 @@
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
 */
-package de.muenchen.security;
+package de.muenchen.service.security;
 
-import de.muenchen.security.entities.User;
-import de.muenchen.security.repositories.UserRepository;
+import de.muenchen.service.security.entities.User;
+import de.muenchen.service.security.repositories.UserRepository;
 import de.muenchen.vaadin.demo.apilib.domain.Principal;
 import de.muenchen.vaadin.demo.apilib.rest.SecurityRestClient;
 import org.springframework.beans.factory.annotation.Autowired;

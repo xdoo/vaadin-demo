@@ -1,4 +1,4 @@
-package de.muenchen.security;
+package de.muenchen.service.security;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;

@@ -1,7 +1,5 @@
-package de.muenchen.security.configurator;
+package de.muenchen.service.security.configurator;
 
-import de.muenchen.security.entities.User;
-import de.muenchen.security.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +12,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.ldap.userdetails.LdapAuthoritiesPopulator;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Anbindung an die Permissions, die in der DB stehen.
@@ -28,43 +28,29 @@ import java.util.HashSet;
 public class CustomLdapAuthoritiesPopulator implements LdapAuthoritiesPopulator {
 
     private static final Logger LOG = LoggerFactory.getLogger(CustomLdapAuthoritiesPopulator.class);
-
+    public static final String QUERY =
+            "SELECT PERMISSIONS.PERM_PERMISSION " +
+            "FROM USERS_AUTHORITIES " +
+            "JOIN USERS on USERS_AUTHORITIES.USER_OID = USERS.OID " +
+            "JOIN AUTHORITIES on USERS_AUTHORITIES.AUTHORITY_OID  = AUTHORITIES.OID " +
+            "JOIN AUTHORITIES_PERMISSIONS on AUTHORITIES_PERMISSIONS.AUTHORITY_OID = USERS_AUTHORITIES.AUTHORITY_OID " +
+            "JOIN PERMISSIONS ON AUTHORITIES_PERMISSIONS.PERMISSION_OID = PERMISSIONS.OID WHERE USERS.USER_USERNAME = \'%s\'";
 
     @Autowired
-    private UserRepository userRepository;
+    private EntityManager entityManager;
 
     @Override
     @Transactional(readOnly = true)
     public Collection<? extends GrantedAuthority> getGrantedAuthorities(
             DirContextOperations userData, String username) {
-        Collection<GrantedAuthority> gas = new HashSet<>();
 
-        /*
-        Gets a list of all authorities of this user
-        and with this authorities all permissions of this user.
+        @SuppressWarnings("unchecked")
+        final List<String> resultList = entityManager.createNativeQuery(
+                String.format(QUERY, username)
+        ).getResultList();
 
-        Afterwards returns a list of all permissions of this user.
-         */
+        LOG.info("User " + username + " got Permissions:"+ resultList.toString());
 
-        User user = userRepository.findFirstByUsername(username);
-
-        user.getAuthoritys().stream().forEach(userAuthority -> {
-
-            String authorityName = userAuthority.getAuthority();
-
-            userAuthority.getPermissions().stream().forEach(authorityPermission -> {
-
-                String authName = authorityPermission.getPermission();
-
-                gas.add(new SimpleGrantedAuthority(authName));
-
-            });
-
-
-        });
-
-        LOG.info("User " + username + " got Permissions:"+ gas.toString());
-
-        return gas;
+        return resultList.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toSet());
     }
 }

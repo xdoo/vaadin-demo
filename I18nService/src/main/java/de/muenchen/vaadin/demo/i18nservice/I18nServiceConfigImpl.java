@@ -30,9 +30,8 @@ import java.util.stream.Stream;
 @RefreshScope
 public class I18nServiceConfigImpl implements I18nService {
 
-    public static final String ISO_8859_1 = "ISO-8859-1";
-    public static final String UTF_8 = "UTF-8";
     private static final Logger LOG = LoggerFactory.getLogger(I18nService.class);
+
     /**
      * Holds all properties.
      * Properties may be loaded from the spring cloud config server.
