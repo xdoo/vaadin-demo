@@ -1,6 +1,5 @@
 package de.muenchen.service;
 
-import de.muenchen.service.security.entities.BaseEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

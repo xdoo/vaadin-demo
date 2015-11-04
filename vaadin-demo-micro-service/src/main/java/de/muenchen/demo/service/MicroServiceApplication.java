@@ -18,9 +18,9 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
  * Application class for starting the micro-service.
  */
 @Configuration
-@ComponentScan(basePackages = {"de.muenchen.demo.service", "de.muenchen.service", "de.muenchen.auditing", "de.muenchen.security"})
-@EntityScan(basePackages = {"de.muenchen.demo.service", "de.muenchen.service", "de.muenchen.auditing", "de.muenchen.security"})
-@EnableJpaRepositories(basePackages = {"de.muenchen.demo.service", "de.muenchen.service", "de.muenchen.auditing", "de.muenchen.security"})
+@ComponentScan(basePackages = {"de.muenchen.demo.service", "de.muenchen.service", "de.muenchen.auditing"})
+@EntityScan(basePackages = {"de.muenchen.demo.service", "de.muenchen.service", "de.muenchen.auditing"})
+@EnableJpaRepositories(basePackages = {"de.muenchen.demo.service", "de.muenchen.service", "de.muenchen.auditing"})
 @EnableAutoConfiguration
 @EnableEurekaClient //TODO not generated
 @EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)

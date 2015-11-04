@@ -1,6 +1,5 @@
 package de.muenchen.service;
 
-import de.muenchen.service.security.entities.BaseEntity;
 import de.muenchen.service.security.entities.User;
 import de.muenchen.service.security.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

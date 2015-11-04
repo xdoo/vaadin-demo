@@ -6,8 +6,8 @@
 package de.muenchen.service.security.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import de.muenchen.service.BaseEntity;
 import org.hibernate.search.annotations.Indexed;
-import org.springframework.security.access.prepost.PreAuthorize;
 
 import javax.persistence.*;
 import java.io.Serializable;

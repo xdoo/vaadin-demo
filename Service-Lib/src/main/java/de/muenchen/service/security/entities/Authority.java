@@ -5,6 +5,8 @@
  */
 package de.muenchen.service.security.entities;
 
+import de.muenchen.service.BaseEntity;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -18,14 +20,14 @@ public class Authority extends BaseEntity {
     @Column(name = "AUTH_AUTHORITY")
     private String authority;
 
-    @ElementCollection
-    @JoinTable(name = "authorities_permissions", joinColumns = {@JoinColumn(name = "authority_oid")})
-    private Set<String> permissions;
+    @ManyToMany(cascade = CascadeType.REFRESH)
+    @JoinTable(name = "authorities_permissions", joinColumns = @JoinColumn(name = "authority_oid"), inverseJoinColumns = @JoinColumn(name = "permission_oid"))
+    private Set<Permission> permissions;
 
     public Authority() {
     }
 
-    public Authority(Authority authority, Set<String> permissions) {
+    public Authority(Authority authority, Set<Permission> permissions) {
         this.authority = authority.authority;
         this.permissions = permissions;
 
@@ -41,11 +43,11 @@ public class Authority extends BaseEntity {
     }
 
 
-    public Set<String> getPermissions() {
+    public Set<Permission> getPermissions() {
         return permissions;
     }
 
-    public void setPermissions(Set<String> permissions) {
+    public void setPermissions(Set<Permission> permissions) {
         this.permissions = permissions;
     }
 }

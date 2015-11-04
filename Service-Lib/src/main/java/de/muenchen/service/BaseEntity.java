@@ -1,4 +1,4 @@
-package de.muenchen.service.security.entities;
+package de.muenchen.service;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.muenchen.service.DatabaseBeforeSaveEventListener;

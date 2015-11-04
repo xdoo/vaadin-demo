@@ -41,7 +41,7 @@ public class SecurityRestClientImpl implements SecurityRestClient {
                     principal.getRoles().add(authority1.getAuthority());
                     // Add Permissions
                     authority1.getPermissions()
-                            .forEach(permission11 -> principal.getPermissions().add(permission11));
+                            .forEach(permission11 -> principal.getPermissions().add(permission11.getPermission()));
                 });
         return Optional.of(principal);
     }
