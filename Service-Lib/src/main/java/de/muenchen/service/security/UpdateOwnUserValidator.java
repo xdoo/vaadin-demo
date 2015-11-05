@@ -24,6 +24,9 @@ public class UpdateOwnUserValidator {
 
         if (o == null)
             return true;
+            
+        if(o.getClass() != User.class)
+            throw new IllegalArgumentException();
 
         final User changeUser = ((User) o);
         final User currentUser = userRepository.findFirstByUsername(authentication.getName());
