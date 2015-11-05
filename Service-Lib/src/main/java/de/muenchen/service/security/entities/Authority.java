@@ -7,13 +7,7 @@ package de.muenchen.service.security.entities;
 
 import de.muenchen.service.BaseEntity;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Set;
 
 /**
@@ -27,7 +21,7 @@ public class Authority extends BaseEntity {
     private String authority;
 
     @ManyToMany(cascade = CascadeType.REFRESH)
-    @JoinTable(name = "authorities_permissions", joinColumns = @JoinColumn(name = "authority_oid"), inverseJoinColumns = @JoinColumn(name = "permission_oid"))
+    @JoinTable(name = "_authorities_permissions", joinColumns = @JoinColumn(name = "authority_oid"), inverseJoinColumns = @JoinColumn(name = "permission_oid"))
     private Set<Permission> permissions;
 
     public Authority() {
