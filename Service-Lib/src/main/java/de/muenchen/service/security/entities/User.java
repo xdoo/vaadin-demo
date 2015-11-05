@@ -28,7 +28,7 @@ import java.util.Set;
  */
 @Entity
 @Indexed
-@Table(name = "USERS")
+@Table(name = "_USERS")
 public class User extends BaseEntity implements Serializable {
 
     @Column(name = "USER_USERNAME", nullable = false)

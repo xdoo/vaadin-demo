@@ -16,7 +16,7 @@ import javax.persistence.Table;
  * @author praktikant.tmar
  */
 @Entity
-@Table(name = "PERMISSIONS")
+@Table(name = "_PERMISSIONS")
 public class Permission extends BaseEntity {
 
     @Column(name = "PERM_PERMISSION")

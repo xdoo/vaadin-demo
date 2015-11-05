@@ -20,7 +20,7 @@ import java.util.Set;
  * @author praktikant.tmar
  */
 @Entity
-@Table(name = "AUTHORITIES")
+@Table(name = "_AUTHORITIES")
 public class Authority extends BaseEntity {
 
     @Column(name = "AUTH_AUTHORITY")
