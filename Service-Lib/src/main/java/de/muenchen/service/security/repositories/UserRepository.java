@@ -6,6 +6,7 @@
 package de.muenchen.service.security.repositories;
 
 import de.muenchen.service.TenantService;
+import de.muenchen.service.security.UpdateOwnUserValidator;
 import de.muenchen.service.security.entities.User;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -53,7 +54,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
     @SuppressWarnings("unchecked")
     @Override
     @CachePut(value = User_CACHE, key = "#p0.oid")
-    @PreAuthorize(ROLE_WRITE)
+    @PostAuthorize(ROLE_WRITE + "or" + UpdateOwnUserValidator.IS_OWN_USER_AUTH)
     User save(User User);
 
     @Override
