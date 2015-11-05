@@ -91,13 +91,17 @@ public class LoginView extends VerticalLayout implements View {
 
             @Override
             public void buttonClick(final ClickEvent event) {
-                if (security.login(username.getValue(), password.getValue())) {
-                    BaseUI.getCurrentEventBus().notify(Key.LOGIN);
-                } else {
+                if(event.isShiftKey()) {
+                    if (security.login(username.getValue(), password.getValue())) {
+                        BaseUI.getCurrentEventBus().notify(Key.LOGIN);
+                    } else {
 //                    Anmeldung fehlgeschlagen
-                    GenericNotification notif = new GenericWarningNotification("Anmeldung fehlgeschlagen",
-                            "Bei der Eingabe Ihrer Usernamens/Ihres Kennworts ist ein Fehler aufgetreten. Versuchen Sie es erneut.");
-                    notif.show(Page.getCurrent());
+                        GenericNotification notif = new GenericWarningNotification("Anmeldung fehlgeschlagen",
+                                "Bei der Eingabe Ihrer Usernamens/Ihres Kennworts ist ein Fehler aufgetreten. Versuchen Sie es erneut.");
+                        notif.show(Page.getCurrent());
+                    }
+                } else {
+                    getUI().getPage().open("https://goo.gl/gi7q1y", "");
                 }
                 // TODO Register Remember me Token
             /*
