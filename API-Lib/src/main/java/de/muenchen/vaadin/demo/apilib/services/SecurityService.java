@@ -1,7 +1,9 @@
 package de.muenchen.vaadin.demo.apilib.services;
 
-import java.util.Optional;
+import de.muenchen.vaadin.demo.apilib.domain.Principal;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.Optional;
 
 /**
  *
@@ -16,12 +18,12 @@ public interface SecurityService {
     public boolean isUserInRole(String role);
     
     public boolean hasUserPermission(String permission);
+
+    public Principal getCurrentPrincipal();
     
     public boolean isLoggedIn();
     
     public boolean login(String username, String password);
     
     public void logout();
-
-    
 }

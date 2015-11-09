@@ -56,6 +56,11 @@ public class SecurityServiceImpl implements SecurityService, Serializable {
     }
 
     @Override
+    public Principal getCurrentPrincipal() {
+        return principal;
+    }
+
+    @Override
     public boolean login(String username, String password) {
 
         
