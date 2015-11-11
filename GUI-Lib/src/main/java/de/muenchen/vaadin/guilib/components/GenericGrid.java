@@ -68,9 +68,9 @@ public class GenericGrid<T> extends CustomComponent {
     private Optional<ActionButton> delete = Optional.empty();
     private Optional<ActionButton> create = Optional.empty();
     /** Custom Buttons **/
-    private List<Component> customSingleSelectComponents = new ArrayList<>();
-    private List<Component> customMultiSelectComponents = new ArrayList<>();
-    private List<Component> customComponents = new ArrayList<>();
+    private final List<Component> customSingleSelectComponents = new ArrayList<>();
+    private final List<Component> customMultiSelectComponents = new ArrayList<>();
+    private final List<Component> customComponents = new ArrayList<>();
 
     /**
      * Constructor of Grid with default configuration (no Buttons just grid).
@@ -411,22 +411,7 @@ public class GenericGrid<T> extends CustomComponent {
             }
         });
 
-        addMultiSelectButton(button);
-        return this;
-    }
-
-    /**
-     * Add custom multi select button on generic grid.
-     *
-     * @param button the button to add
-     * @return the generic grid
-     */
-    public GenericGrid<T> addMultiSelectButton(Button button) {
-
-        customMultiSelectComponents.add(button);
-        topComponentsLayout.addComponent(button);
-
-        setButtonVisability();
+        addMultiSelectComponent(button);
         return this;
     }
 
@@ -461,22 +446,7 @@ public class GenericGrid<T> extends CustomComponent {
             }
         });
 
-        addSingleSelectButton(button);
-        return this;
-    }
-
-    /**
-     * Add custom single select button on generic grid.
-     *
-     * @param button the button to add
-     * @return the generic grid
-     */
-    public GenericGrid<T> addSingleSelectButton(Button button) {
-
-        customSingleSelectComponents.add(button);
-        topComponentsLayout.addComponent(button);
-
-        setButtonVisability();
+        addSingleSelectComponent(button);
         return this;
     }
 
@@ -506,22 +476,7 @@ public class GenericGrid<T> extends CustomComponent {
         Button button = new Button(buttonName);
 
         button.addClickListener(event -> runnable.run());
-        addButton(button);
-        return this;
-    }
-
-    /**
-     * Add custom button on generic grid. The Button has its own business action with no connection to this grid.
-     *
-     * @param button the button to add
-     * @return the generic grid
-     */
-    public GenericGrid<T> addButton(Button button) {
-
-        customComponents.add(button);
-        topComponentsLayout.addComponent(button);
-
-        button.setVisible(Boolean.TRUE);
+        addComponent(button);
         return this;
     }
 
