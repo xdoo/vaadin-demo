@@ -40,7 +40,7 @@ public class BuergerChildTab extends CustomComponent {
         ActionButton addButton = new ActionButton(Buerger.class, SimpleAction.add);
         NavigateActions navigateActions = new NavigateActions(BuergerAddChildView.NAME);
         addButton.addActionPerformer(navigateActions::navigate);
-        grid.addButton(addButton);
+        grid.addComponent(addButton);
 
         //Create Button to delete one or more associations
         ActionButton deleteButton = new ActionButton(Buerger.class, SimpleAction.delete);
@@ -50,7 +50,7 @@ public class BuergerChildTab extends CustomComponent {
                         .collect(Collectors.toList())
         );
         deleteButton.addActionPerformer(listAction::removeAssociations);
-        grid.addMultiSelectButton(deleteButton);
+        grid.addMultiSelectComponent(deleteButton);
 
 
         HorizontalLayout layout = new HorizontalLayout(grid);

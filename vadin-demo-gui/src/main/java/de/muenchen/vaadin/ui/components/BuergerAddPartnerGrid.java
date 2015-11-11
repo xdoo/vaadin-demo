@@ -44,7 +44,7 @@ public class BuergerAddPartnerGrid extends BaseComponent {
         addSingle.addActionPerformer(actionsSingle::addAssociation);
         addSingle.addActionPerformer(navigateActions::navigate);
 
-        grid.addSingleSelectButton(addSingle);
+        grid.addSingleSelectComponent(addSingle);
 
         final VerticalLayout layout = new VerticalLayout(backButton, grid);
         layout.setSpacing(true);
