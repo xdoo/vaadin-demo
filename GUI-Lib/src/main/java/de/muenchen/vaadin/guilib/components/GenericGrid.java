@@ -7,6 +7,7 @@ import com.vaadin.event.ShortcutAction;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Grid;
@@ -67,9 +68,9 @@ public class GenericGrid<T> extends CustomComponent {
     private Optional<ActionButton> delete = Optional.empty();
     private Optional<ActionButton> create = Optional.empty();
     /** Custom Buttons **/
-    private List<Button> customSingleSelectButtons = new ArrayList<>();
-    private List<Button> customMultiSelectButtons = new ArrayList<>();
-    private List<Button> customButtons = new ArrayList<>();
+    private List<Component> customSingleSelectComponents = new ArrayList<>();
+    private List<Component> customMultiSelectComponents = new ArrayList<>();
+    private List<Component> customComponents = new ArrayList<>();
 
     /**
      * Constructor of Grid with default configuration (no Buttons just grid).
@@ -221,8 +222,8 @@ public class GenericGrid<T> extends CustomComponent {
         if (copy.isPresent()) copy.get().setVisible(size > 0);
         if (delete.isPresent()) delete.get().setVisible(size > 0);
 
-        customSingleSelectButtons.stream().forEach(button -> button.setVisible(size == 1));
-        customMultiSelectButtons.stream().forEach(button -> button.setVisible(size > 0));
+        customSingleSelectComponents.stream().forEach(component -> component.setVisible(size == 1));
+        customMultiSelectComponents.stream().forEach(component -> component.setVisible(size > 0));
     }
 
     //--------------
@@ -422,8 +423,23 @@ public class GenericGrid<T> extends CustomComponent {
      */
     public GenericGrid<T> addMultiSelectButton(Button button) {
 
-        customMultiSelectButtons.add(button);
+        customMultiSelectComponents.add(button);
         topComponentsLayout.addComponent(button);
+
+        setButtonVisability();
+        return this;
+    }
+
+    /**
+     * Add custom multi select component on generic grid.
+     *
+     * @param component the component to add
+     * @return the generic grid
+     */
+    public GenericGrid<T> addMultiSelectComponent(Component component) {
+
+        customMultiSelectComponents.add(component);
+        topComponentsLayout.addComponent(component);
 
         setButtonVisability();
         return this;
@@ -457,8 +473,23 @@ public class GenericGrid<T> extends CustomComponent {
      */
     public GenericGrid<T> addSingleSelectButton(Button button) {
 
-        customSingleSelectButtons.add(button);
+        customSingleSelectComponents.add(button);
         topComponentsLayout.addComponent(button);
+
+        setButtonVisability();
+        return this;
+    }
+
+    /**
+     * Add custom single select component on generic grid.
+     *
+     * @param component the component to add
+     * @return the generic grid
+     */
+    public GenericGrid<T> addSingleSelectComponent(Component component) {
+
+        customSingleSelectComponents.add(component);
+        topComponentsLayout.addComponent(component);
 
         setButtonVisability();
         return this;
@@ -487,12 +518,28 @@ public class GenericGrid<T> extends CustomComponent {
      */
     public GenericGrid<T> addButton(Button button) {
 
-        customButtons.add(button);
+        customComponents.add(button);
         topComponentsLayout.addComponent(button);
 
         button.setVisible(Boolean.TRUE);
         return this;
     }
+
+    /**
+     * Add custom component on generic grid. The Button has its own business action with no connection to this grid.
+     *
+     * @param component the component to add
+     * @return the generic grid
+     */
+    public GenericGrid<T> addComponent(Component component) {
+
+        customComponents.add(component);
+        topComponentsLayout.addComponent(component);
+
+        component.setVisible(Boolean.TRUE);
+        return this;
+    }
+
     //--------------
     // Getter / Setter
     //--------------
