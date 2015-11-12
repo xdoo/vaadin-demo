@@ -12,15 +12,7 @@ import com.vaadin.server.VaadinService;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.ComponentContainer;
-import com.vaadin.ui.CssLayout;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.MenuBar;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.EventBus;
 import de.muenchen.eventbus.selector.Key;
@@ -64,10 +56,12 @@ public class MainUI extends BaseUI {
     protected ValoMenuLayout root = new ValoMenuLayout();
     protected ComponentContainer viewDisplay = root.getContentContainer();
     protected CssLayout menu = new CssLayout();
+    protected CssLayout help = new CssLayout();
     protected CssLayout menuItemsLayout = new CssLayout();
 
     private MenuBar bar = new MenuBar();
     private MenuBar.MenuItem language;
+    private boolean helpVisible = false;
 
     @Autowired
     public MainUI(EventBus eventBus, I18nResolverImpl i18nResolver, SpringViewProvider ViewProvider, SecurityService security, MessageService i18n) {
@@ -102,6 +96,7 @@ public class MainUI extends BaseUI {
         setContent(root);
         root.setWidth("100%");
         root.addMenu(buildMenu());
+        root.addMenu(buildHelp());
         addStyleName(ValoTheme.UI_WITH_MENU);
 
         // configure navigator
@@ -203,6 +198,12 @@ public class MainUI extends BaseUI {
         return menu;
     }
 
+    private CssLayout buildHelp() {
+        this.createHelpContent("");
+        help.setVisible(false);
+        return help;
+    }
+
     private Component createMenuTitle() {
         final HorizontalLayout top = new HorizontalLayout();
         top.setWidth("100%");
@@ -214,6 +215,26 @@ public class MainUI extends BaseUI {
         top.addComponent(title);
         top.setExpandRatio(title, 1);
         return top;
+    }
+
+    private Component createHelpTitle() {
+        final HorizontalLayout top = new HorizontalLayout();
+        top.setWidth("100%");
+        top.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
+        top.addStyleName("valo-menu-title");
+        final Label title = new Label(
+                "<h3>Vaadin <strong>Help</strong></h3>", ContentMode.HTML);
+        title.setSizeUndefined();
+        top.addComponent(title);
+        top.setExpandRatio(title, 1);
+        return top;
+    }
+
+    public void createHelpContent(String content){
+        this.help.removeAllComponents();
+        this.help.addComponent(createHelpTitle());
+        final Label text = new Label(content, ContentMode.HTML);
+        this.help.addComponent(text);
     }
 
     private MenuBar buildMenuBar() {
@@ -271,6 +292,12 @@ public class MainUI extends BaseUI {
 //            b.setIcon(testIcon.get());
             menuItemsLayout.addComponent(b);
         }
+        //creates a Help button
+        final Button helpButton = new Button("Help", event ->{ help.setVisible(!helpVisible); helpVisible = !helpVisible;});
+        helpButton.setHtmlContentAllowed(true);
+        helpButton.setPrimaryStyleName(ValoTheme.MENU_ITEM);
+        helpButton.setId("MENU_ITEM_BUTTON_HELP");
+        menuItemsLayout.addComponent(helpButton);
 
         // creates and displays the logout button
         final Button logoutButton = new Button("Logout", event -> {

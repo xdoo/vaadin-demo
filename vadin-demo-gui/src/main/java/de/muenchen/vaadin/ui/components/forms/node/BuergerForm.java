@@ -2,12 +2,7 @@ package de.muenchen.vaadin.ui.components.forms.node;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
-import com.vaadin.ui.CheckBox;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.DateField;
-import com.vaadin.ui.Field;
-import com.vaadin.ui.FormLayout;
-import com.vaadin.ui.TextField;
+import com.vaadin.ui.*;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.guilib.components.BaseComponent;
 import de.muenchen.vaadin.guilib.util.FormUtil;
@@ -82,7 +77,11 @@ public class BuergerForm extends BaseComponent {
         final DateField geburtsdatum = formUtil.createDateField(Buerger.Field.geburtsdatum.name());
         final CheckBox alive = formUtil.createCheckBox(Buerger.Field.alive.name());
         final TokenField eigenschaften = formUtil.createTokenField(Buerger.Field.eigenschaften.name());
-
+        vorname.setDescription("Hier den Vornamen des Bürgers eintragen");
+        nachname.setDescription("Hier den Nachnamen des Bürgers eintragen");
+        augenfarbe.setDescription("Hier bitte die passende Augenfarbe auswählen");
+        geburtsdatum.setDescription("Hier wählen Sie bitte das Geburtsdatum de Bürgers aus. Achtung es muss in der Vergangenheit liegen!");
+        eigenschaften.setDescription("Hier können ein bis 5 eigenschaften angegeben werden");
         return Arrays.asList(vorname, nachname, augenfarbe, geburtsdatum, alive, eigenschaften);
     }
 
