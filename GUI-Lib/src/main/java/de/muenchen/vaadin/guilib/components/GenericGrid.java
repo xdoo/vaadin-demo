@@ -114,6 +114,7 @@ public class GenericGrid<T> extends CustomComponent {
         });
 
         this.grid.getColumns().stream().forEach(c ->
+                //TODO Wirklicha lle hidable? Dieser button sieht schrecklich aus :O
                         c.setHidable(true)
         );
 
@@ -582,4 +583,7 @@ public class GenericGrid<T> extends CustomComponent {
         return BaseUI.getCurrentNavigator();
     }
 
+    public Grid getGrid() {
+        return grid;
+    }
 }
