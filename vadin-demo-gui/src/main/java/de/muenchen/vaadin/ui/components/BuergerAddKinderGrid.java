@@ -41,7 +41,7 @@ public class BuergerAddKinderGrid extends BaseComponent {
         addMultiple.addActionPerformer(actionMultiple::addAssociations);
         addMultiple.addActionPerformer(navigateActions::navigate);
 
-        grid.addMultiSelectButton(addMultiple);
+        grid.addMultiSelectComponent(addMultiple);
 
         final VerticalLayout layout = new VerticalLayout(backButton, grid);
         layout.setSpacing(true);
