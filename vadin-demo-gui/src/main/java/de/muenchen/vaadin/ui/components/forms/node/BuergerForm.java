@@ -2,9 +2,13 @@ package de.muenchen.vaadin.ui.components.forms.node;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
-import com.vaadin.ui.*;
+import com.vaadin.ui.CheckBox;
+import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.DateField;
+import com.vaadin.ui.Field;
+import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.TextField;
 import de.muenchen.vaadin.demo.api.local.Buerger;
-import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.components.BaseComponent;
 import de.muenchen.vaadin.guilib.util.FormUtil;
 import org.vaadin.tokenfield.TokenField;
@@ -72,12 +76,12 @@ public class BuergerForm extends BaseComponent {
     private List<Field> buildFields() {
         final FormUtil formUtil = new FormUtil(getBinder());
 
-        final TextField vorname = formUtil.createTextField(Buerger.Field.vorname.name(), BaseUI.getCurrentI18nResolver().resolve("buerger.vorname.tooltip"));
-        final TextField nachname = formUtil.createTextField(Buerger.Field.nachname.name(), BaseUI.getCurrentI18nResolver().resolve("buerger.nachname.tooltip"));
-        final ComboBox augenfarbe = formUtil.createComboBox(Buerger.Field.augenfarbe.name(), BaseUI.getCurrentI18nResolver().resolve("buerger.augenfarbe.tooltip"));
-        final DateField geburtsdatum = formUtil.createDateField(Buerger.Field.geburtsdatum.name(), BaseUI.getCurrentI18nResolver().resolve("buerger.geburtsdatum.tooltip"));
+        final TextField vorname = formUtil.createTextField(Buerger.Field.vorname.name());
+        final TextField nachname = formUtil.createTextField(Buerger.Field.nachname.name());
+        final ComboBox augenfarbe = formUtil.createComboBox(Buerger.Field.augenfarbe.name());
+        final DateField geburtsdatum = formUtil.createDateField(Buerger.Field.geburtsdatum.name());
         final CheckBox alive = formUtil.createCheckBox(Buerger.Field.alive.name());
-        final TokenField eigenschaften = formUtil.createTokenField(Buerger.Field.eigenschaften.name(), BaseUI.getCurrentI18nResolver().resolve("buerger.eigenschaften.tooltip"));
+        final TokenField eigenschaften = formUtil.createTokenField(Buerger.Field.eigenschaften.name());
         return Arrays.asList(vorname, nachname, augenfarbe, geburtsdatum, alive, eigenschaften);
     }
 
