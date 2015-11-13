@@ -84,16 +84,9 @@ public class FormUtil {
      * @return A TextField bound to the property of the binder.
      */
     public TextField createTextField(String property, String tooltip) {
-        final String caption = getCaption(property);
-        final String prompt = getPrompt(property);
-
-        TextField tf = getBinder().buildAndBind(caption, property, TextField.class);
-        tf.setNullRepresentation(NULL_REPRESENTATION);
-        tf.setInputPrompt(prompt);
+        TextField tf = createTextField(property);
         tf.setId(property + INPUT);
         tf.setDescription(tooltip);
-        deactivateValidation(tf);
-        //tf.setId(String.format("%s_%s_FIELD", getI18nResolver().getBasePath(), property).toUpperCase());
         return tf;
     }
 
@@ -188,16 +181,8 @@ public class FormUtil {
      * @return The Combobox for the given property.
      */
     public ComboBox createComboBox(String property, String tooltip) {
-        final String caption = getCaption(property);
-        final String prompt = getPrompt(property);
-
-        ComboBox cb = getBinder().buildAndBind(caption, property, ComboBox.class);
-        cb.setInputPrompt(prompt);
-        cb.setTextInputAllowed(true);
-        cb.setNullSelectionAllowed(false);
-        cb.setId(property + INPUT);
+        ComboBox cb = createComboBox(property);
         cb.setDescription(tooltip);
-        deactivateValidation(cb);
         return cb;
     }
 
@@ -230,13 +215,7 @@ public class FormUtil {
      * @return The DateField for the property.
      */
     public DateField createDateField(String property, String tooltip) {
-        final String caption = getCaption(property);
-
-        DateField df = getBinder().buildAndBind(caption, property, DateField.class);
-
-        deactivateValidation(df);
-
-        df.setId(property + INPUT);
+        DateField df = createDateField(property);
         df.setDescription(tooltip);
         return df;
     }
@@ -268,12 +247,8 @@ public class FormUtil {
      * @return The CheckBox for the property.
      */
     public CheckBox createCheckBox(String property, String tooltip) {
-        final String caption = getCaption(property);
-
-        CheckBox df = getBinder().buildAndBind(caption, property, CheckBox.class);
-        df.setId(property + INPUT);
+        CheckBox df = createCheckBox(property);
         df.setDescription(tooltip);
-        deactivateValidation(df);
         return df;
     }
 
@@ -342,48 +317,8 @@ public class FormUtil {
      * @return The TokenField of the property
      */
     public TokenField createTokenField(String property, String tooltip) {
-        final String caption = getCaption(property);
-
-        //Group Elements of TokenField in CSS Layout
-        CssLayout lo = new CssLayout();
-        lo.addStyleName("v-component-group");
-
-        TokenField tf = new TokenField(caption, lo) {
-            public static final String SEPERATOR = ",";
-            @Override
-            protected void onTokenInput(Object tokenId) {
-                //Multiple Tokens separated by ',' possible
-                Stream.of(((String) tokenId).split(SEPERATOR))
-                        .map(String::trim)
-                        .filter(s -> !s.isEmpty())
-                        .forEach(t -> super.onTokenInput(t));
-            }
-
-            //HACK TO PREVENT READONLYEXCEPTION
-            //AND SHOW CORRECT FIELD IN READONLY MODE
-            @Override
-            protected void configureTokenButton(Object tokenId, Button button) {
-                super.configureTokenButton(tokenId, button);
-                button.removeStyleName(ValoTheme.BUTTON_LINK);
-            }
-
-            @Override
-            public void setReadOnly(boolean readOnly) {
-                super.setReadOnly(readOnly);
-                buttons.values()
-                        .forEach(button -> button.setEnabled(!readOnly));
-
-                if (readOnly)
-                    getLayout().removeComponent(cb);
-            }
-        };
-
-        getBinder().bind(tf, property);
-
-        tf.setRememberNewTokens(false);
-        tf.setId(property + INPUT);
+        TokenField tf = createTokenField(property);
         tf.setDescription(tooltip);
-        deactivateValidation(tf);
         return tf;
     }
 
