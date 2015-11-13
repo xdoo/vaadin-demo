@@ -65,6 +65,7 @@ public class MainUI extends BaseUI {
     protected ComponentContainer viewDisplay = root.getContentContainer();
     protected CssLayout menu = new CssLayout();
     protected CssLayout help = new CssLayout();
+    private Component helpTitle;
     protected CssLayout menuItemsLayout = new CssLayout();
 
     private MenuBar bar = new MenuBar();
@@ -209,6 +210,7 @@ public class MainUI extends BaseUI {
     }
 
     private CssLayout buildHelp() {
+        this.helpTitle = createHelpTitle();
         this.createHelpContent("");
         help.setVisible(false);
         return help;
@@ -242,7 +244,7 @@ public class MainUI extends BaseUI {
 
     public void createHelpContent(String content){
         this.help.removeAllComponents();
-        this.help.addComponent(createHelpTitle());
+        this.help.addComponent(helpTitle);
         final Label text = new Label("<font color = #040404>"+content+"</font>", ContentMode.HTML);
         this.help.addComponent(text);
     }
