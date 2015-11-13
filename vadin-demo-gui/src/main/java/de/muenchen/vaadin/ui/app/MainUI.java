@@ -95,8 +95,10 @@ public class MainUI extends BaseUI {
         getPage().setTitle(i18n.get("page.title"));
         setContent(root);
         root.setWidth("100%");
+        buildHelp();
         root.addMenu(buildMenu());
-        root.addMenu(buildHelp());
+        root.addComponent(help);
+        root.setComponentAlignment(help, Alignment.TOP_RIGHT);
         addStyleName(ValoTheme.UI_WITH_MENU);
 
         // configure navigator
@@ -233,7 +235,7 @@ public class MainUI extends BaseUI {
     public void createHelpContent(String content){
         this.help.removeAllComponents();
         this.help.addComponent(createHelpTitle());
-        final Label text = new Label(content, ContentMode.HTML);
+        final Label text = new Label("<font color = #040404>"+content+"</font>", ContentMode.HTML);
         this.help.addComponent(text);
     }
 

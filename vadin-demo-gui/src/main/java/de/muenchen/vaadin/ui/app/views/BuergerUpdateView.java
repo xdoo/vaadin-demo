@@ -22,7 +22,7 @@ public class BuergerUpdateView extends DefaultBuergerView {
 
     @Autowired
     public BuergerUpdateView(BuergerViewController controller) {
-        super(controller);
+        super(controller, "dIe daten des zuletzt ausgewählten Bürgers <br>können hier bearbeitet werden");
     }
 
     @Override

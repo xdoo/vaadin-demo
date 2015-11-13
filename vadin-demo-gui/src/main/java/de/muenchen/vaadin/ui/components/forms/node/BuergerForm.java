@@ -4,6 +4,7 @@ import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.ui.*;
 import de.muenchen.vaadin.demo.api.local.Buerger;
+import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.components.BaseComponent;
 import de.muenchen.vaadin.guilib.util.FormUtil;
 import org.vaadin.tokenfield.TokenField;
@@ -71,17 +72,12 @@ public class BuergerForm extends BaseComponent {
     private List<Field> buildFields() {
         final FormUtil formUtil = new FormUtil(getBinder());
 
-        final TextField vorname = formUtil.createTextField(Buerger.Field.vorname.name());
-        final TextField nachname = formUtil.createTextField(Buerger.Field.nachname.name());
-        final ComboBox augenfarbe = formUtil.createComboBox(Buerger.Field.augenfarbe.name());
-        final DateField geburtsdatum = formUtil.createDateField(Buerger.Field.geburtsdatum.name());
+        final TextField vorname = formUtil.createTextField(Buerger.Field.vorname.name(), BaseUI.getCurrentI18nResolver().resolve("buerger.vorname.tooltip"));
+        final TextField nachname = formUtil.createTextField(Buerger.Field.nachname.name(), BaseUI.getCurrentI18nResolver().resolve("buerger.nachname.tooltip"));
+        final ComboBox augenfarbe = formUtil.createComboBox(Buerger.Field.augenfarbe.name(), BaseUI.getCurrentI18nResolver().resolve("buerger.augenfarbe.tooltip"));
+        final DateField geburtsdatum = formUtil.createDateField(Buerger.Field.geburtsdatum.name(), BaseUI.getCurrentI18nResolver().resolve("buerger.geburtsdatum.tooltip"));
         final CheckBox alive = formUtil.createCheckBox(Buerger.Field.alive.name());
-        final TokenField eigenschaften = formUtil.createTokenField(Buerger.Field.eigenschaften.name());
-        vorname.setDescription("Hier den Vornamen des Bürgers eintragen");
-        nachname.setDescription("Hier den Nachnamen des Bürgers eintragen");
-        augenfarbe.setDescription("Hier bitte die passende Augenfarbe auswählen");
-        geburtsdatum.setDescription("Hier wählen Sie bitte das Geburtsdatum de Bürgers aus. Achtung es muss in der Vergangenheit liegen!");
-        eigenschaften.setDescription("Hier können ein bis 5 eigenschaften angegeben werden");
+        final TokenField eigenschaften = formUtil.createTokenField(Buerger.Field.eigenschaften.name(), BaseUI.getCurrentI18nResolver().resolve("buerger.eigenschaften.tooltip"));
         return Arrays.asList(vorname, nachname, augenfarbe, geburtsdatum, alive, eigenschaften);
     }
 
