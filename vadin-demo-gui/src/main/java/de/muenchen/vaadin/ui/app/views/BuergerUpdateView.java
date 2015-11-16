@@ -7,6 +7,7 @@ import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
+import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.components.forms.BuergerUpdateForm;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class BuergerUpdateView extends DefaultBuergerView {
 
     @Autowired
     public BuergerUpdateView(BuergerViewController controller) {
-        super(controller, "dIe daten des zuletzt ausgewählten Bürgers <br>können hier bearbeitet werden");
+        super(controller, MainUI.getCurrentI18nResolver().resolve("buerger.updateview.helptext"));
     }
 
     @Override

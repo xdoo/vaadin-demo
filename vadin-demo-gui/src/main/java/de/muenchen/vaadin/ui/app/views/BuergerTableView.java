@@ -2,6 +2,7 @@ package de.muenchen.vaadin.ui.app.views;
 
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
+import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.components.BuergerGrid;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 import org.slf4j.Logger;
@@ -23,7 +24,7 @@ public class BuergerTableView extends DefaultBuergerView {
 
     @Autowired
     public BuergerTableView(BuergerViewController controller) {
-        super(controller, "In dieser View werden alle bürger angezeigt <br> zum Bearbeiten den gewünschten bürger auswählen <br> anschließend erscheinen Schaltflächen Zum Bearbeiten.");
+        super(controller, MainUI.getCurrentI18nResolver().resolve("buerger.tableview.helptext"));
         LOG.debug("creating 'buerger_table_view'");
     }
 

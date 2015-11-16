@@ -61,6 +61,9 @@ i18n.de-DE.mainpage.title : Startseite
 i18n.de-DE.page.title : Bürgerverwaltung
 i18n.de-DE.sprache.title : Sprache
 
+i18n.de-DE.buerger.tableview.helptext : "In dieser View werden alle bürger angezeigt. <br> Zum Bearbeiten den gewünschten Bürger auswählen. <br> Anschließend erscheinen Schaltflächen Zum Bearbeiten."
+i18n.de-DE.buerger.updateview.helptext: "Die Daten des zuletzt ausgewählten Bürgers können hier bearbeitet werden."
+
 i18n.de-DE.buerger.page.title : Bürger View
 i18n.de-DE.buerger.navigation.button.label : Bürger Pflege
 i18n.de-DE.buerger.form.update.headline.label : Bürger bearbeiten
