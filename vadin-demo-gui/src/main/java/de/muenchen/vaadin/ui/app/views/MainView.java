@@ -11,6 +11,7 @@ import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import de.muenchen.vaadin.ui.app.MainUI;
 
 import javax.annotation.PostConstruct;
 
@@ -26,6 +27,8 @@ public class MainView extends VerticalLayout implements View {
         setSizeFull();
         setSpacing(true);
         setMargin(new MarginInfo(false, true, false, true));
+
+        ((MainUI) getUI()).setHelpContent("");
 
         Label pageTitle = new Label("Main View", ContentMode.HTML);
         pageTitle.addStyleName(ValoTheme.LABEL_H1);

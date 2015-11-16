@@ -37,7 +37,7 @@ public abstract class DefaultBuergerView extends VerticalLayout implements View{
     public void enter(ViewChangeListener.ViewChangeEvent event) {
         this.configureLayout();
         MainUI ui = (MainUI) getUI();
-        ui.createHelpContent(helpContent);
+        ui.setHelpContent(helpContent);
         // add some components
         this.addHeadline();
         this.site();
