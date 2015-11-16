@@ -114,11 +114,6 @@ public class GenericGrid<T> extends CustomComponent {
             setButtonVisability();
         });
 
-        this.grid.getColumns().stream().forEach(c ->
-                //TODO Wirklicha lle hidable? Dieser button sieht schrecklich aus :O
-                        c.setHidable(true)
-        );
-
         Stream.of(fields).forEach(field ->
                         this.grid.getColumn(field).setHeaderCaption(BaseUI.getCurrentI18nResolver().resolveRelative(getType(), getEntityFieldPath(field, I18nPaths.Type.column_header)))
         );
@@ -234,6 +229,13 @@ public class GenericGrid<T> extends CustomComponent {
 
     public GenericGrid<T> setSelectionMode(Grid.SelectionMode mode){
         grid.setSelectionMode(mode);
+        return this;
+    }
+
+    public GenericGrid<T> setColumnsHidable(boolean hidable){
+        this.grid.getColumns().stream().forEach(c ->
+                c.setHidable(hidable)
+        );
         return this;
     }
 
