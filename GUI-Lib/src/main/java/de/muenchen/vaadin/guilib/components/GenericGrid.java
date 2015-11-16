@@ -3,6 +3,7 @@ package de.muenchen.vaadin.guilib.components;
 import com.vaadin.data.util.AbstractBeanContainer;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.event.SelectionEvent;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.FontAwesome;
@@ -269,6 +270,16 @@ public class GenericGrid<T> extends CustomComponent {
                 consumer.accept(((BeanItem<T>) grid.getContainerDataSource().getItem(itemClickEvent.getItemId())).getBean());
             }
         });
+        return this;
+    }
+
+    /**
+     * Add a selection Listener.
+     * @param listener the listener
+     * @return the generic grid
+     */
+    public GenericGrid<T> addSelectionListener(SelectionEvent.SelectionListener listener) {
+        grid.addSelectionListener(listener);
         return this;
     }
 
@@ -581,9 +592,5 @@ public class GenericGrid<T> extends CustomComponent {
      */
     private Navigator getNavigator() {
         return BaseUI.getCurrentNavigator();
-    }
-
-    public Grid getGrid() {
-        return grid;
     }
 }
