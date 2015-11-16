@@ -11,6 +11,7 @@ import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Responsive;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
+import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
@@ -212,10 +213,21 @@ public class MainUI extends BaseUI {
         return menu;
     }
 
+    private final String helpHtmlWrap = "<p style=\"margin: 6px; color: white\">%s</p>";
+
     private CssLayout buildHelp() {
-        this.createHelpContent();
+        help.addComponent(createTitle("Help"));
+        helpContent = new Label(String.format(helpHtmlWrap, "Not yet initialized..."), ContentMode.HTML);
+        help.setStyleName(ValoTheme.LABEL_NO_MARGIN);
+        help.addComponent(helpContent);
+        help.setWidth(220, Unit.PIXELS);
         help.setVisible(false);
+        help.addStyleName("valo-menu valo-menu-part v-csslayout-valo-menu-part");
         return help;
+    }
+
+    public void setHelpContent(String content){
+        helpContent.setValue(String.format(helpHtmlWrap, content));
     }
 
     private Component createTitle(String titleText) {
@@ -231,17 +243,6 @@ public class MainUI extends BaseUI {
         return top;
     }
 
-    private void createHelpContent() {
-        help.addComponent(createTitle("Help"));
-        helpContent = new Label("Not yet initialized...", ContentMode.HTML);
-        help.addComponent(helpContent);
-
-    }
-
-    public void setHelpContent(String content){
-        helpContent.setValue(content);
-    }
-
     private MenuBar buildMenuBar() {
         bar.addStyleName(ValoTheme.MENUBAR_BORDERLESS);
         addLanguageSelector(bar);
@@ -250,7 +251,7 @@ public class MainUI extends BaseUI {
     }
 
     private MenuBar addHelpToggle(MenuBar bar) {
-        MenuBar.MenuItem item = bar.addItem("Help", FontAwesome.PLUS, selectedItem -> toggleHelpBar());
+        bar.addItem("Help", FontAwesome.INFO, selectedItem -> toggleHelpBar());
         root.addShortcutListener(new ShortcutListener("togglehelp", ShortcutAction.KeyCode.F1, null) {
             @Override
             public void handleAction(Object sender, Object target) {

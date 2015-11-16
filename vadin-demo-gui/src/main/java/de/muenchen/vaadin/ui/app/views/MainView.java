@@ -28,8 +28,6 @@ public class MainView extends VerticalLayout implements View {
         setSpacing(true);
         setMargin(new MarginInfo(false, true, false, true));
 
-        ((MainUI) getUI()).setHelpContent("");
-
         Label pageTitle = new Label("Main View", ContentMode.HTML);
         pageTitle.addStyleName(ValoTheme.LABEL_H1);
         pageTitle.addStyleName(ValoTheme.LABEL_COLORED);
@@ -47,6 +45,7 @@ public class MainView extends VerticalLayout implements View {
 
     @Override
     public void enter(ViewChangeEvent event) {
-        //
+        MainUI ui = (MainUI) getUI();
+        ui.setHelpContent("");
     }
 }
