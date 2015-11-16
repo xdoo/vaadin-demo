@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 
 /**
  * Provides a simple Util for creating various binded Fields on properties.
- * <p/>
+ * <p>
  * This is kind of something like a {@link DefaultFieldGroupFieldFactory}.
  *
  * @author p.mueller
@@ -52,7 +52,7 @@ public class FormUtil {
     /**
      * Create a new FormUtil for the binder resolving string via i18n.
      *
-     * @param binder       The binder containing the Data the Fields are bound to.
+     * @param binder The binder containing the Data the Fields are bound to.
      */
     public FormUtil(BeanFieldGroup<?> binder) {
         this.binder = binder;
@@ -62,7 +62,7 @@ public class FormUtil {
 
     /**
      * Create a new TextField for the given property.
-     * <p/>
+     * <p>
      * It has no ID set, the individual component must take care of that.
      *
      * @param property The property to bind to of the entity.
@@ -77,7 +77,7 @@ public class FormUtil {
         tf.setInputPrompt(prompt);
         tf.setId(property + INPUT);
 
-        if(tooltip!=I18nPaths.getEntityFieldPath(property, I18nPaths.Type.tooltip))
+        if (!tooltip.equals(""))
             tf.setDescription(tooltip);
         deactivateValidation(tf);
         //tf.setId(String.format("%s_%s_FIELD", getI18nResolver().getBasePath(), property).toUpperCase());
@@ -147,7 +147,7 @@ public class FormUtil {
 
     /**
      * Create a ComboBox for the specified property. The enum is used to determine the possible values.
-     * <p/>
+     * <p>
      * It has no ID set, the individual component must take care of that.
      *
      * @param property The property of the entity.
@@ -163,8 +163,8 @@ public class FormUtil {
         cb.setNullSelectionAllowed(false);
         cb.setId(property + INPUT);
 
-        if(tooltip!=I18nPaths.getEntityFieldPath(property, I18nPaths.Type.tooltip))
-        cb.setDescription(tooltip);
+        if (!tooltip.equals(""))
+            cb.setDescription(tooltip);
 
         deactivateValidation(cb);
         return cb;
@@ -172,7 +172,7 @@ public class FormUtil {
 
     /**
      * Create a Date Field for the given property.
-     * <p/>
+     * <p>
      * It has no ID set, the individual component must take care of that.
      *
      * @param property The property of the entity to bind to.
@@ -186,8 +186,8 @@ public class FormUtil {
         deactivateValidation(df);
 
         df.setId(property + INPUT);
-        if(tooltip!=I18nPaths.getEntityFieldPath(property, I18nPaths.Type.tooltip))
-        df.setDescription(tooltip);
+        if (!tooltip.equals(""))
+            df.setDescription(tooltip);
 
         return df;
     }
@@ -195,7 +195,7 @@ public class FormUtil {
 
     /**
      * Create a CheckBox Field for the given property.
-     * <p/>
+     * <p>
      * It has no ID set, the individual component must take care of that.
      *
      * @param property The property of the entity to bind tlo.
@@ -207,17 +207,17 @@ public class FormUtil {
         CheckBox df = getBinder().buildAndBind(caption, property, CheckBox.class);
         df.setId(property + INPUT);
 
-        if(tooltip!=I18nPaths.getEntityFieldPath(property, I18nPaths.Type.tooltip)) {
+        if (!tooltip.equals(""))
             df.setDescription(tooltip);
-        }
+
         deactivateValidation(df);
         return df;
     }
 
     /**
      * Create a TokenField for the given property.
-     * <p/>
-     * <p/>
+     * <p>
+     * <p>
      * It has no ID set, the individual component must take care of that.
      *
      * @param property
@@ -232,6 +232,7 @@ public class FormUtil {
 
         TokenField tf = new TokenField(caption, lo) {
             public static final String SEPERATOR = ",";
+
             @Override
             protected void onTokenInput(Object tokenId) {
                 //Multiple Tokens separated by ',' possible
@@ -265,14 +266,15 @@ public class FormUtil {
         tf.setRememberNewTokens(false);
         tf.setId(property + INPUT);
 
-        if(tooltip!=I18nPaths.getEntityFieldPath(property, I18nPaths.Type.tooltip))
-        tf.setDescription(tooltip);
+        if (!tooltip.equals(""))
+            tf.setDescription(tooltip);
 
         deactivateValidation(tf);
         return tf;
     }
 
     private String getTooltip(String property) {
+
         return getI18nResolver().resolveRelative(entityClass, I18nPaths.getEntityFieldPath(property, I18nPaths.Type.tooltip));
     }
 
