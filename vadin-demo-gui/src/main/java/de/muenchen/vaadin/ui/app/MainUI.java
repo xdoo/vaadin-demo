@@ -3,12 +3,15 @@ package de.muenchen.vaadin.ui.app;
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
+import com.vaadin.event.ShortcutAction;
+import com.vaadin.event.ShortcutListener;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Responsive;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
+import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
@@ -64,6 +67,8 @@ public class MainUI extends BaseUI {
     protected ValoMenuLayout root = new ValoMenuLayout();
     protected ComponentContainer viewDisplay = root.getContentContainer();
     protected CssLayout menu = new CssLayout();
+    protected CssLayout help = new CssLayout();
+    private Label helpContent;
     protected CssLayout menuItemsLayout = new CssLayout();
 
     private MenuBar bar = new MenuBar();
@@ -103,6 +108,11 @@ public class MainUI extends BaseUI {
         root.setWidth("100%");
         root.addMenu(buildMenu());
         addStyleName(ValoTheme.UI_WITH_MENU);
+
+        // Configure Help-Layout
+        buildHelp();
+        root.addComponent(help);
+        root.setComponentAlignment(help, Alignment.TOP_RIGHT);
 
         // configure navigator
         VerticalLayout componentContainer = new VerticalLayout();
@@ -198,18 +208,35 @@ public class MainUI extends BaseUI {
     }
 
     private CssLayout buildMenu() {
-        this.menu.addComponent(this.createMenuTitle());
+        this.menu.addComponent(this.createTitle("Valo Theme"));
         this.menu.addComponent(this.createNavigationMenu());
         return menu;
     }
 
-    private Component createMenuTitle() {
+    private final String helpHtmlWrap = "<p style=\"margin: 6px; color: white\">%s</p>";
+
+    private CssLayout buildHelp() {
+        help.addComponent(createTitle("Help"));
+        helpContent = new Label(String.format(helpHtmlWrap, "Not yet initialized..."), ContentMode.HTML);
+        help.setStyleName(ValoTheme.LABEL_NO_MARGIN);
+        help.addComponent(helpContent);
+        help.setWidth(220, Unit.PIXELS);
+        help.setVisible(false);
+        help.addStyleName("valo-menu valo-menu-part v-csslayout-valo-menu-part");
+        return help;
+    }
+
+    public void setHelpContent(String content){
+        helpContent.setValue(String.format(helpHtmlWrap, content));
+    }
+
+    private Component createTitle(String titleText) {
         final HorizontalLayout top = new HorizontalLayout();
         top.setWidth("100%");
         top.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
         top.addStyleName("valo-menu-title");
         final Label title = new Label(
-                "<h3>Vaadin <strong>Valo Theme</strong></h3>", ContentMode.HTML);
+                "<h3>Vaadin <strong>" + titleText + "</strong></h3>", ContentMode.HTML);
         title.setSizeUndefined();
         top.addComponent(title);
         top.setExpandRatio(title, 1);
@@ -219,7 +246,23 @@ public class MainUI extends BaseUI {
     private MenuBar buildMenuBar() {
         bar.addStyleName(ValoTheme.MENUBAR_BORDERLESS);
         addLanguageSelector(bar);
+        addHelpToggle(bar);
         return bar;
+    }
+
+    private MenuBar addHelpToggle(MenuBar bar) {
+        bar.addItem("Help", FontAwesome.INFO, selectedItem -> toggleHelpBar());
+        root.addShortcutListener(new ShortcutListener("togglehelp", ShortcutAction.KeyCode.F1, null) {
+            @Override
+            public void handleAction(Object sender, Object target) {
+                toggleHelpBar();
+            }
+        });
+        return bar;
+    }
+
+    private void toggleHelpBar() {
+        help.setVisible(!help.isVisible());
     }
 
     private MenuBar addLanguageSelector(MenuBar bar) {

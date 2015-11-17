@@ -82,7 +82,6 @@ public class BuergerForm extends BaseComponent {
         final DateField geburtsdatum = formUtil.createDateField(Buerger.Field.geburtsdatum.name());
         final CheckBox alive = formUtil.createCheckBox(Buerger.Field.alive.name());
         final TokenField eigenschaften = formUtil.createTokenField(Buerger.Field.eigenschaften.name());
-
         return Arrays.asList(vorname, nachname, augenfarbe, geburtsdatum, alive, eigenschaften);
     }
 

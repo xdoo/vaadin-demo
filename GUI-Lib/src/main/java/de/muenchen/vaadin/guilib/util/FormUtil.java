@@ -3,7 +3,13 @@ package de.muenchen.vaadin.guilib.util;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.DefaultFieldGroupFieldFactory;
 import com.vaadin.data.fieldgroup.FieldGroup;
-import com.vaadin.ui.*;
+import com.vaadin.ui.AbstractField;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.CheckBox;
+import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.CssLayout;
+import com.vaadin.ui.DateField;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
@@ -14,7 +20,7 @@ import java.util.stream.Stream;
 
 /**
  * Provides a simple Util for creating various binded Fields on properties.
- * <p/>
+ * <p>
  * This is kind of something like a {@link DefaultFieldGroupFieldFactory}.
  *
  * @author p.mueller
@@ -46,7 +52,7 @@ public class FormUtil {
     /**
      * Create a new FormUtil for the binder resolving string via i18n.
      *
-     * @param binder       The binder containing the Data the Fields are bound to.
+     * @param binder The binder containing the Data the Fields are bound to.
      */
     public FormUtil(BeanFieldGroup<?> binder) {
         this.binder = binder;
@@ -56,7 +62,7 @@ public class FormUtil {
 
     /**
      * Create a new TextField for the given property.
-     * <p/>
+     * <p>
      * It has no ID set, the individual component must take care of that.
      *
      * @param property The property to bind to of the entity.
@@ -65,15 +71,19 @@ public class FormUtil {
     public TextField createTextField(String property) {
         final String caption = getCaption(property);
         final String prompt = getPrompt(property);
-
+        final String tooltip = getTooltip(property);
         TextField tf = getBinder().buildAndBind(caption, property, TextField.class);
         tf.setNullRepresentation(NULL_REPRESENTATION);
         tf.setInputPrompt(prompt);
         tf.setId(property + INPUT);
+
+        if (!tooltip.equals(""))
+            tf.setDescription(tooltip);
         deactivateValidation(tf);
         //tf.setId(String.format("%s_%s_FIELD", getI18nResolver().getBasePath(), property).toUpperCase());
         return tf;
     }
+
 
     /**
      * Resolve the Caption of a Field for the specified property.
@@ -137,7 +147,7 @@ public class FormUtil {
 
     /**
      * Create a ComboBox for the specified property. The enum is used to determine the possible values.
-     * <p/>
+     * <p>
      * It has no ID set, the individual component must take care of that.
      *
      * @param property The property of the entity.
@@ -146,38 +156,46 @@ public class FormUtil {
     public ComboBox createComboBox(String property) {
         final String caption = getCaption(property);
         final String prompt = getPrompt(property);
-
+        final String tooltip = getTooltip(property);
         ComboBox cb = getBinder().buildAndBind(caption, property, ComboBox.class);
         cb.setInputPrompt(prompt);
         cb.setTextInputAllowed(true);
         cb.setNullSelectionAllowed(false);
         cb.setId(property + INPUT);
+
+        if (!tooltip.equals(""))
+            cb.setDescription(tooltip);
+
         deactivateValidation(cb);
         return cb;
     }
 
     /**
      * Create a Date Field for the given property.
-     * <p/>
+     * <p>
      * It has no ID set, the individual component must take care of that.
      *
-     * @param property The property of the entity to bind tlo.
+     * @param property The property of the entity to bind to.
      * @return The DateField for the property.
      */
     public DateField createDateField(String property) {
         final String caption = getCaption(property);
-
+        final String tooltip = getTooltip(property);
         DateField df = getBinder().buildAndBind(caption, property, DateField.class);
 
         deactivateValidation(df);
 
         df.setId(property + INPUT);
+        if (!tooltip.equals(""))
+            df.setDescription(tooltip);
+
         return df;
     }
 
+
     /**
      * Create a CheckBox Field for the given property.
-     * <p/>
+     * <p>
      * It has no ID set, the individual component must take care of that.
      *
      * @param property The property of the entity to bind tlo.
@@ -185,17 +203,21 @@ public class FormUtil {
      */
     public CheckBox createCheckBox(String property) {
         final String caption = getCaption(property);
-
+        final String tooltip = getTooltip(property);
         CheckBox df = getBinder().buildAndBind(caption, property, CheckBox.class);
         df.setId(property + INPUT);
+
+        if (!tooltip.equals(""))
+            df.setDescription(tooltip);
+
         deactivateValidation(df);
         return df;
     }
 
     /**
      * Create a TokenField for the given property.
-     * <p/>
-     * <p/>
+     * <p>
+     * <p>
      * It has no ID set, the individual component must take care of that.
      *
      * @param property
@@ -203,13 +225,14 @@ public class FormUtil {
      */
     public TokenField createTokenField(String property) {
         final String caption = getCaption(property);
-
+        final String tooltip = getTooltip(property);
         //Group Elements of TokenField in CSS Layout
         CssLayout lo = new CssLayout();
         lo.addStyleName("v-component-group");
 
         TokenField tf = new TokenField(caption, lo) {
             public static final String SEPERATOR = ",";
+
             @Override
             protected void onTokenInput(Object tokenId) {
                 //Multiple Tokens separated by ',' possible
@@ -242,7 +265,18 @@ public class FormUtil {
 
         tf.setRememberNewTokens(false);
         tf.setId(property + INPUT);
+
+        if (!tooltip.equals(""))
+            tf.setDescription(tooltip);
+
         deactivateValidation(tf);
         return tf;
     }
+
+    private String getTooltip(String property) {
+
+        return getI18nResolver().resolveRelative(entityClass, I18nPaths.getEntityFieldPath(property, I18nPaths.Type.tooltip));
+    }
+
+
 }

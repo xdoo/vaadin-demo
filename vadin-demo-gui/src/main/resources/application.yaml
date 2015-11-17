@@ -61,6 +61,9 @@ i18n.de-DE.mainpage.title : Startseite
 i18n.de-DE.page.title : Bürgerverwaltung
 i18n.de-DE.sprache.title : Sprache
 
+i18n.de-DE.buerger.tableview.helptext : "In dieser View werden alle bürger angezeigt. <br> Zum Bearbeiten den gewünschten Bürger auswählen. <br> Anschließend erscheinen Schaltflächen Zum Bearbeiten."
+i18n.de-DE.buerger.updateview.helptext: "Die Daten des zuletzt ausgewählten Bürgers können hier bearbeitet werden."
+
 i18n.de-DE.buerger.page.title : Bürger View
 i18n.de-DE.buerger.navigation.button.label : Bürger Pflege
 i18n.de-DE.buerger.form.update.headline.label : Bürger bearbeiten
@@ -81,26 +84,31 @@ i18n.de-DE.buerger.table_buttons.column_header : Aktionen
 i18n.de-DE.buerger.vorname.label : Vorname
 i18n.de-DE.buerger.vorname.column_header : Vorname
 i18n.de-DE.buerger.vorname.input_prompt : Vorname
+i18n.de-DE.buerger.vorname.tooltip : Hier den Vornamen des Bürgers eintragen
 i18n.de-DE.buerger.nachname.label : Nachname
 i18n.de-DE.buerger.nachname.column_header : Nachname
 i18n.de-DE.buerger.nachname.input_prompt : Nachname
+i18n.de-DE.buerger.nachname.tooltip : Hier den Nachnamen des Bürgers eintragen
 i18n.de-DE.buerger.geburtsdatum.label : Geburtsdatum
 i18n.de-DE.buerger.geburtsdatum.column_header : Geburtsdatum
+i18n.de-DE.buerger.geburtsdatum.tooltip : Hier kann das Geburtsdatum eingetragen werden. Es muss in der Vergangenheit liegen
 i18n.de-DE.buerger.augenfarbe.label : Augenfarbe
 i18n.de-DE.buerger.augenfarbe.column_header : Augenfarbe
 i18n.de-DE.buerger.augenfarbe.input_prompt : Augenfarbe
+i18n.de-DE.buerger.augenfarbe.tooltip : Wählen sie hier die korrekte Augenfarbe für den Bürger aus
 i18n.de-DE.buerger.kinder.label : Kinder
 i18n.de-DE.buerger.kinder.column_header : Kinder
 i18n.de-DE.buerger.alive.label : Noch am Leben?
 i18n.de-DE.buerger.alive.column_header : Lebendig
+i18n.de-DE.buerger.alive.tooltip: 
 i18n.de-DE.buerger.eigenschaften.label : Eigenschaften dieser Person
 i18n.de-DE.buerger.eigenschaften.column_header : Eigenschaften
+i18n.de-DE.buerger.eigenschaften.tooltip : Hier können Eigenschaften des Bürgers angegeben werden
 
 i18n.de-DE.buerger.partner.label : Partner
 i18n.de-DE.buerger.partner.column_header : Partner
 i18n.de-DE.buerger.partner.column_header.icon :
 i18n.de-DE.buerger.partner.input_prompt : Partner
-
 # Aktionsmeldungen
 
 ## Success

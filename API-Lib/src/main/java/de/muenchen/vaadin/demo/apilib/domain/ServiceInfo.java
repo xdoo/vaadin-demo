@@ -1,8 +1,9 @@
 package de.muenchen.vaadin.demo.apilib.domain;
 
+import org.springframework.hateoas.Link;
+
 import java.util.HashMap;
 import java.util.Map;
-import org.springframework.hateoas.Link;
 
 /**
  *

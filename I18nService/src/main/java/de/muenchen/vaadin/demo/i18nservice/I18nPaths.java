@@ -30,7 +30,7 @@ public class I18nPaths {
      * Texttype.
      */
     public enum Type implements I18nPath {
-        label,text,title, column_header, validation, validationstring, input_prompt, confirm, cancel
+        label,text,title, column_header, validation, validationstring, input_prompt, confirm, cancel, tooltip
     }
 
     /**

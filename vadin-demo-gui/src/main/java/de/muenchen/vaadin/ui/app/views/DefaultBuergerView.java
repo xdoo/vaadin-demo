@@ -8,6 +8,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.guilib.BaseUI;
+import de.muenchen.vaadin.ui.app.MainUI;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Type;
@@ -23,15 +24,20 @@ import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getPagePath;
 public abstract class DefaultBuergerView extends VerticalLayout implements View{
 
     BuergerViewController controller;
-
+    String helpContent;
     public DefaultBuergerView(BuergerViewController controller) {
         this.controller = controller;
+        this.helpContent ="No Help menu found";
     }
-
+    public DefaultBuergerView(BuergerViewController controller, String helpContent) {
+        this.controller = controller;
+        this.helpContent = helpContent;
+    }
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
         this.configureLayout();
-
+        MainUI ui = (MainUI) getUI();
+        ui.setHelpContent(helpContent);
         // add some components
         this.addHeadline();
         this.site();
@@ -59,5 +65,4 @@ public abstract class DefaultBuergerView extends VerticalLayout implements View{
      *
      */
     protected abstract void site();
-    
 }
