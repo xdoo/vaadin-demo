@@ -197,7 +197,6 @@ public class GenericGrid<T> extends CustomComponent {
 
     private void createFilter() {
         filter.setId(String.format("%s_QUERY_FIELD", BaseUI.getCurrentI18nResolver().getBasePath(getType())));
-        filter.focus();
         filter.setWidth("100%");
     }
 
