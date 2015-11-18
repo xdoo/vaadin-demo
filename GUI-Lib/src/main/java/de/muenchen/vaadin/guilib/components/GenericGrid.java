@@ -549,6 +549,10 @@ public class GenericGrid<T> extends BaseComponent {
     }
 
 
+    public BeanItemContainer<T> getDatastore(){
+        return datastore;
+    }
+
     //--------------
     //intern Helper-Methods
     //--------------
