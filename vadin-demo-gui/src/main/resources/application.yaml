@@ -46,6 +46,19 @@ logging.level.com.netflix.discovery : 'OFF'
 # I18N #
 #=======================================#
 
+i18n.de-DE.issue.create : Issue erstellen
+i18n.de-DE.issue.window.title : Issue erstellen
+i18n.de-DE.issue.button.create : Erstellen
+i18n.de-DE.issue.title.label : Titel
+i18n.de-DE.issue.content.label : Inhalt
+i18n.de-DE.issue.content.text : "Erstellt im GAIA-Präsentationsmodus\nIn View: "
+
+i18n.de-DE.issue.notification.success.create.label : Issue erstellt
+i18n.de-DE.issue.notification.success.create.text : Das Issue wurde erfolgreich gespeichert.
+
+i18n.de-DE.issue.notification.error.create.label : Fehler
+i18n.de-DE.issue.notification.error.create.text : Das Issue konnte nicht gespeichert werden.
+
 # Icons (no localization)
 buerger.geburtsdatum.column_header.icon :
 buerger.nachname.column_header.icon :

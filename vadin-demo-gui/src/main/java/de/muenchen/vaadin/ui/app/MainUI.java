@@ -11,19 +11,10 @@ import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Responsive;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
-import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.ComponentContainer;
-import com.vaadin.ui.CssLayout;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.MenuBar;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.EventBus;
 import de.muenchen.eventbus.selector.Key;
@@ -35,6 +26,7 @@ import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.ValoMenuLayout;
 import de.muenchen.vaadin.guilib.components.ConfirmationWindow;
+import de.muenchen.presentationlib.gui.IssueWindow;
 import de.muenchen.vaadin.ui.app.views.BuergerTableView;
 import de.muenchen.vaadin.ui.app.views.LoginView;
 import de.muenchen.vaadin.ui.app.views.MainView;
@@ -247,6 +239,7 @@ public class MainUI extends BaseUI {
         bar.addStyleName(ValoTheme.MENUBAR_BORDERLESS);
         addLanguageSelector(bar);
         addHelpToggle(bar);
+        addIssueCreator(bar);
         return bar;
     }
 
@@ -282,6 +275,19 @@ public class MainUI extends BaseUI {
 
         i18n.getSupportedLocales().stream().forEach(locale -> language.addItem(locale.getDisplayLanguage(), null, languageSelection));
         return bar;
+    }
+
+    private MenuBar addIssueCreator(MenuBar bar) {
+        bar.addItem("Issue erstellen", FontAwesome.EXCLAMATION_CIRCLE, selectedItem -> showIssueWindow());
+        return bar;
+    }
+
+    private void showIssueWindow(){
+        String issueFor = getNavigator().getState();
+        Window issueWindow = new IssueWindow(issueFor);
+        getUI().addWindow(issueWindow);
+        issueWindow.center();
+        issueWindow.focus();
     }
 
     private Component createSettings() {

@@ -22,6 +22,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
+import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -32,7 +33,7 @@ import org.springframework.web.filter.HiddenHttpMethodFilter;
 @SpringBootApplication
 @EnableEurekaClient
 @Configuration
-@ComponentScan
+@ComponentScan(basePackages = {"de.muenchen.vaadin", "de.muenchen.presentationlib"})
 //Exclude SecAutoConfig because OAuth needs to be manually configured
 @EnableAutoConfiguration(exclude = {
         org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration.class})

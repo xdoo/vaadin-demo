@@ -1,0 +1,69 @@
+package de.muenchen.presentationlib.gui;
+
+import com.vaadin.data.Validator;
+import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.TextArea;
+import com.vaadin.ui.TextField;
+import de.muenchen.presentationlib.api.Issue;
+import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
+import de.muenchen.vaadin.guilib.BaseUI;
+import de.muenchen.vaadin.guilib.components.BaseComponent;
+
+/**
+ * Created by maximilian.zollbrecht on 18.11.15.
+ */
+public class IssueForm extends BaseComponent {
+
+        /**
+         * The FormLayout that contains all the form fields.
+         */
+        private final FormLayout formLayout;
+
+        private final TextField title;
+        private final TextArea content;
+
+        /**
+         * Create a new IssueForm;
+         * <p/>
+         * This Form is only the plain fields for input, and has no additional components or buttons.
+         */
+        public IssueForm() {
+            I18nResolver resolver = BaseUI.getCurrentI18nResolver();
+            title = new TextField(resolver.resolve("issue.title.label"));
+            content = new TextArea(resolver.resolve("issue.content.label"));
+
+            content.setWidth(450, Unit.PIXELS);
+
+            formLayout = new FormLayout(title, content);
+
+            setCompositionRoot(formLayout);
+        }
+
+        /**
+         * Get the Issue object of this form.
+         *
+         * @return The Issue.
+         */
+        public Issue getIssue() throws Validator.InvalidValueException {
+            return new Issue();
+        }
+
+        /**
+         * Set the Issue of this Form.
+         *
+         * @param issue The new Issue.
+         */
+        public void setIssue(Issue issue) {
+            title.setValue(issue.getTitle());
+            content.setValue(issue.getContent());
+        }
+
+        /**
+         * Get the layout of this form, containing all the Fields.
+         *
+         * @return The base Layout.
+         */
+        public FormLayout getFormLayout() {
+            return formLayout;
+        }
+}
