@@ -5,22 +5,19 @@ import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.SelectionEvent;
 import com.vaadin.event.ShortcutAction;
-import com.vaadin.navigator.Navigator;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
-import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.eventbus.EventBus;
 import de.muenchen.eventbus.selector.entity.RequestEntityKey;
 import de.muenchen.eventbus.selector.entity.RequestEvent;
+import de.muenchen.eventbus.selector.entity.ResponseEntityKey;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
-import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.components.actions.EntityActions;
@@ -28,6 +25,7 @@ import de.muenchen.vaadin.guilib.components.actions.EntityListActions;
 import de.muenchen.vaadin.guilib.components.actions.EntitySingleActions;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
+import de.muenchen.vaadin.guilib.util.Datastore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,7 +44,7 @@ import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getEntityFieldPath;
  * @param <T> the entity
  */
 @SuppressWarnings("unchecked")
-public class GenericGrid<T> extends CustomComponent {
+public class GenericGrid<T> extends BaseComponent {
     /**
      * The constant LOG.
      */
@@ -73,15 +71,40 @@ public class GenericGrid<T> extends CustomComponent {
     private final List<Component> customMultiSelectComponents = new ArrayList<>();
     private final List<Component> customComponents = new ArrayList<>();
 
+    private BeanItemContainer<T> datastore;
+    private Class<T> entityClass;
+
     /**
      * Constructor of Grid with default configuration (no Buttons just grid).
      *
-     * @param dataStore  Datastore of this grid
-     * @param fields     Fields to show.
+     * @param entityClass Class of entity
+     * @param fields    Fields to show.
+     */
+    public GenericGrid(Class<T> entityClass, String[] fields){
+        this.entityClass = entityClass;
+
+        getEventBus().on(new ResponseEntityKey(entityClass).toSelector(), this::datastoreEventhandler);
+
+        init(fields);
+    }
+
+    /**
+     * Constructor of Grid with default configuration (no Buttons just grid).
+     *
+     * @param dataStore Datastore of this grid
+     * @param fields    Fields to show.
      */
     public GenericGrid(BeanItemContainer<T> dataStore, String[] fields) {
-        grid.setContainerDataSource(dataStore);
 
+        this.entityClass = ((AbstractBeanContainer) dataStore).getBeanType();
+
+        setDatastore(dataStore);
+
+        init(fields);
+
+    }
+
+    private void init(String[] fields){
         //----------- Grid Configuration
         grid.setColumns(fields);
         grid.setSizeFull();
@@ -104,18 +127,8 @@ public class GenericGrid<T> extends CustomComponent {
             }
         });
 
-        // HACK:
-        // Change Buttonvisibility and RowSelection if
-        // datastore is changed elsewhere
-        dataStore.addItemSetChangeListener(event -> {
-            grid.getSelectedRows().stream()
-                    .filter(itemID -> !event.getContainer().containsId(itemID))
-                    .forEach(grid::deselect);
-            setButtonVisability();
-        });
-
         Stream.of(fields).forEach(field ->
-                        this.grid.getColumn(field).setHeaderCaption(BaseUI.getCurrentI18nResolver().resolveRelative(getType(), getEntityFieldPath(field, I18nPaths.Type.column_header)))
+                this.grid.getColumn(field).setHeaderCaption(BaseUI.getCurrentI18nResolver().resolveRelative(getType(), getEntityFieldPath(field, I18nPaths.Type.column_header)))
         );
         //---------------
 
@@ -134,7 +147,6 @@ public class GenericGrid<T> extends CustomComponent {
 
         //Request Data for this Grid
         getEventBus().notify(new RequestEntityKey(RequestEvent.READ_LIST, getType()));
-
     }
 
     //-------------------------
@@ -571,27 +583,29 @@ public class GenericGrid<T> extends CustomComponent {
     }
 
     private Class<?> getType() {
-        return ((AbstractBeanContainer) grid.getContainerDataSource()).getBeanType();
+        return entityClass;
     }
 
-    private I18nResolver getResolver(){
-        return BaseUI.getCurrentI18nResolver();
+    private void setDatastore(BeanItemContainer<T> dataStore) {
+        this.datastore = dataStore;
+        grid.setContainerDataSource(dataStore);
+
+        // HACK:
+        // Change Buttonvisibility and RowSelection if
+        // datastore is changed elsewhere
+        dataStore.addItemSetChangeListener(event -> {
+            grid.getSelectedRows().stream()
+                    .filter(itemID -> !event.getContainer().containsId(itemID))
+                    .forEach(grid::deselect);
+            setButtonVisability();
+        });
     }
 
-    /**
-     * TODO REMOVE
-     *
-     * @return
-     */
-    private EventBus getEventBus() {
-        return BaseUI.getCurrentEventBus();
+    private void datastoreEventhandler(reactor.bus.Event<?> event) {
+        if(datastore == null){
+            Datastore container = (Datastore) event.getData();
+            setDatastore(container.getEntityContainer());
+        }
     }
 
-    /**
-     * TODO REMOVE
-     * @return
-     */
-    private Navigator getNavigator() {
-        return BaseUI.getCurrentNavigator();
-    }
 }
