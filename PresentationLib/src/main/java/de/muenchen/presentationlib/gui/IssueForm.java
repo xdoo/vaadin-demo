@@ -30,7 +30,7 @@ public class IssueForm extends BaseComponent {
         public IssueForm() {
             I18nResolver resolver = BaseUI.getCurrentI18nResolver();
             title = new TextField(resolver.resolve("issue.title.label"));
-            content = new TextArea(resolver.resolve("issue.content.label"));
+            content = new TextArea(resolver.resolve("issue.body.label"));
 
             content.setWidth(450, Unit.PIXELS);
 
@@ -45,7 +45,7 @@ public class IssueForm extends BaseComponent {
          * @return The Issue.
          */
         public Issue getIssue() throws Validator.InvalidValueException {
-            return new Issue();
+            return new Issue(title.getValue(), content.getValue());
         }
 
         /**
@@ -55,7 +55,7 @@ public class IssueForm extends BaseComponent {
          */
         public void setIssue(Issue issue) {
             title.setValue(issue.getTitle());
-            content.setValue(issue.getContent());
+            content.setValue(issue.getBody());
         }
 
         /**

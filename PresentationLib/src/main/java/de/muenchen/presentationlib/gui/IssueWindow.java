@@ -3,6 +3,7 @@ package de.muenchen.presentationlib.gui;
 import com.vaadin.server.Page;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import de.muenchen.presentationlib.api.RepositoryAccess;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.components.GenericErrorNotification;
@@ -18,33 +19,54 @@ public class IssueWindow extends Window {
 
     private final Logger LOG = LoggerFactory.getLogger(IssueWindow.class);
 
-    private IssueService service = new IssueServiceImpl();
+    private static IssueService service;
+    private static RepositoryAccess access;
 
     private final I18nResolver resolver;
 
+    private final RepositoryAccessForm accessForm = new RepositoryAccessForm();
+    private final Button repoAccSaveButton;
     private final IssueForm form = new IssueForm();
     private final Button createButton;
 
     public IssueWindow(String issueFor){
         this.resolver = BaseUI.getCurrentI18nResolver();
 
-        form.setIssue(new Issue(issueFor, resolver.resolve("issue.content.text")+issueFor+"\n"));
         createButton = new Button(resolver.resolve("issue.button.create"), event -> {
             try {
                 Issue issue = form.getIssue();
                 service.createIssue(issue);
-                LOG.info("created issue:"+issue.getTitle());
+                LOG.info("created issue: "+issue.getTitle());
                 showSuccessNotification();
                 this.close();
             } catch (Exception e){
                 LOG.error("error while creating issue: "+e.getClass()+" "+e.getMessage());
                 showErrorNotification();
             }
-
         });
         createButton.setStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
 
-        FormLayout layout = new FormLayout(form, createButton);
+        FormLayout issueLayout = new FormLayout(form, createButton);
+        issueLayout.setVisible(false);
+
+        repoAccSaveButton = new Button(resolver.resolve("repositoryaccess.button.create"), event -> {
+            if(accessForm.isVisible()){
+                service = new GitIssueService(accessForm.getRepositoryAccess());
+                access = accessForm.getRepositoryAccess();
+                issueLayout.setVisible(true);
+                accessForm.setVisible(false);
+            } else {
+                issueLayout.setVisible(false);
+                accessForm.setVisible(true);
+            }
+        });
+        repoAccSaveButton.setStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
+
+        form.setIssue(new Issue(issueFor, resolver.resolve("issue.body.text") + issueFor + "\n"));
+        if(access!=null)
+            accessForm.setRepositoryAccess(access);
+
+        FormLayout layout = new FormLayout(accessForm, repoAccSaveButton, issueLayout);
         layout.setMargin(true);
         this.setContent(layout);
         this.setCaption(resolver.resolve("issue.window.title"));
@@ -66,7 +88,5 @@ public class IssueWindow extends Window {
                 resolver.resolve("issue.notification.error.create.text"));
         error.show(Page.getCurrent());
     }
-
-
 
 }

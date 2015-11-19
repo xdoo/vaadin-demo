@@ -18,6 +18,9 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.EventBus;
 import de.muenchen.eventbus.selector.Key;
+import de.muenchen.presentationlib.api.RepositoryAccess;
+import de.muenchen.presentationlib.gui.GitIssueService;
+import de.muenchen.presentationlib.gui.RepositoryAccessForm;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.apilib.services.SecurityService;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolverImpl;
@@ -60,6 +63,7 @@ public class MainUI extends BaseUI {
     protected ComponentContainer viewDisplay = root.getContentContainer();
     protected CssLayout menu = new CssLayout();
     protected CssLayout help = new CssLayout();
+    protected RepositoryAccess repositoryAccess;
     private Label helpContent;
     protected CssLayout menuItemsLayout = new CssLayout();
 
@@ -278,7 +282,9 @@ public class MainUI extends BaseUI {
     }
 
     private MenuBar addIssueCreator(MenuBar bar) {
-        bar.addItem("Issue erstellen", FontAwesome.EXCLAMATION_CIRCLE, selectedItem -> showIssueWindow());
+        bar.addItem(getCurrentI18nResolver().resolve("issue.title"), FontAwesome.EXCLAMATION_CIRCLE, selectedItem -> {
+            showIssueWindow();
+        });
         return bar;
     }
 

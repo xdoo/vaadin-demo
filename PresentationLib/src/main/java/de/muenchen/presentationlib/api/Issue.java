@@ -5,14 +5,14 @@ package de.muenchen.presentationlib.api;
  */
 public class Issue {
     private String title = "";
-    private String content = "";
+    private String body = "";
 
     public Issue() {
     }
 
     public Issue(String title, String content) {
         this.title = title;
-        this.content = content;
+        this.body = content;
     }
 
     public String getTitle() {
@@ -23,11 +23,11 @@ public class Issue {
         this.title = title;
     }
 
-    public String getContent() {
-        return content;
+    public String getBody() {
+        return body;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setBody(String body) {
+        this.body = body;
     }
 }
