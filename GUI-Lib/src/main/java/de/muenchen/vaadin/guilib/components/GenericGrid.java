@@ -71,7 +71,6 @@ public class GenericGrid<T> extends BaseComponent {
     private final List<Component> customMultiSelectComponents = new ArrayList<>();
     private final List<Component> customComponents = new ArrayList<>();
 
-    private BeanItemContainer<T> datastore;
     private Class<T> entityClass;
 
     /**
@@ -83,7 +82,9 @@ public class GenericGrid<T> extends BaseComponent {
     public GenericGrid(Class<T> entityClass, String[] fields){
         this.entityClass = entityClass;
 
-        getEventBus().on(new ResponseEntityKey(entityClass).toSelector(), this::datastoreEventhandler);
+        getEventBus()
+                .on(new ResponseEntityKey(entityClass).toSelector(), this::datastoreEventhandler)
+                .cancelAfterUse();
 
         init(fields);
     }
@@ -548,11 +549,6 @@ public class GenericGrid<T> extends BaseComponent {
                 .findFirst().get();
     }
 
-
-    public BeanItemContainer<T> getDatastore(){
-        return datastore;
-    }
-
     //--------------
     //intern Helper-Methods
     //--------------
@@ -591,7 +587,7 @@ public class GenericGrid<T> extends BaseComponent {
     }
 
     private void setDatastore(BeanItemContainer<T> dataStore) {
-        this.datastore = dataStore;
+
         grid.setContainerDataSource(dataStore);
 
         // HACK:
@@ -606,10 +602,10 @@ public class GenericGrid<T> extends BaseComponent {
     }
 
     private void datastoreEventhandler(reactor.bus.Event<?> event) {
-        if(datastore == null){
-            Datastore container = (Datastore) event.getData();
-            setDatastore(container.getEntityContainer());
-        }
+
+       Datastore container = (Datastore) event.getData();
+       setDatastore(container.getEntityContainer());
+
     }
 
 }
