@@ -19,7 +19,7 @@ public class BuergerGrid extends GenericGrid {
 
     public BuergerGrid(final BuergerViewController controller) {
 
-        super(controller.getModel().getBuergers(),
+        super(Buerger.class,
                 Buerger.Field.getProperties());
 
         this

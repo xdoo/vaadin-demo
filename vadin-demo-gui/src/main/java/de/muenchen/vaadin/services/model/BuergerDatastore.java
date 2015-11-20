@@ -2,6 +2,7 @@ package de.muenchen.vaadin.services.model;
 
 import com.vaadin.data.util.BeanItemContainer;
 import de.muenchen.vaadin.demo.api.local.Buerger;
+import de.muenchen.vaadin.guilib.util.Datastore;
 
 import java.util.Optional;
 
@@ -12,7 +13,7 @@ import java.util.Optional;
 /**
  * Provides a simple Model for the Buerger in the GUI.
  */
-public class BuergerDatastore {
+public class BuergerDatastore implements Datastore<Buerger> {
 
     /** A List of all the Buerger, possible reduced by the query. */
     private final BeanItemContainer<Buerger> buergers = new BeanItemContainer<>(Buerger.class);
@@ -26,6 +27,11 @@ public class BuergerDatastore {
 
     /** The query to filter the buerger. */
     private Optional<String> query = Optional.empty();
+
+    @Override
+    public BeanItemContainer<Buerger> getEntityContainer() {
+        return getBuergers();
+    }
 
     public Optional<Buerger> getSelectedBuerger() {
         return selectedBuerger;
