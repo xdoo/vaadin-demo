@@ -1,5 +1,20 @@
 package de.muenchen.vaadin.guilib.components;
 
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getEntityFieldPath;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.vaadin.data.Container.Filter;
+import com.vaadin.data.Item;
 import com.vaadin.data.util.AbstractBeanContainer;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
@@ -26,17 +41,6 @@ import de.muenchen.vaadin.guilib.components.actions.EntitySingleActions;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
 import de.muenchen.vaadin.guilib.util.Datastore;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getEntityFieldPath;
 
 /**
  * Created by rene.zarwel on 07.10.15.
@@ -198,13 +202,21 @@ public class GenericGrid<T> extends BaseComponent {
     }
 
 
-    private void createSearch() {
+    private void createSearch(boolean nonRelation) {
         search = new Button(FontAwesome.SEARCH);
         search.setStyleName(ValoTheme.BUTTON_ICON_ONLY);
         search.setClickShortcut(ShortcutAction.KeyCode.ENTER);
 
-        search.addClickListener(getEntityAction()::readList);
+        if(nonRelation)
+        	search.addClickListener(getEntityAction()::readList);
+        else{
+        	search.addClickListener(clickEvent -> relationFilter(filter.getValue()));
+        	filter.addTextChangeListener(changeEvent -> {
+        		final String query = changeEvent.getText();
+        		relationFilter(query);
+        	});
 
+        }
         search.setId(String.format("%s_SEARCH_BUTTON", BaseUI.getCurrentI18nResolver().getBasePath(getType())));
     }
 
@@ -213,12 +225,34 @@ public class GenericGrid<T> extends BaseComponent {
         filter.setWidth("100%");
     }
 
+    private void relationFilter(String query){
+    	((BeanItemContainer<?>)grid.getContainerDataSource()).removeAllContainerFilters();
+		((BeanItemContainer<?>)grid.getContainerDataSource()).addContainerFilter(new Filter(){
+			@Override
+			public boolean passesFilter(Object itemId, Item item) throws UnsupportedOperationException {
+				boolean result = true;
+				if(query==null||query.equals(" "))
+					return true;
+				List<String> queryStrings = Arrays.asList(query.split(" "));
+					for(String next : queryStrings){
+						result &= item.toString().contains(next);
+					}
+				return result;
+			}
+			@Override
+			public boolean appliesToProperty(Object propertyId) {
+				return true;
+			}
+    	});
+    }
+
     private void createReset() {
         reset = new Button(FontAwesome.TIMES);
         reset.setStyleName(ValoTheme.BUTTON_ICON_ONLY);
         reset.setClickShortcut(ShortcutAction.KeyCode.ESCAPE);
         reset.addClickListener(e -> {
             filter.setValue("");
+    		((BeanItemContainer<?>)grid.getContainerDataSource()).removeAllContainerFilters();
             getEntityAction().readList(e);
         });
         reset.setId(String.format("%s_RESET_BUTTON", BaseUI.getCurrentI18nResolver().getBasePath(getType())));
@@ -297,12 +331,16 @@ public class GenericGrid<T> extends BaseComponent {
         return this;
     }
 
+    public GenericGrid<T> activateSearch(){
+    	return activateSearch(true);
+    }
+
     /**
      * Activate search on generic grid.
      *
      * @return the generic grid
      */
-    public GenericGrid<T> activateSearch() {
+    public GenericGrid<T> activateSearch(boolean nonRelation) {
 
         if (!searchLayout.isPresent()) {
             //Configure layout
@@ -310,7 +348,7 @@ public class GenericGrid<T> extends BaseComponent {
             cssLayout.addStyleName("v-component-group");
             cssLayout.setSizeFull();
             //Set Components
-            createSearch();
+            createSearch(nonRelation);
             createFilter();
             createReset();
             cssLayout.addComponents(filter, search, reset);

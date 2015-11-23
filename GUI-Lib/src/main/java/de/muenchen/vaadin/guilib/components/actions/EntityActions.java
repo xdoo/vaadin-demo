@@ -36,7 +36,7 @@ public class EntityActions {
     }
 
     /**
-     * Read the whole list of buergers.
+     * Read the whole list of the Current Entity Class.
      * @param clickEvent can be null
      */
     public void readList(Button.ClickEvent clickEvent) {
