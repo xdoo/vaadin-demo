@@ -23,7 +23,7 @@ import java.util.Set;
 @Table(name = "_USERS")
 public class User extends BaseEntity implements Serializable {
 
-    @Column(name = "USER_USERNAME", nullable = false)
+    @Column(name = "USER_USERNAME", nullable = false, updatable = false)
     private String username;
 
     @JsonIgnore
