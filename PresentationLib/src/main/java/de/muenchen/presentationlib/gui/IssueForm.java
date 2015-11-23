@@ -4,7 +4,7 @@ import com.vaadin.data.Validator;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
-import de.muenchen.presentationlib.api.Issue;
+import de.muenchen.presentationlib.api.GaiaIssue;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.components.BaseComponent;
@@ -44,8 +44,8 @@ public class IssueForm extends BaseComponent {
          *
          * @return The Issue.
          */
-        public Issue getIssue() throws Validator.InvalidValueException {
-            return new Issue(title.getValue(), content.getValue());
+        public GaiaIssue getIssue() throws Validator.InvalidValueException {
+            return new GaiaIssue(title.getValue(), content.getValue());
         }
 
         /**
@@ -53,7 +53,7 @@ public class IssueForm extends BaseComponent {
          *
          * @param issue The new Issue.
          */
-        public void setIssue(Issue issue) {
+        public void setIssue(GaiaIssue issue) {
             title.setValue(issue.getTitle());
             content.setValue(issue.getBody());
         }

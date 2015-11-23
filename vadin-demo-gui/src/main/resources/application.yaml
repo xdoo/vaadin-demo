@@ -16,7 +16,7 @@ service.principal.url: ${service.url}principal
 server.port: 8081
 
 # Security
-security.oauth2.client.id : acme
+security.oauth2.client.id: acme
 
 #i18n
 spring.messages.basename: messages
@@ -59,12 +59,12 @@ i18n.de-DE.issue.notification.success.create.text : Das Issue wurde erfolgreich 
 i18n.de-DE.issue.notification.error.create.label : Fehler
 i18n.de-DE.issue.notification.error.create.text : Das Issue konnte nicht gespeichert werden.
 
-i18n.de-DE.repositoryaccess.repourl.label : RepoUrl
-i18n.de-DE.repositoryaccess.username.label : Name
-i18n.de-DE.repositoryaccess.password.label : Passwort
-i18n.de-DE.repositoryaccess.button.create : Repo ändern
+i18n.de-DE.gaiaaccess.repourl.label : RepoUrl
+i18n.de-DE.gaiaaccess.username.label : Name
+i18n.de-DE.gaiaaccess.password.label : Passwort
+i18n.de-DE.gaiaaccess.button.create : Gaia Anmeldung ändern
 i18n.de-DE.issue.title : Issue
-i18n.de-DE.issue.repositoryaccess.title : Repo ändern
+i18n.de-DE.issue.gaiaaccess.title : Gaia Anmeldung
 
 # Icons (no localization)
 buerger.geburtsdatum.column_header.icon :

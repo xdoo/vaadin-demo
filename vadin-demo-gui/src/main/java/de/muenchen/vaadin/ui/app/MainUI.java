@@ -18,9 +18,8 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.EventBus;
 import de.muenchen.eventbus.selector.Key;
-import de.muenchen.presentationlib.api.RepositoryAccess;
-import de.muenchen.presentationlib.gui.GitIssueService;
-import de.muenchen.presentationlib.gui.RepositoryAccessForm;
+import de.muenchen.presentationlib.api.GaiaAccess;
+import de.muenchen.presentationlib.gui.IssueService;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.apilib.services.SecurityService;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolverImpl;
@@ -63,7 +62,7 @@ public class MainUI extends BaseUI {
     protected ComponentContainer viewDisplay = root.getContentContainer();
     protected CssLayout menu = new CssLayout();
     protected CssLayout help = new CssLayout();
-    protected RepositoryAccess repositoryAccess;
+    protected IssueWindow issueWindow;
     private Label helpContent;
     protected CssLayout menuItemsLayout = new CssLayout();
 
@@ -71,12 +70,13 @@ public class MainUI extends BaseUI {
     private MenuBar.MenuItem language;
 
     @Autowired
-    public MainUI(EventBus eventBus, I18nResolverImpl i18nResolver, SpringViewProvider ViewProvider, SecurityService security, MessageService i18n) {
+    public MainUI(EventBus eventBus, I18nResolverImpl i18nResolver, SpringViewProvider ViewProvider, SecurityService security, MessageService i18n, IssueWindow issueWindow) {
         super(eventBus, i18nResolver);
         LOG.info("starting UI");
         this.viewProvider = ViewProvider;
         this.security = security;
         this.i18n = i18n;
+        this.issueWindow = issueWindow;
     }
 
     @Override
@@ -290,7 +290,7 @@ public class MainUI extends BaseUI {
 
     private void showIssueWindow(){
         String issueFor = getNavigator().getState();
-        Window issueWindow = new IssueWindow(issueFor);
+        issueWindow.setIssue(issueFor);
         getUI().addWindow(issueWindow);
         issueWindow.center();
         issueWindow.focus();

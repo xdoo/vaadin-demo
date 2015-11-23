@@ -1,46 +1,55 @@
 package de.muenchen.presentationlib.gui;
 
 import com.vaadin.server.Page;
+import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.presentationlib.api.RepositoryAccess;
+import de.muenchen.presentationlib.api.GaiaAccess;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.components.GenericErrorNotification;
 import de.muenchen.vaadin.guilib.components.GenericSuccessNotification;
-import de.muenchen.presentationlib.api.Issue;
+import de.muenchen.presentationlib.api.GaiaIssue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
 /**
  * Created by maximilian.zollbrecht on 18.11.15.
  */
+@SpringComponent
+@UIScope
 public class IssueWindow extends Window {
 
     private final Logger LOG = LoggerFactory.getLogger(IssueWindow.class);
 
+    @Autowired
     private static IssueService service;
-    private static RepositoryAccess access;
+
+    private static GaiaAccess access;
 
     private final I18nResolver resolver;
 
-    private final RepositoryAccessForm accessForm = new RepositoryAccessForm();
+    private final GaiaAccessForm accessForm = new GaiaAccessForm();
     private final Button repoAccSaveButton;
     private final IssueForm form = new IssueForm();
     private final Button createButton;
 
-    public IssueWindow(String issueFor){
+    public IssueWindow(){
         this.resolver = BaseUI.getCurrentI18nResolver();
 
         createButton = new Button(resolver.resolve("issue.button.create"), event -> {
             try {
-                Issue issue = form.getIssue();
+                GaiaIssue issue = form.getIssue();
                 service.createIssue(issue);
                 LOG.info("created issue: "+issue.getTitle());
                 showSuccessNotification();
                 this.close();
             } catch (Exception e){
-                LOG.error("error while creating issue: "+e.getClass()+" "+e.getMessage());
+                LOG.error("error while creating issue: " + e.getClass() + " " + e.getMessage());
+                //throw new RuntimeException(e);
                 showErrorNotification();
             }
         });
@@ -49,9 +58,9 @@ public class IssueWindow extends Window {
         FormLayout issueLayout = new FormLayout(form, createButton);
         issueLayout.setVisible(false);
 
-        repoAccSaveButton = new Button(resolver.resolve("repositoryaccess.button.create"), event -> {
+        repoAccSaveButton = new Button(resolver.resolve("gaiaaccess.button.create"), event -> {
             if(accessForm.isVisible()){
-                service = new GitIssueService(accessForm.getRepositoryAccess());
+                service.login(access.getUsername(), access.getPassword());
                 access = accessForm.getRepositoryAccess();
                 issueLayout.setVisible(true);
                 accessForm.setVisible(false);
@@ -62,9 +71,13 @@ public class IssueWindow extends Window {
         });
         repoAccSaveButton.setStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
 
-        form.setIssue(new Issue(issueFor, resolver.resolve("issue.body.text") + issueFor + "\n"));
-        if(access!=null)
+        if(access!=null) {
             accessForm.setRepositoryAccess(access);
+
+            service.login(access.getUsername(), access.getPassword());
+            issueLayout.setVisible(true);
+            accessForm.setVisible(false);
+        }
 
         FormLayout layout = new FormLayout(accessForm, repoAccSaveButton, issueLayout);
         layout.setMargin(true);
@@ -73,6 +86,10 @@ public class IssueWindow extends Window {
         this.setClosable(true);
         this.setResizable(false);
         this.setModal(true);
+    }
+
+    public void setIssue(String forComponent){
+        this.form.setIssue(new GaiaIssue(forComponent, resolver.resolve("issue.body.text") + forComponent + "\n"));
     }
 
     private void showSuccessNotification() {
