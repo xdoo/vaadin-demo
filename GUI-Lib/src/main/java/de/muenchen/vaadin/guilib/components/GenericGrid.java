@@ -1,23 +1,12 @@
 package de.muenchen.vaadin.guilib.components;
 
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getEntityFieldPath;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.vaadin.data.Container.Filter;
 import com.vaadin.data.Item;
 import com.vaadin.data.util.AbstractBeanContainer;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.data.util.GeneratedPropertyContainer;
+import com.vaadin.data.util.PropertyValueGenerator;
 import com.vaadin.event.SelectionEvent;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.FontAwesome;
@@ -41,6 +30,18 @@ import de.muenchen.vaadin.guilib.components.actions.EntitySingleActions;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
 import de.muenchen.vaadin.guilib.util.Datastore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getEntityFieldPath;
 
 /**
  * Created by rene.zarwel on 07.10.15.
@@ -111,7 +112,7 @@ public class GenericGrid<T> extends BaseComponent {
 
     private void init(String[] fields){
         //----------- Grid Configuration
-        grid.setColumns(fields);
+        //grid.setColumns(fields);
         grid.setSizeFull();
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
         grid.addSelectionListener(selectionEvent -> setButtonVisability());
@@ -559,6 +560,24 @@ public class GenericGrid<T> extends BaseComponent {
         return this;
     }
 
+    public GenericGrid<T> addGeneratedColumn(){
+
+        GeneratedPropertyContainer container = (GeneratedPropertyContainer) grid.getContainerDataSource();
+        container.addGeneratedProperty("Test", new PropertyValueGenerator<String>() {
+            @Override
+            public String getValue(Item item, Object itemId, Object propertyId) {
+                return item.toString() + "///// " + itemId.toString() + " //// " + propertyId.toString();
+            }
+
+            @Override
+            public Class<String> getType() {
+                return String.class;
+            }
+        });
+
+        return this;
+    }
+
     //--------------
     // Getter / Setter
     //--------------
@@ -626,7 +645,20 @@ public class GenericGrid<T> extends BaseComponent {
 
     private void setDatastore(BeanItemContainer<T> dataStore) {
 
-        grid.setContainerDataSource(dataStore);
+        GeneratedPropertyContainer container = new GeneratedPropertyContainer(dataStore);
+
+
+        //Removes Entity specific content if present
+        if (dataStore.getContainerPropertyIds().contains("id")){
+            container.removeContainerProperty("id");
+        }
+        if (dataStore.getContainerPropertyIds().contains("links")){
+            container.removeContainerProperty("links");
+        }
+
+        grid.setContainerDataSource(container);
+
+        addGeneratedColumn();
 
         // HACK:
         // Change Buttonvisibility and RowSelection if
