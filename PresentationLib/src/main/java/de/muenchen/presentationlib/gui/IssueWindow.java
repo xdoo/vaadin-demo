@@ -23,9 +23,8 @@ public class IssueWindow extends Window {
 
     private final Logger LOG = LoggerFactory.getLogger(IssueWindow.class);
 
-    @Autowired(required = true)
-    @Qualifier("GAIAIssueService")
-    private static IssueService service;
+    @Autowired
+    private IssueService service;
 
     private static GaiaAccess access;
 
@@ -45,8 +44,7 @@ public class IssueWindow extends Window {
                 showSuccessNotification();
                 this.close();
             } catch (Exception e){
-                LOG.error("error while creating issue: " + e.getClass() + " " + e.getMessage());
-                //throw new RuntimeException(e);
+                LOG.error("error while creating issue: " + e.getMessage());
                 showErrorNotification();
             }
         });
@@ -57,8 +55,8 @@ public class IssueWindow extends Window {
 
         repoAccSaveButton = new Button("GAIA-Login", event -> {
             if(accessForm.isVisible()){
-                service.login(access.getUsername(), access.getPassword());
                 access = accessForm.getRepositoryAccess();
+                service.login(access.getUsername(), access.getPassword());
                 issueLayout.setVisible(true);
                 accessForm.setVisible(false);
             } else {

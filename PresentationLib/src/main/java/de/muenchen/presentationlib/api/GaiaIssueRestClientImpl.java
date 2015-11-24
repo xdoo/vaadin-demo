@@ -18,6 +18,7 @@ public class GaiaIssueRestClientImpl implements GaiaIssueRestClient {
         if (template == null) throw new NullPointerException("RestTemplate must not be null!");
         if (baseUri == null) throw new NullPointerException("BaseUri must not be null!");
         this.template = template;
+        this.baseUri = baseUri;
     }
 
     @Override
