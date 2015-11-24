@@ -62,7 +62,10 @@ public class MainUI extends BaseUI {
     protected ComponentContainer viewDisplay = root.getContentContainer();
     protected CssLayout menu = new CssLayout();
     protected CssLayout help = new CssLayout();
+
+    @Autowired
     protected IssueWindow issueWindow;
+
     private Label helpContent;
     protected CssLayout menuItemsLayout = new CssLayout();
 
@@ -70,13 +73,12 @@ public class MainUI extends BaseUI {
     private MenuBar.MenuItem language;
 
     @Autowired
-    public MainUI(EventBus eventBus, I18nResolverImpl i18nResolver, SpringViewProvider ViewProvider, SecurityService security, MessageService i18n, IssueWindow issueWindow) {
+    public MainUI(EventBus eventBus, I18nResolverImpl i18nResolver, SpringViewProvider ViewProvider, SecurityService security, MessageService i18n) {
         super(eventBus, i18nResolver);
         LOG.info("starting UI");
         this.viewProvider = ViewProvider;
         this.security = security;
         this.i18n = i18n;
-        this.issueWindow = issueWindow;
     }
 
     @Override

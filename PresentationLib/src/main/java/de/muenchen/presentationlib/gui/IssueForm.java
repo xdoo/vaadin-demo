@@ -28,9 +28,8 @@ public class IssueForm extends BaseComponent {
          * This Form is only the plain fields for input, and has no additional components or buttons.
          */
         public IssueForm() {
-            I18nResolver resolver = BaseUI.getCurrentI18nResolver();
-            title = new TextField(resolver.resolve("issue.title.label"));
-            content = new TextArea(resolver.resolve("issue.body.label"));
+            title = new TextField("Title");
+            content = new TextArea("Body");
 
             content.setWidth(450, Unit.PIXELS);
 

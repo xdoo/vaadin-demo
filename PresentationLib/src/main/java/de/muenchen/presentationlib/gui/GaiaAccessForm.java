@@ -28,9 +28,8 @@ public class GaiaAccessForm extends BaseComponent {
      * This Form is only the plain fields for input, and has no additional components or buttons.
      */
     public GaiaAccessForm() {
-        I18nResolver resolver = BaseUI.getCurrentI18nResolver();
-        username = new TextField(resolver.resolve("gaiaaccess.username.label"));
-        password = new PasswordField(resolver.resolve("gaiaaccess.password.label"));
+        username = new TextField("GAIA-username");
+        password = new PasswordField("GAIA-password");
 
         username.setWidth(400, Unit.PIXELS);
         password.setWidth(400, Unit.PIXELS);
