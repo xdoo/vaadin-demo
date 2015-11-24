@@ -587,6 +587,26 @@ public class GenericGrid<T> extends BaseComponent {
                 .findFirst().get();
     }
 
+    public Optional<ActionButton> getCreate() {
+        return create;
+    }
+
+    public Optional<ActionButton> getCopy() {
+        return copy;
+    }
+
+    public Optional<ActionButton> getRead() {
+        return read;
+    }
+
+    public Optional<ActionButton> getDelete() {
+        return delete;
+    }
+
+    public Optional<ActionButton> getEdit() {
+        return edit;
+    }
+
     //--------------
     //intern Helper-Methods
     //--------------
