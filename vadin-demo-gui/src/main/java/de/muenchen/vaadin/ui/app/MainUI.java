@@ -284,8 +284,12 @@ public class MainUI extends BaseUI {
     }
 
     private MenuBar addIssueCreator(MenuBar bar) {
-        bar.addItem(getCurrentI18nResolver().resolve("issue.title"), FontAwesome.EXCLAMATION_CIRCLE, selectedItem -> {
-            showIssueWindow();
+        bar.addItem(getCurrentI18nResolver().resolve("issue.title"), FontAwesome.EXCLAMATION_CIRCLE, selectedItem ->showIssueWindow());
+        root.addShortcutListener(new ShortcutListener("createissue", ShortcutAction.KeyCode.F2, null) {
+            @Override
+            public void handleAction(Object sender, Object target) {
+                showIssueWindow();
+            }
         });
         return bar;
     }

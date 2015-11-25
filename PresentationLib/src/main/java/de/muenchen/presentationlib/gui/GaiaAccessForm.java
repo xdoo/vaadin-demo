@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Created by maximilian.zollbrecht on 18.11.15.
+ * For GAIA-Credentials
  */
 public class GaiaAccessForm extends BaseComponent {
 
@@ -23,7 +24,7 @@ public class GaiaAccessForm extends BaseComponent {
     private final PasswordField password;
 
     /**
-     * Create a new RepositoryAccessForm;
+     * Create a new GaiaAccessForm;
      * <p/>
      * This Form is only the plain fields for input, and has no additional components or buttons.
      */
@@ -51,11 +52,6 @@ public class GaiaAccessForm extends BaseComponent {
         password.setValue(gaiaaccess.getPassword());
     }
 
-    /**
-     * Get the layout of this form, containing all the Fields.
-     *
-     * @return The base Layout.
-     */
     public FormLayout getFormLayout() {
             return formLayout;
         }

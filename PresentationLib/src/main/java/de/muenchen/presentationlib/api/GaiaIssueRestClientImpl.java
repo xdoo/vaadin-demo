@@ -12,6 +12,9 @@ public class GaiaIssueRestClientImpl implements GaiaIssueRestClient {
     private RestTemplate template;
     private URI baseUri;
 
+    /**
+     * relative url to create issues. ProjectName needs to be appended as url-parameter
+     */
     private static final String ISSUE_URL = "/businessActions/issueErstellen?project=";
 
     public GaiaIssueRestClientImpl(RestTemplate template, URI baseUri) {
