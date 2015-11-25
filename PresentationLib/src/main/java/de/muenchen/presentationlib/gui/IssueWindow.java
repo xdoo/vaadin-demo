@@ -12,7 +12,6 @@ import de.muenchen.presentationlib.api.GaiaIssue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
  * Created by maximilian.zollbrecht on 18.11.15.
@@ -28,13 +27,13 @@ public class IssueWindow extends Window {
 
     private static GaiaAccess access;
 
-    private GaiaAccessForm accessForm;
-    private Button repoAccSaveButton;
+    private GaiaAccessForm gaiaLoginForm;
+    private Button gaiaLoginButton;
     private IssueForm issueForm;
     private Button issueCreateButton;
 
     public IssueWindow(){
-        accessForm = new GaiaAccessForm();
+        gaiaLoginForm = new GaiaAccessForm();
         issueForm = new IssueForm();
         issueCreateButton = new Button("Create", event -> {
             try {
@@ -53,28 +52,28 @@ public class IssueWindow extends Window {
         FormLayout issueLayout = new FormLayout(issueForm, issueCreateButton);
         issueLayout.setVisible(false);
 
-        repoAccSaveButton = new Button("GAIA-Login", event -> {
-            if(accessForm.isVisible()){
-                access = accessForm.getRepositoryAccess();
+        gaiaLoginButton = new Button("GAIA-Login", event -> {
+            if(gaiaLoginForm.isVisible()){
+                access = gaiaLoginForm.getRepositoryAccess();
                 service.login(access.getUsername(), access.getPassword());
                 issueLayout.setVisible(true);
-                accessForm.setVisible(false);
+                gaiaLoginForm.setVisible(false);
             } else {
                 issueLayout.setVisible(false);
-                accessForm.setVisible(true);
+                gaiaLoginForm.setVisible(true);
             }
         });
-        repoAccSaveButton.setStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
+        gaiaLoginButton.setStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
 
         if(access!=null) {
-            accessForm.setRepositoryAccess(access);
+            gaiaLoginForm.setRepositoryAccess(access);
 
             service.login(access.getUsername(), access.getPassword());
             issueLayout.setVisible(true);
-            accessForm.setVisible(false);
+            gaiaLoginForm.setVisible(false);
         }
 
-        FormLayout layout = new FormLayout(accessForm, repoAccSaveButton, issueLayout);
+        FormLayout layout = new FormLayout(gaiaLoginForm, gaiaLoginButton, issueLayout);
         layout.setMargin(true);
         this.setContent(layout);
         this.setCaption("Create Issue");
