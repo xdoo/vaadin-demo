@@ -38,6 +38,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -297,7 +298,11 @@ public class GenericGrid<T> extends BaseComponent {
         grid.addItemClickListener(itemClickEvent -> {
             if (itemClickEvent.getPropertyId() != null) {
                 if (itemClickEvent.isDoubleClick()) {
-                    T entity = ((BeanItem<T>) itemClickEvent.getItem()).getBean();
+                    T entity = ((BeanItem<T>) ( (GeneratedPropertyContainer) grid.getContainerDataSource())
+                            .getWrappedContainer()
+                            .getItem(itemClickEvent.getItemId()))
+                            .getBean();
+
                     getEventBus()
                             .notify(new RequestEntityKey(RequestEvent.READ_SELECTED, getType()), reactor.bus.Event.wrap(entity));
                     navigateAction.navigate();
@@ -316,7 +321,11 @@ public class GenericGrid<T> extends BaseComponent {
     public GenericGrid<T> addDoubleClickListener(Consumer consumer) {
         grid.addItemClickListener(itemClickEvent -> {
             if (itemClickEvent.isDoubleClick()) {
-                consumer.accept(((BeanItem<T>) grid.getContainerDataSource().getItem(itemClickEvent.getItemId())).getBean());
+                consumer.accept(
+                        ((BeanItem<T>) ( (GeneratedPropertyContainer) grid.getContainerDataSource())
+                                .getWrappedContainer()
+                                .getItem(itemClickEvent.getItemId()))
+                                .getBean());
             }
         });
         return this;
@@ -471,7 +480,11 @@ public class GenericGrid<T> extends BaseComponent {
         button.addClickListener(event -> {
             if (grid.getSelectedRows() != null) {
                 consumer.accept(grid.getSelectedRows().stream()
-                        .map(item -> ((BeanItem<T>) grid.getContainerDataSource().getItem(item)).getBean())
+                        .map(item -> (
+                                ((GeneratedPropertyContainer) grid.getContainerDataSource())
+                                        .getWrappedContainer()
+                                        .getItem(item)))
+                        .map(item -> ((BeanItem<T>) item).getBean())
                         .collect(Collectors.toList()));
             }
         });
@@ -507,7 +520,11 @@ public class GenericGrid<T> extends BaseComponent {
 
         button.addClickListener(event -> {
             if (grid.getSelectedRows().size() == 1) {
-                consumer.accept(((BeanItem<T>) grid.getContainerDataSource().getItem(grid.getSelectedRows().toArray()[0])).getBean());
+                consumer.accept(
+                        ((BeanItem<T>) ( (GeneratedPropertyContainer) grid.getContainerDataSource())
+                                .getWrappedContainer()
+                                .getItem(grid.getSelectedRows().toArray()[0]))
+                                .getBean());
             }
         });
 
@@ -560,18 +577,24 @@ public class GenericGrid<T> extends BaseComponent {
         return this;
     }
 
-    public GenericGrid<T> addGeneratedColumn(){
+    /**
+     *
+     * @param generator
+     * @param <E>
+     * @return
+     */
+    public <E> GenericGrid<T> addGeneratedColumn(String propertyId, Class<E> propertyClass, Function<T, E> generator){
 
         GeneratedPropertyContainer container = (GeneratedPropertyContainer) grid.getContainerDataSource();
-        container.addGeneratedProperty("Test", new PropertyValueGenerator<String>() {
+        container.addGeneratedProperty(propertyId, new PropertyValueGenerator<E>() {
             @Override
-            public String getValue(Item item, Object itemId, Object propertyId) {
-                return item.toString() + "///// " + itemId.toString() + " //// " + propertyId.toString();
+            public E getValue(Item item, Object itemId, Object propertyId) {
+                return generator.apply((T)itemId);
             }
 
             @Override
-            public Class<String> getType() {
-                return String.class;
+            public Class<E> getType() {
+                return propertyClass;
             }
         });
 
@@ -588,7 +611,10 @@ public class GenericGrid<T> extends BaseComponent {
      */
     public List<T> getSelectedEntities() {
         return grid.getSelectedRows().stream()
-                .map(item -> (BeanItem<T>) grid.getContainerDataSource().getItem(item))
+                .map(item ->
+                        (BeanItem<T>) ( (GeneratedPropertyContainer) grid.getContainerDataSource())
+                                .getWrappedContainer()
+                                .getItem(item))
                 .map(BeanItem::getBean)
                 .collect(Collectors.toList());
     }
@@ -601,7 +627,10 @@ public class GenericGrid<T> extends BaseComponent {
      */
     public T getSelectedEntity() {
         return grid.getSelectedRows().stream()
-                .map(item -> (BeanItem<T>) grid.getContainerDataSource().getItem(item))
+                .map(item ->
+                        (BeanItem<T>) ( (GeneratedPropertyContainer) grid.getContainerDataSource())
+                                .getWrappedContainer()
+                                .getItem(item))
                 .map(BeanItem::getBean)
                 .findFirst().get();
     }
@@ -621,7 +650,10 @@ public class GenericGrid<T> extends BaseComponent {
         return new EntityListActions(
                 () -> grid.getSelectedRows().stream()
                         .peek(grid::deselect)
-                        .map(itemID -> (BeanItem<T>) grid.getContainerDataSource().getItem(itemID))
+                        .map(item ->
+                                (BeanItem<T>) ( (GeneratedPropertyContainer) grid.getContainerDataSource())
+                                        .getWrappedContainer()
+                                        .getItem(item))
                         .map(BeanItem::getBean)
                         .collect(Collectors.toList()),
                 getType()
@@ -657,8 +689,6 @@ public class GenericGrid<T> extends BaseComponent {
         }
 
         grid.setContainerDataSource(container);
-
-        addGeneratedColumn();
 
         // HACK:
         // Change Buttonvisibility and RowSelection if
