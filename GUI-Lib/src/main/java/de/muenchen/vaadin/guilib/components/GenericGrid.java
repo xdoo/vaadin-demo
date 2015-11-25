@@ -1,23 +1,12 @@
 package de.muenchen.vaadin.guilib.components;
 
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getEntityFieldPath;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.vaadin.data.Container.Filter;
 import com.vaadin.data.Item;
 import com.vaadin.data.util.AbstractBeanContainer;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.data.util.GeneratedPropertyContainer;
+import com.vaadin.data.util.PropertyValueGenerator;
 import com.vaadin.event.SelectionEvent;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.FontAwesome;
@@ -41,6 +30,20 @@ import de.muenchen.vaadin.guilib.components.actions.EntitySingleActions;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
 import de.muenchen.vaadin.guilib.util.Datastore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getEntityFieldPath;
 
 /**
  * Created by rene.zarwel on 07.10.15.
@@ -77,6 +80,9 @@ public class GenericGrid<T> extends BaseComponent {
 
     private Class<T> entityClass;
 
+    private List<String> fields;
+    private Map<String,PropertyValueGenerator> propertyValueGenerators = new HashMap<>();
+
     /**
      * Constructor of Grid with default configuration (no Buttons just grid).
      *
@@ -86,9 +92,13 @@ public class GenericGrid<T> extends BaseComponent {
     public GenericGrid(Class<T> entityClass, String[] fields){
         this.entityClass = entityClass;
 
+        grid.setContainerDataSource(new GeneratedPropertyContainer(grid.getContainerDataSource()));
+
         getEventBus()
                 .on(new ResponseEntityKey(entityClass).toSelector(), this::datastoreEventhandler)
                 .cancelAfterUse();
+
+
 
         init(fields);
     }
@@ -103,15 +113,16 @@ public class GenericGrid<T> extends BaseComponent {
 
         this.entityClass = ((AbstractBeanContainer) dataStore).getBeanType();
 
-        setDatastore(dataStore);
-
         init(fields);
+
+        setDatastore(dataStore);
 
     }
 
     private void init(String[] fields){
         //----------- Grid Configuration
-        grid.setColumns(fields);
+        this.fields = Arrays.asList(fields);
+
         grid.setSizeFull();
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
         grid.addSelectionListener(selectionEvent -> setButtonVisability());
@@ -132,9 +143,6 @@ public class GenericGrid<T> extends BaseComponent {
             }
         });
 
-        Stream.of(fields).forEach(field ->
-                this.grid.getColumn(field).setHeaderCaption(BaseUI.getCurrentI18nResolver().resolveRelative(getType(), getEntityFieldPath(field, I18nPaths.Type.column_header)))
-        );
         //---------------
 
         //----------- ComponentsLayout Configuration
@@ -296,7 +304,11 @@ public class GenericGrid<T> extends BaseComponent {
         grid.addItemClickListener(itemClickEvent -> {
             if (itemClickEvent.getPropertyId() != null) {
                 if (itemClickEvent.isDoubleClick()) {
-                    T entity = ((BeanItem<T>) itemClickEvent.getItem()).getBean();
+                    T entity = ((BeanItem<T>) ( (GeneratedPropertyContainer) grid.getContainerDataSource())
+                            .getWrappedContainer()
+                            .getItem(itemClickEvent.getItemId()))
+                            .getBean();
+
                     getEventBus()
                             .notify(new RequestEntityKey(RequestEvent.READ_SELECTED, getType()), reactor.bus.Event.wrap(entity));
                     navigateAction.navigate();
@@ -315,7 +327,11 @@ public class GenericGrid<T> extends BaseComponent {
     public GenericGrid<T> addDoubleClickListener(Consumer consumer) {
         grid.addItemClickListener(itemClickEvent -> {
             if (itemClickEvent.isDoubleClick()) {
-                consumer.accept(((BeanItem<T>) grid.getContainerDataSource().getItem(itemClickEvent.getItemId())).getBean());
+                consumer.accept(
+                        ((BeanItem<T>) ( (GeneratedPropertyContainer) grid.getContainerDataSource())
+                                .getWrappedContainer()
+                                .getItem(itemClickEvent.getItemId()))
+                                .getBean());
             }
         });
         return this;
@@ -470,7 +486,11 @@ public class GenericGrid<T> extends BaseComponent {
         button.addClickListener(event -> {
             if (grid.getSelectedRows() != null) {
                 consumer.accept(grid.getSelectedRows().stream()
-                        .map(item -> ((BeanItem<T>) grid.getContainerDataSource().getItem(item)).getBean())
+                        .map(item -> (
+                                ((GeneratedPropertyContainer) grid.getContainerDataSource())
+                                        .getWrappedContainer()
+                                        .getItem(item)))
+                        .map(item -> ((BeanItem<T>) item).getBean())
                         .collect(Collectors.toList()));
             }
         });
@@ -506,7 +526,11 @@ public class GenericGrid<T> extends BaseComponent {
 
         button.addClickListener(event -> {
             if (grid.getSelectedRows().size() == 1) {
-                consumer.accept(((BeanItem<T>) grid.getContainerDataSource().getItem(grid.getSelectedRows().toArray()[0])).getBean());
+                consumer.accept(
+                        ((BeanItem<T>) ( (GeneratedPropertyContainer) grid.getContainerDataSource())
+                                .getWrappedContainer()
+                                .getItem(grid.getSelectedRows().toArray()[0]))
+                                .getBean());
             }
         });
 
@@ -559,6 +583,72 @@ public class GenericGrid<T> extends BaseComponent {
         return this;
     }
 
+    /**
+     * Create a new Column with a generated Property.
+     * The generator gets the Item of this Row and should
+     * generate a cool new Value.
+     *
+     * @param propertyId Name of the column
+     * @param propertyClass Class of the property Item
+     * @param generator Generator for Property Item
+     * @param <E> Type of property Item
+     * @return This Grid for further config
+     */
+    public <E> GenericGrid<T> addGeneratedColumn(String propertyId, Class<E> propertyClass, Function<T, E> generator){
+
+        GeneratedPropertyContainer container = (GeneratedPropertyContainer) grid.getContainerDataSource();
+
+        if(!propertyValueGenerators.containsKey(propertyId)) {
+
+            propertyValueGenerators.put(propertyId, new PropertyValueGenerator<E>() {
+                @Override
+                public E getValue(Item item, Object itemId, Object propertyId) {
+                    return generator.apply((T) itemId);
+                }
+
+                @Override
+                public Class<E> getType() {
+                    return propertyClass;
+                }
+            });
+
+            container.addGeneratedProperty(propertyId, propertyValueGenerators.get(propertyId));
+
+            this.grid.getColumn(propertyId)
+                    .setHeaderCaption(BaseUI.getCurrentI18nResolver().resolveRelative(getType(), getEntityFieldPath(propertyId, I18nPaths.Type.column_header)));
+
+        }
+
+        return this;
+    }
+
+    /**
+     * Removes a generated property.
+     *
+     * @param propertyId Name of property
+     * @return This Grid for further config
+     */
+    public GenericGrid<T> removeGeneratedColumn(String propertyId){
+        ((GeneratedPropertyContainer) grid.getContainerDataSource())
+            .removeGeneratedProperty(propertyId);
+
+        propertyValueGenerators.remove(propertyId);
+
+        return this;
+    }
+
+    /**
+     * Removes a non generated property.
+     *
+     * @param propertyId Name of property
+     * @return This Grid for further config
+     */
+    public GenericGrid<T> removeColumn(String propertyId){
+        grid.getContainerDataSource().removeContainerProperty(propertyId);
+
+        return this;
+    }
+
     //--------------
     // Getter / Setter
     //--------------
@@ -569,7 +659,10 @@ public class GenericGrid<T> extends BaseComponent {
      */
     public List<T> getSelectedEntities() {
         return grid.getSelectedRows().stream()
-                .map(item -> (BeanItem<T>) grid.getContainerDataSource().getItem(item))
+                .map(item ->
+                        (BeanItem<T>) ( (GeneratedPropertyContainer) grid.getContainerDataSource())
+                                .getWrappedContainer()
+                                .getItem(item))
                 .map(BeanItem::getBean)
                 .collect(Collectors.toList());
     }
@@ -582,7 +675,10 @@ public class GenericGrid<T> extends BaseComponent {
      */
     public T getSelectedEntity() {
         return grid.getSelectedRows().stream()
-                .map(item -> (BeanItem<T>) grid.getContainerDataSource().getItem(item))
+                .map(item ->
+                        (BeanItem<T>) ( (GeneratedPropertyContainer) grid.getContainerDataSource())
+                                .getWrappedContainer()
+                                .getItem(item))
                 .map(BeanItem::getBean)
                 .findFirst().get();
     }
@@ -602,7 +698,10 @@ public class GenericGrid<T> extends BaseComponent {
         return new EntityListActions(
                 () -> grid.getSelectedRows().stream()
                         .peek(grid::deselect)
-                        .map(itemID -> (BeanItem<T>) grid.getContainerDataSource().getItem(itemID))
+                        .map(item ->
+                                (BeanItem<T>) ( (GeneratedPropertyContainer) grid.getContainerDataSource())
+                                        .getWrappedContainer()
+                                        .getItem(item))
                         .map(BeanItem::getBean)
                         .collect(Collectors.toList()),
                 getType()
@@ -626,7 +725,24 @@ public class GenericGrid<T> extends BaseComponent {
 
     private void setDatastore(BeanItemContainer<T> dataStore) {
 
-        grid.setContainerDataSource(dataStore);
+        GeneratedPropertyContainer container = new GeneratedPropertyContainer(dataStore);
+
+
+        //Removes Entity specific content if present
+        if (dataStore.getContainerPropertyIds().contains("id")){
+            container.removeContainerProperty("id");
+        }
+        if (dataStore.getContainerPropertyIds().contains("links")){
+            container.removeContainerProperty("links");
+        }
+
+        grid.setContainerDataSource(container);
+
+        grid.setColumnOrder(fields.toArray());
+
+        fields.forEach(field ->
+                this.grid.getColumn(field).setHeaderCaption(BaseUI.getCurrentI18nResolver().resolveRelative(getType(), getEntityFieldPath(field, I18nPaths.Type.column_header)))
+        );
 
         // HACK:
         // Change Buttonvisibility and RowSelection if
