@@ -177,11 +177,11 @@ i18n.de-DE.buerger.nachname.validationstring : Bitte verwenden Sie nur gültige 
 i18n.de-DE.buerger.geburtsdatum.validation : Geburtsdatum muss in der Vergangenheit liegen!
 
 
-i18n.de-DE.confirmation.header.text : Achtung!
-i18n.de-DE.confirmation.logout.text : Wollen Sie sich wirklich ausloggen?
-i18n.de-DE.confirmation.logout.confirm : Logout
-i18n.de-DE.confirmation.logout.cancel : Abbrechen
+i18n.de-DE.confirmation_.header.text : Achtung!
+i18n.de-DE.confirmation_.logout.text : Wollen Sie sich wirklich ausloggen?
+i18n.de-DE.confirmation_.logout.confirm : Logout
+i18n.de-DE.confirmation_.logout.cancel : Abbrechen
 
-i18n.de-DE.confirmation.override.text : Wollen Sie den aktuellen Eintrag überschreiben?
-i18n.de-DE.confirmation.override.confirm : Überschreiben
-i18n.de-DE.confirmation.override.cancel : Abbrechen
+i18n.de-DE.confirmation_.override.text : Wollen Sie den aktuellen Eintrag überschreiben?
+i18n.de-DE.confirmation_.override.confirm : Überschreiben
+i18n.de-DE.confirmation_.override.cancel : Abbrechen

@@ -113,7 +113,7 @@ public class I18nPaths {
      * @return path
      */
     public static String getConfirmationPath(Action a, Type t, String... additionalAttributes) {
-        return "confirmation" + get(a,t) + addAttribues(additionalAttributes);
+        return "confirmation_" + get(a,t) + addAttribues(additionalAttributes);
     }
 
     /**
