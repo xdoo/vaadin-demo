@@ -113,9 +113,9 @@ public class GenericGrid<T> extends BaseComponent {
 
         this.entityClass = ((AbstractBeanContainer) dataStore).getBeanType();
 
-        setDatastore(dataStore);
-
         init(fields);
+
+        setDatastore(dataStore);
 
     }
 
