@@ -35,12 +35,13 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getEntityFieldPath;
 
@@ -79,6 +80,9 @@ public class GenericGrid<T> extends BaseComponent {
 
     private Class<T> entityClass;
 
+    private List<String> fields;
+    private Map<String,PropertyValueGenerator> propertyValueGenerators = new HashMap<>();
+
     /**
      * Constructor of Grid with default configuration (no Buttons just grid).
      *
@@ -88,9 +92,13 @@ public class GenericGrid<T> extends BaseComponent {
     public GenericGrid(Class<T> entityClass, String[] fields){
         this.entityClass = entityClass;
 
+        grid.setContainerDataSource(new GeneratedPropertyContainer(grid.getContainerDataSource()));
+
         getEventBus()
                 .on(new ResponseEntityKey(entityClass).toSelector(), this::datastoreEventhandler)
                 .cancelAfterUse();
+
+
 
         init(fields);
     }
@@ -113,7 +121,8 @@ public class GenericGrid<T> extends BaseComponent {
 
     private void init(String[] fields){
         //----------- Grid Configuration
-        //grid.setColumns(fields);
+        this.fields = Arrays.asList(fields);
+
         grid.setSizeFull();
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
         grid.addSelectionListener(selectionEvent -> setButtonVisability());
@@ -134,9 +143,6 @@ public class GenericGrid<T> extends BaseComponent {
             }
         });
 
-        Stream.of(fields).forEach(field ->
-                this.grid.getColumn(field).setHeaderCaption(BaseUI.getCurrentI18nResolver().resolveRelative(getType(), getEntityFieldPath(field, I18nPaths.Type.column_header)))
-        );
         //---------------
 
         //----------- ComponentsLayout Configuration
@@ -591,17 +597,27 @@ public class GenericGrid<T> extends BaseComponent {
     public <E> GenericGrid<T> addGeneratedColumn(String propertyId, Class<E> propertyClass, Function<T, E> generator){
 
         GeneratedPropertyContainer container = (GeneratedPropertyContainer) grid.getContainerDataSource();
-        container.addGeneratedProperty(propertyId, new PropertyValueGenerator<E>() {
-            @Override
-            public E getValue(Item item, Object itemId, Object propertyId) {
-                return generator.apply((T)itemId);
-            }
 
-            @Override
-            public Class<E> getType() {
-                return propertyClass;
-            }
-        });
+        if(!propertyValueGenerators.containsKey(propertyId)) {
+
+            propertyValueGenerators.put(propertyId, new PropertyValueGenerator<E>() {
+                @Override
+                public E getValue(Item item, Object itemId, Object propertyId) {
+                    return generator.apply((T) itemId);
+                }
+
+                @Override
+                public Class<E> getType() {
+                    return propertyClass;
+                }
+            });
+
+            container.addGeneratedProperty(propertyId, propertyValueGenerators.get(propertyId));
+
+            this.grid.getColumn(propertyId)
+                    .setHeaderCaption(BaseUI.getCurrentI18nResolver().resolveRelative(getType(), getEntityFieldPath(propertyId, I18nPaths.Type.column_header)));
+
+        }
 
         return this;
     }
@@ -615,6 +631,8 @@ public class GenericGrid<T> extends BaseComponent {
     public GenericGrid<T> removeGeneratedColumn(String propertyId){
         ((GeneratedPropertyContainer) grid.getContainerDataSource())
             .removeGeneratedProperty(propertyId);
+
+        propertyValueGenerators.remove(propertyId);
 
         return this;
     }
@@ -719,6 +737,10 @@ public class GenericGrid<T> extends BaseComponent {
         }
 
         grid.setContainerDataSource(container);
+
+        fields.forEach(field ->
+                this.grid.getColumn(field).setHeaderCaption(BaseUI.getCurrentI18nResolver().resolveRelative(getType(), getEntityFieldPath(field, I18nPaths.Type.column_header)))
+        );
 
         // HACK:
         // Change Buttonvisibility and RowSelection if
