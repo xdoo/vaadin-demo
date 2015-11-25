@@ -738,6 +738,8 @@ public class GenericGrid<T> extends BaseComponent {
 
         grid.setContainerDataSource(container);
 
+        grid.setColumnOrder(fields.toArray());
+
         fields.forEach(field ->
                 this.grid.getColumn(field).setHeaderCaption(BaseUI.getCurrentI18nResolver().resolveRelative(getType(), getEntityFieldPath(field, I18nPaths.Type.column_header)))
         );
