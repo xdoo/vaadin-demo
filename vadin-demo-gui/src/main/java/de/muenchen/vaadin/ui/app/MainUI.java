@@ -283,6 +283,11 @@ public class MainUI extends BaseUI {
         return bar;
     }
 
+    /**
+     * Adds the IssueWindow-functionality to the MenuBar
+     * @param bar to add to
+     * @return MenuBar with IssueWindow-item
+     */
     private MenuBar addIssueCreator(MenuBar bar) {
         bar.addItem(getCurrentI18nResolver().resolve("issue.title"), FontAwesome.EXCLAMATION_CIRCLE, selectedItem ->showIssueWindow());
         root.addShortcutListener(new ShortcutListener("createissue", ShortcutAction.KeyCode.F2, null) {
@@ -294,6 +299,9 @@ public class MainUI extends BaseUI {
         return bar;
     }
 
+    /**
+     * Displays the IssueWindow
+     */
     private void showIssueWindow(){
         String issueFor = getNavigator().getState();
         issueWindow.setIssue(issueFor);

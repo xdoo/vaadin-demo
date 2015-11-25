@@ -2,6 +2,8 @@ package de.muenchen.presentationlib.api;
 
 /**
  * Created by maximilian.zollbrecht on 18.11.15.
+ * Issue as used by GAIA
+ * TODO Maybe has to be changed to be in GAIA API
  */
 public class GaiaIssue {
     private String title = "";
