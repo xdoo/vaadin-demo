@@ -578,10 +578,15 @@ public class GenericGrid<T> extends BaseComponent {
     }
 
     /**
+     * Create a new Column with a generated Property.
+     * The generator gets the Item of this Row and should
+     * generate a cool new Value.
      *
-     * @param generator
-     * @param <E>
-     * @return
+     * @param propertyId Name of the column
+     * @param propertyClass Class of the property Item
+     * @param generator Generator for Property Item
+     * @param <E> Type of property Item
+     * @return This Grid for further config
      */
     public <E> GenericGrid<T> addGeneratedColumn(String propertyId, Class<E> propertyClass, Function<T, E> generator){
 
