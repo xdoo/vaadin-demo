@@ -606,6 +606,31 @@ public class GenericGrid<T> extends BaseComponent {
         return this;
     }
 
+    /**
+     * Removes a generated property.
+     *
+     * @param propertyId Name of property
+     * @return This Grid for further config
+     */
+    public GenericGrid<T> removeGeneratedColumn(String propertyId){
+        ((GeneratedPropertyContainer) grid.getContainerDataSource())
+            .removeGeneratedProperty(propertyId);
+
+        return this;
+    }
+
+    /**
+     * Removes a non generated property.
+     *
+     * @param propertyId Name of property
+     * @return This Grid for further config
+     */
+    public GenericGrid<T> removeColumn(String propertyId){
+        grid.getContainerDataSource().removeContainerProperty(propertyId);
+
+        return this;
+    }
+
     //--------------
     // Getter / Setter
     //--------------
