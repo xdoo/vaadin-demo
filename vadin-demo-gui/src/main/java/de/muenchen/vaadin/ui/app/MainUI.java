@@ -11,7 +11,6 @@ import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Responsive;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
-import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
@@ -35,6 +34,7 @@ import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.ValoMenuLayout;
 import de.muenchen.vaadin.guilib.components.ConfirmationWindow;
+import de.muenchen.presentationlib.gui.IssueWindow;
 import de.muenchen.vaadin.ui.app.views.BuergerTableView;
 import de.muenchen.vaadin.ui.app.views.LoginView;
 import de.muenchen.vaadin.ui.app.views.MainView;
@@ -68,6 +68,10 @@ public class MainUI extends BaseUI {
     protected ComponentContainer viewDisplay = root.getContentContainer();
     protected CssLayout menu = new CssLayout();
     protected CssLayout help = new CssLayout();
+
+    @Autowired
+    protected IssueWindow issueWindow;
+
     private Label helpContent;
     protected CssLayout menuItemsLayout = new CssLayout();
 
@@ -247,6 +251,7 @@ public class MainUI extends BaseUI {
         bar.addStyleName(ValoTheme.MENUBAR_BORDERLESS);
         addLanguageSelector(bar);
         addHelpToggle(bar);
+        addIssueCreator(bar);
         return bar;
     }
 
@@ -282,6 +287,33 @@ public class MainUI extends BaseUI {
 
         i18n.getSupportedLocales().stream().forEach(locale -> language.addItem(locale.getDisplayLanguage(), null, languageSelection));
         return bar;
+    }
+
+    /**
+     * Adds the IssueWindow-functionality to the MenuBar
+     * @param bar to add to
+     * @return MenuBar with IssueWindow-item
+     */
+    private MenuBar addIssueCreator(MenuBar bar) {
+        bar.addItem(getCurrentI18nResolver().resolve("issue.title"), FontAwesome.EXCLAMATION_CIRCLE, selectedItem ->showIssueWindow());
+        root.addShortcutListener(new ShortcutListener("createissue", ShortcutAction.KeyCode.F2, null) {
+            @Override
+            public void handleAction(Object sender, Object target) {
+                showIssueWindow();
+            }
+        });
+        return bar;
+    }
+
+    /**
+     * Displays the IssueWindow
+     */
+    private void showIssueWindow(){
+        String issueFor = getNavigator().getState();
+        issueWindow.setIssue(issueFor);
+        getUI().addWindow(issueWindow);
+        issueWindow.center();
+        issueWindow.focus();
     }
 
     private Component createSettings() {

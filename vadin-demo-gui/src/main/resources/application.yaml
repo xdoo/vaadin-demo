@@ -16,7 +16,7 @@ service.principal.url: ${service.url}principal
 server.port: 8081
 
 # Security
-security.oauth2.client.id : acme
+security.oauth2.client.id: acme
 
 #i18n
 spring.messages.basename: messages
@@ -45,6 +45,26 @@ logging.level.com.netflix.discovery : 'OFF'
 #=======================================#
 # I18N #
 #=======================================#
+
+i18n.de-DE.issue.create : Issue erstellen
+i18n.de-DE.issue.window.title : Issue erstellen
+i18n.de-DE.issue.button.create : Erstellen
+i18n.de-DE.issue.title.label : Titel
+i18n.de-DE.issue.body.label : Inhalt
+i18n.de-DE.issue.body.text : "Erstellt im GAIA-Präsentationsmodus\nIn View: "
+
+i18n.de-DE.issue.notification.success.create.label : Issue erstellt
+i18n.de-DE.issue.notification.success.create.text : Das Issue wurde erfolgreich gespeichert.
+
+i18n.de-DE.issue.notification.error.create.label : Fehler
+i18n.de-DE.issue.notification.error.create.text : Das Issue konnte nicht gespeichert werden.
+
+i18n.de-DE.gaiaaccess.repourl.label : RepoUrl
+i18n.de-DE.gaiaaccess.username.label : Name
+i18n.de-DE.gaiaaccess.password.label : Passwort
+i18n.de-DE.gaiaaccess.button.create : Gaia Anmeldung ändern
+i18n.de-DE.issue.title : Issue
+i18n.de-DE.issue.gaiaaccess.title : Gaia Anmeldung
 
 # Icons (no localization)
 buerger.geburtsdatum.column_header.icon :

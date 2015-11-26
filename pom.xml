@@ -18,6 +18,7 @@
         <module>Auditing</module>
         <module>API-Lib</module>
         <module>Service-Lib</module>
+        <module>PresentationLib</module>
     </modules>
     <properties>
         <main.basedir>${basedir}/../..</main.basedir>
