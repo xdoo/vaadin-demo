@@ -19,6 +19,7 @@
         <module>API-Lib</module>
         <module>Service-Lib</module>
         <module>PresentationLib</module>
+        <module>auth-service</module>
     </modules>
     <properties>
         <main.basedir>${basedir}/../..</main.basedir>
