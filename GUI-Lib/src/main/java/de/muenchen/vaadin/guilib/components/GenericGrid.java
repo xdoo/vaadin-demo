@@ -758,6 +758,11 @@ public class GenericGrid<T> extends BaseComponent {
 
         grid.setContainerDataSource(container);
 
+        container.getContainerPropertyIds().stream()
+                .filter(property -> !fields.contains(property))
+                .forEach(container::removeContainerProperty);
+
+
         grid.setColumnOrder(fields.toArray());
 
         fields.forEach(field ->
