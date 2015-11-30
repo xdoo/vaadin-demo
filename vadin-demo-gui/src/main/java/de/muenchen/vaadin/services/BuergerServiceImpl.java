@@ -3,6 +3,7 @@ package de.muenchen.vaadin.services;
 import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
+import de.muenchen.vaadin.demo.api.domain.Services;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.api.rest.BuergerRestClient;
 import de.muenchen.vaadin.demo.api.rest.BuergerRestClientImpl;
@@ -56,7 +57,7 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
     public BuergerServiceImpl(InfoService infoService, SecurityService securityService, I18nResolverImpl resolver) {
         this.securityService = securityService;
         //TODO
-        this.client = new BuergerRestClientImpl(getTemplate(), infoService.getBaseUri("service"));
+        this.client = new BuergerRestClientImpl(getTemplate(), infoService.getBaseUri(Services.SERVICE));
         this.resolver = resolver;
         executor = Executors.newCachedThreadPool();
     }
