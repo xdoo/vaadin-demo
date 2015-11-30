@@ -758,6 +758,7 @@ public class GenericGrid<T> extends BaseComponent {
 
         grid.setContainerDataSource(container);
 
+        //Remove Columns from Conatiner which are not present in Field enum
         container.getContainerPropertyIds().stream()
                 .filter(property -> !fields.contains(property))
                 .forEach(container::removeContainerProperty);
