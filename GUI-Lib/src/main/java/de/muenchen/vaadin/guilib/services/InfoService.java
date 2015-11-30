@@ -1,5 +1,7 @@
 package de.muenchen.vaadin.guilib.services;
 
+import de.muenchen.vaadin.demo.apilib.domain.DomainService;
+
 import java.net.URI;
 
 /**
@@ -8,6 +10,6 @@ import java.net.URI;
  */
 public interface InfoService {
     
-   public URI getBaseUri();
+   public URI getBaseUri(DomainService service);
     
 }
