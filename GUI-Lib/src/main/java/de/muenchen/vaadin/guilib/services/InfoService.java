@@ -8,6 +8,6 @@ import java.net.URI;
  */
 public interface InfoService {
     
-   public URI getBaseUri();
+   public URI getBaseUri(String serviceName);
     
 }

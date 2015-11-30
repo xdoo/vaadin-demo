@@ -50,11 +50,13 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
     private I18nResolverImpl resolver;
     private ExecutorService executor;
 
+
+
     @Autowired
     public BuergerServiceImpl(InfoService infoService, SecurityService securityService, I18nResolverImpl resolver) {
         this.securityService = securityService;
         //TODO
-        this.client = new BuergerRestClientImpl(getTemplate(), infoService.getBaseUri());
+        this.client = new BuergerRestClientImpl(getTemplate(), infoService.getBaseUri("service"));
         this.resolver = resolver;
         executor = Executors.newCachedThreadPool();
     }
