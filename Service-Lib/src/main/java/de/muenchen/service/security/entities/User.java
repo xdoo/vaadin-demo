@@ -8,6 +8,7 @@ package de.muenchen.service.security.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.muenchen.service.BaseEntity;
 import org.hibernate.search.annotations.Indexed;
+import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -54,6 +55,7 @@ public class User extends BaseEntity implements Serializable {
     private Date birthdate;
 
     @Column(name = "USER_EMAIL")
+    @Email
     private String email;
 
     @Column(name = "USER_ENABLED")
