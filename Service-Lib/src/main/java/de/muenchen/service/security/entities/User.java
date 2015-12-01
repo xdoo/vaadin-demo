@@ -43,6 +43,7 @@ public class User extends BaseEntity implements Serializable {
     @Size(min=1)
     private String forname;
 
+    @Column(name = "USER_SURNAME")
     @NotNull
     @Pattern(regexp="[a-zA-Z]*")
     @Size(min=1)
