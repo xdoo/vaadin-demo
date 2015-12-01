@@ -36,6 +36,8 @@ public class User extends BaseEntity implements Serializable {
     @Column(name = "USER_PASSWORD")
     private String password;
 
+
+    @Column(name = "USER_FORNAME")
     @NotNull
     @Pattern(regexp="[a-zA-Z]*")
     @Size(min=1)
