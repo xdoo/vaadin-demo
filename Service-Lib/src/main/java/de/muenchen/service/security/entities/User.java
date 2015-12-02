@@ -29,7 +29,7 @@ public class User extends BaseEntity implements Serializable {
 
     @Column(name = "USER_USERNAME", nullable = false, updatable = false)
     @NotNull
-    @Pattern(regexp="[a-z0-9_-]*")
+    @Pattern(regexp="[a-zA-Z0-9_\\.-]*")
     @Size(min=1)
     private String username;
 
