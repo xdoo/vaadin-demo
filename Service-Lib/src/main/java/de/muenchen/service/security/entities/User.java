@@ -7,7 +7,9 @@ package de.muenchen.service.security.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.muenchen.service.BaseEntity;
+import de.muenchen.service.PetersPerfectBridge;
 import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.FieldBridge;
 import org.hibernate.search.annotations.Indexed;
 
 import javax.persistence.*;
@@ -41,6 +43,7 @@ public class User extends BaseEntity implements Serializable {
     private String surname;
 
     @Field
+    @FieldBridge(impl = PetersPerfectBridge.class)
     @Column(name = "USER_BIRTHDATE")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date birthdate;

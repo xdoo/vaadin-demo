@@ -34,6 +34,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     /**
      * Used by Tenant-Service. Not exported due to security-reasons. Tenant-Filtering leads to circulating calls.
+     *
      * @param username
      * @return
      */
@@ -82,5 +83,8 @@ public interface UserRepository extends CrudRepository<User, Long> {
     @PreAuthorize(ROLE_DELETE)
     @PreFilter(TenantService.IS_TENANT_FILTER)
     void deleteAll();
+
+    @PreAuthorize(TenantService.IS_TENANT_AUTH)
+    User findByUsername(@Param(value = "username") String username);
 
 }
