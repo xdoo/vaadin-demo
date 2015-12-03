@@ -260,7 +260,7 @@ public class GenericGrid<T> extends BaseComponent {
         reset.setClickShortcut(ShortcutAction.KeyCode.ESCAPE);
         reset.addClickListener(e -> {
             filter.setValue("");
-    		((BeanItemContainer<?>)grid.getContainerDataSource()).removeAllContainerFilters();
+    		((GeneratedPropertyContainer)grid.getContainerDataSource()).removeAllContainerFilters();
             getEntityAction().readList(e);
         });
         reset.setId(String.format("%s_RESET_BUTTON", BaseUI.getCurrentI18nResolver().getBasePath(getType())));
