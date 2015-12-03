@@ -7,6 +7,7 @@ package de.muenchen.service.security.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.muenchen.service.BaseEntity;
+import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 
 import javax.persistence.*;
@@ -23,6 +24,7 @@ import java.util.Set;
 @Table(name = "_USERS")
 public class User extends BaseEntity implements Serializable {
 
+    @Field
     @Column(name = "USER_USERNAME", nullable = false, updatable = false)
     private String username;
 
@@ -30,16 +32,20 @@ public class User extends BaseEntity implements Serializable {
     @Column(name = "USER_PASSWORD")
     private String password;
 
+    @Field
     @Column(name = "USER_FORNAME")
     private String forname;
 
+    @Field
     @Column(name = "USER_SURNAME")
     private String surname;
 
+    @Field
     @Column(name = "USER_BIRTHDATE")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date birthdate;
 
+    @Field
     @Column(name = "USER_EMAIL")
     private String email;
 
