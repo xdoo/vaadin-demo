@@ -8,8 +8,12 @@ package de.muenchen.service.security.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.muenchen.service.BaseEntity;
 import org.hibernate.search.annotations.Indexed;
+import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
@@ -24,16 +28,26 @@ import java.util.Set;
 public class User extends BaseEntity implements Serializable {
 
     @Column(name = "USER_USERNAME", nullable = false, updatable = false)
+    @NotNull
+    @Pattern(regexp="[a-zA-Z0-9_\\.-]*")
+    @Size(min=1)
     private String username;
 
     @JsonIgnore
     @Column(name = "USER_PASSWORD")
     private String password;
 
+
     @Column(name = "USER_FORNAME")
+    @NotNull
+    @Pattern(regexp="\\p{L}")
+    @Size(min=1)
     private String forname;
 
     @Column(name = "USER_SURNAME")
+    @NotNull
+    @Pattern(regexp = "\\p{L}")
+    @Size(min=1)
     private String surname;
 
     @Column(name = "USER_BIRTHDATE")
@@ -41,6 +55,7 @@ public class User extends BaseEntity implements Serializable {
     private Date birthdate;
 
     @Column(name = "USER_EMAIL")
+    @Email
     private String email;
 
     @Column(name = "USER_ENABLED")
