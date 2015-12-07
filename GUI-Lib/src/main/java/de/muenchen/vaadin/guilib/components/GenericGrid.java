@@ -173,7 +173,7 @@ public class GenericGrid<T> extends BaseComponent {
         readButton.addActionPerformer(getSingleActionOnSelected()::read);
         readButton.addActionPerformer(getNavigateAction(navigateToRead)::navigate);
 
-        readButton.setVisible(false);
+        readButton.setEnabled(false);
         read = Optional.of(readButton);
     }
 
@@ -204,7 +204,7 @@ public class GenericGrid<T> extends BaseComponent {
         ActionButton createButton = new ActionButton(getType(), SimpleAction.create);
 
         createButton.addActionPerformer(getNavigateAction(navigateToCreate)::navigate);
-        createButton.setVisible(Boolean.TRUE);
+        createButton.setEnabled(Boolean.TRUE);
 
         create = Optional.of(createButton);
     }
@@ -260,7 +260,7 @@ public class GenericGrid<T> extends BaseComponent {
         reset.setClickShortcut(ShortcutAction.KeyCode.ESCAPE);
         reset.addClickListener(e -> {
             filter.setValue("");
-    		((BeanItemContainer<?>)grid.getContainerDataSource()).removeAllContainerFilters();
+    		((GeneratedPropertyContainer)grid.getContainerDataSource()).removeAllContainerFilters();
             getEntityAction().readList(e);
         });
         reset.setId(String.format("%s_RESET_BUTTON", BaseUI.getCurrentI18nResolver().getBasePath(getType())));
@@ -268,13 +268,13 @@ public class GenericGrid<T> extends BaseComponent {
 
     private void setButtonVisability() {
         int size = grid.getSelectedRows().size();
-        if (read.isPresent()) read.get().setVisible(size == 1);
-        if (edit.isPresent()) edit.get().setVisible(size == 1);
-        if (copy.isPresent()) copy.get().setVisible(size > 0);
-        if (delete.isPresent()) delete.get().setVisible(size > 0);
+        if (read.isPresent()) read.get().setEnabled(size == 1);
+        if (edit.isPresent()) edit.get().setEnabled(size == 1);
+        if (copy.isPresent()) copy.get().setEnabled(size > 0);
+        if (delete.isPresent()) delete.get().setEnabled(size > 0);
 
-        customSingleSelectComponents.stream().forEach(component -> component.setVisible(size == 1));
-        customMultiSelectComponents.stream().forEach(component -> component.setVisible(size > 0));
+        customSingleSelectComponents.stream().forEach(component -> component.setEnabled(size == 1));
+        customMultiSelectComponents.stream().forEach(component -> component.setEnabled(size > 0));
     }
 
     //--------------
@@ -579,7 +579,7 @@ public class GenericGrid<T> extends BaseComponent {
         customComponents.add(component);
         topComponentsLayout.addComponent(component);
 
-        component.setVisible(Boolean.TRUE);
+        component.setEnabled(Boolean.TRUE);
         return this;
     }
 

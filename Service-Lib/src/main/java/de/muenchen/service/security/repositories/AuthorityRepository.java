@@ -6,11 +6,13 @@
 package de.muenchen.service.security.repositories;
 
 import de.muenchen.service.security.entities.Authority;
+import org.apache.http.auth.AUTH;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cloud.security.oauth2.resource.EnableOAuth2Resource;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.security.access.prepost.PreAuthorize;
 
@@ -59,5 +61,7 @@ public interface AuthorityRepository  extends CrudRepository<Authority, Long> {
     @CacheEvict(value = AUTHORITY_CACHE, allEntries = true)
     @PreAuthorize(ROLE_DELETE)
     void deleteAll();
+
+    Authority findByAuthority(@Param(value = "authority")String authority);
 
 }
