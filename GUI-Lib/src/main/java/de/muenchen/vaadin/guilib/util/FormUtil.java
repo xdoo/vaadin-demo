@@ -9,6 +9,8 @@ import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.DateField;
+import com.vaadin.ui.PasswordField;
+import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
@@ -81,6 +83,52 @@ public class FormUtil {
             tf.setDescription(tooltip);
         deactivateValidation(tf);
         //tf.setId(String.format("%s_%s_FIELD", getI18nResolver().getBasePath(), property).toUpperCase());
+        return tf;
+    }
+
+    /**
+     * Create a new PasswordField for the given property.
+     * <p>
+     * It has no ID set, the individual component must take care of that.
+     *
+     * @param property The property to bind to of the entity.
+     * @return A PasswordField bound to the property of the binder.
+     */
+    public PasswordField createPasswordField(String property) {
+        final String caption = getCaption(property);
+        final String prompt = getPrompt(property);
+        final String tooltip = getTooltip(property);
+        PasswordField tf = getBinder().buildAndBind(caption, property, PasswordField.class);
+        tf.setNullRepresentation(NULL_REPRESENTATION);
+        tf.setInputPrompt(prompt);
+        tf.setId(property + INPUT);
+
+        if (!tooltip.equals(""))
+            tf.setDescription(tooltip);
+        deactivateValidation(tf);
+        return tf;
+    }
+
+    /**
+     * Create a new TextArea for the given property.
+     * <p>
+     * It has no ID set, the individual component must take care of that.
+     *
+     * @param property The property to bind to of the entity.
+     * @return A TextArea bound to the property of the binder.
+     */
+    public TextArea createTextArea(String property) {
+        final String caption = getCaption(property);
+        final String prompt = getPrompt(property);
+        final String tooltip = getTooltip(property);
+        TextArea tf = getBinder().buildAndBind(caption, property, TextArea.class);
+        tf.setNullRepresentation(NULL_REPRESENTATION);
+        tf.setInputPrompt(prompt);
+        tf.setId(property + INPUT);
+
+        if (!tooltip.equals(""))
+            tf.setDescription(tooltip);
+        deactivateValidation(tf);
         return tf;
     }
 
