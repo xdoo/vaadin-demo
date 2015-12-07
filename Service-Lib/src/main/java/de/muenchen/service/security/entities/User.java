@@ -11,8 +11,12 @@ import de.muenchen.service.PetersPerfectBridge;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.FieldBridge;
 import org.hibernate.search.annotations.Indexed;
+import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
@@ -28,6 +32,9 @@ public class User extends BaseEntity implements Serializable {
 
     @Field
     @Column(name = "USER_USERNAME", nullable = false, updatable = false)
+    @NotNull
+    @Pattern(regexp="[a-zA-Z0-9_\\.-]*")
+    @Size(min=1)
     private String username;
 
     @JsonIgnore
@@ -36,10 +43,16 @@ public class User extends BaseEntity implements Serializable {
 
     @Field
     @Column(name = "USER_FORNAME")
+    @NotNull
+    @Pattern(regexp="\\p{L}")
+    @Size(min=1)
     private String forname;
 
     @Field
     @Column(name = "USER_SURNAME")
+    @NotNull
+    @Pattern(regexp = "\\p{L}")
+    @Size(min=1)
     private String surname;
 
     @Field
@@ -50,6 +63,7 @@ public class User extends BaseEntity implements Serializable {
 
     @Field
     @Column(name = "USER_EMAIL")
+    @Email
     private String email;
 
     @Column(name = "USER_ENABLED")
