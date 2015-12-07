@@ -44,14 +44,14 @@ public class User extends BaseEntity implements Serializable {
     @Field
     @Column(name = "USER_FORNAME")
     @NotNull
-    @Pattern(regexp="\\p{L}")
+    @Pattern(regexp="\\S*")
     @Size(min=1)
     private String forname;
 
     @Field
     @Column(name = "USER_SURNAME")
     @NotNull
-    @Pattern(regexp = "\\p{L}")
+    @Pattern(regexp = "\\S*")
     @Size(min=1)
     private String surname;
 
