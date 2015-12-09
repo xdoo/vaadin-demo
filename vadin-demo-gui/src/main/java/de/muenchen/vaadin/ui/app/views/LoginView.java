@@ -91,7 +91,7 @@ public class LoginView extends VerticalLayout implements View {
 
             @Override
             public void buttonClick(final ClickEvent event) {
-                if(event.isShiftKey()) {
+
                     if (security.login(username.getValue(), password.getValue())) {
                         BaseUI.getCurrentEventBus().notify(Key.LOGIN);
                     } else {
@@ -100,9 +100,7 @@ public class LoginView extends VerticalLayout implements View {
                                 "Bei der Eingabe Ihrer Usernamens/Ihres Kennworts ist ein Fehler aufgetreten. Versuchen Sie es erneut.");
                         notif.show(Page.getCurrent());
                     }
-                } else {
-                    getUI().getPage().open("https://goo.gl/gi7q1y", "");
-                }
+
                 // TODO Register Remember me Token
             /*
             * Redirect is handled by the VaadinRedirectStrategy
