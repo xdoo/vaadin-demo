@@ -24,13 +24,10 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import java.security.Principal;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -43,12 +40,6 @@ import java.util.stream.Collectors;
 @EnableJpaRepositories(basePackages = {"de.muenchen.auth"})
 @EnableAutoConfiguration
 public class AuthserverApplication extends WebMvcConfigurerAdapter {
-
-    @RequestMapping("/user")
-    @ResponseBody
-    public Principal user(Principal user) {
-        return user;
-    }
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {

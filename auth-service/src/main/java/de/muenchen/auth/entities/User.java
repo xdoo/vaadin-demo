@@ -47,7 +47,7 @@ public class User extends BaseEntity implements Serializable {
 
     @ManyToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
     @JoinTable(name = "_users_authorities", joinColumns = {@JoinColumn(name = "user_oid")}, inverseJoinColumns = {@JoinColumn(name = "authority_oid")})
-    private Set<Authority> authoritys;
+    private Set<Authority> authorities;
 
     public User() {
     }
@@ -60,7 +60,7 @@ public class User extends BaseEntity implements Serializable {
         this.birthdate = user.birthdate;
         this.email = user.email;
         this.userEnabled = user.userEnabled;
-        this.authoritys = user.authoritys;
+        this.authorities = user.authorities;
     }
 
     public String getUsername() {
@@ -119,11 +119,11 @@ public class User extends BaseEntity implements Serializable {
         this.userEnabled = userEnabled;
     }
 
-    public Set<Authority> getAuthoritys() {
-        return authoritys;
+    public Set<Authority> getAuthorities() {
+        return authorities;
     }
 
-    public void setAuthoritys(Set<Authority> authoritys) {
-        this.authoritys = authoritys;
+    public void setAuthorities(Set<Authority> authorities) {
+        this.authorities = authorities;
     }
 }
