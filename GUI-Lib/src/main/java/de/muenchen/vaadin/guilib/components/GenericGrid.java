@@ -10,6 +10,7 @@ import com.vaadin.data.util.PropertyValueGenerator;
 import com.vaadin.event.SelectionEvent;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.shared.ui.grid.HeightMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
@@ -59,7 +60,13 @@ public class GenericGrid<T> extends BaseComponent {
     /**
      * Components Layout
      */
-    final HorizontalLayout topComponentsLayout = new HorizontalLayout();
+    final HorizontalLayout topComponentsLayout = new HorizontalLayout(){
+        @Override
+        public void addComponent(Component c) {
+            super.addComponent(c);
+            this.setVisible(true);
+        }
+    };
     /** Default Components **/
     private Grid grid = new Grid();
     //----------- Search Components
@@ -123,13 +130,36 @@ public class GenericGrid<T> extends BaseComponent {
         //----------- Grid Configuration
         this.fields = Arrays.asList(fields);
 
-        grid.setSizeFull();
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
         grid.addSelectionListener(selectionEvent -> setButtonVisability());
         grid.setVisible(Boolean.TRUE);
         grid.setWidth("100%");
         grid.setHeightByRows(10);
-        //Grid Selection
+        grid.setHeightMode(HeightMode.ROW);
+
+        configureGridSelection();
+
+        //----------- ComponentsLayout Configuration
+        topComponentsLayout.addStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
+        topComponentsLayout.setSpacing(true);
+        topComponentsLayout.setVisible(false);
+        //--------------
+
+        // Assemble GenericGrid
+        VerticalLayout layout = new VerticalLayout();
+        layout.addComponents(topComponentsLayout);
+        layout.addComponent(grid);
+        layout.setSpacing(true);
+        setCompositionRoot(layout);
+
+        //Request Data for this Grid
+        getEventBus().notify(new RequestEntityKey(RequestEvent.READ_LIST, getType()));
+    }
+
+    /**
+     *
+     */
+    private void configureGridSelection() {
         grid.addItemClickListener(itemClickEvent -> {
             if (itemClickEvent.getPropertyId() != null) {
                 boolean isClicked = grid.isSelected(itemClickEvent.getItemId());
@@ -142,24 +172,6 @@ public class GenericGrid<T> extends BaseComponent {
                     grid.deselect(itemClickEvent.getItemId());
             }
         });
-
-        //---------------
-
-        //----------- ComponentsLayout Configuration
-        topComponentsLayout.addStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
-        //topComponentsLayout.setSizeFull();
-        topComponentsLayout.setSpacing(true);
-        //--------------
-
-        // Assemble GenericGrid
-        VerticalLayout layout = new VerticalLayout();
-        layout.addComponents(topComponentsLayout);
-        layout.addComponent(grid);
-        layout.setSpacing(true);
-        setCompositionRoot(layout);
-
-        //Request Data for this Grid
-        getEventBus().notify(new RequestEntityKey(RequestEvent.READ_LIST, getType()));
     }
 
     //-------------------------
@@ -234,8 +246,8 @@ public class GenericGrid<T> extends BaseComponent {
     }
 
     private void relationFilter(String query){
-    	((BeanItemContainer<?>)grid.getContainerDataSource()).removeAllContainerFilters();
-		((BeanItemContainer<?>)grid.getContainerDataSource()).addContainerFilter(new Filter(){
+    	((GeneratedPropertyContainer)grid.getContainerDataSource()).removeAllContainerFilters();
+		((GeneratedPropertyContainer)grid.getContainerDataSource()).addContainerFilter(new Filter(){
 			@Override
 			public boolean passesFilter(Object itemId, Item item) throws UnsupportedOperationException {
 				boolean result = true;
@@ -280,6 +292,11 @@ public class GenericGrid<T> extends BaseComponent {
     //--------------
     //Configuration-Methods
     //--------------
+
+    public GenericGrid<T> setHeightByRows(int rows){
+        grid.setHeightByRows(rows);
+        return this;
+    }
 
     public GenericGrid<T> setSelectionMode(Grid.SelectionMode mode){
         grid.setSelectionMode(mode);
