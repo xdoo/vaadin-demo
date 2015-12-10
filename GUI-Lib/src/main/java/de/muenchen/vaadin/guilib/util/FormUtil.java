@@ -3,6 +3,7 @@ package de.muenchen.vaadin.guilib.util;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.DefaultFieldGroupFieldFactory;
 import com.vaadin.data.fieldgroup.FieldGroup;
+import com.vaadin.data.util.converter.Converter;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CheckBox;
@@ -18,6 +19,11 @@ import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 import de.muenchen.vaadin.guilib.BaseUI;
 import org.vaadin.tokenfield.TokenField;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 import java.util.stream.Stream;
 
 /**
@@ -314,11 +320,40 @@ public class FormUtil {
         tf.setRememberNewTokens(false);
         tf.setId(property + INPUT);
 
+        tf.setConverter(getListToSetConverter());
+
         if (!tooltip.equals(""))
             tf.setDescription(tooltip);
 
         deactivateValidation(tf);
         return tf;
+    }
+
+    @SuppressWarnings("all")
+    private Converter getListToSetConverter() {
+        return new Converter<Set<String>, List<String>>() {
+            @Override
+            public List<String> convertToModel(Set<String> value, Class<? extends List<String>> targetType,
+                                               Locale locale) throws com.vaadin.data.util.converter.Converter.ConversionException {
+                return new ArrayList<String>(value);
+            }
+
+            @Override
+            public Set<String> convertToPresentation(List<String> value, Class<? extends Set<String>> targetType,
+                                                     Locale locale) throws com.vaadin.data.util.converter.Converter.ConversionException {
+                return new HashSet<String>(value);
+            }
+
+            @Override
+            public Class<List<String>> getModelType() {
+                return (Class<List<String>>) (Class<?>) ArrayList.class;
+            }
+
+            @Override
+            public Class<Set<String>> getPresentationType() {
+                return (Class<Set<String>>) (Class<?>) HashSet.class;
+            }
+        };
     }
 
     private String getTooltip(String property) {
