@@ -319,7 +319,7 @@ public class FormUtil {
                     getLayout().removeComponent(cb);
             }
         };
-
+        // Needed because of internal use of set (we use lists)
         tf.setConverter(getListToSetConverter(clazz));
         tf.setConversionError(getConversionError(clazz));
 
@@ -348,6 +348,9 @@ public class FormUtil {
             return BaseUI.getCurrentI18nResolver().resolve("tokenfield.conversion.error.other");
     }
 
+    /**
+     * Returns a Converter to convert a List of Class T to a Set of Strings and vice versa.
+     */
     @SuppressWarnings("all")
     private <T> Converter getListToSetConverter(Class<? extends T> clazz) {
         if(clazz==null)
