@@ -16,6 +16,8 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.authentication.configurers.GlobalAuthenticationConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -23,11 +25,15 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -40,6 +46,17 @@ import java.util.stream.Collectors;
 @EnableJpaRepositories(basePackages = {"de.muenchen.auth"})
 @EnableAutoConfiguration
 public class AuthserverApplication extends WebMvcConfigurerAdapter {
+
+
+
+    @RequestMapping("/logout")
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null){
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+        }
+        SecurityContextHolder.getContext().setAuthentication(null);
+    }
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
@@ -69,7 +86,8 @@ public class AuthserverApplication extends WebMvcConfigurerAdapter {
             http
                     .formLogin().loginPage("/login").permitAll()
                     .and()
-                    .requestMatchers().antMatchers("/login", "/oauth/authorize", "/oauth/confirm_access")
+                    //Enable httpSecurity for matched urls
+                    .requestMatchers().antMatchers("/login",  "/logout", "/oauth/authorize", "/oauth/confirm_access")
                     .and()
                     .authorizeRequests().anyRequest().authenticated();
             // @formatter:on

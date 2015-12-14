@@ -8,10 +8,7 @@ import java.util.Set;
  */
 public class UserDto {
 
-
-
     private String username;
-
 
     private String forname;
 
@@ -22,6 +19,8 @@ public class UserDto {
     private String email;
 
     private boolean userEnabled;
+
+    private String mandant;
 
     private Set<String> authorities;
 
@@ -81,4 +80,11 @@ public class UserDto {
         this.authorities = authorities;
     }
 
+    public void setMandant(String mandant) {
+        this.mandant = mandant;
+    }
+
+    public String getMandant() {
+        return mandant;
+    }
 }

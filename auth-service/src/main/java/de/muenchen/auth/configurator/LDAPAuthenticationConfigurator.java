@@ -1,4 +1,4 @@
-package de.muenchen.service.security.configurator;
+package de.muenchen.auth.configurator;
 
 import org.kohsuke.MetaInfServices;
 import org.springframework.beans.factory.annotation.Autowired;

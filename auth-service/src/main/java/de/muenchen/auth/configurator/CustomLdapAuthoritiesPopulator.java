@@ -1,4 +1,4 @@
-package de.muenchen.service.security.configurator;
+package de.muenchen.auth.configurator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
