@@ -20,6 +20,7 @@
         <module>Service-Lib</module>
         <module>PresentationLib</module>
         <module>auth-service</module>
+        <module>echo-service</module>
     </modules>
     <properties>
         <main.basedir>${basedir}/../..</main.basedir>
