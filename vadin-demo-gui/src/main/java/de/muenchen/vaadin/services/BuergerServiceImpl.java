@@ -12,7 +12,6 @@ import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolverImpl;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.GenericErrorNotification;
-import de.muenchen.vaadin.guilib.components.GenericSuccessNotification;
 import de.muenchen.vaadin.guilib.services.InfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,13 +24,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+import java.util.concurrent.*;
 
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getNotificationPath;
 
@@ -68,7 +61,6 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
         Future<Buerger> result = executor.submit(() -> client.create(buerger));
         try {
             returnBuerger = result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
-            showSuccessNotification(I18nPaths.NotificationType.success, SimpleAction.create);
         } catch (ExecutionException e) {
             HttpClientErrorException exception = (HttpClientErrorException) e.getCause();
             returnBuerger = BuergerFallbackDataGenerator.createBuergerFallback();
@@ -94,7 +86,6 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
         Future<Buerger> result = executor.submit(() -> client.update(buerger));
         try {
             returnBuerger = result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
-            showSuccessNotification(I18nPaths.NotificationType.success, SimpleAction.update);
         } catch (ExecutionException e) {
             HttpClientErrorException exception = (HttpClientErrorException) e.getCause();
             returnBuerger = BuergerFallbackDataGenerator.createBuergerFallback();
@@ -119,7 +110,6 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
         Future<?> result = executor.submit(() -> client.delete(link));
         try {
             result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
-            showSuccessNotification(I18nPaths.NotificationType.success, SimpleAction.delete);
             return true;
         } catch (ExecutionException e) {
             HttpClientErrorException exception = (HttpClientErrorException) e.getCause();
@@ -248,7 +238,6 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
         Future<?> result = executor.submit(() -> client.setRelations(link, links));
         try {
             result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
-            showSuccessNotification(I18nPaths.NotificationType.success, SimpleAction.association);
             return true;
         } catch (HttpClientErrorException e) {
             LOG.error(e.getMessage());
@@ -272,7 +261,6 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
         Future<?> result = executor.submit(() -> client.setRelation(link, relation));
         try {
             result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
-            showSuccessNotification(I18nPaths.NotificationType.success, SimpleAction.association);
             return true;
         } catch (HttpClientErrorException e) {
             LOG.error(e.getMessage());
@@ -301,13 +289,6 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
             return template;
         }
         return securityService.getRestTemplate().orElse(null);
-    }
-
-    private void showSuccessNotification(I18nPaths.NotificationType type, SimpleAction action) {
-        GenericSuccessNotification succes = new GenericSuccessNotification(
-                resolver.resolveRelative(Buerger.class, getNotificationPath(type, action, I18nPaths.Type.label)),
-                resolver.resolveRelative(Buerger.class, getNotificationPath(type, action, I18nPaths.Type.text)));
-        succes.show(Page.getCurrent());
     }
 
     private void showErrorNotification(I18nPaths.NotificationType type, SimpleAction action) {

@@ -2,22 +2,12 @@ package de.muenchen.vaadin.guilib.components;
 
 import com.vaadin.data.Container.Filter;
 import com.vaadin.data.Item;
-import com.vaadin.data.util.AbstractBeanContainer;
-import com.vaadin.data.util.BeanItem;
-import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.data.util.GeneratedPropertyContainer;
-import com.vaadin.data.util.PropertyValueGenerator;
+import com.vaadin.data.util.*;
 import com.vaadin.event.SelectionEvent;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.ui.grid.HeightMode;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.CssLayout;
-import com.vaadin.ui.Grid;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.selector.entity.RequestEntityKey;
 import de.muenchen.eventbus.selector.entity.RequestEvent;
@@ -34,12 +24,7 @@ import de.muenchen.vaadin.guilib.util.Datastore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -191,6 +176,7 @@ public class GenericGrid<T> extends BaseComponent {
 
     private void createCopy() {
         ActionButton copyButton = new ActionButton(getType(), SimpleAction.copy);
+        copyButton.useNotification(true);
 
         copyButton.addActionPerformer(getListActionOnSelected()::create);
         copy = Optional.of(copyButton);
@@ -198,6 +184,7 @@ public class GenericGrid<T> extends BaseComponent {
 
     private void createDelete() {
         ActionButton deleteButton = new ActionButton(getType(), SimpleAction.delete);
+        deleteButton.useNotification(true);
 
         deleteButton.addActionPerformer(getListActionOnSelected()::delete);
         delete = Optional.of(deleteButton);
