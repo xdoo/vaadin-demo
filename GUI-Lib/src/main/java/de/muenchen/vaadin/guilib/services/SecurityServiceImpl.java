@@ -24,8 +24,6 @@ import java.util.Arrays;
 import java.util.Optional;
 
 /**
- * VORSICHT HACK! DAS MUSS ALLES NOCHMAL HINTERFRAGT UND GETESTET WERDEN!
- * 
  * 
  * @author claus.straube
  */
@@ -105,8 +103,10 @@ public class SecurityServiceImpl implements SecurityService, Serializable {
     
     @Override
     public void logout() {
+        //TODO Request on Logout Endpoint of SecService
+
         //Delete Token
-        restTemplate = null;  //TODO Ist this way correct?
+        restTemplate = null;
         this.login = Boolean.FALSE;
     }
 
