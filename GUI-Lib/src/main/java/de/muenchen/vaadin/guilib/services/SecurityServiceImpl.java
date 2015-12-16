@@ -1,6 +1,7 @@
-package de.muenchen.vaadin.demo.apilib.services;
+package de.muenchen.vaadin.guilib.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vaadin.spring.annotation.UIScope;
 import de.muenchen.vaadin.demo.apilib.domain.Principal;
 import de.muenchen.vaadin.demo.apilib.rest.SecurityRestClient;
 import org.slf4j.Logger;
@@ -29,6 +30,7 @@ import java.util.Optional;
  * @author claus.straube
  */
 @Component
+@UIScope
 public class SecurityServiceImpl implements SecurityService, Serializable {
     
     private static final Logger LOG = LoggerFactory.getLogger(SecurityService.class);
