@@ -20,7 +20,7 @@ import de.muenchen.demo.service.gen.rest.SachbearbeiterRepository;
 import de.muenchen.demo.service.gen.rest.StaatsangehoerigkeitRepository;
 import de.muenchen.demo.service.gen.rest.WohnungRepository;
 import de.muenchen.demo.service.gen.services.BusinessActionService;
-import de.muenchen.service.security.repositories.UserRepository;
+import de.muenchen.service.TenantUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -57,8 +57,6 @@ public class BusinessActionServiceImpl implements BusinessActionService {
     PassRepository passRepo;
     @Autowired
     SachbearbeiterRepository sachbearbeiterRepo;
-    @Autowired
-    UserRepository userRepository;
 
     public void testdatenerzeugen() {
 
@@ -149,7 +147,7 @@ public class BusinessActionServiceImpl implements BusinessActionService {
 
     public String getCurrentMandant() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return userRepository.findFirstByUsername(authentication.getName()).getMandant();
+        return TenantUtils.extractTenantFromUsername(authentication.getName());
     }
 
     /**
