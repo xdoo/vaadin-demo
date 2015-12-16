@@ -3,13 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.muenchen.service.security.repositories;
+package de.muenchen.auth.repositories;
 
-import de.muenchen.service.security.entities.Permission;
+import de.muenchen.auth.entities.Permission;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cloud.security.oauth2.resource.EnableOAuth2Resource;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,7 +18,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
  * @author praktikant.tmar
  */
 @PreAuthorize("hasRole('ROLE_READ_SEC_Authority')")
-@EnableOAuth2Resource
 @RepositoryRestResource
 public interface PermissionRepository  extends CrudRepository<Permission, Long>  {
 

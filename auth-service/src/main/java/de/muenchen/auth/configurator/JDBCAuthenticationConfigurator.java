@@ -26,10 +26,12 @@ public class JDBCAuthenticationConfigurator extends GlobalAuthenticationConfigur
                 .dataSource(dataSource)
                 .usersByUsernameQuery("select USER_USERNAME, USER_PASSWORD, USER_ENABLED from _USERS where USER_USERNAME = ? AND USER_PASSWORD IS NOT NULL")
                 .authoritiesByUsernameQuery(
-                        "SELECT _USERS.USER_USERNAME, _AUTHORITIES.AUTH_AUTHORITY " +
+                        "SELECT _USERS.USER_USERNAME, _PERMISSIONS.PERM_PERMISSION " +
                                 "FROM _USERS_AUTHORITIES " +
                                 "JOIN _USERS on _USERS_AUTHORITIES.USER_OID = _USERS.OID " +
                                 "JOIN _AUTHORITIES on _USERS_AUTHORITIES.AUTHORITY_OID  = _AUTHORITIES.OID " +
+                                "JOIN _AUTHORITIES_PERMISSIONS on _AUTHORITIES_PERMISSIONS.AUTHORITY_OID = _USERS_AUTHORITIES.AUTHORITY_OID " +
+                                "JOIN _PERMISSIONS ON _AUTHORITIES_PERMISSIONS.PERMISSION_OID = _PERMISSIONS.OID " +
                                 "WHERE _USERS.USER_USERNAME = ?");
 
     }

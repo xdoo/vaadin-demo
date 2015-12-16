@@ -1,7 +1,9 @@
 package de.muenchen.auth.mapper;
 
+import de.muenchen.auth.dto.AuthorityDto;
 import de.muenchen.auth.dto.UserDto;
 import de.muenchen.auth.entities.Authority;
+import de.muenchen.auth.entities.Permission;
 import de.muenchen.auth.entities.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -17,9 +19,13 @@ public abstract class UserMapper {
 
     public abstract UserDto userToUserDto(User user);
 
-    public abstract Set<String> authoritySetToStringSet(Set<Authority> authorities);
+    public abstract Set<AuthorityDto> authoritiesToAuthorities(Set<Authority> authorities);
 
-    public String authorityToString(Authority authority){
-        return authority.getAuthority();
+    public abstract AuthorityDto authorityToAuthorityDto(Authority authority);
+
+    public abstract Set<String> permissionsToPermissions(Set<Permission> permission );
+
+    public String permissionToString(Permission permission){
+        return permission.getPermission();
     }
 }

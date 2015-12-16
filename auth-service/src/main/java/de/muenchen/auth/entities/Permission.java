@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.muenchen.service.security.entities;
+package de.muenchen.auth.entities;
 
-import de.muenchen.service.BaseEntity;
+import de.muenchen.auth.BaseEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

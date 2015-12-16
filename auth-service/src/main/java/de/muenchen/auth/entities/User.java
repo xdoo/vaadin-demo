@@ -6,6 +6,7 @@
 package de.muenchen.auth.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import de.muenchen.auth.BaseEntity;
 import org.hibernate.search.annotations.Indexed;
 
@@ -15,6 +16,7 @@ import java.util.Date;
 import java.util.Set;
 
 /**
+ *
  * @author praktikant.tmar
  */
 @Entity
@@ -36,7 +38,7 @@ public class User extends BaseEntity implements Serializable {
     private String surname;
 
     @Column(name = "USER_BIRTHDATE")
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(TemporalType.DATE)
     private Date birthdate;
 
     @Column(name = "USER_EMAIL")

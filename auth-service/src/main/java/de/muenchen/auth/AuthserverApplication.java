@@ -86,7 +86,7 @@ public class AuthserverApplication extends WebMvcConfigurerAdapter {
             http
                     .formLogin().loginPage("/login").permitAll()
                     .and()
-                    //Enable httpSecurity for matched urls
+                    //Enable httpSecurity for urls match
                     .requestMatchers().antMatchers("/login",  "/logout", "/oauth/authorize", "/oauth/confirm_access")
                     .and()
                     .authorizeRequests().anyRequest().authenticated();

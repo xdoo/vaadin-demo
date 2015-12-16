@@ -5,12 +5,10 @@
  */
 package de.muenchen.auth.entities;
 
-
 import de.muenchen.auth.BaseEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Set;
 
 /**
  * @author praktikant.tmar
@@ -22,11 +20,17 @@ public class Authority extends BaseEntity {
     @Column(name = "AUTH_AUTHORITY")
     private String authority;
 
+    @ManyToMany(cascade = CascadeType.REFRESH)
+    @JoinTable(name = "_authorities_permissions", joinColumns = @JoinColumn(name = "authority_oid"), inverseJoinColumns = @JoinColumn(name = "permission_oid"))
+    private Set<Permission> permissions;
+
     public Authority() {
     }
 
-    public Authority(Authority authority) {
+    public Authority(Authority authority, Set<Permission> permissions) {
         this.authority = authority.authority;
+        this.permissions = permissions;
+
     }
 
 
@@ -36,5 +40,14 @@ public class Authority extends BaseEntity {
 
     public void setAuthority(String authority) {
         this.authority = authority;
+    }
+
+
+    public Set<Permission> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(Set<Permission> permissions) {
+        this.permissions = permissions;
     }
 }

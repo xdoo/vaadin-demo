@@ -22,7 +22,7 @@ public class UserDto {
 
     private String mandant;
 
-    private Set<String> authorities;
+    private Set<AuthorityDto> authorities;
 
     public String getUsername() {
         return username;
@@ -72,11 +72,11 @@ public class UserDto {
         this.userEnabled = userEnabled;
     }
 
-    public Set<String> getAuthorities() {
+    public Set<AuthorityDto> getAuthorities() {
         return authorities;
     }
 
-    public void setAuthorities(Set<String> authorities) {
+    public void setAuthorities(Set<AuthorityDto> authorities) {
         this.authorities = authorities;
     }
 
