@@ -51,7 +51,7 @@ public class Authority_Permissions_ReadEdit extends BaseComponent {
             if (isOneSelected) {
                 // select authorities' permissions
                 authoritySingleActions.read(null);
-                permSelect.select(authorityViewController.getModel().getSelectedAuthorityPermissions());
+                permSelect.select(authorityViewController.getModel().getSelectedAuthorityPermissions().getItemIds());
             }
         });
 
