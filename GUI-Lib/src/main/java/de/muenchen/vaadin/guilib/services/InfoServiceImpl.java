@@ -16,7 +16,7 @@ public class InfoServiceImpl implements InfoService {
     @Autowired
     DiscoveryClient discoveryClient;
 
-    @Value(value = "${service.url}")
+    @Value(value = "${service.buerger.url}")
     private String url;
     @Value(value = "${service.info.id.eureka}")
     private String eurekaId;
