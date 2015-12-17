@@ -2,28 +2,23 @@ package de.muenchen.vaadin.guilib.security.components;
 
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TwinColSelect;
-import com.vaadin.ui.VerticalLayout;
 import de.muenchen.eventbus.events.Association;
 import de.muenchen.vaadin.demo.apilib.local.Authority_;
 import de.muenchen.vaadin.demo.apilib.local.Permission_;
-import de.muenchen.vaadin.guilib.security.components.buttons.listener.Authority_AssociationListActions;
-import de.muenchen.vaadin.guilib.security.controller.Permission_ViewController;
 import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.components.BaseComponent;
+import de.muenchen.vaadin.guilib.security.components.buttons.listener.Authority_AssociationListActions;
+import de.muenchen.vaadin.guilib.security.controller.Permission_ViewController;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Authority_Permissions_TwinSelect extends BaseComponent {
     private final Permission_ViewController controller;
-
-    private final HorizontalLayout topLayout = new HorizontalLayout();
-
-    private final VerticalLayout layout = new VerticalLayout();
 
     private final TwinColSelect select;
 
@@ -57,36 +52,30 @@ public class Authority_Permissions_TwinSelect extends BaseComponent {
         BeanItemContainer<Permission_> perms = controller.getModel().getPermissions();
         perms.sort(new String[]{"permission"}, new boolean[]{true});
         select.setContainerDataSource(perms);
-        select.setWidth("100%");
+        select.setWidth("99%");
         select.setHeight("484px");
+        select.setImmediate(true);
         select.addValueChangeListener(saveListener);
         select.setLeftColumnCaption(BaseUI.getCurrentI18nResolver().resolveRelative(Authority_.class, "permissions.available.label"));
         select.setRightColumnCaption(BaseUI.getCurrentI18nResolver().resolveRelative(Authority_.class, "permissions.granted.label"));
 
-        layout.addComponents(select);
-        layout.setVisible(true);
-        layout.setSpacing(true);
-        layout.setSizeFull();
-
-        setCompositionRoot(layout);
+        setCompositionRoot(select);
     }
 
     public void deselectAll(){
         select.removeValueChangeListener(saveListener);
 
         lastSelected.clear();
-        select.getItemIds().forEach(select::unselect);
+        select.setValue(new HashSet<>());
 
         select.addValueChangeListener(saveListener);
     }
 
-    public void select(BeanItemContainer<Permission_> permissions){
+    public void select(List<Permission_> permissions){
         select.removeValueChangeListener(saveListener);
 
-        lastSelected.addAll(permissions.getItemIds());
-        permissions.getItemIds().forEach(permission -> {
-            select.select(permission);
-        });
+        lastSelected.addAll(permissions);
+        select.setValue(permissions);
 
         select.addValueChangeListener(saveListener);
     }
