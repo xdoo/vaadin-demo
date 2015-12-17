@@ -1,7 +1,6 @@
 package de.muenchen.demo.test.service;
 
 /**
- *
  * @author claus.straube
  */
 public interface DomainConstants {
@@ -333,7 +332,7 @@ public interface DomainConstants {
     public final static String M2_AR038 = "OIDM2_ADREF038";
     public final static String M2_AR039 = "OIDM2_ADREF039";
 
-//Adresse Interne 
+    //Adresse Interne
     public final static String M2_AI001 = "OIDM2_ADIN001";
     public final static String M2_AI002 = "OIDM2_ADIN002";
     public final static String M2_AI003 = "OIDM2_ADIN003";
@@ -354,7 +353,7 @@ public interface DomainConstants {
     public final static String M2_AI018 = "OIDM2_ADIN018";
     public final static String M2_AI019 = "OIDM2_ADIN019";
 
-//Adresse Externe
+    //Adresse Externe
     public final static String M2_AE001 = "OIDM2_ADEN001";
     public final static String M2_AE002 = "OIDM2_ADEN002";
     public final static String M2_AE003 = "OIDM2_ADEN003";

@@ -5,14 +5,13 @@
  */
 package de.muenchen.auth.entities;
 
-import de.muenchen.auth.BaseEntity;
+import de.muenchen.service.BaseEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 /**
- *
  * @author praktikant.tmar
  */
 @Entity

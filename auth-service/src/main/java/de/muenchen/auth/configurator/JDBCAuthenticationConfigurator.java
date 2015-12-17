@@ -12,7 +12,7 @@ import javax.sql.DataSource;
  * Created by rene.zarwel on 21.08.15.
  */
 @MetaInfServices
-@Order(1)
+@Order(2)
 public class JDBCAuthenticationConfigurator extends GlobalAuthenticationConfigurerAdapter {
 
     @Autowired
@@ -24,7 +24,7 @@ public class JDBCAuthenticationConfigurator extends GlobalAuthenticationConfigur
         auth
                 .jdbcAuthentication()
                 .dataSource(dataSource)
-                .usersByUsernameQuery("select USER_USERNAME, USER_PASSWORD, USER_ENABLED from _USERS where USER_USERNAME = ? AND USER_PASSWORD IS NOT NULL")
+                .usersByUsernameQuery("select USER_USERNAME, USER_PASSWORD, USER_ENABLED, mandant from _USERS where USER_USERNAME = ? AND USER_PASSWORD IS NOT NULL")
                 .authoritiesByUsernameQuery(
                         "SELECT _USERS.USER_USERNAME, _PERMISSIONS.PERM_PERMISSION " +
                                 "FROM _USERS_AUTHORITIES " +
@@ -35,4 +35,5 @@ public class JDBCAuthenticationConfigurator extends GlobalAuthenticationConfigur
                                 "WHERE _USERS.USER_USERNAME = ?");
 
     }
+
 }

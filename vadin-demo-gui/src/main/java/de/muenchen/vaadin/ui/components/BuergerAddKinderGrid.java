@@ -1,6 +1,5 @@
 package de.muenchen.vaadin.ui.components;
 
-import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.VerticalLayout;
 import de.muenchen.eventbus.events.Association;
 import de.muenchen.vaadin.demo.api.local.Buerger;
@@ -9,7 +8,6 @@ import de.muenchen.vaadin.guilib.components.BaseComponent;
 import de.muenchen.vaadin.guilib.components.GenericGrid;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
-import de.muenchen.vaadin.ui.app.views.BuergerDetailView;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerAssociationListActions;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
@@ -22,13 +20,13 @@ public class BuergerAddKinderGrid extends BaseComponent {
     private final String navigateOnAdd;
     private final BuergerViewController controller;
 
-    public BuergerAddKinderGrid(String navigateOnAdd, BuergerViewController controller){
+    public BuergerAddKinderGrid(String navigateOnAdd, BuergerViewController controller) {
         this.controller = controller;
-        this.navigateOnAdd= navigateOnAdd;
+        this.navigateOnAdd = navigateOnAdd;
         init();
     }
 
-    protected void init(){
+    protected void init() {
         final ActionButton backButton = new ActionButton(Buerger.class, SimpleAction.back);
         final NavigateActions navigateActions = new NavigateActions(navigateOnAdd);
         backButton.addActionPerformer(navigateActions::navigate);

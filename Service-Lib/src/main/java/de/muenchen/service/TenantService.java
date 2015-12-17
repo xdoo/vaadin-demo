@@ -27,7 +27,8 @@ public class TenantService {
     public String getCurrentTenantId(Authentication authentication) {
         if (authentication == null)
             throw new IllegalArgumentException("Authentication cannot be null or emtpy!");
-        final String tenant = TenantUtils.extractTenantFromUsername(authentication.getName());
+        String tenant = TenantUtils.extractTenantFromPrincipal(authentication.getPrincipal());
+
         if (tenant == null || tenant.isEmpty())
             throw new AssertionError(String.format("User with authentication %s has no tenant!.", authentication));
 

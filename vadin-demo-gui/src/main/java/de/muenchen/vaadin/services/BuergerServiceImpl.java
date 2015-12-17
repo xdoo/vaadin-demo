@@ -24,13 +24,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+import java.util.concurrent.*;
 
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getNotificationPath;
 
@@ -226,7 +220,7 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
             buergers = BuergerFallbackDataGenerator.createBuergersFallback();
             LOG.error(e.getMessage());
             showErrorNotification(I18nPaths.NotificationType.error, SimpleAction.read);
-        } catch (TimeoutException e){
+        } catch (TimeoutException e) {
             buergers = BuergerFallbackDataGenerator.createBuergersFallback();
             LOG.error(e.getMessage());
             showErrorNotification(I18nPaths.NotificationType.error, SimpleAction.read, TIMEOUT_I18N);

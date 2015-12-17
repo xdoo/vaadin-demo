@@ -11,14 +11,23 @@ import de.muenchen.auth.entities.Permission;
  * Provides methods to implement logic before and after Events.
  */
 public interface PermissionEventService {
-	void onAfterCreate(Permission entity);
-	void onBeforeCreate(Permission entity);
-	void onBeforeSave(Permission entity);
-	void onAfterSave(Permission entity);
-	void onBeforeLinkSave(Permission parent, Object linked);
-	void onAfterLinkSave(Permission parent, Object linked);
-	void onBeforeLinkDelete(Permission parent, Object linked);
-	void onBeforeDelete(Permission entity);
-	void onAfterDelete(Permission entity);
-	void onAfterLinkDelete(Permission parent, Object linked);
+    void onAfterCreate(Permission entity);
+
+    void onBeforeCreate(Permission entity);
+
+    void onBeforeSave(Permission entity);
+
+    void onAfterSave(Permission entity);
+
+    void onBeforeLinkSave(Permission parent, Object linked);
+
+    void onAfterLinkSave(Permission parent, Object linked);
+
+    void onBeforeLinkDelete(Permission parent, Object linked);
+
+    void onBeforeDelete(Permission entity);
+
+    void onAfterDelete(Permission entity);
+
+    void onAfterLinkDelete(Permission parent, Object linked);
 }

@@ -22,7 +22,6 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
-import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -38,7 +37,7 @@ import org.springframework.web.filter.HiddenHttpMethodFilter;
 @EnableAutoConfiguration(exclude = {
         org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration.class})
 public class Application {
-    
+
     public static void main(String[] args) throws Exception {
         new SpringApplicationBuilder(Application.class).run(args);
     }
@@ -54,7 +53,7 @@ public class Application {
 
     @Bean
     @UIScope
-    public EventBus eventbus(){
+    public EventBus eventbus() {
         return new EventBus();
     }
 }

@@ -1,7 +1,6 @@
 package de.muenchen.service;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import de.muenchen.service.DatabaseBeforeSaveEventListener;
 import org.hibernate.search.annotations.IndexedEmbedded;
 
 import javax.persistence.Column;
@@ -11,7 +10,6 @@ import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 
 /**
- *
  * @author claus.straube
  */
 @MappedSuperclass

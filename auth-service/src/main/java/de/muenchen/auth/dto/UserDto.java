@@ -80,11 +80,11 @@ public class UserDto {
         this.authorities = authorities;
     }
 
-    public void setMandant(String mandant) {
-        this.mandant = mandant;
-    }
-
     public String getMandant() {
         return mandant;
+    }
+
+    public void setMandant(String mandant) {
+        this.mandant = mandant;
     }
 }

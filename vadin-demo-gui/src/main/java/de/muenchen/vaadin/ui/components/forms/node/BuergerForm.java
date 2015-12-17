@@ -2,12 +2,7 @@ package de.muenchen.vaadin.ui.components.forms.node;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
-import com.vaadin.ui.CheckBox;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.DateField;
-import com.vaadin.ui.Field;
-import com.vaadin.ui.FormLayout;
-import com.vaadin.ui.TextField;
+import com.vaadin.ui.*;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.guilib.components.BaseComponent;
 import de.muenchen.vaadin.guilib.util.FormUtil;
@@ -21,7 +16,7 @@ import static com.vaadin.data.Validator.InvalidValueException;
 
 /**
  * Provides a very simple and basic Form for a Buerger.
- * <p/>
+ * <p>
  * If no Buerger is set, a blank user without an ID will be used. It has no buttons or additional components but can be
  * used for any Buerger you set it to.
  *
@@ -49,10 +44,9 @@ public class BuergerForm extends BaseComponent {
 
     /**
      * Create a new BuergerForm using the specified i18nResolver and the eventbus.
-     * <p/>
+     * <p>
      * This Form is only the plain fields for input, and has no additional components or buttons. You can use {@link
      * BuergerForm#setReadOnly(boolean)} for a readonly mode.
-     *
      */
     public BuergerForm() {
         binder.setItemDataSource(new Buerger());
@@ -68,7 +62,7 @@ public class BuergerForm extends BaseComponent {
 
     /**
      * Build all the (input) Fields used by this form.
-     * <p/>
+     * <p>
      * The Fields are data binded to the Buerger.
      *
      * @return A List of all Components.

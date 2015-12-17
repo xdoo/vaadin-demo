@@ -10,13 +10,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- *
  * @author claus
  */
 @SpringView(name = BuergerTableView.NAME)
 @UIScope
 public class BuergerTableView extends DefaultBuergerView {
-    
+
     public static final String NAME = "buerger_table_view";
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerCreateView.class);
 

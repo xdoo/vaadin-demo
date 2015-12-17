@@ -6,9 +6,9 @@ import de.muenchen.eventbus.events.Association;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.BaseComponent;
+import de.muenchen.vaadin.guilib.components.ConfirmationWindow;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
-import de.muenchen.vaadin.guilib.components.ConfirmationWindow;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerAssociationActions;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerSingleActions;
 import de.muenchen.vaadin.ui.components.forms.selected.SelectedBuergerPartnerForm;
@@ -20,9 +20,13 @@ import de.muenchen.vaadin.ui.components.forms.selected.SelectedBuergerPartnerFor
  * @version 1.1
  */
 public class BuergerPartnerForm extends BaseComponent {
-    /** Indicates the mode of the form. */
+    /**
+     * Indicates the mode of the form.
+     */
     public static final boolean READ_ONLY = true;
-    /** The underlying form. */
+    /**
+     * The underlying form.
+     */
     private final SelectedBuergerPartnerForm partnerForm = new SelectedBuergerPartnerForm() {
         @Override
         public void setBuerger(Buerger buerger) {
@@ -30,30 +34,50 @@ public class BuergerPartnerForm extends BaseComponent {
             super.setBuerger(buerger);
         }
     };
-    /** The root layout for the content of this component. */
+    /**
+     * The root layout for the content of this component.
+     */
     private final VerticalLayout rootLayout = new VerticalLayout();
-    /** The layout for the buttons (that are always visible). */
+    /**
+     * The layout for the buttons (that are always visible).
+     */
     private final HorizontalLayout buttonLayout = new HorizontalLayout();
-    /** The create Button. */
+    /**
+     * The create Button.
+     */
     private final ActionButton createButton = new ActionButton(Buerger.class, SimpleAction.create);
-    /** The button for the add action. */
+    /**
+     * The button for the add action.
+     */
     private final ActionButton addButton = new ActionButton(Buerger.class, SimpleAction.add);
-    /** The layout for the buttons that are added to the form. */
+    /**
+     * The layout for the buttons that are added to the form.
+     */
     private final HorizontalLayout formButtonLayout = new HorizontalLayout();
-    /** The button for the read action. */
+    /**
+     * The button for the read action.
+     */
     private final ActionButton readButton = new ActionButton(Buerger.class, SimpleAction.read);
-    /** The button for the delete action. */
+    /**
+     * The button for the delete action.
+     */
     private final ActionButton deleteButton = new ActionButton(Buerger.class, SimpleAction.delete);
-    /** The navigation for the create action. */
+    /**
+     * The navigation for the create action.
+     */
     private final NavigateActions createNavigation;
-    /** The navigation for the read action. */
+    /**
+     * The navigation for the read action.
+     */
     private final NavigateActions readNavigation;
-    /** The navigation for the add action. */
+    /**
+     * The navigation for the add action.
+     */
     private final NavigateActions addNavigation;
 
     /**
      * Create a new BuergerPartnerForm with the navigateToCreate, navigateToRead and navigateToAdd.
-     * <p/>
+     * <p>
      * It will always show the current partner of the selected Buerger. The Form won't be visible if no Partner is present.
      *
      * @param navigateToCreate The View to navigate to on the create action.

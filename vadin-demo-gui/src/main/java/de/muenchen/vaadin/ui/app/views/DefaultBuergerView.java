@@ -18,21 +18,24 @@ import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getPagePath;
 /**
  * Für jede Entity existiert eine (voll generierte) Basis Klasse. Aus dieser
  * leiten sich alle anderen Views ab.
- * 
+ *
  * @author claus.straube
  */
-public abstract class DefaultBuergerView extends VerticalLayout implements View{
+public abstract class DefaultBuergerView extends VerticalLayout implements View {
 
     BuergerViewController controller;
     String helpContent;
+
     public DefaultBuergerView(BuergerViewController controller) {
         this.controller = controller;
-        this.helpContent ="No Help menu found";
+        this.helpContent = "No Help menu found";
     }
+
     public DefaultBuergerView(BuergerViewController controller, String helpContent) {
         this.controller = controller;
         this.helpContent = helpContent;
     }
+
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
         this.configureLayout();

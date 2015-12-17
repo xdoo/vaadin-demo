@@ -5,7 +5,7 @@
  */
 package de.muenchen.auth.entities;
 
-import de.muenchen.auth.BaseEntity;
+import de.muenchen.service.BaseEntity;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -17,10 +17,12 @@ import java.util.Set;
 @Table(name = "_AUTHORITIES")
 public class Authority extends BaseEntity {
 
+    public static final String ADMIN_AUTHORITY = "ADMIN";
+
     @Column(name = "AUTH_AUTHORITY")
     private String authority;
 
-    @ManyToMany(cascade = CascadeType.REFRESH)
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinTable(name = "_authorities_permissions", joinColumns = @JoinColumn(name = "authority_oid"), inverseJoinColumns = @JoinColumn(name = "permission_oid"))
     private Set<Permission> permissions;
 

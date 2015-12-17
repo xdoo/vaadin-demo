@@ -1,6 +1,7 @@
 package de.muenchen.auth;
 
 import de.muenchen.auth.configurator.JDBCAuthenticationConfigurator;
+import de.muenchen.service.security.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -8,6 +9,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -24,6 +26,8 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.DefaultUserAuthenticationConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
@@ -34,6 +38,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -45,14 +50,18 @@ import java.util.stream.Collectors;
 @EntityScan(basePackages = {"de.muenchen.auth"})
 @EnableJpaRepositories(basePackages = {"de.muenchen.auth"})
 @EnableAutoConfiguration
+@ComponentScan(basePackages = {"de.muenchen.service", "de.muenchen.auth"})
 public class AuthserverApplication extends WebMvcConfigurerAdapter {
 
 
+    public static void main(String[] args) {
+        SpringApplication.run(AuthserverApplication.class, args);
+    }
 
     @RequestMapping("/logout")
     public void logout(HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null){
+        if (auth != null) {
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
         SecurityContextHolder.getContext().setAuthentication(null);
@@ -69,10 +78,6 @@ public class AuthserverApplication extends WebMvcConfigurerAdapter {
         return new JDBCAuthenticationConfigurator();
     }
 
-    public static void main(String[] args) {
-        SpringApplication.run(AuthserverApplication.class, args);
-    }
-
     @Configuration
     @Order(-20)
     protected static class LoginConfig extends WebSecurityConfigurerAdapter {
@@ -87,7 +92,7 @@ public class AuthserverApplication extends WebMvcConfigurerAdapter {
                     .formLogin().loginPage("/login").permitAll()
                     .and()
                     //Enable httpSecurity for urls match
-                    .requestMatchers().antMatchers("/login",  "/logout", "/oauth/authorize", "/oauth/confirm_access")
+                    .requestMatchers().antMatchers("/login", "/logout", "/oauth/authorize", "/oauth/confirm_access")
                     .and()
                     .authorizeRequests().anyRequest().authenticated();
             // @formatter:on
@@ -122,6 +127,9 @@ public class AuthserverApplication extends WebMvcConfigurerAdapter {
         @Bean
         public JwtAccessTokenConverter jwtAccessTokenConverter() {
             JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+            DefaultAccessTokenConverter accessTokenConverter = new DefaultAccessTokenConverter();
+            accessTokenConverter.setUserTokenConverter(new CustomDefaultUserAuthenticationConverter());
+            converter.setAccessTokenConverter(accessTokenConverter);
             converter.setSigningKey(signingKey);
             return converter;
         }
@@ -149,5 +157,17 @@ public class AuthserverApplication extends WebMvcConfigurerAdapter {
                     "isAuthenticated()");
         }
 
+
+        class CustomDefaultUserAuthenticationConverter extends DefaultUserAuthenticationConverter {
+            @Override
+            public Map<String, ?> convertUserAuthentication(Authentication authentication) {
+                Map<String, Object> properties = (Map<String, Object>) super.convertUserAuthentication(authentication);
+                Object principal = authentication.getPrincipal();
+                if (principal instanceof UserInfo) {
+                    properties.put(UserInfo.TENANT, ((UserInfo) principal).getTenant());
+                }
+                return properties;
+            }
+        }
     }
 }

@@ -14,18 +14,11 @@ import com.vaadin.server.VaadinService;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.ComponentContainer;
-import com.vaadin.ui.CssLayout;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.MenuBar;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.EventBus;
 import de.muenchen.eventbus.selector.Key;
+import de.muenchen.presentationlib.gui.IssueWindow;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.apilib.services.SecurityService;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolverImpl;
@@ -34,7 +27,6 @@ import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.ValoMenuLayout;
 import de.muenchen.vaadin.guilib.components.ConfirmationWindow;
-import de.muenchen.presentationlib.gui.IssueWindow;
 import de.muenchen.vaadin.ui.app.views.BuergerTableView;
 import de.muenchen.vaadin.ui.app.views.LoginView;
 import de.muenchen.vaadin.ui.app.views.MainView;
@@ -64,17 +56,15 @@ public class MainUI extends BaseUI {
     private final MessageService i18n;
     private final boolean testMode = false;
     private final LinkedHashMap<String, String> menuItems = new LinkedHashMap<String, String>();
+    private final String helpHtmlWrap = "<p style=\"margin: 6px; color: white\">%s</p>";
     protected ValoMenuLayout root = new ValoMenuLayout();
     protected ComponentContainer viewDisplay = root.getContentContainer();
     protected CssLayout menu = new CssLayout();
     protected CssLayout help = new CssLayout();
-
     @Autowired
     protected IssueWindow issueWindow;
-
-    private Label helpContent;
     protected CssLayout menuItemsLayout = new CssLayout();
-
+    private Label helpContent;
     private MenuBar bar = new MenuBar();
     private MenuBar.MenuItem language;
 
@@ -217,8 +207,6 @@ public class MainUI extends BaseUI {
         return menu;
     }
 
-    private final String helpHtmlWrap = "<p style=\"margin: 6px; color: white\">%s</p>";
-
     private CssLayout buildHelp() {
         help.addComponent(createTitle("Help"));
         helpContent = new Label(String.format(helpHtmlWrap, "Not yet initialized..."), ContentMode.HTML);
@@ -230,7 +218,7 @@ public class MainUI extends BaseUI {
         return help;
     }
 
-    public void setHelpContent(String content){
+    public void setHelpContent(String content) {
         helpContent.setValue(String.format(helpHtmlWrap, content));
     }
 
@@ -291,11 +279,12 @@ public class MainUI extends BaseUI {
 
     /**
      * Adds the IssueWindow-functionality to the MenuBar
+     *
      * @param bar to add to
      * @return MenuBar with IssueWindow-item
      */
     private MenuBar addIssueCreator(MenuBar bar) {
-        bar.addItem(getCurrentI18nResolver().resolve("issue.title"), FontAwesome.EXCLAMATION_CIRCLE, selectedItem ->showIssueWindow());
+        bar.addItem(getCurrentI18nResolver().resolve("issue.title"), FontAwesome.EXCLAMATION_CIRCLE, selectedItem -> showIssueWindow());
         root.addShortcutListener(new ShortcutListener("createissue", ShortcutAction.KeyCode.F2, null) {
             @Override
             public void handleAction(Object sender, Object target) {
@@ -308,7 +297,7 @@ public class MainUI extends BaseUI {
     /**
      * Displays the IssueWindow
      */
-    private void showIssueWindow(){
+    private void showIssueWindow() {
         String issueFor = getNavigator().getState();
         issueWindow.setIssue(issueFor);
         getUI().addWindow(issueWindow);

@@ -14,13 +14,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- *
  * @author claus
  */
 @SpringView(name = BuergerCreateChildView.NAME)
 @UIScope
 public class BuergerCreateChildView extends DefaultBuergerView {
-    
+
     public static final String NAME = "buerger_create_child_view";
     protected static final Logger LOG = LoggerFactory.getLogger(BuergerCreateChildView.class);
 
@@ -44,5 +43,5 @@ public class BuergerCreateChildView extends DefaultBuergerView {
 
         addComponent(layout);
     }
-    
+
 }

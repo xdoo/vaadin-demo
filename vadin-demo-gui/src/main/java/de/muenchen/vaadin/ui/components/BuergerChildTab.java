@@ -4,7 +4,6 @@ import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import de.muenchen.eventbus.events.Association;
 import de.muenchen.vaadin.demo.api.local.Buerger;
-import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolverImpl;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.GenericGrid;
@@ -12,13 +11,10 @@ import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
 import de.muenchen.vaadin.ui.app.views.BuergerAddChildView;
 import de.muenchen.vaadin.ui.app.views.BuergerDetailView;
-import de.muenchen.vaadin.ui.app.views.TableSelectWindow;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerAssociationListActions;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
 
 import java.util.stream.Collectors;
-
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getFormPath;
 
 /**
  * @author claus
@@ -46,7 +42,7 @@ public class BuergerChildTab extends CustomComponent {
         ActionButton deleteButton = new ActionButton(Buerger.class, SimpleAction.delete);
         BuergerAssociationListActions listAction = new BuergerAssociationListActions(
                 () -> grid.getSelectedEntities().stream()
-                        .map(buerger -> new Association<>( buerger, Buerger.Rel.kinder.name()))
+                        .map(buerger -> new Association<>(buerger, Buerger.Rel.kinder.name()))
                         .collect(Collectors.toList())
         );
         deleteButton.addActionPerformer(listAction::removeAssociations);

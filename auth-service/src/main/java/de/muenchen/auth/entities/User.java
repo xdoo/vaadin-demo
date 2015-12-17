@@ -6,8 +6,7 @@
 package de.muenchen.auth.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import de.muenchen.auth.BaseEntity;
+import de.muenchen.service.BaseEntity;
 import org.hibernate.search.annotations.Indexed;
 
 import javax.persistence.*;
@@ -16,7 +15,6 @@ import java.util.Date;
 import java.util.Set;
 
 /**
- *
  * @author praktikant.tmar
  */
 @Entity

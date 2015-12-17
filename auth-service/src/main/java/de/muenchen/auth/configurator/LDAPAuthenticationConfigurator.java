@@ -12,7 +12,7 @@ import org.springframework.security.ldap.DefaultSpringSecurityContextSource;
  * Created by rene.zarwel on 21.08.15.
  */
 @MetaInfServices
-@Order(2)
+@Order(3)
 public class LDAPAuthenticationConfigurator extends GlobalAuthenticationConfigurerAdapter {
 
     private final static String USER_SEARCH_BASE = "o=Landeshauptstadt München,c=de";

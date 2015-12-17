@@ -14,12 +14,11 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 /**
- *
  * @author praktikant.tmar
  */
 @PreAuthorize("hasRole('ROLE_READ_SEC_Authority')")
 @RepositoryRestResource
-public interface PermissionRepository  extends CrudRepository<Permission, Long>  {
+public interface PermissionRepository extends CrudRepository<Permission, Long> {
 
     String PERMISSION_CACHE = "SEC_PERMISSION_CACHE";
     String ROLE_WRITE = "hasRole('ROLE_WRITE_SEC_Permission')";

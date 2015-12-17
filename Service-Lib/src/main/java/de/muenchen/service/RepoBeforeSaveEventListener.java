@@ -19,6 +19,6 @@ public class RepoBeforeSaveEventListener extends AbstractRepositoryEventListener
 
     public String getCurrentMandant() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return TenantUtils.extractTenantFromUsername(authentication.getName());
+        return TenantUtils.extractTenantFromPrincipal(authentication.getPrincipal());
     }
 }

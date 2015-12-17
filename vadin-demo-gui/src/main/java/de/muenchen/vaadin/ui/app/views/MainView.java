@@ -37,7 +37,7 @@ public class MainView extends VerticalLayout implements View {
                 "../../img/gaia.png");
 
 
-        final Image image1 = new Image("",resource);
+        final Image image1 = new Image("", resource);
 
         addComponent(pageTitle);
         addComponent(image1);

@@ -16,47 +16,56 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class PermissionEventListener extends AbstractRepositoryEventListener<Permission> {
-	@Autowired
-	PermissionEventService service;
-	
-	@Override
-	protected void onAfterCreate(Permission entity) {
-		service.onAfterCreate(entity);
-	}
-	@Override
-	protected void onBeforeCreate(Permission entity) {
-		service.onBeforeCreate(entity);
-	}
-	@Override
-	protected void onBeforeSave(Permission entity) {
-		service.onBeforeSave(entity);
-	}
-	@Override
-	protected void onAfterSave(Permission entity) {
-		service.onAfterSave(entity);
-	}
-	@Override
-	protected void onBeforeLinkSave(Permission parent, Object linked) {
-		service.onBeforeLinkSave(parent, linked);
-	}
-	@Override
-	protected void onAfterLinkSave(Permission parent, Object linked) {
-		service.onAfterLinkSave(parent, linked);
-	}
-	@Override
-	protected void onBeforeLinkDelete(Permission parent, Object linked) {
-		service.onBeforeLinkDelete(parent, linked);
-	}
-	@Override
-	protected void onBeforeDelete(Permission entity) {
-		service.onBeforeDelete(entity);
-	}
-	@Override
-	protected void onAfterDelete(Permission entity) {
-		service.onAfterDelete(entity);
-	}
-	@Override
-	protected void onAfterLinkDelete(Permission parent, Object linked) {
-		service.onAfterLinkDelete(parent, linked);
-	}
+    @Autowired
+    PermissionEventService service;
+
+    @Override
+    protected void onAfterCreate(Permission entity) {
+        service.onAfterCreate(entity);
+    }
+
+    @Override
+    protected void onBeforeCreate(Permission entity) {
+        service.onBeforeCreate(entity);
+    }
+
+    @Override
+    protected void onBeforeSave(Permission entity) {
+        service.onBeforeSave(entity);
+    }
+
+    @Override
+    protected void onAfterSave(Permission entity) {
+        service.onAfterSave(entity);
+    }
+
+    @Override
+    protected void onBeforeLinkSave(Permission parent, Object linked) {
+        service.onBeforeLinkSave(parent, linked);
+    }
+
+    @Override
+    protected void onAfterLinkSave(Permission parent, Object linked) {
+        service.onAfterLinkSave(parent, linked);
+    }
+
+    @Override
+    protected void onBeforeLinkDelete(Permission parent, Object linked) {
+        service.onBeforeLinkDelete(parent, linked);
+    }
+
+    @Override
+    protected void onBeforeDelete(Permission entity) {
+        service.onBeforeDelete(entity);
+    }
+
+    @Override
+    protected void onAfterDelete(Permission entity) {
+        service.onAfterDelete(entity);
+    }
+
+    @Override
+    protected void onAfterLinkDelete(Permission parent, Object linked) {
+        service.onAfterLinkDelete(parent, linked);
+    }
 }

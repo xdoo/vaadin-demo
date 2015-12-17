@@ -1,9 +1,9 @@
 package de.muenchen.auth.search;
 
 
-import de.muenchen.auth.QueryService;
 import de.muenchen.auth.entities.Authority;
 import de.muenchen.auth.repositories.AuthorityRepository;
+import de.muenchen.service.QueryService;
 import org.hibernate.search.exception.EmptyQueryException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;

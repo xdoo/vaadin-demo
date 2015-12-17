@@ -17,15 +17,25 @@ import de.muenchen.vaadin.ui.components.forms.selected.SelectedBuergerForm;
  */
 public class BuergerReadForm extends BaseComponent {
 
-    /** Indicates the mode of the Form. */
+    /**
+     * Indicates the mode of the Form.
+     */
     public static final boolean READ_ONLY = true;
-    /** The underlying form. */
+    /**
+     * The underlying form.
+     */
     private final SelectedBuergerForm buergerForm;
-    /** The layout for all Buttons. */
+    /**
+     * The layout for all Buttons.
+     */
     private final HorizontalLayout buttonLayout = new HorizontalLayout();
-    /** The button for the update action. */
+    /**
+     * The button for the update action.
+     */
     private final ActionButton updateButton = new ActionButton(Buerger.class, SimpleAction.update);
-    /** The actions for the navigate on update. */
+    /**
+     * The actions for the navigate on update.
+     */
     private final NavigateActions updateNavigation;
 
     /**

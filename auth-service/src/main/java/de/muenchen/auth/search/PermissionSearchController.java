@@ -1,9 +1,9 @@
 package de.muenchen.auth.search;
 
 
-import de.muenchen.auth.QueryService;
 import de.muenchen.auth.entities.Permission;
 import de.muenchen.auth.repositories.PermissionRepository;
+import de.muenchen.service.QueryService;
 import org.hibernate.search.exception.EmptyQueryException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -32,7 +32,7 @@ import java.util.stream.StreamSupport;
 @ExposesResourceFor(Permission.class)
 @RequestMapping("/permissions/search")
 public class PermissionSearchController {
-		
+
     @Autowired
     QueryService service;
 
@@ -60,7 +60,7 @@ public class PermissionSearchController {
 
         final List<PersistentEntityResource> collect = permissionStream.map(assembler::toResource).collect(Collectors.toList());
         return new ResponseEntity<Object>(new Resources<>(collect), HttpStatus.OK);
-	}
+    }
 }
 
 

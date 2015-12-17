@@ -18,18 +18,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class PermissionResourceProcessor implements ResourceProcessor<Resource<Permission>> {
 
-	/**
-	 * Service for processing Permission_ entities.
-	 */
-	@Autowired
-	PermissionResourceService resourceService;
+    /**
+     * Service for processing Permission_ entities.
+     */
+    @Autowired
+    PermissionResourceService resourceService;
 
-	@Override
+    @Override
     public Resource<Permission> process(Resource<Permission> resource) {
-	    // Hand the resource to the service.
-		resourceService.process(resource);
+        // Hand the resource to the service.
+        resourceService.process(resource);
         return resource;
     }
-    
+
 }
 

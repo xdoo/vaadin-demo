@@ -5,9 +5,9 @@
  */
 package de.muenchen.auth.repositories;
 
-import de.muenchen.auth.TenantService;
 import de.muenchen.auth.UpdateOwnUserValidator;
 import de.muenchen.auth.entities.User;
+import de.muenchen.service.TenantService;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -46,7 +46,6 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     @Override
     @Cacheable(value = User_CACHE, key = "#p0")
-
     @PostAuthorize(TenantService.IS_TENANT_AUTH)
     User findOne(Long oid);
 

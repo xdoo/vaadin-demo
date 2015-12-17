@@ -12,8 +12,8 @@ import org.springframework.hateoas.Resource;
  * Provides methods to alter resources before being sent to a client.
  */
 public interface PermissionResourceService {
-	/**
-	 * Process a resource. You can add links and alter the entity itself.
-	 */
-	Resource<Permission> process(Resource<Permission> resource);
+    /**
+     * Process a resource. You can add links and alter the entity itself.
+     */
+    Resource<Permission> process(Resource<Permission> resource);
 }
