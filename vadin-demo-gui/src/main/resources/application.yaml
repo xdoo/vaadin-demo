@@ -84,6 +84,206 @@ i18n.de-DE.sprache.title : Sprache
 i18n.de-DE.buerger.tableview.helptext : "In dieser View werden alle bürger angezeigt. <br> Zum Bearbeiten den gewünschten Bürger auswählen. <br> Anschließend erscheinen Schaltflächen Zum Bearbeiten."
 i18n.de-DE.buerger.updateview.helptext: "Die Daten des zuletzt ausgewählten Bürgers können hier bearbeitet werden."
 
+# Security
+
+## Users
+i18n.de-DE.user:
+  username:
+    label: Benutzername
+    column_header: Benutzername
+    input_prompt:
+    tooltip:
+  forname:
+    label: Vorname
+    column_header: Vorname
+    input_prompt:
+    tooltip:
+  surname:
+    label: Nachname
+    column_header: Nachname
+    input_prompt:
+    tooltip:
+  birthdate:
+    label: Geburtsdatum
+    column_header: Geburtsdatum
+    input_prompt:
+    tooltip:
+  email:
+    label: Email
+    column_header: Email
+    input_prompt:
+    tooltip:
+  userEnabled:
+    label: Aktiv
+    column_header:
+    input_prompt:
+    tooltip:
+  authorities:
+    available.label: verfügbare Rollen
+    granted.label: zugewiesene Rollen
+  form:
+    create.button.label: Anlegen
+    read.button.label: Details
+    delete.button.label: Löschen
+    update.button.label: Aktualisieren
+    cancel.button.label: Abbrechen
+    save.button.label: Speichern
+
+
+i18n.de-DE.view_.users:
+  title : Nutzerverwaltung
+  label.all : Alle Nutzer
+  helptext: Auf dieser Seite können alle Nutzer des Gaia-Systems verwaltet werden.
+i18n.de-DE.view_.userDetails:
+  title: Benutzer Details
+  helptext: Für diese Seite existiert keine Beschreibung
+  back: zurück
+i18n.de-DE.view_.userCreate:
+  title: Benutzer anlegen
+  helptext: Für diese Seite existiert keine Beschreibung
+  back: zurück
+
+
+## Authority
+i18n.de-DE.view_.authorities:
+  title: Rollenverwaltung
+  helptext: In dieser View können sie Rollen für Ihre Applikation verwalten. Wählen Sie dazu eine Rolle aus und bestimmen Sie anschließend deren Rechte über die Rechte-Komponente.
+  create:
+    title: Rolle erstellen
+    back: zurück
+    helptext: Erstellen Sie eine neue Rolle für Ihre Anwendung
+i18n.de-DE.authority.notification.warning.create:
+  label: Ungültige Eingabe
+  text: Bitte füllen Sie alle Felder mit gültigen Werten aus.
+
+i18n.de-DE.authority:
+  authority:
+    label : Rolle
+    column_header : Rolle
+    input_prompt : Rolle
+    tooltip : Rolle
+  permissions:
+    available.label: Verfügbare Rechte
+    granted.label: Rechte der Rolle
+i18n.de-DE.authority.form:
+  save.button.label : speichern
+  delete.button.label : löschen
+
+## Messages
+i18n.de-DE.authority.notification.success:
+  update.label : Authority angepasst
+  update.text : Authority wurde erfolgreich angepasst und gespeichert.
+  create.label : Authority erstellt
+  create.text : Authority wurde erfolgreich erstellt und gespeichert.
+  delete.label : Authority gelöscht
+  delete.text : Authority wurde erfolgreich gelöscht.
+  copy.label : Authority kopiert
+  copy.text : Authority wurde erfolgreich kopiert.
+  release.label : Authority entfernt
+  release.text : Authority wurde erfolgreich entfernt.
+
+  release.label.permissions : Permissions entfernt
+  release.text.permissions : Permissions wurde erfolgreich entfernt.
+
+  add.label : Authority hinzugefügt
+  add.text : Authority wurde erfolgreich zum Authority hinzugefügt.
+  association.label : Änderung gespeichert
+  association.text : Die Änderung wurde erfolgreich gespeichert.
+
+  ## Warnings
+i18n.de-DE.authority.notification.warning:
+  save.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
+  save.label : Warnung
+
+  ## Errors
+i18n.de-DE.authority.notification.error:
+  create.label.timeout : Zeitüberschreitung
+  create.text.timeout : Beim Versuch die Daten zu speichern ist eine Zeitüberschreitung aufgetreten.
+  create.label : Fehler
+  create.text : Beim erstellen ist ein Fehler aufgetreten.
+
+  update.label.timeout : Zeitüberschreitung
+  update.text.timeout : Beim Versuch die Daten zu ändern ist eine Zeitüberschreitung aufgetreten.
+  update.label : Fehler
+  update.text : Beim ändern ist ein Fehler aufgetreten. Änderung wurde nicht gespeichert.
+
+  read.label.timeout : Zeitüberschreitung
+  read.text.timeout : Beim Versuch die Daten zu laden ist eine Zeitüberschreitung aufgetreten.
+  read.label : Fehler
+  read.text : Beim Lesen ist ein Fehler aufgetreten.
+
+  association.label.timeout : Zeitüberschreitung
+  association.text.timeout : Beim Versuch die Assoziation zu ändern ist eine Zeitüberschreitung aufgetreten.
+  association.label : Fehler
+  association.text : Beim ändern der Assoziation ist ein Fehler aufgetreten.
+
+  delete.label.timeout : Zeitüberschreitung
+  delete.text.timeout : Beim Versuch die Daten zu löschen ist eine Zeitüberschreitung aufgetreten.
+  delete.label.409 : Konflikt
+  delete.text.409 : Authority wird in anderer Entität referenziert. Löschen nicht möglich.
+  delete.label.400 : Nicht gefunden
+  delete.text.400 : Authority existiert nicht.
+  delete.label : Fehler
+  delete.text : Ein Fehler ist aufgetreten. Löschen nicht möglich.
+
+i18n.de-DE.user.notification.success:
+  update.label : User angepasst
+  update.text : User wurde erfolgreich angepasst und gespeichert.
+  create.label : User erstellt
+  create.text : User wurde erfolgreich erstellt und gespeichert.
+  delete.label : User gelöscht
+  delete.text : User wurde erfolgreich gelöscht.
+  copy.label : User kopiert
+  copy.text : User wurde erfolgreich kopiert.
+  release.label : User entfernt
+  release.text : User wurde erfolgreich entfernt.
+
+  release.label.authorities : Authorities entfernt
+  release.text.authorities : Authorities wurde erfolgreich entfernt.
+
+  add.label : User hinzugefügt
+  add.text : User wurde erfolgreich zum User hinzugefügt.
+  association.label : Änderung gespeichert
+  association.text : Die Änderung wurde erfolgreich gespeichert.
+
+  ## Warnings
+i18n.de-DE.user.notification.warning:
+  save.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
+  save.label : Warnung
+
+  ## Errors
+i18n.de-DE.user.notification.error:
+  create.label.timeout : Zeitüberschreitung
+  create.text.timeout : Beim Versuch die Daten zu speichern ist eine Zeitüberschreitung aufgetreten.
+  create.label : Fehler
+  create.text : Beim erstellen ist ein Fehler aufgetreten.
+
+  user.notification.error.update.label.timeout : Zeitüberschreitung
+  user.notification.error.update.text.timeout : Beim Versuch die Daten zu ändern ist eine Zeitüberschreitung aufgetreten.
+  user.notification.error.update.label : Fehler
+  user.notification.error.update.text : Beim ändern ist ein Fehler aufgetreten. Änderung wurde nicht gespeichert.
+
+  read.label.timeout : Zeitüberschreitung
+  read.text.timeout : Beim Versuch die Daten zu laden ist eine Zeitüberschreitung aufgetreten.
+  read.label : Fehler
+  read.text : Beim Lesen ist ein Fehler aufgetreten.
+
+  association.label.timeout : Zeitüberschreitung
+  association.text.timeout : Beim Versuch die Assoziation zu ändern ist eine Zeitüberschreitung aufgetreten.
+  association.label : Fehler
+  association.text : Beim ändern der Assoziation ist ein Fehler aufgetreten.
+
+  delete.label.timeout : Zeitüberschreitung
+  delete.text.timeout : Beim Versuch die Daten zu löschen ist eine Zeitüberschreitung aufgetreten.
+  delete.label.409 : Konflikt
+  delete.text.409 : User wird in anderer Entität referenziert. Löschen nicht möglich.
+  delete.label.400 : Nicht gefunden
+  delete.text.400 : User existiert nicht.
+  delete.label : Fehler
+  delete.text : Ein Fehler ist aufgetreten. Löschen nicht möglich.
+
+# End of Security
+
 i18n.de-DE.buerger.page.title : Bürger View
 i18n.de-DE.buerger.navigation.button.label : Bürger Pflege
 i18n.de-DE.buerger.form.update.headline.label : Bürger bearbeiten

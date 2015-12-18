@@ -9,6 +9,11 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
+import de.muenchen.vaadin.guilib.BaseUI;
+import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
+import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
+import de.muenchen.vaadin.guilib.security.components.User_CreateForm;
 import de.muenchen.vaadin.guilib.security.components.User_Grid;
 import de.muenchen.vaadin.guilib.security.controller.User_ViewController;
 import de.muenchen.vaadin.ui.app.MainUI;
@@ -16,11 +21,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 
-@SpringView(name = UserView.NAME)
+@SpringView(name = UserCreateView.NAME)
 @UIScope
-public class UserView extends VerticalLayout implements View {
+public class UserCreateView extends VerticalLayout implements View {
 
-    public static final String NAME = "users";
+    public static final String NAME = "userCreate";
 
     @Autowired
     User_ViewController userViewController;
@@ -31,19 +36,18 @@ public class UserView extends VerticalLayout implements View {
         setSpacing(true);
         setMargin(new MarginInfo(false, true, false, true));
 
-        Label pageTitle = new Label("Users", ContentMode.HTML);
+        Label pageTitle = new Label("Create User", ContentMode.HTML);
         pageTitle.addStyleName(ValoTheme.LABEL_H1);
         pageTitle.addStyleName(ValoTheme.LABEL_COLORED);
 
         addComponent(pageTitle);
 
-        User_Grid userGrid = new User_Grid(userViewController);
-        userGrid.activateSearch();
-        userGrid.activateCreate(UserCreateView.NAME);
-        userGrid.activateRead(UserDetailView.NAME);
-        userGrid.activateDoubleClickToRead(NAME);
-        userGrid.activateDelete();
-        addComponent(userGrid);
+        ActionButton button = new ActionButton(BaseUI.getCurrentI18nResolver().resolve("view_." + NAME + ".back"), SimpleAction.back);
+        button.addActionPerformer(new NavigateActions(UserView.NAME)::navigate);
+        addComponent(button);
+
+        User_CreateForm createForm = new User_CreateForm(UserView.NAME);
+        addComponent(createForm);
     }
 
     @Override

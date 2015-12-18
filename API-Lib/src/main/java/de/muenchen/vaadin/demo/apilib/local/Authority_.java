@@ -79,8 +79,6 @@ public class Authority_ extends ResourceSupport {
 	
 	@Override
 	public String toString(){
-		String s = "";
-		s += "String authority: " + this.getAuthority();
-		return s;
+		return authority;
 	}
 }

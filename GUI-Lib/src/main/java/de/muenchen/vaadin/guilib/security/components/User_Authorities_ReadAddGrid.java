@@ -28,8 +28,7 @@ public class User_Authorities_ReadAddGrid extends CustomComponent {
 
         this.controller = controller;
 
-        grid = new GenericGrid<Authority_>(controller.getModel().getSelectedUserAuthorities(), Authority_.Field.getProperties());
-        //grid.activateSearch();
+        grid = new GenericGrid<>(controller.getModel().getSelectedUserAuthorities(), Authority_.Field.getProperties());
 
         ActionButton addButton = new ActionButton(User_.class, SimpleAction.add);
         NavigateActions navigateActions = new NavigateActions(navigateToAdd);

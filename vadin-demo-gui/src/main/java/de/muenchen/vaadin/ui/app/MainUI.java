@@ -35,6 +35,7 @@ import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.ValoMenuLayout;
 import de.muenchen.vaadin.guilib.components.ConfirmationWindow;
 import de.muenchen.vaadin.guilib.services.SecurityService;
+import de.muenchen.vaadin.ui.app.views.AuthorityView;
 import de.muenchen.vaadin.ui.app.views.BuergerTableView;
 import de.muenchen.vaadin.ui.app.views.LoginView;
 import de.muenchen.vaadin.ui.app.views.MainView;
@@ -322,7 +323,8 @@ public class MainUI extends BaseUI {
     }
 
     private void addMenuItems() {
-        this.menuItems.put(UserView.NAME, BaseUI.getCurrentI18nResolver().resolve("userview.title"));
+        this.menuItems.put(UserView.NAME, BaseUI.getCurrentI18nResolver().resolve("view_."+UserView.NAME+".title"));
+        this.menuItems.put(AuthorityView.NAME, BaseUI.getCurrentI18nResolver().resolve("view_."+AuthorityView.NAME+".title"));
         this.menuItems.put(MainView.NAME, BaseUI.getCurrentI18nResolver().resolve("mainpage.title"));
         this.menuItems.put(BuergerTableView.NAME, BaseUI.getCurrentI18nResolver().resolveRelative(Buerger.class, "navigation.button.label"));
     }

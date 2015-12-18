@@ -9,21 +9,25 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.vaadin.guilib.security.components.User_Grid;
-import de.muenchen.vaadin.guilib.security.controller.User_ViewController;
+import de.muenchen.vaadin.guilib.security.components.Authority_AllInOne;
+import de.muenchen.vaadin.guilib.security.controller.Authority_ViewController;
+import de.muenchen.vaadin.guilib.security.controller.Permission_ViewController;
 import de.muenchen.vaadin.ui.app.MainUI;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 
-@SpringView(name = UserView.NAME)
+@SpringView(name = AuthorityView.NAME)
 @UIScope
-public class UserView extends VerticalLayout implements View {
+public class AuthorityView extends VerticalLayout implements View {
 
-    public static final String NAME = "users";
+    public static final String NAME = "authorities";
 
     @Autowired
-    User_ViewController userViewController;
+    Authority_ViewController authorityViewController;
+
+    @Autowired
+    Permission_ViewController permissionViewController;
 
     @PostConstruct
     private void postConstruct() {
@@ -31,19 +35,14 @@ public class UserView extends VerticalLayout implements View {
         setSpacing(true);
         setMargin(new MarginInfo(false, true, false, true));
 
-        Label pageTitle = new Label("Users", ContentMode.HTML);
+        Label pageTitle = new Label("Authorities", ContentMode.HTML);
         pageTitle.addStyleName(ValoTheme.LABEL_H1);
         pageTitle.addStyleName(ValoTheme.LABEL_COLORED);
 
         addComponent(pageTitle);
 
-        User_Grid userGrid = new User_Grid(userViewController);
-        userGrid.activateSearch();
-        userGrid.activateCreate(UserCreateView.NAME);
-        userGrid.activateRead(UserDetailView.NAME);
-        userGrid.activateDoubleClickToRead(NAME);
-        userGrid.activateDelete();
-        addComponent(userGrid);
+        Authority_AllInOne authorities = new Authority_AllInOne(permissionViewController, authorityViewController);
+        addComponent(authorities);
     }
 
     @Override

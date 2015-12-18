@@ -52,7 +52,7 @@ public class Authority_Permissions_TwinSelect extends BaseComponent {
         BeanItemContainer<Permission_> perms = controller.getModel().getPermissions();
         perms.sort(new String[]{"permission"}, new boolean[]{true});
         select.setContainerDataSource(perms);
-        select.setWidth("99%");
+        select.setWidth("100%");
         select.setHeight("484px");
         select.setImmediate(true);
         select.addValueChangeListener(saveListener);
