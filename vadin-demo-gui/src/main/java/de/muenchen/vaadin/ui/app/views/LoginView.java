@@ -94,7 +94,7 @@ public class LoginView extends VerticalLayout implements View {
                 if (security.login(username.getValue(), password.getValue())) {
                     BaseUI.getCurrentEventBus().notify(Key.LOGIN);
                 } else {
-                // Anmeldung fehlgeschlagen
+                    // Anmeldung fehlgeschlagen
                     GenericNotification notif = new GenericWarningNotification("Anmeldung fehlgeschlagen",
                             "Bei der Eingabe Ihrer Usernamens/Ihres Kennworts ist ein Fehler aufgetreten. Versuchen Sie es erneut.");
                     notif.show(Page.getCurrent());
