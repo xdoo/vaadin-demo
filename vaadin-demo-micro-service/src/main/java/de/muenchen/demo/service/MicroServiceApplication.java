@@ -10,6 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.hateoas.config.EnableHypermediaSupport;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
@@ -17,6 +18,7 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 /**
  * Application class for starting the micro-service.
  */
+// rev: Warum wird hier nicht die Annotation @SpringBootApplication benutzt?
 @Configuration
 @ComponentScan(basePackages = {"de.muenchen.demo.service", "de.muenchen.service", "de.muenchen.auditing"})
 @EntityScan(basePackages = {"de.muenchen.demo.service", "de.muenchen.service", "de.muenchen.auditing"})
@@ -24,8 +26,11 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 @EnableAutoConfiguration
 @EnableEurekaClient //TODO not generated
 @EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)
+// http://projects.spring.io/spring-security-oauth/docs/oauth2.html
 @EnableResourceServer
-// rev: Warum wird hier nicht die Annotation @SpringBootApplication benutzt?
+// Enable Security and Pre and Post Filter annotations.
+// https://spring.io/blog/2013/07/04/spring-security-java-config-preview-method-security/
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class MicroServiceApplication {
 
     public static void main(String[] args) throws Exception {
@@ -43,4 +48,5 @@ public class MicroServiceApplication {
             converter.setAccessTokenConverter(accessTokenConverter);
         }
     }
+
 }
