@@ -1,7 +1,7 @@
 package de.muenchen.vaadin.demo.apilib.hateoas;
 
 import de.muenchen.vaadin.demo.apilib.domain.User_DTO;
-import de.muenchen.vaadin.demo.apilib.local.User_;
+import de.muenchen.vaadin.demo.apilib.local.User;
 import de.muenchen.vaadin.demo.apilib.rest.User_Resource;
 import org.springframework.hateoas.Resource;
 
@@ -17,10 +17,10 @@ public class User_Assembler {
 	 * @param resource the REST DTO Resource
 	 * @return the local Object Representation
 	 */
-	public User_ toBean(Resource<User_DTO> resource) {
+	public User toBean(Resource<User_DTO> resource) {
 
 		User_DTO userDTO = resource.getContent();
-		User_ bean = new User_();
+		User bean = new User();
 		bean.setUsername(userDTO.getUsername());
 		bean.setForname(userDTO.getForname());
 		bean.setSurname(userDTO.getSurname());
@@ -38,7 +38,7 @@ public class User_Assembler {
 	 * @param bean the local object representation
 	 * @return the REST DTO Resource
 	 */
-	public User_Resource toResource(User_ bean) {
+	public User_Resource toResource(User bean) {
 		User_DTO userDTO = new User_DTO();
 		userDTO.setUsername(bean.getUsername());
 		userDTO.setForname(bean.getForname());

@@ -1,6 +1,6 @@
 package de.muenchen.vaadin.guilib.security.services;
 
-import de.muenchen.vaadin.demo.apilib.local.User_;
+import de.muenchen.vaadin.demo.apilib.local.User;
 import org.springframework.hateoas.Link;
 
 import java.util.List;
@@ -15,19 +15,19 @@ import java.util.Optional;
  * Service zum Verwalten von User_ aus der GUI heraus.
  */
 public interface User_Service {
-    User_ create(User_ user);
+    User create(User user);
 
-    User_ update(User_ user);
+    User update(User user);
 
     boolean delete(Link link);
 		
-    List<User_> findAll();
+    List<User> findAll();
 
-    List<User_> findAll(Link relation);
+    List<User> findAll(Link relation);
 
-    Optional<User_> findOne(Link link);
+    Optional<User> findOne(Link link);
 
-    List<User_> queryUser(String query);
+    List<User> queryUser(String query);
 
     boolean setRelations(Link link, List<Link> relations);
 

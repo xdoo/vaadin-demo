@@ -2,7 +2,7 @@ package de.muenchen.vaadin.demo.apilib.rest;
 
 import de.muenchen.vaadin.demo.apilib.domain.User_DTO;
 import de.muenchen.vaadin.demo.apilib.hateoas.User_Assembler;
-import de.muenchen.vaadin.demo.apilib.local.User_;
+import de.muenchen.vaadin.demo.apilib.local.User;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.client.Traverson;
@@ -49,7 +49,7 @@ public class User_RestClientImpl implements User_RestClient {
     }
 	
 	@Override
-	public List<User_> findFullTextFuzzy(String filter) {
+	public List<User> findFullTextFuzzy(String filter) {
 	return traverson.follow(USERS, SEARCH, FIND_FULL_TEXT_FUZZY)
 	.withTemplateParameters(Collections.singletonMap("q", filter))
 	.toObject(User_Resource.LIST).getContent()
@@ -59,7 +59,7 @@ public class User_RestClientImpl implements User_RestClient {
 	}
 	
 	@Override
-	public List<User_> findAll() {  
+	public List<User> findAll() {
 		return traverson
 				.follow(USERS)
 				.toObject(User_Resource.LIST).getContent()
@@ -69,7 +69,7 @@ public class User_RestClientImpl implements User_RestClient {
 				.collect(Collectors.toList());
 	}
 	@Override
-	public List<User_> findAll(Link relation) {
+	public List<User> findAll(Link relation) {
 		URI uri = URI.create(relation.getHref());
 			 return restTemplate
 			 		.exchange(uri, HttpMethod.GET, null, User_Resource.LIST)
@@ -82,7 +82,7 @@ public class User_RestClientImpl implements User_RestClient {
 	}
 		
 	@Override
-	public Optional<User_> findOne(Link link) {
+	public Optional<User> findOne(Link link) {
 	     URI uri = URI.create(link.getHref());
 		User_Resource resource = restTemplate
 				.exchange(uri, HttpMethod.GET, null, User_Resource.class)
@@ -107,7 +107,7 @@ public class User_RestClientImpl implements User_RestClient {
 
 		
 	@Override
-	public User_ create(User_ user) {
+	public User create(User user) {
 		URI uri = URI.create(
 		traverson.follow(USERS).asLink().getHref());
 			User_DTO userDTO = userAssembler.toResource(user).getContent();
@@ -116,7 +116,7 @@ public class User_RestClientImpl implements User_RestClient {
 	}
 	
 	@Override
-	public User_ update(User_ user) {
+	public User update(User user) {
 
         URI uri = URI.create(user.getId().getHref());
 

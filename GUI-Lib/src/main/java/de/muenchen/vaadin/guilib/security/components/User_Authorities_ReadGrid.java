@@ -1,6 +1,6 @@
 package de.muenchen.vaadin.guilib.security.components;
 
-import de.muenchen.vaadin.demo.apilib.local.Authority_;
+import de.muenchen.vaadin.demo.apilib.local.Authority;
 import de.muenchen.vaadin.guilib.security.components.buttons.listener.User_SingleActions;
 import de.muenchen.vaadin.guilib.security.controller.User_ViewController;
 import de.muenchen.vaadin.guilib.components.GenericGrid;
@@ -8,13 +8,13 @@ import de.muenchen.vaadin.guilib.components.GenericGrid;
 /**
  * @author rene.zarwel
  */
-public class User_Authorities_ReadGrid extends GenericGrid<Authority_> {
+public class User_Authorities_ReadGrid extends GenericGrid<Authority> {
 
 	private final User_ViewController controller;
 
     public User_Authorities_ReadGrid(final User_ViewController controller, final String navigateToRead) {
     	super(controller.getModel().getSelectedUserAuthorities(),
-                Authority_.Field.getProperties());
+                Authority.Field.getProperties());
         this.controller = controller;
         this.activateSearch().activateRead(navigateToRead).activateDoubleClickToRead(navigateToRead);
     }

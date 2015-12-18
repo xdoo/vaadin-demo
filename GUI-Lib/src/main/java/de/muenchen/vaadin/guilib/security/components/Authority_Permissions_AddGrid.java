@@ -2,8 +2,8 @@ package de.muenchen.vaadin.guilib.security.components;
 
 import com.vaadin.ui.Grid;
 import de.muenchen.eventbus.events.Association;
-import de.muenchen.vaadin.demo.apilib.local.Authority_;
-import de.muenchen.vaadin.demo.apilib.local.Permission_;
+import de.muenchen.vaadin.demo.apilib.local.Authority;
+import de.muenchen.vaadin.demo.apilib.local.Permission;
 import de.muenchen.vaadin.guilib.security.components.buttons.listener.Authority_AssociationListActions;
 import de.muenchen.vaadin.guilib.security.controller.Permission_ViewController;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
@@ -27,14 +27,14 @@ public class Authority_Permissions_AddGrid extends BaseComponent {
     protected void init(){
         final NavigateActions navigateActions = new NavigateActions(navigateOnAdd);
 
-        final GenericGrid<Permission_> grid = new Permission_Grid(controller);
+        final GenericGrid<Permission> grid = new Permission_Grid(controller);
 
 		grid.setSelectionMode(Grid.SelectionMode.SINGLE).activateSearch();
 
-        ActionButton addButton = new ActionButton(Permission_.class, SimpleAction.add);
+        ActionButton addButton = new ActionButton(Permission.class, SimpleAction.add);
         
         Authority_AssociationListActions actionMultiple = new Authority_AssociationListActions(
-                () -> grid.getSelectedEntities().stream().map(entity -> new Association<>(entity, Authority_.Rel.permissions.name())).collect(Collectors.toList()));
+                () -> grid.getSelectedEntities().stream().map(entity -> new Association<>(entity, Authority.Rel.permissions.name())).collect(Collectors.toList()));
         addButton.addActionPerformer(actionMultiple::addAssociations);
         addButton.addActionPerformer(navigateActions::navigate);
         grid.addMultiSelectComponent(addButton);

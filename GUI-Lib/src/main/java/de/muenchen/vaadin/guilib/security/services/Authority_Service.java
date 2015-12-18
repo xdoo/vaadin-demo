@@ -1,6 +1,6 @@
 package de.muenchen.vaadin.guilib.security.services;
 
-import de.muenchen.vaadin.demo.apilib.local.Authority_;
+import de.muenchen.vaadin.demo.apilib.local.Authority;
 import org.springframework.hateoas.Link;
 
 import java.util.List;
@@ -15,19 +15,19 @@ import java.util.Optional;
  * Service zum Verwalten von Authority_ aus der GUI heraus.
  */
 public interface Authority_Service {
-    Authority_ create(Authority_ authority);
+    Authority create(Authority authority);
 
-    Authority_ update(Authority_ authority);
+    Authority update(Authority authority);
 
     boolean delete(Link link);
 		
-    List<Authority_> findAll();
+    List<Authority> findAll();
 
-    List<Authority_> findAll(Link relation);
+    List<Authority> findAll(Link relation);
 
-    Optional<Authority_> findOne(Link link);
+    Optional<Authority> findOne(Link link);
 
-    List<Authority_> queryAuthority(String query);
+    List<Authority> queryAuthority(String query);
 
     boolean setRelations(Link link, List<Link> relations);
 

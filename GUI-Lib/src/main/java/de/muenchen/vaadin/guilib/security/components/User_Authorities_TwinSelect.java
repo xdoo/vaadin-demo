@@ -4,8 +4,8 @@ import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.TwinColSelect;
 import de.muenchen.eventbus.events.Association;
-import de.muenchen.vaadin.demo.apilib.local.Authority_;
-import de.muenchen.vaadin.demo.apilib.local.User_;
+import de.muenchen.vaadin.demo.apilib.local.Authority;
+import de.muenchen.vaadin.demo.apilib.local.User;
 import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.components.BaseComponent;
 import de.muenchen.vaadin.guilib.security.components.buttons.listener.User_AssociationListActions;
@@ -25,15 +25,15 @@ public class User_Authorities_TwinSelect extends BaseComponent {
 
     private final TwinColSelect select;
 
-    private final Set<Authority_> lastSelected = new HashSet<>();
+    private final Set<Authority> lastSelected = new HashSet<>();
 
     private final Property.ValueChangeListener saveListener = (event) -> {
-        Collection<Authority_> eventData = ((Collection<Authority_>)event.getProperty().getValue());
+        Collection<Authority> eventData = ((Collection<Authority>)event.getProperty().getValue());
 
         User_AssociationListActions addedPermissions = new User_AssociationListActions(
-                () -> eventData.stream().filter(auth -> !lastSelected.contains(auth)).map(auth -> new Association<>(auth, User_.Rel.authoritys.name())).collect(Collectors.toList()));
+                () -> eventData.stream().filter(auth -> !lastSelected.contains(auth)).map(auth -> new Association<>(auth, User.Rel.authoritys.name())).collect(Collectors.toList()));
         User_AssociationListActions removedPermissions = new User_AssociationListActions(
-                () -> lastSelected.stream().filter(auth -> !eventData.contains(auth)).map(auth -> new Association<>(auth, User_.Rel.authoritys.name())).collect(Collectors.toList()));
+                () -> lastSelected.stream().filter(auth -> !eventData.contains(auth)).map(auth -> new Association<>(auth, User.Rel.authoritys.name())).collect(Collectors.toList()));
 
         addedPermissions.addAssociations(null);
         removedPermissions.removeAssociations(null);
@@ -52,7 +52,7 @@ public class User_Authorities_TwinSelect extends BaseComponent {
     }
 
     private void init(){
-        BeanItemContainer<Authority_> perms = authorityViewController.getModel().getAuthoritys();
+        BeanItemContainer<Authority> perms = authorityViewController.getModel().getAuthoritys();
         perms.addAll(authorityViewController.queryAuthority());
 
         perms.sort(new String[]{"authority"}, new boolean[]{true});
@@ -65,8 +65,8 @@ public class User_Authorities_TwinSelect extends BaseComponent {
         select(userViewController.getModel().getSelectedUserAuthorities().getItemIds());
 
         select.addValueChangeListener(saveListener);
-        select.setLeftColumnCaption(BaseUI.getCurrentI18nResolver().resolveRelative(User_.class, "authorities.available.label"));
-        select.setRightColumnCaption(BaseUI.getCurrentI18nResolver().resolveRelative(User_.class, "authorities.granted.label"));
+        select.setLeftColumnCaption(BaseUI.getCurrentI18nResolver().resolveRelative(User.class, "authorities.available.label"));
+        select.setRightColumnCaption(BaseUI.getCurrentI18nResolver().resolveRelative(User.class, "authorities.granted.label"));
 
         setCompositionRoot(select);
     }
@@ -80,7 +80,7 @@ public class User_Authorities_TwinSelect extends BaseComponent {
         select.addValueChangeListener(saveListener);
     }
 
-    public void select(List<Authority_> authorities){
+    public void select(List<Authority> authorities){
         select.removeValueChangeListener(saveListener);
 
         lastSelected.addAll(authorities);

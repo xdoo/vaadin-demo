@@ -8,7 +8,7 @@ import com.vaadin.ui.DateField;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
-import de.muenchen.vaadin.demo.apilib.local.User_;
+import de.muenchen.vaadin.demo.apilib.local.User;
 import de.muenchen.vaadin.guilib.components.BaseComponent;
 import de.muenchen.vaadin.guilib.util.FormUtil;
 
@@ -30,7 +30,7 @@ public class User_Form extends BaseComponent {
     /**
      * The class of the Entity of this Form.
      */
-    public static final Class<User_> ENTITY_CLASS = User_.class;
+    public static final Class<User> ENTITY_CLASS = User.class;
 
     /**
      * The FormLayout that contains all the form fields.
@@ -40,7 +40,7 @@ public class User_Form extends BaseComponent {
     /**
      * Contains the current User_ and handles the data binding.
      */
-    private final BeanFieldGroup<User_> binder = new BeanFieldGroup<>(ENTITY_CLASS);
+    private final BeanFieldGroup<User> binder = new BeanFieldGroup<>(ENTITY_CLASS);
 
     /**
      * A list of all the Fields.
@@ -54,7 +54,7 @@ public class User_Form extends BaseComponent {
      * User_Form#setReadOnly(boolean)} for a readonly mode.
      */
     public User_Form() {
-        binder.setItemDataSource(new User_());
+        binder.setItemDataSource(new User());
         fields = buildFields();
 
         final FormLayout formLayout = new FormLayout();
@@ -75,12 +75,12 @@ public class User_Form extends BaseComponent {
     private List<Field> buildFields() {
         final FormUtil formUtil = new FormUtil(getBinder());
 
-		final TextField username = formUtil.createTextField(User_.Field.username.name());
-		final TextField forname = formUtil.createTextField(User_.Field.forname.name());
-		final TextField surname = formUtil.createTextField(User_.Field.surname.name());
-		final DateField birthday = formUtil.createDateField(User_.Field.birthdate.name());
-		final TextField email = formUtil.createTextField(User_.Field.email.name());
-		final CheckBox userEnabled = formUtil.createCheckBox(User_.Field.userEnabled.name());
+		final TextField username = formUtil.createTextField(User.Field.username.name());
+		final TextField forname = formUtil.createTextField(User.Field.forname.name());
+		final TextField surname = formUtil.createTextField(User.Field.surname.name());
+		final DateField birthday = formUtil.createDateField(User.Field.birthdate.name());
+		final TextField email = formUtil.createTextField(User.Field.email.name());
+		final CheckBox userEnabled = formUtil.createCheckBox(User.Field.userEnabled.name());
 		
         return Arrays.asList(username, forname, surname, birthday, email, userEnabled);
     }
@@ -90,7 +90,7 @@ public class User_Form extends BaseComponent {
      *
      * @return The binder.
      */
-    private BeanFieldGroup<User_> getBinder() {
+    private BeanFieldGroup<User> getBinder() {
         return binder;
     }
 
@@ -99,7 +99,7 @@ public class User_Form extends BaseComponent {
      *
      * @return The User_.
      */
-    public User_ getUser() {
+    public User getUser() {
         try {
             getBinder().commit();
         } catch (FieldGroup.CommitException e) {
@@ -113,8 +113,8 @@ public class User_Form extends BaseComponent {
      *
      * @param user The new User_.
      */
-    public void setUser(User_ user) {
-        getBinder().setItemDataSource(user == null ? new User_() : user);
+    public void setUser(User user) {
+        getBinder().setItemDataSource(user == null ? new User() : user);
     }
 
     /**

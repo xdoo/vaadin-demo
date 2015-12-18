@@ -2,7 +2,7 @@ package de.muenchen.vaadin.demo.apilib.rest;
 
 import de.muenchen.vaadin.demo.apilib.domain.Permission_DTO;
 import de.muenchen.vaadin.demo.apilib.hateoas.Permission_Assembler;
-import de.muenchen.vaadin.demo.apilib.local.Permission_;
+import de.muenchen.vaadin.demo.apilib.local.Permission;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.client.Traverson;
@@ -49,7 +49,7 @@ public class Permission_RestClientImpl implements Permission_RestClient {
     }
 	
 	@Override
-	public List<Permission_> findFullTextFuzzy(String filter) {
+	public List<Permission> findFullTextFuzzy(String filter) {
 	return traverson.follow(PERMISSIONS, SEARCH, FIND_FULL_TEXT_FUZZY)
 	.withTemplateParameters(Collections.singletonMap("q", filter))
 	.toObject(Permission_Resource.LIST).getContent()
@@ -59,7 +59,7 @@ public class Permission_RestClientImpl implements Permission_RestClient {
 	}
 	
 	@Override
-	public List<Permission_> findAll() {  
+	public List<Permission> findAll() {
 		return traverson
 				.follow(PERMISSIONS)
 				.toObject(Permission_Resource.LIST).getContent()
@@ -69,7 +69,7 @@ public class Permission_RestClientImpl implements Permission_RestClient {
 				.collect(Collectors.toList());
 	}
 	@Override
-	public List<Permission_> findAll(Link relation) {
+	public List<Permission> findAll(Link relation) {
 		URI uri = URI.create(relation.getHref());
 			 return restTemplate
 			 		.exchange(uri, HttpMethod.GET, null, Permission_Resource.LIST)
@@ -82,7 +82,7 @@ public class Permission_RestClientImpl implements Permission_RestClient {
 	}
 		
 	@Override
-	public Optional<Permission_> findOne(Link link) {
+	public Optional<Permission> findOne(Link link) {
 	     URI uri = URI.create(link.getHref());
 		Permission_Resource resource = restTemplate
 				.exchange(uri, HttpMethod.GET, null, Permission_Resource.class)
@@ -107,7 +107,7 @@ public class Permission_RestClientImpl implements Permission_RestClient {
 
 		
 	@Override
-	public Permission_ create(Permission_ permission) {
+	public Permission create(Permission permission) {
 		URI uri = URI.create(
 		traverson.follow(PERMISSIONS).asLink().getHref());
 			Permission_DTO permissionDTO = permissionAssembler.toResource(permission).getContent();
@@ -116,7 +116,7 @@ public class Permission_RestClientImpl implements Permission_RestClient {
 	}
 	
 	@Override
-	public Permission_ update(Permission_ permission) {
+	public Permission update(Permission permission) {
 
         URI uri = URI.create(permission.getId().getHref());
 

@@ -1,6 +1,6 @@
 package de.muenchen.vaadin.demo.apilib.rest;
 
-import de.muenchen.vaadin.demo.apilib.local.Authority_;
+import de.muenchen.vaadin.demo.apilib.local.Authority;
 import org.springframework.hateoas.Link;
 
 import java.util.Collection;
@@ -23,7 +23,7 @@ public interface Authority_RestClient {
      *
      * @return a List of all Authoritys.
      */
-    List<Authority_> findAll();
+    List<Authority> findAll();
 
     /**
      * Get all the Authoritys (with matching tenancy) on a specific endpoint.
@@ -33,14 +33,14 @@ public interface Authority_RestClient {
      * @param relation
      * @return
      */
-    List<Authority_> findAll(Link relation);
+    List<Authority> findAll(Link relation);
     
     /**
      * Get all Authority matched with string due to fuzzy search.
      * @param filter the string for the query
      * @return
      */
-    List<Authority_> findFullTextFuzzy(String filter);
+    List<Authority> findFullTextFuzzy(String filter);
 
     /**
      * Try to find one Authority (with matching tenancy) by its ID / self relation.
@@ -48,7 +48,7 @@ public interface Authority_RestClient {
      * @param link The ID / self relation of the Authority_.
      * @return an optional of the Authority_.
      */
-    Optional<Authority_> findOne(Link link);
+    Optional<Authority> findOne(Link link);
 
     /**
      * Set all the relations, specified by links, on a specific relation endpoint.
@@ -83,15 +83,15 @@ public interface Authority_RestClient {
      * @param authority The Authority_ to create, it must not contain any links.
      * @return the created Authority_ (with ID).
      */
-    Authority_ create(Authority_ authority);
+    Authority create(Authority authority);
 
     /**
-     * Update the fields of a Authority_ by the {@link Authority_#getId()}.
+     * Update the fields of a Authority_ by the {@link Authority#getId()}.
      *
      * @param authority The updated Authority_ that will be saved.
      * @return the updated version from the REST Server.
      */
-    Authority_ update(Authority_ authority);
+    Authority update(Authority authority);
 
     /**
      * Try to delete an ID.

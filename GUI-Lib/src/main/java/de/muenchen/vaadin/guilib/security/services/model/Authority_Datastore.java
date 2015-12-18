@@ -1,8 +1,8 @@
 package de.muenchen.vaadin.guilib.security.services.model;
 
 import com.vaadin.data.util.BeanItemContainer;
-import de.muenchen.vaadin.demo.apilib.local.Authority_;
-import de.muenchen.vaadin.demo.apilib.local.Permission_;
+import de.muenchen.vaadin.demo.apilib.local.Authority;
+import de.muenchen.vaadin.demo.apilib.local.Permission;
 
 import java.util.Optional;
 
@@ -17,18 +17,18 @@ import java.util.Optional;
 public class Authority_Datastore {
 
     /** All the permissions of the selectedAuthority. */
-    private final BeanItemContainer<Permission_> selectedAuthorityPermissions = new BeanItemContainer<>(Permission_.class);
+    private final BeanItemContainer<Permission> selectedAuthorityPermissions = new BeanItemContainer<>(Permission.class);
     
     /** A List of all the Authority_, possible reduced by the query. */
-    private final BeanItemContainer<Authority_> authoritys = new BeanItemContainer<>(Authority_.class);
+    private final BeanItemContainer<Authority> authoritys = new BeanItemContainer<>(Authority.class);
     
     /** The current (single or none) selected authority in the GUI. */
-    private Optional<Authority_> selectedAuthority= Optional.empty();
+    private Optional<Authority> selectedAuthority= Optional.empty();
     
     /** The query to filter the authority. */
     private Optional<String> query = Optional.empty();
 
-    public Optional<Authority_> getSelectedAuthority() {
+    public Optional<Authority> getSelectedAuthority() {
         return selectedAuthority;
     }
 
@@ -37,11 +37,11 @@ public class Authority_Datastore {
      *
      * @param selectedAuthority The Authority_ to set as the selected one.
      */
-    public void setSelectedAuthority(Authority_ selectedAuthority) {
+    public void setSelectedAuthority(Authority selectedAuthority) {
         this.selectedAuthority = Optional.ofNullable(selectedAuthority);
     }
 
-    public BeanItemContainer<Authority_> getAuthoritys() {
+    public BeanItemContainer<Authority> getAuthoritys() {
         return authoritys;
     }
 
@@ -61,7 +61,7 @@ public class Authority_Datastore {
 	/**
 	 * Get the permissions of the current selected Authority_
 	 */
-    public BeanItemContainer<Permission_> getSelectedAuthorityPermissions() {
+    public BeanItemContainer<Permission> getSelectedAuthorityPermissions() {
         return selectedAuthorityPermissions;
     }
 }

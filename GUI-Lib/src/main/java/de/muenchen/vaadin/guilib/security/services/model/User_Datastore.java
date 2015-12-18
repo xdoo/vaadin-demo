@@ -1,8 +1,8 @@
 package de.muenchen.vaadin.guilib.security.services.model;
 
 import com.vaadin.data.util.BeanItemContainer;
-import de.muenchen.vaadin.demo.apilib.local.Authority_;
-import de.muenchen.vaadin.demo.apilib.local.User_;
+import de.muenchen.vaadin.demo.apilib.local.Authority;
+import de.muenchen.vaadin.demo.apilib.local.User;
 
 import java.util.Optional;
 
@@ -17,18 +17,18 @@ import java.util.Optional;
 public class User_Datastore {
 
     /** All the authoritys of the selectedUser. */
-    private final BeanItemContainer<Authority_> selectedUserAuthorities = new BeanItemContainer<>(Authority_.class);
+    private final BeanItemContainer<Authority> selectedUserAuthorities = new BeanItemContainer<>(Authority.class);
     
     /** A List of all the User_, possible reduced by the query. */
-    private final BeanItemContainer<User_> users = new BeanItemContainer<>(User_.class);
+    private final BeanItemContainer<User> users = new BeanItemContainer<>(User.class);
     
     /** The current (single or none) selected user in the GUI. */
-    private Optional<User_> selectedUser= Optional.empty();
+    private Optional<User> selectedUser= Optional.empty();
     
     /** The query to filter the user. */
     private Optional<String> query = Optional.empty();
 
-    public Optional<User_> getSelectedUser() {
+    public Optional<User> getSelectedUser() {
         return selectedUser;
     }
 
@@ -37,11 +37,11 @@ public class User_Datastore {
      *
      * @param selectedUser The User_ to set as the selected one.
      */
-    public void setSelectedUser(User_ selectedUser) {
+    public void setSelectedUser(User selectedUser) {
         this.selectedUser = Optional.ofNullable(selectedUser);
     }
 
-    public BeanItemContainer<User_> getUsers() {
+    public BeanItemContainer<User> getUsers() {
         return users;
     }
 
@@ -61,7 +61,7 @@ public class User_Datastore {
 	/**
 	 * Get the authoritys of the current selected User_
 	 */
-    public BeanItemContainer<Authority_> getSelectedUserAuthorities() {
+    public BeanItemContainer<Authority> getSelectedUserAuthorities() {
         return selectedUserAuthorities;
     }
 }

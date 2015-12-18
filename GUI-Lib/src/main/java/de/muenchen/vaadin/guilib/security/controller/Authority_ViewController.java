@@ -9,8 +9,8 @@ import de.muenchen.eventbus.selector.entity.RequestEntityKey;
 import de.muenchen.eventbus.selector.entity.RequestEvent;
 import de.muenchen.eventbus.selector.entity.ResponseEntityKey;
 
-import de.muenchen.vaadin.demo.apilib.local.Authority_;
-import de.muenchen.vaadin.demo.apilib.local.Permission_;
+import de.muenchen.vaadin.demo.apilib.local.Authority;
+import de.muenchen.vaadin.demo.apilib.local.Permission;
 import de.muenchen.vaadin.guilib.security.services.Authority_Service;
 import de.muenchen.vaadin.guilib.security.services.Permission_Service;
 import de.muenchen.vaadin.guilib.security.services.model.Authority_Datastore;
@@ -77,11 +77,11 @@ public class Authority_ViewController implements Serializable{
 	////////////////////////
 
 	/**
-	 * Speichert ein {@link Authority_} Objekt in der Datenbank.
+	 * Speichert ein {@link Authority} Objekt in der Datenbank.
 	 *
 	 * @param authority Authority_ der gespeichert werden soll
 	 */
-	public Authority_ save(Authority_ authority) {
+	public Authority save(Authority authority) {
 		return authorityService.create(authority);
 	}
 
@@ -90,11 +90,11 @@ public class Authority_ViewController implements Serializable{
 	 *
 	 * @param event
 	 */
-	private void releasePermissions(Permission_ event) {
-		Link link = getModel().getSelectedAuthority().get().getLink(Authority_.Rel.permissions.name());
+	private void releasePermissions(Permission event) {
+		Link link = getModel().getSelectedAuthority().get().getLink(Authority.Rel.permissions.name());
 		List<Link> permissions = permissionService.findAll(link)
 				.stream()
-				.map(Permission_::getId)
+				.map(Permission::getId)
 				.filter(id -> !id.equals(event.getId()))
 				.collect(Collectors.toList());
 
@@ -103,17 +103,17 @@ public class Authority_ViewController implements Serializable{
 	
 	
 	/**
-	 * Speichert eine beziehung als permissions zu einem {@link Permission_} Objekt in der Datenbank.
+	 * Speichert eine beziehung als permissions zu einem {@link Permission} Objekt in der Datenbank.
 	 *
 	 * @param permissionsEntity Permissions
 	 * @return Permission_
 	 */
-	public void addAuthorityPermissions(Permission_ permissionsEntity) {
-		Link link = getModel().getSelectedAuthority().get().getLink(Authority_.Rel.permissions.name());
+	public void addAuthorityPermissions(Permission permissionsEntity) {
+		Link link = getModel().getSelectedAuthority().get().getLink(Authority.Rel.permissions.name());
 		List<Link> permissionslist = Stream.concat(
 				permissionService.findAll(link)
 						.stream()
-						.map(Permission_::getId),
+						.map(Permission::getId),
 				Stream.of(permissionsEntity.getId()))
 	
 				.collect(Collectors.toList());
@@ -121,33 +121,33 @@ public class Authority_ViewController implements Serializable{
 		authorityService.setRelations(link, permissionslist);
 	}
 	
-	public List<Permission_> queryPermissions(Authority_ entity) {
-		return permissionService.findAll(entity.getLink(Authority_.Rel.permissions.name())).stream().collect(Collectors.toList());
+	public List<Permission> queryPermissions(Authority entity) {
+		return permissionService.findAll(entity.getLink(Authority.Rel.permissions.name())).stream().collect(Collectors.toList());
 	}
 	/**
-	 * Speichert die Änderungen an einem {@link Authority_} Objekt in der Datenbank.
+	 * Speichert die Änderungen an einem {@link Authority} Objekt in der Datenbank.
 	 *
 	 * @param entity Authority_
 	 * @return Authority_
 	 */
-	public Authority_ updateAuthority(Authority_ entity) {
+	public Authority updateAuthority(Authority entity) {
 		return authorityService.update(entity);
 	}
 
 	/**
-	 * Löscht ein {@link Authority_} Objekt.
+	 * Löscht ein {@link Authority} Objekt.
 	 *
 	 * @param entity Authority_
 	 */
-	public void deleteAuthority(Authority_ entity) {
+	public void deleteAuthority(Authority entity) {
 		authorityService.delete(entity.getId());
 	}
 
-	public List<Authority_> queryAuthority() {
+	public List<Authority> queryAuthority() {
 		return authorityService.findAll().stream().collect(Collectors.toList());
 	}
 
-	public List<Authority_> queryAuthority(String query) {
+	public List<Authority> queryAuthority(String query) {
 		return authorityService.queryAuthority(query);
 	}
 	
@@ -182,10 +182,10 @@ public class Authority_ViewController implements Serializable{
 			throw new IllegalArgumentException("The event must be of " + Association.class);
 
 		final Association<?> association = (Association<?>) event.getData();
-		final Authority_.Rel rel = Authority_.Rel.valueOf(association.getRel());
+		final Authority.Rel rel = Authority.Rel.valueOf(association.getRel());
 		
-		if (Authority_.Rel.permissions == rel) {
-			Permission_ permissions = (Permission_) association.getAssociation();
+		if (Authority.Rel.permissions == rel) {
+			Permission permissions = (Permission) association.getAssociation();
 			releasePermissions(permissions);
 			getModel().getSelectedAuthorityPermissions().removeItem(permissions);
 		}
@@ -211,9 +211,9 @@ public class Authority_ViewController implements Serializable{
 
 		final Association<?> association = (Association<?>) event.getData();
 
-		final Authority_.Rel rel = Authority_.Rel.valueOf(association.getRel());
-		if (Authority_.Rel.permissions == rel) {
-			Permission_ permissions = (Permission_) association.getAssociation();
+		final Authority.Rel rel = Authority.Rel.valueOf(association.getRel());
+		if (Authority.Rel.permissions == rel) {
+			Permission permissions = (Permission) association.getAssociation();
 			// If Permissions has no ID he has to be created in the backend
 			if (permissions.getId() == null) {
 				permissions = permissionService.create(permissions);
@@ -229,16 +229,16 @@ public class Authority_ViewController implements Serializable{
 	 * Create a new Buerger on the DataStore.
 	 * Update the Model and send it on the ResponseEntityKey if necessary.
 	 *
-	 * @param event The event with an {@link Authority_} as {@link Event#getData()}.
+	 * @param event The event with an {@link Authority} as {@link Event#getData()}.
 	 */
 	private void create(Event<?> event) {
 		final Object data = event.getData();
 		if (data == null) 
 			throw new NullPointerException("Event data must not be null!");
-		if (data.getClass() != Authority_.class)
-			throw new IllegalArgumentException("The event must be of " + Authority_.class);
-		final Authority_ authority = (Authority_) event.getData();
-		final Authority_ fromREST = authorityService.create(authority);
+		if (data.getClass() != Authority.class)
+			throw new IllegalArgumentException("The event must be of " + Authority.class);
+		final Authority authority = (Authority) event.getData();
+		final Authority fromREST = authorityService.create(authority);
 		getModel().getAuthoritys().addBean(fromREST);
 		notifyComponents();
 	}
@@ -248,15 +248,15 @@ public class Authority_ViewController implements Serializable{
 	 * Delete the Authority_ on the DataStore.
 	 * Update the Model and send it on the ResponseEntityKey if necessary.
 	 *
-	 * @param event The event with an {@link Authority_} as {@link Event#getData()}.
+	 * @param event The event with an {@link Authority} as {@link Event#getData()}.
 	 */
 	private void delete(Event<?> event) {
 		final Object data = event.getData();
 		if (data == null) 
 			throw new NullPointerException("Event data must not be null!");
-		if (data.getClass() != Authority_.class)
-			throw new IllegalArgumentException("The event must be of " + Authority_.class);
-		final Authority_ authority = (Authority_) event.getData();
+		if (data.getClass() != Authority.class)
+			throw new IllegalArgumentException("The event must be of " + Authority.class);
+		final Authority authority = (Authority) event.getData();
 		if (authority.getId() == null)
 			throw new IllegalArgumentException("The Authority_ must have an ID.");
 		authorityService.delete(authority.getId());
@@ -275,18 +275,18 @@ public class Authority_ViewController implements Serializable{
 	 * Update the Authority_ on the DataStore.
 	 * Update the Model and send it on the ResponseEntityKey if necessary.
 	 *
-	 * @param event The event with an {@link Authority_} as {@link Event#getData()}.
+	 * @param event The event with an {@link Authority} as {@link Event#getData()}.
 	 */
 	private void update(Event<?> event) {
 		final Object data = event.getData();	 
 		if (data == null) 
 			throw new NullPointerException("Event data must not be null!");
-		if (data.getClass() != Authority_.class)
-			throw new IllegalArgumentException("The event must be of " + Authority_.class);
-		final Authority_ authority = (Authority_) event.getData();
+		if (data.getClass() != Authority.class)
+			throw new IllegalArgumentException("The event must be of " + Authority.class);
+		final Authority authority = (Authority) event.getData();
 		if (authority.getId() == null)
 			throw new IllegalArgumentException("The Authority_ must have an ID.");
-		final Authority_ fromREST = authorityService.update(authority);
+		final Authority fromREST = authorityService.update(authority);
 		refreshModelSelected();
 		getModel().getAuthoritys().addBean(fromREST);
 		notifyComponents();
@@ -315,7 +315,7 @@ public class Authority_ViewController implements Serializable{
 	 */
 	void refreshModelAssociations() {
 		getModel().getSelectedAuthority().ifPresent(authority -> {
-			final List<Permission_> permissions = queryPermissions(authority);
+			final List<Permission> permissions = queryPermissions(authority);
 			getModel().getSelectedAuthorityPermissions().removeAllItems();
 			getModel().getSelectedAuthorityPermissions().addAll(permissions);
 		});	
@@ -353,13 +353,13 @@ public class Authority_ViewController implements Serializable{
 	 * If called with null, the current selected Authority_ will only be refreshed from the DataStore.
 	 * Update the Model and send it on the ResponseEntityKey if necessary.
 	 *
-	 * @param event The event with an {@link Authority_} or *null* as {@link Event#getData()}.
+	 * @param event The event with an {@link Authority} or *null* as {@link Event#getData()}.
 	 */
 	private void readSelected(Event<?> event) {
 		final Object data = event.getData();
 
-		if (data instanceof Authority_) {
-			final Authority_ authority = (Authority_) event.getData();
+		if (data instanceof Authority) {
+			final Authority authority = (Authority) event.getData();
 			getModel().setSelectedAuthority(authority);
 			refreshModelSelected();
 			refreshModelAssociations();
@@ -386,7 +386,7 @@ public class Authority_ViewController implements Serializable{
 	 * @return The RequestEntityKey with the chosen RequestEvent.
 	 */
 	public RequestEntityKey getRequestKey(RequestEvent event) {
-		return new RequestEntityKey(event, Authority_.class);
+		return new RequestEntityKey(event, Authority.class);
 	}
 
 	/**
@@ -395,6 +395,6 @@ public class Authority_ViewController implements Serializable{
 	 * @return The ResponseEntityKey.
 	 */
 	public ResponseEntityKey getResponseKey() {
-		return new ResponseEntityKey(Authority_.class);
+		return new ResponseEntityKey(Authority.class);
 	}
 }

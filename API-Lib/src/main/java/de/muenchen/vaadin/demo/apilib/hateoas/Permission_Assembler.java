@@ -2,7 +2,7 @@ package de.muenchen.vaadin.demo.apilib.hateoas;
 
 
 import de.muenchen.vaadin.demo.apilib.domain.Permission_DTO;
-import de.muenchen.vaadin.demo.apilib.local.Permission_;
+import de.muenchen.vaadin.demo.apilib.local.Permission;
 import de.muenchen.vaadin.demo.apilib.rest.Permission_Resource;
 import org.springframework.hateoas.Resource;
 
@@ -18,10 +18,10 @@ public class Permission_Assembler {
 	 * @param resource the REST DTO Resource
 	 * @return the local Object Representation
 	 */
-	public Permission_ toBean(Resource<Permission_DTO> resource) {
+	public Permission toBean(Resource<Permission_DTO> resource) {
 
 		Permission_DTO permissionDTO = resource.getContent();
-		Permission_ bean = new Permission_();
+		Permission bean = new Permission();
 		bean.setPermission(permissionDTO.getPermission());
 		bean.add(resource.getLinks());
 		return bean;
@@ -34,7 +34,7 @@ public class Permission_Assembler {
 	 * @param bean the local object representation
 	 * @return the REST DTO Resource
 	 */
-	public Permission_Resource toResource(Permission_ bean) {
+	public Permission_Resource toResource(Permission bean) {
 		Permission_DTO permissionDTO = new Permission_DTO();
 		permissionDTO.setPermission(bean.getPermission());
 		return new Permission_Resource(permissionDTO, bean.getLinks());

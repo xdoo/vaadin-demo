@@ -1,7 +1,7 @@
 package de.muenchen.vaadin.guilib.security.services;
 
 
-import de.muenchen.vaadin.demo.apilib.local.User_;
+import de.muenchen.vaadin.demo.apilib.local.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,7 @@ public class User_FallbackDataGenerator{
 	 * 
 	 * @return Generierter fallback-Wert
 	 */
-	public static User_ createUserFallback(){
+	public static User createUserFallback(){
 		return null;
 	}
 	
@@ -30,7 +30,7 @@ public class User_FallbackDataGenerator{
 	 * 
 	 * @return Generierter fallback-Wert
 	 */
-	public static List<User_> createUsersFallback(){
+	public static List<User> createUsersFallback(){
 		return new ArrayList<>();
 	}
 	
@@ -39,7 +39,7 @@ public class User_FallbackDataGenerator{
 	 * 
 	 * @return Generierter fallback-Wert
 	 */
-	public static Optional<User_> createOptionalUserFallback(){
+	public static Optional<User> createOptionalUserFallback(){
 		return Optional.empty();
 	}
 	

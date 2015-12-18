@@ -4,8 +4,8 @@ import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.TwinColSelect;
 import de.muenchen.eventbus.events.Association;
-import de.muenchen.vaadin.demo.apilib.local.Authority_;
-import de.muenchen.vaadin.demo.apilib.local.Permission_;
+import de.muenchen.vaadin.demo.apilib.local.Authority;
+import de.muenchen.vaadin.demo.apilib.local.Permission;
 import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.components.BaseComponent;
 import de.muenchen.vaadin.guilib.security.components.buttons.listener.Authority_AssociationListActions;
@@ -22,15 +22,15 @@ public class Authority_Permissions_TwinSelect extends BaseComponent {
 
     private final TwinColSelect select;
 
-    private final Set<Permission_> lastSelected = new HashSet<>();
+    private final Set<Permission> lastSelected = new HashSet<>();
 
     private final Property.ValueChangeListener saveListener = (event) -> {
-        Collection<Permission_> eventData = ((Collection<Permission_>)event.getProperty().getValue());
+        Collection<Permission> eventData = ((Collection<Permission>)event.getProperty().getValue());
 
         Authority_AssociationListActions addedPermissions = new Authority_AssociationListActions(
-                () -> eventData.stream().filter(perm -> !lastSelected.contains(perm)).map(perm -> new Association<>(perm, Authority_.Rel.permissions.name())).collect(Collectors.toList()));
+                () -> eventData.stream().filter(perm -> !lastSelected.contains(perm)).map(perm -> new Association<>(perm, Authority.Rel.permissions.name())).collect(Collectors.toList()));
         Authority_AssociationListActions removedPermissions = new Authority_AssociationListActions(
-                () -> lastSelected.stream().filter(perm -> !eventData.contains(perm)).map(perm -> new Association<>(perm, Authority_.Rel.permissions.name())).collect(Collectors.toList()));
+                () -> lastSelected.stream().filter(perm -> !eventData.contains(perm)).map(perm -> new Association<>(perm, Authority.Rel.permissions.name())).collect(Collectors.toList()));
 
         addedPermissions.addAssociations(null);
         removedPermissions.removeAssociations(null);
@@ -49,15 +49,15 @@ public class Authority_Permissions_TwinSelect extends BaseComponent {
 
     private void init(){
         controller.getModel().getPermissions().addAll(controller.queryPermission());
-        BeanItemContainer<Permission_> perms = controller.getModel().getPermissions();
+        BeanItemContainer<Permission> perms = controller.getModel().getPermissions();
         perms.sort(new String[]{"permission"}, new boolean[]{true});
         select.setContainerDataSource(perms);
         select.setWidth("100%");
         select.setHeight("484px");
         select.setImmediate(true);
         select.addValueChangeListener(saveListener);
-        select.setLeftColumnCaption(BaseUI.getCurrentI18nResolver().resolveRelative(Authority_.class, "permissions.available.label"));
-        select.setRightColumnCaption(BaseUI.getCurrentI18nResolver().resolveRelative(Authority_.class, "permissions.granted.label"));
+        select.setLeftColumnCaption(BaseUI.getCurrentI18nResolver().resolveRelative(Authority.class, "permissions.available.label"));
+        select.setRightColumnCaption(BaseUI.getCurrentI18nResolver().resolveRelative(Authority.class, "permissions.granted.label"));
 
         setCompositionRoot(select);
     }
@@ -71,7 +71,7 @@ public class Authority_Permissions_TwinSelect extends BaseComponent {
         select.addValueChangeListener(saveListener);
     }
 
-    public void select(List<Permission_> permissions){
+    public void select(List<Permission> permissions){
         select.removeValueChangeListener(saveListener);
 
         lastSelected.addAll(permissions);

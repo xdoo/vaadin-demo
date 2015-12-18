@@ -2,7 +2,7 @@ package de.muenchen.vaadin.demo.apilib.hateoas;
 
 
 import de.muenchen.vaadin.demo.apilib.domain.Authority_DTO;
-import de.muenchen.vaadin.demo.apilib.local.Authority_;
+import de.muenchen.vaadin.demo.apilib.local.Authority;
 import de.muenchen.vaadin.demo.apilib.rest.Authority_Resource;
 import org.springframework.hateoas.Resource;
 
@@ -18,10 +18,10 @@ public class Authority_Assembler {
 	 * @param resource the REST DTO Resource
 	 * @return the local Object Representation
 	 */
-	public Authority_ toBean(Resource<Authority_DTO> resource) {
+	public Authority toBean(Resource<Authority_DTO> resource) {
 
 		Authority_DTO authorityDTO = resource.getContent();
-		Authority_ bean = new Authority_();
+		Authority bean = new Authority();
 		bean.setAuthority(authorityDTO.getAuthority());
 		bean.add(resource.getLinks());
 		return bean;
@@ -34,7 +34,7 @@ public class Authority_Assembler {
 	 * @param bean the local object representation
 	 * @return the REST DTO Resource
 	 */
-	public Authority_Resource toResource(Authority_ bean) {
+	public Authority_Resource toResource(Authority bean) {
 		Authority_DTO authorityDTO = new Authority_DTO();
 		authorityDTO.setAuthority(bean.getAuthority());
 		return new Authority_Resource(authorityDTO, bean.getLinks());

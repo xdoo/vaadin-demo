@@ -3,7 +3,7 @@ package de.muenchen.vaadin.guilib.security.services;
 import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
-import de.muenchen.vaadin.demo.apilib.local.User_;
+import de.muenchen.vaadin.demo.apilib.local.User;
 import de.muenchen.vaadin.demo.apilib.rest.User_RestClient;
 import de.muenchen.vaadin.demo.apilib.rest.User_RestClientImpl;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
@@ -62,9 +62,9 @@ public class User_ServiceImpl implements User_Service, Serializable {
 	 * @return user
 	 */
     @Override
-    public User_ create(User_ user) {
-    	User_ returnUser;
-        Future<User_> result = executor.submit(() -> client.create(user));
+    public User create(User user) {
+    	User returnUser;
+        Future<User> result = executor.submit(() -> client.create(user));
         try {
             returnUser = result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
             showSuccessNotification(I18nPaths.NotificationType.success, SimpleAction.create);
@@ -92,9 +92,9 @@ public class User_ServiceImpl implements User_Service, Serializable {
 	 * @return user
 	 */
     @Override
-    public User_ update(User_ user) {
-    	User_ returnUser;
-        Future<User_> result = executor.submit(() -> client.update(user));
+    public User update(User user) {
+    	User returnUser;
+        Future<User> result = executor.submit(() -> client.update(user));
         try {
             returnUser = result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
             showSuccessNotification(I18nPaths.NotificationType.success, SimpleAction.update);
@@ -154,9 +154,9 @@ public class User_ServiceImpl implements User_Service, Serializable {
 	 * @return users the results
 	 */
     @Override
-    public List<User_> findAll() {
-        List<User_> users;
-        Future<List<User_>> result = Executors.newCachedThreadPool().submit((Callable<List<User_>>) client::findAll);
+    public List<User> findAll() {
+        List<User> users;
+        Future<List<User>> result = Executors.newCachedThreadPool().submit((Callable<List<User>>) client::findAll);
         try {
             users = result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
             return users;
@@ -184,9 +184,9 @@ public class User_ServiceImpl implements User_Service, Serializable {
 	 * @return users the results
 	 */
     @Override
-    public List<User_> findAll(Link relation) {
-        List<User_> users;
-        Future<List<User_>> result = executor.submit(() -> client.findAll(relation));
+    public List<User> findAll(Link relation) {
+        List<User> users;
+        Future<List<User>> result = executor.submit(() -> client.findAll(relation));
         try {
             users = result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
         } catch (HttpClientErrorException e) {
@@ -213,9 +213,9 @@ public class User_ServiceImpl implements User_Service, Serializable {
 	 * @return the found User_ 
 	 */
     @Override
-    public Optional<User_> findOne(Link link) {
-        Optional<User_> user;
-        Future<Optional<User_>> result = executor.submit(() -> client.findOne(link));
+    public Optional<User> findOne(Link link) {
+        Optional<User> user;
+        Future<Optional<User>> result = executor.submit(() -> client.findOne(link));
         try {
             user = result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
         } catch (HttpClientErrorException e) {
@@ -244,9 +244,9 @@ public class User_ServiceImpl implements User_Service, Serializable {
 	 * @return users the results
 	 */
     @Override
-    public List<User_> queryUser(String query) {
-        List<User_> users;
-        Future<List<User_>> result = executor.submit(() -> client.findFullTextFuzzy(query));
+    public List<User> queryUser(String query) {
+        List<User> users;
+        Future<List<User>> result = executor.submit(() -> client.findFullTextFuzzy(query));
         try {
             users = result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
         } catch (HttpClientErrorException e) {
@@ -345,8 +345,8 @@ public class User_ServiceImpl implements User_Service, Serializable {
      */
     private void showSuccessNotification(I18nPaths.NotificationType type, SimpleAction action) {
         GenericSuccessNotification succes = new GenericSuccessNotification(
-                BaseUI.getCurrentI18nResolver().resolveRelative(User_.class, getNotificationPath(type, action, I18nPaths.Type.label)),
-                BaseUI.getCurrentI18nResolver().resolveRelative(User_.class, getNotificationPath(type, action, I18nPaths.Type.text)));
+                BaseUI.getCurrentI18nResolver().resolveRelative(User.class, getNotificationPath(type, action, I18nPaths.Type.label)),
+                BaseUI.getCurrentI18nResolver().resolveRelative(User.class, getNotificationPath(type, action, I18nPaths.Type.text)));
         succes.show(Page.getCurrent());
     }
 
@@ -357,8 +357,8 @@ public class User_ServiceImpl implements User_Service, Serializable {
      */
     private void showErrorNotification(I18nPaths.NotificationType type, SimpleAction action) {
         GenericErrorNotification succes = new GenericErrorNotification(
-                BaseUI.getCurrentI18nResolver().resolveRelative(User_.class, getNotificationPath(type, action, I18nPaths.Type.label)),
-                BaseUI.getCurrentI18nResolver().resolveRelative(User_.class, getNotificationPath(type, action, I18nPaths.Type.text)));
+                BaseUI.getCurrentI18nResolver().resolveRelative(User.class, getNotificationPath(type, action, I18nPaths.Type.label)),
+                BaseUI.getCurrentI18nResolver().resolveRelative(User.class, getNotificationPath(type, action, I18nPaths.Type.text)));
         succes.show(Page.getCurrent());
     }
 
@@ -370,8 +370,8 @@ public class User_ServiceImpl implements User_Service, Serializable {
      */
     private void showErrorNotification(I18nPaths.NotificationType type, SimpleAction action, String statusCode) {
         GenericErrorNotification succes = new GenericErrorNotification(
-                BaseUI.getCurrentI18nResolver().resolveRelative(User_.class, getNotificationPath(type, action, I18nPaths.Type.label, statusCode)),
-                BaseUI.getCurrentI18nResolver().resolveRelative(User_.class, getNotificationPath(type, action, I18nPaths.Type.text, statusCode)));
+                BaseUI.getCurrentI18nResolver().resolveRelative(User.class, getNotificationPath(type, action, I18nPaths.Type.label, statusCode)),
+                BaseUI.getCurrentI18nResolver().resolveRelative(User.class, getNotificationPath(type, action, I18nPaths.Type.text, statusCode)));
         succes.show(Page.getCurrent());
     }
 }

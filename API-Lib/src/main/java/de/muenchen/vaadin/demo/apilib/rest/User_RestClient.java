@@ -1,6 +1,6 @@
 package de.muenchen.vaadin.demo.apilib.rest;
 
-import de.muenchen.vaadin.demo.apilib.local.User_;
+import de.muenchen.vaadin.demo.apilib.local.User;
 import org.springframework.hateoas.Link;
 
 import java.util.Collection;
@@ -23,7 +23,7 @@ public interface User_RestClient {
      *
      * @return a List of all Users.
      */
-    List<User_> findAll();
+    List<User> findAll();
 
     /**
      * Get all the Users (with matching tenancy) on a specific endpoint.
@@ -33,14 +33,14 @@ public interface User_RestClient {
      * @param relation
      * @return
      */
-    List<User_> findAll(Link relation);
+    List<User> findAll(Link relation);
     
     /**
      * Get all User matched with string due to fuzzy search.
      * @param filter the string for the query
      * @return
      */
-    List<User_> findFullTextFuzzy(String filter);
+    List<User> findFullTextFuzzy(String filter);
 
     /**
      * Try to find one User (with matching tenancy) by its ID / self relation.
@@ -48,7 +48,7 @@ public interface User_RestClient {
      * @param link The ID / self relation of the User_.
      * @return an optional of the User_.
      */
-    Optional<User_> findOne(Link link);
+    Optional<User> findOne(Link link);
 
     /**
      * Set all the relations, specified by links, on a specific relation endpoint.
@@ -83,15 +83,15 @@ public interface User_RestClient {
      * @param user The User_ to create, it must not contain any links.
      * @return the created User_ (with ID).
      */
-    User_ create(User_ user);
+    User create(User user);
 
     /**
-     * Update the fields of a User_ by the {@link User_#getId()}.
+     * Update the fields of a User_ by the {@link User#getId()}.
      *
      * @param user The updated User_ that will be saved.
      * @return the updated version from the REST Server.
      */
-    User_ update(User_ user);
+    User update(User user);
 
     /**
      * Try to delete an ID.

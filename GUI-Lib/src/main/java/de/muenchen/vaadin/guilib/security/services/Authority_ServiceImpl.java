@@ -3,7 +3,7 @@ package de.muenchen.vaadin.guilib.security.services;
 import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
-import de.muenchen.vaadin.demo.apilib.local.Authority_;
+import de.muenchen.vaadin.demo.apilib.local.Authority;
 import de.muenchen.vaadin.demo.apilib.rest.Authority_RestClient;
 import de.muenchen.vaadin.demo.apilib.rest.Authority_RestClientImpl;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
@@ -62,9 +62,9 @@ public class Authority_ServiceImpl implements Authority_Service, Serializable {
 	 * @return authority
 	 */
     @Override
-    public Authority_ create(Authority_ authority) {
-    	Authority_ returnAuthority;
-        Future<Authority_> result = executor.submit(() -> client.create(authority));
+    public Authority create(Authority authority) {
+    	Authority returnAuthority;
+        Future<Authority> result = executor.submit(() -> client.create(authority));
         try {
             returnAuthority = result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
             showSuccessNotification(I18nPaths.NotificationType.success, SimpleAction.create);
@@ -92,9 +92,9 @@ public class Authority_ServiceImpl implements Authority_Service, Serializable {
 	 * @return authority
 	 */
     @Override
-    public Authority_ update(Authority_ authority) {
-    	Authority_ returnAuthority;
-        Future<Authority_> result = executor.submit(() -> client.update(authority));
+    public Authority update(Authority authority) {
+    	Authority returnAuthority;
+        Future<Authority> result = executor.submit(() -> client.update(authority));
         try {
             returnAuthority = result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
             showSuccessNotification(I18nPaths.NotificationType.success, SimpleAction.update);
@@ -154,9 +154,9 @@ public class Authority_ServiceImpl implements Authority_Service, Serializable {
 	 * @return authoritys the results
 	 */
     @Override
-    public List<Authority_> findAll() {
-        List<Authority_> authoritys;
-        Future<List<Authority_>> result = Executors.newCachedThreadPool().submit((Callable<List<Authority_>>) client::findAll);
+    public List<Authority> findAll() {
+        List<Authority> authoritys;
+        Future<List<Authority>> result = Executors.newCachedThreadPool().submit((Callable<List<Authority>>) client::findAll);
         try {
             authoritys = result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
             return authoritys;
@@ -184,9 +184,9 @@ public class Authority_ServiceImpl implements Authority_Service, Serializable {
 	 * @return authoritys the results
 	 */
     @Override
-    public List<Authority_> findAll(Link relation) {
-        List<Authority_> authoritys;
-        Future<List<Authority_>> result = executor.submit(() -> client.findAll(relation));
+    public List<Authority> findAll(Link relation) {
+        List<Authority> authoritys;
+        Future<List<Authority>> result = executor.submit(() -> client.findAll(relation));
         try {
             authoritys = result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
         } catch (HttpClientErrorException e) {
@@ -213,9 +213,9 @@ public class Authority_ServiceImpl implements Authority_Service, Serializable {
 	 * @return the found Authority_ 
 	 */
     @Override
-    public Optional<Authority_> findOne(Link link) {
-        Optional<Authority_> authority;
-        Future<Optional<Authority_>> result = executor.submit(() -> client.findOne(link));
+    public Optional<Authority> findOne(Link link) {
+        Optional<Authority> authority;
+        Future<Optional<Authority>> result = executor.submit(() -> client.findOne(link));
         try {
             authority = result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
         } catch (HttpClientErrorException e) {
@@ -244,9 +244,9 @@ public class Authority_ServiceImpl implements Authority_Service, Serializable {
 	 * @return authoritys the results
 	 */
     @Override
-    public List<Authority_> queryAuthority(String query) {
-        List<Authority_> authoritys;
-        Future<List<Authority_>> result = executor.submit(() -> client.findFullTextFuzzy(query));
+    public List<Authority> queryAuthority(String query) {
+        List<Authority> authoritys;
+        Future<List<Authority>> result = executor.submit(() -> client.findFullTextFuzzy(query));
         try {
             authoritys = result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
         } catch (HttpClientErrorException e) {
@@ -345,8 +345,8 @@ public class Authority_ServiceImpl implements Authority_Service, Serializable {
      */
     private void showSuccessNotification(I18nPaths.NotificationType type, SimpleAction action) {
         GenericSuccessNotification succes = new GenericSuccessNotification(
-                BaseUI.getCurrentI18nResolver().resolveRelative(Authority_.class, getNotificationPath(type, action, I18nPaths.Type.label)),
-                BaseUI.getCurrentI18nResolver().resolveRelative(Authority_.class, getNotificationPath(type, action, I18nPaths.Type.text)));
+                BaseUI.getCurrentI18nResolver().resolveRelative(Authority.class, getNotificationPath(type, action, I18nPaths.Type.label)),
+                BaseUI.getCurrentI18nResolver().resolveRelative(Authority.class, getNotificationPath(type, action, I18nPaths.Type.text)));
         succes.show(Page.getCurrent());
     }
 
@@ -357,8 +357,8 @@ public class Authority_ServiceImpl implements Authority_Service, Serializable {
      */
     private void showErrorNotification(I18nPaths.NotificationType type, SimpleAction action) {
         GenericErrorNotification succes = new GenericErrorNotification(
-                BaseUI.getCurrentI18nResolver().resolveRelative(Authority_.class, getNotificationPath(type, action, I18nPaths.Type.label)),
-                BaseUI.getCurrentI18nResolver().resolveRelative(Authority_.class, getNotificationPath(type, action, I18nPaths.Type.text)));
+                BaseUI.getCurrentI18nResolver().resolveRelative(Authority.class, getNotificationPath(type, action, I18nPaths.Type.label)),
+                BaseUI.getCurrentI18nResolver().resolveRelative(Authority.class, getNotificationPath(type, action, I18nPaths.Type.text)));
         succes.show(Page.getCurrent());
     }
 
@@ -370,8 +370,8 @@ public class Authority_ServiceImpl implements Authority_Service, Serializable {
      */
     private void showErrorNotification(I18nPaths.NotificationType type, SimpleAction action, String statusCode) {
         GenericErrorNotification succes = new GenericErrorNotification(
-                BaseUI.getCurrentI18nResolver().resolveRelative(Authority_.class, getNotificationPath(type, action, I18nPaths.Type.label, statusCode)),
-                BaseUI.getCurrentI18nResolver().resolveRelative(Authority_.class, getNotificationPath(type, action, I18nPaths.Type.text, statusCode)));
+                BaseUI.getCurrentI18nResolver().resolveRelative(Authority.class, getNotificationPath(type, action, I18nPaths.Type.label, statusCode)),
+                BaseUI.getCurrentI18nResolver().resolveRelative(Authority.class, getNotificationPath(type, action, I18nPaths.Type.text, statusCode)));
         succes.show(Page.getCurrent());
     }
 }

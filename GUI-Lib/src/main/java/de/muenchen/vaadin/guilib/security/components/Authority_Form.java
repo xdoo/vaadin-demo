@@ -6,7 +6,7 @@ import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
-import de.muenchen.vaadin.demo.apilib.local.Authority_;
+import de.muenchen.vaadin.demo.apilib.local.Authority;
 import de.muenchen.vaadin.guilib.components.BaseComponent;
 import de.muenchen.vaadin.guilib.util.FormUtil;
 
@@ -26,13 +26,13 @@ import java.util.List;
 public class Authority_Form extends BaseComponent {
 
     /** The class of the Entity of this Form. */
-    public static final Class<Authority_> ENTITY_CLASS = Authority_.class;
+    public static final Class<Authority> ENTITY_CLASS = Authority.class;
     
     /** The FormLayout that contains all the form fields. */
     private final FormLayout formLayout;
     
     /** Contains the current Authority_ and handles the data binding. */
-    private final BeanFieldGroup<Authority_> binder = new BeanFieldGroup<>(ENTITY_CLASS);
+    private final BeanFieldGroup<Authority> binder = new BeanFieldGroup<>(ENTITY_CLASS);
     
     /** A list of all the Fields. */
     private final List<Field> fields;
@@ -44,7 +44,7 @@ public class Authority_Form extends BaseComponent {
      * Authority_Form#setReadOnly(boolean)} for a readonly mode.
      */
     public Authority_Form() {
-        binder.setItemDataSource(new Authority_());
+        binder.setItemDataSource(new Authority());
         fields = buildFields();
 
         final FormLayout formLayout = new FormLayout();
@@ -65,7 +65,7 @@ public class Authority_Form extends BaseComponent {
     private List<Field> buildFields() {
         final FormUtil formUtil = new FormUtil(getBinder());
 
-		final TextField authority = formUtil.createTextField(Authority_.Field.authority.name());
+		final TextField authority = formUtil.createTextField(Authority.Field.authority.name());
 		
         return Arrays.asList(authority);
     }
@@ -75,7 +75,7 @@ public class Authority_Form extends BaseComponent {
      *
      * @return The binder.
      */
-    private BeanFieldGroup<Authority_> getBinder() {
+    private BeanFieldGroup<Authority> getBinder() {
         return binder;
     }
 
@@ -84,7 +84,7 @@ public class Authority_Form extends BaseComponent {
      *
      * @return The Authority_.
      */
-    public Authority_ getAuthority() {
+    public Authority getAuthority() {
         try {
             getBinder().commit();
         } catch (FieldGroup.CommitException e) {
@@ -98,8 +98,8 @@ public class Authority_Form extends BaseComponent {
      *
      * @param authority The new Authority_.
      */
-    public void setAuthority(Authority_ authority) {
-        getBinder().setItemDataSource(authority == null ? new Authority_() : authority);
+    public void setAuthority(Authority authority) {
+        getBinder().setItemDataSource(authority == null ? new Authority() : authority);
     }
 
     /**

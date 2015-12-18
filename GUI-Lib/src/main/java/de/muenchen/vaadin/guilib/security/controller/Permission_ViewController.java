@@ -7,7 +7,7 @@ import de.muenchen.eventbus.events.Association;
 import de.muenchen.eventbus.selector.entity.RequestEntityKey;
 import de.muenchen.eventbus.selector.entity.RequestEvent;
 import de.muenchen.eventbus.selector.entity.ResponseEntityKey;
-import de.muenchen.vaadin.demo.apilib.local.Permission_;
+import de.muenchen.vaadin.demo.apilib.local.Permission;
 import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.security.services.Permission_Service;
 import de.muenchen.vaadin.guilib.security.services.model.Permission_Datastore;
@@ -65,37 +65,37 @@ public class Permission_ViewController implements Serializable{
 	////////////////////////
 
 	/**
-	 * Speichert ein {@link Permission_} Objekt in der Datenbank.
+	 * Speichert ein {@link Permission} Objekt in der Datenbank.
 	 *
 	 * @param permission Permission_ der gespeichert werden soll
 	 */
-	public Permission_ save(Permission_ permission) {
+	public Permission save(Permission permission) {
 		return permissionService.create(permission);
 	}
 	/**
-	 * Speichert die Änderungen an einem {@link Permission_} Objekt in der Datenbank.
+	 * Speichert die Änderungen an einem {@link Permission} Objekt in der Datenbank.
 	 *
 	 * @param entity Permission_
 	 * @return Permission_
 	 */
-	public Permission_ updatePermission(Permission_ entity) {
+	public Permission updatePermission(Permission entity) {
 		return permissionService.update(entity);
 	}
 
 	/**
-	 * Löscht ein {@link Permission_} Objekt.
+	 * Löscht ein {@link Permission} Objekt.
 	 *
 	 * @param entity Permission_
 	 */
-	public void deletePermission(Permission_ entity) {
+	public void deletePermission(Permission entity) {
 		permissionService.delete(entity.getId());
 	}
 
-	public List<Permission_> queryPermission() {
+	public List<Permission> queryPermission() {
 		return permissionService.findAll().stream().collect(Collectors.toList());
 	}
 
-	public List<Permission_> queryPermission(String query) {
+	public List<Permission> queryPermission(String query) {
 		return permissionService.queryPermission(query);
 	}
 	
@@ -130,7 +130,7 @@ public class Permission_ViewController implements Serializable{
 			throw new IllegalArgumentException("The event must be of " + Association.class);
 
 		final Association<?> association = (Association<?>) event.getData();
-		final Permission_.Rel rel = Permission_.Rel.valueOf(association.getRel());
+		final Permission.Rel rel = Permission.Rel.valueOf(association.getRel());
 		
 		notifyComponents();
 	}
@@ -154,7 +154,7 @@ public class Permission_ViewController implements Serializable{
 
 		final Association<?> association = (Association<?>) event.getData();
 
-		final Permission_.Rel rel = Permission_.Rel.valueOf(association.getRel());
+		final Permission.Rel rel = Permission.Rel.valueOf(association.getRel());
 		refreshModelAssociations();
 		notifyComponents();
 	}
@@ -163,16 +163,16 @@ public class Permission_ViewController implements Serializable{
 	 * Create a new Buerger on the DataStore.
 	 * Update the Model and send it on the ResponseEntityKey if necessary.
 	 *
-	 * @param event The event with an {@link Permission_} as {@link Event#getData()}.
+	 * @param event The event with an {@link Permission} as {@link Event#getData()}.
 	 */
 	private void create(Event<?> event) {
 		final Object data = event.getData();
 		if (data == null) 
 			throw new NullPointerException("Event data must not be null!");
-		if (data.getClass() != Permission_.class)
-			throw new IllegalArgumentException("The event must be of " + Permission_.class);
-		final Permission_ permission = (Permission_) event.getData();
-		final Permission_ fromREST = permissionService.create(permission);
+		if (data.getClass() != Permission.class)
+			throw new IllegalArgumentException("The event must be of " + Permission.class);
+		final Permission permission = (Permission) event.getData();
+		final Permission fromREST = permissionService.create(permission);
 		getModel().getPermissions().addBean(fromREST);
 		notifyComponents();
 	}
@@ -182,15 +182,15 @@ public class Permission_ViewController implements Serializable{
 	 * Delete the Permission_ on the DataStore.
 	 * Update the Model and send it on the ResponseEntityKey if necessary.
 	 *
-	 * @param event The event with an {@link Permission_} as {@link Event#getData()}.
+	 * @param event The event with an {@link Permission} as {@link Event#getData()}.
 	 */
 	private void delete(Event<?> event) {
 		final Object data = event.getData();
 		if (data == null) 
 			throw new NullPointerException("Event data must not be null!");
-		if (data.getClass() != Permission_.class)
-			throw new IllegalArgumentException("The event must be of " + Permission_.class);
-		final Permission_ permission = (Permission_) event.getData();
+		if (data.getClass() != Permission.class)
+			throw new IllegalArgumentException("The event must be of " + Permission.class);
+		final Permission permission = (Permission) event.getData();
 		if (permission.getId() == null)
 			throw new IllegalArgumentException("The Permission_ must have an ID.");
 		permissionService.delete(permission.getId());
@@ -208,18 +208,18 @@ public class Permission_ViewController implements Serializable{
 	 * Update the Permission_ on the DataStore.
 	 * Update the Model and send it on the ResponseEntityKey if necessary.
 	 *
-	 * @param event The event with an {@link Permission_} as {@link Event#getData()}.
+	 * @param event The event with an {@link Permission} as {@link Event#getData()}.
 	 */
 	private void update(Event<?> event) {
 		final Object data = event.getData();	 
 		if (data == null) 
 			throw new NullPointerException("Event data must not be null!");
-		if (data.getClass() != Permission_.class)
-			throw new IllegalArgumentException("The event must be of " + Permission_.class);
-		final Permission_ permission = (Permission_) event.getData();
+		if (data.getClass() != Permission.class)
+			throw new IllegalArgumentException("The event must be of " + Permission.class);
+		final Permission permission = (Permission) event.getData();
 		if (permission.getId() == null)
 			throw new IllegalArgumentException("The Permission_ must have an ID.");
-		final Permission_ fromREST = permissionService.update(permission);
+		final Permission fromREST = permissionService.update(permission);
 		refreshModelSelected();
 		getModel().getPermissions().addBean(fromREST);
 		notifyComponents();
@@ -283,13 +283,13 @@ public class Permission_ViewController implements Serializable{
 	 * If called with null, the current selected Permission_ will only be refreshed from the DataStore.
 	 * Update the Model and send it on the ResponseEntityKey if necessary.
 	 *
-	 * @param event The event with an {@link Permission_} or *null* as {@link Event#getData()}.
+	 * @param event The event with an {@link Permission} or *null* as {@link Event#getData()}.
 	 */
 	private void readSelected(Event<?> event) {
 		final Object data = event.getData();
 
-		if (data instanceof Permission_) {
-			final Permission_ permission = (Permission_) event.getData();
+		if (data instanceof Permission) {
+			final Permission permission = (Permission) event.getData();
 			getModel().setSelectedPermission(permission);
 			refreshModelSelected();
 			refreshModelAssociations();
@@ -316,7 +316,7 @@ public class Permission_ViewController implements Serializable{
 	 * @return The RequestEntityKey with the chosen RequestEvent.
 	 */
 	public RequestEntityKey getRequestKey(RequestEvent event) {
-		return new RequestEntityKey(event, Permission_.class);
+		return new RequestEntityKey(event, Permission.class);
 	}
 
 	/**
@@ -325,6 +325,6 @@ public class Permission_ViewController implements Serializable{
 	 * @return The ResponseEntityKey.
 	 */
 	public ResponseEntityKey getResponseKey() {
-		return new ResponseEntityKey(Permission_.class);
+		return new ResponseEntityKey(Permission.class);
 	}
 }

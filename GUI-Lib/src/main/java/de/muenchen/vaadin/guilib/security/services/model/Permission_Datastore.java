@@ -1,7 +1,7 @@
 package de.muenchen.vaadin.guilib.security.services.model;
 
 import com.vaadin.data.util.BeanItemContainer;
-import de.muenchen.vaadin.demo.apilib.local.Permission_;
+import de.muenchen.vaadin.demo.apilib.local.Permission;
 
 import java.util.Optional;
 
@@ -16,15 +16,15 @@ import java.util.Optional;
 public class Permission_Datastore {
     
     /** A List of all the Permission_, possible reduced by the query. */
-    private final BeanItemContainer<Permission_> permissions = new BeanItemContainer<>(Permission_.class);
+    private final BeanItemContainer<Permission> permissions = new BeanItemContainer<>(Permission.class);
     
     /** The current (single or none) selected permission in the GUI. */
-    private Optional<Permission_> selectedPermission= Optional.empty();
+    private Optional<Permission> selectedPermission= Optional.empty();
     
     /** The query to filter the permission. */
     private Optional<String> query = Optional.empty();
 
-    public Optional<Permission_> getSelectedPermission() {
+    public Optional<Permission> getSelectedPermission() {
         return selectedPermission;
     }
 
@@ -33,11 +33,11 @@ public class Permission_Datastore {
      *
      * @param selectedPermission The Permission_ to set as the selected one.
      */
-    public void setSelectedPermission(Permission_ selectedPermission) {
+    public void setSelectedPermission(Permission selectedPermission) {
         this.selectedPermission = Optional.ofNullable(selectedPermission);
     }
 
-    public BeanItemContainer<Permission_> getPermissions() {
+    public BeanItemContainer<Permission> getPermissions() {
         return permissions;
     }
 

@@ -1,6 +1,6 @@
 package de.muenchen.vaadin.guilib.security.services;
 
-import de.muenchen.vaadin.demo.apilib.local.Permission_;
+import de.muenchen.vaadin.demo.apilib.local.Permission;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ public class Permission_FallbackDataGenerator{
 	 * 
 	 * @return Generierter fallback-Wert
 	 */
-	public static Permission_ createPermissionFallback(){
+	public static Permission createPermissionFallback(){
 		return null;
 	}
 	
@@ -29,7 +29,7 @@ public class Permission_FallbackDataGenerator{
 	 * 
 	 * @return Generierter fallback-Wert
 	 */
-	public static List<Permission_> createPermissionsFallback(){
+	public static List<Permission> createPermissionsFallback(){
 		return new ArrayList<>();
 	}
 	
@@ -38,7 +38,7 @@ public class Permission_FallbackDataGenerator{
 	 * 
 	 * @return Generierter fallback-Wert
 	 */
-	public static Optional<Permission_> createOptionalPermissionFallback(){
+	public static Optional<Permission> createOptionalPermissionFallback(){
 		return Optional.empty();
 	}
 	

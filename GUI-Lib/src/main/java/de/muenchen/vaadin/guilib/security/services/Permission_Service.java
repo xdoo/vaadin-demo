@@ -1,6 +1,6 @@
 package de.muenchen.vaadin.guilib.security.services;
 
-import de.muenchen.vaadin.demo.apilib.local.Permission_;
+import de.muenchen.vaadin.demo.apilib.local.Permission;
 import org.springframework.hateoas.Link;
 
 import java.util.List;
@@ -15,19 +15,19 @@ import java.util.Optional;
  * Service zum Verwalten von Permission_ aus der GUI heraus.
  */
 public interface Permission_Service {
-    Permission_ create(Permission_ permission);
+    Permission create(Permission permission);
 
-    Permission_ update(Permission_ permission);
+    Permission update(Permission permission);
 
     boolean delete(Link link);
 		
-    List<Permission_> findAll();
+    List<Permission> findAll();
 
-    List<Permission_> findAll(Link relation);
+    List<Permission> findAll(Link relation);
 
-    Optional<Permission_> findOne(Link link);
+    Optional<Permission> findOne(Link link);
 
-    List<Permission_> queryPermission(String query);
+    List<Permission> queryPermission(String query);
 
     boolean setRelations(Link link, List<Link> relations);
 

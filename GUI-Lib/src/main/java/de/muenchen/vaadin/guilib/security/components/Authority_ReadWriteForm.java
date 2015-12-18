@@ -3,7 +3,7 @@ package de.muenchen.vaadin.guilib.security.components;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
-import de.muenchen.vaadin.demo.apilib.local.Authority_;
+import de.muenchen.vaadin.demo.apilib.local.Authority;
 import de.muenchen.vaadin.guilib.security.components.buttons.listener.Authority_SingleActions;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.BaseComponent;
@@ -60,7 +60,7 @@ public class Authority_ReadWriteForm extends BaseComponent {
      * @return An array of all buttons.
      */
     private Component[] createEditButtons() {
-        final ActionButton saveButton = new ActionButton(Authority_.class, SimpleAction.save);
+        final ActionButton saveButton = new ActionButton(Authority.class, SimpleAction.save);
 
         final Authority_SingleActions singleActions = new Authority_SingleActions(getAuthorityForm()::getAuthority);
         saveButton.addActionPerformer(singleActions::update);
@@ -69,7 +69,7 @@ public class Authority_ReadWriteForm extends BaseComponent {
             return true;
         });
 
-        final ActionButton cancelButton = new ActionButton(Authority_.class, SimpleAction.cancel);
+        final ActionButton cancelButton = new ActionButton(Authority.class, SimpleAction.cancel);
 
         cancelButton.addActionPerformer(singleActions::reRead);
         cancelButton.addActionPerformer(clickEvent -> {
@@ -85,7 +85,7 @@ public class Authority_ReadWriteForm extends BaseComponent {
      * @return An array of all buttons.
      */
     private Component[] createButtons() {
-        final ActionButton editButton = new ActionButton(Authority_.class, SimpleAction.update);
+        final ActionButton editButton = new ActionButton(Authority.class, SimpleAction.update);
         editButton.addClickListener(clickEvent -> setEdit(true));
 
         return new Component[]{editButton};

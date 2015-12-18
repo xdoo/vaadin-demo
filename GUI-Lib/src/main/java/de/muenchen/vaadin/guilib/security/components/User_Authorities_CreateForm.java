@@ -3,7 +3,7 @@ package de.muenchen.vaadin.guilib.security.components;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
 import de.muenchen.eventbus.events.Association;
-import de.muenchen.vaadin.demo.apilib.local.Authority_;
+import de.muenchen.vaadin.demo.apilib.local.Authority;
 import de.muenchen.vaadin.guilib.security.components.buttons.listener.User_AssociationActions;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.BaseComponent;
@@ -28,10 +28,10 @@ public class User_Authorities_CreateForm extends BaseComponent {
 
     private final HorizontalLayout buttonLayout = new HorizontalLayout();
     private final NavigateActions saveNavigation;
-    private final ActionButton saveButton = new ActionButton(Authority_.class, SimpleAction.save);
+    private final ActionButton saveButton = new ActionButton(Authority.class, SimpleAction.save);
 
     /**
-     * Formular zum Erstellen eines {@link Authority_}s. Über diesen Konstruktor kann zusätzlich eine Zielseite für die
+     * Formular zum Erstellen eines {@link Authority}s. Über diesen Konstruktor kann zusätzlich eine Zielseite für die
      * 'abbrechen' Schaltfläche erstellt werden. Dies ist dann sinnvoll, wenn dieses Formular in einen Wizzard, bzw. in
      * eine definierte Abfolge von Formularen eingebettet wird.
      *

@@ -3,7 +3,7 @@ package de.muenchen.vaadin.guilib.security.services;
 import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
-import de.muenchen.vaadin.demo.apilib.local.Permission_;
+import de.muenchen.vaadin.demo.apilib.local.Permission;
 import de.muenchen.vaadin.demo.apilib.rest.Permission_RestClient;
 import de.muenchen.vaadin.demo.apilib.rest.Permission_RestClientImpl;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
@@ -62,9 +62,9 @@ public class Permission_ServiceImpl implements Permission_Service, Serializable 
 	 * @return permission
 	 */
     @Override
-    public Permission_ create(Permission_ permission) {
-    	Permission_ returnPermission;
-        Future<Permission_> result = executor.submit(() -> client.create(permission));
+    public Permission create(Permission permission) {
+    	Permission returnPermission;
+        Future<Permission> result = executor.submit(() -> client.create(permission));
         try {
             returnPermission = result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
             showSuccessNotification(I18nPaths.NotificationType.success, SimpleAction.create);
@@ -92,9 +92,9 @@ public class Permission_ServiceImpl implements Permission_Service, Serializable 
 	 * @return permission
 	 */
     @Override
-    public Permission_ update(Permission_ permission) {
-    	Permission_ returnPermission;
-        Future<Permission_> result = executor.submit(() -> client.update(permission));
+    public Permission update(Permission permission) {
+    	Permission returnPermission;
+        Future<Permission> result = executor.submit(() -> client.update(permission));
         try {
             returnPermission = result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
             showSuccessNotification(I18nPaths.NotificationType.success, SimpleAction.update);
@@ -154,9 +154,9 @@ public class Permission_ServiceImpl implements Permission_Service, Serializable 
 	 * @return permissions the results
 	 */
     @Override
-    public List<Permission_> findAll() {
-        List<Permission_> permissions;
-        Future<List<Permission_>> result = Executors.newCachedThreadPool().submit((Callable<List<Permission_>>) client::findAll);
+    public List<Permission> findAll() {
+        List<Permission> permissions;
+        Future<List<Permission>> result = Executors.newCachedThreadPool().submit((Callable<List<Permission>>) client::findAll);
         try {
             permissions = result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
             return permissions;
@@ -184,9 +184,9 @@ public class Permission_ServiceImpl implements Permission_Service, Serializable 
 	 * @return permissions the results
 	 */
     @Override
-    public List<Permission_> findAll(Link relation) {
-        List<Permission_> permissions;
-        Future<List<Permission_>> result = executor.submit(() -> client.findAll(relation));
+    public List<Permission> findAll(Link relation) {
+        List<Permission> permissions;
+        Future<List<Permission>> result = executor.submit(() -> client.findAll(relation));
         try {
             permissions = result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
         } catch (HttpClientErrorException e) {
@@ -213,9 +213,9 @@ public class Permission_ServiceImpl implements Permission_Service, Serializable 
 	 * @return the found Permission_ 
 	 */
     @Override
-    public Optional<Permission_> findOne(Link link) {
-        Optional<Permission_> permission;
-        Future<Optional<Permission_>> result = executor.submit(() -> client.findOne(link));
+    public Optional<Permission> findOne(Link link) {
+        Optional<Permission> permission;
+        Future<Optional<Permission>> result = executor.submit(() -> client.findOne(link));
         try {
             permission = result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
         } catch (HttpClientErrorException e) {
@@ -244,9 +244,9 @@ public class Permission_ServiceImpl implements Permission_Service, Serializable 
 	 * @return permissions the results
 	 */
     @Override
-    public List<Permission_> queryPermission(String query) {
-        List<Permission_> permissions;
-        Future<List<Permission_>> result = executor.submit(() -> client.findFullTextFuzzy(query));
+    public List<Permission> queryPermission(String query) {
+        List<Permission> permissions;
+        Future<List<Permission>> result = executor.submit(() -> client.findFullTextFuzzy(query));
         try {
             permissions = result.get(TIMEOUT_VAL, TimeUnit.SECONDS);
         } catch (HttpClientErrorException e) {
@@ -345,8 +345,8 @@ public class Permission_ServiceImpl implements Permission_Service, Serializable 
      */
     private void showSuccessNotification(I18nPaths.NotificationType type, SimpleAction action) {
         GenericSuccessNotification succes = new GenericSuccessNotification(
-                BaseUI.getCurrentI18nResolver().resolveRelative(Permission_.class, getNotificationPath(type, action, I18nPaths.Type.label)),
-                BaseUI.getCurrentI18nResolver().resolveRelative(Permission_.class, getNotificationPath(type, action, I18nPaths.Type.text)));
+                BaseUI.getCurrentI18nResolver().resolveRelative(Permission.class, getNotificationPath(type, action, I18nPaths.Type.label)),
+                BaseUI.getCurrentI18nResolver().resolveRelative(Permission.class, getNotificationPath(type, action, I18nPaths.Type.text)));
         succes.show(Page.getCurrent());
     }
 
@@ -357,8 +357,8 @@ public class Permission_ServiceImpl implements Permission_Service, Serializable 
      */
     private void showErrorNotification(I18nPaths.NotificationType type, SimpleAction action) {
         GenericErrorNotification succes = new GenericErrorNotification(
-                BaseUI.getCurrentI18nResolver().resolveRelative(Permission_.class, getNotificationPath(type, action, I18nPaths.Type.label)),
-                BaseUI.getCurrentI18nResolver().resolveRelative(Permission_.class, getNotificationPath(type, action, I18nPaths.Type.text)));
+                BaseUI.getCurrentI18nResolver().resolveRelative(Permission.class, getNotificationPath(type, action, I18nPaths.Type.label)),
+                BaseUI.getCurrentI18nResolver().resolveRelative(Permission.class, getNotificationPath(type, action, I18nPaths.Type.text)));
         succes.show(Page.getCurrent());
     }
 
@@ -370,8 +370,8 @@ public class Permission_ServiceImpl implements Permission_Service, Serializable 
      */
     private void showErrorNotification(I18nPaths.NotificationType type, SimpleAction action, String statusCode) {
         GenericErrorNotification succes = new GenericErrorNotification(
-                BaseUI.getCurrentI18nResolver().resolveRelative(Permission_.class, getNotificationPath(type, action, I18nPaths.Type.label, statusCode)),
-                BaseUI.getCurrentI18nResolver().resolveRelative(Permission_.class, getNotificationPath(type, action, I18nPaths.Type.text, statusCode)));
+                BaseUI.getCurrentI18nResolver().resolveRelative(Permission.class, getNotificationPath(type, action, I18nPaths.Type.label, statusCode)),
+                BaseUI.getCurrentI18nResolver().resolveRelative(Permission.class, getNotificationPath(type, action, I18nPaths.Type.text, statusCode)));
         succes.show(Page.getCurrent());
     }
 }

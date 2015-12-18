@@ -3,7 +3,7 @@ package de.muenchen.vaadin.demo.apilib.rest;
 
 import de.muenchen.vaadin.demo.apilib.domain.Authority_DTO;
 import de.muenchen.vaadin.demo.apilib.hateoas.Authority_Assembler;
-import de.muenchen.vaadin.demo.apilib.local.Authority_;
+import de.muenchen.vaadin.demo.apilib.local.Authority;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.client.Traverson;
@@ -50,7 +50,7 @@ public class Authority_RestClientImpl implements Authority_RestClient {
     }
 	
 	@Override
-	public List<Authority_> findFullTextFuzzy(String filter) {
+	public List<Authority> findFullTextFuzzy(String filter) {
 	return traverson.follow(AUTHORITYS, SEARCH, FIND_FULL_TEXT_FUZZY)
 	.withTemplateParameters(Collections.singletonMap("q", filter))
 	.toObject(Authority_Resource.LIST).getContent()
@@ -60,7 +60,7 @@ public class Authority_RestClientImpl implements Authority_RestClient {
 	}
 	
 	@Override
-	public List<Authority_> findAll() {
+	public List<Authority> findAll() {
 		return traverson
 				.follow(AUTHORITYS)
 				.toObject(Authority_Resource.LIST).getContent()
@@ -70,7 +70,7 @@ public class Authority_RestClientImpl implements Authority_RestClient {
 				.collect(Collectors.toList());
 	}
 	@Override
-	public List<Authority_> findAll(Link relation) {
+	public List<Authority> findAll(Link relation) {
 		URI uri = URI.create(relation.getHref());
 			 return restTemplate
 			 		.exchange(uri, HttpMethod.GET, null, Authority_Resource.LIST)
@@ -83,7 +83,7 @@ public class Authority_RestClientImpl implements Authority_RestClient {
 	}
 		
 	@Override
-	public Optional<Authority_> findOne(Link link) {
+	public Optional<Authority> findOne(Link link) {
 	     URI uri = URI.create(link.getHref());
 		Authority_Resource resource = restTemplate
 				.exchange(uri, HttpMethod.GET, null, Authority_Resource.class)
@@ -108,7 +108,7 @@ public class Authority_RestClientImpl implements Authority_RestClient {
 
 		
 	@Override
-	public Authority_ create(Authority_ authority) {
+	public Authority create(Authority authority) {
 		URI uri = URI.create(
 		traverson.follow(AUTHORITYS).asLink().getHref());
 			Authority_DTO authorityDTO = authorityAssembler.toResource(authority).getContent();
@@ -117,7 +117,7 @@ public class Authority_RestClientImpl implements Authority_RestClient {
 	}
 	
 	@Override
-	public Authority_ update(Authority_ authority) {
+	public Authority update(Authority authority) {
 
         URI uri = URI.create(authority.getId().getHref());
 

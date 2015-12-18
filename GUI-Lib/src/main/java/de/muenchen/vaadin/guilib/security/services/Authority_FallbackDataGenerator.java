@@ -1,6 +1,6 @@
 package de.muenchen.vaadin.guilib.security.services;
 
-import de.muenchen.vaadin.demo.apilib.local.Authority_;
+import de.muenchen.vaadin.demo.apilib.local.Authority;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ public class Authority_FallbackDataGenerator{
 	 * 
 	 * @return Generierter fallback-Wert
 	 */
-	public static Authority_ createAuthorityFallback(){
+	public static Authority createAuthorityFallback(){
 		return null;
 	}
 	
@@ -29,7 +29,7 @@ public class Authority_FallbackDataGenerator{
 	 * 
 	 * @return Generierter fallback-Wert
 	 */
-	public static List<Authority_> createAuthoritysFallback(){
+	public static List<Authority> createAuthoritysFallback(){
 		return new ArrayList<>();
 	}
 	
@@ -38,7 +38,7 @@ public class Authority_FallbackDataGenerator{
 	 * 
 	 * @return Generierter fallback-Wert
 	 */
-	public static Optional<Authority_> createOptionalAuthorityFallback(){
+	public static Optional<Authority> createOptionalAuthorityFallback(){
 		return Optional.empty();
 	}
 	

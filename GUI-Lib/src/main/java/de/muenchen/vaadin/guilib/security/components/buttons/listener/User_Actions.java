@@ -1,6 +1,6 @@
 package de.muenchen.vaadin.guilib.security.components.buttons.listener;
 
-import de.muenchen.vaadin.demo.apilib.local.User_;
+import de.muenchen.vaadin.demo.apilib.local.User;
 import de.muenchen.vaadin.guilib.components.actions.EntityActions;
 
 import java.util.function.Supplier;
@@ -12,6 +12,6 @@ import java.util.function.Supplier;
 public class User_Actions extends EntityActions {
 
     public User_Actions(Supplier<String> filterSupplier) {
-        super(filterSupplier, User_.class);
+        super(filterSupplier, User.class);
     }
 }

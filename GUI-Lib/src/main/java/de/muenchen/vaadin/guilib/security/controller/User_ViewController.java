@@ -7,8 +7,8 @@ import de.muenchen.eventbus.events.Association;
 import de.muenchen.eventbus.selector.entity.RequestEntityKey;
 import de.muenchen.eventbus.selector.entity.RequestEvent;
 import de.muenchen.eventbus.selector.entity.ResponseEntityKey;
-import de.muenchen.vaadin.demo.apilib.local.Authority_;
-import de.muenchen.vaadin.demo.apilib.local.User_;
+import de.muenchen.vaadin.demo.apilib.local.Authority;
+import de.muenchen.vaadin.demo.apilib.local.User;
 import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.security.services.Authority_Service;
 import de.muenchen.vaadin.guilib.security.services.User_Service;
@@ -75,11 +75,11 @@ public class User_ViewController implements Serializable{
 	////////////////////////
 
 	/**
-	 * Speichert ein {@link User_} Objekt in der Datenbank.
+	 * Speichert ein {@link User} Objekt in der Datenbank.
 	 *
 	 * @param user User_ der gespeichert werden soll
 	 */
-	public User_ save(User_ user) {
+	public User save(User user) {
 		return userService.create(user);
 	}
 
@@ -88,11 +88,11 @@ public class User_ViewController implements Serializable{
 	 *
 	 * @param event
 	 */
-	private void releaseAuthorities(Authority_ event) {
-		Link link = getModel().getSelectedUser().get().getLink(User_.Rel.authoritys.name());
+	private void releaseAuthorities(Authority event) {
+		Link link = getModel().getSelectedUser().get().getLink(User.Rel.authoritys.name());
 		List<Link> authorities = authorityService.findAll(link)
 				.stream()
-				.map(Authority_::getId)
+				.map(Authority::getId)
 				.filter(id -> !id.equals(event.getId()))
 				.collect(Collectors.toList());
 
@@ -101,17 +101,17 @@ public class User_ViewController implements Serializable{
 	
 	
 	/**
-	 * Speichert eine beziehung als authoritys zu einem {@link Authority_} Objekt in der Datenbank.
+	 * Speichert eine beziehung als authoritys zu einem {@link Authority} Objekt in der Datenbank.
 	 *
 	 * @param authoritiesEntity Authorities
 	 * @return Authority_
 	 */
-	public void addUserAuthorities(Authority_ authoritiesEntity) {
-		Link link = getModel().getSelectedUser().get().getLink(User_.Rel.authoritys.name());
+	public void addUserAuthorities(Authority authoritiesEntity) {
+		Link link = getModel().getSelectedUser().get().getLink(User.Rel.authoritys.name());
 		List<Link> authoritieslist = Stream.concat(
 				authorityService.findAll(link)
 						.stream()
-						.map(Authority_::getId),
+						.map(Authority::getId),
 				Stream.of(authoritiesEntity.getId()))
 	
 				.collect(Collectors.toList());
@@ -119,33 +119,33 @@ public class User_ViewController implements Serializable{
 		userService.setRelations(link, authoritieslist);
 	}
 	
-	public List<Authority_> queryAuthorities(User_ entity) {
-		return authorityService.findAll(entity.getLink(User_.Rel.authoritys.name())).stream().collect(Collectors.toList());
+	public List<Authority> queryAuthorities(User entity) {
+		return authorityService.findAll(entity.getLink(User.Rel.authoritys.name())).stream().collect(Collectors.toList());
 	}
 	/**
-	 * Speichert die Änderungen an einem {@link User_} Objekt in der Datenbank.
+	 * Speichert die Änderungen an einem {@link User} Objekt in der Datenbank.
 	 *
 	 * @param entity User_
 	 * @return User_
 	 */
-	public User_ updateUser(User_ entity) {
+	public User updateUser(User entity) {
 		return userService.update(entity);
 	}
 
 	/**
-	 * Löscht ein {@link User_} Objekt.
+	 * Löscht ein {@link User} Objekt.
 	 *
 	 * @param entity User_
 	 */
-	public void deleteUser(User_ entity) {
+	public void deleteUser(User entity) {
 		userService.delete(entity.getId());
 	}
 
-	public List<User_> queryUser() {
+	public List<User> queryUser() {
 		return userService.findAll().stream().collect(Collectors.toList());
 	}
 
-	public List<User_> queryUser(String query) {
+	public List<User> queryUser(String query) {
 		return userService.queryUser(query);
 	}
 	
@@ -180,10 +180,10 @@ public class User_ViewController implements Serializable{
 			throw new IllegalArgumentException("The event must be of " + Association.class);
 
 		final Association<?> association = (Association<?>) event.getData();
-		final User_.Rel rel = User_.Rel.valueOf(association.getRel());
+		final User.Rel rel = User.Rel.valueOf(association.getRel());
 		
-		if (User_.Rel.authoritys == rel) {
-			Authority_ authorities = (Authority_) association.getAssociation();
+		if (User.Rel.authoritys == rel) {
+			Authority authorities = (Authority) association.getAssociation();
 			releaseAuthorities(authorities);
 			getModel().getSelectedUserAuthorities().removeItem(authorities);
 		}
@@ -209,9 +209,9 @@ public class User_ViewController implements Serializable{
 
 		final Association<?> association = (Association<?>) event.getData();
 
-		final User_.Rel rel = User_.Rel.valueOf(association.getRel());
-		if (User_.Rel.authoritys == rel) {
-			Authority_ authorities = (Authority_) association.getAssociation();
+		final User.Rel rel = User.Rel.valueOf(association.getRel());
+		if (User.Rel.authoritys == rel) {
+			Authority authorities = (Authority) association.getAssociation();
 			// If Authorities has no ID he has to be created in the backend
 			if (authorities.getId() == null) {
 				authorities = authorityService.create(authorities);
@@ -227,16 +227,16 @@ public class User_ViewController implements Serializable{
 	 * Create a new Buerger on the DataStore.
 	 * Update the Model and send it on the ResponseEntityKey if necessary.
 	 *
-	 * @param event The event with an {@link User_} as {@link Event#getData()}.
+	 * @param event The event with an {@link User} as {@link Event#getData()}.
 	 */
 	private void create(Event<?> event) {
 		final Object data = event.getData();
 		if (data == null) 
 			throw new NullPointerException("Event data must not be null!");
-		if (data.getClass() != User_.class)
-			throw new IllegalArgumentException("The event must be of " + User_.class);
-		final User_ user = (User_) event.getData();
-		final User_ fromREST = userService.create(user);
+		if (data.getClass() != User.class)
+			throw new IllegalArgumentException("The event must be of " + User.class);
+		final User user = (User) event.getData();
+		final User fromREST = userService.create(user);
 		getModel().getUsers().addBean(fromREST);
 		notifyComponents();
 	}
@@ -246,15 +246,15 @@ public class User_ViewController implements Serializable{
 	 * Delete the User_ on the DataStore.
 	 * Update the Model and send it on the ResponseEntityKey if necessary.
 	 *
-	 * @param event The event with an {@link User_} as {@link Event#getData()}.
+	 * @param event The event with an {@link User} as {@link Event#getData()}.
 	 */
 	private void delete(Event<?> event) {
 		final Object data = event.getData();
 		if (data == null) 
 			throw new NullPointerException("Event data must not be null!");
-		if (data.getClass() != User_.class)
-			throw new IllegalArgumentException("The event must be of " + User_.class);
-		final User_ user = (User_) event.getData();
+		if (data.getClass() != User.class)
+			throw new IllegalArgumentException("The event must be of " + User.class);
+		final User user = (User) event.getData();
 		if (user.getId() == null)
 			throw new IllegalArgumentException("The User_ must have an ID.");
 		userService.delete(user.getId());
@@ -273,18 +273,18 @@ public class User_ViewController implements Serializable{
 	 * Update the User_ on the DataStore.
 	 * Update the Model and send it on the ResponseEntityKey if necessary.
 	 *
-	 * @param event The event with an {@link User_} as {@link Event#getData()}.
+	 * @param event The event with an {@link User} as {@link Event#getData()}.
 	 */
 	private void update(Event<?> event) {
 		final Object data = event.getData();	 
 		if (data == null) 
 			throw new NullPointerException("Event data must not be null!");
-		if (data.getClass() != User_.class)
-			throw new IllegalArgumentException("The event must be of " + User_.class);
-		final User_ user = (User_) event.getData();
+		if (data.getClass() != User.class)
+			throw new IllegalArgumentException("The event must be of " + User.class);
+		final User user = (User) event.getData();
 		if (user.getId() == null)
 			throw new IllegalArgumentException("The User_ must have an ID.");
-		final User_ fromREST = userService.update(user);
+		final User fromREST = userService.update(user);
 		refreshModelSelected();
 		getModel().getUsers().addBean(fromREST);
 		notifyComponents();
@@ -313,7 +313,7 @@ public class User_ViewController implements Serializable{
 	 */
 	void refreshModelAssociations() {
 		getModel().getSelectedUser().ifPresent(user -> {
-			final List<Authority_> authorities = queryAuthorities(user);
+			final List<Authority> authorities = queryAuthorities(user);
 			getModel().getSelectedUserAuthorities().removeAllItems();
 			getModel().getSelectedUserAuthorities().addAll(authorities);
 		});	
@@ -351,13 +351,13 @@ public class User_ViewController implements Serializable{
 	 * If called with null, the current selected User_ will only be refreshed from the DataStore.
 	 * Update the Model and send it on the ResponseEntityKey if necessary.
 	 *
-	 * @param event The event with an {@link User_} or *null* as {@link Event#getData()}.
+	 * @param event The event with an {@link User} or *null* as {@link Event#getData()}.
 	 */
 	private void readSelected(Event<?> event) {
 		final Object data = event.getData();
 
-		if (data instanceof User_) {
-			final User_ user = (User_) event.getData();
+		if (data instanceof User) {
+			final User user = (User) event.getData();
 			getModel().setSelectedUser(user);
 			refreshModelSelected();
 			refreshModelAssociations();
@@ -384,7 +384,7 @@ public class User_ViewController implements Serializable{
 	 * @return The RequestEntityKey with the chosen RequestEvent.
 	 */
 	public RequestEntityKey getRequestKey(RequestEvent event) {
-		return new RequestEntityKey(event, User_.class);
+		return new RequestEntityKey(event, User.class);
 	}
 
 	/**
@@ -393,6 +393,6 @@ public class User_ViewController implements Serializable{
 	 * @return The ResponseEntityKey.
 	 */
 	public ResponseEntityKey getResponseKey() {
-		return new ResponseEntityKey(User_.class);
+		return new ResponseEntityKey(User.class);
 	}
 }

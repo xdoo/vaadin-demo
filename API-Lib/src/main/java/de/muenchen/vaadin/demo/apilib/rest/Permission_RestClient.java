@@ -1,6 +1,6 @@
 package de.muenchen.vaadin.demo.apilib.rest;
 
-import de.muenchen.vaadin.demo.apilib.local.Permission_;
+import de.muenchen.vaadin.demo.apilib.local.Permission;
 import org.springframework.hateoas.Link;
 
 import java.util.Collection;
@@ -23,7 +23,7 @@ public interface Permission_RestClient {
      *
      * @return a List of all Permissions.
      */
-    List<Permission_> findAll();
+    List<Permission> findAll();
 
     /**
      * Get all the Permissions (with matching tenancy) on a specific endpoint.
@@ -33,14 +33,14 @@ public interface Permission_RestClient {
      * @param relation
      * @return
      */
-    List<Permission_> findAll(Link relation);
+    List<Permission> findAll(Link relation);
     
     /**
      * Get all Permission matched with string due to fuzzy search.
      * @param filter the string for the query
      * @return
      */
-    List<Permission_> findFullTextFuzzy(String filter);
+    List<Permission> findFullTextFuzzy(String filter);
 
     /**
      * Try to find one Permission (with matching tenancy) by its ID / self relation.
@@ -48,7 +48,7 @@ public interface Permission_RestClient {
      * @param link The ID / self relation of the Permission_.
      * @return an optional of the Permission_.
      */
-    Optional<Permission_> findOne(Link link);
+    Optional<Permission> findOne(Link link);
 
     /**
      * Set all the relations, specified by links, on a specific relation endpoint.
@@ -83,15 +83,15 @@ public interface Permission_RestClient {
      * @param permission The Permission_ to create, it must not contain any links.
      * @return the created Permission_ (with ID).
      */
-    Permission_ create(Permission_ permission);
+    Permission create(Permission permission);
 
     /**
-     * Update the fields of a Permission_ by the {@link Permission_#getId()}.
+     * Update the fields of a Permission_ by the {@link Permission#getId()}.
      *
      * @param permission The updated Permission_ that will be saved.
      * @return the updated version from the REST Server.
      */
-    Permission_ update(Permission_ permission);
+    Permission update(Permission permission);
 
     /**
      * Try to delete an ID.

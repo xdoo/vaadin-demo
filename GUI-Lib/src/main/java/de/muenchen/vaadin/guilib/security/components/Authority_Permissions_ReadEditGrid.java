@@ -3,8 +3,8 @@ package de.muenchen.vaadin.guilib.security.components;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import de.muenchen.eventbus.events.Association;
-import de.muenchen.vaadin.demo.apilib.local.Authority_;
-import de.muenchen.vaadin.demo.apilib.local.Permission_;
+import de.muenchen.vaadin.demo.apilib.local.Authority;
+import de.muenchen.vaadin.demo.apilib.local.Permission;
 import de.muenchen.vaadin.guilib.security.components.buttons.listener.Authority_AssociationListActions;
 import de.muenchen.vaadin.guilib.security.components.buttons.listener.Authority_SingleActions;
 import de.muenchen.vaadin.guilib.security.controller.Authority_ViewController;
@@ -21,27 +21,27 @@ import java.util.stream.Collectors;
 public class Authority_Permissions_ReadEditGrid extends CustomComponent {
 
     private Authority_ViewController controller;
-    private GenericGrid<Permission_> grid;
+    private GenericGrid<Permission> grid;
 
     public Authority_Permissions_ReadEditGrid(Authority_ViewController controller, String navigateToRead, String navigateToCreate, String navigateToAdd
     ) {
 
         this.controller = controller;
 
-        grid = new GenericGrid<Permission_>(controller.getModel().getSelectedAuthorityPermissions(), Permission_.Field.getProperties());
+        grid = new GenericGrid<Permission>(controller.getModel().getSelectedAuthorityPermissions(), Permission.Field.getProperties());
         //grid.activateSearch();
         grid.activateCreate(navigateToCreate);
 
-        ActionButton addButton = new ActionButton(Authority_.class, SimpleAction.add);
+        ActionButton addButton = new ActionButton(Authority.class, SimpleAction.add);
         NavigateActions navigateActions = new NavigateActions(navigateToAdd);
         addButton.addActionPerformer(navigateActions::navigate);
         grid.addComponent(addButton);
 
         //Create Button to delete one or more associations
-        ActionButton deleteButton = new ActionButton(Authority_.class, SimpleAction.delete);
+        ActionButton deleteButton = new ActionButton(Authority.class, SimpleAction.delete);
         Authority_AssociationListActions listAction = new Authority_AssociationListActions(
                 () -> grid.getSelectedEntities().stream()
-                        .map(permission -> new Association<>(permission, Authority_.Rel.permissions.name()))
+                        .map(permission -> new Association<>(permission, Authority.Rel.permissions.name()))
                         .collect(Collectors.toList())
         );
         deleteButton.addActionPerformer(listAction::removeAssociations);

@@ -1,7 +1,7 @@
 package de.muenchen.vaadin.guilib.security.components;
 
 import com.vaadin.ui.HorizontalLayout;
-import de.muenchen.vaadin.demo.apilib.local.Authority_;
+import de.muenchen.vaadin.demo.apilib.local.Authority;
 import de.muenchen.vaadin.guilib.security.components.buttons.listener.Authority_SingleActions;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.BaseComponent;
@@ -18,7 +18,7 @@ public class Authority_ReadForm extends BaseComponent {
     private final Authority_SelectedForm authorityForm;
 
     private final HorizontalLayout buttonLayout = new HorizontalLayout();
-    private final ActionButton updateButton = new ActionButton(Authority_.class, SimpleAction.update);
+    private final ActionButton updateButton = new ActionButton(Authority.class, SimpleAction.update);
 
     private final NavigateActions updateNavigation;
 

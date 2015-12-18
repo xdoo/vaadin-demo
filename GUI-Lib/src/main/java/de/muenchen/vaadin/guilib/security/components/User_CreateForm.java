@@ -2,7 +2,7 @@ package de.muenchen.vaadin.guilib.security.components;
 
 import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
-import de.muenchen.vaadin.demo.apilib.local.User_;
+import de.muenchen.vaadin.demo.apilib.local.User;
 import de.muenchen.vaadin.guilib.security.components.buttons.listener.User_SingleActions;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.BaseComponent;
@@ -22,7 +22,7 @@ public class User_CreateForm extends BaseComponent {
 
     private final HorizontalLayout buttonLayout = new HorizontalLayout();
     private final NavigateActions saveNavigation;
-    private final ActionButton saveButton = new ActionButton(User_.class, SimpleAction.save);
+    private final ActionButton saveButton = new ActionButton(User.class, SimpleAction.save);
 
 	/**
 	 * Create a new User_CreateForm that navigates to the navigateTo View on save.

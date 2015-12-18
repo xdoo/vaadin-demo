@@ -1,9 +1,8 @@
 package de.muenchen.vaadin.guilib.security.components;
 
-import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
-import de.muenchen.vaadin.demo.apilib.local.Authority_;
+import de.muenchen.vaadin.demo.apilib.local.Authority;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.BaseComponent;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
@@ -71,10 +70,10 @@ public class Authority_AllInOne extends BaseComponent {
 
     private void configureAuthCreator() {
         final TextField authField = new TextField();
-        ActionButton authSaveButton = new ActionButton(Authority_.class, SimpleAction.save);
+        ActionButton authSaveButton = new ActionButton(Authority.class, SimpleAction.save);
 
         Authority_SingleActions authoritySingleActions = new Authority_SingleActions(() ->{
-            Authority_ auth = new Authority_();
+            Authority auth = new Authority();
             auth.setAuthority(authField.getValue());
             return auth;
         });
