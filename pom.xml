@@ -21,6 +21,7 @@
         <module>PresentationLib</module>
         <module>auth-service</module>
         <module>echo-service</module>
+        <module>ms-test-support</module>
     </modules>
     <properties>
         <main.basedir>${basedir}/../..</main.basedir>
@@ -37,7 +38,7 @@
     </properties>
     <name>vaadin demo :: parent</name>
     <dependencies>
-        
+
     </dependencies>
 
     <dependencyManagement>
@@ -52,7 +53,7 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-   
+
     <build>
         <plugins>
             <plugin>
