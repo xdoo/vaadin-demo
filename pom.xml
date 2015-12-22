@@ -22,6 +22,7 @@
         <module>auth-service</module>
         <module>echo-service</module>
         <module>ms-test-support</module>
+        <module>java-angular2-ui</module>
     </modules>
     <properties>
         <main.basedir>${basedir}/../..</main.basedir>
