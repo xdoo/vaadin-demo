@@ -5,7 +5,7 @@ endpoints.shutdown.enabled: true
 service.url: http://localhost:9999/uaa/
 service.token.url: ${service.url}oauth/token
 
-service.buerger.url: http://localhost:8080
+service.self.url: http://localhost:8080
 # Basis URL des Services
 service.info.url: ${service.url}service_info
 service.info.id.eureka: microservice

@@ -11,7 +11,10 @@ import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import de.muenchen.vaadin.demo.apilib.domain.Principal;
+import de.muenchen.vaadin.guilib.services.SecurityService;
 import de.muenchen.vaadin.ui.app.MainUI;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 
@@ -22,11 +25,16 @@ public class MainView extends VerticalLayout implements View {
     public static final String NAME = "";
     private static final long serialVersionUID = -3780256410686877889L;
 
+    @Autowired
+    SecurityService securityService;
+
     @PostConstruct
     private void postConstruct() {
         setSizeFull();
         setSpacing(true);
         setMargin(new MarginInfo(false, true, false, true));
+
+        Principal p = securityService.getCurrentPrincipal();
 
         Label pageTitle = new Label("Main View", ContentMode.HTML);
         pageTitle.addStyleName(ValoTheme.LABEL_H1);
