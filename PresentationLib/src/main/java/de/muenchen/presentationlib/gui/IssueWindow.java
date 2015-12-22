@@ -97,6 +97,7 @@ public class IssueWindow extends Window {
 
         FormLayout layout = new FormLayout(gaiaLoginForm, gaiaLoginButton, issueLayout);
         layout.setMargin(true);
+        this.setWidth(700, Unit.PIXELS);
         this.setContent(layout);
         this.setCaption("Create Issue");
         this.setClosable(true);

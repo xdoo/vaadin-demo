@@ -21,7 +21,7 @@ import java.util.List;
  * on confirmation.
  */
 public class ConfirmationWindow extends Window {
-    public static final String CONFIRMATION_HEADER_TEXT = "confirmation.header.text";
+    public static final String CONFIRMATION_HEADER_TEXT = "confirmation_.header.text";
     /** The Content of the Window. */
     private final VerticalLayout layout = new VerticalLayout();
     /** The Layout for the Buttons. */

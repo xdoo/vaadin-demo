@@ -1,4 +1,4 @@
-package de.muenchen.vaadin.demo.apilib.services;
+package de.muenchen.vaadin.guilib.services;
 
 import de.muenchen.vaadin.demo.apilib.domain.Principal;
 import org.springframework.web.client.RestTemplate;

@@ -10,6 +10,7 @@ import com.vaadin.data.util.PropertyValueGenerator;
 import com.vaadin.event.SelectionEvent;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.shared.ui.grid.HeightMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
@@ -59,7 +60,13 @@ public class GenericGrid<T> extends BaseComponent {
     /**
      * Components Layout
      */
-    final HorizontalLayout topComponentsLayout = new HorizontalLayout();
+    final HorizontalLayout topComponentsLayout = new HorizontalLayout(){
+        @Override
+        public void addComponent(Component c) {
+            super.addComponent(c);
+            this.setVisible(true);
+        }
+    };
     /** Default Components **/
     private Grid grid = new Grid();
     //----------- Search Components
@@ -123,32 +130,19 @@ public class GenericGrid<T> extends BaseComponent {
         //----------- Grid Configuration
         this.fields = Arrays.asList(fields);
 
-        grid.setSizeFull();
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
         grid.addSelectionListener(selectionEvent -> setButtonVisability());
         grid.setVisible(Boolean.TRUE);
         grid.setWidth("100%");
         grid.setHeightByRows(10);
-        //Grid Selection
-        grid.addItemClickListener(itemClickEvent -> {
-            if (itemClickEvent.getPropertyId() != null) {
-                boolean isClicked = grid.isSelected(itemClickEvent.getItemId());
-                if (!itemClickEvent.isCtrlKey()) {
-                    grid.getSelectedRows().stream().forEach(grid::deselect);
-                }
-                if (!isClicked)
-                    grid.select(itemClickEvent.getItemId());
-                else
-                    grid.deselect(itemClickEvent.getItemId());
-            }
-        });
+        grid.setHeightMode(HeightMode.ROW);
 
-        //---------------
+        configureGridSelection();
 
         //----------- ComponentsLayout Configuration
         topComponentsLayout.addStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
-        //topComponentsLayout.setSizeFull();
         topComponentsLayout.setSpacing(true);
+        topComponentsLayout.setVisible(false);
         //--------------
 
         // Assemble GenericGrid
@@ -162,6 +156,24 @@ public class GenericGrid<T> extends BaseComponent {
         getEventBus().notify(new RequestEntityKey(RequestEvent.READ_LIST, getType()));
     }
 
+    /**
+     *
+     */
+    private void configureGridSelection() {
+        grid.addItemClickListener(itemClickEvent -> {
+            if (itemClickEvent.getPropertyId() != null) {
+                boolean isClicked = grid.isSelected(itemClickEvent.getItemId());
+                if (!itemClickEvent.isCtrlKey()) {
+                    grid.getSelectedRows().stream().forEach(grid::deselect);
+                }
+                if (!isClicked)
+                    grid.select(itemClickEvent.getItemId());
+                else
+                    grid.deselect(itemClickEvent.getItemId());
+            }
+        });
+    }
+
     //-------------------------
     // Methods to create default components
     //-------------------------
@@ -173,7 +185,7 @@ public class GenericGrid<T> extends BaseComponent {
         readButton.addActionPerformer(getSingleActionOnSelected()::read);
         readButton.addActionPerformer(getNavigateAction(navigateToRead)::navigate);
 
-        readButton.setVisible(false);
+        readButton.setEnabled(false);
         read = Optional.of(readButton);
     }
 
@@ -204,7 +216,7 @@ public class GenericGrid<T> extends BaseComponent {
         ActionButton createButton = new ActionButton(getType(), SimpleAction.create);
 
         createButton.addActionPerformer(getNavigateAction(navigateToCreate)::navigate);
-        createButton.setVisible(Boolean.TRUE);
+        createButton.setEnabled(Boolean.TRUE);
 
         create = Optional.of(createButton);
     }
@@ -234,8 +246,8 @@ public class GenericGrid<T> extends BaseComponent {
     }
 
     private void relationFilter(String query){
-    	((BeanItemContainer<?>)grid.getContainerDataSource()).removeAllContainerFilters();
-		((BeanItemContainer<?>)grid.getContainerDataSource()).addContainerFilter(new Filter(){
+    	((GeneratedPropertyContainer)grid.getContainerDataSource()).removeAllContainerFilters();
+		((GeneratedPropertyContainer)grid.getContainerDataSource()).addContainerFilter(new Filter(){
 			@Override
 			public boolean passesFilter(Object itemId, Item item) throws UnsupportedOperationException {
 				boolean result = true;
@@ -260,7 +272,7 @@ public class GenericGrid<T> extends BaseComponent {
         reset.setClickShortcut(ShortcutAction.KeyCode.ESCAPE);
         reset.addClickListener(e -> {
             filter.setValue("");
-    		((BeanItemContainer<?>)grid.getContainerDataSource()).removeAllContainerFilters();
+    		((GeneratedPropertyContainer)grid.getContainerDataSource()).removeAllContainerFilters();
             getEntityAction().readList(e);
         });
         reset.setId(String.format("%s_RESET_BUTTON", BaseUI.getCurrentI18nResolver().getBasePath(getType())));
@@ -268,18 +280,23 @@ public class GenericGrid<T> extends BaseComponent {
 
     private void setButtonVisability() {
         int size = grid.getSelectedRows().size();
-        if (read.isPresent()) read.get().setVisible(size == 1);
-        if (edit.isPresent()) edit.get().setVisible(size == 1);
-        if (copy.isPresent()) copy.get().setVisible(size > 0);
-        if (delete.isPresent()) delete.get().setVisible(size > 0);
+        if (read.isPresent()) read.get().setEnabled(size == 1);
+        if (edit.isPresent()) edit.get().setEnabled(size == 1);
+        if (copy.isPresent()) copy.get().setEnabled(size > 0);
+        if (delete.isPresent()) delete.get().setEnabled(size > 0);
 
-        customSingleSelectComponents.stream().forEach(component -> component.setVisible(size == 1));
-        customMultiSelectComponents.stream().forEach(component -> component.setVisible(size > 0));
+        customSingleSelectComponents.stream().forEach(component -> component.setEnabled(size == 1));
+        customMultiSelectComponents.stream().forEach(component -> component.setEnabled(size > 0));
     }
 
     //--------------
     //Configuration-Methods
     //--------------
+
+    public GenericGrid<T> setHeightByRows(int rows){
+        grid.setHeightByRows(rows);
+        return this;
+    }
 
     public GenericGrid<T> setSelectionMode(Grid.SelectionMode mode){
         grid.setSelectionMode(mode);
@@ -579,7 +596,7 @@ public class GenericGrid<T> extends BaseComponent {
         customComponents.add(component);
         topComponentsLayout.addComponent(component);
 
-        component.setVisible(Boolean.TRUE);
+        component.setEnabled(Boolean.TRUE);
         return this;
     }
 
@@ -649,6 +666,12 @@ public class GenericGrid<T> extends BaseComponent {
         return this;
     }
 
+    /**
+     * Deselects all selected Items.
+     */
+    public void deselectAll(){
+        grid.getSelectedRows().forEach(grid::deselect);
+    }
     //--------------
     // Getter / Setter
     //--------------
@@ -757,6 +780,12 @@ public class GenericGrid<T> extends BaseComponent {
         }
 
         grid.setContainerDataSource(container);
+
+        //Remove Columns from Conatiner which are not present in Field enum
+        container.getContainerPropertyIds().stream()
+                .filter(property -> !fields.contains(property))
+                .forEach(container::removeContainerProperty);
+
 
         grid.setColumnOrder(fields.toArray());
 

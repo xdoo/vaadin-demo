@@ -81,4 +81,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
     @PreFilter(TenantService.IS_TENANT_FILTER)
     void deleteAll();
 
+    @PreAuthorize(TenantService.IS_TENANT_AUTH)
+    User findByUsername(@Param(value = "username") String username);
+
 }

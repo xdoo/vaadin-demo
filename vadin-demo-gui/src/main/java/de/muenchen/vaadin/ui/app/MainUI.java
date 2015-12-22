@@ -20,7 +20,6 @@ import de.muenchen.eventbus.EventBus;
 import de.muenchen.eventbus.selector.Key;
 import de.muenchen.presentationlib.gui.IssueWindow;
 import de.muenchen.vaadin.demo.api.local.Buerger;
-import de.muenchen.vaadin.demo.apilib.services.SecurityService;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolverImpl;
 import de.muenchen.vaadin.demo.i18nservice.MessageService;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;

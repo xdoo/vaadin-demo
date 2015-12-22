@@ -6,6 +6,7 @@
 package de.muenchen.auth.entities;
 
 import de.muenchen.service.BaseEntity;
+import org.hibernate.search.annotations.Field;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -19,6 +20,7 @@ public class Authority extends BaseEntity {
 
     public static final String ADMIN_AUTHORITY = "ADMIN";
 
+    @Field
     @Column(name = "AUTH_AUTHORITY")
     private String authority;
 
