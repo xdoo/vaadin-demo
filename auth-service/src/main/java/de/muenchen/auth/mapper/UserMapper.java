@@ -6,8 +6,6 @@ import de.muenchen.auth.entities.Authority;
 import de.muenchen.auth.entities.Permission;
 import de.muenchen.auth.entities.User;
 import de.muenchen.service.security.UserInfo;
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -17,9 +15,8 @@ import java.util.stream.Collectors;
 /**
  * Created by dennis_huning on 09.12.15.
  */
-@Mapper
 public abstract class UserMapper {
-    public static UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
+    public static UserMapper INSTANCE = new UserMapperImpl();
 
     public abstract UserDto userToUserDto(User user);
 

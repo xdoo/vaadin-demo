@@ -1,0 +1,20 @@
+<div class="container">
+  <h1>{{title}}</h1>
+
+  <header>
+    <nav class="navbar navbar-default">
+      <ul class="nav navbar-nav">
+        <li *ngIf="authenticated" ><a class="link" [routerLink]="['/Home']">Home</a></li>
+        <li *ngIf="authenticated" ><a class="link" [routerLink]="['/BuergerList']">Bürger</a></li>
+        <li *ngIf="authenticated" ><a class="link" [routerLink]="['/User']">Benutzer</a></li>
+        <li *ngIf="!authenticated" ><a class="link" href="../login">Login</a></li>
+        <li *ngIf="authenticated" ><a class="link" (click)="logoutServer()">Logout</a></li>
+        <!--li ><a class="link" [router-link]="['/Login']">Login</a></li-->
+      </ul>
+    </nav>
+  </header>
+
+  <div>
+    <router-outlet></router-outlet>
+  </div>
+</div>
