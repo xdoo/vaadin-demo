@@ -39,7 +39,7 @@ import java.util.Set;
 public class User extends BaseEntity implements Serializable {
 
     @Field
-    @Column(name = "USER_USERNAME", nullable = false, updatable = false)
+    @Column(name = "USER_USERNAME", nullable = false, updatable = false, unique = true)
     @NotNull
     @Pattern(regexp="[a-zA-Z0-9_\\.-]*")
     @Size(min=1)

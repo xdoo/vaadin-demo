@@ -1,10 +1,10 @@
-insert into _users (oid, user_email, user_enabled, user_username, user_password, mandant) values (1,'admin@admin.muenchen.de',TRUE,'admin1','admin1','m1');
-insert into _users (oid, user_email, user_enabled, user_username, user_password, mandant) values (2,'admin@admin.muenchen.de',TRUE,'admin2','admin2','m2');
+insert into _users (oid, user_email, user_enabled, user_username, user_password, mandant) values (1,'admin@admin.muenchen.de',TRUE,'m01_admin1','admin1','m1');
+insert into _users (oid, user_email, user_enabled, user_username, user_password, mandant) values (2,'admin@admin.muenchen.de',TRUE,'m02_admin2','admin2','m2');
 
-insert into _users (oid, user_email, user_enabled, user_username, user_password, mandant) values (3,'admin@admin.muenchen.de',TRUE,'read1','read1','m1');
-insert into _users (oid, user_email, user_enabled, user_username, user_password, mandant) values (4,'admin@admin.muenchen.de',TRUE,'read2','read2','m2');
+insert into _users (oid, user_email, user_enabled, user_username, user_password, mandant) values (3,'admin@admin.muenchen.de',TRUE,'m01_read1','read1','m1');
+insert into _users (oid, user_email, user_enabled, user_username, user_password, mandant) values (4,'admin@admin.muenchen.de',TRUE,'m02_read2','read2','m2');
 
-insert into _users (oid, user_email, user_enabled, user_username, user_password, mandant) values (5,'admin@admin.muenchen.de',TRUE,'hans','test','m1');
+insert into _users (oid, user_email, user_enabled, user_username, user_password, mandant) values (5,'admin@admin.muenchen.de',TRUE,'m02_hans','test','m1');
 
 insert into _authorities (oid, auth_authority) values (1,'ADMIN');
 insert into _authorities (oid, auth_authority) values (2,'READ_ONLY_USER');
