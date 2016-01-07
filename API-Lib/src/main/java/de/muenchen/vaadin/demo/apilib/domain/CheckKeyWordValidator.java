@@ -17,6 +17,8 @@ public class CheckKeyWordValidator implements ConstraintValidator<NoKeyWord,Stri
             "enum","extends","false","final","finally","float","goto","for","if","implements","import","instanceof","int","interface","long","native","new","null","package","private","protected",
             "public","return","short","static","strictfp"});
 
+    private final List<String> BARRAKUDA_KEYWORDS = Arrays.asList(new String[]{"test"});
+
     public void initialize(NoKeyWord noKeyWord){
         this.noKeyWord = noKeyWord;
     }
@@ -25,7 +27,12 @@ public class CheckKeyWordValidator implements ConstraintValidator<NoKeyWord,Stri
         if (object == null)
             return true;
         if (Stream.of(noKeyWord.of()).anyMatch(keyword -> keyword.equals(NoKeyWord.Keywords.JAVA))) {
-            return !JAVA_KEYWORDS.contains(object);
+            if(JAVA_KEYWORDS.contains(object))
+                return false;
+        }
+        if (Stream.of(noKeyWord.of()).anyMatch(keyword -> keyword.equals(NoKeyWord.Keywords.BARRAKUDA))) {
+            if(BARRAKUDA_KEYWORDS.contains(object))
+                return false;
         }
         return true;
     }

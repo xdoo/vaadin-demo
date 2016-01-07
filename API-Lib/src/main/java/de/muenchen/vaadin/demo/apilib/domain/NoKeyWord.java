@@ -22,7 +22,7 @@ public @interface NoKeyWord {
     Class<? extends Payload>[] payload() default {};
 
     public enum Keywords{
-        JAVA, BARRAKUDA, SQL
+        JAVA, BARRAKUDA
     }
 
     Keywords[] of();
