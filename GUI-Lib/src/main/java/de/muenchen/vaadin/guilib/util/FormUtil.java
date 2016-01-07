@@ -10,6 +10,7 @@ import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.DateField;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
@@ -286,8 +287,12 @@ public class FormUtil {
         final String caption = getCaption(property);
         final String tooltip = getTooltip(property);
         //Group Elements of TokenField in CSS Layout
-        CssLayout lo = new CssLayout();
+
+        HorizontalLayout lo = new HorizontalLayout();
+        lo.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
+        lo.setSpacing(true);
         lo.addStyleName("v-component-group");
+
 
         TokenField tf = new TokenField(caption, lo) {
             public static final String SEPERATOR = ",";
