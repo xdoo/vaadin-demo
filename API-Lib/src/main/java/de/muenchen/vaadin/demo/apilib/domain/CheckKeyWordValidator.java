@@ -4,7 +4,6 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
@@ -25,13 +24,8 @@ public class CheckKeyWordValidator implements ConstraintValidator<NoKeyWord,Stri
     public boolean isValid(String object, ConstraintValidatorContext context){
         if (object == null)
             return true;
-        if (Stream.of(noKeyWord.of()).anyMatch(new Predicate<NoKeyWord.Keywords>() {
-            @Override
-            public boolean test(NoKeyWord.Keywords keywords) {
-                return keywords.equals(NoKeyWord.Keywords.JAVA);
-            }
-        })) {
-            return JAVA_KEYWORDS.contains(object);
+        if (Stream.of(noKeyWord.of()).anyMatch(keyword -> keyword.equals(NoKeyWord.Keywords.JAVA))) {
+            return !JAVA_KEYWORDS.contains(object);
         }
         return true;
     }
