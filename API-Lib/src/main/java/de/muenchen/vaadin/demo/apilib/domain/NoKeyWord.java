@@ -15,7 +15,7 @@ import javax.validation.Payload;
 @Target(ElementType.FIELD)
 public @interface NoKeyWord {
 
-    String message() default "{de.muenchen.vaadin.demo.keyword.message}";
+    String message() default "Schlüsselwörter dürfen nicht verwendet werden.";
 
     Class<?>[] groups() default {};
 
