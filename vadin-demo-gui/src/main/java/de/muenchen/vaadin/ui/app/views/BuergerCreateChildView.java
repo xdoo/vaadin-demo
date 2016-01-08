@@ -37,7 +37,7 @@ public class BuergerCreateChildView extends DefaultBuergerView {
         backButton.addActionPerformer(navigateActions::navigate);
         backButton.setId("back-button-" + navigateActions.getNavigateTo());
 
-        final BuergerCreateForm c = this.controller.getViewFactory().generateCreatePartnerForm(BuergerDetailView.NAME, BuergerDetailView.NAME);
+        final BuergerCreateForm c = this.controller.getViewFactory().generateCreateChildForm(BuergerDetailView.NAME, BuergerDetailView.NAME);
 
         final VerticalLayout layout = new VerticalLayout(backButton, c);
         layout.setSpacing(true);
