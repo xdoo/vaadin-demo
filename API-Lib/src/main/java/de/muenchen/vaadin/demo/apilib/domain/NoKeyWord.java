@@ -21,9 +21,14 @@ public @interface NoKeyWord {
 
     Class<? extends Payload>[] payload() default {};
 
+    /** Languages which Keywords can be checked. */
     public enum Keywords{
         JAVA, BARRAKUDA
     }
 
+    /**
+     * Array of the Languages which shall be checked.
+     * @return
+     */
     Keywords[] of();
 }
