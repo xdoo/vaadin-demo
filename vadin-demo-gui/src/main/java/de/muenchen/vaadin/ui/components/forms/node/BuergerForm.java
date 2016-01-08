@@ -81,7 +81,7 @@ public class BuergerForm extends BaseComponent {
         final ComboBox augenfarbe = formUtil.createComboBox(Buerger.Field.augenfarbe.name());
         final DateField geburtsdatum = formUtil.createDateField(Buerger.Field.geburtsdatum.name());
         final CheckBox alive = formUtil.createCheckBox(Buerger.Field.alive.name());
-        final TokenField eigenschaften = formUtil.createTokenField(Buerger.Field.eigenschaften.name());
+        final TokenField eigenschaften = formUtil.createTokenField(Buerger.Field.eigenschaften.name(), String.class);
         return Arrays.asList(vorname, nachname, augenfarbe, geburtsdatum, alive, eigenschaften);
     }
 

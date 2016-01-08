@@ -3,6 +3,7 @@ package de.muenchen.vaadin.guilib.util;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.DefaultFieldGroupFieldFactory;
 import com.vaadin.data.fieldgroup.FieldGroup;
+import com.vaadin.data.util.converter.Converter;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CheckBox;
@@ -18,6 +19,16 @@ import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 import de.muenchen.vaadin.guilib.BaseUI;
 import org.vaadin.tokenfield.TokenField;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -271,7 +282,7 @@ public class FormUtil {
      * @param property
      * @return The TokenField of the property
      */
-    public TokenField createTokenField(String property) {
+    public TokenField createTokenField(String property, Class<?> clazz) {
         final String caption = getCaption(property);
         final String tooltip = getTooltip(property);
         //Group Elements of TokenField in CSS Layout
@@ -308,6 +319,9 @@ public class FormUtil {
                     getLayout().removeComponent(cb);
             }
         };
+        // Needed because of internal use of set (we use lists)
+        tf.setConverter(getListToSetConverter(clazz));
+        tf.setConversionError(getConversionError(clazz));
 
         getBinder().bind(tf, property);
 
@@ -319,6 +333,84 @@ public class FormUtil {
 
         deactivateValidation(tf);
         return tf;
+    }
+
+    private String getConversionError(Class<?> clazz) {
+        if(clazz.equals(Long.class)){
+            return BaseUI.getCurrentI18nResolver().resolve("tokenfield.conversion.error.long");
+        } else if(clazz.equals(Date.class)){
+            return BaseUI.getCurrentI18nResolver().resolve("tokenfield.conversion.error.date");
+        } else if(clazz.equals(Boolean.class)){
+            return BaseUI.getCurrentI18nResolver().resolve("tokenfield.conversion.error.boolean");
+        } else if(clazz.equals(String.class))
+            return BaseUI.getCurrentI18nResolver().resolve("tokenfield.conversion.error.string");
+        else
+            return BaseUI.getCurrentI18nResolver().resolve("tokenfield.conversion.error.other");
+    }
+
+    /**
+     * Returns a Converter to convert a List of Class T to a Set of Strings and vice versa.
+     */
+    @SuppressWarnings("all")
+    private <T> Converter getListToSetConverter(Class<? extends T> clazz) {
+        if(clazz==null)
+            throw new NullPointerException();
+        return new Converter<Set<String>, List<T>>() {
+
+            private DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+
+            @Override
+            public List<T> convertToModel(Set<String> value, Class<? extends List<T>> targetType,
+                                               Locale locale) throws com.vaadin.data.util.converter.Converter.ConversionException {
+                if(value.size()<=0)
+                    return new ArrayList<T>();
+
+                if(clazz.equals(Long.class)){
+                    return value.stream().map(next -> {
+                        try{
+                            return (T)(new Long(next));
+                        } catch (NumberFormatException e){
+                            throw new ConversionException(e);
+                        }
+                        }).collect(Collectors.toList());
+                } else if(clazz.equals(Date.class)){
+                    return value.stream().map(next -> {
+                        try {
+                            return (T) (format.parse(next));
+                        } catch (ParseException e) {
+                            throw new ConversionException(e);
+                        }
+                    }).collect(Collectors.toList());
+                } else if(clazz.equals(Boolean.class)){
+                    return value.stream().map(next -> {
+                        return (T)(new Boolean(next));
+                    }).collect(Collectors.toList());
+                } else if(clazz.equals(String.class))
+                    return value.stream().map(o -> (T)o).collect(Collectors.toList());
+                else
+                    throw new ConversionException("Cannot convert to "+clazz);
+            }
+
+            @Override
+            public Set<String> convertToPresentation(List<T> value, Class<? extends Set<String>> targetType,
+                                                     Locale locale) throws com.vaadin.data.util.converter.Converter.ConversionException {
+                if(clazz.equals(Date.class))
+                    return value.stream().map(o -> format.format(o)).collect(Collectors.toSet());
+                return value.stream().map(o -> o.toString()).collect(Collectors.toSet());
+            }
+
+            @Override
+            public Class<List<T>> getModelType() {
+                return (Class<List<T>>) (Class<?>) ArrayList.class;
+            }
+
+            @Override
+            public Class<Set<String>> getPresentationType() {
+                return (Class<Set<String>>) (Class<?>) HashSet.class;
+            }
+
+
+        };
     }
 
     private String getTooltip(String property) {

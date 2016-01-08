@@ -20,10 +20,10 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.selector.Key;
-import de.muenchen.vaadin.demo.apilib.services.SecurityService;
 import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.components.GenericNotification;
 import de.muenchen.vaadin.guilib.components.GenericWarningNotification;
+import de.muenchen.vaadin.guilib.services.SecurityService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -91,17 +91,13 @@ public class LoginView extends VerticalLayout implements View {
 
             @Override
             public void buttonClick(final ClickEvent event) {
-                if(event.isShiftKey()) {
-                    if (security.login(username.getValue(), password.getValue())) {
-                        BaseUI.getCurrentEventBus().notify(Key.LOGIN);
-                    } else {
-//                    Anmeldung fehlgeschlagen
-                        GenericNotification notif = new GenericWarningNotification("Anmeldung fehlgeschlagen",
-                                "Bei der Eingabe Ihrer Usernamens/Ihres Kennworts ist ein Fehler aufgetreten. Versuchen Sie es erneut.");
-                        notif.show(Page.getCurrent());
-                    }
+                if (security.login(username.getValue(), password.getValue())) {
+                    BaseUI.getCurrentEventBus().notify(Key.LOGIN);
                 } else {
-                    getUI().getPage().open("https://goo.gl/gi7q1y", "");
+                    // Anmeldung fehlgeschlagen
+                    GenericNotification notif = new GenericWarningNotification("Anmeldung fehlgeschlagen",
+                            "Bei der Eingabe Ihrer Usernamens/Ihres Kennworts ist ein Fehler aufgetreten. Versuchen Sie es erneut.");
+                    notif.show(Page.getCurrent());
                 }
                 // TODO Register Remember me Token
             /*

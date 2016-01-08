@@ -26,18 +26,20 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.EventBus;
 import de.muenchen.eventbus.selector.Key;
+import de.muenchen.presentationlib.gui.IssueWindow;
 import de.muenchen.vaadin.demo.api.local.Buerger;
-import de.muenchen.vaadin.demo.apilib.services.SecurityService;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolverImpl;
 import de.muenchen.vaadin.demo.i18nservice.MessageService;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.ValoMenuLayout;
 import de.muenchen.vaadin.guilib.components.ConfirmationWindow;
-import de.muenchen.presentationlib.gui.IssueWindow;
+import de.muenchen.vaadin.guilib.services.SecurityService;
+import de.muenchen.vaadin.ui.app.views.AuthorityView;
 import de.muenchen.vaadin.ui.app.views.BuergerTableView;
 import de.muenchen.vaadin.ui.app.views.LoginView;
 import de.muenchen.vaadin.ui.app.views.MainView;
+import de.muenchen.vaadin.ui.app.views.UserView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -321,6 +323,8 @@ public class MainUI extends BaseUI {
     }
 
     private void addMenuItems() {
+        this.menuItems.put(UserView.NAME, BaseUI.getCurrentI18nResolver().resolve("view_."+UserView.NAME+".title"));
+        this.menuItems.put(AuthorityView.NAME, BaseUI.getCurrentI18nResolver().resolve("view_."+AuthorityView.NAME+".title"));
         this.menuItems.put(MainView.NAME, BaseUI.getCurrentI18nResolver().resolve("mainpage.title"));
         this.menuItems.put(BuergerTableView.NAME, BaseUI.getCurrentI18nResolver().resolveRelative(Buerger.class, "navigation.button.label"));
     }

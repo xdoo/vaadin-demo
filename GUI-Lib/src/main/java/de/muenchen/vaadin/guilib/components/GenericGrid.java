@@ -668,6 +668,12 @@ public class GenericGrid<T> extends BaseComponent {
         return this;
     }
 
+    /**
+     * Deselects all selected Items.
+     */
+    public void deselectAll(){
+        grid.getSelectedRows().forEach(grid::deselect);
+    }
     //--------------
     // Getter / Setter
     //--------------
