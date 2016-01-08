@@ -10,7 +10,9 @@ import de.muenchen.vaadin.guilib.components.GenericSuccessNotification;
 import java.util.ArrayList;
 import java.util.List;
 
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.*;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getFormPath;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getNotificationPath;
+
 
 /**
  * Provides a styled Button that represents a specific action.
@@ -73,7 +75,7 @@ public class ActionButton extends Button {
      * @return
      */
     private static String resolveLabel(Action action, Class entityClass) {
-        final String labelPath = getFormPath(action, Component.button, Type.label);
+        final String labelPath = getFormPath(action, I18nPaths.Component.button, I18nPaths.Type.label);
         return BaseUI.getCurrentI18nResolver().resolveRelative(entityClass, labelPath);
     }
 
