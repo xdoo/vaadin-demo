@@ -84,6 +84,7 @@ public class BuergerRWForm extends BaseComponent {
     private void configureSaveButton() {
         final BuergerSingleActions singleActions = new BuergerSingleActions(getBuergerForm()::getBuerger);
         saveButton.addActionPerformer(singleActions::update);
+        saveButton.useNotification(true);
         saveButton.addActionPerformer(clickEvent -> {
             setEdit(false);
             return true;

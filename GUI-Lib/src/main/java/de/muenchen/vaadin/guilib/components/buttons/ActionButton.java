@@ -87,6 +87,15 @@ public class ActionButton extends Button {
     }
 
     /**
+     * Sets the displayed notification to the action-appropriate one
+     *
+     * @param action the Action the button should display anotification for.
+     */
+    public void setNotifyAction(Action action){
+        notified=action;
+    }
+
+    /**
      * Style the button by the action rules.
      *
      * @param action Action the button should represent (is styled for).
