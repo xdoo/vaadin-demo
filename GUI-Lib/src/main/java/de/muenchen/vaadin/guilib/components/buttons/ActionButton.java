@@ -119,8 +119,8 @@ public class ActionButton extends Button {
     @SuppressWarnings("unchecked")
     private void perform(ClickEvent event) {
         //Perform all actions until all actions are performed or one crashes.
-        actions.stream().sequential().anyMatch(actionPerformer -> !actionPerformer.perform(event));
-        showSuccessNotification();
+        if(!actions.stream().sequential().anyMatch(actionPerformer -> !actionPerformer.perform(event)))
+            showSuccessNotification();
     }
 
     private void showSuccessNotification() {
