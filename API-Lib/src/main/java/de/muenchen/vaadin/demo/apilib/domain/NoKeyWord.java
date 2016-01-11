@@ -30,5 +30,5 @@ public @interface NoKeyWord {
      * Array of the Languages which shall be checked.
      * @return
      */
-    Keywords[] of();
+    Keywords[] of() default {Keywords.JAVA, Keywords.BARRAKUDA};
 }
