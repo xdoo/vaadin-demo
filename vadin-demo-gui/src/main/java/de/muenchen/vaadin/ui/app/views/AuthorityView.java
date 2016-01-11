@@ -9,7 +9,7 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
-import de.muenchen.vaadin.guilib.security.components.Authority_AllInOne;
+import de.muenchen.vaadin.guilib.security.components.Authority_ReadEditForm;
 import de.muenchen.vaadin.guilib.security.controller.Authority_ViewController;
 import de.muenchen.vaadin.guilib.security.controller.Permission_ViewController;
 import de.muenchen.vaadin.ui.app.MainUI;
@@ -41,7 +41,7 @@ public class AuthorityView extends VerticalLayout implements View {
 
         addComponent(pageTitle);
 
-        Authority_AllInOne authorities = new Authority_AllInOne(permissionViewController, authorityViewController);
+        Authority_ReadEditForm authorities = new Authority_ReadEditForm(permissionViewController, authorityViewController);
         addComponent(authorities);
     }
 

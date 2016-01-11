@@ -13,7 +13,7 @@ import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
-import de.muenchen.vaadin.guilib.security.components.User_Details_AllInOne;
+import de.muenchen.vaadin.guilib.security.components.User_ReadEditForm;
 import de.muenchen.vaadin.guilib.security.controller.Authority_ViewController;
 import de.muenchen.vaadin.guilib.security.controller.User_ViewController;
 import de.muenchen.vaadin.ui.app.MainUI;
@@ -49,7 +49,7 @@ public class UserDetailView extends VerticalLayout implements View {
         button.addActionPerformer(new NavigateActions(UserView.NAME)::navigate);
         addComponent(button);
 
-        User_Details_AllInOne userDetails = new User_Details_AllInOne(userViewController, authorityViewController);
+        User_ReadEditForm userDetails = new User_ReadEditForm(userViewController, authorityViewController);
         addComponent(userDetails);
     }
 

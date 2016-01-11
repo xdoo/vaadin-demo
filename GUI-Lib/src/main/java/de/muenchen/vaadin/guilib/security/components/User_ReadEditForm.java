@@ -8,12 +8,12 @@ import de.muenchen.vaadin.guilib.security.controller.User_ViewController;
 
 /**
  * Provides a full-featured Form for a User_. It allows to view the current selected user and edit it.
- * Below it shows a List of all Authorities and allows to add those to the User.
+ * It also shows a List of all Authorities and allows to add and remove them for the selected User.
  *
  * @author p.mueller
  * @version 1.0
  */
-public class User_Details_AllInOne extends BaseComponent {
+public class User_ReadEditForm extends BaseComponent {
 
     /** The Form displaying the current selected User_. */
     private final User_ReadWriteForm userForm;
@@ -24,7 +24,7 @@ public class User_Details_AllInOne extends BaseComponent {
      * Create a new User_ReadWriteForm with the internationalization of the Controller.
      * It will navigate to the navigateBack value on the back button click.
      */
-    public User_Details_AllInOne(User_ViewController userViewController, Authority_ViewController authorityViewController) {
+    public User_ReadEditForm(User_ViewController userViewController, Authority_ViewController authorityViewController) {
         userForm = new User_ReadWriteForm();
         authorityTwinSelect = new User_Authorities_TwinSelect(userViewController, authorityViewController);
 

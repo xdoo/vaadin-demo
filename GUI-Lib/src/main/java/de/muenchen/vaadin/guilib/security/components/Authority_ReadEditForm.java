@@ -11,9 +11,11 @@ import de.muenchen.vaadin.guilib.security.controller.Authority_ViewController;
 import de.muenchen.vaadin.guilib.security.controller.Permission_ViewController;
 
 /**
+ * This Form allows creating and deleting Authorities, and adding/removing Permissions for them.
+ *
  * Created by maximilian.zollbrecht on 17.12.15.
  */
-public class Authority_AllInOne extends BaseComponent {
+public class Authority_ReadEditForm extends BaseComponent {
 
     private final Authority_ViewController authorityViewController;
 
@@ -24,7 +26,7 @@ public class Authority_AllInOne extends BaseComponent {
     private final Authority_Grid authGrid;
     private final Authority_Permissions_TwinSelect permSelect;
 
-    public Authority_AllInOne(Permission_ViewController permissionViewController, Authority_ViewController authorityViewController) {
+    public Authority_ReadEditForm(Permission_ViewController permissionViewController, Authority_ViewController authorityViewController) {
         this.authorityViewController = authorityViewController;
 
         permSelect = new Authority_Permissions_TwinSelect(permissionViewController);
