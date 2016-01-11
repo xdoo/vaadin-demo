@@ -336,6 +336,8 @@ i18n.de-DE.buerger.notification.success.update.label : Bürger angepasst
 i18n.de-DE.buerger.notification.success.update.text : Der Bürger wurde erfolgreich angepasst und gespeichert.
 i18n.de-DE.buerger.notification.success.create.label : Bürger erstellt
 i18n.de-DE.buerger.notification.success.create.text : Der Bürger wurde erfolgreich erstellt und gespeichert.
+i18n.de-DE.buerger.notification.success.save.label : Bürger erstellt
+i18n.de-DE.buerger.notification.success.save.text : Der Bürger wurde erfolgreich erstellt und gespeichert.
 i18n.de-DE.buerger.notification.success.delete.label : Bürger gelöscht
 i18n.de-DE.buerger.notification.success.delete.text : Der Bürger wurde erfolgreich gelöscht.
 i18n.de-DE.buerger.notification.success.copy.label : Bürger kopiert

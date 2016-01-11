@@ -9,12 +9,8 @@ import de.muenchen.vaadin.guilib.components.BaseComponent;
 import de.muenchen.vaadin.guilib.components.GenericGrid;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
-import de.muenchen.vaadin.ui.app.views.BuergerDetailView;
 import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerAssociationActions;
-import de.muenchen.vaadin.ui.components.buttons.node.listener.BuergerAssociationListActions;
 import de.muenchen.vaadin.ui.controller.BuergerViewController;
-
-import java.util.stream.Collectors;
 
 /**
  * Created by maximilian.zollbrecht on 28.10.15.
@@ -39,6 +35,7 @@ public class BuergerAddPartnerGrid extends BaseComponent {
         grid.setSelectionMode(Grid.SelectionMode.SINGLE).activateSearch();
 
         ActionButton addSingle = new ActionButton(Buerger.class, SimpleAction.add);
+        addSingle.useNotification(true);
         BuergerAssociationActions actionsSingle = new BuergerAssociationActions(
                 () -> new Association<>(grid.getSelectedEntities().get(0), Buerger.Rel.partner.name()));
         addSingle.addActionPerformer(actionsSingle::addAssociation);

@@ -191,6 +191,7 @@ public class GenericGrid<T> extends BaseComponent {
 
     private void createCopy() {
         ActionButton copyButton = new ActionButton(getType(), SimpleAction.copy);
+        copyButton.useNotification(true);
 
         copyButton.addActionPerformer(getListActionOnSelected()::create);
         copy = Optional.of(copyButton);
@@ -198,6 +199,7 @@ public class GenericGrid<T> extends BaseComponent {
 
     private void createDelete() {
         ActionButton deleteButton = new ActionButton(getType(), SimpleAction.delete);
+        deleteButton.useNotification(true);
 
         deleteButton.addActionPerformer(getListActionOnSelected()::delete);
         delete = Optional.of(deleteButton);
