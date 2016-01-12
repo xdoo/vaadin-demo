@@ -29,12 +29,11 @@ public class BuildSearchIndex
                 FullTextEntityManager fullTextEntityManager =
                         Search.getFullTextEntityManager(entityManager);
                 fullTextEntityManager.createIndexer().startAndWait();
-            } catch (InterruptedException e) {
+            } catch (InterruptedException | IllegalArgumentException e) {
                 System.out.println(
                         "An error occurred trying to build the serach index: " +
                                 e.toString());
             }
-            return;
         }
     }
 }
