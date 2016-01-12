@@ -1,6 +1,7 @@
 package de.muenchen.vaadin.guilib.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.netflix.discovery.DiscoveryClient;
 import com.vaadin.spring.annotation.UIScope;
 import de.muenchen.vaadin.demo.apilib.domain.Principal;
 import de.muenchen.vaadin.demo.apilib.rest.SecurityRestClient;
@@ -37,13 +38,14 @@ public class SecurityServiceImpl implements SecurityService, Serializable {
     private Principal principal;
     private OAuth2RestTemplate restTemplate;
 
-    @Value("${service.token.url}")
-    private String TOKEN_URL;
-
     @Value("${security.oauth2.client.id}")
     private String clientID;
     
     @Autowired private SecurityRestClient restClient;
+
+    @Autowired
+    private DiscoveryClient discoveryClient;
+    private String token_url;
 
     @Override
     public boolean isUserInRole(String role) {
@@ -62,7 +64,12 @@ public class SecurityServiceImpl implements SecurityService, Serializable {
 
     @Override
     public boolean login(String username, String password) {
-
+        try {
+            token_url = discoveryClient.getNextServerFromEureka("authservice", false).getHomePageUrl();
+        } catch (RuntimeException e) {
+            LOG.error(e.getMessage());
+            token_url = null;
+        }
         
         // Get RestTemplate
         ResourceOwnerPasswordResourceDetails resource = new ResourceOwnerPasswordResourceDetails();
@@ -70,7 +77,7 @@ public class SecurityServiceImpl implements SecurityService, Serializable {
         resource.setPassword(password);
         resource.setGrantType("password");
         resource.setClientId(clientID);
-        resource.setAccessTokenUri(TOKEN_URL);
+        resource.setAccessTokenUri(token_url + "/uaa/oauth/token");
 
         OAuth2RestTemplate template = new OAuth2RestTemplate(resource, new DefaultOAuth2ClientContext());
 
