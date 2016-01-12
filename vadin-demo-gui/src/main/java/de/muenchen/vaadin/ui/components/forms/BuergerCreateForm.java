@@ -142,7 +142,7 @@ public class BuergerCreateForm extends BaseComponent {
             BuergerSingleActions buergerSingleActions = new BuergerSingleActions(getBuergerForm()::getBuerger);
             getSaveButton().addActionPerformer(buergerSingleActions::create);
         }
-
+        getSaveButton().useNotification(true);
         getSaveButton().addActionPerformer(getSaveNavigation()::navigate);
     }
 

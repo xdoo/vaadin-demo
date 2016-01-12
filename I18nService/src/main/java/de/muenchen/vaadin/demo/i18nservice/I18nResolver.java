@@ -24,6 +24,14 @@ public interface I18nResolver {
     String resolveRelative(Class clazz, String relativePath);
 
     /**
+     * Resolves the Path with a label as BasePath and a String of the relative Path
+     * @param label
+     * @param relativePath
+     * @return
+     */
+    String resolveRelative(String label, String relativePath);
+
+    /**
      * resolves the icon due to given Classname and relative path
      * @param clazz
      * @param relativePath

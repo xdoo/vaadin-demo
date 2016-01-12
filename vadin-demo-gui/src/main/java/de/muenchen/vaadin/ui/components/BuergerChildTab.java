@@ -40,6 +40,7 @@ public class BuergerChildTab extends CustomComponent {
 
         //Create Button to delete one or more associations
         ActionButton deleteButton = new ActionButton(Buerger.class, SimpleAction.delete);
+        deleteButton.useNotification(true);
         BuergerAssociationListActions listAction = new BuergerAssociationListActions(
                 () -> grid.getSelectedEntities().stream()
                         .map(buerger -> new Association<>(buerger, Buerger.Rel.kinder.name()))

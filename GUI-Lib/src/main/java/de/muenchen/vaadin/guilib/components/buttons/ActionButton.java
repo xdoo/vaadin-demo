@@ -1,15 +1,18 @@
 package de.muenchen.vaadin.guilib.components.buttons;
 
+import com.vaadin.server.Page;
 import com.vaadin.ui.Button;
+import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.Action;
 import de.muenchen.vaadin.guilib.BaseUI;
+import de.muenchen.vaadin.guilib.components.GenericSuccessNotification;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Component;
-import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.Type;
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getFormPath;
+import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getNotificationPath;
+
 
 /**
  * Provides a styled Button that represents a specific action.
@@ -28,7 +31,10 @@ public class ActionButton extends Button {
 
     /** List of Actions to perform on click. **/
     private List<CrashableActionPerformer> actions = new ArrayList<>();
-
+    private Class entity;
+    private String label;
+    private Action notified;
+    private boolean notify;
 
     /**
      * Create a new ActionButton with the specified label, context, action.
@@ -40,7 +46,8 @@ public class ActionButton extends Button {
      */
     public ActionButton(final String label, final Action action) {
         super(label);
-
+        notified = action;
+        this.label = label;
         configureButton(action);
         addClickListener(this::perform);
     }
@@ -55,7 +62,10 @@ public class ActionButton extends Button {
      */
     public ActionButton(final Class entityClass, final Action action) {
         this(resolveLabel(action, entityClass), action);
+        this.entity=entityClass;
+        notified = action;
     }
+
 
     /**
      * Resolve the action label with help of the context [i18n].
@@ -65,8 +75,26 @@ public class ActionButton extends Button {
      * @return
      */
     private static String resolveLabel(Action action, Class entityClass) {
-        final String labelPath = getFormPath(action, Component.button, Type.label);
+        final String labelPath = getFormPath(action, I18nPaths.Component.button, I18nPaths.Type.label);
         return BaseUI.getCurrentI18nResolver().resolveRelative(entityClass, labelPath);
+    }
+
+    /**
+     * Activates or deactivates successnotifications
+     *
+     * @param use boolea describing if notifications are used or not;
+     */
+    public void useNotification(boolean use){
+        notify=use;
+    }
+
+    /**
+     * Sets the displayed notification to the action-appropriate one
+     *
+     * @param action the Action the button should display anotification for.
+     */
+    public void setNotifyAction(Action action){
+        notified=action;
     }
 
     /**
@@ -91,7 +119,25 @@ public class ActionButton extends Button {
     @SuppressWarnings("unchecked")
     private void perform(ClickEvent event) {
         //Perform all actions until all actions are performed or one crashes.
-        actions.stream().sequential().anyMatch(actionPerformer -> !actionPerformer.perform(event));
+        if(!actions.stream().sequential().anyMatch(actionPerformer -> !actionPerformer.perform(event)))
+            showSuccessNotification();
+    }
+
+    private void showSuccessNotification() {
+        if (notify) {
+            if(entity!= null) {
+                GenericSuccessNotification succes = new GenericSuccessNotification(
+                        BaseUI.getCurrentI18nResolver().resolveRelative(entity, getNotificationPath(I18nPaths.NotificationType.success, notified, I18nPaths.Type.label)),
+                        BaseUI.getCurrentI18nResolver().resolveRelative(entity, getNotificationPath(I18nPaths.NotificationType.success, notified, I18nPaths.Type.text)));
+                succes.show(Page.getCurrent());
+            }else{
+                GenericSuccessNotification succes = new GenericSuccessNotification(
+                        BaseUI.getCurrentI18nResolver().resolveRelative(label, getNotificationPath(I18nPaths.NotificationType.success, notified, I18nPaths.Type.label)),
+                        BaseUI.getCurrentI18nResolver().resolveRelative(label, getNotificationPath(I18nPaths.NotificationType.success, notified, I18nPaths.Type.text)));
+                succes.show(Page.getCurrent());
+            }
+
+        }
     }
 
 }

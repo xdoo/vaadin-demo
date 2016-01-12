@@ -34,6 +34,7 @@ public class BuergerAddKinderGrid extends BaseComponent {
         final GenericGrid<Buerger> grid = this.controller.getViewFactory().generateBuergerSearchTable().activateSearch();
 
         ActionButton addMultiple = new ActionButton(Buerger.class, SimpleAction.add);
+        addMultiple.useNotification(true);
         BuergerAssociationListActions actionMultiple = new BuergerAssociationListActions(
                 () -> grid.getSelectedEntities().stream().map(buerger -> new Association<>(buerger, Buerger.Rel.kinder.name())).collect(Collectors.toList()));
         addMultiple.addActionPerformer(actionMultiple::addAssociations);

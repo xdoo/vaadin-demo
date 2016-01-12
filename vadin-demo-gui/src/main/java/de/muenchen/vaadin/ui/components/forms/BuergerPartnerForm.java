@@ -155,6 +155,7 @@ public class BuergerPartnerForm extends BaseComponent {
         final BuergerAssociationActions associationActions = new BuergerAssociationActions(
                 () -> new Association<>(getPartnerForm().getBuerger(), Buerger.Rel.partner.name()));
         getDeleteButton().addActionPerformer(associationActions::removeAssociation);
+        getDeleteButton().useNotification(true);
     }
 
     /**

@@ -35,6 +35,7 @@ public class BuergerAddPartnerGrid extends BaseComponent {
         grid.setSelectionMode(Grid.SelectionMode.SINGLE).activateSearch();
 
         ActionButton addSingle = new ActionButton(Buerger.class, SimpleAction.add);
+        addSingle.useNotification(true);
         BuergerAssociationActions actionsSingle = new BuergerAssociationActions(
                 () -> new Association<>(grid.getSelectedEntities().get(0), Buerger.Rel.partner.name()));
         addSingle.addActionPerformer(actionsSingle::addAssociation);

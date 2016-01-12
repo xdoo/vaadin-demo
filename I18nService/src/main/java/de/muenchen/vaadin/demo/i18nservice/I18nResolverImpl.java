@@ -42,6 +42,21 @@ public class I18nResolverImpl implements I18nResolver {
         return msg.get(((clazz!=null) ? removeUnderscore(clazz.getSimpleName().toLowerCase()) + "." : "") + relativePath);
     }
 
+
+    /**
+     * Resolve the relative path (e.g. "asdf.label").
+     * <p/>
+     * The base path will be appended at start and then read from the properties.
+     *
+     * @param label the label for the basePath
+     * @param relativePath the path to add to the base path.
+     * @return the resolved String.
+     */
+    @Override
+    public String resolveRelative(String label, String relativePath) {
+        return msg.get(((label!=null) ? removeUnderscore(label.toLowerCase()) + "." : "") + relativePath);
+    }
+
     @Override
     public String getBasePath(Class clazz) {
         return (clazz!=null) ? (removeUnderscore(clazz.getSimpleName().toLowerCase())) : "";

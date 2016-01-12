@@ -87,6 +87,30 @@ insert into _authorities_permissions (authority_oid, permission_oid) values ('1'
 insert into _authorities_permissions (authority_oid, permission_oid) values ('1','200007');
 insert into _authorities_permissions (authority_oid, permission_oid) values ('1','300007');
 
+insert into _permissions (oid,perm_permission) values ('100008','ROLE_READ_SEC_User');
+insert into _permissions (oid,perm_permission) values ('200008','ROLE_WRITE_SEC_User');
+insert into _permissions (oid,perm_permission) values ('300008','ROLE_DELETE_SEC_User');
+insert into _authorities_permissions (authority_oid, permission_oid) values ('2','100008');
+insert into _authorities_permissions (authority_oid, permission_oid) values ('1','100008');
+insert into _authorities_permissions (authority_oid, permission_oid) values ('1','200008');
+insert into _authorities_permissions (authority_oid, permission_oid) values ('1','300008');
+
+insert into _permissions (oid,perm_permission) values ('100009','ROLE_READ_SEC_Authority');
+insert into _permissions (oid,perm_permission) values ('200009','ROLE_WRITE_SEC_Authority');
+insert into _permissions (oid,perm_permission) values ('300009','ROLE_DELETE_SEC_Authority');
+insert into _authorities_permissions (authority_oid, permission_oid) values ('2','100009');
+insert into _authorities_permissions (authority_oid, permission_oid) values ('1','100009');
+insert into _authorities_permissions (authority_oid, permission_oid) values ('1','200009');
+insert into _authorities_permissions (authority_oid, permission_oid) values ('1','300009');
+
+insert into _permissions (oid,perm_permission) values ('100010','ROLE_READ_SEC_Permission');
+insert into _permissions (oid,perm_permission) values ('200010','ROLE_WRITE_SEC_Permission');
+insert into _permissions (oid,perm_permission) values ('300010','ROLE_DELETE_SEC_Permission');
+insert into _authorities_permissions (authority_oid, permission_oid) values ('2','100010');
+insert into _authorities_permissions (authority_oid, permission_oid) values ('1','100010');
+insert into _authorities_permissions (authority_oid, permission_oid) values ('1','200010');
+insert into _authorities_permissions (authority_oid, permission_oid) values ('1','300010');
+
 insert into _permissions (oid,perm_permission) values ('900000','ROLE_BUSINESSACTION_BuergerAlsMailVerschicken');
 insert into _authorities_permissions (authority_oid, permission_oid) values (100,'900000');
 

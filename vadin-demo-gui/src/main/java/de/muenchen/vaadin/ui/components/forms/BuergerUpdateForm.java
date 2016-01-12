@@ -110,6 +110,8 @@ public class BuergerUpdateForm extends BaseComponent {
         final BuergerSingleActions singleActions = new BuergerSingleActions(getBuergerForm()::getBuerger);
         getSaveButton().addActionPerformer(singleActions::update);
         getSaveButton().addActionPerformer(getSaveNavigation()::navigate);
+        getSaveButton().useNotification(true);
+        getSaveButton().setNotifyAction(SimpleAction.update);
     }
 
     /**
