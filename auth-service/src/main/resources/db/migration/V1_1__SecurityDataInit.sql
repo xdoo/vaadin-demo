@@ -1,10 +1,15 @@
-insert into _users (oid, user_email, user_enabled, user_username, user_password, mandant) values (1,'admin@admin.muenchen.de',TRUE,'m01_admin1','admin1','m1');
-insert into _users (oid, user_email, user_enabled, user_username, user_password, mandant) values (2,'admin@admin.muenchen.de',TRUE,'m02_admin2','admin2','m2');
+insert into _users (oid, user_email, user_enabled, user_username, user_password, user_forname, user_surname, mandant)
+values (1,'admin@admin.muenchen.de',TRUE,'m01_admin1','admin1', 'Addi', 'Admin', 'm01');
+insert into _users (oid, user_email, user_enabled, user_username, user_password, user_forname, user_surname, mandant)
+values (2,'admin@admin.muenchen.de',TRUE,'m02_admin2','admin2', 'Addi', 'Admin', 'm02');
 
-insert into _users (oid, user_email, user_enabled, user_username, user_password, mandant) values (3,'admin@admin.muenchen.de',TRUE,'m01_read1','read1','m1');
-insert into _users (oid, user_email, user_enabled, user_username, user_password, mandant) values (4,'admin@admin.muenchen.de',TRUE,'m02_read2','read2','m2');
+insert into _users (oid, user_email, user_enabled, user_username, user_password, user_forname, user_surname, mandant)
+values (3,'admin@admin.muenchen.de',TRUE,'m01_read1','read1', 'Reinhard', 'Ready', 'm01');
+insert into _users (oid, user_email, user_enabled, user_username, user_password, user_forname, user_surname, mandant)
+values (4,'admin@admin.muenchen.de',TRUE,'m02_read2','read2', 'Reinhard', 'Ready', 'm02');
 
-insert into _users (oid, user_email, user_enabled, user_username, user_password, mandant) values (5,'admin@admin.muenchen.de',TRUE,'m02_hans','test','m1');
+insert into _users (oid, user_email, user_enabled, user_username, user_password, user_forname, user_surname, mandant)
+values (5,'admin@admin.muenchen.de',TRUE,'m02_hans','test','Thomas', 'Test', 'm02');
 
 
 insert into _authorities (oid, auth_authority) values (1,'ADMIN');
@@ -18,9 +23,6 @@ insert into _users_authorities (authority_oid, user_oid) values (2, 4);
 
 insert into _authorities (oid, auth_authority) values (100,'Fachanalyst');
 insert into _users_authorities (authority_oid, user_oid) values (100, 1);
-
-insert into _authorities (oid, auth_authority) values (101,'name');
-insert into _users_authorities (authority_oid, user_oid) values (101, 1);
 
 insert into _permissions (oid,perm_permission) values ('1','ROLE_READ_SEC_User');
 insert into _permissions (oid,perm_permission) values ('2','ROLE_WRITE_SEC_User');

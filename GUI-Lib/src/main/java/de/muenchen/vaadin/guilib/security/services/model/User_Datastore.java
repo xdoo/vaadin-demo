@@ -16,7 +16,7 @@ import java.util.Optional;
  */
 public class User_Datastore {
 
-    /** All the authoritys of the selectedUser. */
+    /** All the authorities of the selectedUser. */
     private final BeanItemContainer<Authority> selectedUserAuthorities = new BeanItemContainer<>(Authority.class);
     
     /** A List of all the User_, possible reduced by the query. */
@@ -59,7 +59,7 @@ public class User_Datastore {
     }
 
 	/**
-	 * Get the authoritys of the current selected User_
+	 * Get the authorities of the current selected User_
 	 */
     public BeanItemContainer<Authority> getSelectedUserAuthorities() {
         return selectedUserAuthorities;

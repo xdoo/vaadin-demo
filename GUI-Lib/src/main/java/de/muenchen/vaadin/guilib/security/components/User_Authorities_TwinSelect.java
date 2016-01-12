@@ -31,9 +31,9 @@ public class User_Authorities_TwinSelect extends BaseComponent {
         Collection<Authority> eventData = ((Collection<Authority>)event.getProperty().getValue());
 
         User_AssociationListActions addedPermissions = new User_AssociationListActions(
-                () -> eventData.stream().filter(auth -> !lastSelected.contains(auth)).map(auth -> new Association<>(auth, User.Rel.authoritys.name())).collect(Collectors.toList()));
+                () -> eventData.stream().filter(auth -> !lastSelected.contains(auth)).map(auth -> new Association<>(auth, User.Rel.authorities.name())).collect(Collectors.toList()));
         User_AssociationListActions removedPermissions = new User_AssociationListActions(
-                () -> lastSelected.stream().filter(auth -> !eventData.contains(auth)).map(auth -> new Association<>(auth, User.Rel.authoritys.name())).collect(Collectors.toList()));
+                () -> lastSelected.stream().filter(auth -> !eventData.contains(auth)).map(auth -> new Association<>(auth, User.Rel.authorities.name())).collect(Collectors.toList()));
 
         addedPermissions.addAssociations(null);
         removedPermissions.removeAssociations(null);

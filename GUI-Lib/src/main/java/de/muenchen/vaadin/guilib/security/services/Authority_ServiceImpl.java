@@ -162,7 +162,7 @@ public class Authority_ServiceImpl implements Authority_Service, Serializable {
 
 	/**
 	 * Returns all Authority_
-	 * @return authoritys the results
+	 * @return authorities the results
 	 */
     @Override
     public List<Authority> findAll() {
@@ -192,7 +192,7 @@ public class Authority_ServiceImpl implements Authority_Service, Serializable {
 	/**
 	 * Returns all Authority_ of a specified relation
 	 * @param relation the relation
-	 * @return authoritys the results
+	 * @return authorities the results
 	 */
     @Override
     public List<Authority> findAll(Link relation) {
@@ -252,7 +252,7 @@ public class Authority_ServiceImpl implements Authority_Service, Serializable {
 	/**
 	 * Query to given string
 	 * @param query
-	 * @return authoritys the results
+	 * @return authorities the results
 	 */
     @Override
     public List<Authority> queryAuthority(String query) {
