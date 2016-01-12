@@ -24,7 +24,7 @@ public class CheckKeyWordValidator implements ConstraintValidator<NoKeyWord,Stri
     private final List<String> BARRAKUDA_KEYWORDS = Arrays.asList(new String[]{"allowedRegex","any","auditAll","auditChanges","auditNone","businessAction","customDateType","customListType",
             "customLogicType","customNumberType","customTextType","entity","extends","external","given","handleLikeAttribute","inTheFuture","inThePast","listOf","long","mainFeature","manyToMany",
             "manyToOne","maxLength=","maxValue=","minLength=","minValue=","normal","oneToMany","oneToOne","optional","package","password","pointNumber","purpose","searchable","serviceModel","then",
-            "type=","version"});
+            "type=","version", "noJavaKeyWord", "noBarrakudaKeyWord"});
 
     public void initialize(NoKeyWord noKeyWord){
         this.noKeyWord = noKeyWord;
