@@ -1,27 +1,6 @@
-insert into _permissions (oid,perm_permission) values ('1','ROLE_READ_SEC_User');
-insert into _permissions (oid,perm_permission) values ('2','ROLE_WRITE_SEC_User');
-insert into _permissions (oid,perm_permission) values ('3','ROLE_DELETE_SEC_User');
-insert into _authorities_permissions (authority_oid, permission_oid) values ('1','1');
-insert into _authorities_permissions (authority_oid, permission_oid) values ('1','2');
-insert into _authorities_permissions (authority_oid, permission_oid) values ('1','3');
-
-insert into _permissions (oid,perm_permission) values ('4','ROLE_READ_SEC_Authority');
-insert into _permissions (oid,perm_permission) values ('5','ROLE_WRITE_SEC_Authority');
-insert into _permissions (oid,perm_permission) values ('6','ROLE_DELETE_SEC_Authority');
-insert into _authorities_permissions (authority_oid, permission_oid) values ('1','4');
-insert into _authorities_permissions (authority_oid, permission_oid) values ('1','5');
-insert into _authorities_permissions (authority_oid, permission_oid) values ('1','6');
-
-insert into _permissions (oid,perm_permission) values ('7','ROLE_READ_SEC_Permission');
-insert into _permissions (oid,perm_permission) values ('8','ROLE_WRITE_SEC_Permission');
-insert into _permissions (oid,perm_permission) values ('9','ROLE_DELETE_SEC_Permission');
-insert into _authorities_permissions (authority_oid, permission_oid) values ('1','7');
-insert into _authorities_permissions (authority_oid, permission_oid) values ('1','8');
-insert into _authorities_permissions (authority_oid, permission_oid) values ('1','9');
-
-insert into _permissions (oid,perm_permission) values ('110000','ROLE_READ_Team');
-insert into _permissions (oid,perm_permission) values ('210000','ROLE_WRITE_Team');
-insert into _permissions (oid,perm_permission) values ('310000','ROLE_DELETE_Team');
+insert into _permissions (oid,perm_permission) values ('110000','ROLE_READ_Domain');
+insert into _permissions (oid,perm_permission) values ('210000','ROLE_WRITE_Domain');
+insert into _permissions (oid,perm_permission) values ('310000','ROLE_DELETE_Domain');
 insert into _authorities_permissions (authority_oid, permission_oid) values ('2','110000');
 insert into _authorities_permissions (authority_oid, permission_oid) values ('1','110000');
 insert into _authorities_permissions (authority_oid, permission_oid) values ('1','210000');
