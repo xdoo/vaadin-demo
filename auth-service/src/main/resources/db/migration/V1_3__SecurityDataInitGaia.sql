@@ -311,3 +311,6 @@ insert into _authorities_permissions (authority_oid, permission_oid) values (100
 insert into _permissions (oid,perm_permission) values ('910003','ROLE_BUSINESSACTION_IssueErstellen');
 insert into _authorities_permissions (authority_oid, permission_oid) values (100,'910003');
 
+insert into _permissions (oid,perm_permission) values ('910004','ROLE_BUSINESSACTION_ModellGenerieren');
+insert into _authorities_permissions (authority_oid, permission_oid) values (100,'910004');
+
