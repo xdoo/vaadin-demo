@@ -41,7 +41,8 @@ public class SecurityServiceImpl implements SecurityService, Serializable {
     @Value("${security.oauth2.client.id}")
     private String clientID;
     
-    @Autowired private SecurityRestClient restClient;
+    @Autowired
+    private SecurityRestClient restClient;
 
     @Autowired
     private DiscoveryClient discoveryClient;
@@ -96,7 +97,7 @@ public class SecurityServiceImpl implements SecurityService, Serializable {
                 halConverter
         ));
 
-        Optional<Principal> p = this.restClient.getPrincipal(template);
+        Optional<Principal> p = restClient.getPrincipal(template);
         if(p.isPresent()) {
             this.login = Boolean.TRUE;
             this.restTemplate = template;
@@ -110,8 +111,7 @@ public class SecurityServiceImpl implements SecurityService, Serializable {
     
     @Override
     public void logout() {
-        //TODO Request on Logout Endpoint of SecService
-
+        restClient.logout(restTemplate);
         //Delete Token
         restTemplate = null;
         this.login = Boolean.FALSE;
