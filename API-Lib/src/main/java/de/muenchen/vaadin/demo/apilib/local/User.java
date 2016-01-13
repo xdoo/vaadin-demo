@@ -149,7 +149,7 @@ public class User extends ResourceSupport {
 	  * </p>
 	  */
 	 public enum Rel {
-		 authoritys;
+		 authorities;
     }
 	
 	@Override

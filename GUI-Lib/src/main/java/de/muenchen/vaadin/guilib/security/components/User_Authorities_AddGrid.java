@@ -34,7 +34,7 @@ public class User_Authorities_AddGrid extends BaseComponent {
         ActionButton addButton = new ActionButton(Authority.class, SimpleAction.add);
         
         User_AssociationListActions actionMultiple = new User_AssociationListActions(
-                () -> grid.getSelectedEntities().stream().map(entity -> new Association<>(entity, User.Rel.authoritys.name())).collect(Collectors.toList()));
+                () -> grid.getSelectedEntities().stream().map(entity -> new Association<>(entity, User.Rel.authorities.name())).collect(Collectors.toList()));
         addButton.addActionPerformer(actionMultiple::addAssociations);
         addButton.addActionPerformer(navigateActions::navigate);
         grid.addMultiSelectComponent(addButton);

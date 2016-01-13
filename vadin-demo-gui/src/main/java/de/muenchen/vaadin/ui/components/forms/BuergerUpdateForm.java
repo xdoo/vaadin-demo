@@ -17,21 +17,31 @@ import de.muenchen.vaadin.ui.components.forms.selected.SelectedBuergerForm;
  * @version 1.0
  */
 public class BuergerUpdateForm extends BaseComponent {
-    /** The mode of the form. */
+    /**
+     * The mode of the form.
+     */
     private static final boolean READ_ONLY = false;
-    /** The underlying form. */
+    /**
+     * The underlying form.
+     */
     private final SelectedBuergerForm buergerForm;
-    /** The layout for the buttons */
+    /**
+     * The layout for the buttons
+     */
     private final HorizontalLayout buttonLayout = new HorizontalLayout();
-    /** The actions for the navigation on save. */
+    /**
+     * The actions for the navigation on save.
+     */
     private final NavigateActions saveNavigation;
-    /** The Button for the save action. */
+    /**
+     * The Button for the save action.
+     */
     private final ActionButton saveButton = new ActionButton(Buerger.class, SimpleAction.save);
 
     /**
      * Create a new Update Form for the current buerger, after the save click it will navigate to the View specified by the String.
      *
-     * @param navigateToSaved  The String of the View that is navigated to on save.
+     * @param navigateToSaved The String of the View that is navigated to on save.
      */
     public BuergerUpdateForm(final String navigateToSaved) {
         saveNavigation = new NavigateActions(navigateToSaved);
@@ -68,6 +78,7 @@ public class BuergerUpdateForm extends BaseComponent {
 
     /**
      * Get the underlying Form.
+     *
      * @return The form that displays the current buerger.
      */
     public SelectedBuergerForm getBuergerForm() {
@@ -76,6 +87,7 @@ public class BuergerUpdateForm extends BaseComponent {
 
     /**
      * Get the layout containing all buttons.
+     *
      * @return The horizontal Layout of buttons.
      */
     public HorizontalLayout getButtonLayout() {
@@ -84,6 +96,7 @@ public class BuergerUpdateForm extends BaseComponent {
 
     /**
      * Get the Button for the Save action.
+     *
      * @return The ActionButton for save.
      */
     public ActionButton getSaveButton() {
@@ -103,6 +116,7 @@ public class BuergerUpdateForm extends BaseComponent {
 
     /**
      * Get the navigation for the save action.
+     *
      * @return The NavigateActions for save.
      */
     public NavigateActions getSaveNavigation() {

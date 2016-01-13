@@ -3,7 +3,6 @@ package de.muenchen.service;
 import java.util.UUID;
 
 /**
- *
  * @author claus.straube
  */
 public class IdService {

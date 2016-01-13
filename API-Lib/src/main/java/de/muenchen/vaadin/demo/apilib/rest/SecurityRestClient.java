@@ -12,5 +12,7 @@ import java.util.Optional;
 public interface SecurityRestClient {
     
     public Optional<Principal> getPrincipal(RestTemplate template);
+
+    public void logout(RestTemplate template);
     
 }

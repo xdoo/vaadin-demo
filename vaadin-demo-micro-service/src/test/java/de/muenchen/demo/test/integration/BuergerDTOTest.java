@@ -39,9 +39,6 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.token.grant.password.ResourceOwnerPasswordResourceDetails;
@@ -114,7 +111,6 @@ public class BuergerDTOTest {
     @Value("${security.oauth2.client.scope:defaultScope}")
     private Set<String> scopes;
 
-
     @Before
     public void setUp() throws JsonProcessingException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
 
@@ -167,9 +163,6 @@ public class BuergerDTOTest {
             //-------------------------------------------------------
 
             //INIT Repo ---------------------------------------------
-            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken("admin1", "admin1");
-            Authentication auth = authenticationManager.authenticate(token);
-            SecurityContextHolder.getContext().setAuthentication(auth);
 
             Buerger b1M1 = new Buerger();
             Set<String> eig1 = new HashSet<>();
@@ -233,9 +226,7 @@ public class BuergerDTOTest {
             b5M1.setOid(5L);
             b5M1.setGeburtsdatum(new Date());
             repo.save(b5M1);
-            UsernamePasswordAuthenticationToken token2 = new UsernamePasswordAuthenticationToken("admin2", "admin2");
-            Authentication auth2 = authenticationManager.authenticate(token2);
-            SecurityContextHolder.getContext().setAuthentication(auth2);
+
             Buerger b1M2 = new Buerger();
             Set<String> eig6 = new HashSet<>();
             eig6.add("eig");
@@ -312,7 +303,7 @@ public class BuergerDTOTest {
     @Test
     public void getBuergersM1Test() throws JsonProcessingException {
         System.out.println("========== get Alle Bürger Mandant 'm1' Test ==========");
-        int x = this.count("m1", "admin1", "admin1");
+        int x = this.count("m1");
         url = "http://localhost:" + port + "/buergers";
         ResponseEntity<Resources<BuergerResource>> result = restTemplate.exchange(
                 url,
@@ -329,7 +320,7 @@ public class BuergerDTOTest {
     @Test
     public void getBuergersM2Test() throws JsonProcessingException {
         System.out.println("========== get Alle Bürger Mandant 'm2' Test ==========");
-        int x = this.count("m2", "admin2", "admin2");
+        int x = this.count("m2");
         url = "http://localhost:" + port + "/buergers";
         ResponseEntity<Resources<BuergerResource>> result = restTemplate2.exchange(
                 url,
@@ -342,10 +333,7 @@ public class BuergerDTOTest {
         System.out.println(String.format("Suche wurde erfolgreich durchgeführt. Einträge Mandant 'm2': %s | Ergebnis der Suche: %s", x, result.getBody().getContent().size()));
     }
 
-    private int count(String mid, String name, String password) {
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(name, password);
-        Authentication auth = authenticationManager.authenticate(token);
-        SecurityContextHolder.getContext().setAuthentication(auth);
+    private int count(String mid) {
         ArrayList<Buerger> all = Lists.newArrayList(repo.findAll());
         return all.stream().filter(b -> b.getMandant().equals(mid)).collect(Collectors.counting()).intValue();
     }

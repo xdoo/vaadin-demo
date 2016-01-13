@@ -16,9 +16,17 @@ import de.muenchen.vaadin.ui.components.forms.selected.SelectedBuergerPartnerFor
  * @version 1.0
  */
 public class BuergerPartnerReadForm extends BaseComponent {
-    /** Indicates the mode of the form. */
+    /**
+     * Indicates the mode of the form.
+     */
     public static final boolean READ_ONLY = true;
-    /** The underlying form. */
+    /**
+     * The layout for all Buttons.
+     */
+    private final HorizontalLayout buttonLayout = new HorizontalLayout();
+    /**
+     * The underlying form.
+     */
     private final SelectedBuergerPartnerForm partnerForm = new SelectedBuergerPartnerForm() {
         @Override
         public void setBuerger(Buerger buerger) {
@@ -26,11 +34,13 @@ public class BuergerPartnerReadForm extends BaseComponent {
             super.setBuerger(buerger);
         }
     };
-    /** The layout for all Buttons. */
-    private final HorizontalLayout buttonLayout = new HorizontalLayout();
-    /** The button for the update action. */
+    /**
+     * The button for the update action.
+     */
     private final ActionButton detailButton = new ActionButton(Buerger.class, SimpleAction.read);
-    /** The navigation for the detail aciton. */
+    /**
+     * The navigation for the detail aciton.
+     */
     private final NavigateActions detailNavigation;
 
     /**

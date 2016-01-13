@@ -41,7 +41,7 @@ public class User_Authorities_ReadAddGrid extends CustomComponent {
         ActionButton deleteButton = new ActionButton(User.class, SimpleAction.delete);
         User_AssociationListActions listAction = new User_AssociationListActions(
                 () -> grid.getSelectedEntities().stream()
-                        .map(authority -> new Association<>(authority, User.Rel.authoritys.name()))
+                        .map(authority -> new Association<>(authority, User.Rel.authorities.name()))
                         .collect(Collectors.toList())
         );
         deleteButton.addActionPerformer(listAction::removeAssociations);

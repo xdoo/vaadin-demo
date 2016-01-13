@@ -1,26 +1,9 @@
 package de.muenchen.demo.service.services;
 
-import de.muenchen.demo.service.gen.domain.Adresse;
-import de.muenchen.demo.service.gen.domain.AdresseExtern;
-import de.muenchen.demo.service.gen.domain.AdresseIntern;
-import de.muenchen.demo.service.gen.domain.Augenfarben;
-import de.muenchen.demo.service.gen.domain.Buerger;
-import de.muenchen.demo.service.gen.domain.MoeglicheStaatsangehoerigkeiten;
-import de.muenchen.demo.service.gen.domain.Pass;
-import de.muenchen.demo.service.gen.domain.PassTyp;
-import de.muenchen.demo.service.gen.domain.Sachbearbeiter;
-import de.muenchen.demo.service.gen.domain.Staatsangehoerigkeit;
-import de.muenchen.demo.service.gen.domain.Wohnung;
-import de.muenchen.demo.service.gen.rest.AdresseExternRepository;
-import de.muenchen.demo.service.gen.rest.AdresseInternRepository;
-import de.muenchen.demo.service.gen.rest.AdresseRepository;
-import de.muenchen.demo.service.gen.rest.BuergerRepository;
-import de.muenchen.demo.service.gen.rest.PassRepository;
-import de.muenchen.demo.service.gen.rest.SachbearbeiterRepository;
-import de.muenchen.demo.service.gen.rest.StaatsangehoerigkeitRepository;
-import de.muenchen.demo.service.gen.rest.WohnungRepository;
+import de.muenchen.demo.service.gen.domain.*;
+import de.muenchen.demo.service.gen.rest.*;
 import de.muenchen.demo.service.gen.services.BusinessActionService;
-import de.muenchen.service.security.repositories.UserRepository;
+import de.muenchen.service.TenantUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -57,8 +40,6 @@ public class BusinessActionServiceImpl implements BusinessActionService {
     PassRepository passRepo;
     @Autowired
     SachbearbeiterRepository sachbearbeiterRepo;
-    @Autowired
-    UserRepository userRepository;
 
     public void testdatenerzeugen() {
 
@@ -149,7 +130,7 @@ public class BusinessActionServiceImpl implements BusinessActionService {
 
     public String getCurrentMandant() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return userRepository.findFirstByUsername(authentication.getName()).getMandant();
+        return TenantUtils.extractTenantFromUsername(authentication.getName());
     }
 
     /**

@@ -20,13 +20,13 @@ public class BuergerAddKinderGrid extends BaseComponent {
     private final String navigateOnAdd;
     private final BuergerViewController controller;
 
-    public BuergerAddKinderGrid(String navigateOnAdd, BuergerViewController controller){
+    public BuergerAddKinderGrid(String navigateOnAdd, BuergerViewController controller) {
         this.controller = controller;
-        this.navigateOnAdd= navigateOnAdd;
+        this.navigateOnAdd = navigateOnAdd;
         init();
     }
 
-    protected void init(){
+    protected void init() {
         final ActionButton backButton = new ActionButton(Buerger.class, SimpleAction.back);
         final NavigateActions navigateActions = new NavigateActions(navigateOnAdd);
         backButton.addActionPerformer(navigateActions::navigate);

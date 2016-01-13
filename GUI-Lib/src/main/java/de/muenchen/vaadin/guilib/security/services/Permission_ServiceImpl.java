@@ -1,11 +1,15 @@
 package de.muenchen.vaadin.guilib.security.services;
 
+import com.netflix.discovery.DiscoveryClient;
 import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import de.muenchen.vaadin.demo.apilib.local.Permission;
+import de.muenchen.vaadin.demo.apilib.rest.Authority_RestClient;
+import de.muenchen.vaadin.demo.apilib.rest.Authority_RestClientImpl;
 import de.muenchen.vaadin.demo.apilib.rest.Permission_RestClient;
 import de.muenchen.vaadin.demo.apilib.rest.Permission_RestClientImpl;
+import de.muenchen.vaadin.demo.apilib.rest.User_RestClientImpl;
 import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.BaseUI;
@@ -22,6 +26,8 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.Serializable;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Callable;
@@ -50,9 +56,16 @@ public class Permission_ServiceImpl implements Permission_Service, Serializable 
     private final ExecutorService executor;
 
     @Autowired
-    public Permission_ServiceImpl(InfoService infoService, SecurityService securityService) {
+    public Permission_ServiceImpl(DiscoveryClient discoveryClient, SecurityService securityService) {
         this.securityService=securityService;
-        this.client = new Permission_RestClientImpl(getTemplate(), infoService.getBaseUri(() -> "service"/* TODO create constant for Security */));
+        URI secUri = null;
+        try {
+            String base_url = discoveryClient.getNextServerFromEureka("authservice", false).getHomePageUrl();
+            secUri = new URI(base_url + "uaa/");
+        } catch (RuntimeException | URISyntaxException e) {
+            LOG.error(e.getMessage());
+        }
+        this.client = new Permission_RestClientImpl(getTemplate(), secUri);
         executor = Executors.newCachedThreadPool();
     }
 

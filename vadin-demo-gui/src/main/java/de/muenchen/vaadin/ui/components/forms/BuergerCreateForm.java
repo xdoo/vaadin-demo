@@ -22,24 +22,36 @@ import java.util.Optional;
  */
 public class BuergerCreateForm extends BaseComponent {
 
-    /** Indicates the mode of the Form. */
+    /**
+     * Indicates the mode of the Form.
+     */
     private static final boolean READ_ONLY = false;
-    /** The optional relation this CreateForm is for. */
+    /**
+     * The optional relation this CreateForm is for.
+     */
     private final Optional<String> relation;
-    /** The Form used to diplay the fields. */
+    /**
+     * The Form used to diplay the fields.
+     */
     private final BuergerForm buergerForm;
-    /** Layout for all buttons. */
+    /**
+     * Layout for all buttons.
+     */
     private final HorizontalLayout buttonLayout = new HorizontalLayout();
-    /** Action for executing the navigation on save. */
+    /**
+     * Action for executing the navigation on save.
+     */
     private final NavigateActions saveNavigation;
-    /** The Button for the save action. */
+    /**
+     * The Button for the save action.
+     */
     private final ActionButton saveButton = new ActionButton(Buerger.class, SimpleAction.save);
 
     /**
      * Create a new BuergerCreateForm that navigates to the navigateTo View on save.
      * This CreateForm is for the pure Buerger, and not as a relation of a different controller.
      *
-     * @param navigateTo       The String of the view to navigate to on save.
+     * @param navigateTo The String of the view to navigate to on save.
      */
     public BuergerCreateForm(final String navigateTo) {
         this(navigateTo, null);
@@ -145,6 +157,7 @@ public class BuergerCreateForm extends BaseComponent {
 
     /**
      * Get the Action for the save navigation.
+     *
      * @return The NavigateActions.
      */
     public NavigateActions getSaveNavigation() {

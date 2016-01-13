@@ -50,8 +50,7 @@ public class SecurityServiceImpl implements SecurityService, Serializable {
         this.restClient = restClient;
 
         try {
-            TOKEN_URL = discoveryClient.getNextServerFromEureka("microservice", false).getHomePageUrl();
-            TOKEN_URL += "oauth/token";
+            TOKEN_URL = discoveryClient.getNextServerFromEureka("authservice", false).getHomePageUrl();
         } catch (RuntimeException e) {
             TOKEN_URL = null;
             LOG.error(e.getMessage());
@@ -75,7 +74,6 @@ public class SecurityServiceImpl implements SecurityService, Serializable {
 
     @Override
     public boolean login(String username, String password) {
-
         
         // Get RestTemplate
         ResourceOwnerPasswordResourceDetails resource = new ResourceOwnerPasswordResourceDetails();
@@ -83,7 +81,7 @@ public class SecurityServiceImpl implements SecurityService, Serializable {
         resource.setPassword(password);
         resource.setGrantType("password");
         resource.setClientId(clientID);
-        resource.setAccessTokenUri(TOKEN_URL);
+        resource.setAccessTokenUri(TOKEN_URL + "/uaa/oauth/token");
 
         OAuth2RestTemplate template = new OAuth2RestTemplate(resource, new DefaultOAuth2ClientContext());
 
@@ -102,7 +100,7 @@ public class SecurityServiceImpl implements SecurityService, Serializable {
                 halConverter
         ));
 
-        Optional<Principal> p = this.restClient.getPrincipal(template);
+        Optional<Principal> p = restClient.getPrincipal(template);
         if(p.isPresent()) {
             this.login = Boolean.TRUE;
             this.restTemplate = template;
@@ -116,8 +114,7 @@ public class SecurityServiceImpl implements SecurityService, Serializable {
     
     @Override
     public void logout() {
-        //TODO Request on Logout Endpoint of SecService
-
+        restClient.logout(restTemplate);
         //Delete Token
         restTemplate = null;
         this.login = Boolean.FALSE;

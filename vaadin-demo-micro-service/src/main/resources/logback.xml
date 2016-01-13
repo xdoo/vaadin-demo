@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration debug="true">
-	<include resource="org/springframework/boot/logging/logback/base.xml"/>	
-	<logger name="de.muenchen.vaadin" level="INFO"/>
-	<logger name="org.springframework.security" level="INFO"/>
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <logger name="de.muenchen.vaadin" level="INFO"/>
+    <logger name="org.springframework.security" level="INFO"/>
 
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
@@ -12,9 +12,9 @@
             </Pattern>
         </layout>
     </appender>
-    
+
     <logger name="org.springframework" level="INFO" additivity="false">
-        <appender-ref ref="STDOUT" />
+        <appender-ref ref="STDOUT"/>
         <!--<appender-ref ref="FILE" />-->
     </logger>
 

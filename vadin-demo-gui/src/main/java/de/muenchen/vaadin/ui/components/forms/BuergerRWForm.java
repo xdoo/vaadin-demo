@@ -17,21 +17,37 @@ import de.muenchen.vaadin.ui.components.forms.selected.SelectedBuergerForm;
  */
 public class BuergerRWForm extends BaseComponent {
 
-    /** The default (readOnly/write) mode the Form initially starts. */
+    /**
+     * The default (readOnly/write) mode the Form initially starts.
+     */
     public static final boolean DEFAULT_MODE_IS_EDIT = false;
-    /** The button for the edit action. */
+    /**
+     * The button for the edit action.
+     */
     final ActionButton editButton = new ActionButton(Buerger.class, SimpleAction.update);
-    /** The button for the save action. */
+    /**
+     * The button for the save action.
+     */
     final ActionButton saveButton = new ActionButton(Buerger.class, SimpleAction.save);
-    /** The button for the cancel button. */
+    /**
+     * The button for the cancel button.
+     */
     final ActionButton cancelButton = new ActionButton(Buerger.class, SimpleAction.cancel);
-    /** The Form displaying the current selected Buerger. */
+    /**
+     * The Form displaying the current selected Buerger.
+     */
     private final SelectedBuergerForm buergerForm = new SelectedBuergerForm();
-    /** The layout for all buttons that are shown in readonly mode. */
+    /**
+     * The layout for all buttons that are shown in readonly mode.
+     */
     private final HorizontalLayout buttons = new HorizontalLayout();
-    /** The layout for all buttons that are shown in the update mode. */
+    /**
+     * The layout for all buttons that are shown in the update mode.
+     */
     private final HorizontalLayout editButtons = new HorizontalLayout();
-    /** The current mode the RWForm is in. */
+    /**
+     * The current mode the RWForm is in.
+     */
     private boolean edit;
 
     /**

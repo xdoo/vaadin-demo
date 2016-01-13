@@ -2,7 +2,6 @@ package de.muenchen.vaadin.ui.components.buttons.node.listener;
 
 import de.muenchen.eventbus.events.Association;
 import de.muenchen.vaadin.demo.api.local.Buerger;
-import de.muenchen.vaadin.demo.i18nservice.I18nResolver;
 import de.muenchen.vaadin.guilib.components.actions.EntityAssociationActions;
 
 import java.util.function.Supplier;

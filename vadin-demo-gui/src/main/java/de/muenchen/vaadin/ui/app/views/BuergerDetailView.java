@@ -24,7 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import static de.muenchen.vaadin.demo.i18nservice.I18nPaths.getEntityFieldPath;
 
 /**
- *
  * @author claus
  */
 @SpringView(name = BuergerDetailView.NAME)
@@ -36,6 +35,7 @@ public class BuergerDetailView extends DefaultBuergerView {
     private BuergerChildTab childTab;
     private BuergerPartnerTab partnerTab;
     private BuergerRWForm readForm;
+
     @Autowired
     public BuergerDetailView(BuergerViewController controller) {
         super(controller);

@@ -84,12 +84,12 @@ public class User_ViewController implements Serializable{
 	}
 
 	/**
-	 * Zerstört die Verbindung zwischen einem User_ und seinem authoritys
+	 * Zerstört die Verbindung zwischen einem User_ und seinem authorities
 	 *
 	 * @param event
 	 */
 	private void releaseAuthorities(Authority event) {
-		Link link = getModel().getSelectedUser().get().getLink(User.Rel.authoritys.name());
+		Link link = getModel().getSelectedUser().get().getLink(User.Rel.authorities.name());
 		List<Link> authorities = authorityService.findAll(link)
 				.stream()
 				.map(Authority::getId)
@@ -101,13 +101,13 @@ public class User_ViewController implements Serializable{
 	
 	
 	/**
-	 * Speichert eine beziehung als authoritys zu einem {@link Authority} Objekt in der Datenbank.
+	 * Speichert eine beziehung als authorities zu einem {@link Authority} Objekt in der Datenbank.
 	 *
 	 * @param authoritiesEntity Authorities
 	 * @return Authority_
 	 */
 	public void addUserAuthorities(Authority authoritiesEntity) {
-		Link link = getModel().getSelectedUser().get().getLink(User.Rel.authoritys.name());
+		Link link = getModel().getSelectedUser().get().getLink(User.Rel.authorities.name());
 		List<Link> authoritieslist = Stream.concat(
 				authorityService.findAll(link)
 						.stream()
@@ -120,7 +120,7 @@ public class User_ViewController implements Serializable{
 	}
 	
 	public List<Authority> queryAuthorities(User entity) {
-		return authorityService.findAll(entity.getLink(User.Rel.authoritys.name())).stream().collect(Collectors.toList());
+		return authorityService.findAll(entity.getLink(User.Rel.authorities.name())).stream().collect(Collectors.toList());
 	}
 	/**
 	 * Speichert die Änderungen an einem {@link User} Objekt in der Datenbank.
@@ -182,7 +182,7 @@ public class User_ViewController implements Serializable{
 		final Association<?> association = (Association<?>) event.getData();
 		final User.Rel rel = User.Rel.valueOf(association.getRel());
 		
-		if (User.Rel.authoritys == rel) {
+		if (User.Rel.authorities == rel) {
 			Authority authorities = (Authority) association.getAssociation();
 			releaseAuthorities(authorities);
 			getModel().getSelectedUserAuthorities().removeItem(authorities);
@@ -210,7 +210,7 @@ public class User_ViewController implements Serializable{
 		final Association<?> association = (Association<?>) event.getData();
 
 		final User.Rel rel = User.Rel.valueOf(association.getRel());
-		if (User.Rel.authoritys == rel) {
+		if (User.Rel.authorities == rel) {
 			Authority authorities = (Authority) association.getAssociation();
 			// If Authorities has no ID he has to be created in the backend
 			if (authorities.getId() == null) {

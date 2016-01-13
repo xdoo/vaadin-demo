@@ -3,7 +3,7 @@ package de.muenchen.vaadin.guilib.services;
 import com.netflix.discovery.DiscoveryClient;
 import de.muenchen.vaadin.demo.apilib.domain.DomainService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
@@ -17,17 +17,15 @@ public class InfoServiceImpl implements InfoService {
     @Autowired
     DiscoveryClient discoveryClient;
 
-    @Autowired
-    private Environment environment;
+    private String url;
 
     @Override
     public URI getBaseUri(DomainService service) {
-
-        String url;
         try {
             url = discoveryClient.getNextServerFromEureka(service.getClientId(), false).getHomePageUrl();
         } catch (RuntimeException e) {
-            url = environment.getProperty(service.getClientId()+".url");
+            // Exception occurs if no eureka server was found.
+            // service.info.url will be used
         }
         return URI.create(url);
     }

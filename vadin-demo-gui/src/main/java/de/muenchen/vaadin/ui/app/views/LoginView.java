@@ -8,16 +8,9 @@ import com.vaadin.server.Page;
 import com.vaadin.server.Responsive;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
+import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.PasswordField;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.selector.Key;
 import de.muenchen.vaadin.guilib.BaseUI;
@@ -91,14 +84,16 @@ public class LoginView extends VerticalLayout implements View {
 
             @Override
             public void buttonClick(final ClickEvent event) {
+
                 if (security.login(username.getValue(), password.getValue())) {
                     BaseUI.getCurrentEventBus().notify(Key.LOGIN);
                 } else {
-                    // Anmeldung fehlgeschlagen
+//                    Anmeldung fehlgeschlagen
                     GenericNotification notif = new GenericWarningNotification("Anmeldung fehlgeschlagen",
                             "Bei der Eingabe Ihrer Usernamens/Ihres Kennworts ist ein Fehler aufgetreten. Versuchen Sie es erneut.");
                     notif.show(Page.getCurrent());
                 }
+
                 // TODO Register Remember me Token
             /*
             * Redirect is handled by the VaadinRedirectStrategy

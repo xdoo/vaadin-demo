@@ -1,8 +1,5 @@
 package de.muenchen.service;
 
-import de.muenchen.service.security.entities.User;
-import de.muenchen.service.security.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -14,9 +11,6 @@ public class TenantService {
 
     public static final String IS_TENANT_FILTER = "@tenantPermissionEvaluator.isTenant(authentication,filterObject)";
     public static final String IS_TENANT_AUTH = "@tenantPermissionEvaluator.isTenant(authentication,returnObject)";
-
-    @Autowired
-    UserRepository userRepository;
 
     public boolean isTenant(Authentication authentication, Object o) {
 
@@ -33,15 +27,12 @@ public class TenantService {
     public String getCurrentTenantId(Authentication authentication) {
         if (authentication == null)
             throw new IllegalArgumentException("Authentication cannot be null or emtpy!");
+        String tenant = TenantUtils.extractTenantFromPrincipal(authentication.getPrincipal());
 
-        final User user = userRepository.findFirstByUsername(authentication.getName());
-        if (user == null)
-            throw new IllegalArgumentException(String.format("User with authentication %s not found!", authentication));
-
-        final String tenant = user.getMandant();
         if (tenant == null || tenant.isEmpty())
             throw new AssertionError(String.format("User with authentication %s has no tenant!.", authentication));
 
         return tenant;
     }
+
 }

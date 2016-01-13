@@ -19,7 +19,7 @@ public class EventBusTest {
     private final EventBus eventBus = new EventBus();
 
     @Before
-    public void before(){
+    public void before() {
         eventBus.on(new RequestEntityKey(RequestEvent.CREATE, Buerger.class).toSelector(), this::create);
     }
 
@@ -37,14 +37,14 @@ public class EventBusTest {
     }
 
     @Test
-    public void buergerTest(){
+    public void buergerTest() {
         Buerger b = new Buerger();
         b.setVorname("hans");
         eventBus.notify(new RequestEntityKey(RequestEvent.CREATE, Buerger.class), Event.wrap(b));
     }
 
     @Test
-    public void linkTest(){
+    public void linkTest() {
         Link link = new Link("http://www.google.com");
         eventBus.notify(new RequestEntityKey(RequestEvent.CREATE, Buerger.class), Event.wrap(link));
     }

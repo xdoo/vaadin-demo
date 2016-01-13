@@ -17,28 +17,28 @@ import javax.persistence.EntityManager;
 @Component
 public class ApplicationStartup implements ApplicationListener<ContextRefreshedEvent> {
 
-	 private static final Logger LOG = LoggerFactory.getLogger(ApplicationStartup.class);
-	
-	@Autowired
-	private EntityManager entityManager;
+    private static final Logger LOG = LoggerFactory.getLogger(ApplicationStartup.class);
 
-	/*
-	 * This method is called during Spring's startup.
-	 * 
-	 * @param event Event raised when an ApplicationContext gets initialized or
-	 * refreshed.
-	 */
-	@Override
-	public void onApplicationEvent(final ContextRefreshedEvent event) {
+    @Autowired
+    private EntityManager entityManager;
 
-		FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
-		try {
-			fullTextEntityManager.createIndexer().startAndWait();
-		} catch (InterruptedException e) {
-			LOG.error("Lucene indexing interrupted, index might be incomlpete!", e);
-		}
+    /*
+     * This method is called during Spring's startup.
+     *
+     * @param event Event raised when an ApplicationContext gets initialized or
+     * refreshed.
+     */
+    @Override
+    public void onApplicationEvent(final ContextRefreshedEvent event) {
 
-		return;
-	}
+        FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
+        try {
+            fullTextEntityManager.createIndexer().startAndWait();
+        } catch (InterruptedException e) {
+            LOG.error("Lucene indexing interrupted, index might be incomlpete!", e);
+        }
+
+        return;
+    }
 
 }

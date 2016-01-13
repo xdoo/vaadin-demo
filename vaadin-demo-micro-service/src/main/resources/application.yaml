@@ -2,7 +2,11 @@
 # Service Info
 service.info.oid: EWO
 service.info.name: Einwohnerwesen
-service.info.version: v1.0 
+service.info.version: v1.0
+
+service.url: http://localhost:9999/uaa/
+service.token.url: ${service.url}oauth/token
+security.oauth2.client.id: acme
 
 #
 management.address: 127.0.0.1
@@ -50,14 +54,9 @@ URL : http://localhost:8089/
 pfad : /home/maximilian.zollbrecht
 
 # Basis URL 
-info.url: http://localhost:8080/
-service.token.url: ${info.url}oauth/token
+
 
 # Security
-#security.basic.enabled:false
-security.oauth2.client.id : acme
-#security.oauth2.client.access-token-validity-seconds:10
-#security.oauth2.client.scope:scope
-
+security.oauth2.resource.jwt.keyValue: secret
 
 

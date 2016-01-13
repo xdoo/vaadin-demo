@@ -2,21 +2,23 @@ management.address: 127.0.0.1
 endpoints.shutdown.enabled: true
 
 #Basis URL Microservice
-service.url: http://localhost:8080/
-service.token.url: ${service.url}/oauth/token
+service.url: http://localhost:9999/uaa/
+service.token.url: ${service.url}oauth/token
 
+service.self.url: http://localhost:8080
 # Basis URL des Services
 service.info.url: ${service.url}service_info
 service.info.id.eureka: microservice
 
 # Basis URL des Principal
-service.principal.url: ${service.url}principal
+service.principal.url: ${service.url}user
 
 # EMBEDDED SERVER CONFIGURATION (ServerProperties)
 server.port: 8081
 
 # Security
 security.oauth2.client.id: acme
+security.oauth2.jwt.signingKey: secret
 
 #i18n
 spring.messages.basename: messages
@@ -320,7 +322,7 @@ i18n.de-DE.buerger.kinder.label : Kinder
 i18n.de-DE.buerger.kinder.column_header : Kinder
 i18n.de-DE.buerger.alive.label : Noch am Leben?
 i18n.de-DE.buerger.alive.column_header : Lebendig
-i18n.de-DE.buerger.alive.tooltip: 
+i18n.de-DE.buerger.alive.tooltip:
 i18n.de-DE.buerger.eigenschaften.label : Eigenschaften dieser Person
 i18n.de-DE.buerger.eigenschaften.column_header : Eigenschaften
 i18n.de-DE.buerger.eigenschaften.tooltip : Hier können Eigenschaften des Bürgers angegeben werden

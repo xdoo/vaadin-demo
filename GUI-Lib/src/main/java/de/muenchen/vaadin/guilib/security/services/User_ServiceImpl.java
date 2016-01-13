@@ -1,5 +1,6 @@
 package de.muenchen.vaadin.guilib.security.services;
 
+import com.netflix.discovery.DiscoveryClient;
 import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
@@ -13,6 +14,7 @@ import de.muenchen.vaadin.guilib.components.GenericErrorNotification;
 import de.muenchen.vaadin.guilib.components.GenericSuccessNotification;
 import de.muenchen.vaadin.guilib.services.InfoService;
 import de.muenchen.vaadin.guilib.services.SecurityService;
+import org.apache.http.client.utils.URIBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,8 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.Serializable;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Callable;
@@ -50,9 +54,16 @@ public class User_ServiceImpl implements User_Service, Serializable {
     private final ExecutorService executor;
 
     @Autowired
-    public User_ServiceImpl(InfoService infoService, SecurityService securityService) {
+    public User_ServiceImpl(DiscoveryClient discoveryClient, SecurityService securityService) {
         this.securityService=securityService;
-        this.client = new User_RestClientImpl(getTemplate(), infoService.getBaseUri(() -> "service"/* TODO create constant for Security */));
+        URI secUserUri = null;
+        try {
+            String base_url = discoveryClient.getNextServerFromEureka("authservice", false).getHomePageUrl();
+            secUserUri = new URI(base_url + "uaa/");
+        } catch (RuntimeException | URISyntaxException e) {
+            LOG.error(e.getMessage());
+        }
+        this.client = new User_RestClientImpl(getTemplate(), secUserUri);
         executor = Executors.newCachedThreadPool();
     }
 

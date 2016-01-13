@@ -251,7 +251,8 @@
         <profile>
             <id>my-profile</id>
             <properties>
-                <pfad>/home/praktikant.tmar/NetBeansProjects/vaadin-demo/vaadin-demo-micro-service/src/main/resources</pfad>
+                <pfad>/home/praktikant.tmar/NetBeansProjects/vaadin-demo/vaadin-demo-micro-service/src/main/resources
+                </pfad>
             </properties>
         </profile>
     </profiles>
