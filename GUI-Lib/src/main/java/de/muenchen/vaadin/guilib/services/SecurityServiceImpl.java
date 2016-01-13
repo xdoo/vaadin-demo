@@ -1,6 +1,7 @@
 package de.muenchen.vaadin.guilib.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.netflix.discovery.DiscoveryClient;
 import com.vaadin.spring.annotation.UIScope;
 import de.muenchen.vaadin.demo.apilib.domain.Principal;
 import de.muenchen.vaadin.demo.apilib.rest.SecurityRestClient;
@@ -37,13 +38,25 @@ public class SecurityServiceImpl implements SecurityService, Serializable {
     private Principal principal;
     private OAuth2RestTemplate restTemplate;
 
-    @Value("${service.token.url}")
     private String TOKEN_URL;
 
     @Value("${security.oauth2.client.id}")
     private String clientID;
-    
-    @Autowired private SecurityRestClient restClient;
+
+    private SecurityRestClient restClient;
+
+    @Autowired
+    public SecurityServiceImpl(DiscoveryClient discoveryClient, SecurityRestClient restClient){
+        this.restClient = restClient;
+
+        try {
+            TOKEN_URL = discoveryClient.getNextServerFromEureka("microservice", false).getHomePageUrl();
+            TOKEN_URL += "oauth/token";
+        } catch (RuntimeException e) {
+            TOKEN_URL = null;
+            LOG.error(e.getMessage());
+        }
+    }
 
     @Override
     public boolean isUserInRole(String role) {
