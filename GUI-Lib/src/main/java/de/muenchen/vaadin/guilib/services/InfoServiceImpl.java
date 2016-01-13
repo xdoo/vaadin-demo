@@ -23,11 +23,9 @@ public class InfoServiceImpl implements InfoService {
     @Override
     public URI getBaseUri(DomainService service) {
 
-        String eurekaId = environment.getProperty(service.getClientId()+".info.id.eureka");
-
         String url;
         try {
-            url = discoveryClient.getNextServerFromEureka(eurekaId, false).getHomePageUrl();
+            url = discoveryClient.getNextServerFromEureka(service.getClientId(), false).getHomePageUrl();
         } catch (RuntimeException e) {
             url = environment.getProperty(service.getClientId()+".url");
         }
