@@ -17,10 +17,7 @@ public class InfoServiceImpl implements InfoService {
     @Autowired
     DiscoveryClient discoveryClient;
 
-    @Value(value = "${service.self.url}")
     private String url;
-    @Value(value = "${service.info.id.eureka}")
-    private String eurekaId;
 
     @Override
     public URI getBaseUri(DomainService service) {
