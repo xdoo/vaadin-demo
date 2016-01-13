@@ -38,15 +38,25 @@ public class SecurityServiceImpl implements SecurityService, Serializable {
     private Principal principal;
     private OAuth2RestTemplate restTemplate;
 
+    private String TOKEN_URL;
+
     @Value("${security.oauth2.client.id}")
     private String clientID;
-    
-    @Autowired
+
     private SecurityRestClient restClient;
 
     @Autowired
-    private DiscoveryClient discoveryClient;
-    private String token_url;
+    public SecurityServiceImpl(DiscoveryClient discoveryClient, SecurityRestClient restClient){
+        this.restClient = restClient;
+
+        try {
+            TOKEN_URL = discoveryClient.getNextServerFromEureka("microservice", false).getHomePageUrl();
+            TOKEN_URL += "oauth/token";
+        } catch (RuntimeException e) {
+            TOKEN_URL = null;
+            LOG.error(e.getMessage());
+        }
+    }
 
     @Override
     public boolean isUserInRole(String role) {
@@ -65,12 +75,6 @@ public class SecurityServiceImpl implements SecurityService, Serializable {
 
     @Override
     public boolean login(String username, String password) {
-        try {
-            token_url = discoveryClient.getNextServerFromEureka("authservice", false).getHomePageUrl();
-        } catch (RuntimeException e) {
-            LOG.error(e.getMessage());
-            token_url = null;
-        }
         
         // Get RestTemplate
         ResourceOwnerPasswordResourceDetails resource = new ResourceOwnerPasswordResourceDetails();
@@ -78,7 +82,7 @@ public class SecurityServiceImpl implements SecurityService, Serializable {
         resource.setPassword(password);
         resource.setGrantType("password");
         resource.setClientId(clientID);
-        resource.setAccessTokenUri(token_url + "/uaa/oauth/token");
+        resource.setAccessTokenUri(TOKEN_URL + "/uaa/oauth/token");
 
         OAuth2RestTemplate template = new OAuth2RestTemplate(resource, new DefaultOAuth2ClientContext());
 
