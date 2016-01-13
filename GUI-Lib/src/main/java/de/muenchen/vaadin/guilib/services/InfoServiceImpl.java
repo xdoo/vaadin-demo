@@ -25,7 +25,7 @@ public class InfoServiceImpl implements InfoService {
     @Override
     public URI getBaseUri(DomainService service) {
         try {
-            url = discoveryClient.getNextServerFromEureka(eurekaId, false).getHomePageUrl();
+            url = discoveryClient.getNextServerFromEureka(service.getClientId(), false).getHomePageUrl();
         } catch (RuntimeException e) {
             // Exception occurs if no eureka server was found.
             // service.info.url will be used
