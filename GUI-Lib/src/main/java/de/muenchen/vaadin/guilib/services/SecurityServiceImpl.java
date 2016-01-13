@@ -50,8 +50,7 @@ public class SecurityServiceImpl implements SecurityService, Serializable {
         this.restClient = restClient;
 
         try {
-            TOKEN_URL = discoveryClient.getNextServerFromEureka("microservice", false).getHomePageUrl();
-            TOKEN_URL += "oauth/token";
+            TOKEN_URL = discoveryClient.getNextServerFromEureka("authservice", false).getHomePageUrl();
         } catch (RuntimeException e) {
             TOKEN_URL = null;
             LOG.error(e.getMessage());

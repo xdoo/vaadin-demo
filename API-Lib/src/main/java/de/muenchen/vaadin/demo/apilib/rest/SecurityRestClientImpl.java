@@ -39,7 +39,7 @@ public class SecurityRestClientImpl implements SecurityRestClient {
         Principal principal = null;
 
         try {
-            principal = template.getForObject(securityUrl + "uaa/user/", Principal.class);
+            principal = template.getForObject(securityUrl + "uaa/profile", Principal.class);
         } catch (RestClientException | OAuth2AccessDeniedException | IllegalArgumentException e) {
             LOG.debug("HTTP Response Error bei Login: " + e.getMessage());
         }
