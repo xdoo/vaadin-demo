@@ -278,6 +278,22 @@ insert into _authorities_permissions (authority_oid, permission_oid) values ('1'
 insert into _authorities_permissions (authority_oid, permission_oid) values ('1','210035');
 insert into _authorities_permissions (authority_oid, permission_oid) values ('1','310035');
 
+insert into _permissions (oid,perm_permission) values ('110036','ROLE_READ_LogicType');
+insert into _permissions (oid,perm_permission) values ('210036','ROLE_WRITE_LogicType');
+insert into _permissions (oid,perm_permission) values ('310036','ROLE_DELETE_LogicType');
+insert into _authorities_permissions (authority_oid, permission_oid) values ('2','110036');
+insert into _authorities_permissions (authority_oid, permission_oid) values ('1','110036');
+insert into _authorities_permissions (authority_oid, permission_oid) values ('1','210036');
+insert into _authorities_permissions (authority_oid, permission_oid) values ('1','310036');
+
+insert into _permissions (oid,perm_permission) values ('110037','ROLE_READ_Elementtype');
+insert into _permissions (oid,perm_permission) values ('210037','ROLE_WRITE_Elementtype');
+insert into _permissions (oid,perm_permission) values ('310037','ROLE_DELETE_Elementtype');
+insert into _authorities_permissions (authority_oid, permission_oid) values ('2','110037');
+insert into _authorities_permissions (authority_oid, permission_oid) values ('1','110037');
+insert into _authorities_permissions (authority_oid, permission_oid) values ('1','210037');
+insert into _authorities_permissions (authority_oid, permission_oid) values ('1','310037');
+
 insert into _permissions (oid,perm_permission) values ('910000','ROLE_BUSINESSACTION_ProgrammGenerieren');
 insert into _authorities_permissions (authority_oid, permission_oid) values (100,'910000');
 
