@@ -4,19 +4,21 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.discovery.DiscoveryClient;
 import com.vaadin.spring.annotation.UIScope;
 import de.muenchen.vaadin.demo.apilib.domain.Principal;
-import de.muenchen.vaadin.demo.apilib.rest.SecurityRestClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.hal.Jackson2HalModule;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+import org.springframework.security.oauth2.client.resource.OAuth2AccessDeniedException;
 import org.springframework.security.oauth2.client.token.grant.password.ResourceOwnerPasswordResourceDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.Serializable;
@@ -25,15 +27,14 @@ import java.util.Arrays;
 import java.util.Optional;
 
 /**
- * 
  * @author claus.straube
  */
 @Component
 @UIScope
 public class SecurityServiceImpl implements SecurityService, Serializable {
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(SecurityService.class);
-    
+
     private boolean login;
     private Principal principal;
     private OAuth2RestTemplate restTemplate;
@@ -43,12 +44,8 @@ public class SecurityServiceImpl implements SecurityService, Serializable {
     @Value("${security.oauth2.client.id}")
     private String clientID;
 
-    private SecurityRestClient restClient;
-
     @Autowired
-    public SecurityServiceImpl(DiscoveryClient discoveryClient, SecurityRestClient restClient){
-        this.restClient = restClient;
-
+    public SecurityServiceImpl(DiscoveryClient discoveryClient) {
         try {
             TOKEN_URL = discoveryClient.getNextServerFromEureka("authservice", false).getHomePageUrl();
         } catch (RuntimeException e) {
@@ -61,7 +58,7 @@ public class SecurityServiceImpl implements SecurityService, Serializable {
     public boolean isUserInRole(String role) {
         return this.principal.getRoles().contains(role);
     }
-    
+
     @Override
     public boolean hasUserPermission(String permission) {
         return this.principal.getPermissions().contains(permission);
@@ -74,7 +71,7 @@ public class SecurityServiceImpl implements SecurityService, Serializable {
 
     @Override
     public boolean login(String username, String password) {
-        
+
         // Get RestTemplate
         ResourceOwnerPasswordResourceDetails resource = new ResourceOwnerPasswordResourceDetails();
         resource.setUsername(username);
@@ -100,21 +97,32 @@ public class SecurityServiceImpl implements SecurityService, Serializable {
                 halConverter
         ));
 
-        Optional<Principal> p = restClient.getPrincipal(template);
-        if(p.isPresent()) {
+        //TODO Resolve principle of token
+        Principal principal = null;
+        try {
+            principal = template.getForObject(TOKEN_URL + "uaa/profile", Principal.class);
+        } catch (RestClientException | OAuth2AccessDeniedException | IllegalArgumentException e) {
+            LOG.debug("HTTP Response Error bei Login: " + e.getMessage());
+        }
+
+        if (principal != null) {
             this.login = Boolean.TRUE;
             this.restTemplate = template;
-            this.principal = p.get();
+            this.principal = principal;
             LOG.info("Successfully logged in!");
         } else {
             this.login = Boolean.FALSE;
         }
         return login;
     }
-    
+
     @Override
     public void logout() {
-        restClient.logout(restTemplate);
+        try {
+            restTemplate.exchange(TOKEN_URL + "uaa/logout", HttpMethod.POST, null, Void.class);
+        } catch (RestClientException e) {
+            LOG.debug("Logout-Fehler: " + e.getMessage());
+        }
         //Delete Token
         restTemplate = null;
         this.login = Boolean.FALSE;
