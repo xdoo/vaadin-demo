@@ -14,7 +14,7 @@ service.info.id.eureka: microservice
 service.principal.url: ${service.url}user
 
 # EMBEDDED SERVER CONFIGURATION (ServerProperties)
-server.port: 8081
+server.port: 8071
 
 # Security
 security.oauth2.client.id: acme

@@ -8,7 +8,7 @@ import de.muenchen.vaadin.demo.apilib.domain.DomainService;
  * Created by rene.zarwel on 30.11.15.
  */
 public enum  Services implements DomainService{
-    SERVICE("service");
+    SERVICE("vaadin-microservice");
 
     String id;
 
