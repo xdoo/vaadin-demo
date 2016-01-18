@@ -10,16 +10,6 @@
         <module>vaadin-demo-micro-service</module>
         <module>vaadin-demo-api</module>
         <module>vadin-demo-gui</module>
-        <module>vaadin-demo</module>
-        <module>vaadin-demo-configcloud</module>
-        <module>I18nService</module>
-        <module>Eventbus</module>
-        <module>GUI-Lib</module>
-        <module>Auditing</module>
-        <module>API-Lib</module>
-        <module>Service-Lib</module>
-        <module>PresentationLib</module>
-        <module>auth-service</module>
         <module>echo-service</module>
         <module>ms-test-support</module>
         <module>java-angular2-ui</module>
