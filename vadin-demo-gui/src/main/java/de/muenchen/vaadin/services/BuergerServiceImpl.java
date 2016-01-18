@@ -3,7 +3,6 @@ package de.muenchen.vaadin.services;
 import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
-import de.muenchen.vaadin.demo.api.domain.Services;
 import de.muenchen.vaadin.demo.api.local.Buerger;
 import de.muenchen.vaadin.demo.api.rest.BuergerRestClient;
 import de.muenchen.vaadin.demo.api.rest.BuergerRestClientImpl;
@@ -11,7 +10,6 @@ import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolverImpl;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.GenericErrorNotification;
-import de.muenchen.vaadin.guilib.services.InfoService;
 import de.muenchen.vaadin.guilib.services.SecurityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,10 +45,10 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
 
 
     @Autowired
-    public BuergerServiceImpl(InfoService infoService, SecurityService securityService, I18nResolverImpl resolver) {
+    public BuergerServiceImpl(SecurityService securityService, I18nResolverImpl resolver) {
         this.securityService = securityService;
         //TODO
-        this.client = new BuergerRestClientImpl(getTemplate(), infoService.getBaseUri(Services.SERVICE.getClientId()));
+        this.client = new BuergerRestClientImpl(getTemplate());
         this.resolver = resolver;
         executor = Executors.newCachedThreadPool();
     }

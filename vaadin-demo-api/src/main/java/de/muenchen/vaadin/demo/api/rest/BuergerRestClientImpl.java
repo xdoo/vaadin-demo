@@ -44,17 +44,15 @@ public class BuergerRestClientImpl implements BuergerRestClient {
     private final BuergerAssembler buergerAssembler = new BuergerAssembler();
 
     /**
-     * Create a new BuergerRestClient by RestTemplate and baseUri of the server.
+     * Create a new BuergerRestClient by RestTemplate of the server.
      *
      * @param restTemplate The restTemplate for the HTTP Requests.
-     * @param baseUri      The base URI of the REST Server.
      */
-    public BuergerRestClientImpl(RestTemplate restTemplate, URI baseUri) {
+    public BuergerRestClientImpl(RestTemplate restTemplate) {
         if (restTemplate == null) throw new NullPointerException("RestTemplate must not be null!");
-        if (baseUri == null) throw new NullPointerException("BaseUri must not be null!");
         this.restTemplate = restTemplate;
 
-        traverson = new Traverson(baseUri, MediaTypes.HAL_JSON);
+        traverson = new Traverson(URI.create("http://MICROSERVICE/"), MediaTypes.HAL_JSON);
         traverson.setRestOperations(restTemplate);
     }
 
