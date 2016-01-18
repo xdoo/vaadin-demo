@@ -10,6 +10,6 @@ import java.net.URI;
  */
 public interface InfoService {
     
-   public URI getBaseUri(DomainService service);
+   public URI getBaseUri(String service);
     
 }

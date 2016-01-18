@@ -116,14 +116,14 @@ public class SecurityServiceImpl implements SecurityService, Serializable {
         try {
             principal = template.getForObject("http://authservice/uaa/profile", Principal.class);
         } catch (RestClientException | OAuth2AccessDeniedException | IllegalArgumentException | IllegalStateException e) {
-            LOG.debug("HTTP Response Error bei Login: " + e.getMessage());
+            LOG.error("HTTP Response Error bei Login: " + e.getMessage());
         }
 
         if (principal != null) {
             this.login = Boolean.TRUE;
             this.restTemplate = template;
             this.principal = principal;
-            LOG.info("Successfully logged in!");
+            LOG.error("Successfully logged in!");
         } else {
             this.login = Boolean.FALSE;
         }
@@ -135,7 +135,7 @@ public class SecurityServiceImpl implements SecurityService, Serializable {
         try {
             restTemplate.exchange(TOKEN_URL + "uaa/logout", HttpMethod.POST, null, Void.class);
         } catch (RestClientException e) {
-            LOG.debug("Logout-Fehler: " + e.getMessage());
+            LOG.error("Logout-Fehler: " + e.getMessage());
         }
         //Delete Token
         restTemplate = null;
