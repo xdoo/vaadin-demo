@@ -8,9 +8,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.netflix.ribbon.RibbonClientHttpRequestFactory;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.hal.Jackson2HalModule;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpRequest;
+import org.springframework.http.client.*;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
@@ -21,9 +24,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Optional;
 
 /**
@@ -69,6 +75,9 @@ public class SecurityServiceImpl implements SecurityService, Serializable {
         return principal;
     }
 
+    @Autowired
+    RibbonClientHttpRequestFactory ribbonClientHttpRequestFactory;
+
     @Override
     public boolean login(String username, String password) {
 
@@ -81,7 +90,12 @@ public class SecurityServiceImpl implements SecurityService, Serializable {
         resource.setAccessTokenUri(TOKEN_URL + "/uaa/oauth/token");
 
         OAuth2RestTemplate template = new OAuth2RestTemplate(resource, new DefaultOAuth2ClientContext());
-
+        template.setRequestFactory((uri, httpMethod) -> {
+            final ClientHttpRequest request = ribbonClientHttpRequestFactory.createRequest(uri, httpMethod);
+            if (!uri.equals(request.getURI()))
+                request.getHeaders().add("X-Forwarded-Host", uri.getHost());
+            return request;
+        });
 
         //MessageConverter
         MappingJackson2HttpMessageConverter halConverter = new MappingJackson2HttpMessageConverter();
@@ -100,8 +114,8 @@ public class SecurityServiceImpl implements SecurityService, Serializable {
         //TODO Resolve principle of token
         Principal principal = null;
         try {
-            principal = template.getForObject(TOKEN_URL + "uaa/profile", Principal.class);
-        } catch (RestClientException | OAuth2AccessDeniedException | IllegalArgumentException e) {
+            principal = template.getForObject("http://authservice/uaa/profile", Principal.class);
+        } catch (RestClientException | OAuth2AccessDeniedException | IllegalArgumentException | IllegalStateException e) {
             LOG.debug("HTTP Response Error bei Login: " + e.getMessage());
         }
 
