@@ -17,12 +17,13 @@ public class InfoServiceImpl implements InfoService {
     @Autowired
     DiscoveryClient discoveryClient;
 
+    @Value("service.info.url")
     private String url;
 
     @Override
-    public URI getBaseUri(DomainService service) {
+    public URI getBaseUri(String service) {
         try {
-            url = discoveryClient.getNextServerFromEureka(service.getClientId(), false).getHomePageUrl();
+            url = discoveryClient.getNextServerFromEureka(service, false).getHomePageUrl();
         } catch (RuntimeException e) {
             // Exception occurs if no eureka server was found.
             // service.info.url will be used
