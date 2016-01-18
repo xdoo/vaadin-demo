@@ -39,13 +39,12 @@ public class Authority_RestClientImpl implements Authority_RestClient {
     private final Authority_Assembler authorityAssembler = new Authority_Assembler();
 	
 	/**
-	 * Create a new Authority_RestClient by RestTemplate and baseUri of the server.
+	 * Create a new Authority_RestClient by RestTemplate of the server.
      * @param restTemplate The restTemplate for the HTTP Requests.
-     * @param baseUri The base URI of the REST Server.
      */
-    public Authority_RestClientImpl(RestTemplate restTemplate, URI baseUri) {
+    public Authority_RestClientImpl(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        traverson = new Traverson(baseUri, MediaTypes.HAL_JSON);
+        traverson = new Traverson(URI.create("http:/AUTHSERVICE/uaa/"), MediaTypes.HAL_JSON);
         traverson.setRestOperations(restTemplate);
     }
 	

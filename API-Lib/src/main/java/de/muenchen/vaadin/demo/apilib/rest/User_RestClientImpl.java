@@ -38,13 +38,12 @@ public class User_RestClientImpl implements User_RestClient {
     private final User_Assembler userAssembler = new User_Assembler();
 	
 	/**
-	 * Create a new User_RestClient by RestTemplate and baseUri of the server.
+	 * Create a new User_RestClient by RestTemplate of the server.
      * @param restTemplate The restTemplate for the HTTP Requests.
-     * @param baseUri The base URI of the REST Server.
      */
-    public User_RestClientImpl(RestTemplate restTemplate, URI baseUri) {
+    public User_RestClientImpl(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        traverson = new Traverson(baseUri, MediaTypes.HAL_JSON);
+        traverson = new Traverson(URI.create("http:/AUTHSERVICE/uaa/"), MediaTypes.HAL_JSON);
         traverson.setRestOperations(restTemplate);
     }
 	

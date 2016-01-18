@@ -47,16 +47,9 @@ public class User_ServiceImpl implements User_Service, Serializable {
     private final ExecutorService executor;
 
     @Autowired
-    public User_ServiceImpl(DiscoveryClient discoveryClient, SecurityService securityService) {
+    public User_ServiceImpl(SecurityService securityService) {
         this.securityService=securityService;
-        URI secUserUri = null;
-        try {
-            String base_url = discoveryClient.getNextServerFromEureka("authservice", false).getHomePageUrl();
-            secUserUri = new URI(base_url + "uaa/");
-        } catch (RuntimeException | URISyntaxException e) {
-            LOG.error(e.getMessage());
-        }
-        this.client = new User_RestClientImpl(getTemplate(), secUserUri);
+        this.client = new User_RestClientImpl(getTemplate());
         executor = Executors.newCachedThreadPool();
     }
 

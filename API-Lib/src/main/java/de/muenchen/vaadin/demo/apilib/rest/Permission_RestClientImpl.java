@@ -38,13 +38,12 @@ public class Permission_RestClientImpl implements Permission_RestClient {
     private final Permission_Assembler permissionAssembler = new Permission_Assembler();
 	
 	/**
-	 * Create a new Permission_RestClient by RestTemplate and baseUri of the server.
+	 * Create a new Permission_RestClient by RestTemplate of the server.
      * @param restTemplate The restTemplate for the HTTP Requests.
-     * @param baseUri The base URI of the REST Server.
      */
-    public Permission_RestClientImpl(RestTemplate restTemplate, URI baseUri) {
+    public Permission_RestClientImpl(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        traverson = new Traverson(baseUri, MediaTypes.HAL_JSON);
+        traverson = new Traverson(URI.create("http:/AUTHSERVICE/uaa/"), MediaTypes.HAL_JSON);
         traverson.setRestOperations(restTemplate);
     }
 	

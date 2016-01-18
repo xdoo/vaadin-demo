@@ -47,16 +47,9 @@ public class Permission_ServiceImpl implements Permission_Service, Serializable 
     private final ExecutorService executor;
 
     @Autowired
-    public Permission_ServiceImpl(DiscoveryClient discoveryClient, SecurityService securityService) {
+    public Permission_ServiceImpl(SecurityService securityService) {
         this.securityService=securityService;
-        URI secUri = null;
-        try {
-            String base_url = discoveryClient.getNextServerFromEureka("authservice", false).getHomePageUrl();
-            secUri = new URI(base_url + "uaa/");
-        } catch (RuntimeException | URISyntaxException e) {
-            LOG.error(e.getMessage());
-        }
-        this.client = new Permission_RestClientImpl(getTemplate(), secUri);
+        this.client = new Permission_RestClientImpl(getTemplate());
         executor = Executors.newCachedThreadPool();
     }
 

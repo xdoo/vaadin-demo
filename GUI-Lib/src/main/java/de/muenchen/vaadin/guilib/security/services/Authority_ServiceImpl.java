@@ -47,16 +47,9 @@ public class Authority_ServiceImpl implements Authority_Service, Serializable {
     private final ExecutorService executor;
 
     @Autowired
-    public Authority_ServiceImpl(DiscoveryClient discoveryClient, SecurityService securityService) {
+    public Authority_ServiceImpl(SecurityService securityService) {
         this.securityService=securityService;
-        URI secUri = null;
-        try {
-            String base_url = discoveryClient.getNextServerFromEureka("authservice", false).getHomePageUrl();
-            secUri = new URI(base_url + "uaa/");
-        } catch (RuntimeException | URISyntaxException e) {
-            LOG.error(e.getMessage());
-        }
-        this.client = new Authority_RestClientImpl(getTemplate(), secUri);
+        this.client = new Authority_RestClientImpl(getTemplate());
         executor = Executors.newCachedThreadPool();
     }
 
