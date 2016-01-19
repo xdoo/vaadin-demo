@@ -47,7 +47,7 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
 
 
     @Autowired
-    public BuergerServiceImpl(InfoService infoService, SecurityService securityService, I18nResolverImpl resolver) {
+    public BuergerServiceImpl(InfoService infoService, SecurityService securityService) {
         this.securityService = securityService;
         //TODO
         this.client = new BuergerRestClientImpl(getTemplate(), infoService.getBaseUri(Services.SERVICE.getClientId()));
@@ -296,6 +296,7 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
                 resolver.resolveRelative(Buerger.class, getNotificationPath(type, action, I18nPaths.Type.label)),
                 resolver.resolveRelative(Buerger.class, getNotificationPath(type, action, I18nPaths.Type.text)));
         succes.show(Page.getCurrent());
+        throw new RuntimeException();
     }
 
     private void showErrorNotification(I18nPaths.NotificationType type, SimpleAction action, String statusCode) {
