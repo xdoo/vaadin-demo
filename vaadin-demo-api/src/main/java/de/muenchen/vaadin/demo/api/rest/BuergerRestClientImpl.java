@@ -63,7 +63,6 @@ public class BuergerRestClientImpl implements BuergerRestClient {
         return traverson
                 .follow(BUERGERS)
                 .toObject(BuergerResource.LIST).getContent()
-
                 .stream()
                 .map(buergerAssembler::toBean)
                 .collect(Collectors.toList());
