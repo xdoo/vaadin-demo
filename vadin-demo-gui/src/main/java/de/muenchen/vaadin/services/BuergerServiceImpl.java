@@ -14,7 +14,6 @@ import de.muenchen.vaadin.demo.i18nservice.I18nResolverImpl;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.components.GenericErrorNotification;
-import de.muenchen.vaadin.guilib.services.InfoService;
 import de.muenchen.vaadin.guilib.services.SecurityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,10 +50,10 @@ public class BuergerServiceImpl implements BuergerService, Serializable {
 
 
     @Autowired
-    public BuergerServiceImpl(InfoService infoService, SecurityService securityService) {
+    public BuergerServiceImpl(SecurityService securityService, I18nResolverImpl resolver) {
         this.securityService = securityService;
         //TODO
-        this.client = new BuergerRestClientImpl(getTemplate(), infoService.getBaseUri(Services.SERVICE.getClientId()));
+        this.client = new BuergerRestClientImpl(getTemplate());
         this.resolver = resolver;
         executor = Executors.newCachedThreadPool();
     }
