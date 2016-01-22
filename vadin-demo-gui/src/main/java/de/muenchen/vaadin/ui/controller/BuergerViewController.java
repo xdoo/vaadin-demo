@@ -159,6 +159,11 @@ public class BuergerViewController implements Serializable {
         getEventbus().on(getRequestKey(RequestEvent.REMOVE_ASSOCIATION).toSelector(), this::removeAssociation);
         getEventbus().on(getRequestKey(RequestEvent.READ_LIST).toSelector(), this::readList);
         getEventbus().on(getRequestKey(RequestEvent.READ_SELECTED).toSelector(), this::readSelected);
+        getEventbus().on(getRequestKey(RequestEvent.ERROR).toSelector(), this::displayError);
+    }
+
+    private void displayError(Event<?> event) {
+        LOG.debug(event.getData().toString());
     }
 
     /**
