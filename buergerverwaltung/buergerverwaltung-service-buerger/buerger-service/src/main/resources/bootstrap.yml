@@ -1,0 +1,179 @@
+spring:
+  # if you want to set a different profile
+  # use environment variable:
+  #
+  # SPRING_PROFILES_ACTIVE=docker
+  profiles.active: local
+  # the application name exposed to the discovery service. Be
+  # careful changing this value in this file. If you change it, 
+  # you have to refactor the values for client side load balancing.
+  # If it's possible, change this property with the generator gui.
+  application.name: BUERGER-MICROSERVICE
+  #JPA
+  jpa:
+    hibernate:
+        naming_strategy: org.hibernate.cfg.ImprovedNamingStrategy
+        show-sql: true
+    # Hibernate search
+    properties.hibernate.search.default:
+        directory_provider : filesystem
+        indexBase : /tmp/gaiaservice
+# send ip addresses to the discovery. this is
+# important for client side load balancing
+eureka.instance.preferIpAddress: true
+management.port: ${server.port}
+
+---
+spring:
+  profiles: docker
+  # DB
+  # ---
+  # for docker set environment variables in
+  # docker-compose file.
+  #
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    poolName: SpringBootHikariCP
+    # This property controls the maximum size that the pool is allowed to reach,
+    # including both idle and in-use connections. Basically this value will 
+    # determine the maximum number of actual connections to the database 
+    # backend. A reasonable value for this is best determined by your execution
+    # environment. When the pool reaches this size, and no idle connections are
+    # available, calls to getConnection() will block for up to connectionTimeout
+    # milliseconds before timing out. Default: 10
+    maximumPoolSize: ${DB_MAX_POOLSIZE}
+    # This property controls the maximum lifetime of a connection in the pool.
+    # When a connection reaches this timeout it will be retired from the pool,
+    # subject to a maximum variation of +30 seconds. An in-use connection will 
+    # never be retired, only when it is closed will it then be removed. We 
+    # strongly recommend setting this value, and it should be at least 30 
+    # seconds less than any database-level connection timeout. A value of 0 
+    # indicates no maximum lifetime (infinite lifetime), subject of course to 
+    # the idleTimeout setting. Default: 1800000 (30 minutes)
+    maxLifetime: ${DB_MAX_LIFE_TIME}
+    # This property controls the maximum number of milliseconds that a client
+    # (that's you) will wait for a connection from the pool. If this time is 
+    # exceeded without a connection becoming available, a SQLException will be 
+    # thrown. 1000ms is the minimum value. Default: 30000 (30 seconds)
+    connectionTimeout: ${DB_CONNECTION_TIME_OUT}
+    # This property controls the maximum amount of time that a connection is 
+    # allowed to sit idle in the pool. Whether a connection is retired as idle 
+    # or not is subject to a maximum variation of +30 seconds, and average 
+    # variation of +15 seconds. A connection will never be retired as idle 
+    # before this timeout. A value of 0 means that idle connections are never 
+    # removed from the pool. Default: 600000 (10 minutes)
+    idleTimeout: ${DB_IDLE_TIMEOUT}
+    # This property controls whether the pool will "fail fast" if the
+    # pool cannot be seeded with initial connections successfully. 
+    # If you want your application to start even when the database is 
+    # down/unavailable, set this property to false. Default: true
+    # 
+    # In a Docker-Compose environment, we should set this property to false,
+    # because we can't guarantee that the db is up and running, after the
+    # service has been started. 
+    initializationFailFast: false
+    # ------------------------------
+    # MYSQL Performance Optimization
+    # see https://github.com/brettwooldridge/HikariCP/wiki/MySQL-Configuration
+    # ------------------------------
+    # Neither of the above parameters have any effect if the cache is in 
+    # fact disabled, as it is by default. You must set this parameter to true.
+    cachePrepStmts: true
+    # This sets the number of prepared statements that the MySQL 
+    # driver will cache per connection. The default is a conservative 
+    # 25. We recommend setting this to between 250-500.
+    prepStmtCacheSize: 250
+    # This is the maximum length of a prepared SQL statement that 
+    # the driver will cache. The MySQL default is 256. In our 
+    # experience, especially with ORM frameworks like Hibernate, 
+    # this default is well below the threshold of generated statement 
+    # lengths. Our recommended setting is 2048.
+    prepStmtCacheSqlLimit: 2048
+  jpa:
+    hibernate:
+        # in long term running scenarios 'none' is the
+        # best configuration. 'update' will throw an 
+        # CannotCreateTransactionException after a long
+        # idle time, which leaves the system in a corrupt
+        # state.
+        # 
+        # valid values are: none, update, create-drop
+        ddl-auto: update
+# inside a container, we can always map to 8080. Use your compose
+# file to expose a service on a different port.
+server.port: 8080
+flyway:
+    # database specific DDL location
+    locations: db/migration/${DB_TYPE}
+    # this property should only be used for 
+    # development setups, or inital production
+    # deployment. for details see: 
+    # http://flywaydb.org/documentation/maven/migrate.html
+    baseline-on-migrate: true
+    # this should be enabled in production mode!
+    enabled: false
+# the hostname of your eureka server should be 'discovery'
+eureka.client.serviceUrl.defaultZone: http://discovery:8761/eureka/
+---
+spring:
+  profiles: local
+  # DB
+  # --- 
+  # in memory db for local use
+  # 
+  datasource:
+    url: jdbc:h2:mem:data_ref
+    username: sa
+    password:
+  #JPA
+  jpa:
+    database: H2
+    hibernate:
+        # always drop and create the db should be the best
+        # configuration for local (development) mode. this 
+        # is also the default, that spring offers by convention.
+        # but here explicite:
+        ddl-auto: create-drop
+# random server port to avoid port 
+# conflicts on localhost
+server.port: 0
+# database specific DDL location
+flyway.locations: db/migration/common
+eureka.client:
+    # in local mode you have to run your service 
+    # discovery on localhost (you also can run the 
+    # cloud infrastructure on your local docker host)
+    serviceUrl.defaultZone: http://localhost:8761/eureka/
+    registry-fetch-interval-seconds: 5
+---
+spring:
+    profiles: vm
+    # DB
+    # ---
+    # for production environment overwrite db settings
+    # with configuration server.
+    #
+    datasource:
+        url: jdbc:h2:mem:data_ref
+        #url: jdbc:h2:tcp://localhost/~/java_data
+        username: sa
+        password:
+        # To configure connection pooling, use the parameters from profile
+        # 'docker'. Without configuration the default values will be used
+        # (see description above).
+    #JPA
+    jpa:
+        database: H2
+        # see expanation in docker profile
+        ddl-auto: create-drop
+# inside a vm, we can always map to 8080. 
+server.port: 8080
+# database specific DDL location. for production
+# overwrite this settings with configuration server.
+flyway.locations: db/migration/common
+# you have to define an environment variable with the address of
+# the discovery service.
+eureka.client.serviceUrl.defaultZone: http://${eureka.address}:8761/eureka/
+

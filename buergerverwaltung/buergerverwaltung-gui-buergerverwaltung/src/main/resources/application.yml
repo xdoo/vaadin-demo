@@ -1,0 +1,993 @@
+spring:
+  profiles:
+    active: local
+  #i18n
+  messages:
+        basename: messages
+        cache-seconds: -1
+        encoding: UTF-8
+info.url: http://localhost:${server.port}/
+
+# Security
+security.oauth2.client.id : acme
+security.oauth2.jwt.signingKey: secret
+
+# Auth Client:
+gaia.auth.basePath: http://AUTHSERVICE/
+gaia.auth.tokenPath: /uaa/oauth/token
+gaia.auth.userPath: /uaa/user
+gaia.auth.logoutPath: /uaa/logout
+# clientid (wird benötigt bis Das OAuth-Token in der GUI auch ribbon kann)
+gaia.auth.clientid: AUTHSERVICE
+
+
+# Other Clients:
+BUERGER.microservice.basePath: http://BUERGER-MICROSERVICE
+BUERGER.microservice.eurekaId: buergerverwaltung-BUERGER-SERVICE
+
+#Logging
+logging.level.org.springframework.cloud.netflix.config : 'OFF'
+logging.level.com.netflix.discovery : 'OFF'
+
+---
+spring:
+    profiles: docker
+---
+spring:
+    profiles: local
+---
+spring:
+    profiles: vm
+---
+
+#=======================================#
+#           I18N-Messages               #
+#=======================================#
+
+# Allgemeines
+i18n.supported : de-DE
+i18n.fallback : de-DE
+
+i18n.de-DE.sprache.title : Sprache
+i18n.de-DE.mainpage.title : Startseite
+i18n.de-DE.page.title : buergerverwaltung
+
+i18n.de-DE.confirmation_.header.text : Achtung!
+i18n.de-DE.confirmation_.logout.text : Wollen Sie sich wirklich ausloggen?
+i18n.de-DE.confirmation_.logout.confirm : Logout
+i18n.de-DE.confirmation_.logout.cancel : Abbrechen
+
+i18n.de-DE.confirmation_.override.text : Wollen Sie den aktuellen Eintrag überschreiben?
+i18n.de-DE.confirmation_.override.confirm : Überschreiben
+i18n.de-DE.confirmation_.override.cancel : Abbrechen
+
+# Used as conversion-error message for Tokenfields
+# https://vaadin.com/api/com/vaadin/ui/AbstractField.html#setConversionError%28java.lang.String%29
+i18n.de-DE.tokenfield.conversion.error:
+   long: Nur Zahlen erlaubt.
+   date: "Datumsformat: dd.MM.yyyy"
+   boolean: True und false erlaubt.
+   string: Texte erlaubt.
+   other: Ungültiges Format {1}
+
+
+
+#=======================================#
+#                Views                  #
+#=======================================#
+i18n.de-DE.view_.startseite.title : Startseite
+i18n.de-DE.view_.startseite.button.onePercentChanceOfWinningTenMillionEURO.label : OnePercentChanceOfWinningTenMillionEURO
+i18n.de-DE.view_.startseite.helptext : Für diese Seite existiert keine Beschreibung
+
+i18n.de-DE.view_.buergerverwaltung.title : Buergerverwaltung
+i18n.de-DE.view_.buergerverwaltung.component1.button.create.label : create
+i18n.de-DE.view_.buergerverwaltung.component1.button.detail.label : detail
+i18n.de-DE.view_.buergerverwaltung.helptext : Für diese Seite existiert keine Beschreibung
+
+i18n.de-DE.view_.readWriteBurger.title : ReadWriteBurger
+i18n.de-DE.view_.readWriteBurger.component2.button.create.label : create
+i18n.de-DE.view_.readWriteBurger.component2.button.add.label : add
+i18n.de-DE.view_.readWriteBurger.component2.button.detail.label : detail
+i18n.de-DE.view_.readWriteBurger.component3.button.create.label : create
+i18n.de-DE.view_.readWriteBurger.component3.button.add.label : add
+i18n.de-DE.view_.readWriteBurger.component3.button.details.label : details
+i18n.de-DE.view_.readWriteBurger.helptext : Für diese Seite existiert keine Beschreibung
+
+i18n.de-DE.view_.addPassForBuerger.title : AddPassForBuerger
+i18n.de-DE.view_.addPassForBuerger.component1.button.save.label : save
+i18n.de-DE.view_.addPassForBuerger.helptext : Für diese Seite existiert keine Beschreibung
+
+i18n.de-DE.view_.createPassForBuerger.title : CreatePassForBuerger
+i18n.de-DE.view_.createPassForBuerger.component1.button.save.label : save
+i18n.de-DE.view_.createPassForBuerger.helptext : Für diese Seite existiert keine Beschreibung
+
+i18n.de-DE.view_.addSachbearbeiterForBuerger.title : AddSachbearbeiterForBuerger
+i18n.de-DE.view_.addSachbearbeiterForBuerger.component1.button.save.label : save
+i18n.de-DE.view_.addSachbearbeiterForBuerger.helptext : Für diese Seite existiert keine Beschreibung
+
+i18n.de-DE.view_.createSachbearbeiterForBuerger.title : CreateSachbearbeiterForBuerger
+i18n.de-DE.view_.createSachbearbeiterForBuerger.component1.button.save.label : save
+i18n.de-DE.view_.createSachbearbeiterForBuerger.helptext : Für diese Seite existiert keine Beschreibung
+
+i18n.de-DE.view_.buergerCreateView.title : BuergerCreateView
+i18n.de-DE.view_.buergerCreateView.component1.button.save.label : save
+i18n.de-DE.view_.buergerCreateView.helptext : Für diese Seite existiert keine Beschreibung
+
+i18n.de-DE.view_.passverwaltung.title : Passverwaltung
+i18n.de-DE.view_.passverwaltung.component1.button.create.label : create
+i18n.de-DE.view_.passverwaltung.component1.button.detail.label : detail
+i18n.de-DE.view_.passverwaltung.helptext : Für diese Seite existiert keine Beschreibung
+
+i18n.de-DE.view_.readWritePass.title : ReadWritePass
+i18n.de-DE.view_.readWritePass.button.zurueck.label : zurueck
+i18n.de-DE.view_.readWritePass.helptext : Für diese Seite existiert keine Beschreibung
+
+i18n.de-DE.view_.passCreateView.title : PassCreateView
+i18n.de-DE.view_.passCreateView.component1.button.save.label : save
+i18n.de-DE.view_.passCreateView.helptext : Für diese Seite existiert keine Beschreibung
+
+i18n.de-DE.view_.sachbearbeiterverwaltung.title : Sachbearbeiterverwaltung
+i18n.de-DE.view_.sachbearbeiterverwaltung.component1.button.create.label : create
+i18n.de-DE.view_.sachbearbeiterverwaltung.component1.button.detail.label : detail
+i18n.de-DE.view_.sachbearbeiterverwaltung.helptext : Für diese Seite existiert keine Beschreibung
+
+i18n.de-DE.view_.readWriteSachbearbeiter.title : ReadWriteSachbearbeiter
+i18n.de-DE.view_.readWriteSachbearbeiter.button.zurueck.label : zurueck
+i18n.de-DE.view_.readWriteSachbearbeiter.helptext : Für diese Seite existiert keine Beschreibung
+
+i18n.de-DE.view_.sachbearbeiterCreateView.title : SachbearbeiterCreateView
+i18n.de-DE.view_.sachbearbeiterCreateView.component1.button.save.label : save
+i18n.de-DE.view_.sachbearbeiterCreateView.helptext : Für diese Seite existiert keine Beschreibung
+
+#=======================================#
+# Service: buerger
+#=======================================#
+
+# Icons (no localization)
+## Entity Buerger - Icons
+buerger:
+   vorname.column_header.icon :
+   nachname.column_header.icon :
+   geburtstag.column_header.icon :
+   augenfarbe.column_header.icon :
+   telefonnummer.column_header.icon :
+   email.column_header.icon :
+   lebendig.column_header.icon :
+   kinder.column_header.icon :
+   partner.column_header.icon :
+   wohnungen.column_header.icon :
+   staatsangehoerigkeiten.column_header.icon :
+   sachbearbeiter.column_header.icon :
+   pass.column_header.icon :
+   eigenschaften.column_header.icon :
+
+## Entity Adresse - Icons
+adresse:
+   interneAdresse.column_header.icon :
+   externeAdresse.column_header.icon :
+
+## Entity AdresseExtern - Icons
+adresseextern:
+   strasse.column_header.icon :
+   hausnummer.column_header.icon :
+   plz.column_header.icon :
+   ort.column_header.icon :
+
+## Entity AdresseIntern - Icons
+adresseintern:
+   strassenSchluessel.column_header.icon :
+   hausnummer.column_header.icon :
+
+## Entity Pass - Icons
+pass:
+   passNummer.column_header.icon :
+   typ.column_header.icon :
+   kode.column_header.icon :
+   groesse.column_header.icon :
+   behoerde.column_header.icon :
+
+## Entity Sachbearbeiter - Icons
+sachbearbeiter:
+   telefon.column_header.icon :
+   fax.column_header.icon :
+   funktion.column_header.icon :
+   organisationseinheit.column_header.icon :
+
+## Entity Wohnung - Icons
+wohnung:
+   stock.column_header.icon :
+   ausrichtung.column_header.icon :
+   adresse.column_header.icon :
+
+# Entity Buerger
+i18n.de-DE.buerger.form:
+   update.headline.label : Buerger bearbeiten
+   create.headline.label : Buerger erstellen
+   add.headline.label : Buerger hinzufügen
+   read.headline.label : Buerger Details
+   history.headline.label : Buerger History
+   update.button.label : bearbeiten
+   create.button.label : neu
+   cancel.button.label : abbrechen
+   back.button.label : zurück
+   save.button.label : speichern
+   add.button.label : hinzufügen
+   delete.button.label : löschen
+   copy.button.label : kopieren
+   read.button.label : Details
+
+i18n.de-DE.buerger.table_buttons.column_header : Aktionen
+
+## Entity Buerger - Attribute vorname
+i18n.de-DE.buerger.vorname:
+   label : Vorname*
+   column_header : Vorname
+   input_prompt : Vorname
+   tooltip : 
+## Entity Buerger - Attribute nachname
+i18n.de-DE.buerger.nachname:
+   label : Nachname*
+   column_header : Nachname
+   input_prompt : Nachname
+   tooltip : 
+## Entity Buerger - Attribute geburtstag
+i18n.de-DE.buerger.geburtstag:
+   label : Geburtstag*
+   column_header : Geburtstag
+   input_prompt : Geburtstag
+   tooltip : 
+## Entity Buerger - Attribute augenfarbe
+i18n.de-DE.buerger.augenfarbe:
+   label : Augenfarbe*
+   column_header : Augenfarbe
+   input_prompt : Augenfarbe
+   tooltip : 
+## Entity Buerger - Attribute telefonnummer
+i18n.de-DE.buerger.telefonnummer:
+   label : Telefonnummer*
+   column_header : Telefonnummer
+   input_prompt : Telefonnummer
+   tooltip : 
+## Entity Buerger - Attribute email
+i18n.de-DE.buerger.email:
+   label : Email*
+   column_header : Email
+   input_prompt : Email
+   tooltip : 
+## Entity Buerger - Attribute lebendig
+i18n.de-DE.buerger.lebendig:
+   label : Lebendig*
+   column_header : Lebendig
+   input_prompt : Lebendig
+   tooltip : 
+## Entity Buerger - Attribute kinder
+i18n.de-DE.buerger.kinder:
+   label : Kinder
+   column_header : Kinder
+   input_prompt : Kinder
+   tooltip : 
+## Entity Buerger - Attribute partner
+i18n.de-DE.buerger.partner:
+   label : Partner
+   column_header : Partner
+   input_prompt : Partner
+   tooltip : 
+## Entity Buerger - Attribute wohnungen
+i18n.de-DE.buerger.wohnungen:
+   label : Wohnungen
+   column_header : Wohnungen
+   input_prompt : Wohnungen
+   tooltip : 
+## Entity Buerger - Attribute staatsangehoerigkeiten
+i18n.de-DE.buerger.staatsangehoerigkeiten:
+   label : Staatsangehoerigkeiten
+   column_header : Staatsangehoerigkeiten
+   input_prompt : Staatsangehoerigkeiten
+   tooltip : 
+## Entity Buerger - Attribute sachbearbeiter
+i18n.de-DE.buerger.sachbearbeiter:
+   label : Sachbearbeiter
+   column_header : Sachbearbeiter
+   input_prompt : Sachbearbeiter
+   tooltip : 
+## Entity Buerger - Attribute pass
+i18n.de-DE.buerger.pass:
+   label : Pass*
+   column_header : Pass
+   input_prompt : Pass
+   tooltip : 
+## Entity Buerger - Attribute eigenschaften
+i18n.de-DE.buerger.eigenschaften:
+   label : Eigenschaften*
+   column_header : Eigenschaften
+   input_prompt : Eigenschaften
+   tooltip : 
+
+## Entity Buerger - Aktionsmeldungen
+
+### Entity Buerger - Success
+i18n.de-DE.buerger.notification.success:
+   update.label : Buerger angepasst
+   update.text : Buerger wurde erfolgreich angepasst und gespeichert.
+   save.label : Buerger erstellt
+   save.text : Buerger wurde erfolgreich erstellt und gespeichert.
+   delete.label : Buerger gelöscht
+   delete.text : Buerger wurde erfolgreich gelöscht.
+   copy.label : Buerger kopiert
+   copy.text : Buerger wurde erfolgreich kopiert.
+   release.label : Buerger entfernt
+   release.text : Buerger wurde erfolgreich entfernt.
+   add.label : Buerger hinzugefügt
+   add.text : Buerger wurde erfolgreich zum Buerger hinzugefügt.
+   association.label : Änderung gespeichert
+   association.text : Die Änderung wurde erfolgreich gespeichert.
+   
+   release.label.kinder : Kinder entfernt
+   release.text.kinder : Kinder wurde erfolgreich entfernt.
+   
+   release.label.partner : Partner entfernt
+   release.text.partner : Partner wurde erfolgreich entfernt.
+   
+   release.label.pass : Pass entfernt
+   release.text.pass : Pass wurde erfolgreich entfernt.
+   
+   release.label.sachbearbeiter : Sachbearbeiter entfernt
+   release.text.sachbearbeiter : Sachbearbeiter wurde erfolgreich entfernt.
+   
+   release.label.wohnungen : Wohnungen entfernt
+   release.text.wohnungen : Wohnungen wurde erfolgreich entfernt.
+   
+### Entity Buerger - Warnings
+i18n.de-DE.buerger.notification.warning:
+   save.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
+   save.label : Warnung
+   update.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
+   update.label : Warnung
+
+### Entity Buerger - Errors
+i18n.de-DE.buerger.notification.error.create:
+   label.timeout : Zeitüberschreitung
+   text.timeout : Beim Versuch die Daten zu speichern ist eine Zeitüberschreitung aufgetreten.
+   label : Fehler
+   text : Beim erstellen ist ein Fehler aufgetreten.
+
+i18n.de-DE.buerger.notification.error.update:
+   label.timeout : Zeitüberschreitung
+   text.timeout : Beim Versuch die Daten zu ändern ist eine Zeitüberschreitung aufgetreten.
+   label : Fehler
+   text : Beim ändern ist ein Fehler aufgetreten. Änderung wurde nicht gespeichert.
+
+i18n.de-DE.buerger.notification.error.read:
+   label.timeout : Zeitüberschreitung
+   text.timeout : Beim Versuch die Daten zu laden ist eine Zeitüberschreitung aufgetreten.
+   label : Fehler
+   text : Beim Lesen ist ein Fehler aufgetreten.
+
+i18n.de-DE.buerger.notification.error.association:
+   label.timeout : Zeitüberschreitung
+   text.timeout : Beim Versuch die Assoziation zu ändern ist eine Zeitüberschreitung aufgetreten.
+   label : Fehler
+   text : Beim ändern der Assoziation ist ein Fehler aufgetreten.
+
+i18n.de-DE.buerger.notification.error.delete:
+   label.timeout : Zeitüberschreitung
+   text.timeout : Beim Versuch die Daten zu löschen ist eine Zeitüberschreitung aufgetreten.
+   label.409 : Konflikt
+   text.409 : Buerger wird in anderer Entität referenziert. Löschen nicht möglich.
+   label.400 : Nicht gefunden
+   text.400 : Buerger existiert nicht.
+   label : Fehler
+   text : Ein Fehler ist aufgetreten. Löschen nicht möglich.
+
+# Entity Adresse
+i18n.de-DE.adresse.form:
+   update.headline.label : Adresse bearbeiten
+   create.headline.label : Adresse erstellen
+   add.headline.label : Adresse hinzufügen
+   read.headline.label : Adresse Details
+   history.headline.label : Adresse History
+   update.button.label : bearbeiten
+   create.button.label : neu
+   cancel.button.label : abbrechen
+   back.button.label : zurück
+   save.button.label : speichern
+   add.button.label : hinzufügen
+   delete.button.label : löschen
+   copy.button.label : kopieren
+   read.button.label : Details
+
+i18n.de-DE.adresse.table_buttons.column_header : Aktionen
+
+## Entity Adresse - Attribute interneAdresse
+i18n.de-DE.adresse.interneAdresse:
+   label : InterneAdresse*
+   column_header : InterneAdresse
+   input_prompt : InterneAdresse
+   tooltip : 
+## Entity Adresse - Attribute externeAdresse
+i18n.de-DE.adresse.externeAdresse:
+   label : ExterneAdresse*
+   column_header : ExterneAdresse
+   input_prompt : ExterneAdresse
+   tooltip : 
+
+## Entity Adresse - Aktionsmeldungen
+
+### Entity Adresse - Success
+i18n.de-DE.adresse.notification.success:
+   update.label : Adresse angepasst
+   update.text : Adresse wurde erfolgreich angepasst und gespeichert.
+   save.label : Adresse erstellt
+   save.text : Adresse wurde erfolgreich erstellt und gespeichert.
+   delete.label : Adresse gelöscht
+   delete.text : Adresse wurde erfolgreich gelöscht.
+   copy.label : Adresse kopiert
+   copy.text : Adresse wurde erfolgreich kopiert.
+   release.label : Adresse entfernt
+   release.text : Adresse wurde erfolgreich entfernt.
+   add.label : Adresse hinzugefügt
+   add.text : Adresse wurde erfolgreich zum Adresse hinzugefügt.
+   association.label : Änderung gespeichert
+   association.text : Die Änderung wurde erfolgreich gespeichert.
+   
+### Entity Adresse - Warnings
+i18n.de-DE.adresse.notification.warning:
+   save.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
+   save.label : Warnung
+   update.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
+   update.label : Warnung
+
+### Entity Adresse - Errors
+i18n.de-DE.adresse.notification.error.create:
+   label.timeout : Zeitüberschreitung
+   text.timeout : Beim Versuch die Daten zu speichern ist eine Zeitüberschreitung aufgetreten.
+   label : Fehler
+   text : Beim erstellen ist ein Fehler aufgetreten.
+
+i18n.de-DE.adresse.notification.error.update:
+   label.timeout : Zeitüberschreitung
+   text.timeout : Beim Versuch die Daten zu ändern ist eine Zeitüberschreitung aufgetreten.
+   label : Fehler
+   text : Beim ändern ist ein Fehler aufgetreten. Änderung wurde nicht gespeichert.
+
+i18n.de-DE.adresse.notification.error.read:
+   label.timeout : Zeitüberschreitung
+   text.timeout : Beim Versuch die Daten zu laden ist eine Zeitüberschreitung aufgetreten.
+   label : Fehler
+   text : Beim Lesen ist ein Fehler aufgetreten.
+
+i18n.de-DE.adresse.notification.error.association:
+   label.timeout : Zeitüberschreitung
+   text.timeout : Beim Versuch die Assoziation zu ändern ist eine Zeitüberschreitung aufgetreten.
+   label : Fehler
+   text : Beim ändern der Assoziation ist ein Fehler aufgetreten.
+
+i18n.de-DE.adresse.notification.error.delete:
+   label.timeout : Zeitüberschreitung
+   text.timeout : Beim Versuch die Daten zu löschen ist eine Zeitüberschreitung aufgetreten.
+   label.409 : Konflikt
+   text.409 : Adresse wird in anderer Entität referenziert. Löschen nicht möglich.
+   label.400 : Nicht gefunden
+   text.400 : Adresse existiert nicht.
+   label : Fehler
+   text : Ein Fehler ist aufgetreten. Löschen nicht möglich.
+
+# Entity AdresseExtern
+i18n.de-DE.adresseextern.form:
+   update.headline.label : AdresseExtern bearbeiten
+   create.headline.label : AdresseExtern erstellen
+   add.headline.label : AdresseExtern hinzufügen
+   read.headline.label : AdresseExtern Details
+   history.headline.label : AdresseExtern History
+   update.button.label : bearbeiten
+   create.button.label : neu
+   cancel.button.label : abbrechen
+   back.button.label : zurück
+   save.button.label : speichern
+   add.button.label : hinzufügen
+   delete.button.label : löschen
+   copy.button.label : kopieren
+   read.button.label : Details
+
+i18n.de-DE.adresseextern.table_buttons.column_header : Aktionen
+
+## Entity AdresseExtern - Attribute strasse
+i18n.de-DE.adresseextern.strasse:
+   label : Strasse*
+   column_header : Strasse
+   input_prompt : Strasse
+   tooltip : 
+## Entity AdresseExtern - Attribute hausnummer
+i18n.de-DE.adresseextern.hausnummer:
+   label : Hausnummer*
+   column_header : Hausnummer
+   input_prompt : Hausnummer
+   tooltip : 
+## Entity AdresseExtern - Attribute plz
+i18n.de-DE.adresseextern.plz:
+   label : Plz*
+   column_header : Plz
+   input_prompt : Plz
+   tooltip : 
+## Entity AdresseExtern - Attribute ort
+i18n.de-DE.adresseextern.ort:
+   label : Ort*
+   column_header : Ort
+   input_prompt : Ort
+   tooltip : 
+
+## Entity AdresseExtern - Aktionsmeldungen
+
+### Entity AdresseExtern - Success
+i18n.de-DE.adresseextern.notification.success:
+   update.label : AdresseExtern angepasst
+   update.text : AdresseExtern wurde erfolgreich angepasst und gespeichert.
+   save.label : AdresseExtern erstellt
+   save.text : AdresseExtern wurde erfolgreich erstellt und gespeichert.
+   delete.label : AdresseExtern gelöscht
+   delete.text : AdresseExtern wurde erfolgreich gelöscht.
+   copy.label : AdresseExtern kopiert
+   copy.text : AdresseExtern wurde erfolgreich kopiert.
+   release.label : AdresseExtern entfernt
+   release.text : AdresseExtern wurde erfolgreich entfernt.
+   add.label : AdresseExtern hinzugefügt
+   add.text : AdresseExtern wurde erfolgreich zum AdresseExtern hinzugefügt.
+   association.label : Änderung gespeichert
+   association.text : Die Änderung wurde erfolgreich gespeichert.
+   
+### Entity AdresseExtern - Warnings
+i18n.de-DE.adresseextern.notification.warning:
+   save.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
+   save.label : Warnung
+   update.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
+   update.label : Warnung
+
+### Entity AdresseExtern - Errors
+i18n.de-DE.adresseextern.notification.error.create:
+   label.timeout : Zeitüberschreitung
+   text.timeout : Beim Versuch die Daten zu speichern ist eine Zeitüberschreitung aufgetreten.
+   label : Fehler
+   text : Beim erstellen ist ein Fehler aufgetreten.
+
+i18n.de-DE.adresseextern.notification.error.update:
+   label.timeout : Zeitüberschreitung
+   text.timeout : Beim Versuch die Daten zu ändern ist eine Zeitüberschreitung aufgetreten.
+   label : Fehler
+   text : Beim ändern ist ein Fehler aufgetreten. Änderung wurde nicht gespeichert.
+
+i18n.de-DE.adresseextern.notification.error.read:
+   label.timeout : Zeitüberschreitung
+   text.timeout : Beim Versuch die Daten zu laden ist eine Zeitüberschreitung aufgetreten.
+   label : Fehler
+   text : Beim Lesen ist ein Fehler aufgetreten.
+
+i18n.de-DE.adresseextern.notification.error.association:
+   label.timeout : Zeitüberschreitung
+   text.timeout : Beim Versuch die Assoziation zu ändern ist eine Zeitüberschreitung aufgetreten.
+   label : Fehler
+   text : Beim ändern der Assoziation ist ein Fehler aufgetreten.
+
+i18n.de-DE.adresseextern.notification.error.delete:
+   label.timeout : Zeitüberschreitung
+   text.timeout : Beim Versuch die Daten zu löschen ist eine Zeitüberschreitung aufgetreten.
+   label.409 : Konflikt
+   text.409 : AdresseExtern wird in anderer Entität referenziert. Löschen nicht möglich.
+   label.400 : Nicht gefunden
+   text.400 : AdresseExtern existiert nicht.
+   label : Fehler
+   text : Ein Fehler ist aufgetreten. Löschen nicht möglich.
+
+# Entity AdresseIntern
+i18n.de-DE.adresseintern.form:
+   update.headline.label : AdresseIntern bearbeiten
+   create.headline.label : AdresseIntern erstellen
+   add.headline.label : AdresseIntern hinzufügen
+   read.headline.label : AdresseIntern Details
+   history.headline.label : AdresseIntern History
+   update.button.label : bearbeiten
+   create.button.label : neu
+   cancel.button.label : abbrechen
+   back.button.label : zurück
+   save.button.label : speichern
+   add.button.label : hinzufügen
+   delete.button.label : löschen
+   copy.button.label : kopieren
+   read.button.label : Details
+
+i18n.de-DE.adresseintern.table_buttons.column_header : Aktionen
+
+## Entity AdresseIntern - Attribute strassenSchluessel
+i18n.de-DE.adresseintern.strassenSchluessel:
+   label : StrassenSchluessel*
+   column_header : StrassenSchluessel
+   input_prompt : StrassenSchluessel
+   tooltip : 
+## Entity AdresseIntern - Attribute hausnummer
+i18n.de-DE.adresseintern.hausnummer:
+   label : Hausnummer*
+   column_header : Hausnummer
+   input_prompt : Hausnummer
+   tooltip : 
+
+## Entity AdresseIntern - Aktionsmeldungen
+
+### Entity AdresseIntern - Success
+i18n.de-DE.adresseintern.notification.success:
+   update.label : AdresseIntern angepasst
+   update.text : AdresseIntern wurde erfolgreich angepasst und gespeichert.
+   save.label : AdresseIntern erstellt
+   save.text : AdresseIntern wurde erfolgreich erstellt und gespeichert.
+   delete.label : AdresseIntern gelöscht
+   delete.text : AdresseIntern wurde erfolgreich gelöscht.
+   copy.label : AdresseIntern kopiert
+   copy.text : AdresseIntern wurde erfolgreich kopiert.
+   release.label : AdresseIntern entfernt
+   release.text : AdresseIntern wurde erfolgreich entfernt.
+   add.label : AdresseIntern hinzugefügt
+   add.text : AdresseIntern wurde erfolgreich zum AdresseIntern hinzugefügt.
+   association.label : Änderung gespeichert
+   association.text : Die Änderung wurde erfolgreich gespeichert.
+   
+### Entity AdresseIntern - Warnings
+i18n.de-DE.adresseintern.notification.warning:
+   save.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
+   save.label : Warnung
+   update.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
+   update.label : Warnung
+
+### Entity AdresseIntern - Errors
+i18n.de-DE.adresseintern.notification.error.create:
+   label.timeout : Zeitüberschreitung
+   text.timeout : Beim Versuch die Daten zu speichern ist eine Zeitüberschreitung aufgetreten.
+   label : Fehler
+   text : Beim erstellen ist ein Fehler aufgetreten.
+
+i18n.de-DE.adresseintern.notification.error.update:
+   label.timeout : Zeitüberschreitung
+   text.timeout : Beim Versuch die Daten zu ändern ist eine Zeitüberschreitung aufgetreten.
+   label : Fehler
+   text : Beim ändern ist ein Fehler aufgetreten. Änderung wurde nicht gespeichert.
+
+i18n.de-DE.adresseintern.notification.error.read:
+   label.timeout : Zeitüberschreitung
+   text.timeout : Beim Versuch die Daten zu laden ist eine Zeitüberschreitung aufgetreten.
+   label : Fehler
+   text : Beim Lesen ist ein Fehler aufgetreten.
+
+i18n.de-DE.adresseintern.notification.error.association:
+   label.timeout : Zeitüberschreitung
+   text.timeout : Beim Versuch die Assoziation zu ändern ist eine Zeitüberschreitung aufgetreten.
+   label : Fehler
+   text : Beim ändern der Assoziation ist ein Fehler aufgetreten.
+
+i18n.de-DE.adresseintern.notification.error.delete:
+   label.timeout : Zeitüberschreitung
+   text.timeout : Beim Versuch die Daten zu löschen ist eine Zeitüberschreitung aufgetreten.
+   label.409 : Konflikt
+   text.409 : AdresseIntern wird in anderer Entität referenziert. Löschen nicht möglich.
+   label.400 : Nicht gefunden
+   text.400 : AdresseIntern existiert nicht.
+   label : Fehler
+   text : Ein Fehler ist aufgetreten. Löschen nicht möglich.
+
+# Entity Pass
+i18n.de-DE.pass.form:
+   update.headline.label : Pass bearbeiten
+   create.headline.label : Pass erstellen
+   add.headline.label : Pass hinzufügen
+   read.headline.label : Pass Details
+   history.headline.label : Pass History
+   update.button.label : bearbeiten
+   create.button.label : neu
+   cancel.button.label : abbrechen
+   back.button.label : zurück
+   save.button.label : speichern
+   add.button.label : hinzufügen
+   delete.button.label : löschen
+   copy.button.label : kopieren
+   read.button.label : Details
+
+i18n.de-DE.pass.table_buttons.column_header : Aktionen
+
+## Entity Pass - Attribute passNummer
+i18n.de-DE.pass.passNummer:
+   label : PassNummer*
+   column_header : PassNummer
+   input_prompt : PassNummer
+   tooltip : 
+## Entity Pass - Attribute typ
+i18n.de-DE.pass.typ:
+   label : Typ*
+   column_header : Typ
+   input_prompt : Typ
+   tooltip : 
+## Entity Pass - Attribute kode
+i18n.de-DE.pass.kode:
+   label : Kode*
+   column_header : Kode
+   input_prompt : Kode
+   tooltip : 
+## Entity Pass - Attribute groesse
+i18n.de-DE.pass.groesse:
+   label : Groesse*
+   column_header : Groesse
+   input_prompt : Groesse
+   tooltip : 
+## Entity Pass - Attribute behoerde
+i18n.de-DE.pass.behoerde:
+   label : Behoerde*
+   column_header : Behoerde
+   input_prompt : Behoerde
+   tooltip : 
+
+## Entity Pass - Aktionsmeldungen
+
+### Entity Pass - Success
+i18n.de-DE.pass.notification.success:
+   update.label : Pass angepasst
+   update.text : Pass wurde erfolgreich angepasst und gespeichert.
+   save.label : Pass erstellt
+   save.text : Pass wurde erfolgreich erstellt und gespeichert.
+   delete.label : Pass gelöscht
+   delete.text : Pass wurde erfolgreich gelöscht.
+   copy.label : Pass kopiert
+   copy.text : Pass wurde erfolgreich kopiert.
+   release.label : Pass entfernt
+   release.text : Pass wurde erfolgreich entfernt.
+   add.label : Pass hinzugefügt
+   add.text : Pass wurde erfolgreich zum Pass hinzugefügt.
+   association.label : Änderung gespeichert
+   association.text : Die Änderung wurde erfolgreich gespeichert.
+   
+### Entity Pass - Warnings
+i18n.de-DE.pass.notification.warning:
+   save.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
+   save.label : Warnung
+   update.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
+   update.label : Warnung
+
+### Entity Pass - Errors
+i18n.de-DE.pass.notification.error.create:
+   label.timeout : Zeitüberschreitung
+   text.timeout : Beim Versuch die Daten zu speichern ist eine Zeitüberschreitung aufgetreten.
+   label : Fehler
+   text : Beim erstellen ist ein Fehler aufgetreten.
+
+i18n.de-DE.pass.notification.error.update:
+   label.timeout : Zeitüberschreitung
+   text.timeout : Beim Versuch die Daten zu ändern ist eine Zeitüberschreitung aufgetreten.
+   label : Fehler
+   text : Beim ändern ist ein Fehler aufgetreten. Änderung wurde nicht gespeichert.
+
+i18n.de-DE.pass.notification.error.read:
+   label.timeout : Zeitüberschreitung
+   text.timeout : Beim Versuch die Daten zu laden ist eine Zeitüberschreitung aufgetreten.
+   label : Fehler
+   text : Beim Lesen ist ein Fehler aufgetreten.
+
+i18n.de-DE.pass.notification.error.association:
+   label.timeout : Zeitüberschreitung
+   text.timeout : Beim Versuch die Assoziation zu ändern ist eine Zeitüberschreitung aufgetreten.
+   label : Fehler
+   text : Beim ändern der Assoziation ist ein Fehler aufgetreten.
+
+i18n.de-DE.pass.notification.error.delete:
+   label.timeout : Zeitüberschreitung
+   text.timeout : Beim Versuch die Daten zu löschen ist eine Zeitüberschreitung aufgetreten.
+   label.409 : Konflikt
+   text.409 : Pass wird in anderer Entität referenziert. Löschen nicht möglich.
+   label.400 : Nicht gefunden
+   text.400 : Pass existiert nicht.
+   label : Fehler
+   text : Ein Fehler ist aufgetreten. Löschen nicht möglich.
+
+# Entity Sachbearbeiter
+i18n.de-DE.sachbearbeiter.form:
+   update.headline.label : Sachbearbeiter bearbeiten
+   create.headline.label : Sachbearbeiter erstellen
+   add.headline.label : Sachbearbeiter hinzufügen
+   read.headline.label : Sachbearbeiter Details
+   history.headline.label : Sachbearbeiter History
+   update.button.label : bearbeiten
+   create.button.label : neu
+   cancel.button.label : abbrechen
+   back.button.label : zurück
+   save.button.label : speichern
+   add.button.label : hinzufügen
+   delete.button.label : löschen
+   copy.button.label : kopieren
+   read.button.label : Details
+
+i18n.de-DE.sachbearbeiter.table_buttons.column_header : Aktionen
+
+## Entity Sachbearbeiter - Attribute telefon
+i18n.de-DE.sachbearbeiter.telefon:
+   label : Telefon*
+   column_header : Telefon
+   input_prompt : Telefon
+   tooltip : 
+## Entity Sachbearbeiter - Attribute fax
+i18n.de-DE.sachbearbeiter.fax:
+   label : Fax*
+   column_header : Fax
+   input_prompt : Fax
+   tooltip : 
+## Entity Sachbearbeiter - Attribute funktion
+i18n.de-DE.sachbearbeiter.funktion:
+   label : Funktion*
+   column_header : Funktion
+   input_prompt : Funktion
+   tooltip : 
+## Entity Sachbearbeiter - Attribute organisationseinheit
+i18n.de-DE.sachbearbeiter.organisationseinheit:
+   label : Organisationseinheit*
+   column_header : Organisationseinheit
+   input_prompt : Organisationseinheit
+   tooltip : 
+
+## Entity Sachbearbeiter - Aktionsmeldungen
+
+### Entity Sachbearbeiter - Success
+i18n.de-DE.sachbearbeiter.notification.success:
+   update.label : Sachbearbeiter angepasst
+   update.text : Sachbearbeiter wurde erfolgreich angepasst und gespeichert.
+   save.label : Sachbearbeiter erstellt
+   save.text : Sachbearbeiter wurde erfolgreich erstellt und gespeichert.
+   delete.label : Sachbearbeiter gelöscht
+   delete.text : Sachbearbeiter wurde erfolgreich gelöscht.
+   copy.label : Sachbearbeiter kopiert
+   copy.text : Sachbearbeiter wurde erfolgreich kopiert.
+   release.label : Sachbearbeiter entfernt
+   release.text : Sachbearbeiter wurde erfolgreich entfernt.
+   add.label : Sachbearbeiter hinzugefügt
+   add.text : Sachbearbeiter wurde erfolgreich zum Sachbearbeiter hinzugefügt.
+   association.label : Änderung gespeichert
+   association.text : Die Änderung wurde erfolgreich gespeichert.
+   
+### Entity Sachbearbeiter - Warnings
+i18n.de-DE.sachbearbeiter.notification.warning:
+   save.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
+   save.label : Warnung
+   update.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
+   update.label : Warnung
+
+### Entity Sachbearbeiter - Errors
+i18n.de-DE.sachbearbeiter.notification.error.create:
+   label.timeout : Zeitüberschreitung
+   text.timeout : Beim Versuch die Daten zu speichern ist eine Zeitüberschreitung aufgetreten.
+   label : Fehler
+   text : Beim erstellen ist ein Fehler aufgetreten.
+
+i18n.de-DE.sachbearbeiter.notification.error.update:
+   label.timeout : Zeitüberschreitung
+   text.timeout : Beim Versuch die Daten zu ändern ist eine Zeitüberschreitung aufgetreten.
+   label : Fehler
+   text : Beim ändern ist ein Fehler aufgetreten. Änderung wurde nicht gespeichert.
+
+i18n.de-DE.sachbearbeiter.notification.error.read:
+   label.timeout : Zeitüberschreitung
+   text.timeout : Beim Versuch die Daten zu laden ist eine Zeitüberschreitung aufgetreten.
+   label : Fehler
+   text : Beim Lesen ist ein Fehler aufgetreten.
+
+i18n.de-DE.sachbearbeiter.notification.error.association:
+   label.timeout : Zeitüberschreitung
+   text.timeout : Beim Versuch die Assoziation zu ändern ist eine Zeitüberschreitung aufgetreten.
+   label : Fehler
+   text : Beim ändern der Assoziation ist ein Fehler aufgetreten.
+
+i18n.de-DE.sachbearbeiter.notification.error.delete:
+   label.timeout : Zeitüberschreitung
+   text.timeout : Beim Versuch die Daten zu löschen ist eine Zeitüberschreitung aufgetreten.
+   label.409 : Konflikt
+   text.409 : Sachbearbeiter wird in anderer Entität referenziert. Löschen nicht möglich.
+   label.400 : Nicht gefunden
+   text.400 : Sachbearbeiter existiert nicht.
+   label : Fehler
+   text : Ein Fehler ist aufgetreten. Löschen nicht möglich.
+
+# Entity Wohnung
+i18n.de-DE.wohnung.form:
+   update.headline.label : Wohnung bearbeiten
+   create.headline.label : Wohnung erstellen
+   add.headline.label : Wohnung hinzufügen
+   read.headline.label : Wohnung Details
+   history.headline.label : Wohnung History
+   update.button.label : bearbeiten
+   create.button.label : neu
+   cancel.button.label : abbrechen
+   back.button.label : zurück
+   save.button.label : speichern
+   add.button.label : hinzufügen
+   delete.button.label : löschen
+   copy.button.label : kopieren
+   read.button.label : Details
+
+i18n.de-DE.wohnung.table_buttons.column_header : Aktionen
+
+## Entity Wohnung - Attribute stock
+i18n.de-DE.wohnung.stock:
+   label : Stock*
+   column_header : Stock
+   input_prompt : Stock
+   tooltip : 
+## Entity Wohnung - Attribute ausrichtung
+i18n.de-DE.wohnung.ausrichtung:
+   label : Ausrichtung
+   column_header : Ausrichtung
+   input_prompt : Ausrichtung
+   tooltip : 
+## Entity Wohnung - Attribute adresse
+i18n.de-DE.wohnung.adresse:
+   label : Adresse*
+   column_header : Adresse
+   input_prompt : Adresse
+   tooltip : 
+
+## Entity Wohnung - Aktionsmeldungen
+
+### Entity Wohnung - Success
+i18n.de-DE.wohnung.notification.success:
+   update.label : Wohnung angepasst
+   update.text : Wohnung wurde erfolgreich angepasst und gespeichert.
+   save.label : Wohnung erstellt
+   save.text : Wohnung wurde erfolgreich erstellt und gespeichert.
+   delete.label : Wohnung gelöscht
+   delete.text : Wohnung wurde erfolgreich gelöscht.
+   copy.label : Wohnung kopiert
+   copy.text : Wohnung wurde erfolgreich kopiert.
+   release.label : Wohnung entfernt
+   release.text : Wohnung wurde erfolgreich entfernt.
+   add.label : Wohnung hinzugefügt
+   add.text : Wohnung wurde erfolgreich zum Wohnung hinzugefügt.
+   association.label : Änderung gespeichert
+   association.text : Die Änderung wurde erfolgreich gespeichert.
+   
+   release.label.adresse : Adresse entfernt
+   release.text.adresse : Adresse wurde erfolgreich entfernt.
+   
+### Entity Wohnung - Warnings
+i18n.de-DE.wohnung.notification.warning:
+   save.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
+   save.label : Warnung
+   update.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
+   update.label : Warnung
+
+### Entity Wohnung - Errors
+i18n.de-DE.wohnung.notification.error.create:
+   label.timeout : Zeitüberschreitung
+   text.timeout : Beim Versuch die Daten zu speichern ist eine Zeitüberschreitung aufgetreten.
+   label : Fehler
+   text : Beim erstellen ist ein Fehler aufgetreten.
+
+i18n.de-DE.wohnung.notification.error.update:
+   label.timeout : Zeitüberschreitung
+   text.timeout : Beim Versuch die Daten zu ändern ist eine Zeitüberschreitung aufgetreten.
+   label : Fehler
+   text : Beim ändern ist ein Fehler aufgetreten. Änderung wurde nicht gespeichert.
+
+i18n.de-DE.wohnung.notification.error.read:
+   label.timeout : Zeitüberschreitung
+   text.timeout : Beim Versuch die Daten zu laden ist eine Zeitüberschreitung aufgetreten.
+   label : Fehler
+   text : Beim Lesen ist ein Fehler aufgetreten.
+
+i18n.de-DE.wohnung.notification.error.association:
+   label.timeout : Zeitüberschreitung
+   text.timeout : Beim Versuch die Assoziation zu ändern ist eine Zeitüberschreitung aufgetreten.
+   label : Fehler
+   text : Beim ändern der Assoziation ist ein Fehler aufgetreten.
+
+i18n.de-DE.wohnung.notification.error.delete:
+   label.timeout : Zeitüberschreitung
+   text.timeout : Beim Versuch die Daten zu löschen ist eine Zeitüberschreitung aufgetreten.
+   label.409 : Konflikt
+   text.409 : Wohnung wird in anderer Entität referenziert. Löschen nicht möglich.
+   label.400 : Nicht gefunden
+   text.400 : Wohnung existiert nicht.
+   label : Fehler
+   text : Ein Fehler ist aufgetreten. Löschen nicht möglich.
+
+
+# End of buerger section
+
