@@ -1,0 +1,3 @@
+de.muenchen.itm.infrastructure.auth.configurator.CustomUserDetailServiceAuthenticationConfigurator
+de.muenchen.itm.infrastructure.auth.configurator.JDBCAuthenticationConfigurator
+de.muenchen.itm.infrastructure.auth.configurator.LDAPAuthenticationConfigurator

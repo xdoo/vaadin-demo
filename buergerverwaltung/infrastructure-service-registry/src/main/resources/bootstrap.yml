@@ -1,0 +1,31 @@
+spring:
+  profiles:
+    active: local
+  application:
+    name: discovery
+# use always the standard server port
+server:
+  port: 8761
+eureka.instance.preferIpAddress: true
+management.port: ${server.port}
+---
+spring:
+  profiles: local
+eureka:
+  instance:
+    hostname: localhost
+endpoints:
+  health:
+    sensitive: false
+---
+spring:
+  profiles: docker
+eureka:
+  instance:
+    hostname: discovery
+---
+spring:
+  profiles: vm
+endpoints:
+  health:
+    sensitive: false
