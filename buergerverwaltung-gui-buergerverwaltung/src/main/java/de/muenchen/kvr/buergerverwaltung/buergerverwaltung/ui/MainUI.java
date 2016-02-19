@@ -22,6 +22,7 @@ import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.MenuBar;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.EventBus;
@@ -198,6 +199,7 @@ public class MainUI extends BaseUI {
     public void logoutEventHandler(reactor.bus.Event<?> event) {
         this.root.switchOffMenu();
         security.logout();
+        ((BaseUI) UI.getCurrent()).setCurrentPrincipal(null);
 
         // Close the VaadinServiceSession
         getUI().getSession().close();
