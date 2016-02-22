@@ -1,0 +1,29 @@
+spring:
+  profiles.active: local
+  application.name: buergerverwaltung
+  eureka.instance.preferIpAddress: true
+management.port: ${server.port}
+
+---
+spring.profiles: docker
+eureka.client.serviceUrl.defaultZone: http://discovery:8761/eureka/
+server.port: 8080
+eureka:
+    instance:
+        registryFetchIntervalSeconds: 1
+        leaseRenewalIntervalInSeconds: 2
+    client:
+        initialInstanceInfoReplicationIntervalSeconds: 5
+        serviceUrl.defaultZone: http://discovery:8761/eureka/
+---
+spring.profiles: local
+eureka.client:
+  serviceUrl.defaultZone: http://localhost:8761/eureka/
+  registry-fetch-interval-seconds: 5
+server:
+    port: 0
+---
+spring.profiles: vm
+eureka.client.serviceUrl.defaultZone: http://${eureka.address}:8761/eureka/
+server:
+  port: 8080

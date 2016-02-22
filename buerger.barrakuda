@@ -1,0 +1,163 @@
+domain buergerverwaltung package de.muenchen.kvr version 1.0;
+serviceModel buerger package de.muenchen.kvr.buergerverwaltung version 1.0 {
+	customTextType text;
+	customTextType textZwischen2und50Zeichen minLength=2 maxLength=50;
+	customTextType email minLength=3 allowedRegex="([a-zA-Z0-9]+.[a-zA-Z0-9]+@[a-zA-Z0-9]+.[a-zA-Z0-9]+)";
+	customDateType date inThePast;
+	customNumberType nummer;
+	customNumberType telefonNummer minValue=10000 maxValue=999999999;
+	customLogicType bool;
+	customListType moeglicheStaatsangehoerigkeiten [ "deutsch" "spanisch" "italienisch" "englisch"];
+	customListType augenfarben [ "blau" "rot" "grün" "grau" "violett" "braun"];
+	customListType passtyp [ "personalausweis" "reisepass"];
+	
+	entity Buerger auditChanges {
+		vorname text mainFeature searchable "Peter";
+		nachname text mainFeature searchable "Müller";
+		geburtstag date mainFeature searchable "07.09.1995";
+		augenfarbe augenfarben mainFeature searchable "braun";
+		telefonnummer oneToOne telefonNummer mainFeature searchable "08912345";
+		email oneToOne email mainFeature searchable "p.mueller@muenchen.de";
+		lebendig bool mainFeature searchable "false"; // hämisches Lachen
+		kinder manyToMany Buerger optional;
+		partner oneToOne Buerger optional;
+		wohnungen manyToOne Wohnung optional;
+		staatsangehoerigkeiten manyToMany moeglicheStaatsangehoerigkeiten optional "deutsch";
+		sachbearbeiter manyToMany Sachbearbeiter optional;
+		pass manyToOne Pass; 
+		eigenschaften manyToMany text "gehtnich";
+	}
+	
+	entity Adresse auditChanges{
+		interneAdresse oneToOne AdresseIntern;
+		externeAdresse oneToOne AdresseExtern;
+	}
+	
+	valueObject AdresseExtern{
+		strasse text mainFeature searchable "Allgäuer Straße";
+		hausnummer nummer mainFeature searchable "666";
+		plz nummer mainFeature searchable "12345";
+		ort text mainFeature searchable "Allgäu";
+	}
+	
+	valueObject AdresseIntern{
+		strassenSchluessel nummer mainFeature searchable "1234567890";
+		hausnummer nummer mainFeature searchable "13";
+	}
+	
+	entity Pass auditChanges{
+		passNummer nummer mainFeature searchable "56473829";
+		typ passtyp mainFeature searchable "personalausweis";
+		kode text mainFeature searchable "lösche gerne Sachen";
+		groesse nummer mainFeature searchable "10";
+		behoerde text mainFeature searchable "Narnia";
+	}
+	
+	entity Sachbearbeiter auditChanges{
+		telefon nummer mainFeature searchable "0987654321";
+		fax nummer mainFeature searchable "0987654320";
+		funktion text mainFeature searchable "löschen";
+		organisationseinheit text mainFeature searchable "it@m";
+	}
+	
+	entity Wohnung auditChanges{
+		stock text mainFeature searchable "255";
+		ausrichtung text mainFeature searchable optional "nordnordost";
+		adresse oneToMany Adresse;
+	}
+}
+
+guiModel buergerverwaltung package de.muenchen.kvr.buergerverwaltung version 1.0 {
+	mainview Startseite;
+	
+	view Startseite appearsInMenu {
+		button OnePercentChanceOfWinningTenMillionEURO;
+	}
+	
+	view Buergerverwaltung appearsInMenu {
+		component buerger for buerger.Buerger type Table{
+			button create navigatesTo BuergerCreateView;
+			button detail navigatesTo ReadWriteBurger;
+		}
+	}
+	
+	view ReadWriteBurger {
+		component buerger for buerger.Buerger type ReadWriteForm;
+		relComponent pass for buerger.Buerger.pass type ReadEditComponent{
+			button create navigatesTo CreatePassForBuerger;
+			button add navigatesTo AddPassForBuerger;
+			button detail navigatesTo ReadWritePass;
+		}
+		relComponent sach for buerger.Buerger.sachbearbeiter type ReadEditComponent{
+			button create navigatesTo CreateSachbearbeiterForBuerger;
+			button add navigatesTo AddSachbearbeiterForBuerger;
+			button details navigatesTo ReadWriteSachbearbeiter;
+		}
+	}
+	
+	view AddPassForBuerger {
+		relComponent pass for buerger.Buerger.pass type AddTable{
+			button save navigatesTo ReadWriteBurger;
+		}
+	}
+	
+	view CreatePassForBuerger {
+		relComponent pass for buerger.Buerger.pass type CreateForm{
+			button save navigatesTo ReadWriteBurger;
+		}
+	}
+	
+	view AddSachbearbeiterForBuerger {
+		relComponent sach for buerger.Buerger.sachbearbeiter type AddTable{
+			button save navigatesTo ReadWriteBurger;
+		}
+	}
+	
+	view CreateSachbearbeiterForBuerger {
+		relComponent sach for buerger.Buerger.sachbearbeiter type CreateForm{
+			button save navigatesTo ReadWriteBurger;
+		}
+	}
+	
+	view BuergerCreateView{
+		component buerger for buerger.Buerger type CreateForm{
+			button save navigatesTo Buergerverwaltung;
+		}
+	}
+	
+	view Passverwaltung appearsInMenu {
+		component pass for buerger.Pass type Table{
+			button create navigatesTo PassCreateView;
+			button detail navigatesTo ReadWritePass;
+		}
+	}
+	
+	view ReadWritePass{
+		button zurueck navigatesTo Passverwaltung;
+		component pass for buerger.Pass type ReadWriteForm;
+	}
+	
+	view PassCreateView{
+		component pass for buerger.Pass type CreateForm{
+			button save navigatesTo Passverwaltung;
+		}
+	}
+	
+	view Sachbearbeiterverwaltung appearsInMenu {
+		component sach for buerger.Sachbearbeiter type Table{
+			button create navigatesTo SachbearbeiterCreateView;
+			button detail navigatesTo ReadWriteSachbearbeiter;
+		}
+	}
+	
+	view ReadWriteSachbearbeiter{
+		button zurueck navigatesTo Sachbearbeiterverwaltung;
+		component sach for buerger.Sachbearbeiter type ReadWriteForm;
+	}
+	
+	view SachbearbeiterCreateView{
+		component sach for buerger.Sachbearbeiter type CreateForm{
+			button save navigatesTo Sachbearbeiterverwaltung;
+		}
+	}
+}

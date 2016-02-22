@@ -1,0 +1,18 @@
+
+spring:
+  profiles:
+    active: local
+---
+spring:
+  profiles:
+    name: docker
+---
+spring:
+  profiles:
+    name: local
+---
+spring:
+  profiles:
+    name: vm
+
+
