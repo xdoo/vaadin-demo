@@ -25,3 +25,4 @@ public class CustomUserDetailServiceAuthenticationConfigurator extends GlobalAut
         auth.userDetailsService(uds);
     }
 }
+

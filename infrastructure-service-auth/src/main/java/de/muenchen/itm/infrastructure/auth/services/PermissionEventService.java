@@ -31,3 +31,4 @@ public interface PermissionEventService {
 
     void onAfterLinkDelete(Permission parent, Object linked);
 }
+

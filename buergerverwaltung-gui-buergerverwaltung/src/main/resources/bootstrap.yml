@@ -21,7 +21,7 @@ eureka.client:
   serviceUrl.defaultZone: http://localhost:8761/eureka/
   registry-fetch-interval-seconds: 5
 server:
-    port: 8088
+    port: 8081
 ---
 spring.profiles: vm
 eureka.client.serviceUrl.defaultZone: http://${eureka.address}:8761/eureka/

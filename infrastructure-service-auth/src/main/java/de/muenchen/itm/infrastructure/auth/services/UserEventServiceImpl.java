@@ -71,3 +71,4 @@ public class UserEventServiceImpl implements UserEventService {
         // Add your logic here.
     }
 }
+

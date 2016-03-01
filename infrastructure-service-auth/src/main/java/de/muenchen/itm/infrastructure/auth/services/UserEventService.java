@@ -33,3 +33,4 @@ public interface UserEventService {
 
     void onAfterLinkDelete(User parent, Object linked);
 }
+

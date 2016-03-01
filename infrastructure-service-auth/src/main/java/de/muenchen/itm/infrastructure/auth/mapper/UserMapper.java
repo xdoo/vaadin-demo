@@ -39,3 +39,4 @@ public abstract class UserMapper {
         return authorities.stream().map(authority -> new SimpleGrantedAuthority(authority.getAuthority())).collect(Collectors.toSet());
     }
 }
+

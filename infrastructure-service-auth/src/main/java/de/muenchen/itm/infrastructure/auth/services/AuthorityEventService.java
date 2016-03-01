@@ -32,3 +32,4 @@ public interface AuthorityEventService {
 
     void onAfterLinkDelete(Authority parent, Object linked);
 }
+

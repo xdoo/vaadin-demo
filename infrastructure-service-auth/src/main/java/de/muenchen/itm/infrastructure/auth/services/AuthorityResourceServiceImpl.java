@@ -31,3 +31,4 @@ public class AuthorityResourceServiceImpl implements AuthorityResourceService {
         return resource;
     }
 }
+

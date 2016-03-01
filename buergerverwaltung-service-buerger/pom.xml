@@ -8,9 +8,9 @@
 	<packaging>pom</packaging>
 	
 	<modules>
-		<module>buerger-service</module>
-		<module>buerger-client</module>
-		<module>buerger-guilib</module>
+		<module>buergerverwaltung-buerger-service</module>
+		<module>buergerverwaltung-buerger-client</module>
+		<module>buergerverwaltung-buerger-guilib</module>
 	</modules>
 </project>
 

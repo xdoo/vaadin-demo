@@ -31,3 +31,4 @@ public class UserResourceServiceImpl implements UserResourceService {
         return resource;
     }
 }
+

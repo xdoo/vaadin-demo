@@ -80,63 +80,78 @@ i18n.de-DE.view_.startseite.button.onePercentChanceOfWinningTenMillionEURO.label
 i18n.de-DE.view_.startseite.helptext : Für diese Seite existiert keine Beschreibung
 
 i18n.de-DE.view_.buergerverwaltung.title : Buergerverwaltung
-i18n.de-DE.view_.buergerverwaltung.component1.button.create.label : create
-i18n.de-DE.view_.buergerverwaltung.component1.button.detail.label : detail
+i18n.de-DE.view_.buergerverwaltung.buerger.label : buerger
+i18n.de-DE.view_.buergerverwaltung.buerger.button.create.label : create
+i18n.de-DE.view_.buergerverwaltung.buerger.button.detail.label : detail
 i18n.de-DE.view_.buergerverwaltung.helptext : Für diese Seite existiert keine Beschreibung
 
 i18n.de-DE.view_.readWriteBurger.title : ReadWriteBurger
-i18n.de-DE.view_.readWriteBurger.component2.button.create.label : create
-i18n.de-DE.view_.readWriteBurger.component2.button.add.label : add
-i18n.de-DE.view_.readWriteBurger.component2.button.detail.label : detail
-i18n.de-DE.view_.readWriteBurger.component3.button.create.label : create
-i18n.de-DE.view_.readWriteBurger.component3.button.add.label : add
-i18n.de-DE.view_.readWriteBurger.component3.button.details.label : details
+i18n.de-DE.view_.readWriteBurger.buerger.label : buerger
+i18n.de-DE.view_.readWriteBurger.pass.label : pass
+i18n.de-DE.view_.readWriteBurger.pass.button.create.label : create
+i18n.de-DE.view_.readWriteBurger.pass.button.add.label : add
+i18n.de-DE.view_.readWriteBurger.pass.button.detail.label : detail
+i18n.de-DE.view_.readWriteBurger.sach.label : sach
+i18n.de-DE.view_.readWriteBurger.sach.button.create.label : create
+i18n.de-DE.view_.readWriteBurger.sach.button.add.label : add
+i18n.de-DE.view_.readWriteBurger.sach.button.details.label : details
 i18n.de-DE.view_.readWriteBurger.helptext : Für diese Seite existiert keine Beschreibung
 
 i18n.de-DE.view_.addPassForBuerger.title : AddPassForBuerger
-i18n.de-DE.view_.addPassForBuerger.component1.button.save.label : save
+i18n.de-DE.view_.addPassForBuerger.pass.label : pass
+i18n.de-DE.view_.addPassForBuerger.pass.button.save.label : save
 i18n.de-DE.view_.addPassForBuerger.helptext : Für diese Seite existiert keine Beschreibung
 
 i18n.de-DE.view_.createPassForBuerger.title : CreatePassForBuerger
-i18n.de-DE.view_.createPassForBuerger.component1.button.save.label : save
+i18n.de-DE.view_.createPassForBuerger.pass.label : pass
+i18n.de-DE.view_.createPassForBuerger.pass.button.save.label : save
 i18n.de-DE.view_.createPassForBuerger.helptext : Für diese Seite existiert keine Beschreibung
 
 i18n.de-DE.view_.addSachbearbeiterForBuerger.title : AddSachbearbeiterForBuerger
-i18n.de-DE.view_.addSachbearbeiterForBuerger.component1.button.save.label : save
+i18n.de-DE.view_.addSachbearbeiterForBuerger.sach.label : sach
+i18n.de-DE.view_.addSachbearbeiterForBuerger.sach.button.save.label : save
 i18n.de-DE.view_.addSachbearbeiterForBuerger.helptext : Für diese Seite existiert keine Beschreibung
 
 i18n.de-DE.view_.createSachbearbeiterForBuerger.title : CreateSachbearbeiterForBuerger
-i18n.de-DE.view_.createSachbearbeiterForBuerger.component1.button.save.label : save
+i18n.de-DE.view_.createSachbearbeiterForBuerger.sach.label : sach
+i18n.de-DE.view_.createSachbearbeiterForBuerger.sach.button.save.label : save
 i18n.de-DE.view_.createSachbearbeiterForBuerger.helptext : Für diese Seite existiert keine Beschreibung
 
 i18n.de-DE.view_.buergerCreateView.title : BuergerCreateView
-i18n.de-DE.view_.buergerCreateView.component1.button.save.label : save
+i18n.de-DE.view_.buergerCreateView.buerger.label : buerger
+i18n.de-DE.view_.buergerCreateView.buerger.button.save.label : save
 i18n.de-DE.view_.buergerCreateView.helptext : Für diese Seite existiert keine Beschreibung
 
 i18n.de-DE.view_.passverwaltung.title : Passverwaltung
-i18n.de-DE.view_.passverwaltung.component1.button.create.label : create
-i18n.de-DE.view_.passverwaltung.component1.button.detail.label : detail
+i18n.de-DE.view_.passverwaltung.pass.label : pass
+i18n.de-DE.view_.passverwaltung.pass.button.create.label : create
+i18n.de-DE.view_.passverwaltung.pass.button.detail.label : detail
 i18n.de-DE.view_.passverwaltung.helptext : Für diese Seite existiert keine Beschreibung
 
 i18n.de-DE.view_.readWritePass.title : ReadWritePass
 i18n.de-DE.view_.readWritePass.button.zurueck.label : zurueck
+i18n.de-DE.view_.readWritePass.pass.label : pass
 i18n.de-DE.view_.readWritePass.helptext : Für diese Seite existiert keine Beschreibung
 
 i18n.de-DE.view_.passCreateView.title : PassCreateView
-i18n.de-DE.view_.passCreateView.component1.button.save.label : save
+i18n.de-DE.view_.passCreateView.pass.label : pass
+i18n.de-DE.view_.passCreateView.pass.button.save.label : save
 i18n.de-DE.view_.passCreateView.helptext : Für diese Seite existiert keine Beschreibung
 
 i18n.de-DE.view_.sachbearbeiterverwaltung.title : Sachbearbeiterverwaltung
-i18n.de-DE.view_.sachbearbeiterverwaltung.component1.button.create.label : create
-i18n.de-DE.view_.sachbearbeiterverwaltung.component1.button.detail.label : detail
+i18n.de-DE.view_.sachbearbeiterverwaltung.sach.label : sach
+i18n.de-DE.view_.sachbearbeiterverwaltung.sach.button.create.label : create
+i18n.de-DE.view_.sachbearbeiterverwaltung.sach.button.detail.label : detail
 i18n.de-DE.view_.sachbearbeiterverwaltung.helptext : Für diese Seite existiert keine Beschreibung
 
 i18n.de-DE.view_.readWriteSachbearbeiter.title : ReadWriteSachbearbeiter
 i18n.de-DE.view_.readWriteSachbearbeiter.button.zurueck.label : zurueck
+i18n.de-DE.view_.readWriteSachbearbeiter.sach.label : sach
 i18n.de-DE.view_.readWriteSachbearbeiter.helptext : Für diese Seite existiert keine Beschreibung
 
 i18n.de-DE.view_.sachbearbeiterCreateView.title : SachbearbeiterCreateView
-i18n.de-DE.view_.sachbearbeiterCreateView.component1.button.save.label : save
+i18n.de-DE.view_.sachbearbeiterCreateView.sach.label : sach
+i18n.de-DE.view_.sachbearbeiterCreateView.sach.button.save.label : save
 i18n.de-DE.view_.sachbearbeiterCreateView.helptext : Für diese Seite existiert keine Beschreibung
 
 #=======================================#
@@ -339,8 +354,8 @@ i18n.de-DE.buerger.notification.success:
    
 ### Entity Buerger - Warnings
 i18n.de-DE.buerger.notification.warning:
-   save.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
-   save.label : Warnung
+   create.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
+   create.label : Warnung
    update.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
    update.label : Warnung
 
@@ -432,8 +447,8 @@ i18n.de-DE.adresse.notification.success:
    
 ### Entity Adresse - Warnings
 i18n.de-DE.adresse.notification.warning:
-   save.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
-   save.label : Warnung
+   create.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
+   create.label : Warnung
    update.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
    update.label : Warnung
 
@@ -537,8 +552,8 @@ i18n.de-DE.adresseextern.notification.success:
    
 ### Entity AdresseExtern - Warnings
 i18n.de-DE.adresseextern.notification.warning:
-   save.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
-   save.label : Warnung
+   create.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
+   create.label : Warnung
    update.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
    update.label : Warnung
 
@@ -630,8 +645,8 @@ i18n.de-DE.adresseintern.notification.success:
    
 ### Entity AdresseIntern - Warnings
 i18n.de-DE.adresseintern.notification.warning:
-   save.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
-   save.label : Warnung
+   create.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
+   create.label : Warnung
    update.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
    update.label : Warnung
 
@@ -741,8 +756,8 @@ i18n.de-DE.pass.notification.success:
    
 ### Entity Pass - Warnings
 i18n.de-DE.pass.notification.warning:
-   save.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
-   save.label : Warnung
+   create.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
+   create.label : Warnung
    update.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
    update.label : Warnung
 
@@ -846,8 +861,8 @@ i18n.de-DE.sachbearbeiter.notification.success:
    
 ### Entity Sachbearbeiter - Warnings
 i18n.de-DE.sachbearbeiter.notification.warning:
-   save.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
-   save.label : Warnung
+   create.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
+   create.label : Warnung
    update.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
    update.label : Warnung
 
@@ -948,8 +963,8 @@ i18n.de-DE.wohnung.notification.success:
    
 ### Entity Wohnung - Warnings
 i18n.de-DE.wohnung.notification.warning:
-   save.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
-   save.label : Warnung
+   create.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
+   create.label : Warnung
    update.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
    update.label : Warnung
 

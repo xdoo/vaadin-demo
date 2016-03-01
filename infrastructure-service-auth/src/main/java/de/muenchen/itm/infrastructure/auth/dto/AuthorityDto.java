@@ -28,3 +28,4 @@ public class AuthorityDto {
         this.authority = authority;
     }
 }
+

@@ -69,3 +69,4 @@ public class AuthorityEventListener extends AbstractRepositoryEventListener<Auth
         service.onAfterLinkDelete(parent, linked);
     }
 }
+

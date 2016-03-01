@@ -53,12 +53,12 @@ public class ReadWriteBurger_View extends DefaultView {
         }
 
         if (principal.getAuthorities().contains("buerger_READ_Pass")) {
-            final Buerger_Pass_ReadEditForm component2 = new Buerger_Pass_ReadEditForm(ReadWritePass_View.NAME, CreatePassForBuerger_View.NAME, AddPassForBuerger_View.NAME);
+            final Buerger_Pass_ReadEditForm component2 = new Buerger_Pass_ReadEditForm(ReadWritePass_View.NAME, CreatePassForBuerger_View.NAME, AddPassForBuerger_View.NAME, NAME);
             layout.addComponent(component2);
         }
 
         if (principal.getAuthorities().contains("buerger_READ_Sachbearbeiter")) {
-            final Buerger_Sachbearbeiter_ReadEditGrid component3 = new Buerger_Sachbearbeiter_ReadEditGrid(buergerController, NAME, CreateSachbearbeiterForBuerger_View.NAME, AddSachbearbeiterForBuerger_View.NAME);
+            final Buerger_Sachbearbeiter_ReadEditGrid component3 = new Buerger_Sachbearbeiter_ReadEditGrid(buergerController, NAME, CreateSachbearbeiterForBuerger_View.NAME, AddSachbearbeiterForBuerger_View.NAME, NAME);
             ActionButton detailsButton = new ActionButton(BaseUI.getCurrentI18nResolver().resolve("view_." + NAME + ".component3.button.details.label"), SimpleAction.none);
             detailsButton.addActionPerformer(new NavigateActions(ReadWriteSachbearbeiter_View.NAME)::navigate);
             component3.addButton(detailsButton);
