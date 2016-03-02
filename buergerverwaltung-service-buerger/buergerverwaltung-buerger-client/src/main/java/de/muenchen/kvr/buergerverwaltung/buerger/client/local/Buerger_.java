@@ -12,6 +12,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Size;
 import javax.validation.constraints.Pattern;
 import de.muenchen.vaadin.demo.apilib.domain.Past;
+import de.muenchen.kvr.buergerverwaltung.buerger.client.local.Adresse_;
 import de.muenchen.kvr.buergerverwaltung.buerger.client.domain.Augenfarben_;
 import de.muenchen.kvr.buergerverwaltung.buerger.client.domain.MoeglicheStaatsangehoerigkeiten_;
 import org.springframework.hateoas.ResourceSupport;
@@ -47,26 +48,26 @@ public class Buerger_ extends ResourceSupport {
 	@NotNull
 	private boolean lebendig;
 	
+	private java.util.List<String> eigenschaften = new java.util.ArrayList<>();
+	
 	private java.util.List<MoeglicheStaatsangehoerigkeiten_> staatsangehoerigkeiten = new java.util.ArrayList<>();
 	
-	@NotNull
-	@Size(min = 1)
-	private java.util.List<String> eigenschaften = new java.util.ArrayList<>();
+	private Adresse_ bisherigeWohnsitze;
 	
 	private java.util.List<String> kinder;
 	
 	private String partner;
 	
-	private String wohnungen;
+	private String hauptwohnung;
 	
 	private java.util.List<String> sachbearbeiter;
 	
-	private String pass;
+	private java.util.List<String> pass;
 	
 	public Buerger_(){}
 	
 	/**
-     * Create a new Buerger_ with the  vorname, nachname, geburtstag, augenfarbe, telefonnummer, email, lebendig, staatsangehoerigkeiten, eigenschaften.
+     * Create a new Buerger_ with the  vorname, nachname, geburtstag, augenfarbe, telefonnummer, email, lebendig, eigenschaften, staatsangehoerigkeiten.
      *
      * @param vorname the vorname of the Buerger_.
      * @param nachname the nachname of the Buerger_.
@@ -75,10 +76,10 @@ public class Buerger_ extends ResourceSupport {
      * @param telefonnummer the telefonnummer of the Buerger_.
      * @param email the email of the Buerger_.
      * @param lebendig the lebendig of the Buerger_.
-     * @param staatsangehoerigkeiten the staatsangehoerigkeiten of the Buerger_.
      * @param eigenschaften the eigenschaften of the Buerger_.
+     * @param staatsangehoerigkeiten the staatsangehoerigkeiten of the Buerger_.
      */
-    public Buerger_( String vorname, String nachname, java.time.LocalDate geburtstag, Augenfarben_ augenfarbe, long telefonnummer, String email, boolean lebendig, java.util.List<MoeglicheStaatsangehoerigkeiten_> staatsangehoerigkeiten, java.util.List<String> eigenschaften) {
+    public Buerger_( String vorname, String nachname, java.time.LocalDate geburtstag, Augenfarben_ augenfarbe, long telefonnummer, String email, boolean lebendig, java.util.List<String> eigenschaften, java.util.List<MoeglicheStaatsangehoerigkeiten_> staatsangehoerigkeiten) {
         this.setVorname(vorname);
         this.setNachname(nachname);
         this.setGeburtstag(geburtstag);
@@ -86,8 +87,8 @@ public class Buerger_ extends ResourceSupport {
         this.setTelefonnummer(telefonnummer);
         this.setEmail(email);
         this.setLebendig(lebendig);
-        this.setStaatsangehoerigkeiten(staatsangehoerigkeiten);
         this.setEigenschaften(eigenschaften);
+        this.setStaatsangehoerigkeiten(staatsangehoerigkeiten);
     }
 	
 	// Getters and Setters
@@ -147,6 +148,14 @@ public class Buerger_ extends ResourceSupport {
 		this.lebendig = lebendig;
 	}
 	
+	public java.util.List<String> getEigenschaften(){
+		return eigenschaften;
+	}
+	
+	public void setEigenschaften(java.util.List<String> eigenschaften){
+		this.eigenschaften = eigenschaften;
+	}
+	
 	public java.util.List<MoeglicheStaatsangehoerigkeiten_> getStaatsangehoerigkeiten(){
 		return staatsangehoerigkeiten;
 	}
@@ -155,12 +164,11 @@ public class Buerger_ extends ResourceSupport {
 		this.staatsangehoerigkeiten = staatsangehoerigkeiten;
 	}
 	
-	public java.util.List<String> getEigenschaften(){
-		return eigenschaften;
+	public Adresse_ getBisherigeWohnsitze(){
+		return bisherigeWohnsitze;
 	}
-	
-	public void setEigenschaften(java.util.List<String> eigenschaften){
-		this.eigenschaften = eigenschaften;
+	public void setBisherigeWohnsitze(Adresse_ value){
+		this.bisherigeWohnsitze = value;
 	}
 	
 	public java.util.List<String> getKinder(){
@@ -177,11 +185,11 @@ public class Buerger_ extends ResourceSupport {
 		this.partner = value;
 	}
 	
-	public String getWohnungen(){
-		return wohnungen;
+	public String getHauptwohnung(){
+		return hauptwohnung;
 	}
-	public void setWohnungen(String value){
-		this.wohnungen = value;
+	public void setHauptwohnung(String value){
+		this.hauptwohnung = value;
 	}
 	
 	public java.util.List<String> getSachbearbeiter(){
@@ -191,10 +199,10 @@ public class Buerger_ extends ResourceSupport {
 		this.sachbearbeiter = value;
 	}
 	
-	public String getPass(){
+	public java.util.List<String> getPass(){
 		return pass;
 	}
-	public void setPass(String value){
+	public void setPass(java.util.List<String> value){
 		this.pass = value;
 	}
 	
@@ -205,7 +213,7 @@ public class Buerger_ extends ResourceSupport {
       * </p>
       */
 	public enum Field {
-        vorname, nachname, geburtstag, augenfarbe, telefonnummer, email, lebendig, staatsangehoerigkeiten(false), eigenschaften(false);
+        vorname, nachname, geburtstag, augenfarbe, telefonnummer, email, lebendig, eigenschaften(false), staatsangehoerigkeiten(false);
 
         private final boolean field;
 
@@ -233,7 +241,7 @@ public class Buerger_ extends ResourceSupport {
 	  * </p>
 	  */
 	 public enum Rel {
-	 	kinder, partner, wohnungen, sachbearbeiter, pass;
+	 	kinder, partner, hauptwohnung, sachbearbeiter, pass;
     }
 	
 	@Override
@@ -246,8 +254,8 @@ public class Buerger_ extends ResourceSupport {
 		s += "long telefonnummer: " + this.getTelefonnummer();
 		s += "String email: " + this.getEmail();
 		s += "boolean lebendig: " + this.isLebendig();
-		s += "java.util.List<MoeglicheStaatsangehoerigkeiten_> staatsangehoerigkeiten: " + this.getStaatsangehoerigkeiten();
 		s += "java.util.List<String> eigenschaften: " + this.getEigenschaften();
+		s += "java.util.List<MoeglicheStaatsangehoerigkeiten_> staatsangehoerigkeiten: " + this.getStaatsangehoerigkeiten();
 		return s;
 	}
 }

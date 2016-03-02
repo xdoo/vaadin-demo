@@ -74,8 +74,12 @@ public class Adresse_Form extends BaseComponent {
     private List<Field> buildFields() {
         final FormUtil formUtil = new FormUtil(getBinder());
 
+		final TextField strasse = formUtil.createTextField(Adresse_.Field.strasse.name());
+		final TextField hausnummer = formUtil.createTextField(Adresse_.Field.hausnummer.name());
+		final TextField plz = formUtil.createTextField(Adresse_.Field.plz.name());
+		final TextField ort = formUtil.createTextField(Adresse_.Field.ort.name());
 		
-        return Arrays.asList();
+        return Arrays.asList(strasse, hausnummer, plz, ort);
     }
 
     /**

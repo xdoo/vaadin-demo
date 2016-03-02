@@ -1,4 +1,4 @@
-package de.muenchen.kvr.buergerverwaltung.buerger.guilib.gen.ui.components.relation.wohnung;
+package de.muenchen.kvr.buergerverwaltung.buerger.guilib.gen.ui.components.relation.buerger;
 
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Component;
@@ -10,38 +10,38 @@ import de.muenchen.vaadin.guilib.components.GenericGrid;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
 
-import de.muenchen.kvr.buergerverwaltung.buerger.client.local.Wohnung_;
-import de.muenchen.kvr.buergerverwaltung.buerger.client.local.Adresse_;
-import de.muenchen.kvr.buergerverwaltung.buerger.guilib.gen.ui.components.buttons.listener.wohnung.Wohnung_AssociationListActions;
-import de.muenchen.kvr.buergerverwaltung.buerger.guilib.gen.ui.components.buttons.listener.wohnung.Wohnung_SingleActions;
-import de.muenchen.kvr.buergerverwaltung.buerger.guilib.gen.ui.controller.Wohnung_ViewController;
+import de.muenchen.kvr.buergerverwaltung.buerger.client.local.Buerger_;
+import de.muenchen.kvr.buergerverwaltung.buerger.client.local.Pass_;
+import de.muenchen.kvr.buergerverwaltung.buerger.guilib.gen.ui.components.buttons.listener.buerger.Buerger_AssociationListActions;
+import de.muenchen.kvr.buergerverwaltung.buerger.guilib.gen.ui.components.buttons.listener.buerger.Buerger_SingleActions;
+import de.muenchen.kvr.buergerverwaltung.buerger.guilib.gen.ui.controller.Buerger_ViewController;
 
 import java.util.stream.Collectors;
 
 /**
  * @author claus
  */
-public class Wohnung_Adresse_ReadEditGrid extends CustomComponent {
+public class Buerger_Pass_ReadEditGrid extends CustomComponent {
 
-    private Wohnung_ViewController controller;
-    private GenericGrid<Adresse_> grid;
+    private Buerger_ViewController controller;
+    private GenericGrid<Pass_> grid;
 	/**
 	 * @param controller
 	 * @param navigateToRead detail button will not be shown if null
 	 * @param navigateToCreate create button will not be shown if null
 	 * @param navigateToAdd add button will not be shown if null
 	 */
-    public Wohnung_Adresse_ReadEditGrid(Wohnung_ViewController controller, String navigateToRead, String navigateToCreate, String navigateToAdd, String navigateToDelete) {
+    public Buerger_Pass_ReadEditGrid(Buerger_ViewController controller, String navigateToRead, String navigateToCreate, String navigateToAdd, String navigateToDelete) {
 
         this.controller = controller;
 
-        grid = new GenericGrid<Adresse_>(controller.getModel().getSelectedWohnungAdresse(), Adresse_.Field.getProperties());
+        grid = new GenericGrid<Pass_>(controller.getModel().getSelectedBuergerPass(), Pass_.Field.getProperties());
         grid.activateSearch(false);
         
         if(navigateToCreate != null)
         	grid.activateCreate(navigateToCreate);
 		if(navigateToAdd != null){
-	        ActionButton addButton = new ActionButton(Wohnung_.class, SimpleAction.add);
+	        ActionButton addButton = new ActionButton(Buerger_.class, SimpleAction.add);
         	NavigateActions addNavigation = new NavigateActions(navigateToAdd);
 	        addButton.addActionPerformer(addNavigation::navigate);
 	        grid.addComponent(addButton);
@@ -50,10 +50,10 @@ public class Wohnung_Adresse_ReadEditGrid extends CustomComponent {
 			grid.activateRead(navigateToRead).activateDoubleClickToRead(navigateToRead);
 		if(navigateToDelete!=null){
 	        //Create Button to delete one or more associations
-	        ActionButton deleteButton = new ActionButton(Wohnung_.class, SimpleAction.delete);
-	        Wohnung_AssociationListActions listAction = new Wohnung_AssociationListActions(
+	        ActionButton deleteButton = new ActionButton(Buerger_.class, SimpleAction.delete);
+	        Buerger_AssociationListActions listAction = new Buerger_AssociationListActions(
 	                () -> grid.getSelectedEntities().stream()
-	                        .map(adresse -> new Association<>(adresse, Wohnung_.Rel.adresse.name()))
+	                        .map(pass -> new Association<>(pass, Buerger_.Rel.pass.name()))
 	                        .collect(Collectors.toList())
 	        );
 	        deleteButton.addActionPerformer(listAction::removeAssociations);
@@ -79,7 +79,7 @@ public class Wohnung_Adresse_ReadEditGrid extends CustomComponent {
 	 * Konsistenten Datenstand zu gewährleisten.
 	 */
 	public void reload(){
-	    final Wohnung_SingleActions singleActions = new Wohnung_SingleActions(controller.getModel().getSelectedWohnung()::get);
+	    final Buerger_SingleActions singleActions = new Buerger_SingleActions(controller.getModel().getSelectedBuerger()::get);
 	    singleActions.reRead(null);
 	}
 }

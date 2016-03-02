@@ -10,8 +10,8 @@ import java.util.stream.Collectors;
 import java.util.NoSuchElementException;
 
 import de.muenchen.kvr.buergerverwaltung.buerger.client.local.Buerger_;
-import de.muenchen.kvr.buergerverwaltung.buerger.client.local.Pass_;
 import de.muenchen.kvr.buergerverwaltung.buerger.guilib.gen.ui.components.buttons.listener.buerger.Buerger_SingleActions;
+import de.muenchen.kvr.buergerverwaltung.buerger.guilib.gen.ui.components.entity.adresse.Adresse_Form;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.components.GenericGrid;
@@ -37,13 +37,11 @@ public class Buerger_CreateForm extends Buerger_Form {
     /** The button for the save action. */
     private final ActionButton saveButton = new ActionButton(Buerger_.class, SimpleAction.save);
     
-	/** 
-	 * Grid to select a required relation.
-	 * relation: pass
-	 * type:  Pass_
-	 */
-	 private final GenericGrid<Pass_> pass_Grid = new GenericGrid<>(Pass_.class, Pass_.Field.getProperties());
-	 
+    /**
+     * Form of the bisherigeWohnsitze of this Buerger.
+     */
+    private final Adresse_Form bisherigeWohnsitze_Form = new Adresse_Form();
+    
 	/**
 	 * Create a new Buerger_CreateForm that navigates to the navigateTo View on save.
 	 *
@@ -64,9 +62,8 @@ public class Buerger_CreateForm extends Buerger_Form {
         getButtonLayout().setSpacing(true);
         getButtonLayout().addComponents(getSaveButton());
 
+		getFormLayout().addComponent(bisherigeWohnsitze_Form);
 		
-		configurePass_Grid();
-		getFormLayout().addComponent(pass_Grid);
         configureSaveButton();
 
         getFormLayout().addComponent(getButtonLayout());
@@ -94,27 +91,13 @@ public class Buerger_CreateForm extends Buerger_Form {
         getSaveButton().useNotification(true);
     }
     
-    /**
-     * Configures the grid used to select the pass of this Buerger
-     */
-    protected void configurePass_Grid(){
-    	pass_Grid.setHeightByRows(5);
-    	pass_Grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-    	pass_Grid.setCaption(BaseUI.getCurrentI18nResolver().resolve("buerger.pass.label"));
-    }
 
 	// Getters
 	@Override
 	public Buerger_ getBuerger(){
 		Buerger_ buerger=super.getBuerger();
 		
-		try{
-			buerger.setPass(pass_Grid.getSelectedEntity().getId().getHref());
-			pass_Grid.setComponentError(null);
-		} catch(NoSuchElementException e) {
-			pass_Grid.setComponentError(new UserError("No Pass selected"));
-			throw new Validator.InvalidValueException("No Pass selected");
-		}
+		buerger.setBisherigeWohnsitze(bisherigeWohnsitze_Form.getAdresse());
 		
 		return buerger;
 	}

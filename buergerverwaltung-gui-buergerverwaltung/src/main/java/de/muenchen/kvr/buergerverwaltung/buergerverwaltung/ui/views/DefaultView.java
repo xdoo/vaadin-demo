@@ -5,8 +5,6 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.VerticalLayout;
 
-import de.muenchen.kvr.buergerverwaltung.buergerverwaltung.ui.MainUI;
-
 /**
  * Aus dieser Klasse leiten sich alle anderen Views ab.
  *

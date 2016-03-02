@@ -11,15 +11,19 @@ import javax.persistence.Table;
 import java.math.BigDecimal;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.ManyToMany;
+import javax.persistence.ElementCollection;
 import javax.persistence.OrderColumn;
+import javax.persistence.CollectionTable;
 import javax.persistence.JoinColumn;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Embedded;
+import javax.persistence.ManyToMany;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToOne;
 import javax.persistence.CascadeType;
 import javax.persistence.ManyToOne;
-import javax.persistence.ElementCollection;
-import javax.persistence.CollectionTable;
+import javax.persistence.OneToMany;
 import org.hibernate.search.annotations.Indexed;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -110,6 +114,28 @@ public class Buerger_ extends BaseEntity {
 	private boolean lebendig;
 	
 	
+	@Column(name="eigenschaften")
+	@OrderColumn(name="order_index")
+	@CollectionTable(name = "Buerger_Eigenschaften", joinColumns = { @JoinColumn(name = "buerger_oid")})
+	@ElementCollection
+	private java.util.List<String> eigenschaften = new java.util.ArrayList<>();
+	
+	
+	@OrderColumn(name="order_index")
+	@JoinTable(name = "Buerger_BisherigeWohnsitze", joinColumns = { @JoinColumn(name = "buerger_oid")})
+	@ElementCollection
+	@Embedded
+	@AttributeOverrides({
+		@AttributeOverride(name="strasse", column=@Column(name="bisherigewohnsitze_strasse")),
+		@AttributeOverride(name="hausnummer", column=@Column(name="bisherigewohnsitze_hausnummer")),
+		@AttributeOverride(name="plz", column=@Column(name="bisherigewohnsitze_plz")),
+		@AttributeOverride(name="ort", column=@Column(name="bisherigewohnsitze_ort"))
+	})	
+	@NotNull
+	@Size(min = 1)
+	private java.util.List<Adresse_> bisherigeWohnsitze = new java.util.ArrayList<>();
+	
+	
 	@OrderColumn(name="order_index")
 	@JoinTable(name = "Buerger_Kinder", joinColumns = { @JoinColumn(name = "buerger_oid")}, inverseJoinColumns = {@JoinColumn(name="kinder_oid")})
 	@ManyToMany
@@ -121,9 +147,9 @@ public class Buerger_ extends BaseEntity {
 	private Buerger_ partner;
 	
 	
-	@JoinTable(name = "Buerger_Wohnungen", joinColumns = { @JoinColumn(name = "buerger_oid")}, inverseJoinColumns = {@JoinColumn(name="wohnungen_oid")})
+	@JoinTable(name = "Buerger_Hauptwohnung", joinColumns = { @JoinColumn(name = "buerger_oid")}, inverseJoinColumns = {@JoinColumn(name="hauptwohnung_oid")})
 	@ManyToOne
-	private Wohnung_ wohnungen;
+	private Wohnung_ hauptwohnung;
 	
 	
 	@Column(name="staatsangehoerigkeiten")
@@ -140,19 +166,10 @@ public class Buerger_ extends BaseEntity {
 	private java.util.List<Sachbearbeiter_> sachbearbeiter = new java.util.ArrayList<>();
 	
 	
-	@JoinTable(name = "Buerger_Pass", joinColumns = { @JoinColumn(name = "buerger_oid")}, inverseJoinColumns = {@JoinColumn(name="pass_oid")})
-	@ManyToOne
-	@NotNull
-	private Pass_ pass;
-	
-	
-	@Column(name="eigenschaften")
 	@OrderColumn(name="order_index")
-	@CollectionTable(name = "Buerger_Eigenschaften", joinColumns = { @JoinColumn(name = "buerger_oid")})
-	@ElementCollection
-	@NotNull
-	@Size(min = 1)
-	private java.util.List<String> eigenschaften = new java.util.ArrayList<>();
+	@JoinTable(name = "Buerger_Pass", joinColumns = { @JoinColumn(name = "buerger_oid")}, inverseJoinColumns = {@JoinColumn(name="pass_oid")})
+	@OneToMany(cascade = {CascadeType.REFRESH})
+	private java.util.List<Pass_> pass = new java.util.ArrayList<>();
 	
 	
 	/**
@@ -226,6 +243,24 @@ public class Buerger_ extends BaseEntity {
 	}
 	
 	
+	public java.util.List<String> getEigenschaften(){
+		return eigenschaften;
+	}
+	
+	public void setEigenschaften(java.util.List<String> eigenschaften){
+		this.eigenschaften = eigenschaften;
+	}
+	
+	
+	public java.util.List<Adresse_> getBisherigeWohnsitze(){
+		return bisherigeWohnsitze;
+	}
+	
+	public void setBisherigeWohnsitze(java.util.List<Adresse_> bisherigeWohnsitze){
+		this.bisherigeWohnsitze = bisherigeWohnsitze;
+	}
+	
+	
 	public java.util.List<Buerger_> getKinder(){
 		return kinder;
 	}
@@ -244,12 +279,12 @@ public class Buerger_ extends BaseEntity {
 	}
 	
 	
-	public Wohnung_ getWohnungen(){
-		return wohnungen;
+	public Wohnung_ getHauptwohnung(){
+		return hauptwohnung;
 	}
 	
-	public void setWohnungen(Wohnung_ wohnungen){
-		this.wohnungen = wohnungen;
+	public void setHauptwohnung(Wohnung_ hauptwohnung){
+		this.hauptwohnung = hauptwohnung;
 	}
 	
 	
@@ -271,21 +306,12 @@ public class Buerger_ extends BaseEntity {
 	}
 	
 	
-	public Pass_ getPass(){
+	public java.util.List<Pass_> getPass(){
 		return pass;
 	}
 	
-	public void setPass(Pass_ pass){
+	public void setPass(java.util.List<Pass_> pass){
 		this.pass = pass;
-	}
-	
-	
-	public java.util.List<String> getEigenschaften(){
-		return eigenschaften;
-	}
-	
-	public void setEigenschaften(java.util.List<String> eigenschaften){
-		this.eigenschaften = eigenschaften;
 	}
 	
 	
@@ -307,13 +333,14 @@ public class Buerger_ extends BaseEntity {
 		s += "\nlong telefonnummer: " + getTelefonnummer();
 		s += "\nString email: " + getEmail();
 		s += "\nboolean lebendig: " + isLebendig();
+		s += "\njava.util.List<String> eigenschaften: " + getEigenschaften();
+		s += "\njava.util.List<Adresse_> bisherigeWohnsitze: " + getBisherigeWohnsitze();
 		s += "\njava.util.List<Buerger_> kinder: " + getKinder();
 		s += "\nBuerger_ partner: " + getPartner();
-		s += "\nWohnung_ wohnungen: " + getWohnungen();
+		s += "\nWohnung_ hauptwohnung: " + getHauptwohnung();
 		s += "\njava.util.List<MoeglicheStaatsangehoerigkeiten_> staatsangehoerigkeiten: " + getStaatsangehoerigkeiten();
 		s += "\njava.util.List<Sachbearbeiter_> sachbearbeiter: " + getSachbearbeiter();
-		s += "\nPass_ pass: " + getPass();
-		s += "\njava.util.List<String> eigenschaften: " + getEigenschaften();
+		s += "\njava.util.List<Pass_> pass: " + getPass();
 		return s;
 	}
 }

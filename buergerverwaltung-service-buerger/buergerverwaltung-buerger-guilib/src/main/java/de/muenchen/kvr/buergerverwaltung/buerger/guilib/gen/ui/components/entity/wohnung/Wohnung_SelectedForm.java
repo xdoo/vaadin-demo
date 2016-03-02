@@ -9,7 +9,6 @@ import org.springframework.hateoas.Link;
 import com.vaadin.data.util.BeanItemContainer;
 import de.muenchen.eventbus.selector.entity.ResponseEntityKey;
 import de.muenchen.kvr.buergerverwaltung.buerger.client.local.Wohnung_;
-import de.muenchen.kvr.buergerverwaltung.buerger.client.local.Adresse_;
 import de.muenchen.kvr.buergerverwaltung.buerger.guilib.gen.ui.components.buttons.listener.wohnung.Wohnung_SingleActions;
 import de.muenchen.kvr.buergerverwaltung.buerger.guilib.gen.services.model.Wohnung_Datastore;
 
@@ -47,16 +46,6 @@ public class Wohnung_SelectedForm extends Wohnung_Form {
         final Wohnung_Datastore data = (Wohnung_Datastore) event.getData();
         if(data.getSelectedWohnung().isPresent()){
         	Wohnung_ wohnung = data.getSelectedWohnung().get();
-			final BeanItemContainer<Adresse_> adresse = data.getSelectedWohnungAdresse();
-			final List<String> listofadresse = new ArrayList<>();
-			List<Adresse_> adresses = adresse.getItemIds();
-			if(adresses != null){
-				listofadresse.addAll(adresse.getItemIds().stream()
-					.map(Adresse_::getId)
-					.map(Link::getHref)
-					.collect(Collectors.toList()));
-			}
-			wohnung.setAdresse(listofadresse);
 			setWohnung(wohnung);
 		}
     }

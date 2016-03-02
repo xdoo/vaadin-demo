@@ -15,16 +15,6 @@
 	lebendig boolean not null, 
 	primary key (oid));
 	
-	create table Adresse (
-	oid varchar(36),
-	interneadresse_strassenschluessel bigint not null, 
-	interneadresse_hausnummer bigint not null, 
-	externeadresse_strasse varchar(255) not null, 
-	externeadresse_hausnummer bigint not null, 
-	externeadresse_plz bigint not null, 
-	externeadresse_ort varchar(255) not null, 
-	primary key (oid));
-	
 	create table Pass (
 	oid varchar(36),
 	passnummer bigint not null, 
@@ -46,7 +36,26 @@
 	oid varchar(36),
 	stock varchar(255) not null, 
 	ausrichtung varchar(255), 
+	adresse_strasse varchar(255) not null, 
+	adresse_hausnummer bigint not null, 
+	adresse_plz bigint not null, 
+	adresse_ort varchar(255) not null, 
 	primary key (oid));
+	
+	--Buerger_BisherigeWohnsitze ValueObject Table
+	create table buerger_bisherigeWohnsitze (
+	buerger_oid varchar(36) not null, 
+	order_index bigint,
+	strasse varchar(255) not null,
+	hausnummer bigint not null,
+	plz bigint not null,
+	ort varchar(255) not null,
+	primary key ( buerger_oid) );
+	
+	alter table buerger_bisherigeWohnsitze 
+	add constraint FK_buerger_bisherigeWohnsitze_TO_buerger 
+	foreign key (buerger_oid) 
+	references buerger;
 	
 	--Buerger_Kinder Relation Table
 	create table Buerger_Kinder (
@@ -83,19 +92,19 @@
 	references Buerger;
 	
 	
-	--Buerger_Wohnungen Relation Table
-	create table Buerger_Wohnungen (
+	--Buerger_Hauptwohnung Relation Table
+	create table Buerger_Hauptwohnung (
 	buerger_oid varchar(36) not null unique, 
-	wohnungen_oid varchar(36) not null, 
-	primary key ( buerger_oid, wohnungen_oid));
+	hauptwohnung_oid varchar(36) not null, 
+	primary key ( buerger_oid, hauptwohnung_oid));
 	
-	alter table Buerger_Wohnungen 
-	add constraint FK_buerger_wohnungen_TO_wohnungen 
-	foreign key (wohnungen_oid) 
+	alter table Buerger_Hauptwohnung 
+	add constraint FK_buerger_hauptwohnung_TO_hauptwohnung 
+	foreign key (hauptwohnung_oid) 
 	references Wohnung;
 	
-	alter table Buerger_Wohnungen 
-	add constraint FK_buerger_wohnungen_TO_buerger 
+	alter table Buerger_Hauptwohnung 
+	add constraint FK_buerger_hauptwohnung_TO_buerger 
 	foreign key (buerger_oid) 
 	references Buerger;
 	
@@ -120,8 +129,9 @@
 	
 	--Buerger_Pass Relation Table
 	create table Buerger_Pass (
-	buerger_oid varchar(36) not null unique, 
-	pass_oid varchar(36) not null, 
+	buerger_oid varchar(36) not null, 
+	pass_oid varchar(36) not null unique, 
+	order_index bigint,
 	primary key ( buerger_oid, pass_oid));
 	
 	alter table Buerger_Pass 
@@ -134,25 +144,6 @@
 	foreign key (buerger_oid) 
 	references Buerger;
 	
-	
-	
-	
-	--Wohnung_Adresse Relation Table
-	create table Wohnung_Adresse (
-	wohnung_oid varchar(36) not null, 
-	adresse_oid varchar(36) not null unique, 
-	order_index bigint,
-	primary key ( wohnung_oid, adresse_oid));
-	
-	alter table Wohnung_Adresse 
-	add constraint FK_wohnung_adresse_TO_adresse 
-	foreign key (adresse_oid) 
-	references Adresse;
-	
-	alter table Wohnung_Adresse 
-	add constraint FK_wohnung_adresse_TO_wohnung 
-	foreign key (wohnung_oid) 
-	references Wohnung;
 	
 	
 	

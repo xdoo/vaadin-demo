@@ -12,7 +12,7 @@ public class Wohnung_DTO extends BaseEntity {
 	
 	private String ausrichtung;
 	
-	private java.util.List<String> adresse;
+	private Adresse_DTO adresse;
 	
 	// Getters and Setters
 	public String getStock(){
@@ -29,10 +29,10 @@ public class Wohnung_DTO extends BaseEntity {
 		this.ausrichtung = ausrichtung;
 	}
 	
-	public java.util.List<String> getAdresse(){
+	public Adresse_DTO getAdresse(){
 		return adresse;
 	}
-	public void setAdresse(java.util.List<String> value){
+	public void setAdresse(Adresse_DTO value){
 		this.adresse = value;
 	}
 	

@@ -10,8 +10,8 @@ import java.util.stream.Collectors;
 import java.util.NoSuchElementException;
 
 import de.muenchen.kvr.buergerverwaltung.buerger.client.local.Wohnung_;
-import de.muenchen.kvr.buergerverwaltung.buerger.client.local.Adresse_;
 import de.muenchen.kvr.buergerverwaltung.buerger.guilib.gen.ui.components.buttons.listener.wohnung.Wohnung_SingleActions;
+import de.muenchen.kvr.buergerverwaltung.buerger.guilib.gen.ui.components.entity.adresse.Adresse_Form;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.components.GenericGrid;
@@ -37,13 +37,11 @@ public class Wohnung_CreateForm extends Wohnung_Form {
     /** The button for the save action. */
     private final ActionButton saveButton = new ActionButton(Wohnung_.class, SimpleAction.save);
     
-	/** 
-	 * Grid to select a required relation.
-	 * relation: adresse
-	 * type: multiple Adresse_
-	 */
-	 private final GenericGrid<Adresse_> adresse_Grid = new GenericGrid<>(Adresse_.class, Adresse_.Field.getProperties());
-	 
+    /**
+     * Form of the adresse of this Wohnung.
+     */
+    private final Adresse_Form adresse_Form = new Adresse_Form();
+    
 	/**
 	 * Create a new Wohnung_CreateForm that navigates to the navigateTo View on save.
 	 *
@@ -64,9 +62,8 @@ public class Wohnung_CreateForm extends Wohnung_Form {
         getButtonLayout().setSpacing(true);
         getButtonLayout().addComponents(getSaveButton());
 
+		getFormLayout().addComponent(adresse_Form);
 		
-		configureAdresse_Grid();
-		getFormLayout().addComponent(adresse_Grid);
         configureSaveButton();
 
         getFormLayout().addComponent(getButtonLayout());
@@ -94,27 +91,13 @@ public class Wohnung_CreateForm extends Wohnung_Form {
         getSaveButton().useNotification(true);
     }
     
-    /**
-     * Configures the grid used to select the adresse of this Wohnung
-     */
-    protected void configureAdresse_Grid(){
-    	adresse_Grid.setHeightByRows(5);
-    	adresse_Grid.setSelectionMode(Grid.SelectionMode.MULTI);
-    	adresse_Grid.setCaption(BaseUI.getCurrentI18nResolver().resolve("wohnung.adresse.label"));
-    }
 
 	// Getters
 	@Override
 	public Wohnung_ getWohnung(){
 		Wohnung_ wohnung=super.getWohnung();
 		
-		try{
-			wohnung.setAdresse(adresse_Grid.getSelectedEntities().stream().map(o -> o.getId().getHref()).collect(Collectors.toList()));
-			adresse_Grid.setComponentError(null);
-		} catch(NoSuchElementException e) {
-			adresse_Grid.setComponentError(new UserError("No Adresse selected"));
-			throw new Validator.InvalidValueException("No Adresse selected");
-		}
+		wohnung.setAdresse(adresse_Form.getAdresse());
 		
 		return wohnung;
 	}

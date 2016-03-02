@@ -17,7 +17,7 @@ import de.muenchen.vaadin.guilib.components.ConfirmationWindow;
 import de.muenchen.kvr.buergerverwaltung.buerger.guilib.gen.ui.components.buttons.listener.buerger.Buerger_AssociationActions;
 import de.muenchen.kvr.buergerverwaltung.buerger.guilib.gen.ui.components.buttons.listener.wohnung.Wohnung_SingleActions;
 
-public class Buerger_Wohnungen_ReadEditForm extends BaseComponent {
+public class Buerger_Hauptwohnung_ReadEditForm extends BaseComponent {
 
     /** The root layout for the content of this component. */
 	private final VerticalLayout layout = new VerticalLayout();
@@ -53,7 +53,7 @@ public class Buerger_Wohnungen_ReadEditForm extends BaseComponent {
 	private final NavigateActions deleteNavigation;
 	
 	/** The underlying form. */
-    private final Buerger_Wohnungen_Form wohnungenForm;
+    private final Buerger_Hauptwohnung_Form hauptwohnungForm;
 
     /**
      * Formular zum Lesen eines {@link Wohnung_}s. Über diesen Konstruktor kann zusätzlich eine Zielseite für die
@@ -63,16 +63,16 @@ public class Buerger_Wohnungen_ReadEditForm extends BaseComponent {
      * @param navigateToCreate
      * @param navigateToAdd
      */
-    public Buerger_Wohnungen_ReadEditForm(final String navigateToRead, final String navigateToCreate, final String navigateToAdd, final String navigateToDelete) {
-        wohnungenForm = new Buerger_Wohnungen_Form() {
+    public Buerger_Hauptwohnung_ReadEditForm(final String navigateToRead, final String navigateToCreate, final String navigateToAdd, final String navigateToDelete) {
+        hauptwohnungForm = new Buerger_Hauptwohnung_Form() {
             @Override
             public void setWohnung(Wohnung_ wohnung) {
                 setFormVisible(wohnung != null);
                 super.setWohnung(wohnung);
             }
         };
-        wohnungenForm.reLoad();
-        wohnungenForm.setReadOnly(true);
+        hauptwohnungForm.reLoad();
+        hauptwohnungForm.setReadOnly(true);
 		
 		this.createNavigation = (navigateToCreate==null ? null : new NavigateActions(navigateToCreate));
 		this.readNavigation = (navigateToRead==null ? null : new NavigateActions(navigateToRead));
@@ -156,7 +156,7 @@ public class Buerger_Wohnungen_ReadEditForm extends BaseComponent {
     }
     
     private void performClick(NavigateActions navigateAction){
-		if (wohnungenForm.isVisible()) {
+		if (hauptwohnungForm.isVisible()) {
 			ConfirmationWindow window = new ConfirmationWindow(SimpleAction.override);
 			window.addActionPerformer(navigateAction::navigate);
 			getUI().addWindow(window);
@@ -181,7 +181,7 @@ public class Buerger_Wohnungen_ReadEditForm extends BaseComponent {
 	 */
     private void configureDeleteButton() {
         final Buerger_AssociationActions associationActions = new Buerger_AssociationActions(
-                () -> new Association<>(getForm().getWohnung(), Buerger_.Rel.wohnungen.name()));
+                () -> new Association<>(getForm().getWohnung(), Buerger_.Rel.hauptwohnung.name()));
         deleteButton.addActionPerformer(associationActions::removeAssociation);
         deleteButton.addActionPerformer(getDeleteNavigation()::navigate);
         
@@ -199,8 +199,8 @@ public class Buerger_Wohnungen_ReadEditForm extends BaseComponent {
     }
 
 	// Getters
-    public Buerger_Wohnungen_Form getForm() {
-        return wohnungenForm;
+    public Buerger_Hauptwohnung_Form getForm() {
+        return hauptwohnungForm;
     }
     
     public HorizontalLayout getButtons(){

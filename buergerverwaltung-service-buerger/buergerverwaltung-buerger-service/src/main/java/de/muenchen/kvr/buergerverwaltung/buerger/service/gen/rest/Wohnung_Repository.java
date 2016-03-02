@@ -108,9 +108,4 @@ public interface Wohnung_Repository extends CrudRepository<Wohnung_, UUID> {
 	List<Wohnung_> findWohnungByStock(@Param("stock") String stock);
 	List<Wohnung_> findWohnungByAusrichtung(@Param("ausrichtung") String ausrichtung);
 	
-	/**
-	 * Find the Wohnung_ with a adresse relation to the Adresse with the given oid.
-	 * @param oid the unique oid of the Adresse that will be searched for in the adresse relation.
-	 */
-	Wohnung_ findByAdresseOid(@Param(value = "oid") UUID oid);
 }

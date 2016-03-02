@@ -1,12 +1,13 @@
 package de.muenchen.kvr.buergerverwaltung.buerger.service.gen.domain;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;	
-import javax.persistence.OneToMany;
-import javax.persistence.OrderColumn;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Embedded;
+import javax.persistence.OneToOne;
 import javax.persistence.CascadeType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -51,12 +52,15 @@ public class Wohnung_ extends BaseEntity {
 	private String ausrichtung;
 	
 	
-	@OrderColumn(name="order_index")
-	@JoinTable(name = "Wohnung_Adresse", joinColumns = { @JoinColumn(name = "wohnung_oid")}, inverseJoinColumns = {@JoinColumn(name="adresse_oid")})
-	@OneToMany(cascade = {CascadeType.REFRESH})
+	@Embedded
+	@AttributeOverrides({
+		@AttributeOverride(name="strasse", column=@Column(name="adresse_strasse")),
+		@AttributeOverride(name="hausnummer", column=@Column(name="adresse_hausnummer")),
+		@AttributeOverride(name="plz", column=@Column(name="adresse_plz")),
+		@AttributeOverride(name="ort", column=@Column(name="adresse_ort"))
+	})	
 	@NotNull
-	@Size(min = 1)
-	private java.util.List<Adresse_> adresse = new java.util.ArrayList<>();
+	private Adresse_ adresse;
 	
 	
 	/**
@@ -85,11 +89,11 @@ public class Wohnung_ extends BaseEntity {
 	}
 	
 	
-	public java.util.List<Adresse_> getAdresse(){
+	public Adresse_ getAdresse(){
 		return adresse;
 	}
 	
-	public void setAdresse(java.util.List<Adresse_> adresse){
+	public void setAdresse(Adresse_ adresse){
 		this.adresse = adresse;
 	}
 	
@@ -107,7 +111,7 @@ public class Wohnung_ extends BaseEntity {
 		String s = "Wohnung";
 		s += "\nString stock: " + getStock();
 		s += "\nString ausrichtung: " + getAusrichtung();
-		s += "\njava.util.List<Adresse_> adresse: " + getAdresse();
+		s += "\nAdresse_ adresse: " + getAdresse();
 		return s;
 	}
 }

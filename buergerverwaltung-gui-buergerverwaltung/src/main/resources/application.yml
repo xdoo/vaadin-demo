@@ -94,7 +94,7 @@ i18n.de-DE.view_.readWriteBurger.pass.button.detail.label : detail
 i18n.de-DE.view_.readWriteBurger.sach.label : sach
 i18n.de-DE.view_.readWriteBurger.sach.button.create.label : create
 i18n.de-DE.view_.readWriteBurger.sach.button.add.label : add
-i18n.de-DE.view_.readWriteBurger.sach.button.details.label : details
+i18n.de-DE.view_.readWriteBurger.sach.button.detail.label : detail
 i18n.de-DE.view_.readWriteBurger.helptext : Für diese Seite existiert keine Beschreibung
 
 i18n.de-DE.view_.addPassForBuerger.title : AddPassForBuerger
@@ -154,6 +154,22 @@ i18n.de-DE.view_.sachbearbeiterCreateView.sach.label : sach
 i18n.de-DE.view_.sachbearbeiterCreateView.sach.button.save.label : save
 i18n.de-DE.view_.sachbearbeiterCreateView.helptext : Für diese Seite existiert keine Beschreibung
 
+i18n.de-DE.view_.wohnungsverwaltung.title : Wohnungsverwaltung
+i18n.de-DE.view_.wohnungsverwaltung.sach.label : sach
+i18n.de-DE.view_.wohnungsverwaltung.sach.button.create.label : create
+i18n.de-DE.view_.wohnungsverwaltung.sach.button.detail.label : detail
+i18n.de-DE.view_.wohnungsverwaltung.helptext : Für diese Seite existiert keine Beschreibung
+
+i18n.de-DE.view_.readWriteWohnung.title : ReadWriteWohnung
+i18n.de-DE.view_.readWriteWohnung.button.zurueck.label : zurueck
+i18n.de-DE.view_.readWriteWohnung.sach.label : sach
+i18n.de-DE.view_.readWriteWohnung.helptext : Für diese Seite existiert keine Beschreibung
+
+i18n.de-DE.view_.wohnungCreate.title : WohnungCreate
+i18n.de-DE.view_.wohnungCreate.wohnung.label : wohnung
+i18n.de-DE.view_.wohnungCreate.wohnung.button.save.label : save
+i18n.de-DE.view_.wohnungCreate.helptext : Für diese Seite existiert keine Beschreibung
+
 #=======================================#
 # Service: buerger
 #=======================================#
@@ -168,30 +184,21 @@ buerger:
    telefonnummer.column_header.icon :
    email.column_header.icon :
    lebendig.column_header.icon :
+   eigenschaften.column_header.icon :
+   bisherigeWohnsitze.column_header.icon :
    kinder.column_header.icon :
    partner.column_header.icon :
-   wohnungen.column_header.icon :
+   hauptwohnung.column_header.icon :
    staatsangehoerigkeiten.column_header.icon :
    sachbearbeiter.column_header.icon :
    pass.column_header.icon :
-   eigenschaften.column_header.icon :
 
 ## Entity Adresse - Icons
 adresse:
-   interneAdresse.column_header.icon :
-   externeAdresse.column_header.icon :
-
-## Entity AdresseExtern - Icons
-adresseextern:
    strasse.column_header.icon :
    hausnummer.column_header.icon :
    plz.column_header.icon :
    ort.column_header.icon :
-
-## Entity AdresseIntern - Icons
-adresseintern:
-   strassenSchluessel.column_header.icon :
-   hausnummer.column_header.icon :
 
 ## Entity Pass - Icons
 pass:
@@ -275,6 +282,18 @@ i18n.de-DE.buerger.lebendig:
    column_header : Lebendig
    input_prompt : Lebendig
    tooltip : 
+## Entity Buerger - Attribute eigenschaften
+i18n.de-DE.buerger.eigenschaften:
+   label : Eigenschaften
+   column_header : Eigenschaften
+   input_prompt : Eigenschaften
+   tooltip : 
+## Entity Buerger - Attribute bisherigeWohnsitze
+i18n.de-DE.buerger.bisherigeWohnsitze:
+   label : BisherigeWohnsitze*
+   column_header : BisherigeWohnsitze
+   input_prompt : BisherigeWohnsitze
+   tooltip : 
 ## Entity Buerger - Attribute kinder
 i18n.de-DE.buerger.kinder:
    label : Kinder
@@ -287,11 +306,11 @@ i18n.de-DE.buerger.partner:
    column_header : Partner
    input_prompt : Partner
    tooltip : 
-## Entity Buerger - Attribute wohnungen
-i18n.de-DE.buerger.wohnungen:
-   label : Wohnungen
-   column_header : Wohnungen
-   input_prompt : Wohnungen
+## Entity Buerger - Attribute hauptwohnung
+i18n.de-DE.buerger.hauptwohnung:
+   label : Hauptwohnung
+   column_header : Hauptwohnung
+   input_prompt : Hauptwohnung
    tooltip : 
 ## Entity Buerger - Attribute staatsangehoerigkeiten
 i18n.de-DE.buerger.staatsangehoerigkeiten:
@@ -307,15 +326,9 @@ i18n.de-DE.buerger.sachbearbeiter:
    tooltip : 
 ## Entity Buerger - Attribute pass
 i18n.de-DE.buerger.pass:
-   label : Pass*
+   label : Pass
    column_header : Pass
    input_prompt : Pass
-   tooltip : 
-## Entity Buerger - Attribute eigenschaften
-i18n.de-DE.buerger.eigenschaften:
-   label : Eigenschaften*
-   column_header : Eigenschaften
-   input_prompt : Eigenschaften
    tooltip : 
 
 ## Entity Buerger - Aktionsmeldungen
@@ -349,8 +362,8 @@ i18n.de-DE.buerger.notification.success:
    release.label.sachbearbeiter : Sachbearbeiter entfernt
    release.text.sachbearbeiter : Sachbearbeiter wurde erfolgreich entfernt.
    
-   release.label.wohnungen : Wohnungen entfernt
-   release.text.wohnungen : Wohnungen wurde erfolgreich entfernt.
+   release.label.hauptwohnung : Hauptwohnung entfernt
+   release.text.hauptwohnung : Hauptwohnung wurde erfolgreich entfernt.
    
 ### Entity Buerger - Warnings
 i18n.de-DE.buerger.notification.warning:
@@ -413,17 +426,29 @@ i18n.de-DE.adresse.form:
 
 i18n.de-DE.adresse.table_buttons.column_header : Aktionen
 
-## Entity Adresse - Attribute interneAdresse
-i18n.de-DE.adresse.interneAdresse:
-   label : InterneAdresse*
-   column_header : InterneAdresse
-   input_prompt : InterneAdresse
+## Entity Adresse - Attribute strasse
+i18n.de-DE.adresse.strasse:
+   label : Strasse*
+   column_header : Strasse
+   input_prompt : Strasse
    tooltip : 
-## Entity Adresse - Attribute externeAdresse
-i18n.de-DE.adresse.externeAdresse:
-   label : ExterneAdresse*
-   column_header : ExterneAdresse
-   input_prompt : ExterneAdresse
+## Entity Adresse - Attribute hausnummer
+i18n.de-DE.adresse.hausnummer:
+   label : Hausnummer*
+   column_header : Hausnummer
+   input_prompt : Hausnummer
+   tooltip : 
+## Entity Adresse - Attribute plz
+i18n.de-DE.adresse.plz:
+   label : Plz*
+   column_header : Plz
+   input_prompt : Plz
+   tooltip : 
+## Entity Adresse - Attribute ort
+i18n.de-DE.adresse.ort:
+   label : Ort*
+   column_header : Ort
+   input_prompt : Ort
    tooltip : 
 
 ## Entity Adresse - Aktionsmeldungen
@@ -484,204 +509,6 @@ i18n.de-DE.adresse.notification.error.delete:
    text.409 : Adresse wird in anderer Entität referenziert. Löschen nicht möglich.
    label.400 : Nicht gefunden
    text.400 : Adresse existiert nicht.
-   label : Fehler
-   text : Ein Fehler ist aufgetreten. Löschen nicht möglich.
-
-# Entity AdresseExtern
-i18n.de-DE.adresseextern.form:
-   update.headline.label : AdresseExtern bearbeiten
-   create.headline.label : AdresseExtern erstellen
-   add.headline.label : AdresseExtern hinzufügen
-   read.headline.label : AdresseExtern Details
-   history.headline.label : AdresseExtern History
-   update.button.label : bearbeiten
-   create.button.label : neu
-   cancel.button.label : abbrechen
-   back.button.label : zurück
-   save.button.label : speichern
-   add.button.label : hinzufügen
-   delete.button.label : löschen
-   copy.button.label : kopieren
-   read.button.label : Details
-
-i18n.de-DE.adresseextern.table_buttons.column_header : Aktionen
-
-## Entity AdresseExtern - Attribute strasse
-i18n.de-DE.adresseextern.strasse:
-   label : Strasse*
-   column_header : Strasse
-   input_prompt : Strasse
-   tooltip : 
-## Entity AdresseExtern - Attribute hausnummer
-i18n.de-DE.adresseextern.hausnummer:
-   label : Hausnummer*
-   column_header : Hausnummer
-   input_prompt : Hausnummer
-   tooltip : 
-## Entity AdresseExtern - Attribute plz
-i18n.de-DE.adresseextern.plz:
-   label : Plz*
-   column_header : Plz
-   input_prompt : Plz
-   tooltip : 
-## Entity AdresseExtern - Attribute ort
-i18n.de-DE.adresseextern.ort:
-   label : Ort*
-   column_header : Ort
-   input_prompt : Ort
-   tooltip : 
-
-## Entity AdresseExtern - Aktionsmeldungen
-
-### Entity AdresseExtern - Success
-i18n.de-DE.adresseextern.notification.success:
-   update.label : AdresseExtern angepasst
-   update.text : AdresseExtern wurde erfolgreich angepasst und gespeichert.
-   save.label : AdresseExtern erstellt
-   save.text : AdresseExtern wurde erfolgreich erstellt und gespeichert.
-   delete.label : AdresseExtern gelöscht
-   delete.text : AdresseExtern wurde erfolgreich gelöscht.
-   copy.label : AdresseExtern kopiert
-   copy.text : AdresseExtern wurde erfolgreich kopiert.
-   release.label : AdresseExtern entfernt
-   release.text : AdresseExtern wurde erfolgreich entfernt.
-   add.label : AdresseExtern hinzugefügt
-   add.text : AdresseExtern wurde erfolgreich zum AdresseExtern hinzugefügt.
-   association.label : Änderung gespeichert
-   association.text : Die Änderung wurde erfolgreich gespeichert.
-   
-### Entity AdresseExtern - Warnings
-i18n.de-DE.adresseextern.notification.warning:
-   create.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
-   create.label : Warnung
-   update.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
-   update.label : Warnung
-
-### Entity AdresseExtern - Errors
-i18n.de-DE.adresseextern.notification.error.create:
-   label.timeout : Zeitüberschreitung
-   text.timeout : Beim Versuch die Daten zu speichern ist eine Zeitüberschreitung aufgetreten.
-   label : Fehler
-   text : Beim erstellen ist ein Fehler aufgetreten.
-
-i18n.de-DE.adresseextern.notification.error.update:
-   label.timeout : Zeitüberschreitung
-   text.timeout : Beim Versuch die Daten zu ändern ist eine Zeitüberschreitung aufgetreten.
-   label : Fehler
-   text : Beim ändern ist ein Fehler aufgetreten. Änderung wurde nicht gespeichert.
-
-i18n.de-DE.adresseextern.notification.error.read:
-   label.timeout : Zeitüberschreitung
-   text.timeout : Beim Versuch die Daten zu laden ist eine Zeitüberschreitung aufgetreten.
-   label : Fehler
-   text : Beim Lesen ist ein Fehler aufgetreten.
-
-i18n.de-DE.adresseextern.notification.error.association:
-   label.timeout : Zeitüberschreitung
-   text.timeout : Beim Versuch die Assoziation zu ändern ist eine Zeitüberschreitung aufgetreten.
-   label : Fehler
-   text : Beim ändern der Assoziation ist ein Fehler aufgetreten.
-
-i18n.de-DE.adresseextern.notification.error.delete:
-   label.timeout : Zeitüberschreitung
-   text.timeout : Beim Versuch die Daten zu löschen ist eine Zeitüberschreitung aufgetreten.
-   label.409 : Konflikt
-   text.409 : AdresseExtern wird in anderer Entität referenziert. Löschen nicht möglich.
-   label.400 : Nicht gefunden
-   text.400 : AdresseExtern existiert nicht.
-   label : Fehler
-   text : Ein Fehler ist aufgetreten. Löschen nicht möglich.
-
-# Entity AdresseIntern
-i18n.de-DE.adresseintern.form:
-   update.headline.label : AdresseIntern bearbeiten
-   create.headline.label : AdresseIntern erstellen
-   add.headline.label : AdresseIntern hinzufügen
-   read.headline.label : AdresseIntern Details
-   history.headline.label : AdresseIntern History
-   update.button.label : bearbeiten
-   create.button.label : neu
-   cancel.button.label : abbrechen
-   back.button.label : zurück
-   save.button.label : speichern
-   add.button.label : hinzufügen
-   delete.button.label : löschen
-   copy.button.label : kopieren
-   read.button.label : Details
-
-i18n.de-DE.adresseintern.table_buttons.column_header : Aktionen
-
-## Entity AdresseIntern - Attribute strassenSchluessel
-i18n.de-DE.adresseintern.strassenSchluessel:
-   label : StrassenSchluessel*
-   column_header : StrassenSchluessel
-   input_prompt : StrassenSchluessel
-   tooltip : 
-## Entity AdresseIntern - Attribute hausnummer
-i18n.de-DE.adresseintern.hausnummer:
-   label : Hausnummer*
-   column_header : Hausnummer
-   input_prompt : Hausnummer
-   tooltip : 
-
-## Entity AdresseIntern - Aktionsmeldungen
-
-### Entity AdresseIntern - Success
-i18n.de-DE.adresseintern.notification.success:
-   update.label : AdresseIntern angepasst
-   update.text : AdresseIntern wurde erfolgreich angepasst und gespeichert.
-   save.label : AdresseIntern erstellt
-   save.text : AdresseIntern wurde erfolgreich erstellt und gespeichert.
-   delete.label : AdresseIntern gelöscht
-   delete.text : AdresseIntern wurde erfolgreich gelöscht.
-   copy.label : AdresseIntern kopiert
-   copy.text : AdresseIntern wurde erfolgreich kopiert.
-   release.label : AdresseIntern entfernt
-   release.text : AdresseIntern wurde erfolgreich entfernt.
-   add.label : AdresseIntern hinzugefügt
-   add.text : AdresseIntern wurde erfolgreich zum AdresseIntern hinzugefügt.
-   association.label : Änderung gespeichert
-   association.text : Die Änderung wurde erfolgreich gespeichert.
-   
-### Entity AdresseIntern - Warnings
-i18n.de-DE.adresseintern.notification.warning:
-   create.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
-   create.label : Warnung
-   update.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
-   update.label : Warnung
-
-### Entity AdresseIntern - Errors
-i18n.de-DE.adresseintern.notification.error.create:
-   label.timeout : Zeitüberschreitung
-   text.timeout : Beim Versuch die Daten zu speichern ist eine Zeitüberschreitung aufgetreten.
-   label : Fehler
-   text : Beim erstellen ist ein Fehler aufgetreten.
-
-i18n.de-DE.adresseintern.notification.error.update:
-   label.timeout : Zeitüberschreitung
-   text.timeout : Beim Versuch die Daten zu ändern ist eine Zeitüberschreitung aufgetreten.
-   label : Fehler
-   text : Beim ändern ist ein Fehler aufgetreten. Änderung wurde nicht gespeichert.
-
-i18n.de-DE.adresseintern.notification.error.read:
-   label.timeout : Zeitüberschreitung
-   text.timeout : Beim Versuch die Daten zu laden ist eine Zeitüberschreitung aufgetreten.
-   label : Fehler
-   text : Beim Lesen ist ein Fehler aufgetreten.
-
-i18n.de-DE.adresseintern.notification.error.association:
-   label.timeout : Zeitüberschreitung
-   text.timeout : Beim Versuch die Assoziation zu ändern ist eine Zeitüberschreitung aufgetreten.
-   label : Fehler
-   text : Beim ändern der Assoziation ist ein Fehler aufgetreten.
-
-i18n.de-DE.adresseintern.notification.error.delete:
-   label.timeout : Zeitüberschreitung
-   text.timeout : Beim Versuch die Daten zu löschen ist eine Zeitüberschreitung aufgetreten.
-   label.409 : Konflikt
-   text.409 : AdresseIntern wird in anderer Entität referenziert. Löschen nicht möglich.
-   label.400 : Nicht gefunden
-   text.400 : AdresseIntern existiert nicht.
    label : Fehler
    text : Ein Fehler ist aufgetreten. Löschen nicht möglich.
 
@@ -957,9 +784,6 @@ i18n.de-DE.wohnung.notification.success:
    add.text : Wohnung wurde erfolgreich zum Wohnung hinzugefügt.
    association.label : Änderung gespeichert
    association.text : Die Änderung wurde erfolgreich gespeichert.
-   
-   release.label.adresse : Adresse entfernt
-   release.text.adresse : Adresse wurde erfolgreich entfernt.
    
 ### Entity Wohnung - Warnings
 i18n.de-DE.wohnung.notification.warning:

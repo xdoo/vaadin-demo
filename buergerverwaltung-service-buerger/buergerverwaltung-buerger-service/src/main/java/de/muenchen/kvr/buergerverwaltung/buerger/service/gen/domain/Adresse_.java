@@ -4,15 +4,12 @@ import javax.validation.constraints.NotNull;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;	
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.Embedded;
-import javax.persistence.OneToOne;
-import javax.persistence.CascadeType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
+import javax.persistence.Embeddable;
 import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.FieldBridge;
+import org.hibernate.search.annotations.Field;
 import de.muenchen.service.BaseEntity;
+import de.muenchen.service.PetersPerfectBridge;
 import de.muenchen.auditing.MUCAudited;
 
 /*
@@ -26,34 +23,39 @@ import de.muenchen.auditing.MUCAudited;
  * The entity's content will be loaded according to the reference variable.
  * </p>
  */
-@Entity
-@Indexed
-@Table(name = "Adresse")
-@MUCAudited({MUCAudited.CREATE, MUCAudited.DELETE, MUCAudited.UPDATE})
-public class Adresse_ extends BaseEntity {
+@Embeddable
+public class Adresse_ {
 	
 	// ========= //
 	// Variables //
 	// ========= //
 	
-	@Embedded
-	@AttributeOverrides({
-		@AttributeOverride(name="strassenSchluessel", column=@Column(name="interneadresse_strassenschluessel")),
-		@AttributeOverride(name="hausnummer", column=@Column(name="interneadresse_hausnummer"))
-	})	
+	@Column(name="strasse")
+	@Field
+	@FieldBridge(impl = PetersPerfectBridge.class)
 	@NotNull
-	private AdresseIntern_ interneAdresse;
+	private String strasse;
 	
 	
-	@Embedded
-	@AttributeOverrides({
-		@AttributeOverride(name="strasse", column=@Column(name="externeadresse_strasse")),
-		@AttributeOverride(name="hausnummer", column=@Column(name="externeadresse_hausnummer")),
-		@AttributeOverride(name="plz", column=@Column(name="externeadresse_plz")),
-		@AttributeOverride(name="ort", column=@Column(name="externeadresse_ort"))
-	})	
+	@Column(name="hausnummer")
+	@Field
+	@FieldBridge(impl = PetersPerfectBridge.class)
 	@NotNull
-	private AdresseExtern_ externeAdresse;
+	private long hausnummer;
+	
+	
+	@Column(name="plz")
+	@Field
+	@FieldBridge(impl = PetersPerfectBridge.class)
+	@NotNull
+	private long plz;
+	
+	
+	@Column(name="ort")
+	@Field
+	@FieldBridge(impl = PetersPerfectBridge.class)
+	@NotNull
+	private String ort;
 	
 	
 	/**
@@ -64,21 +66,39 @@ public class Adresse_ extends BaseEntity {
 	// =================== //
 	// Getters and Setters //
 	// =================== //
-	public AdresseIntern_ getInterneAdresse(){
-		return interneAdresse;
+	public String getStrasse(){
+		return strasse;
 	}
 	
-	public void setInterneAdresse(AdresseIntern_ interneAdresse){
-		this.interneAdresse = interneAdresse;
+	public void setStrasse(String strasse){
+		this.strasse = strasse;
 	}
 	
 	
-	public AdresseExtern_ getExterneAdresse(){
-		return externeAdresse;
+	public long getHausnummer(){
+		return hausnummer;
 	}
 	
-	public void setExterneAdresse(AdresseExtern_ externeAdresse){
-		this.externeAdresse = externeAdresse;
+	public void setHausnummer(long hausnummer){
+		this.hausnummer = hausnummer;
+	}
+	
+	
+	public long getPlz(){
+		return plz;
+	}
+	
+	public void setPlz(long plz){
+		this.plz = plz;
+	}
+	
+	
+	public String getOrt(){
+		return ort;
+	}
+	
+	public void setOrt(String ort){
+		this.ort = ort;
 	}
 	
 	
@@ -93,8 +113,10 @@ public class Adresse_ extends BaseEntity {
 	@Override
 	public String toString(){
 		String s = "Adresse";
-		s += "\nAdresseIntern_ interneAdresse: " + getInterneAdresse();
-		s += "\nAdresseExtern_ externeAdresse: " + getExterneAdresse();
+		s += "\nString strasse: " + getStrasse();
+		s += "\nlong hausnummer: " + getHausnummer();
+		s += "\nlong plz: " + getPlz();
+		s += "\nString ort: " + getOrt();
 		return s;
 	}
 }

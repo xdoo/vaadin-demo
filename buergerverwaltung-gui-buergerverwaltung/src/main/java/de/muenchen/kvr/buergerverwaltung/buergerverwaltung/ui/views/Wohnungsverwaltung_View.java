@@ -14,17 +14,17 @@ import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.kvr.buergerverwaltung.buerger.guilib.gen.ui.components.entity.sachbearbeiter.Sachbearbeiter_Grid;
 import de.muenchen.kvr.buergerverwaltung.buerger.guilib.gen.ui.controller.Sachbearbeiter_ViewController;
 
-@SpringView(name = Sachbearbeiterverwaltung_View.NAME)
+@SpringView(name = Wohnungsverwaltung_View.NAME)
 @UIScope
-public class Sachbearbeiterverwaltung_View extends DefaultView{				
-	public static final String NAME = "sachbearbeiterverwaltung";
+public class Wohnungsverwaltung_View extends DefaultView{				
+	public static final String NAME = "wohnungsverwaltung";
 
 	@Autowired
 	private Sachbearbeiter_ViewController sachbearbeiterController;
 	
 	@Override
 	protected void init(){
-		Label pageTitle = new Label(BaseUI.getCurrentI18nResolver().resolve("view_.sachbearbeiterverwaltung.title"));
+		Label pageTitle = new Label(BaseUI.getCurrentI18nResolver().resolve("view_.wohnungsverwaltung.title"));
         pageTitle.addStyleName(ValoTheme.LABEL_H1);
         pageTitle.addStyleName(ValoTheme.LABEL_COLORED);
         addComponent(pageTitle);
@@ -34,8 +34,8 @@ public class Sachbearbeiterverwaltung_View extends DefaultView{
 		final Sachbearbeiter_Grid sach = new Sachbearbeiter_Grid(sachbearbeiterController
 		);
 		sach.activateSearch().activateCopy().activateDelete();
-		sach.activateCreate(SachbearbeiterCreateView_View.NAME);
-		sach.activateRead(ReadWriteSachbearbeiter_View.NAME).activateDoubleClickToRead(ReadWriteSachbearbeiter_View.NAME);
+		sach.activateCreate(WohnungCreate_View.NAME);
+		sach.activateRead(ReadWriteWohnung_View.NAME).activateDoubleClickToRead(ReadWriteWohnung_View.NAME);
 		
 		// Add components to the default layout
 		final VerticalLayout layout = new VerticalLayout(sach__label, sach);

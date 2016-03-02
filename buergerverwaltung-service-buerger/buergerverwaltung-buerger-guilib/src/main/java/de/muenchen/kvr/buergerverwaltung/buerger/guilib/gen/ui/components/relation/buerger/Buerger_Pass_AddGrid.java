@@ -36,16 +36,16 @@ public class Buerger_Pass_AddGrid extends BaseComponent {
 
         grid = new Pass_Grid(controller);
 
-		grid.setSelectionMode(Grid.SelectionMode.SINGLE).activateSearch();
+		grid.setSelectionMode(Grid.SelectionMode.MULTI).activateSearch();
 
         ActionButton addButton = new ActionButton(Pass_.class, SimpleAction.add);
         
-        Buerger_AssociationActions actionsSingle = new Buerger_AssociationActions(
-                () -> new Association<>(grid.getSelectedEntities().get(0), Buerger_.Rel.pass.name()));
-        addButton.addActionPerformer(actionsSingle::addAssociation);
+        Buerger_AssociationListActions actionMultiple = new Buerger_AssociationListActions(
+                () -> grid.getSelectedEntities().stream().map(entity -> new Association<>(entity, Buerger_.Rel.pass.name())).collect(Collectors.toList()));
+        addButton.addActionPerformer(actionMultiple::addAssociations);
         addButton.addActionPerformer(navigateActions::navigate);
         addButton.useNotification(true);
-        grid.addSingleSelectComponent(addButton);
+        grid.addMultiSelectComponent(addButton);
 
         setCompositionRoot(grid);
     }

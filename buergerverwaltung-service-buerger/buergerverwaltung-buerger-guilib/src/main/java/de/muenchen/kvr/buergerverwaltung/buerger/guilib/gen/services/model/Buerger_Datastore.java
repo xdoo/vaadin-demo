@@ -23,14 +23,14 @@ public class Buerger_Datastore implements Datastore<Buerger_>{
     /** The partner of the selectedBuerger. */
     private Optional<Buerger_> selectedBuergerPartner = Optional.empty();
 
-    /** The pass of the selectedBuerger. */
-    private Optional<Pass_> selectedBuergerPass = Optional.empty();
+    /** All the pass of the selectedBuerger. */
+    private final BeanItemContainer<Pass_> selectedBuergerPass = new BeanItemContainer<>(Pass_.class);
 
     /** All the sachbearbeiter of the selectedBuerger. */
     private final BeanItemContainer<Sachbearbeiter_> selectedBuergerSachbearbeiter = new BeanItemContainer<>(Sachbearbeiter_.class);
 
-    /** The wohnungen of the selectedBuerger. */
-    private Optional<Wohnung_> selectedBuergerWohnungen = Optional.empty();
+    /** The hauptwohnung of the selectedBuerger. */
+    private Optional<Wohnung_> selectedBuergerHauptwohnung = Optional.empty();
     
     /** A List of all the Buerger_, possible reduced by the query. */
     private final BeanItemContainer<Buerger_> buergers = new BeanItemContainer<>(Buerger_.class);
@@ -94,15 +94,9 @@ public class Buerger_Datastore implements Datastore<Buerger_>{
 	/**
 	 * Get the pass of the current selected Buerger_
 	 */
-	public Optional<Pass_> getSelectedBuergerPass() {
-	    return selectedBuergerPass;
-	}
-	/**
-	 * Set the pass of the current selected Buerger_
-	 */
-	public void setSelectedBuergerPass(Optional<Pass_> pass) {
-	    this.selectedBuergerPass = pass;
-	}
+    public BeanItemContainer<Pass_> getSelectedBuergerPass() {
+        return selectedBuergerPass;
+    }
 
 	/**
 	 * Get the sachbearbeiter of the current selected Buerger_
@@ -112,16 +106,16 @@ public class Buerger_Datastore implements Datastore<Buerger_>{
     }
 
 	/**
-	 * Get the wohnungen of the current selected Buerger_
+	 * Get the hauptwohnung of the current selected Buerger_
 	 */
-	public Optional<Wohnung_> getSelectedBuergerWohnungen() {
-	    return selectedBuergerWohnungen;
+	public Optional<Wohnung_> getSelectedBuergerHauptwohnung() {
+	    return selectedBuergerHauptwohnung;
 	}
 	/**
-	 * Set the wohnungen of the current selected Buerger_
+	 * Set the hauptwohnung of the current selected Buerger_
 	 */
-	public void setSelectedBuergerWohnungen(Optional<Wohnung_> wohnungen) {
-	    this.selectedBuergerWohnungen = wohnungen;
+	public void setSelectedBuergerHauptwohnung(Optional<Wohnung_> hauptwohnung) {
+	    this.selectedBuergerHauptwohnung = hauptwohnung;
 	}
 
 	@Override

@@ -7,6 +7,7 @@ package de.muenchen.kvr.buergerverwaltung.buerger.client.local;
 import java.util.stream.Stream;
 
 import javax.validation.constraints.NotNull;
+import de.muenchen.kvr.buergerverwaltung.buerger.client.local.Adresse_;
 import org.springframework.hateoas.ResourceSupport;
 /*
  * This file will be overwritten on every change of the model!
@@ -19,7 +20,7 @@ public class Wohnung_ extends ResourceSupport {
 	
 	private String ausrichtung;
 	
-	private java.util.List<String> adresse;
+	private Adresse_ adresse;
 	
 	public Wohnung_(){}
 	
@@ -51,10 +52,10 @@ public class Wohnung_ extends ResourceSupport {
 		this.ausrichtung = ausrichtung;
 	}
 	
-	public java.util.List<String> getAdresse(){
+	public Adresse_ getAdresse(){
 		return adresse;
 	}
-	public void setAdresse(java.util.List<String> value){
+	public void setAdresse(Adresse_ value){
 		this.adresse = value;
 	}
 	
@@ -93,7 +94,7 @@ public class Wohnung_ extends ResourceSupport {
 	  * </p>
 	  */
 	 public enum Rel {
-	 	adresse;
+	 	;
     }
 	
 	@Override

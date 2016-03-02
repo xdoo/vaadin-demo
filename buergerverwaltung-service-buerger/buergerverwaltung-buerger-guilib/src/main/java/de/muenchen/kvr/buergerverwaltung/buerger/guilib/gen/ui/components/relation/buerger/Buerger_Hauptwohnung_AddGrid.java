@@ -20,12 +20,12 @@ import de.muenchen.kvr.buergerverwaltung.buerger.guilib.gen.ui.components.entity
 
 import java.util.stream.Collectors;
 
-public class Buerger_Wohnungen_AddGrid extends BaseComponent {
+public class Buerger_Hauptwohnung_AddGrid extends BaseComponent {
     private final String navigateOnAdd;
     private GenericGrid<Wohnung_> grid;
     private final Wohnung_ViewController controller;
 
-    public Buerger_Wohnungen_AddGrid(Wohnung_ViewController controller, String navigateOnAdd){
+    public Buerger_Hauptwohnung_AddGrid(Wohnung_ViewController controller, String navigateOnAdd){
         this.controller = controller;
         this.navigateOnAdd= navigateOnAdd;
         init();
@@ -41,7 +41,7 @@ public class Buerger_Wohnungen_AddGrid extends BaseComponent {
         ActionButton addButton = new ActionButton(Wohnung_.class, SimpleAction.add);
         
         Buerger_AssociationActions actionsSingle = new Buerger_AssociationActions(
-                () -> new Association<>(grid.getSelectedEntities().get(0), Buerger_.Rel.wohnungen.name()));
+                () -> new Association<>(grid.getSelectedEntities().get(0), Buerger_.Rel.hauptwohnung.name()));
         addButton.addActionPerformer(actionsSingle::addAssociation);
         addButton.addActionPerformer(navigateActions::navigate);
         addButton.useNotification(true);

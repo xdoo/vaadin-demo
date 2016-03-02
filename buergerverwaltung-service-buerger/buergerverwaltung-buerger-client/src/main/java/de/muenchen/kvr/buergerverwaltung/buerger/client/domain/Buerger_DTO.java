@@ -28,19 +28,21 @@ public class Buerger_DTO extends BaseEntity {
 	
 	private boolean lebendig;
 	
+	private java.util.List<String> eigenschaften = new java.util.ArrayList<>();
+	
 	private java.util.List<MoeglicheStaatsangehoerigkeiten_> staatsangehoerigkeiten = new java.util.ArrayList<>();
 	
-	private java.util.List<String> eigenschaften = new java.util.ArrayList<>();
+	private Adresse_DTO bisherigeWohnsitze;
 	
 	private java.util.List<String> kinder;
 	
 	private String partner;
 	
-	private String wohnungen;
+	private String hauptwohnung;
 	
 	private java.util.List<String> sachbearbeiter;
 	
-	private String pass;
+	private java.util.List<String> pass;
 	
 	// Getters and Setters
 	public String getVorname(){
@@ -92,6 +94,13 @@ public class Buerger_DTO extends BaseEntity {
 		this.lebendig = lebendig;
 	}
 	
+	public java.util.List<String> getEigenschaften(){
+		return eigenschaften;
+	}
+	public void setEigenschaften(java.util.List<String> eigenschaften){
+		this.eigenschaften = eigenschaften;
+	}
+	
 	public java.util.List<MoeglicheStaatsangehoerigkeiten_> getStaatsangehoerigkeiten(){
 		return staatsangehoerigkeiten;
 	}
@@ -99,11 +108,11 @@ public class Buerger_DTO extends BaseEntity {
 		this.staatsangehoerigkeiten = staatsangehoerigkeiten;
 	}
 	
-	public java.util.List<String> getEigenschaften(){
-		return eigenschaften;
+	public Adresse_DTO getBisherigeWohnsitze(){
+		return bisherigeWohnsitze;
 	}
-	public void setEigenschaften(java.util.List<String> eigenschaften){
-		this.eigenschaften = eigenschaften;
+	public void setBisherigeWohnsitze(Adresse_DTO value){
+		this.bisherigeWohnsitze = value;
 	}
 	
 	public java.util.List<String> getKinder(){
@@ -120,11 +129,11 @@ public class Buerger_DTO extends BaseEntity {
 		this.partner = value;
 	}
 	
-	public String getWohnungen(){
-		return wohnungen;
+	public String getHauptwohnung(){
+		return hauptwohnung;
 	}
-	public void setWohnungen(String value){
-		this.wohnungen = value;
+	public void setHauptwohnung(String value){
+		this.hauptwohnung = value;
 	}
 	
 	public java.util.List<String> getSachbearbeiter(){
@@ -134,16 +143,16 @@ public class Buerger_DTO extends BaseEntity {
 		this.sachbearbeiter = value;
 	}
 	
-	public String getPass(){
+	public java.util.List<String> getPass(){
 		return pass;
 	}
-	public void setPass(String value){
+	public void setPass(java.util.List<String> value){
 		this.pass = value;
 	}
 	
 	@Override
 	public String toString() {
-	   	return String.format("%s = {\"vorname\": \"%s\", \"nachname\": \"%s\", \"geburtstag\": \"%s\", \"augenfarbe\": \"%s\", \"telefonnummer\": \"%s\", \"email\": \"%s\", \"lebendig\": \"%s\", \"staatsangehoerigkeiten\": \"%s\", \"eigenschaften\": \"%s\"}", getClass(),
+	   	return String.format("%s = {\"vorname\": \"%s\", \"nachname\": \"%s\", \"geburtstag\": \"%s\", \"augenfarbe\": \"%s\", \"telefonnummer\": \"%s\", \"email\": \"%s\", \"lebendig\": \"%s\", \"eigenschaften\": \"%s\", \"staatsangehoerigkeiten\": \"%s\"}", getClass(),
 	   		this.vorname,
 	   		this.nachname,
 	   		this.geburtstag,
@@ -151,7 +160,7 @@ public class Buerger_DTO extends BaseEntity {
 	   		this.telefonnummer,
 	   		this.email,
 	   		this.lebendig,
-	   		this.staatsangehoerigkeiten,
-	   		this.eigenschaften);
+	   		this.eigenschaften,
+	   		this.staatsangehoerigkeiten);
 	}
 }

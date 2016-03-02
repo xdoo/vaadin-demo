@@ -11,8 +11,6 @@ import de.muenchen.eventbus.selector.entity.ResponseEntityKey;
 
 import de.muenchen.kvr.buergerverwaltung.buerger.guilib.gen.services.Wohnung_Service;
 import de.muenchen.kvr.buergerverwaltung.buerger.client.local.Wohnung_;
-import de.muenchen.kvr.buergerverwaltung.buerger.guilib.gen.services.Adresse_Service;
-import de.muenchen.kvr.buergerverwaltung.buerger.client.local.Adresse_;
 import de.muenchen.kvr.buergerverwaltung.buerger.guilib.gen.services.model.Wohnung_Datastore;
 
 import org.slf4j.Logger;
@@ -51,12 +49,6 @@ public class Wohnung_ViewController implements Serializable{
 	@Autowired
 	Wohnung_Service wohnungService;
 	
-	/**
-	 * Die Adresse_Service Klasse
-	 */
-	@Autowired
-	Adresse_Service adresseService;
-	
 	private final Wohnung_Datastore model = new Wohnung_Datastore();
 	
 
@@ -84,84 +76,6 @@ public class Wohnung_ViewController implements Serializable{
 	 */
 	public Wohnung_ save(Wohnung_ wohnung) {
 		return wohnungService.create(wohnung);
-	}
-
-	/**
-	 * Zerstört die Verbindung zwischen einem Wohnung_ und seinem adresse
-	 *
-	 * @param event
-	 */
-	private void releaseAdresse(Adresse_ event) {
-		Link link = getModel().getSelectedWohnung().get().getLink(Wohnung_.Rel.adresse.name());
-		List<Link> adresse = adresseService.findAll(link)
-				.stream()
-				.map(Adresse_::getId)
-				.filter(id -> !id.equals(event.getId()))
-				.collect(Collectors.toList());
-
-		wohnungService.setRelations(link, adresse);
-	}
-	
-	/**
-	 * Zerstört die Verbindung zwischen einem Wohnung_ und seinen adresse
-	 *
-	 * @param event
-	 */
-	private void releaseAdresseList(List<Adresse_> event) {
-		Link link = getModel().getSelectedWohnung().get().getLink(Wohnung_.Rel.adresse.name());
-		
-		List<Link> eventLinks = event.stream().map(ResourceSupport::getId).collect(Collectors.toList());
-		
-		List<Link> relations = adresseService.findAll(link)
-				.stream()
-				.map(Adresse_::getId)
-				.filter(id -> !eventLinks.contains(id))
-				.collect(Collectors.toList());
-		
-		wohnungService.setRelations(link, relations);
-	}
-	
-	/**
-	 * Speichert eine beziehung als adresse zu einem {@link Adresse_} Objekt in der Datenbank.
-	 *
-	 * @param adresseEntity Adresse
-	 * @return Adresse_
-	 */
-	public void addWohnungAdresse(Adresse_ adresseEntity) {
-		Link link = getModel().getSelectedWohnung().get().getLink(Wohnung_.Rel.adresse.name());
-		List<Link> adresselist = Stream.concat(
-				adresseService.findAll(link)
-						.stream()
-						.map(Adresse_::getId),
-				Stream.of(adresseEntity.getId()))
-	
-				.collect(Collectors.toList());
-	
-		wohnungService.setRelations(link, adresselist);
-	}
-	
-	public List<Adresse_> queryAdresse(Wohnung_ entity) {
-		return adresseService.findAll(entity.getLink(Wohnung_.Rel.adresse.name())).stream().collect(Collectors.toList());
-	}
-	
-	/**
-	 * Speichert Beziehungen als adresse zu einem {@link Adresse_} Objekt in der Datenbank.
-	 */
-	public void addWohnungAdresseList(List<Adresse_> event) {
-		Link link = getModel().getSelectedWohnung().get().getLink(Wohnung_.Rel.adresse.name());
-		
-		List<Link> eventLinks = event.stream().map(ResourceSupport::getId).collect(Collectors.toList());
-		
-		List<Link> relations = Stream.concat(
-		adresseService.findAll(link)
-				.stream()
-				.map(Adresse_::getId)
-				.filter(link1 -> !eventLinks.contains(link1)),
-		
-		eventLinks.stream())
-				.collect(Collectors.toList());
-		
-		wohnungService.setRelations(link, relations);
 	}
 	/**
 	 * Speichert die Änderungen an einem {@link Wohnung_} Objekt in der Datenbank.
@@ -225,11 +139,6 @@ public class Wohnung_ViewController implements Serializable{
 		final Association<?> association = (Association<?>) event.getData();
 		final Wohnung_.Rel rel = Wohnung_.Rel.valueOf(association.getRel());
 		
-		if (Wohnung_.Rel.adresse == rel) {
-			Adresse_ adresse = (Adresse_) association.getAssociation();
-			releaseAdresse(adresse);
-			getModel().getSelectedWohnungAdresse().removeItem(adresse);
-		}
 		notifyComponents();
 	}
 
@@ -253,22 +162,6 @@ public class Wohnung_ViewController implements Serializable{
 		final Association<?> association = (Association<?>) event.getData();
 
 		final Wohnung_.Rel rel = Wohnung_.Rel.valueOf(association.getRel());
-		if (Wohnung_.Rel.adresse == rel) {
-			Adresse_ adresse = (Adresse_) association.getAssociation();
-			// If Adresse has no ID he has to be created in the backend
-			if (adresse.getId() == null) {
-				Class<?> clazz = association.getAssociation().getClass();
-				if(clazz.equals(Adresse_.class)){
-					adresse = adresseService.create((Adresse_)association.getAssociation());
-				} else if(clazz.equals(Adresse_.class)){
-					adresse = adresseService.create((Adresse_) association.getAssociation());
-				} else{
-					throw new IllegalArgumentException("Only classes \"? extends Adresse_\" allowed!");
-				}
-			}
-			addWohnungAdresse(adresse);
-			getModel().getSelectedWohnungAdresse().addBean(adresse);
-		}
 		refreshModelAssociations();
 		notifyComponents();
 	}
@@ -299,13 +192,6 @@ public class Wohnung_ViewController implements Serializable{
 		
 		final Wohnung_.Rel rel = Wohnung_.Rel.valueOf(associations.get(0).getRel());
 		
-		if (Wohnung_.Rel.adresse == rel) {
-			List<Adresse_> adresse = associations.stream()
-				.map(association -> (Adresse_) association.getAssociation())
-				.collect(Collectors.toList());
-			releaseAdresseList(adresse);
-			adresse.forEach(getModel().getSelectedWohnungAdresse()::removeItem);
-		}
 		notifyComponents();
 	}
 	
@@ -338,28 +224,6 @@ public class Wohnung_ViewController implements Serializable{
 			throw new IllegalArgumentException("Associations must be of same Relation");
 		
 		final Wohnung_.Rel rel = Wohnung_.Rel.valueOf(associations.get(0).getRel());
-		if (Wohnung_.Rel.adresse == rel) {
-			List<Adresse_> adresse = associations.stream()
-				.map(association -> {
-					Adresse_ nextAdresse = (Adresse_) association.getAssociation();
-					
-					// If nextAdresse has no ID he has to be created in the backend
-					if(nextAdresse.getId()==null){
-						Class<?> clazz = association.getAssociation().getClass();
-						if(clazz.equals(Adresse_.class)){
-							nextAdresse = adresseService.create(nextAdresse);
-						} else if(clazz.equals(Adresse_.class)) {
-							nextAdresse = adresseService.create((Adresse_)nextAdresse);
-						} else {
-							throw new IllegalArgumentException("Only classes \"? extends Adresse_\" allowed!");
-						}
-					}
-					return nextAdresse;
-				}).collect(Collectors.toList());
-			
-			addWohnungAdresseList(adresse);
-			getModel().getSelectedWohnungAdresse().addAll(adresse);
-		}
 		refreshModelAssociations();
 		notifyComponents();
 	}
@@ -403,7 +267,6 @@ public class Wohnung_ViewController implements Serializable{
 			if (selectedWohnung.equals(wohnung)) {
 				getModel().setSelectedWohnung(null);
 				// reset all selected relations
-				getModel().getSelectedWohnungAdresse().removeAllItems();
 			}
 		});
 		getModel().getWohnungs().removeItem(wohnung);
@@ -454,9 +317,6 @@ public class Wohnung_ViewController implements Serializable{
 	 */
 	void refreshModelAssociations() {
 		getModel().getSelectedWohnung().ifPresent(wohnung -> {
-			final List<Adresse_> adresse = queryAdresse(wohnung);
-			getModel().getSelectedWohnungAdresse().removeAllItems();
-			getModel().getSelectedWohnungAdresse().addAll(adresse);
 		});	
 	}
 

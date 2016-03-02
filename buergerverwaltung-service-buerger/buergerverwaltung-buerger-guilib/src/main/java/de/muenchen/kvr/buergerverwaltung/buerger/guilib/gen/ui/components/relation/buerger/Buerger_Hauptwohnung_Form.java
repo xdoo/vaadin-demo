@@ -5,20 +5,20 @@ import de.muenchen.eventbus.selector.entity.ResponseEntityKey;
 import de.muenchen.kvr.buergerverwaltung.buerger.client.local.Buerger_;
 import de.muenchen.kvr.buergerverwaltung.buerger.guilib.gen.services.model.Buerger_Datastore;
 import de.muenchen.kvr.buergerverwaltung.buerger.guilib.gen.ui.components.buttons.listener.buerger.Buerger_SingleActions;
-import de.muenchen.kvr.buergerverwaltung.buerger.guilib.gen.ui.components.entity.pass.Pass_Form;
+import de.muenchen.kvr.buergerverwaltung.buerger.guilib.gen.ui.components.entity.wohnung.Wohnung_Form;
 
 /**
  * Created by p.mueller on 13.10.15.
  */
-public class Buerger_Pass_Form extends Pass_Form {
+public class Buerger_Hauptwohnung_Form extends Wohnung_Form {
     
     /**
-     * Create a new Pass_Form using the specified i18nResolver and the eventbus.
+     * Create a new Wohnung_Form using the specified i18nResolver and the eventbus.
      * <p/>
      * This Form is only the plain fields for input, and has no additional components or buttons. You can use {@link
-     * Pass_Form#setReadOnly(boolean)} for a readonly mode.
+     * Wohnung_Form#setReadOnly(boolean)} for a readonly mode.
      */
-    public Buerger_Pass_Form() {
+    public Buerger_Hauptwohnung_Form() {
         getEventBus().on(new ResponseEntityKey(Buerger_.class).toSelector(), this::update);
     }
 
@@ -29,7 +29,7 @@ public class Buerger_Pass_Form extends Pass_Form {
 
     private void update(reactor.bus.Event<?> event) {
         final Buerger_Datastore data = (Buerger_Datastore) event.getData();
-        setPass(data.getSelectedBuergerPass().orElse(null));
+        setWohnung(data.getSelectedBuergerHauptwohnung().orElse(null));
     }
 }
 

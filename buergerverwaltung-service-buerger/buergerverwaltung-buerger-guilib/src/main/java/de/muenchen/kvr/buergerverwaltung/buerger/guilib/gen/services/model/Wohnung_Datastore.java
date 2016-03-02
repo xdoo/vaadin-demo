@@ -3,7 +3,6 @@ package de.muenchen.kvr.buergerverwaltung.buerger.guilib.gen.services.model;
 import de.muenchen.vaadin.guilib.util.Datastore;
 import com.vaadin.data.util.BeanItemContainer;
 import de.muenchen.kvr.buergerverwaltung.buerger.client.local.Wohnung_;
-import de.muenchen.kvr.buergerverwaltung.buerger.client.local.Adresse_;
 import java.util.Optional;
 
 /*
@@ -14,9 +13,6 @@ import java.util.Optional;
  * Provides a simple Model for the Wohnung_ in the GUI.
  */
 public class Wohnung_Datastore implements Datastore<Wohnung_>{
-
-    /** All the adresse of the selectedWohnung. */
-    private final BeanItemContainer<Adresse_> selectedWohnungAdresse = new BeanItemContainer<>(Adresse_.class);
     
     /** A List of all the Wohnung_, possible reduced by the query. */
     private final BeanItemContainer<Wohnung_> wohnungs = new BeanItemContainer<>(Wohnung_.class);
@@ -55,13 +51,6 @@ public class Wohnung_Datastore implements Datastore<Wohnung_>{
      */
     public void setQuery(String query) {
         this.query = Optional.ofNullable(query);
-    }
-
-	/**
-	 * Get the adresse of the current selected Wohnung_
-	 */
-    public BeanItemContainer<Adresse_> getSelectedWohnungAdresse() {
-        return selectedWohnungAdresse;
     }
 
 	@Override

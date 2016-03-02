@@ -12,27 +12,27 @@ import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
 
-import de.muenchen.kvr.buergerverwaltung.buerger.guilib.gen.ui.components.entity.sachbearbeiter.Sachbearbeiter_ReadWriteForm;
+import de.muenchen.kvr.buergerverwaltung.buerger.guilib.gen.ui.components.entity.wohnung.Wohnung_ReadWriteForm;
 
-@SpringView(name = ReadWriteSachbearbeiter_View.NAME)
+@SpringView(name = ReadWriteWohnung_View.NAME)
 @UIScope
-public class ReadWriteSachbearbeiter_View extends DefaultView{				
-	public static final String NAME = "readWriteSachbearbeiter";
+public class ReadWriteWohnung_View extends DefaultView{				
+	public static final String NAME = "readWriteWohnung";
 	
 	@Override
 	protected void init(){
-		Label pageTitle = new Label(BaseUI.getCurrentI18nResolver().resolve("view_.readWriteSachbearbeiter.title"));
+		Label pageTitle = new Label(BaseUI.getCurrentI18nResolver().resolve("view_.readWriteWohnung.title"));
         pageTitle.addStyleName(ValoTheme.LABEL_H1);
         pageTitle.addStyleName(ValoTheme.LABEL_COLORED);
         addComponent(pageTitle);
 		
-		final ActionButton zurueck = new ActionButton(MainUI.getCurrentI18nResolver().resolve("view_.readWriteSachbearbeiter.button.zurueck.label"), SimpleAction.none);
-		zurueck.addActionPerformer(new NavigateActions(Sachbearbeiterverwaltung_View.NAME)::navigate);
-		zurueck.setId("zurueck-" + Sachbearbeiterverwaltung_View.NAME);
+		final ActionButton zurueck = new ActionButton(MainUI.getCurrentI18nResolver().resolve("view_.readWriteWohnung.button.zurueck.label"), SimpleAction.none);
+		zurueck.addActionPerformer(new NavigateActions(Wohnungsverwaltung_View.NAME)::navigate);
+		zurueck.setId("zurueck-" + Wohnungsverwaltung_View.NAME);
 		
 		final Label sach__label = new Label(BaseUI.getCurrentI18nResolver().resolve("view_." + NAME + ".sach.label"));
 		sach__label.addStyleName(ValoTheme.LABEL_H2);
-		final Sachbearbeiter_ReadWriteForm sach = new Sachbearbeiter_ReadWriteForm();
+		final Wohnung_ReadWriteForm sach = new Wohnung_ReadWriteForm();
 		
 		// Add components to the default layout
 		final VerticalLayout layout = new VerticalLayout(zurueck, sach__label, sach);

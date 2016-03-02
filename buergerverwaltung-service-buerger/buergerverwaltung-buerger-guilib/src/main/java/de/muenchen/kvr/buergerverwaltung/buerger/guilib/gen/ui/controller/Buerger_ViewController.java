@@ -207,30 +207,82 @@ public class Buerger_ViewController implements Serializable{
 	
 
 	/**
-	 * Vernichted die Verbindung zwischen einem Buerger_ und seinem pass
+	 * Zerstört die Verbindung zwischen einem Buerger_ und seinem pass
 	 *
 	 * @param event
 	 */
 	private void releasePass(Pass_ event) {
 		Link link = getModel().getSelectedBuerger().get().getLink(Buerger_.Rel.pass.name());
-		buergerService.setRelation(link,null);
+		List<Link> pass = passService.findAll(link)
+				.stream()
+				.map(Pass_::getId)
+				.filter(id -> !id.equals(event.getId()))
+				.collect(Collectors.toList());
+
+		buergerService.setRelations(link, pass);
 	}
 	
 	/**
-	 * Speichert eine Beziehung als Pass zu einem {@link Pass_} Objekt in der Datenbank.
+	 * Zerstört die Verbindung zwischen einem Buerger_ und seinen pass
+	 *
+	 * @param event
+	 */
+	private void releasePassList(List<Pass_> event) {
+		Link link = getModel().getSelectedBuerger().get().getLink(Buerger_.Rel.pass.name());
+		
+		List<Link> eventLinks = event.stream().map(ResourceSupport::getId).collect(Collectors.toList());
+		
+		List<Link> relations = passService.findAll(link)
+				.stream()
+				.map(Pass_::getId)
+				.filter(id -> !eventLinks.contains(id))
+				.collect(Collectors.toList());
+		
+		buergerService.setRelations(link, relations);
+	}
+	
+	/**
+	 * Speichert eine beziehung als pass zu einem {@link Pass_} Objekt in der Datenbank.
 	 *
 	 * @param passEntity Pass
-	 * @return Buerger_
+	 * @return Pass_
 	 */
-	public void setBuergerPass(Pass_ passEntity) {
+	public void addBuergerPass(Pass_ passEntity) {
 		Link link = getModel().getSelectedBuerger().get().getLink(Buerger_.Rel.pass.name());
-		passService.setRelation(link, passEntity.getId());
+		List<Link> passlist = Stream.concat(
+				passService.findAll(link)
+						.stream()
+						.map(Pass_::getId),
+				Stream.of(passEntity.getId()))
+	
+				.collect(Collectors.toList());
+	
+		buergerService.setRelations(link, passlist);
 	}
 	
-	public Pass_ queryPass(Buerger_ entity) {
-		return passService.findOne(entity.getLink(Buerger_.Rel.pass.name())).orElse(null);
+	public List<Pass_> queryPass(Buerger_ entity) {
+		return passService.findAll(entity.getLink(Buerger_.Rel.pass.name())).stream().collect(Collectors.toList());
 	}
 	
+	/**
+	 * Speichert Beziehungen als pass zu einem {@link Pass_} Objekt in der Datenbank.
+	 */
+	public void addBuergerPassList(List<Pass_> event) {
+		Link link = getModel().getSelectedBuerger().get().getLink(Buerger_.Rel.pass.name());
+		
+		List<Link> eventLinks = event.stream().map(ResourceSupport::getId).collect(Collectors.toList());
+		
+		List<Link> relations = Stream.concat(
+		passService.findAll(link)
+				.stream()
+				.map(Pass_::getId)
+				.filter(link1 -> !eventLinks.contains(link1)),
+		
+		eventLinks.stream())
+				.collect(Collectors.toList());
+		
+		buergerService.setRelations(link, relations);
+	}
 
 	/**
 	 * Zerstört die Verbindung zwischen einem Buerger_ und seinem sachbearbeiter
@@ -311,28 +363,28 @@ public class Buerger_ViewController implements Serializable{
 	}
 
 	/**
-	 * Vernichted die Verbindung zwischen einem Buerger_ und seinem wohnungen
+	 * Vernichted die Verbindung zwischen einem Buerger_ und seinem hauptwohnung
 	 *
 	 * @param event
 	 */
-	private void releaseWohnungen(Wohnung_ event) {
-		Link link = getModel().getSelectedBuerger().get().getLink(Buerger_.Rel.wohnungen.name());
+	private void releaseHauptwohnung(Wohnung_ event) {
+		Link link = getModel().getSelectedBuerger().get().getLink(Buerger_.Rel.hauptwohnung.name());
 		buergerService.setRelation(link,null);
 	}
 	
 	/**
-	 * Speichert eine Beziehung als Wohnungen zu einem {@link Wohnung_} Objekt in der Datenbank.
+	 * Speichert eine Beziehung als Hauptwohnung zu einem {@link Wohnung_} Objekt in der Datenbank.
 	 *
-	 * @param wohnungenEntity Wohnungen
+	 * @param hauptwohnungEntity Hauptwohnung
 	 * @return Buerger_
 	 */
-	public void setBuergerWohnungen(Wohnung_ wohnungenEntity) {
-		Link link = getModel().getSelectedBuerger().get().getLink(Buerger_.Rel.wohnungen.name());
-		wohnungService.setRelation(link, wohnungenEntity.getId());
+	public void setBuergerHauptwohnung(Wohnung_ hauptwohnungEntity) {
+		Link link = getModel().getSelectedBuerger().get().getLink(Buerger_.Rel.hauptwohnung.name());
+		wohnungService.setRelation(link, hauptwohnungEntity.getId());
 	}
 	
-	public Wohnung_ queryWohnungen(Buerger_ entity) {
-		return wohnungService.findOne(entity.getLink(Buerger_.Rel.wohnungen.name())).orElse(null);
+	public Wohnung_ queryHauptwohnung(Buerger_ entity) {
+		return wohnungService.findOne(entity.getLink(Buerger_.Rel.hauptwohnung.name())).orElse(null);
 	}
 	
 	/**
@@ -410,17 +462,17 @@ public class Buerger_ViewController implements Serializable{
 		if (Buerger_.Rel.pass == rel) {
 			Pass_ pass = (Pass_) association.getAssociation();
 			releasePass(pass);
-			getModel().setSelectedBuergerPass(Optional.empty());
+			getModel().getSelectedBuergerPass().removeItem(pass);
 		}
 		if (Buerger_.Rel.sachbearbeiter == rel) {
 			Sachbearbeiter_ sachbearbeiter = (Sachbearbeiter_) association.getAssociation();
 			releaseSachbearbeiter(sachbearbeiter);
 			getModel().getSelectedBuergerSachbearbeiter().removeItem(sachbearbeiter);
 		}
-		if (Buerger_.Rel.wohnungen == rel) {
-			Wohnung_ wohnungen = (Wohnung_) association.getAssociation();
-			releaseWohnungen(wohnungen);
-			getModel().setSelectedBuergerWohnungen(Optional.empty());
+		if (Buerger_.Rel.hauptwohnung == rel) {
+			Wohnung_ hauptwohnung = (Wohnung_) association.getAssociation();
+			releaseHauptwohnung(hauptwohnung);
+			getModel().setSelectedBuergerHauptwohnung(Optional.empty());
 		}
 		notifyComponents();
 	}
@@ -480,7 +532,6 @@ public class Buerger_ViewController implements Serializable{
 		}
 		if (Buerger_.Rel.pass == rel) {
 			Pass_ pass = (Pass_) association.getAssociation();
-			
 			// If Pass has no ID he has to be created in the backend
 			if (pass.getId() == null) {
 				Class<?> clazz = association.getAssociation().getClass();
@@ -492,8 +543,8 @@ public class Buerger_ViewController implements Serializable{
 					throw new IllegalArgumentException("Only classes \"? extends Pass_\" allowed!");
 				}
 			}
-			setBuergerPass(pass);
-			getModel().setSelectedBuergerPass(Optional.of(pass));
+			addBuergerPass(pass);
+			getModel().getSelectedBuergerPass().addBean(pass);
 		}
 		if (Buerger_.Rel.sachbearbeiter == rel) {
 			Sachbearbeiter_ sachbearbeiter = (Sachbearbeiter_) association.getAssociation();
@@ -511,22 +562,22 @@ public class Buerger_ViewController implements Serializable{
 			addBuergerSachbearbeiter(sachbearbeiter);
 			getModel().getSelectedBuergerSachbearbeiter().addBean(sachbearbeiter);
 		}
-		if (Buerger_.Rel.wohnungen == rel) {
-			Wohnung_ wohnungen = (Wohnung_) association.getAssociation();
+		if (Buerger_.Rel.hauptwohnung == rel) {
+			Wohnung_ hauptwohnung = (Wohnung_) association.getAssociation();
 			
-			// If Wohnungen has no ID he has to be created in the backend
-			if (wohnungen.getId() == null) {
+			// If Hauptwohnung has no ID he has to be created in the backend
+			if (hauptwohnung.getId() == null) {
 				Class<?> clazz = association.getAssociation().getClass();
 				if(clazz.equals(Wohnung_.class)){
-					wohnungen = wohnungService.create((Wohnung_)association.getAssociation());
+					hauptwohnung = wohnungService.create((Wohnung_)association.getAssociation());
 				} else if(clazz.equals(Wohnung_.class)){
-					wohnungen = wohnungService.create((Wohnung_) association.getAssociation());
+					hauptwohnung = wohnungService.create((Wohnung_) association.getAssociation());
 				} else{
 					throw new IllegalArgumentException("Only classes \"? extends Wohnung_\" allowed!");
 				}
 			}
-			setBuergerWohnungen(wohnungen);
-			getModel().setSelectedBuergerWohnungen(Optional.of(wohnungen));
+			setBuergerHauptwohnung(hauptwohnung);
+			getModel().setSelectedBuergerHauptwohnung(Optional.of(hauptwohnung));
 		}
 		refreshModelAssociations();
 		notifyComponents();
@@ -564,6 +615,13 @@ public class Buerger_ViewController implements Serializable{
 				.collect(Collectors.toList());
 			releaseKinderList(kinder);
 			kinder.forEach(getModel().getSelectedBuergerKinder()::removeItem);
+		}
+		if (Buerger_.Rel.pass == rel) {
+			List<Pass_> pass = associations.stream()
+				.map(association -> (Pass_) association.getAssociation())
+				.collect(Collectors.toList());
+			releasePassList(pass);
+			pass.forEach(getModel().getSelectedBuergerPass()::removeItem);
 		}
 		if (Buerger_.Rel.sachbearbeiter == rel) {
 			List<Sachbearbeiter_> sachbearbeiter = associations.stream()
@@ -625,6 +683,28 @@ public class Buerger_ViewController implements Serializable{
 			
 			addBuergerKinderList(kinder);
 			getModel().getSelectedBuergerKinder().addAll(kinder);
+		}
+		if (Buerger_.Rel.pass == rel) {
+			List<Pass_> pass = associations.stream()
+				.map(association -> {
+					Pass_ nextPass = (Pass_) association.getAssociation();
+					
+					// If nextPass has no ID he has to be created in the backend
+					if(nextPass.getId()==null){
+						Class<?> clazz = association.getAssociation().getClass();
+						if(clazz.equals(Pass_.class)){
+							nextPass = passService.create(nextPass);
+						} else if(clazz.equals(Pass_.class)) {
+							nextPass = passService.create((Pass_)nextPass);
+						} else {
+							throw new IllegalArgumentException("Only classes \"? extends Pass_\" allowed!");
+						}
+					}
+					return nextPass;
+				}).collect(Collectors.toList());
+			
+			addBuergerPassList(pass);
+			getModel().getSelectedBuergerPass().addAll(pass);
 		}
 		if (Buerger_.Rel.sachbearbeiter == rel) {
 			List<Sachbearbeiter_> sachbearbeiter = associations.stream()
@@ -693,9 +773,9 @@ public class Buerger_ViewController implements Serializable{
 				// reset all selected relations
 				getModel().getSelectedBuergerKinder().removeAllItems();
 				getModel().setSelectedBuergerPartner(Optional.empty());
-				getModel().setSelectedBuergerPass(Optional.empty());
+				getModel().getSelectedBuergerPass().removeAllItems();
 				getModel().getSelectedBuergerSachbearbeiter().removeAllItems();
-				getModel().setSelectedBuergerWohnungen(Optional.empty());
+				getModel().setSelectedBuergerHauptwohnung(Optional.empty());
 			}
 		});
 		getModel().getBuergers().removeItem(buerger);
@@ -748,16 +828,17 @@ public class Buerger_ViewController implements Serializable{
 		getModel().getSelectedBuerger().ifPresent(buerger -> {
 			final List<Buerger_> kinder = queryKinder(buerger);
 			final Buerger_ partner = queryPartner(buerger);
-			final Pass_ pass = queryPass(buerger);
+			final List<Pass_> pass = queryPass(buerger);
 			final List<Sachbearbeiter_> sachbearbeiter = querySachbearbeiter(buerger);
-			final Wohnung_ wohnungen = queryWohnungen(buerger);
+			final Wohnung_ hauptwohnung = queryHauptwohnung(buerger);
 			getModel().getSelectedBuergerKinder().removeAllItems();
 			getModel().getSelectedBuergerKinder().addAll(kinder);
 			getModel().setSelectedBuergerPartner(Optional.ofNullable(partner));
-			getModel().setSelectedBuergerPass(Optional.ofNullable(pass));
+			getModel().getSelectedBuergerPass().removeAllItems();
+			getModel().getSelectedBuergerPass().addAll(pass);
 			getModel().getSelectedBuergerSachbearbeiter().removeAllItems();
 			getModel().getSelectedBuergerSachbearbeiter().addAll(sachbearbeiter);
-			getModel().setSelectedBuergerWohnungen(Optional.ofNullable(wohnungen));
+			getModel().setSelectedBuergerHauptwohnung(Optional.ofNullable(hauptwohnung));
 		});	
 	}
 

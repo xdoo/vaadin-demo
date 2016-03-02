@@ -112,8 +112,8 @@ public interface Buerger_Repository extends CrudRepository<Buerger_, UUID> {
 	Buerger_ findByTelefonnummer(@Param(value= "telefonnummer") long telefonnummer);
 	Buerger_ findByEmail(@Param(value= "email") String email);
 	Buerger_ findByLebendig(@Param(value= "lebendig") boolean lebendig);
-	Buerger_ findByStaatsangehoerigkeiten(@Param(value= "staatsangehoerigkeiten") java.util.List<MoeglicheStaatsangehoerigkeiten_> staatsangehoerigkeiten);
 	Buerger_ findByEigenschaften(@Param(value= "eigenschaften") java.util.List<String> eigenschaften);
+	Buerger_ findByStaatsangehoerigkeiten(@Param(value= "staatsangehoerigkeiten") java.util.List<MoeglicheStaatsangehoerigkeiten_> staatsangehoerigkeiten);
 	List<Buerger_> findBuergerByVorname(@Param("vorname") String vorname);
 	List<Buerger_> findBuergerByNachname(@Param("nachname") String nachname);
 	List<Buerger_> findBuergerByGeburtstag(@Param("geburtstag") String geburtstag);
@@ -133,18 +133,18 @@ public interface Buerger_Repository extends CrudRepository<Buerger_, UUID> {
 	 */
 	Buerger_ findByPartnerOid(@Param(value = "oid") UUID oid);
 	/**
-	 * Find the Buerger_ entities with a pass relation to the Pass with the given oid.
+	 * Find the Buerger_ with a pass relation to the Pass with the given oid.
 	 * @param oid the unique oid of the Pass that will be searched for in the pass relation.
 	 */
-	java.util.List<Buerger_> findByPassOid(@Param(value = "oid") UUID oid);
+	Buerger_ findByPassOid(@Param(value = "oid") UUID oid);
 	/**
 	 * Find the Buerger_ entities with a sachbearbeiter relation to the Sachbearbeiter with the given oid.
 	 * @param oid the unique oid of the Sachbearbeiter that will be searched for in the sachbearbeiter relation.
 	 */
 	java.util.List<Buerger_> findBySachbearbeiterOid(@Param(value = "oid") UUID oid);
 	/**
-	 * Find the Buerger_ entities with a wohnungen relation to the Wohnung with the given oid.
-	 * @param oid the unique oid of the Wohnung that will be searched for in the wohnungen relation.
+	 * Find the Buerger_ entities with a hauptwohnung relation to the Wohnung with the given oid.
+	 * @param oid the unique oid of the Wohnung that will be searched for in the hauptwohnung relation.
 	 */
-	java.util.List<Buerger_> findByWohnungenOid(@Param(value = "oid") UUID oid);
+	java.util.List<Buerger_> findByHauptwohnungOid(@Param(value = "oid") UUID oid);
 }

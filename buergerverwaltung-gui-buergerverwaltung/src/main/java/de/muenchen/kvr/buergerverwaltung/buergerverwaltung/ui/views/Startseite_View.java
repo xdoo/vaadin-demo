@@ -1,22 +1,14 @@
 package de.muenchen.kvr.buergerverwaltung.buergerverwaltung.ui.views;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.themes.ValoTheme;
-import java.util.ArrayList;
-import java.util.List;
 
 
-
-import de.muenchen.kvr.buergerverwaltung.buergerverwaltung.ui.MainUI;
 import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
-import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
 
 
@@ -32,11 +24,11 @@ public class Startseite_View extends DefaultView{
         pageTitle.addStyleName(ValoTheme.LABEL_COLORED);
         addComponent(pageTitle);
 		
-		final ActionButton component1 = new ActionButton(MainUI.getCurrentI18nResolver().resolve("view_.startseite.button.onePercentChanceOfWinningTenMillionEURO.label"), SimpleAction.none);
-		component1.setId("onePercentChanceOfWinningTenMillionEURO-");
+		final ActionButton onePercentChanceOfWinningTenMillionEURO = new ActionButton(MainUI.getCurrentI18nResolver().resolve("view_.startseite.button.onePercentChanceOfWinningTenMillionEURO.label"), SimpleAction.none);
+		onePercentChanceOfWinningTenMillionEURO.setId("onePercentChanceOfWinningTenMillionEURO-");
 		
 		// Add components to the default layout
-		final VerticalLayout layout = new VerticalLayout(component1);
+		final VerticalLayout layout = new VerticalLayout(onePercentChanceOfWinningTenMillionEURO);
 		
 		layout.setSpacing(true);
 		addComponent(layout);

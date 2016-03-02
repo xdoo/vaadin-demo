@@ -2,8 +2,8 @@ package de.muenchen.kvr.buergerverwaltung.buerger.client.hateoas;
 
 import de.muenchen.kvr.buergerverwaltung.buerger.client.domain.Adresse_DTO;
 import de.muenchen.kvr.buergerverwaltung.buerger.client.local.Adresse_;
-import de.muenchen.kvr.buergerverwaltung.buerger.client.rest.Adresse_Resource;
-import org.springframework.hateoas.Resource;
+import de.muenchen.kvr.buergerverwaltung.buerger.client.domain.Adresse_DTO;
+import de.muenchen.kvr.buergerverwaltung.buerger.client.local.Adresse_;
 
 /*
  * This file will be overwritten on every change of the model!
@@ -11,21 +11,27 @@ import org.springframework.hateoas.Resource;
  */
 public class Adresse_Assembler {
 
-
 	/**
 	 * Transform the Resource (from the REST Server) to the local object representation.
 	 *
-	 * @param resource the REST DTO Resource
+	 * @param adresseDTO the REST DTO Resource
 	 * @return the local Object Representation
 	 */
-	public Adresse_ toBean(Resource<Adresse_DTO> resource) {
-		Adresse_DTO adresseDTO = resource.getContent();
-		Adresse_ bean = new Adresse_();		
-		bean.setInterneAdresse(new AdresseIntern_Assembler().toBean(adresseDTO.getInterneAdresse()));
-		bean.setExterneAdresse(new AdresseExtern_Assembler().toBean(adresseDTO.getExterneAdresse()));
-		bean.add(resource.getLinks());
-		
+	public Adresse_ toBean(Adresse_DTO adresseDTO) {
+		Adresse_ bean = new Adresse_();		bean.setStrasse(adresseDTO.getStrasse());
+		bean.setHausnummer(adresseDTO.getHausnummer());
+		bean.setPlz(adresseDTO.getPlz());
+		bean.setOrt(adresseDTO.getOrt());
 		return bean;
+	}
+	
+	private Adresse_ toAdresseBean(Adresse_DTO adresseDTO) {
+		Adresse_ adresse = new Adresse_();
+		adresse.setStrasse(adresseDTO.getStrasse());
+		adresse.setHausnummer(adresseDTO.getHausnummer());
+		adresse.setPlz(adresseDTO.getPlz());
+		adresse.setOrt(adresseDTO.getOrt());
+		return adresse;
 	}
 	
 	/**
@@ -34,21 +40,12 @@ public class Adresse_Assembler {
 	 * @param bean the local object representation
 	 * @return the REST DTO Resource
 	 */
-	public Adresse_Resource toResource(Adresse_ bean) {
-		return new Adresse_Resource(toDTO(bean), bean.getLinks());
-	}
-	
-	/**
-	 * Transform the local object representation to the DTO.
-	 *
-	 * @param bean the local object representation
-	 * @return the REST DTO
-	 */
 	public Adresse_DTO toDTO(Adresse_ bean) {
 		Adresse_DTO adresseDTO = new Adresse_DTO();
-		
-		adresseDTO.setInterneAdresse(new AdresseIntern_Assembler().toDTO(bean.getInterneAdresse()));
-		adresseDTO.setExterneAdresse(new AdresseExtern_Assembler().toDTO(bean.getExterneAdresse()));
+		adresseDTO.setStrasse(bean.getStrasse());
+		adresseDTO.setHausnummer(bean.getHausnummer());
+		adresseDTO.setPlz(bean.getPlz());
+		adresseDTO.setOrt(bean.getOrt());
 		return adresseDTO;
 	}
 }

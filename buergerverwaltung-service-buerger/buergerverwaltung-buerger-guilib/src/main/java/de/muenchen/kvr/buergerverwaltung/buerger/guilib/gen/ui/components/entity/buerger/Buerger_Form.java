@@ -84,13 +84,13 @@ public class Buerger_Form extends BaseComponent {
 		final TextField telefonnummer = formUtil.createTextField(Buerger_.Field.telefonnummer.name());
 		final TextField email = formUtil.createTextField(Buerger_.Field.email.name());
 		final CheckBox lebendig = formUtil.createCheckBox(Buerger_.Field.lebendig.name());
+		final TokenField eigenschaften = formUtil.createTokenField(Buerger_.Field.eigenschaften.name(), String.class);
 		final TokenField staatsangehoerigkeiten = formUtil.createEnumTokenField(
 					Buerger_.Field.staatsangehoerigkeiten.name(),
 					MoeglicheStaatsangehoerigkeiten_.class,
 					new BeanItemContainer<>(MoeglicheStaatsangehoerigkeiten_.class, Arrays.asList(MoeglicheStaatsangehoerigkeiten_.values())));
-		final TokenField eigenschaften = formUtil.createTokenField(Buerger_.Field.eigenschaften.name(), String.class);
 		
-        return Arrays.asList(vorname, nachname, geburtstag, augenfarbe, telefonnummer, email, lebendig, staatsangehoerigkeiten, eigenschaften);
+        return Arrays.asList(vorname, nachname, geburtstag, augenfarbe, telefonnummer, email, lebendig, eigenschaften, staatsangehoerigkeiten);
     }
 
     /**

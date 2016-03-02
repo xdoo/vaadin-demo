@@ -63,9 +63,9 @@ public class Buerger_SelectedForm extends Buerger_Form {
 				final Buerger_ partner = data.getSelectedBuergerPartner().get();
 				buerger.setPartner(partner.getId().getHref());
 			}
-			if (data.getSelectedBuergerWohnungen().isPresent()){
-				final Wohnung_ wohnungen = data.getSelectedBuergerWohnungen().get();
-				buerger.setWohnungen(wohnungen.getId().getHref());
+			if (data.getSelectedBuergerHauptwohnung().isPresent()){
+				final Wohnung_ hauptwohnung = data.getSelectedBuergerHauptwohnung().get();
+				buerger.setHauptwohnung(hauptwohnung.getId().getHref());
 			}
 			final BeanItemContainer<Sachbearbeiter_> sachbearbeiter = data.getSelectedBuergerSachbearbeiter();
 			final List<String> listofsachbearbeiter = new ArrayList<>();
@@ -77,10 +77,16 @@ public class Buerger_SelectedForm extends Buerger_Form {
 					.collect(Collectors.toList()));
 			}
 			buerger.setSachbearbeiter(listofsachbearbeiter);
-			if (data.getSelectedBuergerPass().isPresent()){
-				final Pass_ pass = data.getSelectedBuergerPass().get();
-				buerger.setPass(pass.getId().getHref());
+			final BeanItemContainer<Pass_> pass = data.getSelectedBuergerPass();
+			final List<String> listofpass = new ArrayList<>();
+			List<Pass_> passs = pass.getItemIds();
+			if(passs != null){
+				listofpass.addAll(pass.getItemIds().stream()
+					.map(Pass_::getId)
+					.map(Link::getHref)
+					.collect(Collectors.toList()));
 			}
+			buerger.setPass(listofpass);
 			setBuerger(buerger);
 		}
     }

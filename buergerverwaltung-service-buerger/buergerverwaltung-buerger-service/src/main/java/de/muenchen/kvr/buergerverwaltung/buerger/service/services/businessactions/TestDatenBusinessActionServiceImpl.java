@@ -14,9 +14,6 @@ import de.muenchen.kvr.buergerverwaltung.buerger.service.gen.domain.Passtyp_;
 import de.muenchen.kvr.buergerverwaltung.buerger.service.gen.domain.Buerger_;
 import de.muenchen.kvr.buergerverwaltung.buerger.service.gen.rest.Buerger_Repository;
 import de.muenchen.kvr.buergerverwaltung.buerger.service.gen.domain.Adresse_;
-import de.muenchen.kvr.buergerverwaltung.buerger.service.gen.rest.Adresse_Repository;
-import de.muenchen.kvr.buergerverwaltung.buerger.service.gen.domain.AdresseExtern_;
-import de.muenchen.kvr.buergerverwaltung.buerger.service.gen.domain.AdresseIntern_;
 import de.muenchen.kvr.buergerverwaltung.buerger.service.gen.domain.Pass_;
 import de.muenchen.kvr.buergerverwaltung.buerger.service.gen.rest.Pass_Repository;
 import de.muenchen.kvr.buergerverwaltung.buerger.service.gen.domain.Sachbearbeiter_;
@@ -40,8 +37,6 @@ public class TestDatenBusinessActionServiceImpl implements TestDatenBusinessActi
 	@Autowired
 	Buerger_Repository buergerRepo;
 	@Autowired
-	Adresse_Repository adresseRepo;
-	@Autowired
 	Pass_Repository passRepo;
 	@Autowired
 	Sachbearbeiter_Repository sachbearbeiterRepo;
@@ -59,25 +54,16 @@ public class TestDatenBusinessActionServiceImpl implements TestDatenBusinessActi
 		buerger.setTelefonnummer(8912345L);
 		buerger.setEmail("p.mueller@muenchen.de");
 		buerger.setLebendig(false);
-		buerger.setStaatsangehoerigkeiten(new java.util.ArrayList<>(Arrays.asList(MoeglicheStaatsangehoerigkeiten_.deutsch)));
 		buerger.setEigenschaften(new java.util.ArrayList<>(Arrays.asList("gehtnich")));
+		buerger.setStaatsangehoerigkeiten(new java.util.ArrayList<>(Arrays.asList(MoeglicheStaatsangehoerigkeiten_.deutsch)));
 		buerger.setOid(UUID.randomUUID());
 		
 		//insert example data for Adresse_
 		Adresse_ adresse = new Adresse_();
-		adresse.setOid(UUID.randomUUID());
-		
-		//insert example data for AdresseExtern_
-		AdresseExtern_ adresseExtern = new AdresseExtern_();
-		adresseExtern.setStrasse("Allgäuer Straße");
-		adresseExtern.setHausnummer(666L);
-		adresseExtern.setPlz(12345L);
-		adresseExtern.setOrt("Allgäu");
-		
-		//insert example data for AdresseIntern_
-		AdresseIntern_ adresseIntern = new AdresseIntern_();
-		adresseIntern.setStrassenSchluessel(1234567890L);
-		adresseIntern.setHausnummer(13L);
+		adresse.setStrasse("Allgäuer Straße");
+		adresse.setHausnummer(666L);
+		adresse.setPlz(12345L);
+		adresse.setOrt("Allgäu");
 		
 		//insert example data for Pass_
 		Pass_ pass = new Pass_();
@@ -105,17 +91,15 @@ public class TestDatenBusinessActionServiceImpl implements TestDatenBusinessActi
 		// Set relations
 		buerger.setKinder(new java.util.ArrayList<>(Arrays.asList(buerger)));
 		buerger.setPartner(buerger);
-		buerger.setPass(pass);
+		buerger.setPass(new java.util.ArrayList<>(Arrays.asList(pass)));
 		buerger.setSachbearbeiter(new java.util.ArrayList<>(Arrays.asList(sachbearbeiter)));
-		buerger.setWohnungen(wohnung);
-		wohnung.setAdresse(new java.util.ArrayList<>(Arrays.asList(adresse)));
+		buerger.setHauptwohnung(wohnung);
 		
 		//Save all example Entities in an order that won't cause errors
-		adresseRepo.save(adresse);
 		passRepo.save(pass);
 		sachbearbeiterRepo.save(sachbearbeiter);
-		buergerRepo.save(buerger);
 		wohnungRepo.save(wohnung);
+		buergerRepo.save(buerger);
 		}
 
 }

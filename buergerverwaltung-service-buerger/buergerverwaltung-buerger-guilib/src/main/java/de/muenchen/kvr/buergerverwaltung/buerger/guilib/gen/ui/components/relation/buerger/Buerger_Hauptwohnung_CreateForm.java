@@ -27,7 +27,7 @@ import java.util.Optional;
  * @author claus.straube p.mueller
  * @version 2.0
  */
-public class Buerger_Wohnungen_CreateForm extends Wohnung_CreateForm {
+public class Buerger_Hauptwohnung_CreateForm extends Wohnung_CreateForm {
 
     /** The relation this CreateForm is for. */
     private final String relation;
@@ -40,7 +40,7 @@ public class Buerger_Wohnungen_CreateForm extends Wohnung_CreateForm {
      * @param navigateTo Zielseite nach Druck der 'erstellen' Schaltfläche
      * @param relation Angabe einer Assoziation, für die der Wohnung_ ist.
      */
-    public Buerger_Wohnungen_CreateForm(final String navigateTo, final String relation) {
+    public Buerger_Hauptwohnung_CreateForm(final String navigateTo, final String relation) {
         super(navigateTo);
         getSaveButton().addActionPerformer(new NavigateActions(navigateTo)::navigate);
         this.relation = relation;
