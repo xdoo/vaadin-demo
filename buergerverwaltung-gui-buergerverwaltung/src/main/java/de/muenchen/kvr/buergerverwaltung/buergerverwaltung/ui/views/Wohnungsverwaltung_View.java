@@ -5,14 +5,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.themes.ValoTheme;
+import java.util.ArrayList;
+import java.util.List;
+import de.muenchen.kvr.buergerverwaltung.buerger.client.local.Wohnung_;
 
 
+
+import de.muenchen.kvr.buergerverwaltung.buergerverwaltung.ui.MainUI;
 import de.muenchen.vaadin.guilib.BaseUI;
+import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
+import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
+import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
 
-import de.muenchen.kvr.buergerverwaltung.buerger.guilib.gen.ui.components.entity.sachbearbeiter.Sachbearbeiter_Grid;
-import de.muenchen.kvr.buergerverwaltung.buerger.guilib.gen.ui.controller.Sachbearbeiter_ViewController;
+import de.muenchen.kvr.buergerverwaltung.buerger.guilib.gen.ui.components.entity.wohnung.Wohnung_Grid;
+import de.muenchen.kvr.buergerverwaltung.buerger.guilib.gen.ui.controller.Wohnung_ViewController;
 
 @SpringView(name = Wohnungsverwaltung_View.NAME)
 @UIScope
@@ -20,7 +29,7 @@ public class Wohnungsverwaltung_View extends DefaultView{
 	public static final String NAME = "wohnungsverwaltung";
 
 	@Autowired
-	private Sachbearbeiter_ViewController sachbearbeiterController;
+	private Wohnung_ViewController wohnungController;
 	
 	@Override
 	protected void init(){
@@ -29,16 +38,16 @@ public class Wohnungsverwaltung_View extends DefaultView{
         pageTitle.addStyleName(ValoTheme.LABEL_COLORED);
         addComponent(pageTitle);
 		
-		final Label sach__label = new Label(BaseUI.getCurrentI18nResolver().resolve("view_." + NAME + ".sach.label"));
-		sach__label.addStyleName(ValoTheme.LABEL_H2);
-		final Sachbearbeiter_Grid sach = new Sachbearbeiter_Grid(sachbearbeiterController
+		final Label wohnungen__label = new Label(BaseUI.getCurrentI18nResolver().resolve("view_." + NAME + ".wohnungen.label"));
+		wohnungen__label.addStyleName(ValoTheme.LABEL_H2);
+		final Wohnung_Grid wohnungen = new Wohnung_Grid(wohnungController
 		);
-		sach.activateSearch().activateCopy().activateDelete();
-		sach.activateCreate(WohnungCreate_View.NAME);
-		sach.activateRead(ReadWriteWohnung_View.NAME).activateDoubleClickToRead(ReadWriteWohnung_View.NAME);
+		wohnungen.activateSearch().activateCopy().activateDelete();
+		wohnungen.activateCreate(WohnungCreate_View.NAME);
+		wohnungen.activateRead(ReadWriteWohnung_View.NAME).activateDoubleClickToRead(ReadWriteWohnung_View.NAME);
 		
 		// Add components to the default layout
-		final VerticalLayout layout = new VerticalLayout(sach__label, sach);
+		final VerticalLayout layout = new VerticalLayout(wohnungen__label, wohnungen);
 		
 		layout.setSpacing(true);
 		addComponent(layout);

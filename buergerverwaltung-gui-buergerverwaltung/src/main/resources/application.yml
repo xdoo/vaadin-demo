@@ -155,19 +155,19 @@ i18n.de-DE.view_.sachbearbeiterCreateView.sach.button.save.label : save
 i18n.de-DE.view_.sachbearbeiterCreateView.helptext : Für diese Seite existiert keine Beschreibung
 
 i18n.de-DE.view_.wohnungsverwaltung.title : Wohnungsverwaltung
-i18n.de-DE.view_.wohnungsverwaltung.sach.label : sach
-i18n.de-DE.view_.wohnungsverwaltung.sach.button.create.label : create
-i18n.de-DE.view_.wohnungsverwaltung.sach.button.detail.label : detail
+i18n.de-DE.view_.wohnungsverwaltung.wohnungen.label : Wohnungen
+i18n.de-DE.view_.wohnungsverwaltung.wohnungen.button.create.label : create
+i18n.de-DE.view_.wohnungsverwaltung.wohnungen.button.detail.label : detail
 i18n.de-DE.view_.wohnungsverwaltung.helptext : Für diese Seite existiert keine Beschreibung
 
 i18n.de-DE.view_.readWriteWohnung.title : ReadWriteWohnung
 i18n.de-DE.view_.readWriteWohnung.button.zurueck.label : zurueck
-i18n.de-DE.view_.readWriteWohnung.sach.label : sach
+i18n.de-DE.view_.readWriteWohnung.wohnungDetails.label : WohnungDetails
 i18n.de-DE.view_.readWriteWohnung.helptext : Für diese Seite existiert keine Beschreibung
 
 i18n.de-DE.view_.wohnungCreate.title : WohnungCreate
-i18n.de-DE.view_.wohnungCreate.wohnung.label : wohnung
-i18n.de-DE.view_.wohnungCreate.wohnung.button.save.label : save
+i18n.de-DE.view_.wohnungCreate.wohnungAnlegen.label : WohnungAnlegen
+i18n.de-DE.view_.wohnungCreate.wohnungAnlegen.button.save.label : save
 i18n.de-DE.view_.wohnungCreate.helptext : Für diese Seite existiert keine Beschreibung
 
 #=======================================#

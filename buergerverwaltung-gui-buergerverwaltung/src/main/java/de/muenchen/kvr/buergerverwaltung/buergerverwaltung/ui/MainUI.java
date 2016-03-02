@@ -26,21 +26,19 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.EventBus;
 import de.muenchen.eventbus.selector.Key;
-import de.muenchen.vaadin.guilib.services.SecurityService;
+import de.muenchen.kvr.buergerverwaltung.buergerverwaltung.ui.views.Buergerverwaltung_View;
+import de.muenchen.kvr.buergerverwaltung.buergerverwaltung.ui.views.LoginView;
+import de.muenchen.kvr.buergerverwaltung.buergerverwaltung.ui.views.Passverwaltung_View;
+import de.muenchen.kvr.buergerverwaltung.buergerverwaltung.ui.views.Sachbearbeiterverwaltung_View;
+import de.muenchen.kvr.buergerverwaltung.buergerverwaltung.ui.views.Startseite_View;
+import de.muenchen.kvr.buergerverwaltung.buergerverwaltung.ui.views.Wohnungsverwaltung_View;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolverImpl;
 import de.muenchen.vaadin.demo.i18nservice.MessageService;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
-
-
 import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.ValoMenuLayout;
 import de.muenchen.vaadin.guilib.components.ConfirmationWindow;
-import de.muenchen.kvr.buergerverwaltung.buergerverwaltung.ui.views.LoginView;
-import de.muenchen.kvr.buergerverwaltung.buergerverwaltung.ui.views.Startseite_View;
-import de.muenchen.kvr.buergerverwaltung.buergerverwaltung.ui.views.Buergerverwaltung_View;
-import de.muenchen.kvr.buergerverwaltung.buergerverwaltung.ui.views.Passverwaltung_View;
-import de.muenchen.kvr.buergerverwaltung.buergerverwaltung.ui.views.Sachbearbeiterverwaltung_View;
-import de.muenchen.kvr.buergerverwaltung.buergerverwaltung.ui.views.Wohnungsverwaltung_View;
+import de.muenchen.vaadin.guilib.services.SecurityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
