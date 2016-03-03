@@ -69,3 +69,4 @@ public class PermissionEventListener extends AbstractRepositoryEventListener<Per
         service.onAfterLinkDelete(parent, linked);
     }
 }
+

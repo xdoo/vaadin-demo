@@ -34,11 +34,13 @@ public class BuergerCreateView_View extends DefaultView{
         pageTitle.addStyleName(ValoTheme.LABEL_COLORED);
         addComponent(pageTitle);
 		
-		final Buerger_CreateForm component1 = new Buerger_CreateForm(Buergerverwaltung_View.NAME
+		final Label buerger__label = new Label(BaseUI.getCurrentI18nResolver().resolve("view_." + NAME + ".buerger.label"));
+		buerger__label.addStyleName(ValoTheme.LABEL_H2);
+		final Buerger_CreateForm buerger = new Buerger_CreateForm(Buergerverwaltung_View.NAME
 		);
 		
 		// Add components to the default layout
-		final VerticalLayout layout = new VerticalLayout(component1);
+		final VerticalLayout layout = new VerticalLayout(buerger__label, buerger);
 		
 		layout.setSpacing(true);
 		addComponent(layout);

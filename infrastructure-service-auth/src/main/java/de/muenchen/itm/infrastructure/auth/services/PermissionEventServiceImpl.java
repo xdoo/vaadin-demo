@@ -71,3 +71,4 @@ public class PermissionEventServiceImpl implements PermissionEventService {
         // Add your logic here.
     }
 }
+

@@ -61,3 +61,4 @@ public interface AuthorityRepository extends CrudRepository<Authority, Long> {
     Authority findByAuthority(@Param(value = "authority")String authority);
 
 }
+

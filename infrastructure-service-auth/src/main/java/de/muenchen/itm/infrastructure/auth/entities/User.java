@@ -154,3 +154,4 @@ public class User extends BaseEntity implements Serializable {
         return getAuthorities().stream().anyMatch(authority -> authority.getAuthority().equals(Authority.ADMIN_AUTHORITY));
     }
 }
+

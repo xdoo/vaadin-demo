@@ -17,7 +17,6 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
@@ -102,7 +101,6 @@ public class LoginView extends VerticalLayout implements View {
             public void buttonClick(final ClickEvent event) {
                 if (security.login(username.getValue(), password.getValue())) {
                     eventBus.notify(Key.LOGIN);
-                    ((BaseUI) UI.getCurrent()).setCurrentPrincipal(security.getCurrentPrincipal());
                 } else {
 //                    Anmeldung fehlgeschlagen
                     GenericNotification notif = new GenericWarningNotification("Anmeldung fehlgeschlagen",

@@ -38,14 +38,16 @@ public class Passverwaltung_View extends DefaultView{
         pageTitle.addStyleName(ValoTheme.LABEL_COLORED);
         addComponent(pageTitle);
 		
-		final Pass_Grid component1 = new Pass_Grid(passController
+		final Label pass__label = new Label(BaseUI.getCurrentI18nResolver().resolve("view_." + NAME + ".pass.label"));
+		pass__label.addStyleName(ValoTheme.LABEL_H2);
+		final Pass_Grid pass = new Pass_Grid(passController
 		);
-		component1.activateSearch().activateCopy().activateDelete();
-		component1.activateCreate(PassCreateView_View.NAME);
-		component1.activateRead(ReadWritePass_View.NAME).activateDoubleClickToRead(ReadWritePass_View.NAME);
+		pass.activateSearch().activateCopy().activateDelete();
+		pass.activateCreate(PassCreateView_View.NAME);
+		pass.activateRead(ReadWritePass_View.NAME).activateDoubleClickToRead(ReadWritePass_View.NAME);
 		
 		// Add components to the default layout
-		final VerticalLayout layout = new VerticalLayout(component1);
+		final VerticalLayout layout = new VerticalLayout(pass__label, pass);
 		
 		layout.setSpacing(true);
 		addComponent(layout);

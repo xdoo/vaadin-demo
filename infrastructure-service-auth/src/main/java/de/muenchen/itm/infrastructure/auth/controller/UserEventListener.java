@@ -69,3 +69,4 @@ public class UserEventListener extends AbstractRepositoryEventListener<User> {
         service.onAfterLinkDelete(parent, linked);
     }
 }
+

@@ -34,11 +34,13 @@ public class PassCreateView_View extends DefaultView{
         pageTitle.addStyleName(ValoTheme.LABEL_COLORED);
         addComponent(pageTitle);
 		
-		final Pass_CreateForm component1 = new Pass_CreateForm(Passverwaltung_View.NAME
+		final Label pass__label = new Label(BaseUI.getCurrentI18nResolver().resolve("view_." + NAME + ".pass.label"));
+		pass__label.addStyleName(ValoTheme.LABEL_H2);
+		final Pass_CreateForm pass = new Pass_CreateForm(Passverwaltung_View.NAME
 		);
 		
 		// Add components to the default layout
-		final VerticalLayout layout = new VerticalLayout(component1);
+		final VerticalLayout layout = new VerticalLayout(pass__label, pass);
 		
 		layout.setSpacing(true);
 		addComponent(layout);

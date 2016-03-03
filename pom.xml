@@ -12,11 +12,12 @@
     <description>Combining the best</description>
 
     <modules>
-        <module>buergerverwaltung-service-buerger</module>
-        <module>buergerverwaltung-gui-buergerverwaltung</module>
         <module>infrastructure-service-auth</module>
+        <module>infrastructure-service-hystrix</module>
         <module>infrastructure-service-config</module>
         <module>infrastructure-service-registry</module>
+        <module>buergerverwaltung-service-buerger</module>
+        <module>buergerverwaltung-gui-buergerverwaltung</module>
     </modules>
 
 </project>

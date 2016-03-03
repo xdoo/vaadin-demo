@@ -1,6 +1,5 @@
 package de.muenchen.itm.infrastructure.auth.search;
 
-
 import de.muenchen.itm.infrastructure.auth.entities.Permission;
 import de.muenchen.itm.infrastructure.auth.repositories.PermissionRepository;
 import de.muenchen.service.QueryService;
@@ -62,5 +61,4 @@ public class PermissionSearchController {
         return new ResponseEntity<Object>(new Resources<>(collect), HttpStatus.OK);
     }
 }
-
 

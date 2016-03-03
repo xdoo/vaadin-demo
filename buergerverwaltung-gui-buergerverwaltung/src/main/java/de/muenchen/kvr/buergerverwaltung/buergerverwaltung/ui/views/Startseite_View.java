@@ -32,11 +32,11 @@ public class Startseite_View extends DefaultView{
         pageTitle.addStyleName(ValoTheme.LABEL_COLORED);
         addComponent(pageTitle);
 		
-		final ActionButton component1 = new ActionButton(MainUI.getCurrentI18nResolver().resolve("view_.startseite.button.onePercentChanceOfWinningTenMillionEURO.label"), SimpleAction.none);
-		component1.setId("onePercentChanceOfWinningTenMillionEURO-");
+		final ActionButton onePercentChanceOfWinningTenMillionEURO = new ActionButton(MainUI.getCurrentI18nResolver().resolve("view_.startseite.button.onePercentChanceOfWinningTenMillionEURO.label"), SimpleAction.none);
+		onePercentChanceOfWinningTenMillionEURO.setId("onePercentChanceOfWinningTenMillionEURO-");
 		
 		// Add components to the default layout
-		final VerticalLayout layout = new VerticalLayout(component1);
+		final VerticalLayout layout = new VerticalLayout(onePercentChanceOfWinningTenMillionEURO);
 		
 		layout.setSpacing(true);
 		addComponent(layout);

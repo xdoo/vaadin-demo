@@ -71,3 +71,4 @@ public class AuthorityEventServiceImpl implements AuthorityEventService {
         // Add your logic here.
     }
 }
+

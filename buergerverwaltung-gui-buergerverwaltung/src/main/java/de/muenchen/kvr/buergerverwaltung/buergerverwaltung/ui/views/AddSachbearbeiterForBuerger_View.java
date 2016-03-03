@@ -41,10 +41,12 @@ public class AddSachbearbeiterForBuerger_View extends DefaultView{
         pageTitle.addStyleName(ValoTheme.LABEL_COLORED);
         addComponent(pageTitle);
 		
-		final Buerger_Sachbearbeiter_AddGrid component1 = new Buerger_Sachbearbeiter_AddGrid(sachbearbeiterController, ReadWriteBurger_View.NAME);
+		final Label sach__label = new Label(BaseUI.getCurrentI18nResolver().resolve("view_." + NAME + ".sach.label"));
+		sach__label.addStyleName(ValoTheme.LABEL_H2);
+		final Buerger_Sachbearbeiter_AddGrid sach = new Buerger_Sachbearbeiter_AddGrid(sachbearbeiterController, ReadWriteBurger_View.NAME);
 		
 		// Add components to the default layout
-		final VerticalLayout layout = new VerticalLayout(component1);
+		final VerticalLayout layout = new VerticalLayout(sach__label, sach);
 		
 		layout.setSpacing(true);
 		addComponent(layout);

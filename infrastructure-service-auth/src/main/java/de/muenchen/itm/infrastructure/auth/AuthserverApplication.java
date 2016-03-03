@@ -165,3 +165,5 @@ public class AuthserverApplication extends WebMvcConfigurerAdapter {
         }
     }
 }
+
+

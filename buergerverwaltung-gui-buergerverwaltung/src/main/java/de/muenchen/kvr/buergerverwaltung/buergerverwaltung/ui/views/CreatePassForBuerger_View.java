@@ -34,10 +34,12 @@ public class CreatePassForBuerger_View extends DefaultView{
         pageTitle.addStyleName(ValoTheme.LABEL_COLORED);
         addComponent(pageTitle);
 		
-		final Buerger_Pass_CreateForm component1 = new Buerger_Pass_CreateForm(ReadWriteBurger_View.NAME, Buerger_.Rel.pass.name());
+		final Label pass__label = new Label(BaseUI.getCurrentI18nResolver().resolve("view_." + NAME + ".pass.label"));
+		pass__label.addStyleName(ValoTheme.LABEL_H2);
+		final Buerger_Pass_CreateForm pass = new Buerger_Pass_CreateForm(ReadWriteBurger_View.NAME, Buerger_.Rel.pass.name());
 		
 		// Add components to the default layout
-		final VerticalLayout layout = new VerticalLayout(component1);
+		final VerticalLayout layout = new VerticalLayout(pass__label, pass);
 		
 		layout.setSpacing(true);
 		addComponent(layout);

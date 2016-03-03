@@ -1,0 +1,6 @@
+info:
+  component: Hystrix Dashboard
+ 
+# expose server on port 7979
+server:
+  port: 7979

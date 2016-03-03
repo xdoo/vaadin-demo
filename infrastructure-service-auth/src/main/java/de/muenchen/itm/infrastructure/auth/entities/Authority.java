@@ -55,3 +55,4 @@ public class Authority extends BaseEntity {
         this.permissions = permissions;
     }
 }
+

@@ -38,14 +38,16 @@ public class Sachbearbeiterverwaltung_View extends DefaultView{
         pageTitle.addStyleName(ValoTheme.LABEL_COLORED);
         addComponent(pageTitle);
 		
-		final Sachbearbeiter_Grid component1 = new Sachbearbeiter_Grid(sachbearbeiterController
+		final Label sach__label = new Label(BaseUI.getCurrentI18nResolver().resolve("view_." + NAME + ".sach.label"));
+		sach__label.addStyleName(ValoTheme.LABEL_H2);
+		final Sachbearbeiter_Grid sach = new Sachbearbeiter_Grid(sachbearbeiterController
 		);
-		component1.activateSearch().activateCopy().activateDelete();
-		component1.activateCreate(SachbearbeiterCreateView_View.NAME);
-		component1.activateRead(ReadWriteSachbearbeiter_View.NAME).activateDoubleClickToRead(ReadWriteSachbearbeiter_View.NAME);
+		sach.activateSearch().activateCopy().activateDelete();
+		sach.activateCreate(SachbearbeiterCreateView_View.NAME);
+		sach.activateRead(ReadWriteSachbearbeiter_View.NAME).activateDoubleClickToRead(ReadWriteSachbearbeiter_View.NAME);
 		
 		// Add components to the default layout
-		final VerticalLayout layout = new VerticalLayout(component1);
+		final VerticalLayout layout = new VerticalLayout(sach__label, sach);
 		
 		layout.setSpacing(true);
 		addComponent(layout);

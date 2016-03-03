@@ -31,3 +31,4 @@ public class PermissionResourceServiceImpl implements PermissionResourceService 
         return resource;
     }
 }
+

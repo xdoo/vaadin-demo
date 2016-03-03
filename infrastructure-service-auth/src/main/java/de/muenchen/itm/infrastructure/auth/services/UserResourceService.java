@@ -17,3 +17,4 @@ public interface UserResourceService {
      */
     Resource<User> process(Resource<User> resource);
 }
+

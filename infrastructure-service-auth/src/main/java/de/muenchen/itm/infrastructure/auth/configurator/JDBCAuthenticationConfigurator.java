@@ -39,3 +39,4 @@ public class JDBCAuthenticationConfigurator extends GlobalAuthenticationConfigur
     }
 
 }
+

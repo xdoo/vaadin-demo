@@ -8,6 +8,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 
 import com.vaadin.spring.annotation.UIScope;
@@ -21,11 +22,11 @@ import de.muenchen.eventbus.EventBus;
 @SpringBootApplication
 @EnableEurekaClient
 @Configuration
-@ComponentScan(basePackages = {"de.muenchen.kvr.buergerverwaltung","de.muenchen.kvr.buergerverwaltung.guilib","de.muenchen.kvr.buergerverwaltung.client",
+@ComponentScan(basePackages = {"de.muenchen.kvr.buergerverwaltung","de.muenchen.kvr.buergerverwaltung.buerger.guilib","de.muenchen.kvr.buergerverwaltung.buerger.client",
 	"de.muenchen.vaadin.demo.apilib","de.muenchen.vaadin.guilib","de.muenchen.vaadin.demo.i18nservice"})
 //Exclude SecAutoConfig because OAuth needs to be manually configured
-@EnableAutoConfiguration(exclude = {
-org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration.class})
+@EnableAutoConfiguration(exclude = {org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration.class})
+@EnableWebSecurity
 public class GuiApplication {
     
     public static void main(String[] args) throws Exception {

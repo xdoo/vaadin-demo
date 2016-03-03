@@ -1,6 +1,5 @@
 package de.muenchen.itm.infrastructure.auth.repositories;
 
-
 import de.muenchen.itm.infrastructure.auth.entities.User;
 import de.muenchen.itm.infrastructure.auth.services.UserResourceService;
 import org.springframework.beans.factory.annotation.Autowired;

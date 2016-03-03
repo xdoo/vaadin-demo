@@ -45,3 +45,4 @@ public class CustomLdapAuthoritiesPopulator implements LdapAuthoritiesPopulator 
         return resultList.stream().map(authority -> new SimpleGrantedAuthority(authority.getAuthority())).collect(Collectors.toSet());
     }
 }
+

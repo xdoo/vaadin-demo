@@ -34,14 +34,16 @@ public class ReadWriteSachbearbeiter_View extends DefaultView{
         pageTitle.addStyleName(ValoTheme.LABEL_COLORED);
         addComponent(pageTitle);
 		
-		final ActionButton component1 = new ActionButton(MainUI.getCurrentI18nResolver().resolve("view_.readWriteSachbearbeiter.button.zurueck.label"), SimpleAction.none);
-		component1.addActionPerformer(new NavigateActions(Sachbearbeiterverwaltung_View.NAME)::navigate);
-		component1.setId("zurueck-" + Sachbearbeiterverwaltung_View.NAME);
+		final ActionButton zurueck = new ActionButton(MainUI.getCurrentI18nResolver().resolve("view_.readWriteSachbearbeiter.button.zurueck.label"), SimpleAction.none);
+		zurueck.addActionPerformer(new NavigateActions(Sachbearbeiterverwaltung_View.NAME)::navigate);
+		zurueck.setId("zurueck-" + Sachbearbeiterverwaltung_View.NAME);
 		
-		final Sachbearbeiter_ReadWriteForm component2 = new Sachbearbeiter_ReadWriteForm();
+		final Label sach__label = new Label(BaseUI.getCurrentI18nResolver().resolve("view_." + NAME + ".sach.label"));
+		sach__label.addStyleName(ValoTheme.LABEL_H2);
+		final Sachbearbeiter_ReadWriteForm sach = new Sachbearbeiter_ReadWriteForm();
 		
 		// Add components to the default layout
-		final VerticalLayout layout = new VerticalLayout(component1, component2);
+		final VerticalLayout layout = new VerticalLayout(zurueck, sach__label, sach);
 		
 		layout.setSpacing(true);
 		addComponent(layout);

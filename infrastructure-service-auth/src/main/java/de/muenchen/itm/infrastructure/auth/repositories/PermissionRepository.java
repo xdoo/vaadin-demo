@@ -60,3 +60,4 @@ public interface PermissionRepository extends CrudRepository<Permission, Long> {
 
     Permission findByPermission(@Param(value = "permission") String permission);
 }
+

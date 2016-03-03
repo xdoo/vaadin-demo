@@ -17,3 +17,4 @@ public interface AuthorityResourceService {
      */
     Resource<Authority> process(Resource<Authority> resource);
 }
+

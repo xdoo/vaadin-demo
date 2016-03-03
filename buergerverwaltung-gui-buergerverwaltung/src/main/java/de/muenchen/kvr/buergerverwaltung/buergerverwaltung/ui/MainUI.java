@@ -22,25 +22,23 @@ import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.MenuBar;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import de.muenchen.eventbus.EventBus;
 import de.muenchen.eventbus.selector.Key;
-import de.muenchen.vaadin.guilib.services.SecurityService;
+import de.muenchen.kvr.buergerverwaltung.buergerverwaltung.ui.views.Buergerverwaltung_View;
+import de.muenchen.kvr.buergerverwaltung.buergerverwaltung.ui.views.LoginView;
+import de.muenchen.kvr.buergerverwaltung.buergerverwaltung.ui.views.Passverwaltung_View;
+import de.muenchen.kvr.buergerverwaltung.buergerverwaltung.ui.views.Sachbearbeiterverwaltung_View;
+import de.muenchen.kvr.buergerverwaltung.buergerverwaltung.ui.views.Startseite_View;
+import de.muenchen.kvr.buergerverwaltung.buergerverwaltung.ui.views.Wohnungsverwaltung_View;
 import de.muenchen.vaadin.demo.i18nservice.I18nResolverImpl;
 import de.muenchen.vaadin.demo.i18nservice.MessageService;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
-
-
 import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.ValoMenuLayout;
 import de.muenchen.vaadin.guilib.components.ConfirmationWindow;
-import de.muenchen.kvr.buergerverwaltung.buergerverwaltung.ui.views.LoginView;
-import de.muenchen.kvr.buergerverwaltung.buergerverwaltung.ui.views.Startseite_View;
-import de.muenchen.kvr.buergerverwaltung.buergerverwaltung.ui.views.Buergerverwaltung_View;
-import de.muenchen.kvr.buergerverwaltung.buergerverwaltung.ui.views.Passverwaltung_View;
-import de.muenchen.kvr.buergerverwaltung.buergerverwaltung.ui.views.Sachbearbeiterverwaltung_View;
+import de.muenchen.vaadin.guilib.services.SecurityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -199,7 +197,6 @@ public class MainUI extends BaseUI {
     public void logoutEventHandler(reactor.bus.Event<?> event) {
         this.root.switchOffMenu();
         security.logout();
-        ((BaseUI) UI.getCurrent()).setCurrentPrincipal(null);
 
         // Close the VaadinServiceSession
         getUI().getSession().close();
@@ -299,6 +296,7 @@ public class MainUI extends BaseUI {
         this.menuItems.put(Buergerverwaltung_View.NAME, BaseUI.getCurrentI18nResolver().resolve("view_.buergerverwaltung.title"));
         this.menuItems.put(Passverwaltung_View.NAME, BaseUI.getCurrentI18nResolver().resolve("view_.passverwaltung.title"));
         this.menuItems.put(Sachbearbeiterverwaltung_View.NAME, BaseUI.getCurrentI18nResolver().resolve("view_.sachbearbeiterverwaltung.title"));
+        this.menuItems.put(Wohnungsverwaltung_View.NAME, BaseUI.getCurrentI18nResolver().resolve("view_.wohnungsverwaltung.title"));
     }
 
     private void removeMenuItems() {

@@ -17,3 +17,4 @@ public interface PermissionResourceService {
      */
     Resource<Permission> process(Resource<Permission> resource);
 }
+

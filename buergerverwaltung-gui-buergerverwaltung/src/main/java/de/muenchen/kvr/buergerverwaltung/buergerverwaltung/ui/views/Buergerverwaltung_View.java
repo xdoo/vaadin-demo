@@ -38,14 +38,16 @@ public class Buergerverwaltung_View extends DefaultView{
         pageTitle.addStyleName(ValoTheme.LABEL_COLORED);
         addComponent(pageTitle);
 		
-		final Buerger_Grid component1 = new Buerger_Grid(buergerController
+		final Label buerger__label = new Label(BaseUI.getCurrentI18nResolver().resolve("view_." + NAME + ".buerger.label"));
+		buerger__label.addStyleName(ValoTheme.LABEL_H2);
+		final Buerger_Grid buerger = new Buerger_Grid(buergerController
 		);
-		component1.activateSearch().activateCopy().activateDelete();
-		component1.activateCreate(BuergerCreateView_View.NAME);
-		component1.activateRead(ReadWriteBurger_View.NAME).activateDoubleClickToRead(ReadWriteBurger_View.NAME);
+		buerger.activateSearch().activateCopy().activateDelete();
+		buerger.activateCreate(BuergerCreateView_View.NAME);
+		buerger.activateRead(ReadWriteBurger_View.NAME).activateDoubleClickToRead(ReadWriteBurger_View.NAME);
 		
 		// Add components to the default layout
-		final VerticalLayout layout = new VerticalLayout(component1);
+		final VerticalLayout layout = new VerticalLayout(buerger__label, buerger);
 		
 		layout.setSpacing(true);
 		addComponent(layout);
