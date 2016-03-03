@@ -6,6 +6,7 @@ import de.muenchen.kvr.buergerverwaltung.buerger.client.rest.Buerger_Resource;
 import org.springframework.hateoas.Resource;
 
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /*
  * This file will be overwritten on every change of the model!
@@ -34,7 +35,12 @@ public class Buerger_Assembler {
 			bean.setEigenschaften(buergerDTO.getEigenschaften());
 		if(buergerDTO.getStaatsangehoerigkeiten() != null)
 			bean.setStaatsangehoerigkeiten(buergerDTO.getStaatsangehoerigkeiten());
-		bean.setBisherigeWohnsitze(new Adresse_Assembler().toBean(buergerDTO.getBisherigeWohnsitze()));
+
+		Adresse_Assembler adresseAssembler = new Adresse_Assembler();
+		bean.setBisherigeWohnsitze(buergerDTO.getBisherigeWohnsitze().stream()
+				.map(adresseAssembler::toBean)
+				.collect(Collectors.toList()));
+
 		bean.add(resource.getLinks());
 		
 		return bean;
@@ -75,7 +81,12 @@ public class Buerger_Assembler {
 			buergerDTO.setEigenschaften(bean.getEigenschaften());
 		if(bean.getStaatsangehoerigkeiten() != null)
 			buergerDTO.setStaatsangehoerigkeiten(bean.getStaatsangehoerigkeiten());
-		buergerDTO.setBisherigeWohnsitze(new Adresse_Assembler().toDTO(bean.getBisherigeWohnsitze()));
+
+		Adresse_Assembler adresseAssembler = new Adresse_Assembler();
+		buergerDTO.setBisherigeWohnsitze(bean.getBisherigeWohnsitze().stream()
+				.map(adresseAssembler::toDTO)
+				.collect(Collectors.toList()));
+
 		if(bean.getKinder() != null)
 			buergerDTO.setKinder(bean.getKinder());
 		if(bean.getPartner() != null)

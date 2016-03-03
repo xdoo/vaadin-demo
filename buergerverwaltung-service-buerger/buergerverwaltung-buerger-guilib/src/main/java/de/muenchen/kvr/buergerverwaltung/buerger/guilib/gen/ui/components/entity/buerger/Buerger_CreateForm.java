@@ -1,20 +1,11 @@
 package de.muenchen.kvr.buergerverwaltung.buerger.guilib.gen.ui.components.entity.buerger;
 
-import com.vaadin.data.Validator;
-import com.vaadin.server.UserError;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Field;
-import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
-import java.util.stream.Collectors;
-import java.util.NoSuchElementException;
-
 import de.muenchen.kvr.buergerverwaltung.buerger.client.local.Buerger_;
 import de.muenchen.kvr.buergerverwaltung.buerger.guilib.gen.ui.components.buttons.listener.buerger.Buerger_SingleActions;
-import de.muenchen.kvr.buergerverwaltung.buerger.guilib.gen.ui.components.entity.adresse.Adresse_Form;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
-import de.muenchen.vaadin.guilib.BaseUI;
-import de.muenchen.vaadin.guilib.components.GenericGrid;
 import de.muenchen.vaadin.guilib.components.actions.NavigateActions;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
 
@@ -37,11 +28,6 @@ public class Buerger_CreateForm extends Buerger_Form {
     /** The button for the save action. */
     private final ActionButton saveButton = new ActionButton(Buerger_.class, SimpleAction.save);
     
-    /**
-     * Form of the bisherigeWohnsitze of this Buerger.
-     */
-    private final Adresse_Form bisherigeWohnsitze_Form = new Adresse_Form();
-    
 	/**
 	 * Create a new Buerger_CreateForm that navigates to the navigateTo View on save.
 	 *
@@ -61,8 +47,6 @@ public class Buerger_CreateForm extends Buerger_Form {
 
         getButtonLayout().setSpacing(true);
         getButtonLayout().addComponents(getSaveButton());
-
-		getFormLayout().addComponent(bisherigeWohnsitze_Form);
 		
         configureSaveButton();
 
@@ -95,11 +79,8 @@ public class Buerger_CreateForm extends Buerger_Form {
 	// Getters
 	@Override
 	public Buerger_ getBuerger(){
-		Buerger_ buerger=super.getBuerger();
-		
-		buerger.setBisherigeWohnsitze(bisherigeWohnsitze_Form.getAdresse());
-		
-		return buerger;
+
+		return super.getBuerger();
 	}
 
     public HorizontalLayout getButtonLayout() {
