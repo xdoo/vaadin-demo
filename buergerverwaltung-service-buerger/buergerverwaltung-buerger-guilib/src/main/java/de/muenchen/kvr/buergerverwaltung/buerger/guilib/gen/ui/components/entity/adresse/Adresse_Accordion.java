@@ -1,24 +1,29 @@
 package de.muenchen.kvr.buergerverwaltung.buerger.guilib.gen.ui.components.entity.adresse;
 
 import com.vaadin.data.Validator;
+import com.vaadin.server.Page;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomField;
 import com.vaadin.ui.VerticalLayout;
 import de.muenchen.kvr.buergerverwaltung.buerger.client.local.Adresse_;
+import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
 import de.muenchen.vaadin.demo.i18nservice.buttons.SimpleAction;
+import de.muenchen.vaadin.guilib.BaseUI;
 import de.muenchen.vaadin.guilib.components.BetterAccordion;
+import de.muenchen.vaadin.guilib.components.GenericWarningNotification;
 import de.muenchen.vaadin.guilib.components.buttons.ActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by rene.zarwel on 02.03.16.
  *
  * Custom Field for a Value Object List of Adresse_
  */
-public class Adresse_Accordion extends CustomField<List<Adresse_>> {
+public class Adresse_Accordion extends CustomField<Set<Adresse_>> {
 
     /** Accordion is by default expanded on every tab **/
     private static final boolean DEFAULT_EXPAND = true;
@@ -27,7 +32,7 @@ public class Adresse_Accordion extends CustomField<List<Adresse_>> {
     private final BetterAccordion root = new BetterAccordion(DEFAULT_EXPAND);
 
     /** Container to save the Adresses linked by the Binder**/
-    private List<Adresse_> adresseContainer;
+    private Set<Adresse_> adresseContainer;
 
     /**Components **/
     private List<Adresse_Form> adresseForms = new ArrayList<>();
@@ -36,6 +41,8 @@ public class Adresse_Accordion extends CustomField<List<Adresse_>> {
     public Adresse_Accordion() {
         super();
         initCreate();
+
+
     }
 
     /**
@@ -50,16 +57,28 @@ public class Adresse_Accordion extends CustomField<List<Adresse_>> {
         add.addActionPerformer(clickEvent -> {
             try {
                 Adresse_ adresse = form.getAdresse();
-                //Add Adress Form
-                addAdresseForm(adresse);
-                //Add Adress to Container
-                adresseContainer.add(adresse);
-                //Reset CreateForm
-                form.setAdresse(new Adresse_());
-                form.getFields().stream()
-                        .map(field -> (AbstractField)field)
-                        .forEach(field -> field.setValidationVisible(false));
-                return true;
+
+                if (!adresseContainer.contains(adresse)) {
+
+                    //Add Adress Form
+                    addAdresseForm(adresse);
+                    //Add Adress to Container
+                    adresseContainer.add(adresse);
+                    //Reset CreateForm
+                    form.setAdresse(new Adresse_());
+                    form.getFields().stream()
+                            .map(field -> (AbstractField) field)
+                            .forEach(field -> field.setValidationVisible(false));
+                    return true;
+                }
+                else {
+                    GenericWarningNotification warn = new GenericWarningNotification(
+                            BaseUI.getCurrentI18nResolver().resolveRelative(Adresse_.class, I18nPaths.getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.add, I18nPaths.Type.label)),
+                            BaseUI.getCurrentI18nResolver().resolveRelative(Adresse_.class, I18nPaths.getNotificationPath(I18nPaths.NotificationType.warning, SimpleAction.add, I18nPaths.Type.text)));
+                    warn.show(Page.getCurrent());
+
+                    return false;
+                }
             } catch (Exception e){
                 return false;
             }
@@ -75,7 +94,7 @@ public class Adresse_Accordion extends CustomField<List<Adresse_>> {
      * Clears the whole Field and initializes the new Container
      * @param adresseList
      */
-    public void setAdresseContainer(List<Adresse_> adresseList) {
+    public void setAdresseContainer(Set<Adresse_> adresseList) {
         //Drop everything
         root.removeAllTabs();
         adresseForms.clear();
@@ -126,8 +145,8 @@ public class Adresse_Accordion extends CustomField<List<Adresse_>> {
 
     @Override
     @SuppressWarnings("unchecked")
-    public Class<? extends List<Adresse_>> getType() {
-        return (Class<List<Adresse_>>)(Object)List.class;
+    public Class<? extends Set<Adresse_>> getType() {
+        return (Class<Set<Adresse_>>)(Object)Set.class;
     }
 
 
@@ -137,7 +156,7 @@ public class Adresse_Accordion extends CustomField<List<Adresse_>> {
     }
 
     @Override
-    protected void setInternalValue(List<Adresse_> address) {
+    protected void setInternalValue(Set<Adresse_> address) {
         super.setInternalValue(address);
         setAdresseContainer(address);
     }
@@ -149,4 +168,6 @@ public class Adresse_Accordion extends CustomField<List<Adresse_>> {
         adresseForms.forEach(Adresse_Form::getAdresse);
         super.commit();
     }
+
+
 }

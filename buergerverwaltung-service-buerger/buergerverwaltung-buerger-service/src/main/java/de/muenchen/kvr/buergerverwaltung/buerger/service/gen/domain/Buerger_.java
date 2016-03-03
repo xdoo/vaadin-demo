@@ -1,40 +1,40 @@
 package de.muenchen.kvr.buergerverwaltung.buerger.service.gen.domain;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Size;
-import javax.validation.constraints.Pattern;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;	
-import java.math.BigDecimal;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.ElementCollection;
-import javax.persistence.OrderColumn;
-import javax.persistence.CollectionTable;
-import javax.persistence.JoinColumn;
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.Embedded;
-import javax.persistence.ManyToMany;
-import javax.persistence.JoinTable;
-import javax.persistence.OneToOne;
-import javax.persistence.CascadeType;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import org.hibernate.search.annotations.Indexed;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import org.hibernate.search.annotations.FieldBridge;
-import org.hibernate.search.annotations.Field;
+import de.muenchen.auditing.MUCAudited;
 import de.muenchen.service.BaseEntity;
 import de.muenchen.service.PetersPerfectBridge;
 import de.muenchen.vaadin.demo.apilib.domain.Past;
-import de.muenchen.auditing.MUCAudited;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.FieldBridge;
+import org.hibernate.search.annotations.Indexed;
+
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.OrderColumn;
+import javax.persistence.Table;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 /*
  * This file will be overwritten on every change of the model!
@@ -133,7 +133,7 @@ public class Buerger_ extends BaseEntity {
 	})	
 	@NotNull
 	@Size(min = 1)
-	private java.util.List<Adresse_> bisherigeWohnsitze = new java.util.ArrayList<>();
+	private java.util.Set<Adresse_> bisherigeWohnsitze = new java.util.HashSet<>();
 	
 	
 	@OrderColumn(name="order_index")
@@ -252,11 +252,11 @@ public class Buerger_ extends BaseEntity {
 	}
 	
 	
-	public java.util.List<Adresse_> getBisherigeWohnsitze(){
+	public java.util.Set<Adresse_> getBisherigeWohnsitze(){
 		return bisherigeWohnsitze;
 	}
 	
-	public void setBisherigeWohnsitze(java.util.List<Adresse_> bisherigeWohnsitze){
+	public void setBisherigeWohnsitze(java.util.Set<Adresse_> bisherigeWohnsitze){
 		this.bisherigeWohnsitze = bisherigeWohnsitze;
 	}
 	

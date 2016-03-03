@@ -39,7 +39,7 @@ public class Buerger_Assembler {
 		Adresse_Assembler adresseAssembler = new Adresse_Assembler();
 		bean.setBisherigeWohnsitze(buergerDTO.getBisherigeWohnsitze().stream()
 				.map(adresseAssembler::toBean)
-				.collect(Collectors.toList()));
+				.collect(Collectors.toSet()));
 
 		bean.add(resource.getLinks());
 		
@@ -85,7 +85,7 @@ public class Buerger_Assembler {
 		Adresse_Assembler adresseAssembler = new Adresse_Assembler();
 		buergerDTO.setBisherigeWohnsitze(bean.getBisherigeWohnsitze().stream()
 				.map(adresseAssembler::toDTO)
-				.collect(Collectors.toList()));
+				.collect(Collectors.toSet()));
 
 		if(bean.getKinder() != null)
 			buergerDTO.setKinder(bean.getKinder());
