@@ -474,6 +474,8 @@ i18n.de-DE.adresse.notification.success:
 i18n.de-DE.adresse.notification.warning:
    create.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
    create.label : Warnung
+   add.text : Adresse bereits eingetragen.
+   add.label : Warnung
    update.text : Bitte füllen Sie alle Felder mit gültigen Werten aus.
    update.label : Warnung
 

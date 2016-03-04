@@ -1,10 +1,12 @@
 package de.muenchen.kvr.buergerverwaltung.buerger.client.domain;
 
-import de.muenchen.vaadin.demo.apilib.domain.BaseEntity;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import de.muenchen.vaadin.demo.apilib.domain.BaseEntity;
+
+import java.util.Set;
 
 /*
  * This file will be overwritten on every change of the model!
@@ -32,7 +34,7 @@ public class Buerger_DTO extends BaseEntity {
 	
 	private java.util.List<MoeglicheStaatsangehoerigkeiten_> staatsangehoerigkeiten = new java.util.ArrayList<>();
 	
-	private Adresse_DTO bisherigeWohnsitze;
+	private Set<Adresse_DTO> bisherigeWohnsitze;
 	
 	private java.util.List<String> kinder;
 	
@@ -108,10 +110,10 @@ public class Buerger_DTO extends BaseEntity {
 		this.staatsangehoerigkeiten = staatsangehoerigkeiten;
 	}
 	
-	public Adresse_DTO getBisherigeWohnsitze(){
+	public Set<Adresse_DTO> getBisherigeWohnsitze(){
 		return bisherigeWohnsitze;
 	}
-	public void setBisherigeWohnsitze(Adresse_DTO value){
+	public void setBisherigeWohnsitze(Set<Adresse_DTO> value){
 		this.bisherigeWohnsitze = value;
 	}
 	

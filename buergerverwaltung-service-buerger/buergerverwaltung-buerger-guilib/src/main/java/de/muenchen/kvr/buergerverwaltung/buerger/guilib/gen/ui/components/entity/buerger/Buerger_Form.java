@@ -1,25 +1,24 @@
 package de.muenchen.kvr.buergerverwaltung.buerger.guilib.gen.ui.components.entity.buerger;
 
+import com.vaadin.data.Validator;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.ui.AbstractField;
+import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.DateField;
+import com.vaadin.ui.Field;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
-import com.vaadin.ui.TextArea;
-import com.vaadin.ui.PasswordField;
-import com.vaadin.ui.CheckBox;
-import com.vaadin.ui.Field;
 import com.vaadin.ui.themes.ValoTheme;
-import org.vaadin.tokenfield.TokenField;
-import com.vaadin.data.Validator;
-
-import de.muenchen.kvr.buergerverwaltung.buerger.client.local.Buerger_;
-import de.muenchen.vaadin.guilib.util.FormUtil;
-import de.muenchen.vaadin.guilib.components.BaseComponent;
-import de.muenchen.kvr.buergerverwaltung.buerger.client.domain.Augenfarben_;
 import de.muenchen.kvr.buergerverwaltung.buerger.client.domain.MoeglicheStaatsangehoerigkeiten_;
+import de.muenchen.kvr.buergerverwaltung.buerger.client.local.Buerger_;
+import de.muenchen.kvr.buergerverwaltung.buerger.guilib.gen.ui.components.entity.adresse.Adresse_Accordion;
+import de.muenchen.vaadin.demo.i18nservice.I18nPaths;
+import de.muenchen.vaadin.guilib.components.BaseComponent;
+import de.muenchen.vaadin.guilib.util.FormUtil;
+import org.vaadin.tokenfield.TokenField;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -40,7 +39,7 @@ public class Buerger_Form extends BaseComponent {
     public static final Class<Buerger_> ENTITY_CLASS = Buerger_.class;
     
     /** The FormLayout that contains all the form fields. */
-    private final FormLayout formLayout;
+    private final FormLayout formLayout = new FormLayout();
     
     /** Contains the current Buerger_ and handles the data binding. */
     private final BeanFieldGroup<Buerger_> binder = new BeanFieldGroup<>(ENTITY_CLASS);
@@ -58,11 +57,9 @@ public class Buerger_Form extends BaseComponent {
         binder.setItemDataSource(new Buerger_());
         fields = buildFields();
 
-        final FormLayout formLayout = new FormLayout();
         formLayout.addStyleName(ValoTheme.FORMLAYOUT_LIGHT);
         fields.stream().forEach(formLayout::addComponent);
 
-        this.formLayout = formLayout;
         setCompositionRoot(formLayout);
     }
 
@@ -89,8 +86,38 @@ public class Buerger_Form extends BaseComponent {
 					Buerger_.Field.staatsangehoerigkeiten.name(),
 					MoeglicheStaatsangehoerigkeiten_.class,
 					new BeanItemContainer<>(MoeglicheStaatsangehoerigkeiten_.class, Arrays.asList(MoeglicheStaatsangehoerigkeiten_.values())));
-		
-        return Arrays.asList(vorname, nachname, geburtstag, augenfarbe, telefonnummer, email, lebendig, eigenschaften, staatsangehoerigkeiten);
+
+        final Field bisherigeWohnsitze = buildValueObjectAccordion();
+
+
+        return Arrays.asList(vorname, nachname, geburtstag, augenfarbe, telefonnummer, email, lebendig, eigenschaften, staatsangehoerigkeiten, bisherigeWohnsitze);
+    }
+
+    private Field buildValueObjectAccordion(){
+
+        Adresse_Accordion adresseAccordion = new Adresse_Accordion();
+
+        //Create Caption
+        String caption = getI18nResolver().resolveRelative(Buerger_.class,
+                I18nPaths.getEntityFieldPath(Buerger_.Field.bisherigeWohnsitze.name(), I18nPaths.Type.label));
+        adresseAccordion.setCaption(caption);
+
+        //Bind and configure Validation Visibility
+        binder.bind(adresseAccordion, Buerger_.Field.bisherigeWohnsitze.name());
+        ((AbstractField)adresseAccordion).setValidationVisible(false);
+
+        getBinder().addCommitHandler(new FieldGroup.CommitHandler() {
+            @Override
+            public void preCommit(FieldGroup.CommitEvent commitEvent) throws FieldGroup.CommitException {
+                adresseAccordion.setValidationVisible(true);
+            }
+
+            @Override
+            public void postCommit(FieldGroup.CommitEvent commitEvent) throws FieldGroup.CommitException {
+            }
+        });
+
+        return adresseAccordion;
     }
 
     /**
